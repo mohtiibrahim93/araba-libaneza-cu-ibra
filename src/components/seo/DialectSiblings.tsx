@@ -17,11 +17,31 @@ import { languageCounterpart } from "@/lib/languageRoutes";
  * languageRoutes stay the one place the two halves are mapped.
  */
 const COMPARISONS = [
-  { path: "/dialecte-arabe/libaneza-vs-egipteana", ro: "libaneză vs. egipteană", en: "Lebanese vs. Egyptian" },
-  { path: "/dialecte-arabe/libaneza-vs-siriana", ro: "libaneză vs. siriană", en: "Lebanese vs. Syrian" },
-  { path: "/dialecte-arabe/levantina-vs-golf", ro: "levantina vs. araba din Golf", en: "Levantine vs. Gulf" },
-  { path: "/dialecte-arabe/levantina-vs-irakiana", ro: "levantina vs. araba irakiană", en: "Levantine vs. Iraqi" },
-  { path: "/dialecte-arabe/levantina-vs-maghrebina", ro: "levantina vs. araba maghrebină", en: "Levantine vs. Maghrebi" },
+  {
+    path: "/dialecte-arabe/libaneza-vs-egipteana",
+    ro: "libaneză vs. egipteană",
+    en: "Lebanese vs. Egyptian",
+  },
+  {
+    path: "/dialecte-arabe/libaneza-vs-siriana",
+    ro: "libaneză vs. siriană",
+    en: "Lebanese vs. Syrian",
+  },
+  {
+    path: "/dialecte-arabe/levantina-vs-golf",
+    ro: "levantina vs. araba din Golf",
+    en: "Levantine vs. Gulf",
+  },
+  {
+    path: "/dialecte-arabe/levantina-vs-irakiana",
+    ro: "levantina vs. araba irakiană",
+    en: "Levantine vs. Iraqi",
+  },
+  {
+    path: "/dialecte-arabe/levantina-vs-maghrebina",
+    ro: "levantina vs. araba maghrebină",
+    en: "Levantine vs. Maghrebi",
+  },
   {
     path: "/dialecte-arabe/levantina-vs-peninsulara",
     ro: "levantina vs. araba din Peninsula Arabică",
@@ -38,7 +58,9 @@ const DialectSiblings = ({ current }: { current: string }) => {
 
   return (
     <>
-      <h2>{lang === "en" ? "The other comparisons" : "Celelalte comparații"}</h2>
+      <h2>
+        {lang === "en" ? "The other comparisons" : "Celelalte comparații"}
+      </h2>
       <ul>
         {others.map((c) => (
           <li key={c.path}>
@@ -47,7 +69,9 @@ const DialectSiblings = ({ current }: { current: string }) => {
         ))}
         <li>
           <Link to="/dialecte-arabe">
-            {lang === "en" ? "All the dialects, side by side" : "Toate dialectele, pe scurt"}
+            {lang === "en"
+              ? "All the dialects, side by side"
+              : "Toate dialectele, pe scurt"}
           </Link>
         </li>
       </ul>

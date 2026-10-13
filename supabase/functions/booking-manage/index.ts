@@ -13,9 +13,19 @@ import {
   ACTIVE_COHORT_SELECT,
   ACTIVE_COHORT_STATUSES,
 } from "../_shared/booking.ts";
-import { fmtBookingLocal, manageUrl, sendBookingEmail, sendAdminBookingEmail } from "../_shared/booking-emails.ts";
+import {
+  fmtBookingLocal,
+  manageUrl,
+  sendBookingEmail,
+  sendAdminBookingEmail,
+} from "../_shared/booking-emails.ts";
 import { buildCorsHeaders } from "../_shared/cors.ts";
-import { LEVEL_CHECK_RULES, LEVEL_CHECK_SLUG, inBlackout, rulesForEventType } from "../_shared/schedule-rules.ts";
+import {
+  LEVEL_CHECK_RULES,
+  LEVEL_CHECK_SLUG,
+  inBlackout,
+  rulesForEventType,
+} from "../_shared/schedule-rules.ts";
 
 /**
  * Free changes stop 24 hours before the lesson — the rule the trial notice,
@@ -46,12 +56,18 @@ function tooLateToChange(startAt: string) {
  */
 function internalCall(req: Request) {
   const serviceRoleKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY") ?? "";
-  const bearer = (req.headers.get("Authorization") ?? "").replace(/^Bearer\s+/i, "");
+  const bearer = (req.headers.get("Authorization") ?? "").replace(
+    /^Bearer\s+/i,
+    "",
+  );
   return serviceRoleKey.length > 0 && bearer === serviceRoleKey;
 }
 
 function client() {
-  return createClient(Deno.env.get("SUPABASE_URL")!, Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!);
+  return createClient(
+    Deno.env.get("SUPABASE_URL")!,
+    Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!,
+  );
 }
 
 async function loadByToken(token: string) {
@@ -75,13 +91,15 @@ Deno.serve(async (req) => {
     for (const [k, v] of Object.entries(corsHeaders)) res.headers.set(k, v);
     return res;
   };
-  if (req.method === "OPTIONS") return new Response(null, { headers: corsHeaders });
+  if (req.method === "OPTIONS")
+    return new Response(null, { headers: corsHeaders });
 
   try {
     const url = new URL(req.url);
     const parts = url.pathname.split("/").filter(Boolean);
     const token = parts[parts.length - 1];
-    if (!token || token.length < 20) return json({ error: "missing token" }, 400);
+    if (!token || token.length < 20)
+      return json({ error: "missing token" }, 400);
 
     const booking = await loadByToken(token);
     if (!booking) return json({ error: "not found" }, 404);
@@ -107,7 +125,9 @@ Deno.serve(async (req) => {
           language: booking.language ?? "ro",
           // Computed here so the page and this function apply the same cutoff
           // to the same clock.
-          changes_allowed: booking.status === "confirmed" && !tooLateToChange(booking.start_at),
+          changes_allowed:
+            booking.status === "confirmed" &&
+            !tooLateToChange(booking.start_at),
         },
         tz: TZ,
       });
@@ -135,28 +155,52 @@ Deno.serve(async (req) => {
       // event or tells the student it is cancelled.
       let cancelQuery = supabase
         .from("bookings")
-        .update({ status: "cancelled", cancelled_at: new Date().toISOString(), google_sync_error: booking.google_event_id ? "cancel_update_pending" : null })
+        .update({
+          status: "cancelled",
+          cancelled_at: new Date().toISOString(),
+          google_sync_error: booking.google_event_id
+            ? "cancel_update_pending"
+            : null,
+        })
         .eq("id", booking.id)
         .eq("status", "confirmed");
-      cancelQuery = booking.google_event_id ? cancelQuery.eq("google_event_id", booking.google_event_id) : cancelQuery.is("google_event_id", null);
-      const { data: cancelledRows, error: cancelErr } = await cancelQuery.select("id");
+      cancelQuery = booking.google_event_id
+        ? cancelQuery.eq("google_event_id", booking.google_event_id)
+        : cancelQuery.is("google_event_id", null);
+      const { data: cancelledRows, error: cancelErr } =
+        await cancelQuery.select("id");
       if (cancelErr) {
         console.error("[booking-manage] cancel write failed", cancelErr);
         return json({ error: "cancel failed" }, 500);
       }
-      if (!cancelledRows?.length) return json({ error: "booking is not active" }, 409);
-      const calendarDeleted = !booking.google_event_id || await gcalDeleteEvent(booking.google_event_id);
-      const deletionPending = !calendarDeleted || booking.google_sync_error === "calendar_create_pending";
+      if (!cancelledRows?.length)
+        return json({ error: "booking is not active" }, 409);
+      const calendarDeleted =
+        !booking.google_event_id ||
+        (await gcalDeleteEvent(booking.google_event_id));
+      const deletionPending =
+        !calendarDeleted ||
+        booking.google_sync_error === "calendar_create_pending";
       if (!deletionPending) {
-        const { error } = await supabase.from("bookings").update({ google_sync_error: null }).eq("id", booking.id);
-        if (error) console.error("[booking-manage] cancellation sync marker not cleared", error);
+        const { error } = await supabase
+          .from("bookings")
+          .update({ google_sync_error: null })
+          .eq("id", booking.id);
+        if (error)
+          console.error(
+            "[booking-manage] cancellation sync marker not cleared",
+            error,
+          );
       }
       sendBookingEmail(
         "booking-cancelled",
         booking.student_email,
         {
           name: booking.student_name,
-          whenLabel: fmtBookingLocal(booking.start_at, booking.language ?? "ro"),
+          whenLabel: fmtBookingLocal(
+            booking.start_at,
+            booking.language ?? "ro",
+          ),
           lang: booking.language ?? "ro",
         },
         `booking-cancel-${booking.id}`,
@@ -169,12 +213,19 @@ Deno.serve(async (req) => {
           studentEmail: booking.student_email,
           studentPhone: booking.student_phone,
           format: booking.format === "online" ? "online" : "fizic",
-          whenLabel: fmtBookingLocal(booking.start_at, booking.language ?? "ro"),
+          whenLabel: fmtBookingLocal(
+            booking.start_at,
+            booking.language ?? "ro",
+          ),
           notes: booking.notes,
         },
         `admin-booking-cancel-${booking.id}`,
       );
-      return json({ ok: true, status: "cancelled", sync_pending: deletionPending });
+      return json({
+        ok: true,
+        status: "cancelled",
+        sync_pending: deletionPending,
+      });
     }
 
     if (req.method === "PATCH") {
@@ -183,7 +234,8 @@ Deno.serve(async (req) => {
       // The owner, through admin-registrations, with the service-role key.
       const admin = internalCall(req);
       const startMs = Date.parse(body.start_at);
-      if (!Number.isFinite(startMs)) return json({ error: "invalid start_at" }, 400);
+      if (!Number.isFinite(startMs))
+        return json({ error: "invalid start_at" }, 400);
       const et = booking.booking_event_types;
       const endMs = startMs + et.duration_min * 60_000;
       const startISO = new Date(startMs).toISOString();
@@ -196,16 +248,31 @@ Deno.serve(async (req) => {
       const day = { y: p.year, m: p.month, d: p.day };
       const dayKey = `${p.year}-${String(p.month).padStart(2, "0")}-${String(p.day).padStart(2, "0")}`;
       const [{ data: rules }, { data: blackouts }] = await Promise.all([
-        supabase.from("availability_rules").select("weekday,start_time,end_time,event_type_slug").eq("is_active", true),
-        supabase.from("availability_blackouts").select("start_date,end_date").lte("start_date", dayKey).gte("end_date", dayKey),
+        supabase
+          .from("availability_rules")
+          .select("weekday,start_time,end_time,event_type_slug")
+          .eq("is_active", true),
+        supabase
+          .from("availability_blackouts")
+          .select("start_date,end_date")
+          .lte("start_date", dayKey)
+          .gte("end_date", dayKey),
       ]);
       const offered = candidateSlotsForDays(
         [day],
-        rulesForEventType(rules ?? [], booking.event_type_slug, booking.event_type_slug === LEVEL_CHECK_SLUG ? LEVEL_CHECK_RULES : undefined),
+        rulesForEventType(
+          rules ?? [],
+          booking.event_type_slug,
+          booking.event_type_slug === LEVEL_CHECK_SLUG
+            ? LEVEL_CHECK_RULES
+            : undefined,
+        ),
         et.duration_min,
       );
       const outsideAvailability =
-        !offered.includes(startISO) || !passesTimingRules(et, booking.format, startISO) || inBlackout(startISO, blackouts ?? []);
+        !offered.includes(startISO) ||
+        !passesTimingRules(et, booking.format, startISO) ||
+        inBlackout(startISO, blackouts ?? []);
       // A student may only move a booking to a slot this site would have
       // offered them: inside the published hours, and inside the notice and
       // advance windows. The owner is not bound by his own opening hours --
@@ -218,8 +285,12 @@ Deno.serve(async (req) => {
         return json({ error: "slot not bookable", code: "invalid_slot" }, 400);
       }
 
-      const checkStart = new Date(startMs - et.buffer_before_min * 60_000).toISOString();
-      const checkEnd = new Date(endMs + et.buffer_after_min * 60_000).toISOString();
+      const checkStart = new Date(
+        startMs - et.buffer_before_min * 60_000,
+      ).toISOString();
+      const checkEnd = new Date(
+        endMs + et.buffer_after_min * 60_000,
+      ).toISOString();
       const [busy, { data: clashes }, { data: cohorts }] = await Promise.all([
         gcalFreebusy(checkStart, checkEnd),
         supabase
@@ -266,43 +337,97 @@ Deno.serve(async (req) => {
       // silently double-books him.
       if (found.length > 0 && (!admin || body.force !== true)) {
         return json(
-          { error: "slot taken", code: "conflict", clashes: found, outside_availability: outsideAvailability },
+          {
+            error: "slot taken",
+            code: "conflict",
+            clashes: found,
+            outside_availability: outsideAvailability,
+          },
           409,
         );
       }
       // Nothing clashes, but it is outside the published hours: say so and let
       // the second call confirm. Silence here would make the panel look like
       // it had quietly extended his working week.
-      if (found.length === 0 && admin && outsideAvailability && body.force !== true) {
+      if (
+        found.length === 0 &&
+        admin &&
+        outsideAvailability &&
+        body.force !== true
+      ) {
         return json(
-          { error: "outside availability", code: "outside_availability", clashes: [], outside_availability: true },
+          {
+            error: "outside availability",
+            code: "outside_availability",
+            clashes: [],
+            outside_availability: true,
+          },
           409,
         );
       }
 
       // Atomic claim, replacement and exact Calendar link transfer. The
       // registration lock shares the contact editor's transaction order.
-      const { data: created, error: moveError } = await supabase.rpc("move_booking_atomically", {
-        p_id: booking.id, p_expected_start: booking.start_at, p_expected_event: booking.google_event_id,
-        p_start: startISO, p_end: endISO,
-      });
+      const { data: created, error: moveError } = await supabase.rpc(
+        "move_booking_atomically",
+        {
+          p_id: booking.id,
+          p_expected_start: booking.start_at,
+          p_expected_event: booking.google_event_id,
+          p_start: startISO,
+          p_end: endISO,
+        },
+      );
       if (moveError || !created) {
-        if (moveError?.code === "23505") return json({ error: "slot taken", code: "conflict" }, 409);
-        if (moveError?.code === "40001") return json({ error: "booking changed; reload and retry", code: "booking_changed" }, 409);
+        if (moveError?.code === "23505")
+          return json({ error: "slot taken", code: "conflict" }, 409);
+        if (moveError?.code === "40001")
+          return json(
+            {
+              error: "booking changed; reload and retry",
+              code: "booking_changed",
+            },
+            409,
+          );
         console.error("[booking-manage] atomic reschedule failed", moveError);
         return json({ error: "reschedule failed" }, 500);
       }
 
       // Patch GCal event in place (keeps id + Meet link) — only after the DB is consistent.
-      const calendarPatched = !!booking.google_event_id && await gcalPatchEvent(booking.google_event_id, startISO, endISO);
-      const contactStillPending = !!booking.google_sync_error || created.student_name !== booking.student_name || created.student_email !== booking.student_email || created.student_phone !== booking.student_phone;
+      const calendarPatched =
+        !!booking.google_event_id &&
+        (await gcalPatchEvent(booking.google_event_id, startISO, endISO));
+      const contactStillPending =
+        !!booking.google_sync_error ||
+        created.student_name !== booking.student_name ||
+        created.student_email !== booking.student_email ||
+        created.student_phone !== booking.student_phone;
       let calendarConfirmed = false;
       if (calendarPatched) {
-        let syncWrite = supabase.from("bookings").update({ google_sync_error: contactStillPending ? "contact_update_pending" : null }).eq("id", created.id).eq("status", "confirmed").eq("start_at", created.start_at).eq("google_sync_error", created.google_sync_error);
-        for (const field of ["student_name", "student_email", "student_phone"]) syncWrite = created[field] == null ? syncWrite.is(field, null) : syncWrite.eq(field, created[field]);
+        let syncWrite = supabase
+          .from("bookings")
+          .update({
+            google_sync_error: contactStillPending
+              ? "contact_update_pending"
+              : null,
+          })
+          .eq("id", created.id)
+          .eq("status", "confirmed")
+          .eq("start_at", created.start_at)
+          .eq("google_sync_error", created.google_sync_error);
+        for (const field of ["student_name", "student_email", "student_phone"])
+          syncWrite =
+            created[field] == null
+              ? syncWrite.is(field, null)
+              : syncWrite.eq(field, created[field]);
         const { data: syncedRows, error } = await syncWrite.select("id");
-        calendarConfirmed = !error && !!syncedRows?.length && !contactStillPending;
-        if (error) console.error("[booking-manage] reschedule sync marker not cleared", error);
+        calendarConfirmed =
+          !error && !!syncedRows?.length && !contactStillPending;
+        if (error)
+          console.error(
+            "[booking-manage] reschedule sync marker not cleared",
+            error,
+          );
       }
 
       sendBookingEmail(
@@ -310,7 +435,10 @@ Deno.serve(async (req) => {
         created.student_email,
         {
           name: created.student_name,
-          oldWhenLabel: fmtBookingLocal(booking.start_at, booking.language ?? "ro"),
+          oldWhenLabel: fmtBookingLocal(
+            booking.start_at,
+            booking.language ?? "ro",
+          ),
           newWhenLabel: fmtBookingLocal(startISO, booking.language ?? "ro"),
           meetLink: booking.meet_link,
           manageUrl: manageUrl(created.manage_token),
@@ -327,14 +455,22 @@ Deno.serve(async (req) => {
           studentEmail: created.student_email,
           studentPhone: created.student_phone,
           format: booking.format === "online" ? "online" : "fizic",
-          oldWhenLabel: fmtBookingLocal(booking.start_at, booking.language ?? "ro"),
+          oldWhenLabel: fmtBookingLocal(
+            booking.start_at,
+            booking.language ?? "ro",
+          ),
           newWhenLabel: fmtBookingLocal(startISO, booking.language ?? "ro"),
           notes: booking.notes,
         },
         `admin-booking-resched-${created.id}`,
       );
 
-      return json({ ok: true, manage_token: created.manage_token, start_at: startISO, sync_pending: !calendarConfirmed });
+      return json({
+        ok: true,
+        manage_token: created.manage_token,
+        start_at: startISO,
+        sync_pending: !calendarConfirmed,
+      });
     }
 
     return json({ error: "method not allowed" }, 405);

@@ -31,12 +31,16 @@ export function signRegistrationId(id: string): Promise<string> {
   return hmacHex(`reg:${id}`);
 }
 
-export async function verifyRegistrationSignature(id: string, sig: unknown): Promise<boolean> {
+export async function verifyRegistrationSignature(
+  id: string,
+  sig: unknown,
+): Promise<boolean> {
   if (typeof sig !== "string" || sig.length !== 40) return false;
   return (await signRegistrationId(id)) === sig;
 }
 
-const norm = (e: unknown) => (typeof e === "string" ? e.trim().toLowerCase() : "");
+const norm = (e: unknown) =>
+  typeof e === "string" ? e.trim().toLowerCase() : "";
 
 /**
  * True when the caller may act on this registration.

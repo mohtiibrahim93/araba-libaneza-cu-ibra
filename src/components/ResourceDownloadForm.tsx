@@ -40,7 +40,9 @@ const ResourceDownloadForm = ({
   const en = lang === "en";
   // Admin-editable overrides (title, description, PDF link, visibility).
   const { resource: row, loaded } = useResource(resource);
-  const displayTitle = row ? (lang === "en" ? row.title_en : row.title_ro) || title : title;
+  const displayTitle = row
+    ? (lang === "en" ? row.title_en : row.title_ro) || title
+    : title;
   const displayDescription = row
     ? (lang === "en" ? row.description_en : row.description_ro) || description
     : description;
@@ -55,23 +57,41 @@ const ResourceDownloadForm = ({
     e.preventDefault();
     if (loading) return;
     if (!consent) {
-      toast({ title: en ? "Please tick the consent box" : "Bifează acordul", description: en ? "We need your consent to send you the PDF." : "Avem nevoie de acordul tău ca să îți trimitem PDF-ul.", variant: "destructive" });
+      toast({
+        title: en ? "Please tick the consent box" : "Bifează acordul",
+        description: en
+          ? "We need your consent to send you the PDF."
+          : "Avem nevoie de acordul tău ca să îți trimitem PDF-ul.",
+        variant: "destructive",
+      });
       return;
     }
     setLoading(true);
     try {
-      const { data, error } = await supabase.functions.invoke("resource-download", {
-        body: { email, name, consent, resource, source },
-      });
+      const { data, error } = await supabase.functions.invoke(
+        "resource-download",
+        {
+          body: { email, name, consent, resource, source },
+        },
+      );
       const errMessage = (data as { error?: string } | null)?.error;
       if (error || errMessage) {
-        throw new Error(errMessage || error?.message || (en ? "Sending failed." : "Trimiterea a eșuat."));
+        throw new Error(
+          errMessage ||
+            error?.message ||
+            (en ? "Sending failed." : "Trimiterea a eșuat."),
+        );
       }
       setDone(true);
     } catch (err) {
       toast({
         title: en ? "We couldn't send the PDF" : "Nu am putut trimite PDF-ul",
-        description: err instanceof Error ? err.message : en ? "Please try again in a moment." : "Încearcă din nou în câteva momente.",
+        description:
+          err instanceof Error
+            ? err.message
+            : en
+              ? "Please try again in a moment."
+              : "Încearcă din nou în câteva momente.",
         variant: "destructive",
       });
     } finally {
@@ -86,10 +106,12 @@ const ResourceDownloadForm = ({
     return (
       <div className="rounded-xl border border-primary/30 bg-primary/5 p-6 space-y-3 not-prose">
         <p className="flex items-center gap-2 font-semibold text-foreground">
-          <CheckCircle2 className="w-5 h-5 text-primary" aria-hidden /> {en ? "Done — check your email" : "Gata — verifică-ți emailul"}
+          <CheckCircle2 className="w-5 h-5 text-primary" aria-hidden />{" "}
+          {en ? "Done — check your email" : "Gata — verifică-ți emailul"}
         </p>
         <p className="text-sm text-muted-foreground">
-          {en ? "We've sent the PDF to " : "Ți-am trimis PDF-ul pe "}<strong>{email}</strong>
+          {en ? "We've sent the PDF to " : "Ți-am trimis PDF-ul pe "}
+          <strong>{email}</strong>
           {en
             ? ". If it doesn't arrive within a few minutes, check Spam or Promotions too."
             : ". Dacă nu apare în câteva minute, uită-te și în Spam sau Promoții."}
@@ -99,7 +121,9 @@ const ResourceDownloadForm = ({
             to="/trial"
             className="inline-block bg-primary text-primary-foreground px-5 py-2.5 rounded-lg font-semibold text-sm no-underline hover:bg-primary/90 transition"
           >
-            {en ? "Book the free trial lesson" : "Rezervă lecția de probă gratuită"}
+            {en
+              ? "Book the free trial lesson"
+              : "Rezervă lecția de probă gratuită"}
           </Link>
           <a
             href={displayFileHref}
@@ -113,7 +137,10 @@ const ResourceDownloadForm = ({
   }
 
   return (
-    <form onSubmit={submit} className="rounded-xl border border-border bg-muted/30 p-6 space-y-4 not-prose">
+    <form
+      onSubmit={submit}
+      className="rounded-xl border border-border bg-muted/30 p-6 space-y-4 not-prose"
+    >
       <div className="space-y-1">
         <h3 className="font-display text-xl font-bold text-foreground flex items-center gap-2">
           <Download className="w-5 h-5 text-primary shrink-0" aria-hidden />
@@ -124,27 +151,67 @@ const ResourceDownloadForm = ({
 
       <div className="grid sm:grid-cols-2 gap-3">
         <div className="space-y-1.5">
-          <Label htmlFor={`${idPrefix}-name`} className="text-sm">{en ? "First name" : "Prenume"}</Label>
-          <Input id={`${idPrefix}-name`} value={name} onChange={(e) => setName(e.target.value)} placeholder="Maria" autoComplete="given-name" maxLength={120} />
+          <Label htmlFor={`${idPrefix}-name`} className="text-sm">
+            {en ? "First name" : "Prenume"}
+          </Label>
+          <Input
+            id={`${idPrefix}-name`}
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+            placeholder="Maria"
+            autoComplete="given-name"
+            maxLength={120}
+          />
         </div>
         <div className="space-y-1.5">
-          <Label htmlFor={`${idPrefix}-email`} className="text-sm">Email *</Label>
-          <Input id={`${idPrefix}-email`} type="email" required value={email} onChange={(e) => setEmail(e.target.value)} placeholder={en ? "maria@example.com" : "maria@exemplu.ro"} autoComplete="email" maxLength={200} />
+          <Label htmlFor={`${idPrefix}-email`} className="text-sm">
+            Email *
+          </Label>
+          <Input
+            id={`${idPrefix}-email`}
+            type="email"
+            required
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            placeholder={en ? "maria@example.com" : "maria@exemplu.ro"}
+            autoComplete="email"
+            maxLength={200}
+          />
         </div>
       </div>
 
       <div className="flex items-start gap-2">
-        <Checkbox id={`${idPrefix}-consent`} checked={consent} onCheckedChange={(v) => setConsent(v === true)} className="mt-0.5" />
-        <Label htmlFor={`${idPrefix}-consent`} className="text-xs text-muted-foreground font-normal cursor-pointer leading-relaxed">
+        <Checkbox
+          id={`${idPrefix}-consent`}
+          checked={consent}
+          onCheckedChange={(v) => setConsent(v === true)}
+          className="mt-0.5"
+        />
+        <Label
+          htmlFor={`${idPrefix}-consent`}
+          className="text-xs text-muted-foreground font-normal cursor-pointer leading-relaxed"
+        >
           {en
             ? "I agree to receive the PDF and occasional information about courses. I can unsubscribe at any time. See the "
             : "Sunt de acord să primesc PDF-ul și ocazional informații despre cursuri. Mă pot dezabona oricând. Vezi "}
-          <Link to="/privacy" className="text-primary underline">{en ? "privacy policy" : "politica de confidențialitate"}</Link>.
+          <Link to="/privacy" className="text-primary underline">
+            {en ? "privacy policy" : "politica de confidențialitate"}
+          </Link>
+          .
         </Label>
       </div>
 
       <Button type="submit" disabled={loading} className="w-full sm:w-auto">
-        {loading ? (<><Loader2 className="w-4 h-4 mr-2 animate-spin" /> {en ? "Sending…" : "Se trimite…"}</>) : en ? "Send me the PDF" : "Trimite-mi PDF-ul"}
+        {loading ? (
+          <>
+            <Loader2 className="w-4 h-4 mr-2 animate-spin" />{" "}
+            {en ? "Sending…" : "Se trimite…"}
+          </>
+        ) : en ? (
+          "Send me the PDF"
+        ) : (
+          "Trimite-mi PDF-ul"
+        )}
       </Button>
     </form>
   );

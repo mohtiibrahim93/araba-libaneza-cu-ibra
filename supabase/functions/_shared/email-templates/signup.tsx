@@ -1,6 +1,6 @@
 /// <reference types="npm:@types/react@19.3.0" />
 
-import * as React from 'npm:react@19.3.0'
+import * as React from "npm:react@19.3.0";
 
 import {
   Body,
@@ -12,7 +12,7 @@ import {
   Link,
   Preview,
   Text,
-} from 'npm:@react-email/components@1.0.12'
+} from "npm:@react-email/components@1.0.12";
 
 /**
  * The code first here too, and this is the one that matters.
@@ -28,12 +28,12 @@ import {
  * slot behind in this one.
  */
 interface SignupEmailProps {
-  siteName: string
-  siteUrl: string
-  recipient: string
-  confirmationUrl: string
+  siteName: string;
+  siteUrl: string;
+  recipient: string;
+  confirmationUrl: string;
   /** The one-time code (Supabase sends 6-10 digits by project setting). */
-  token?: string | undefined
+  token?: string | undefined;
 }
 
 export const SignupEmail = ({
@@ -46,16 +46,20 @@ export const SignupEmail = ({
   <Html lang="ro" dir="ltr">
     <Head />
     <Preview>
-      {token ? `Codul tău pentru ${siteName}: ${token}` : `Confirmă-ți emailul pentru ${siteName}`}
+      {token
+        ? `Codul tău pentru ${siteName}: ${token}`
+        : `Confirmă-ți emailul pentru ${siteName}`}
     </Preview>
     <Body style={main}>
       <Container style={container}>
-        <Heading style={h1}>{token ? 'Codul tău de confirmare' : 'Confirmă-ți emailul'}</Heading>
+        <Heading style={h1}>
+          {token ? "Codul tău de confirmare" : "Confirmă-ți emailul"}
+        </Heading>
         {token ? (
           <>
             <Text style={text}>
               Scrie codul de mai jos în pagina pe care ai lăsat-o deschisă, ca
-              să confirmăm adresa{' '}
+              să confirmăm adresa{" "}
               <Link href={`mailto:${recipient}`} style={link}>
                 {recipient}
               </Link>
@@ -69,7 +73,7 @@ export const SignupEmail = ({
         ) : (
           <>
             <Text style={text}>
-              Mulțumim că te-ai înscris la{' '}
+              Mulțumim că te-ai înscris la{" "}
               <Link href={siteUrl} style={link}>
                 <strong>{siteName}</strong>
               </Link>
@@ -89,52 +93,58 @@ export const SignupEmail = ({
         </Button>
         <Text style={footer}>
           {token
-            ? 'Codul și linkul expiră în scurt timp. Dacă nu ai cerut nimic, poți ignora acest email.'
-            : 'Dacă nu ți-ai creat un cont, poți ignora acest email.'}
+            ? "Codul și linkul expiră în scurt timp. Dacă nu ai cerut nimic, poți ignora acest email."
+            : "Dacă nu ți-ai creat un cont, poți ignora acest email."}
         </Text>
       </Container>
     </Body>
   </Html>
-)
+);
 
-export default SignupEmail
+export default SignupEmail;
 
 const main = {
-  backgroundColor: '#ffffff',
-  fontFamily: "'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif",
-}
-const container = { padding: '32px 28px', maxWidth: '560px' }
+  backgroundColor: "#ffffff",
+  fontFamily:
+    "'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif",
+};
+const container = { padding: "32px 28px", maxWidth: "560px" };
 const h1 = {
-  fontSize: '24px',
+  fontSize: "24px",
   fontWeight: 700 as const,
-  color: 'hsl(220, 14%, 10%)',
-  margin: '0 0 20px',
-  letterSpacing: '-0.01em',
-}
+  color: "hsl(220, 14%, 10%)",
+  margin: "0 0 20px",
+  letterSpacing: "-0.01em",
+};
 const text = {
-  fontSize: '15px',
-  color: 'hsl(220, 9%, 35%)',
-  lineHeight: '1.6',
-  margin: '0 0 20px',
-}
-const link = { color: 'hsl(0, 72%, 51%)', textDecoration: 'underline' }
+  fontSize: "15px",
+  color: "hsl(220, 9%, 35%)",
+  lineHeight: "1.6",
+  margin: "0 0 20px",
+};
+const link = { color: "hsl(0, 72%, 51%)", textDecoration: "underline" };
 const button = {
-  backgroundColor: 'hsl(0, 72%, 51%)',
-  color: '#ffffff',
-  fontSize: '15px',
+  backgroundColor: "hsl(0, 72%, 51%)",
+  color: "#ffffff",
+  fontSize: "15px",
   fontWeight: 600 as const,
-  borderRadius: '12px',
-  padding: '14px 24px',
-  textDecoration: 'none',
-  display: 'inline-block',
-  margin: '8px 0 24px',
-}
+  borderRadius: "12px",
+  padding: "14px 24px",
+  textDecoration: "none",
+  display: "inline-block",
+  margin: "8px 0 24px",
+};
 const codeStyle = {
-  fontFamily: 'Courier, monospace',
-  fontSize: '28px',
+  fontFamily: "Courier, monospace",
+  fontSize: "28px",
   fontWeight: 700 as const,
-  color: 'hsl(0, 72%, 51%)',
-  letterSpacing: '0.15em',
-  margin: '0 0 24px',
-}
-const footer = { fontSize: '13px', color: 'hsl(220, 9%, 55%)', margin: '32px 0 0', lineHeight: '1.5' }
+  color: "hsl(0, 72%, 51%)",
+  letterSpacing: "0.15em",
+  margin: "0 0 24px",
+};
+const footer = {
+  fontSize: "13px",
+  color: "hsl(220, 9%, 55%)",
+  margin: "32px 0 0",
+  lineHeight: "1.5",
+};

@@ -41,12 +41,13 @@ const LevantinaVsGolf = () => (
   >
     <h2>Pe scurt</h2>
     <p>
-      <strong>Levantina (shami)</strong> e vorbită în Liban, Siria, Iordania și Palestina.{" "}
-      <strong>Araba din Golf (khaliji)</strong> acoperă Kuweit, Bahrain, Qatar, Emiratele și estul
-      Arabiei Saudite. Sunt înrudite, dar nu interschimbabile: diferă pronunția mai multor
-      consoane, o parte din morfologia verbului și un strat consistent de vocabular. Un vorbitor
-      din Golf înțelege levantina mai ușor decât invers, pentru că media levantină și egipteană
-      circulă peste tot, iar cea din Golf mult mai puțin.
+      <strong>Levantina (shami)</strong> e vorbită în Liban, Siria, Iordania și
+      Palestina. <strong>Araba din Golf (khaliji)</strong> acoperă Kuweit,
+      Bahrain, Qatar, Emiratele și estul Arabiei Saudite. Sunt înrudite, dar nu
+      interschimbabile: diferă pronunția mai multor consoane, o parte din
+      morfologia verbului și un strat consistent de vocabular. Un vorbitor din
+      Golf înțelege levantina mai ușor decât invers, pentru că media levantină
+      și egipteană circulă peste tot, iar cea din Golf mult mai puțin.
     </p>
 
     <h2>Comparație pe puncte</h2>
@@ -54,58 +55,119 @@ const LevantinaVsGolf = () => (
       caption="Araba levantină comparată cu araba din Golf"
       columns={["Criteriu", "Levantină (shami)", "Golf (khaliji)"]}
       rows={[
-        ["Unde se vorbește", "Liban, Siria, Iordania, Palestina.", "Kuweit, Bahrain, Qatar, Emirate, estul Arabiei Saudite."],
-        ["Litera ق", "Oprire glotală în vorbirea urbană: ʾāl.", "„g” dur: gāl."],
-        ["Litera ك", "Rămâne „k” peste tot.", "Devine des „ch” lângă vocale anterioare."],
-        ["ث și ذ", "De obicei se pierd, devenind t și d.", "Se păstrează mai des ca în araba standard."],
-        ["Prefixul b-", "Marchează prezentul: baʿrif — „știu”.", "Marchează mai degrabă intenția sau viitorul."],
-        ["Acțiunea în desfășurare", "ʿam + verb: ʿam bishrab.", "Verb simplu, sau gāʿid înaintea lui."],
+        [
+          "Unde se vorbește",
+          "Liban, Siria, Iordania, Palestina.",
+          "Kuweit, Bahrain, Qatar, Emirate, estul Arabiei Saudite.",
+        ],
+        [
+          "Litera ق",
+          "Oprire glotală în vorbirea urbană: ʾāl.",
+          "„g” dur: gāl.",
+        ],
+        [
+          "Litera ك",
+          "Rămâne „k” peste tot.",
+          "Devine des „ch” lângă vocale anterioare.",
+        ],
+        [
+          "ث și ذ",
+          "De obicei se pierd, devenind t și d.",
+          "Se păstrează mai des ca în araba standard.",
+        ],
+        [
+          "Prefixul b-",
+          "Marchează prezentul: baʿrif — „știu”.",
+          "Marchează mai degrabă intenția sau viitorul.",
+        ],
+        [
+          "Acțiunea în desfășurare",
+          "ʿam + verb: ʿam bishrab.",
+          "Verb simplu, sau gāʿid înaintea lui.",
+        ],
         ["„Ce faci?”", "kīfak", "shlōnak"],
         ["„Vreau”", "baddi", "abī / arīd"],
-        ["Împrumuturi", "Franceză, engleză, ceva turcă.", "Persană, engleză, hindi și urdu."],
-        ["Acoperire media", "Muzică și seriale difuzate în toată regiunea.", "Producție mai locală, mai puțin exportată."],
+        [
+          "Împrumuturi",
+          "Franceză, engleză, ceva turcă.",
+          "Persană, engleză, hindi și urdu.",
+        ],
+        [
+          "Acoperire media",
+          "Muzică și seriale difuzate în toată regiunea.",
+          "Producție mai locală, mai puțin exportată.",
+        ],
       ]}
     />
 
     <h2>Aceeași propoziție, în ambele</h2>
-    <p><em>„Vreau să beau o cafea.”</em></p>
+    <p>
+      <em>„Vreau să beau o cafea.”</em>
+    </p>
     <ul>
-      <li><strong>Levantină (libaneză):</strong> <em>baddi ishrab ʾahwe</em></li>
-      <li><strong>Golf:</strong> <em>abī ashrab gahwa</em></li>
+      <li>
+        <strong>Levantină (libaneză):</strong> <em>baddi ishrab ʾahwe</em>
+      </li>
+      <li>
+        <strong>Golf:</strong> <em>abī ashrab gahwa</em>
+      </li>
     </ul>
     <p>
-      Același cuvânt pentru cafea, pronunțat cu cele două valori ale lui ق — <em>ʾahwe</em> la
-      Beirut, <em>gahwa</em> la Kuweit. Verbul „a vrea” e complet diferit, iar asta se întâmplă
-      exact la cuvintele pe care le folosești cel mai des.
+      Același cuvânt pentru cafea, pronunțat cu cele două valori ale lui ق —{" "}
+      <em>ʾahwe</em> la Beirut, <em>gahwa</em> la Kuweit. Verbul „a vrea” e
+      complet diferit, iar asta se întâmplă exact la cuvintele pe care le
+      folosești cel mai des.
     </p>
 
     <h2>Cine pe cine înțelege</h2>
     <p>
-      Asimetric, ca aproape peste tot în lumea arabă. Vorbitorii din Golf urmăresc fără probleme
-      seriale libaneze și filme egiptene, deci înțeleg levantina bine. Un vorbitor de levantină
-      care aude pentru prima dată khaliji rapid prinde ideea, dar pierde detaliile — mai ales
-      vocabularul local. Contextul salvează mult: în regiune se comută des spre un registru
+      Asimetric, ca aproape peste tot în lumea arabă. Vorbitorii din Golf
+      urmăresc fără probleme seriale libaneze și filme egiptene, deci înțeleg
+      levantina bine. Un vorbitor de levantină care aude pentru prima dată
+      khaliji rapid prinde ideea, dar pierde detaliile — mai ales vocabularul
+      local. Contextul salvează mult: în regiune se comută des spre un registru
       neutru, apropiat de egipteană sau de araba standard.
     </p>
 
     <h2>Ce alegi, în funcție de scop</h2>
     <ul>
-      <li><strong>Familie sau prieteni din Levant</strong> → levantină. Vezi <Link to="/cursuri-limba-araba">cursurile de arabă libaneză</Link>.</li>
-      <li><strong>Muncă în Emirate, Qatar sau Kuweit, cu clienți nativi</strong> → khaliji e cel mai direct, dar o bază levantină sau egipteană te ține în conversație.</li>
-      <li><strong>Vrei acoperirea cea mai largă în lumea arabă</strong> → levantina sau egipteana, nu khaliji.</li>
-      <li><strong>Documente, contracte, presă</strong> → arabă standard. Vezi <Link to="/ce-araba-sa-inveti">ce arabă să înveți</Link>.</li>
+      <li>
+        <strong>Familie sau prieteni din Levant</strong> → levantină. Vezi{" "}
+        <Link to="/cursuri-limba-araba">cursurile de arabă libaneză</Link>.
+      </li>
+      <li>
+        <strong>Muncă în Emirate, Qatar sau Kuweit, cu clienți nativi</strong> →
+        khaliji e cel mai direct, dar o bază levantină sau egipteană te ține în
+        conversație.
+      </li>
+      <li>
+        <strong>Vrei acoperirea cea mai largă în lumea arabă</strong> →
+        levantina sau egipteana, nu khaliji.
+      </li>
+      <li>
+        <strong>Documente, contracte, presă</strong> → arabă standard. Vezi{" "}
+        <Link to="/ce-araba-sa-inveti">ce arabă să înveți</Link>.
+      </li>
     </ul>
 
     <h2>Unde stau celelalte dialecte</h2>
     <p>
-      Golful nu e singurul vecin al levantinei. Pentru restul hărții: {" "}
-      <Link to="/dialecte-arabe/levantina-vs-irakiana">levantina vs. araba irakiană</Link>,{" "}
-      <Link to="/dialecte-arabe/levantina-vs-peninsulara">levantina vs. araba din Peninsula Arabică</Link>{" "}
-      și <Link to="/dialecte-arabe/levantina-vs-maghrebina">levantina vs. araba maghrebină</Link>.
-      Privirea de ansamblu e în <Link to="/dialecte-arabe">ghidul dialectelor arabe</Link>.
+      Golful nu e singurul vecin al levantinei. Pentru restul hărții:{" "}
+      <Link to="/dialecte-arabe/levantina-vs-irakiana">
+        levantina vs. araba irakiană
+      </Link>
+      ,{" "}
+      <Link to="/dialecte-arabe/levantina-vs-peninsulara">
+        levantina vs. araba din Peninsula Arabică
+      </Link>{" "}
+      și{" "}
+      <Link to="/dialecte-arabe/levantina-vs-maghrebina">
+        levantina vs. araba maghrebină
+      </Link>
+      . Privirea de ansamblu e în{" "}
+      <Link to="/dialecte-arabe">ghidul dialectelor arabe</Link>.
     </p>
     <DialectSiblings current="/dialecte-arabe/levantina-vs-golf" />
-
   </LandingLayout>
 );
 

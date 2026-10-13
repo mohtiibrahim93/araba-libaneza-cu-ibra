@@ -45,9 +45,10 @@ export const PRIVATE_LESSON = 150;
  * at 10 and -20% at 20; the owner replaced both with this one.)
  * Ordered highest-first so `find` returns the best applicable tier.
  */
-export const PRIVATE_DISCOUNT_TIERS: ReadonlyArray<{ from: number; rate: number }> = [
-  { from: 20, rate: 0.15 },
-];
+export const PRIVATE_DISCOUNT_TIERS: ReadonlyArray<{
+  from: number;
+  rate: number;
+}> = [{ from: 20, rate: 0.15 }];
 
 /**
  * Discount for paying a whole group course upfront (adult or kids, online or
@@ -58,7 +59,9 @@ export const GROUP_FULL_COURSE_DISCOUNT = 0.15;
 
 /** Discount fraction for a lesson count: 0 below 20, .15 from 20. */
 export function privateDiscountFor(quantity: number): number {
-  return PRIVATE_DISCOUNT_TIERS.find((tier) => quantity >= tier.from)?.rate ?? 0;
+  return (
+    PRIVATE_DISCOUNT_TIERS.find((tier) => quantity >= tier.from)?.rate ?? 0
+  );
 }
 
 /** In-center classes cost +40%, rounded to the nearest 10 RON. */
@@ -80,7 +83,8 @@ export function groupMonthlyUnitAmount(
 ): number {
   const lvl = (level ?? "").toUpperCase() as GroupLevel;
   const monthlyRon = GROUP_MONTHLY_ONLINE[lvl] ?? GROUP_MONTHLY_ONLINE.A1;
-  const withFormat = format === "fizic" ? round10(monthlyRon * PHYSICAL_MULTIPLIER) : monthlyRon;
+  const withFormat =
+    format === "fizic" ? round10(monthlyRon * PHYSICAL_MULTIPLIER) : monthlyRon;
   return withFormat * 100;
 }
 
@@ -93,7 +97,10 @@ export function groupMonthlyUnitAmount(
  * can never overcharge.
  */
 export function privateLessonUnitAmount(format?: string | null): number {
-  const ron = format === "fizic" ? round10(PRIVATE_LESSON * PHYSICAL_MULTIPLIER) : PRIVATE_LESSON;
+  const ron =
+    format === "fizic"
+      ? round10(PRIVATE_LESSON * PHYSICAL_MULTIPLIER)
+      : PRIVATE_LESSON;
   return ron * 100;
 }
 
@@ -107,7 +114,9 @@ export function groupFullCourseUnitAmount(
   format: string | null | undefined,
 ): number {
   const monthly = groupMonthlyUnitAmount(level, format);
-  return Math.round(monthly * groupMonthsFor(level) * (1 - GROUP_FULL_COURSE_DISCOUNT));
+  return Math.round(
+    monthly * groupMonthsFor(level) * (1 - GROUP_FULL_COURSE_DISCOUNT),
+  );
 }
 
 /**
@@ -147,9 +156,10 @@ export const KIDS_GROUP_MONTHS = 3;
  * two, so a data gap can never overcharge.
  */
 export function kidsGroupMonthlyUnitAmount(format?: string | null): number {
-  const ron = format === "fizic"
-    ? round10(KIDS_GROUP_MONTHLY * PHYSICAL_MULTIPLIER)
-    : KIDS_GROUP_MONTHLY;
+  const ron =
+    format === "fizic"
+      ? round10(KIDS_GROUP_MONTHLY * PHYSICAL_MULTIPLIER)
+      : KIDS_GROUP_MONTHLY;
   return ron * 100;
 }
 
@@ -158,7 +168,11 @@ export function kidsGroupMonthlyUnitAmount(format?: string | null): number {
  * course (monthly × months) less GROUP_FULL_COURSE_DISCOUNT.
  */
 export function kidsGroupFullCourseUnitAmount(format?: string | null): number {
-  return Math.round(kidsGroupMonthlyUnitAmount(format) * KIDS_GROUP_MONTHS * (1 - GROUP_FULL_COURSE_DISCOUNT));
+  return Math.round(
+    kidsGroupMonthlyUnitAmount(format) *
+      KIDS_GROUP_MONTHS *
+      (1 - GROUP_FULL_COURSE_DISCOUNT),
+  );
 }
 
 /** Share of one month held as a refundable deposit to reserve a kids seat. */

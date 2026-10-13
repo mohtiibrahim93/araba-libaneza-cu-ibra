@@ -58,26 +58,28 @@ async function fetchActive(): Promise<Cohort[]> {
   });
 
   const today = iso(now);
-  return (data || [])
-    .map((c) => {
-      const taken = Math.min(takenMap.get(c.id) || 0, c.max_seats);
-      return {
-        ...c,
-        form_type: c.form_type as "group" | "kids",
-        status: (c.status as CohortStatus) ?? "forming",
-        teaching_language: (c.teaching_language as "ro" | "en") ?? "ro",
-        taken,
-        seatsLeft: Math.max(0, c.max_seats - taken),
-        full: taken >= c.max_seats,
-      } as Cohort;
-    })
-    // Already-started cohorts first (most urgent), then by start date.
-    .sort((a, b) => {
-      const aRun = a.start_date <= today ? 0 : 1;
-      const bRun = b.start_date <= today ? 0 : 1;
-      if (aRun !== bRun) return aRun - bRun;
-      return a.start_date.localeCompare(b.start_date);
-    });
+  return (
+    (data || [])
+      .map((c) => {
+        const taken = Math.min(takenMap.get(c.id) || 0, c.max_seats);
+        return {
+          ...c,
+          form_type: c.form_type as "group" | "kids",
+          status: (c.status as CohortStatus) ?? "forming",
+          teaching_language: (c.teaching_language as "ro" | "en") ?? "ro",
+          taken,
+          seatsLeft: Math.max(0, c.max_seats - taken),
+          full: taken >= c.max_seats,
+        } as Cohort;
+      })
+      // Already-started cohorts first (most urgent), then by start date.
+      .sort((a, b) => {
+        const aRun = a.start_date <= today ? 0 : 1;
+        const bRun = b.start_date <= today ? 0 : 1;
+        if (aRun !== bRun) return aRun - bRun;
+        return a.start_date.localeCompare(b.start_date);
+      })
+  );
   // No slice here: the homepage banner keeps only upcoming cohorts, while the
   // enrollment note on /cursuri/grup lists running ones too — each consumer
   // trims the list to what its own copy promises.

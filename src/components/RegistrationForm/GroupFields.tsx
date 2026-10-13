@@ -12,7 +12,14 @@ import LevelAssessmentModal from "@/components/LevelAssessmentModal";
 import type { LevelType, FormatType } from "./types";
 import CohortPicker from "./CohortPicker";
 import type { Cohort } from "@/lib/cohortTypes";
-import { ONLINE_PRICES, GROUP_COURSE_MONTHS, GROUP_FULL_COURSE_DISCOUNT, discountLabel, priceFor, formatLei } from "@/lib/pricing";
+import {
+  ONLINE_PRICES,
+  GROUP_COURSE_MONTHS,
+  GROUP_FULL_COURSE_DISCOUNT,
+  discountLabel,
+  priceFor,
+  formatLei,
+} from "@/lib/pricing";
 
 export type GroupPlan = "monthly" | "full";
 
@@ -53,133 +60,177 @@ const GroupFields = ({
           <Label>{t.mainLeadLevelLabel}</Label>
           <div className="rounded-lg border border-primary/30 bg-primary/5 px-4 py-3 text-sm">
             <span className="font-semibold text-foreground">{level}</span>
-            <span className="text-muted-foreground"> — {
-              level === "A1" ? t.levelA1Subtitle :
-              level === "A2" ? t.levelA2Subtitle :
-              level === "B1" ? t.levelB1Subtitle :
-              level === "B2" ? t.levelB2Subtitle :
-              level === "C1" ? t.levelC1Subtitle : t.levelC2Subtitle
-            }</span>
+            <span className="text-muted-foreground">
+              {" "}
+              —{" "}
+              {level === "A1"
+                ? t.levelA1Subtitle
+                : level === "A2"
+                  ? t.levelA2Subtitle
+                  : level === "B1"
+                    ? t.levelB1Subtitle
+                    : level === "B2"
+                      ? t.levelB2Subtitle
+                      : level === "C1"
+                        ? t.levelC1Subtitle
+                        : t.levelC2Subtitle}
+            </span>
           </div>
         </div>
       ) : (
-      <div className="space-y-2">
-        <div className="flex items-center justify-between">
-          <Label htmlFor="level">{t.mainLeadLevelLabel} *</Label>
-          <button
-            type="button"
-            onClick={() => setShowModal(true)}
-            className="text-xs text-primary hover:underline underline-offset-2"
+        <div className="space-y-2">
+          <div className="flex items-center justify-between">
+            <Label htmlFor="level">{t.mainLeadLevelLabel} *</Label>
+            <button
+              type="button"
+              onClick={() => setShowModal(true)}
+              className="text-xs text-primary hover:underline underline-offset-2"
+            >
+              {t.levelQuizDontKnow}
+            </button>
+          </div>
+          <Select
+            value={level}
+            onValueChange={(v) => onLevelChange(v as LevelType)}
           >
-            {t.levelQuizDontKnow}
-          </button>
+            <SelectTrigger
+              id="level"
+              aria-invalid={levelError || undefined}
+              className={
+                levelError ? "border-destructive focus:ring-destructive" : ""
+              }
+            >
+              <SelectValue placeholder={t.mainLeadLevelPlaceholder} />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="A1">A1 — {t.levelA1Subtitle}</SelectItem>
+              <SelectItem value="A2">A2 — {t.levelA2Subtitle}</SelectItem>
+              <SelectItem value="B1">B1 — {t.levelB1Subtitle}</SelectItem>
+              <SelectItem value="B2">B2 — {t.levelB2Subtitle}</SelectItem>
+              <SelectItem value="C1">C1 — {t.levelC1Subtitle}</SelectItem>
+              <SelectItem value="C2">C2 — {t.levelC2Subtitle}</SelectItem>
+            </SelectContent>
+          </Select>
+          {levelError && (
+            <p className="text-xs text-destructive">{t.mainLeadErrorLevel}</p>
+          )}
+          <p className="text-xs text-muted-foreground">{t.mainLeadLevelHelp}</p>
         </div>
-        <Select value={level} onValueChange={(v) => onLevelChange(v as LevelType)}>
-          <SelectTrigger
-            id="level"
-            aria-invalid={levelError || undefined}
-            className={levelError ? "border-destructive focus:ring-destructive" : ""}
-          >
-            <SelectValue placeholder={t.mainLeadLevelPlaceholder} />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="A1">A1 — {t.levelA1Subtitle}</SelectItem>
-            <SelectItem value="A2">A2 — {t.levelA2Subtitle}</SelectItem>
-            <SelectItem value="B1">B1 — {t.levelB1Subtitle}</SelectItem>
-            <SelectItem value="B2">B2 — {t.levelB2Subtitle}</SelectItem>
-            <SelectItem value="C1">C1 — {t.levelC1Subtitle}</SelectItem>
-            <SelectItem value="C2">C2 — {t.levelC2Subtitle}</SelectItem>
-          </SelectContent>
-        </Select>
-        {levelError && (
-          <p className="text-xs text-destructive">{t.mainLeadErrorLevel}</p>
-        )}
-        <p className="text-xs text-muted-foreground">{t.mainLeadLevelHelp}</p>
-      </div>
       )}
 
-      {!locked && <LevelAssessmentModal
-        open={showModal}
-        onOpenChange={setShowModal}
-        onSelectLevel={onLevelChange}
-      />}
+      {!locked && (
+        <LevelAssessmentModal
+          open={showModal}
+          onOpenChange={setShowModal}
+          onSelectLevel={onLevelChange}
+        />
+      )}
 
       {level && (
-        <div id="cohort-selection" tabIndex={-1} aria-invalid={cohortError || undefined}>
-        <CohortPicker
-          formType="group"
-          level={level}
-          format={format || null}
-          selectedCohortId={cohortId}
-          onSelect={onCohortChange}
-        />
-        {cohortError && <p role="alert" className="text-sm text-destructive">{lang === "en" ? "Choose a group before continuing." : "Alege o grupă înainte de a continua."}</p>}
+        <div
+          id="cohort-selection"
+          tabIndex={-1}
+          aria-invalid={cohortError || undefined}
+        >
+          <CohortPicker
+            formType="group"
+            level={level}
+            format={format || null}
+            selectedCohortId={cohortId}
+            onSelect={onCohortChange}
+          />
+          {cohortError && (
+            <p role="alert" className="text-sm text-destructive">
+              {lang === "en"
+                ? "Choose a group before continuing."
+                : "Alege o grupă înainte de a continua."}
+            </p>
+          )}
         </div>
       )}
 
-      {level && (() => {
-        const months = GROUP_COURSE_MONTHS[level as LevelType] ?? 4;
-        const monthly = priceFor(
-          ONLINE_PRICES.groupMonthly[level as LevelType] ?? 500,
-          format || "online",
-        );
-        const fullBase = monthly * months;
-        const fullDiscounted = Math.round(fullBase * (1 - GROUP_FULL_COURSE_DISCOUNT));
-        const options: { plan: GroupPlan; title: string; big: string; sub?: string; badge?: string }[] = [
-          {
-            plan: "monthly",
-            title: t.groupPlanMonthly,
-            big: `${formatLei(monthly)} LEI / ${lang === "en" ? "month" : "lună"}`,
-            sub: `× ${months} ${lang === "en" ? "months" : "luni"}`,
-          },
-          {
-            plan: "full",
-            title: t.groupPlanFull,
-            big: `${formatLei(fullDiscounted)} LEI`,
-            sub: `${formatLei(fullBase)} LEI`,
-            badge: discountLabel(GROUP_FULL_COURSE_DISCOUNT),
-          },
-        ];
-        return (
-          <div className="space-y-2">
-            <Label>{t.groupMonthsLabel} *</Label>
-            <div className="grid grid-cols-2 gap-2">
-              {options.map((o) => {
-                const active = groupPlan === o.plan;
-                return (
-                  <button
-                    key={o.plan}
-                    type="button"
-                    onClick={() => onGroupPlanChange(o.plan)}
-                    className={`text-left rounded-lg border p-3 transition-colors ${
-                      active
-                        ? "border-primary bg-primary/5"
-                        : "border-border bg-background hover:bg-muted"
-                    }`}
-                  >
-                    <div className="flex items-center justify-between">
-                      <span className="text-sm font-semibold text-foreground">{o.title}</span>
-                      {o.badge && (
-                        <span className="text-[10px] font-bold uppercase tracking-wide text-primary bg-primary/10 px-1.5 py-0.5 rounded-[4px]">
-                          {o.badge}
+      {level &&
+        (() => {
+          const months = GROUP_COURSE_MONTHS[level as LevelType] ?? 4;
+          const monthly = priceFor(
+            ONLINE_PRICES.groupMonthly[level as LevelType] ?? 500,
+            format || "online",
+          );
+          const fullBase = monthly * months;
+          const fullDiscounted = Math.round(
+            fullBase * (1 - GROUP_FULL_COURSE_DISCOUNT),
+          );
+          const options: {
+            plan: GroupPlan;
+            title: string;
+            big: string;
+            sub?: string;
+            badge?: string;
+          }[] = [
+            {
+              plan: "monthly",
+              title: t.groupPlanMonthly,
+              big: `${formatLei(monthly)} LEI / ${lang === "en" ? "month" : "lună"}`,
+              sub: `× ${months} ${lang === "en" ? "months" : "luni"}`,
+            },
+            {
+              plan: "full",
+              title: t.groupPlanFull,
+              big: `${formatLei(fullDiscounted)} LEI`,
+              sub: `${formatLei(fullBase)} LEI`,
+              badge: discountLabel(GROUP_FULL_COURSE_DISCOUNT),
+            },
+          ];
+          return (
+            <div className="space-y-2">
+              <Label>{t.groupMonthsLabel} *</Label>
+              <div className="grid grid-cols-2 gap-2">
+                {options.map((o) => {
+                  const active = groupPlan === o.plan;
+                  return (
+                    <button
+                      key={o.plan}
+                      type="button"
+                      onClick={() => onGroupPlanChange(o.plan)}
+                      className={`text-left rounded-lg border p-3 transition-colors ${
+                        active
+                          ? "border-primary bg-primary/5"
+                          : "border-border bg-background hover:bg-muted"
+                      }`}
+                    >
+                      <div className="flex items-center justify-between">
+                        <span className="text-sm font-semibold text-foreground">
+                          {o.title}
                         </span>
+                        {o.badge && (
+                          <span className="text-[10px] font-bold uppercase tracking-wide text-primary bg-primary/10 px-1.5 py-0.5 rounded-[4px]">
+                            {o.badge}
+                          </span>
+                        )}
+                      </div>
+                      <p className="mt-1 text-base font-bold text-foreground">
+                        {o.big}
+                      </p>
+                      {o.plan === "full" && (
+                        <p className="text-[11px] text-muted-foreground line-through">
+                          {o.sub}
+                        </p>
                       )}
-                    </div>
-                    <p className="mt-1 text-base font-bold text-foreground">{o.big}</p>
-                    {o.plan === "full" && (
-                      <p className="text-[11px] text-muted-foreground line-through">{o.sub}</p>
-                    )}
-                    {o.plan === "monthly" && (
-                      <p className="text-[11px] text-muted-foreground">{o.sub}</p>
-                    )}
-                  </button>
-                );
-              })}
+                      {o.plan === "monthly" && (
+                        <p className="text-[11px] text-muted-foreground">
+                          {o.sub}
+                        </p>
+                      )}
+                    </button>
+                  );
+                })}
+              </div>
+              <p className="text-xs text-muted-foreground">
+                {t.groupMonthsHelp}
+              </p>
             </div>
-            <p className="text-xs text-muted-foreground">{t.groupMonthsHelp}</p>
-          </div>
-        );
-      })()}
+          );
+        })()}
     </>
   );
 };

@@ -23,7 +23,8 @@ export const LEARN_CLUSTER = {
 /** Romanian is x-default: it is the site's primary language. */
 export const LEARN_X_DEFAULT = LEARN_CLUSTER.ro;
 
-export const LEARN_CLUSTER_PATHS: readonly string[] = Object.values(LEARN_CLUSTER);
+export const LEARN_CLUSTER_PATHS: readonly string[] =
+  Object.values(LEARN_CLUSTER);
 
 export const isLearnClusterPath = (path: string): boolean =>
   LEARN_CLUSTER_PATHS.includes(path);

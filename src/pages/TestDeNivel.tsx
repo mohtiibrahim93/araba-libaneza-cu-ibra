@@ -26,7 +26,8 @@ const COPY = {
     home: "Acasă",
     crumb: "Test de nivel",
     start: "Începe testul",
-    startHint: "Cele 24 de întrebări, fără cont. Se încarcă doar după ce apeși.",
+    startHint:
+      "Cele 24 de întrebări, fără cont. Se încarcă doar după ce apeși.",
     practice: "Vrei să exersezi după test?",
     practiceCta: "Jocul Yalla",
     langNote: null as string | null,
@@ -35,9 +36,11 @@ const COPY = {
     intro:
       "24 de întrebări în trei secțiuni, fără cronometru. Citești situații scurte și scrii răspunsul în arabizi. La final primești o recomandare de nivel și cursul care ți se potrivește.",
     knowsH2: "Știi deja ce nivel ai?",
-    knowsP: "Atunci nu ai nevoie de test. Alege cursul potrivit în 30 de secunde.",
+    knowsP:
+      "Atunci nu ai nevoie de test. Alege cursul potrivit în 30 de secunde.",
     knowsCta: "Găsește cursul potrivit",
-    playedP: "Ai exersat deja în Jocul Yalla? Scorul tău din joc poate sugera nivelul, fără test.",
+    playedP:
+      "Ai exersat deja în Jocul Yalla? Scorul tău din joc poate sugera nivelul, fără test.",
     playedCta: "Vezi scorul și nivelul",
     honestH2: "Ce măsoară testul — și ce nu",
     honest: [
@@ -68,9 +71,11 @@ const COPY = {
     intro:
       "24 questions in three sections, with no timer. You read short situations and write your answer in Arabizi. At the end you get a level recommendation and the course that matches it.",
     knowsH2: "Already know your level?",
-    knowsP: "Then you do not need the test. Pick the right course in 30 seconds.",
+    knowsP:
+      "Then you do not need the test. Pick the right course in 30 seconds.",
     knowsCta: "Find the right course",
-    playedP: "Already practising in the Yalla game? Your game score can suggest a level, no test needed.",
+    playedP:
+      "Already practising in the Yalla game? Your game score can suggest a level, no test needed.",
     playedCta: "See your score and level",
     honestH2: "What the test measures — and what it does not",
     honest: [
@@ -109,18 +114,35 @@ const TestDeNivel = () => {
       <Navbar />
 
       <main id="main-content" className="flex-1 pt-16">
-        <nav aria-label="Breadcrumb" className="mx-auto w-full max-w-content px-gutter pb-2 pt-6 text-xs text-muted-foreground">
+        <nav
+          aria-label="Breadcrumb"
+          className="mx-auto w-full max-w-content px-gutter pb-2 pt-6 text-xs text-muted-foreground"
+        >
           <ol className="flex flex-wrap items-center gap-1">
-            <li><Link to="/" className="transition-colors hover:text-foreground">{c.home}</Link></li>
-            <li aria-hidden="true"><ChevronRight className="inline h-3.5 w-3.5 -mt-0.5" /></li>
-            <li className="font-medium text-foreground" aria-current="page">{c.crumb}</li>
+            <li>
+              <Link to="/" className="transition-colors hover:text-foreground">
+                {c.home}
+              </Link>
+            </li>
+            <li aria-hidden="true">
+              <ChevronRight className="inline h-3.5 w-3.5 -mt-0.5" />
+            </li>
+            <li className="font-medium text-foreground" aria-current="page">
+              {c.crumb}
+            </li>
           </ol>
         </nav>
 
         <header className="mx-auto w-full max-w-content px-gutter pb-8 pt-4 text-center">
-          <span className="mb-3 block text-xs font-semibold uppercase tracking-widest text-brand-green">{c.eyebrow}</span>
-          <h1 className="font-display text-display-xl font-bold tracking-tight text-foreground mb-3">{c.h1}</h1>
-          <p className="mx-auto max-w-2xl text-base leading-relaxed text-muted-foreground">{c.intro}</p>
+          <span className="mb-3 block text-xs font-semibold uppercase tracking-widest text-brand-green">
+            {c.eyebrow}
+          </span>
+          <h1 className="font-display text-display-xl font-bold tracking-tight text-foreground mb-3">
+            {c.h1}
+          </h1>
+          <p className="mx-auto max-w-2xl text-base leading-relaxed text-muted-foreground">
+            {c.intro}
+          </p>
           {/* Only an English reader is surprised by this, so only they are told
               — the same arrangement /joc uses for the game itself. */}
           {c.langNote && (
@@ -144,7 +166,9 @@ const TestDeNivel = () => {
               >
                 {c.start}
               </button>
-              <p className="mt-3 text-sm text-muted-foreground">{c.startHint}</p>
+              <p className="mt-3 text-sm text-muted-foreground">
+                {c.startHint}
+              </p>
             </div>
           )}
           <div className="mx-auto mt-5 max-w-2xl">
@@ -152,7 +176,10 @@ const TestDeNivel = () => {
           </div>
           <p className="mt-5 text-center text-sm text-muted-foreground">
             {c.practice}{" "}
-            <Link to="/joc" className="font-semibold text-brand-green underline underline-offset-4">
+            <Link
+              to="/joc"
+              className="font-semibold text-brand-green underline underline-offset-4"
+            >
               {c.practiceCta} →
             </Link>
           </p>
@@ -161,23 +188,35 @@ const TestDeNivel = () => {
         <section className="mx-auto w-full max-w-content px-gutter pb-section-sm">
           <div className="grid gap-8 md:grid-cols-2">
             <div>
-              <h2 className="font-display text-2xl font-bold text-foreground">{c.honestH2}</h2>
+              <h2 className="font-display text-2xl font-bold text-foreground">
+                {c.honestH2}
+              </h2>
               <ul className="mt-3 space-y-2 text-muted-foreground leading-relaxed">
                 {c.honest.map((line) => (
                   <li key={line} className="flex gap-2">
-                    <span aria-hidden className="text-primary">·</span>
+                    <span aria-hidden className="text-primary">
+                      ·
+                    </span>
                     <span>{line}</span>
                   </li>
                 ))}
               </ul>
             </div>
             <div>
-              <h2 className="font-display text-2xl font-bold text-foreground">{c.afterH2}</h2>
-              <p className="mt-3 leading-relaxed text-muted-foreground">{c.afterP}</p>
+              <h2 className="font-display text-2xl font-bold text-foreground">
+                {c.afterH2}
+              </h2>
+              <p className="mt-3 leading-relaxed text-muted-foreground">
+                {c.afterP}
+              </p>
 
               <div className="mt-8 rounded-xl border bg-card p-6">
-                <h2 className="font-display text-xl font-bold text-foreground">{c.knowsH2}</h2>
-                <p className="mt-2 leading-relaxed text-muted-foreground">{c.knowsP}</p>
+                <h2 className="font-display text-xl font-bold text-foreground">
+                  {c.knowsH2}
+                </h2>
+                <p className="mt-2 leading-relaxed text-muted-foreground">
+                  {c.knowsP}
+                </p>
                 <Link
                   to="/quiz"
                   className="mt-4 inline-flex items-center gap-1 font-medium text-primary underline underline-offset-4 hover:text-primary/80"
@@ -188,15 +227,27 @@ const TestDeNivel = () => {
                 {/* The game's practice history is a level signal too — the
                     alternative to sitting this test. */}
                 <p className="mt-4 text-sm leading-relaxed text-muted-foreground">
-                  {lang === "en" ? "Rather talk to someone? " : "Preferi să vorbești cu cineva? "}
-                  <Link to="/verificare-nivel" className="font-medium text-primary underline underline-offset-4 hover:text-primary/80">
-                    {lang === "en" ? "Free level check with Ibra" : "Verificare de nivel gratuită cu Ibra"}
+                  {lang === "en"
+                    ? "Rather talk to someone? "
+                    : "Preferi să vorbești cu cineva? "}
+                  <Link
+                    to="/verificare-nivel"
+                    className="font-medium text-primary underline underline-offset-4 hover:text-primary/80"
+                  >
+                    {lang === "en"
+                      ? "Free level check with Ibra"
+                      : "Verificare de nivel gratuită cu Ibra"}
                   </Link>
-                  {lang === "en" ? " — up to 30 minutes, on Zoom or at the center." : " — până la 30 de minute, pe Zoom sau la centru."}
+                  {lang === "en"
+                    ? " — up to 30 minutes, on Zoom or at the center."
+                    : " — până la 30 de minute, pe Zoom sau la centru."}
                 </p>
                 <p className="mt-4 text-sm leading-relaxed text-muted-foreground">
                   {c.playedP}{" "}
-                  <Link to="/joc/scor" className="font-medium text-primary underline underline-offset-4 hover:text-primary/80">
+                  <Link
+                    to="/joc/scor"
+                    className="font-medium text-primary underline underline-offset-4 hover:text-primary/80"
+                  >
                     {c.playedCta}
                   </Link>
                 </p>

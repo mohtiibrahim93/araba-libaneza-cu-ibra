@@ -45,105 +45,159 @@ const CursuriAraba = () => (
     faq={FAQ}
   >
     <p>
-      Cauți un curs de arabă care să te facă să <strong>vorbești</strong>, nu doar să memorezi
-      reguli? La <Link to="/">Centrul de Arabă Libaneză cu Ibra</Link> predăm dialectul libanez —
-      limba reală a conversațiilor, muzicii și serialelor — cu un profesor nativ și metoda{" "}
-      <strong>Oral First</strong>: vorbești din prima lecție.
+      Cauți un curs de arabă care să te facă să <strong>vorbești</strong>, nu
+      doar să memorezi reguli? La{" "}
+      <Link to="/">Centrul de Arabă Libaneză cu Ibra</Link> predăm dialectul
+      libanez — limba reală a conversațiilor, muzicii și serialelor — cu un
+      profesor nativ și metoda <strong>Oral First</strong>: vorbești din prima
+      lecție.
     </p>
 
     <h2>Alege formatul potrivit</h2>
     <ul>
       <li>
-        <strong><Link to="/cursuri/grup">Curs de grup (A1–C2)</Link></strong> — cel mai accesibil și
-        mai motivant: grupe mici, 2 lecții de 90 min/săptămână, de la 500 lei/lună. Grupele
-        noi pornesc regulat, fizic și online — datele actuale sunt pe pagina cursului de grup.
+        <strong>
+          <Link to="/cursuri/grup">Curs de grup (A1–C2)</Link>
+        </strong>{" "}
+        — cel mai accesibil și mai motivant: grupe mici, 2 lecții de 90
+        min/săptămână, de la 500 lei/lună. Grupele noi pornesc regulat, fizic și
+        online — datele actuale sunt pe pagina cursului de grup.
       </li>
       <li>
-        <strong><Link to="/cursuri/private">Lecții private 1:1</Link></strong> — ritm personalizat și
-        program flexibil, 150 lei/lecție online sau 210 lei fizic (60 min).
+        <strong>
+          <Link to="/cursuri/private">Lecții private 1:1</Link>
+        </strong>{" "}
+        — ritm personalizat și program flexibil, 150 lei/lecție online sau 210
+        lei fizic (60 min).
       </li>
       <li>
-        <strong><Link to="/cursuri/copii">Curs pentru copii (6–11 ani)</Link></strong> — învățare
-        prin joc, cântece și povești, fizic în București.
+        <strong>
+          <Link to="/cursuri/copii">Curs pentru copii (6–11 ani)</Link>
+        </strong>{" "}
+        — învățare prin joc, cântece și povești, fizic în București.
       </li>
     </ul>
 
     <h2>De ce arabă libaneză, nu arabă standard?</h2>
     <p>
-      Araba standard (MSA/Fusha) este limba scrisă a știrilor și documentelor — aproape nimeni nu o
-      vorbește acasă. Dialectul libanez este limba pe care o folosești <em>de fapt</em> cu oamenii:
-      în familie, în vacanță în Liban, pe Instagram și TikTok. Am explicat diferența pe larg în{" "}
-      <Link to="/blog/araba-libaneza-vs-araba-standard">araba libaneză vs araba standard</Link>.
+      Araba standard (MSA/Fusha) este limba scrisă a știrilor și documentelor —
+      aproape nimeni nu o vorbește acasă. Dialectul libanez este limba pe care o
+      folosești <em>de fapt</em> cu oamenii: în familie, în vacanță în Liban, pe
+      Instagram și TikTok. Am explicat diferența pe larg în{" "}
+      <Link to="/blog/araba-libaneza-vs-araba-standard">
+        araba libaneză vs araba standard
+      </Link>
+      .
     </p>
 
     <h2>Cum arată drumul tău</h2>
     <ul>
-      <li><strong>Săptămâna 1:</strong> saluți, te prezinți, pui primele întrebări — totul oral, cu arabizi.</li>
-      <li><strong>Lunile 1–4 (A1):</strong> conversații de supraviețuire — restaurant, taxi, cumpărături.</li>
-      <li><strong>Lunile 5–11 (A2):</strong> povestești la trecut și viitor, îți exprimi opiniile.</li>
-      <li><strong>B1 și mai departe:</strong> conversație liberă, nuanțe culturale, fluență.</li>
+      <li>
+        <strong>Săptămâna 1:</strong> saluți, te prezinți, pui primele întrebări
+        — totul oral, cu arabizi.
+      </li>
+      <li>
+        <strong>Lunile 1–4 (A1):</strong> conversații de supraviețuire —
+        restaurant, taxi, cumpărături.
+      </li>
+      <li>
+        <strong>Lunile 5–11 (A2):</strong> povestești la trecut și viitor, îți
+        exprimi opiniile.
+      </li>
+      <li>
+        <strong>B1 și mai departe:</strong> conversație liberă, nuanțe
+        culturale, fluență.
+      </li>
     </ul>
     <p>
       Detalii despre durată pe fiecare nivel găsești în{" "}
-      <Link to="/blog/cat-dureaza-sa-inveti-araba-libaneza">cât durează să înveți araba libaneză</Link>.
+      <Link to="/blog/cat-dureaza-sa-inveti-araba-libaneza">
+        cât durează să înveți araba libaneză
+      </Link>
+      .
     </p>
 
     <h2>De ce cu profesor nativ</h2>
     <p>
-      Pronunția, intonația și expresiile idiomatice nu se învață din manual — se preiau de la un
-      vorbitor nativ. Ibra e libanez, cu peste 5 ani de experiență în predare, iar metoda{" "}
-      <strong>Oral First</strong> te pune să vorbești din prima lecție, folosind{" "}
-      <Link to="/arabizi">arabizi</Link> (scriere cu litere latine) până când alfabetul arab vine
-      natural — nu ai nevoie de <Link to="/fara-alfabet-arab">alfabetul arab</Link> ca să începi.
+      Pronunția, intonația și expresiile idiomatice nu se învață din manual — se
+      preiau de la un vorbitor nativ. Ibra e libanez, cu peste 5 ani de
+      experiență în predare, iar metoda <strong>Oral First</strong> te pune să
+      vorbești din prima lecție, folosind <Link to="/arabizi">arabizi</Link>{" "}
+      (scriere cu litere latine) până când alfabetul arab vine natural — nu ai
+      nevoie de <Link to="/fara-alfabet-arab">alfabetul arab</Link> ca să
+      începi.
     </p>
 
     <h2>În ce limbă se predau lecțiile</h2>
     <p>
-      Ibra predă fluent în <strong>engleză, franceză, arabă și română</strong> — alegi limba în care
-      te simți cel mai confortabil, iar explicațiile se ajustează după tine. Lecțiile nu se țin în
-      germană sau alte limbi.
+      Ibra predă fluent în <strong>engleză, franceză, arabă și română</strong> —
+      alegi limba în care te simți cel mai confortabil, iar explicațiile se
+      ajustează după tine. Lecțiile nu se țin în germană sau alte limbi.
     </p>
 
     <h2>Cursuri de arabă în București vs online</h2>
     <p>
-      Fizic, la Raduga Creative Center (Strada Icoanei 80, sector 2), ai energia grupei și feedbackul
-      direct. Online înseamnă lecții <strong>live pe Zoom</strong>, nu înregistrări: vezi și auzi
-      profesorul, vorbești din primele minute, primești corecturi pe loc, iar materialele se împart
-      pe ecran — ai nevoie doar de un laptop sau telefon cu cameră. Ambele formate folosesc același
-      profesor nativ și aceeași metodă, iar toate nivelurile au variantă online.
+      Fizic, la Raduga Creative Center (Strada Icoanei 80, sector 2), ai energia
+      grupei și feedbackul direct. Online înseamnă lecții{" "}
+      <strong>live pe Zoom</strong>, nu înregistrări: vezi și auzi profesorul,
+      vorbești din primele minute, primești corecturi pe loc, iar materialele se
+      împart pe ecran — ai nevoie doar de un laptop sau telefon cu cameră.
+      Ambele formate folosesc același profesor nativ și aceeași metodă, iar
+      toate nivelurile au variantă online.
     </p>
     <p>
-      Online funcționează de oriunde, atâta timp cât programul se potrivește cu fusul orar al
-      Bucureștiului (EET) — avem cursanți din diaspora și din alte țări. Pentru detalii despre
-      varianta fizică, vezi <Link to="/cursuri-araba-bucuresti">cursurile de arabă în București</Link>.
+      Online funcționează de oriunde, atâta timp cât programul se potrivește cu
+      fusul orar al Bucureștiului (EET) — avem cursanți din diaspora și din alte
+      țări. Pentru detalii despre varianta fizică, vezi{" "}
+      <Link to="/cursuri-araba-bucuresti">cursurile de arabă în București</Link>
+      .
     </p>
 
     <h2>Ce înseamnă „arabă levantină” și de ce contează</h2>
     <p>
-      Araba libaneză face parte din grupul dialectelor <strong>levantine</strong> (numit și{" "}
-      <em>shami</em>), vorbite în Liban, Siria, Iordania și Palestina. Cine învață libaneză înțelege
-      și vorbește practic cu vorbitori din toate aceste țări — un avantaj real față de alte dialecte.
-      Harta și diferențele sunt explicate în{" "}
+      Araba libaneză face parte din grupul dialectelor{" "}
+      <strong>levantine</strong> (numit și <em>shami</em>), vorbite în Liban,
+      Siria, Iordania și Palestina. Cine învață libaneză înțelege și vorbește
+      practic cu vorbitori din toate aceste țări — un avantaj real față de alte
+      dialecte. Harta și diferențele sunt explicate în{" "}
       <Link to="/dialecte-arabe">ghidul dialectelor arabe</Link> și în{" "}
       <Link to="/blog/limbile-vorbite-in-liban">limbile vorbite în Liban</Link>.
     </p>
 
     <h2>Cursuri de arabă pe vârste</h2>
     <ul>
-      <li><strong><Link to="/curs-araba-copii">Copii 6–11 ani</Link></strong> — prin joc, cântece și povești, fizic, la centru (momentan nu avem cursuri pentru copii).</li>
-      <li><strong><Link to="/cursuri-araba-adolescenti">Adolescenți 12–17 ani</Link></strong> — conversație, muzică și limbaj de social media, fizic sau online.</li>
-      <li><strong><Link to="/cursuri/grup">Adulți A1–C2</Link></strong> — grupe mici pe niveluri, fizic sau online.</li>
+      <li>
+        <strong>
+          <Link to="/curs-araba-copii">Copii 6–11 ani</Link>
+        </strong>{" "}
+        — prin joc, cântece și povești, fizic, la centru (momentan nu avem
+        cursuri pentru copii).
+      </li>
+      <li>
+        <strong>
+          <Link to="/cursuri-araba-adolescenti">Adolescenți 12–17 ani</Link>
+        </strong>{" "}
+        — conversație, muzică și limbaj de social media, fizic sau online.
+      </li>
+      <li>
+        <strong>
+          <Link to="/cursuri/grup">Adulți A1–C2</Link>
+        </strong>{" "}
+        — grupe mici pe niveluri, fizic sau online.
+      </li>
     </ul>
 
     <h2>Nu știi ce format ți se potrivește?</h2>
     <p>
-      Am scris un ghid de comparație onest — dialect vs arabă standard, grup vs privat vs aplicații,
-      cu prețuri și criterii clare:{" "}
-      <Link to="/cel-mai-bun-curs-de-araba">cum alegi cel mai bun curs de arabă</Link>. Sau începi
-      direct cu <Link to="/trial">lecția de probă gratuită de 30 de minute</Link>.
+      Am scris un ghid de comparație onest — dialect vs arabă standard, grup vs
+      privat vs aplicații, cu prețuri și criterii clare:{" "}
+      <Link to="/cel-mai-bun-curs-de-araba">
+        cum alegi cel mai bun curs de arabă
+      </Link>
+      . Sau începi direct cu{" "}
+      <Link to="/trial">lecția de probă gratuită de 30 de minute</Link>.
     </p>
   </LandingLayout>
-
 );
 
 export default CursuriAraba;

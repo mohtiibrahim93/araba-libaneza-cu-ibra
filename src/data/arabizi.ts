@@ -78,7 +78,10 @@ export const ARABIZI_DIGITS: ArabiziDigit[] = [
       ro: "gh, ca un „r” franțuzesc răgușit",
       en: "gh, like a raspy French 'r'",
     },
-    examples: { ro: "8ada (prânz), 8ali (scump)", en: "8ada (lunch), 8ali (expensive)" },
+    examples: {
+      ro: "8ada (prânz), 8ali (scump)",
+      en: "8ada (lunch), 8ali (expensive)",
+    },
   },
 ];
 

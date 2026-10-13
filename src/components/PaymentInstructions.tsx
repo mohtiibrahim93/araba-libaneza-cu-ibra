@@ -30,7 +30,15 @@ interface PaymentInstructionsProps {
   plan?: "monthly" | "full" | undefined;
 }
 
-const PaymentInstructions = ({ courseType, email, name, registrationId, quantity, plan, paid }: PaymentInstructionsProps) => {
+const PaymentInstructions = ({
+  courseType,
+  email,
+  name,
+  registrationId,
+  quantity,
+  plan,
+  paid,
+}: PaymentInstructionsProps) => {
   const { t } = useI18n();
   const navigate = useNavigate();
   const [showAlternatives, setShowAlternatives] = useState(false);
@@ -46,7 +54,8 @@ const PaymentInstructions = ({ courseType, email, name, registrationId, quantity
     if (name) params.set("name", name);
     if (registrationId) params.set("registrationId", registrationId);
     if (quantity && quantity > 1) params.set("quantity", String(quantity));
-    if ((courseType === "group" || courseType === "kids") && plan) params.set("plan", plan);
+    if ((courseType === "group" || courseType === "kids") && plan)
+      params.set("plan", plan);
     navigate(`/checkout?${params.toString()}`);
   };
 
@@ -83,7 +92,9 @@ const PaymentInstructions = ({ courseType, email, name, registrationId, quantity
           className="w-full flex items-center justify-between text-sm font-medium text-foreground hover:text-primary transition-colors"
         >
           <span>
-            {showAlternatives ? t.paymentAlternativesHide : t.paymentAlternativesToggle}
+            {showAlternatives
+              ? t.paymentAlternativesHide
+              : t.paymentAlternativesToggle}
           </span>
           <ChevronDown
             className={`w-4 h-4 transition-transform ${showAlternatives ? "rotate-180" : ""}`}
@@ -103,7 +114,8 @@ const PaymentInstructions = ({ courseType, email, name, registrationId, quantity
                 className="rounded-xl border border-amber-300/70 bg-amber-50 px-4 py-3 text-sm leading-relaxed text-amber-900 dark:border-amber-500/30 dark:bg-amber-500/10 dark:text-amber-200"
               >
                 {t.paymentAlternativesUnpaid}
-                {(courseType === "group" || courseType === "kids") && ` ${t.paymentAlternativesUnpaidSeat}`}
+                {(courseType === "group" || courseType === "kids") &&
+                  ` ${t.paymentAlternativesUnpaidSeat}`}
               </p>
             )}
             <ul className="space-y-2.5">
@@ -122,7 +134,9 @@ const PaymentInstructions = ({ courseType, email, name, registrationId, quantity
                 <span>{t.paymentPaypal}</span>
               </li>
             </ul>
-            <p className="text-xs text-muted-foreground italic">{t.paymentNote}</p>
+            <p className="text-xs text-muted-foreground italic">
+              {t.paymentNote}
+            </p>
             <a
               href={WHATSAPP_URL}
               target="_blank"

@@ -28,7 +28,10 @@ export const MODALITY_LABELS: Record<Modality, { ro: string; en: string }> = {
   fizic: { ro: "Fizic, în București", en: "In person, Bucharest" },
 };
 
-export const COURSE_TYPE_LABELS: Record<CourseType, { ro: string; en: string }> = {
+export const COURSE_TYPE_LABELS: Record<
+  CourseType,
+  { ro: string; en: string }
+> = {
   grup: { ro: "Grup", en: "Group" },
   privat: { ro: "Privat", en: "Private" },
 };
@@ -122,7 +125,10 @@ export const PUBLIC_COURSE_STATUSES: CourseStatus[] = [
  * badge the visitor sees, per the redesign spec: Înscrieri deschise / Ultimele
  * locuri / Listă de așteptare / Complet / În curând / Încheiat.
  */
-export function courseStatusBadge(status: CourseStatus, seatsLeft?: number): StatusBadge {
+export function courseStatusBadge(
+  status: CourseStatus,
+  seatsLeft?: number,
+): StatusBadge {
   switch (status) {
     case "full":
       return { ro: "Listă de așteptare", en: "Waitlist", tone: "waitlist" };
@@ -147,7 +153,10 @@ export function courseStatusBadge(status: CourseStatus, seatsLeft?: number): Sta
 }
 
 /** Display title: explicit title, else level-derived, else a generic label. */
-export function courseTitle(c: Pick<Course, "title_ro" | "title_en" | "level">, lang: "ro" | "en"): string {
+export function courseTitle(
+  c: Pick<Course, "title_ro" | "title_en" | "level">,
+  lang: "ro" | "en",
+): string {
   const explicit = lang === "en" ? c.title_en : c.title_ro;
   if (explicit) return explicit;
   if (c.level) return `Arabă Libaneză ${c.level.toUpperCase()}`;

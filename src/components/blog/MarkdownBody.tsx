@@ -20,7 +20,12 @@ const MarkdownBody = ({ markdown }: { markdown: string }) => (
         if (AUDIO_RE.test(href)) {
           return (
             <span className="block my-3">
-              <audio controls preload="none" src={href} className="w-full max-w-md" />
+              <audio
+                controls
+                preload="none"
+                src={href}
+                className="w-full max-w-md"
+              />
             </span>
           );
         }
@@ -32,7 +37,12 @@ const MarkdownBody = ({ markdown }: { markdown: string }) => (
         );
       },
       img: ({ src = "", alt = "" }) => (
-        <img src={src} alt={alt} loading="lazy" className="max-w-full h-auto rounded-lg my-4" />
+        <img
+          src={src}
+          alt={alt}
+          loading="lazy"
+          className="max-w-full h-auto rounded-lg my-4"
+        />
       ),
       table: ({ children }) => (
         <div className="overflow-x-auto">

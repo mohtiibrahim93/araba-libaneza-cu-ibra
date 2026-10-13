@@ -44,10 +44,14 @@ const DEFAULT_FREQ = "monthly";
 const DEFAULT_PRIORITY = "0.6";
 
 /** A route is listed unless it points its canonical elsewhere, or is noindex. */
-export const belongsInSitemap = (r: SeoRoute): boolean => !r.canonical && !r.noindex;
+export const belongsInSitemap = (r: SeoRoute): boolean =>
+  !r.canonical && !r.noindex;
 
 /** Existing curation, keyed by path, so regenerating does not flatten it. */
-function existingSettings(): Map<string, { changefreq: string; priority: string }> {
+function existingSettings(): Map<
+  string,
+  { changefreq: string; priority: string }
+> {
   const out = new Map<string, { changefreq: string; priority: string }>();
   if (!existsSync(FILE)) return out;
   const xml = readFileSync(FILE, "utf8");
@@ -55,8 +59,10 @@ function existingSettings(): Map<string, { changefreq: string; priority: string 
     const loc = /<loc>([^<]+)<\/loc>/.exec(block)?.[1];
     if (!loc) continue;
     out.set(loc.replace(BASE, "") || "/", {
-      changefreq: /<changefreq>([^<]+)<\/changefreq>/.exec(block)?.[1] ?? DEFAULT_FREQ,
-      priority: /<priority>([^<]+)<\/priority>/.exec(block)?.[1] ?? DEFAULT_PRIORITY,
+      changefreq:
+        /<changefreq>([^<]+)<\/changefreq>/.exec(block)?.[1] ?? DEFAULT_FREQ,
+      priority:
+        /<priority>([^<]+)<\/priority>/.exec(block)?.[1] ?? DEFAULT_PRIORITY,
     });
   }
   return out;
@@ -72,12 +78,15 @@ function existingSettings(): Map<string, { changefreq: string; priority: string 
 export function blogIndexPages(): string[] {
   const out: string[] = [];
   for (const base of ["/blog", "/en/blog"]) {
-    for (let page = 2; page <= blogTotalPages(); page += 1) out.push(blogPageHref(base, page));
+    for (let page = 2; page <= blogTotalPages(); page += 1)
+      out.push(blogPageHref(base, page));
   }
   return out;
 }
 
-export function buildSitemap(lastmods: ReadonlyMap<string, string> = new Map()): string {
+export function buildSitemap(
+  lastmods: ReadonlyMap<string, string> = new Map(),
+): string {
   const curated = existingSettings();
   const entry = (path: string, changefreq: string, priority: string) => {
     const lastmod = lastmods.get(path);
@@ -93,12 +102,18 @@ export function buildSitemap(lastmods: ReadonlyMap<string, string> = new Map()):
   const urls = allSeoRoutes()
     .filter(belongsInSitemap)
     .map((r) => {
-      const s = curated.get(r.path) ?? { changefreq: DEFAULT_FREQ, priority: DEFAULT_PRIORITY };
+      const s = curated.get(r.path) ?? {
+        changefreq: DEFAULT_FREQ,
+        priority: DEFAULT_PRIORITY,
+      };
       return entry(r.path, s.changefreq, s.priority);
     })
     .concat(
       blogIndexPages().map((path) => {
-        const s = curated.get(path) ?? { changefreq: "weekly", priority: "0.5" };
+        const s = curated.get(path) ?? {
+          changefreq: "weekly",
+          priority: "0.5",
+        };
         return entry(path, s.changefreq, s.priority);
       }),
     );

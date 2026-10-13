@@ -45,7 +45,14 @@ import AdminNav from "@/components/AdminNav";
 import { invokeAdmin } from "@/lib/adminAuth";
 import { lovable } from "@/integrations/lovable";
 
-type EmailStatus = "sent" | "pending" | "failed" | "dlq" | "suppressed" | "not_sent" | "no_email";
+type EmailStatus =
+  | "sent"
+  | "pending"
+  | "failed"
+  | "dlq"
+  | "suppressed"
+  | "not_sent"
+  | "no_email";
 
 interface NotificationRow {
   id: string;
@@ -75,23 +82,56 @@ const formatPhoneForWa = (phone: string) => phone.replace(/[^\d]/g, "");
 const buildWaMessage = (r: NotificationRow) => {
   const tip = formTypeLabels[r.form_type] || r.form_type;
   return encodeURIComponent(
-    `Bună, ${r.name}! Sunt Ibra de la Centrul de Arabă Libaneză. Mulțumesc pentru înscrierea la cursul ${tip}. Confirm rezervarea ta și îți trimit toate detaliile aici.`
+    `Bună, ${r.name}! Sunt Ibra de la Centrul de Arabă Libaneză. Mulțumesc pentru înscrierea la cursul ${tip}. Confirm rezervarea ta și îți trimit toate detaliile aici.`,
   );
 };
 
 const EmailBadge = ({ status }: { status: EmailStatus }) => {
-  const map: Record<EmailStatus, { label: string; cls: string; icon: JSX.Element }> = {
-    sent: { label: "Trimis", cls: "bg-green-100 text-green-800", icon: <CheckCircle2 className="w-3 h-3" /> },
-    pending: { label: "În așteptare", cls: "bg-yellow-100 text-yellow-800", icon: <Clock className="w-3 h-3" /> },
-    failed: { label: "Eșuat", cls: "bg-red-100 text-red-800", icon: <XCircle className="w-3 h-3" /> },
-    dlq: { label: "Eșuat (final)", cls: "bg-red-100 text-red-800", icon: <XCircle className="w-3 h-3" /> },
-    suppressed: { label: "Blocat", cls: "bg-gray-200 text-gray-800", icon: <XCircle className="w-3 h-3" /> },
-    not_sent: { label: "Netrimis", cls: "bg-gray-100 text-gray-700", icon: <Clock className="w-3 h-3" /> },
-    no_email: { label: "Fără email", cls: "bg-gray-100 text-gray-500", icon: <XCircle className="w-3 h-3" /> },
+  const map: Record<
+    EmailStatus,
+    { label: string; cls: string; icon: JSX.Element }
+  > = {
+    sent: {
+      label: "Trimis",
+      cls: "bg-green-100 text-green-800",
+      icon: <CheckCircle2 className="w-3 h-3" />,
+    },
+    pending: {
+      label: "În așteptare",
+      cls: "bg-yellow-100 text-yellow-800",
+      icon: <Clock className="w-3 h-3" />,
+    },
+    failed: {
+      label: "Eșuat",
+      cls: "bg-red-100 text-red-800",
+      icon: <XCircle className="w-3 h-3" />,
+    },
+    dlq: {
+      label: "Eșuat (final)",
+      cls: "bg-red-100 text-red-800",
+      icon: <XCircle className="w-3 h-3" />,
+    },
+    suppressed: {
+      label: "Blocat",
+      cls: "bg-gray-200 text-gray-800",
+      icon: <XCircle className="w-3 h-3" />,
+    },
+    not_sent: {
+      label: "Netrimis",
+      cls: "bg-gray-100 text-gray-700",
+      icon: <Clock className="w-3 h-3" />,
+    },
+    no_email: {
+      label: "Fără email",
+      cls: "bg-gray-100 text-gray-500",
+      icon: <XCircle className="w-3 h-3" />,
+    },
   };
   const v = map[status];
   return (
-    <span className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-medium ${v.cls}`}>
+    <span
+      className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-medium ${v.cls}`}
+    >
       {v.icon} {v.label}
     </span>
   );
@@ -116,15 +156,21 @@ const AdminNotifications = () => {
   const [rows, setRows] = useState<NotificationRow[]>([]);
   const [busyId, setBusyId] = useState<string | null>(null);
   const [filter, setFilter] = useState<"all" | "pending" | "done">("all");
-  const [courseFilter, setCourseFilter] = useState<"all" | "group" | "private" | "kids">("all");
+  const [courseFilter, setCourseFilter] = useState<
+    "all" | "group" | "private" | "kids"
+  >("all");
   const [selected, setSelected] = useState<Set<string>>(new Set());
   const [bulkDeleting, setBulkDeleting] = useState(false);
   const [confirmBulkOpen, setConfirmBulkOpen] = useState(false);
-  const [deleteTarget, setDeleteTarget] = useState<NotificationRow | null>(null);
+  const [deleteTarget, setDeleteTarget] = useState<NotificationRow | null>(
+    null,
+  );
   const [deleting, setDeleting] = useState(false);
 
   const refresh = useCallback(async () => {
-    const { data, error: fnError } = await invokeAdmin({ action: "list_notifications" });
+    const { data, error: fnError } = await invokeAdmin({
+      action: "list_notifications",
+    });
     if (fnError) throw fnError;
     if (data?.error) throw new Error(data.error);
     setRows(data.data || []);
@@ -187,13 +233,23 @@ const AdminNotifications = () => {
   const handleResendEmail = async (id: string) => {
     setBusyId(id);
     try {
-      const { data, error: fnError } = await invokeAdmin({ action: "resend_confirmation", id });
+      const { data, error: fnError } = await invokeAdmin({
+        action: "resend_confirmation",
+        id,
+      });
       if (fnError) throw fnError;
       if (data?.error) throw new Error(data.error);
-      toast({ title: "Email retrimis", description: "Va apărea ca trimis după procesare." });
+      toast({
+        title: "Email retrimis",
+        description: "Va apărea ca trimis după procesare.",
+      });
       await refresh();
     } catch (err: any) {
-      toast({ title: "Retrimitere eșuată", description: err?.message, variant: "destructive" });
+      toast({
+        title: "Retrimitere eșuată",
+        description: err?.message,
+        variant: "destructive",
+      });
     } finally {
       setBusyId(null);
     }
@@ -211,16 +267,28 @@ const AdminNotifications = () => {
     setBusyId(r.id);
     // Optimistic update
     setRows((prev) =>
-      prev.map((x) => (x.id === r.id ? { ...x, whatsapp_sent_at: new Date().toISOString() } : x))
+      prev.map((x) =>
+        x.id === r.id
+          ? { ...x, whatsapp_sent_at: new Date().toISOString() }
+          : x,
+      ),
     );
     try {
-      const { data, error: fnError } = await invokeAdmin({ action: "mark_whatsapp_sent", id: r.id });
+      const { data, error: fnError } = await invokeAdmin({
+        action: "mark_whatsapp_sent",
+        id: r.id,
+      });
       if (fnError) throw fnError;
       if (data?.error) throw new Error(data.error);
     } catch (err: any) {
-      toast({ title: "Nu s-a putut salva statusul WhatsApp", variant: "destructive" });
+      toast({
+        title: "Nu s-a putut salva statusul WhatsApp",
+        variant: "destructive",
+      });
       setRows((prev) =>
-        prev.map((x) => (x.id === r.id ? { ...x, whatsapp_sent_at: r.whatsapp_sent_at } : x))
+        prev.map((x) =>
+          x.id === r.id ? { ...x, whatsapp_sent_at: r.whatsapp_sent_at } : x,
+        ),
       );
     } finally {
       setBusyId(null);
@@ -230,13 +298,21 @@ const AdminNotifications = () => {
   const handleClearWhatsApp = async (id: string) => {
     setBusyId(id);
     const prev = rows.find((x) => x.id === id)?.whatsapp_sent_at || null;
-    setRows((p) => p.map((x) => (x.id === id ? { ...x, whatsapp_sent_at: null } : x)));
+    setRows((p) =>
+      p.map((x) => (x.id === id ? { ...x, whatsapp_sent_at: null } : x)),
+    );
     try {
-      const { data, error: fnError } = await invokeAdmin({ action: "mark_whatsapp_sent", id, clear: true });
+      const { data, error: fnError } = await invokeAdmin({
+        action: "mark_whatsapp_sent",
+        id,
+        clear: true,
+      });
       if (fnError) throw fnError;
       if (data?.error) throw new Error(data.error);
     } catch {
-      setRows((p) => p.map((x) => (x.id === id ? { ...x, whatsapp_sent_at: prev } : x)));
+      setRows((p) =>
+        p.map((x) => (x.id === id ? { ...x, whatsapp_sent_at: prev } : x)),
+      );
       toast({ title: "Eroare", variant: "destructive" });
     } finally {
       setBusyId(null);
@@ -247,7 +323,10 @@ const AdminNotifications = () => {
     if (!deleteTarget) return;
     setDeleting(true);
     try {
-      const { data, error: fnError } = await invokeAdmin({ action: "delete", ids: [deleteTarget.id] });
+      const { data, error: fnError } = await invokeAdmin({
+        action: "delete",
+        ids: [deleteTarget.id],
+      });
       if (fnError) throw fnError;
       if (data?.error) throw new Error(data.error);
       setRows((prev) => prev.filter((x) => x.id !== deleteTarget.id));
@@ -259,7 +338,11 @@ const AdminNotifications = () => {
       toast({ title: "Înscriere ștearsă" });
       setDeleteTarget(null);
     } catch (err: any) {
-      toast({ title: "Ștergere eșuată", description: err?.message, variant: "destructive" });
+      toast({
+        title: "Ștergere eșuată",
+        description: err?.message,
+        variant: "destructive",
+      });
     } finally {
       setDeleting(false);
     }
@@ -270,15 +353,24 @@ const AdminNotifications = () => {
     setBulkDeleting(true);
     const ids = Array.from(selected);
     try {
-      const { data, error: fnError } = await invokeAdmin({ action: "delete", ids });
+      const { data, error: fnError } = await invokeAdmin({
+        action: "delete",
+        ids,
+      });
       if (fnError) throw fnError;
       if (data?.error) throw new Error(data.error);
       setRows((prev) => prev.filter((x) => !selected.has(x.id)));
-      toast({ title: `${ids.length} înscrier${ids.length === 1 ? "e ștearsă" : "i șterse"}` });
+      toast({
+        title: `${ids.length} înscrier${ids.length === 1 ? "e ștearsă" : "i șterse"}`,
+      });
       setSelected(new Set());
       setConfirmBulkOpen(false);
     } catch (err: any) {
-      toast({ title: "Ștergere eșuată", description: err?.message, variant: "destructive" });
+      toast({
+        title: "Ștergere eșuată",
+        description: err?.message,
+        variant: "destructive",
+      });
     } finally {
       setBulkDeleting(false);
     }
@@ -286,27 +378,34 @@ const AdminNotifications = () => {
 
   const filtered = useMemo(() => {
     let list = rows;
-    if (courseFilter !== "all") list = list.filter((r) => r.form_type === courseFilter);
+    if (courseFilter !== "all")
+      list = list.filter((r) => r.form_type === courseFilter);
     if (filter === "pending") {
       list = list.filter(
         (r) =>
-          (r.email_status !== "sent" && r.email_status !== "no_email") || !r.whatsapp_sent_at
+          (r.email_status !== "sent" && r.email_status !== "no_email") ||
+          !r.whatsapp_sent_at,
       );
     } else if (filter === "done") {
       list = list.filter(
         (r) =>
-          (r.email_status === "sent" || r.email_status === "no_email") && r.whatsapp_sent_at
+          (r.email_status === "sent" || r.email_status === "no_email") &&
+          r.whatsapp_sent_at,
       );
     }
     return list;
   }, [rows, filter, courseFilter]);
 
   const counts = useMemo(() => {
-    const scope = courseFilter === "all" ? rows : rows.filter((r) => r.form_type === courseFilter);
+    const scope =
+      courseFilter === "all"
+        ? rows
+        : rows.filter((r) => r.form_type === courseFilter);
     let pending = 0;
     let done = 0;
     for (const r of scope) {
-      const emailOk = r.email_status === "sent" || r.email_status === "no_email";
+      const emailOk =
+        r.email_status === "sent" || r.email_status === "no_email";
       const waOk = !!r.whatsapp_sent_at;
       if (emailOk && waOk) done++;
       else pending++;
@@ -355,13 +454,19 @@ const AdminNotifications = () => {
             <div className="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center">
               <Lock className="w-6 h-6 text-primary" />
             </div>
-            <h1 className="text-xl font-bold text-foreground">Notificări — Admin</h1>
+            <h1 className="text-xl font-bold text-foreground">
+              Notificări — Admin
+            </h1>
             <p className="text-sm text-muted-foreground">
               Status email & WhatsApp pentru fiecare lead
             </p>
           </div>
           {error && <p className="text-sm text-destructive">{error}</p>}
-          <Button onClick={handleGoogleSignIn} disabled={loading} className="w-full">
+          <Button
+            onClick={handleGoogleSignIn}
+            disabled={loading}
+            className="w-full"
+          >
             {loading ? <Loader2 className="w-4 h-4 mr-2 animate-spin" /> : null}
             Continuă cu Google
           </Button>
@@ -392,7 +497,10 @@ const AdminNotifications = () => {
         <div className="flex flex-col sm:flex-row gap-3 sm:items-end justify-between">
           <div className="space-y-1.5">
             <Label className="text-xs">Tip curs</Label>
-            <Select value={courseFilter} onValueChange={(v) => setCourseFilter(v as typeof courseFilter)}>
+            <Select
+              value={courseFilter}
+              onValueChange={(v) => setCourseFilter(v as typeof courseFilter)}
+            >
               <SelectTrigger className="w-full sm:w-[200px]">
                 <SelectValue />
               </SelectTrigger>
@@ -418,11 +526,13 @@ const AdminNotifications = () => {
         </div>
 
         <div className="grid grid-cols-3 gap-3">
-          {([
-            ["all", `Toate · ${counts.total}`],
-            ["pending", `În așteptare · ${counts.pending}`],
-            ["done", `Finalizate · ${counts.done}`],
-          ] as const).map(([key, label]) => (
+          {(
+            [
+              ["all", `Toate · ${counts.total}`],
+              ["pending", `În așteptare · ${counts.pending}`],
+              ["done", `Finalizate · ${counts.done}`],
+            ] as const
+          ).map(([key, label]) => (
             <button
               key={key}
               onClick={() => setFilter(key)}
@@ -459,7 +569,10 @@ const AdminNotifications = () => {
             <TableBody>
               {filtered.length === 0 ? (
                 <TableRow>
-                  <TableCell colSpan={7} className="text-center text-muted-foreground py-12">
+                  <TableCell
+                    colSpan={7}
+                    className="text-center text-muted-foreground py-12"
+                  >
                     Nicio înscriere de afișat
                   </TableCell>
                 </TableRow>
@@ -467,7 +580,10 @@ const AdminNotifications = () => {
                 filtered.map((r) => {
                   const isBusy = busyId === r.id;
                   return (
-                    <TableRow key={r.id} data-state={selected.has(r.id) ? "selected" : undefined}>
+                    <TableRow
+                      key={r.id}
+                      data-state={selected.has(r.id) ? "selected" : undefined}
+                    >
                       <TableCell>
                         <Checkbox
                           checked={selected.has(r.id)}
@@ -479,14 +595,24 @@ const AdminNotifications = () => {
                         {new Date(r.created_at).toLocaleString("ro-RO")}
                       </TableCell>
                       <TableCell>
-                        <div className="font-medium text-foreground">{r.name}</div>
-                        <div className="text-xs text-muted-foreground">{r.phone}</div>
-                        {r.email && <div className="text-xs text-muted-foreground">{r.email}</div>}
+                        <div className="font-medium text-foreground">
+                          {r.name}
+                        </div>
+                        <div className="text-xs text-muted-foreground">
+                          {r.phone}
+                        </div>
+                        {r.email && (
+                          <div className="text-xs text-muted-foreground">
+                            {r.email}
+                          </div>
+                        )}
                       </TableCell>
                       <TableCell className="text-sm">
                         {formTypeLabels[r.form_type] || r.form_type}
                         {r.format && (
-                          <div className="text-xs text-muted-foreground">{r.format}</div>
+                          <div className="text-xs text-muted-foreground">
+                            {r.format}
+                          </div>
                         )}
                       </TableCell>
                       <TableCell>
@@ -501,7 +627,9 @@ const AdminNotifications = () => {
                         <WhatsAppBadge sentAt={r.whatsapp_sent_at} />
                         {r.whatsapp_sent_at && (
                           <div className="text-[10px] text-muted-foreground mt-1">
-                            {new Date(r.whatsapp_sent_at).toLocaleString("ro-RO")}
+                            {new Date(r.whatsapp_sent_at).toLocaleString(
+                              "ro-RO",
+                            )}
                           </div>
                         )}
                       </TableCell>
@@ -512,7 +640,11 @@ const AdminNotifications = () => {
                             variant="outline"
                             disabled={isBusy || !r.email}
                             onClick={() => handleResendEmail(r.id)}
-                            title={!r.email ? "Lead-ul nu are email" : "Retrimite confirmarea"}
+                            title={
+                              !r.email
+                                ? "Lead-ul nu are email"
+                                : "Retrimite confirmarea"
+                            }
                           >
                             {isBusy ? (
                               <Loader2 className="w-3 h-3 animate-spin" />
@@ -562,13 +694,20 @@ const AdminNotifications = () => {
         </div>
       </div>
 
-      <AlertDialog open={!!deleteTarget} onOpenChange={(open) => !open && setDeleteTarget(null)}>
+      <AlertDialog
+        open={!!deleteTarget}
+        onOpenChange={(open) => !open && setDeleteTarget(null)}
+      >
         <AlertDialogContent>
           <AlertDialogHeader>
             <AlertDialogTitle>Șterge înscrierea?</AlertDialogTitle>
             <AlertDialogDescription>
               {deleteTarget && (
-                <>Înscrierea pentru <strong>{deleteTarget.name}</strong> ({deleteTarget.phone}) va fi ștearsă definitiv. Acțiunea nu poate fi anulată.</>
+                <>
+                  Înscrierea pentru <strong>{deleteTarget.name}</strong> (
+                  {deleteTarget.phone}) va fi ștearsă definitiv. Acțiunea nu
+                  poate fi anulată.
+                </>
               )}
             </AlertDialogDescription>
           </AlertDialogHeader>
@@ -582,7 +721,9 @@ const AdminNotifications = () => {
               disabled={deleting}
               className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
             >
-              {deleting ? <Loader2 className="w-4 h-4 mr-2 animate-spin" /> : null}
+              {deleting ? (
+                <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+              ) : null}
               Șterge
             </AlertDialogAction>
           </AlertDialogFooter>
@@ -592,13 +733,18 @@ const AdminNotifications = () => {
       <AlertDialog open={confirmBulkOpen} onOpenChange={setConfirmBulkOpen}>
         <AlertDialogContent>
           <AlertDialogHeader>
-            <AlertDialogTitle>Șterge {selected.size} înscrieri?</AlertDialogTitle>
+            <AlertDialogTitle>
+              Șterge {selected.size} înscrieri?
+            </AlertDialogTitle>
             <AlertDialogDescription>
-              Toate înscrierile selectate vor fi șterse definitiv. Acțiunea nu poate fi anulată.
+              Toate înscrierile selectate vor fi șterse definitiv. Acțiunea nu
+              poate fi anulată.
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
-            <AlertDialogCancel disabled={bulkDeleting}>Anulează</AlertDialogCancel>
+            <AlertDialogCancel disabled={bulkDeleting}>
+              Anulează
+            </AlertDialogCancel>
             <AlertDialogAction
               onClick={(e) => {
                 e.preventDefault();
@@ -607,7 +753,9 @@ const AdminNotifications = () => {
               disabled={bulkDeleting}
               className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
             >
-              {bulkDeleting ? <Loader2 className="w-4 h-4 mr-2 animate-spin" /> : null}
+              {bulkDeleting ? (
+                <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+              ) : null}
               Șterge tot
             </AlertDialogAction>
           </AlertDialogFooter>

@@ -69,10 +69,30 @@ const ComparisonPanel = ({ onBack }: ComparisonPanelProps) => {
     },
   ];
 
-  const columns: { track: Track; label: string; icon: React.ReactNode; cta: string }[] = [
-    { track: "group", label: t.compareGroupLabel, icon: <Users className="w-5 h-5" />, cta: t.compareSelectGroup },
-    { track: "private", label: t.comparePrivateLabel, icon: <User className="w-5 h-5" />, cta: t.compareSelectPrivate },
-    { track: "kids", label: t.compareKidsLabel, icon: <Baby className="w-5 h-5" />, cta: t.compareSelectKids },
+  const columns: {
+    track: Track;
+    label: string;
+    icon: React.ReactNode;
+    cta: string;
+  }[] = [
+    {
+      track: "group",
+      label: t.compareGroupLabel,
+      icon: <Users className="w-5 h-5" />,
+      cta: t.compareSelectGroup,
+    },
+    {
+      track: "private",
+      label: t.comparePrivateLabel,
+      icon: <User className="w-5 h-5" />,
+      cta: t.compareSelectPrivate,
+    },
+    {
+      track: "kids",
+      label: t.compareKidsLabel,
+      icon: <Baby className="w-5 h-5" />,
+      cta: t.compareSelectKids,
+    },
   ];
 
   if (selectedTrack) {
@@ -96,7 +116,9 @@ const ComparisonPanel = ({ onBack }: ComparisonPanelProps) => {
           <h2 className="text-display-lg font-bold tracking-tight text-foreground mb-3">
             {t.compareTitle}
           </h2>
-          <p className="text-muted-foreground max-w-xl mx-auto">{t.compareSubtitle}</p>
+          <p className="text-muted-foreground max-w-xl mx-auto">
+            {t.compareSubtitle}
+          </p>
         </div>
 
         {/* Desktop: 3 columns */}
@@ -112,8 +134,12 @@ const ComparisonPanel = ({ onBack }: ComparisonPanelProps) => {
                 {col.icon}
               </div>
               <div className="flex flex-col items-center gap-1">
-                <span className="font-semibold text-foreground">{col.label}</span>
-                {col.track === "group" && <SpotsBadge formType="group" level="A1" compact />}
+                <span className="font-semibold text-foreground">
+                  {col.label}
+                </span>
+                {col.track === "group" && (
+                  <SpotsBadge formType="group" level="A1" compact />
+                )}
                 {col.track === "kids" && <SpotsBadge formType="kids" compact />}
               </div>
             </div>
@@ -140,7 +166,11 @@ const ComparisonPanel = ({ onBack }: ComparisonPanelProps) => {
                         : ""
                     }
                   >
-                    {track === "group" ? row.groupValue : track === "private" ? row.privateValue : row.kidsValue}
+                    {track === "group"
+                      ? row.groupValue
+                      : track === "private"
+                        ? row.privateValue
+                        : row.kidsValue}
                   </span>
                 </div>
               ))}
@@ -150,8 +180,14 @@ const ComparisonPanel = ({ onBack }: ComparisonPanelProps) => {
           {/* CTA row */}
           <div className="bg-muted/60 p-4" />
           {columns.map((col) => (
-            <div key={col.track} className="bg-muted/60 p-4 flex justify-center">
-              <Button onClick={() => setSelectedTrack(col.track)} className="w-full max-w-[180px]">
+            <div
+              key={col.track}
+              className="bg-muted/60 p-4 flex justify-center"
+            >
+              <Button
+                onClick={() => setSelectedTrack(col.track)}
+                className="w-full max-w-[180px]"
+              >
                 {col.cta}
               </Button>
             </div>
@@ -171,9 +207,15 @@ const ComparisonPanel = ({ onBack }: ComparisonPanelProps) => {
                     {col.icon}
                   </div>
                   <div className="flex flex-col gap-1">
-                    <span className="font-semibold text-foreground">{col.label}</span>
-                    {col.track === "group" && <SpotsBadge formType="group" level="A1" compact />}
-                    {col.track === "kids" && <SpotsBadge formType="kids" compact />}
+                    <span className="font-semibold text-foreground">
+                      {col.label}
+                    </span>
+                    {col.track === "group" && (
+                      <SpotsBadge formType="group" level="A1" compact />
+                    )}
+                    {col.track === "kids" && (
+                      <SpotsBadge formType="kids" compact />
+                    )}
                   </div>
                 </div>
                 {rows.map((row, idx) => (
@@ -181,14 +223,23 @@ const ComparisonPanel = ({ onBack }: ComparisonPanelProps) => {
                     key={idx}
                     className={`py-3 ${idx !== rows.length - 1 ? "border-b border-border" : ""}`}
                   >
-                    <p className="text-xs text-muted-foreground mb-1">{row.label}</p>
+                    <p className="text-xs text-muted-foreground mb-1">
+                      {row.label}
+                    </p>
                     <p className="text-sm text-foreground font-medium">
-                      {col.track === "group" ? row.groupValue : col.track === "private" ? row.privateValue : row.kidsValue}
+                      {col.track === "group"
+                        ? row.groupValue
+                        : col.track === "private"
+                          ? row.privateValue
+                          : row.kidsValue}
                     </p>
                   </div>
                 ))}
                 <div className="pt-3">
-                  <Button className="w-full" onClick={() => setSelectedTrack(col.track)}>
+                  <Button
+                    className="w-full"
+                    onClick={() => setSelectedTrack(col.track)}
+                  >
                     {col.cta}
                   </Button>
                 </div>
@@ -199,7 +250,11 @@ const ComparisonPanel = ({ onBack }: ComparisonPanelProps) => {
 
         {/* Mobile scroll hint */}
         <p className="md:hidden text-center text-xs text-muted-foreground mt-2">
-          ← {lang === "ro" ? "Glisează pentru a vedea toate opțiunile" : "Swipe to see all options"} →
+          ←{" "}
+          {lang === "ro"
+            ? "Glisează pentru a vedea toate opțiunile"
+            : "Swipe to see all options"}{" "}
+          →
         </p>
 
         {/* Back link */}

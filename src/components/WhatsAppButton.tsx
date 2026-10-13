@@ -33,7 +33,9 @@ const getStoredContext = (): ContactContext => {
 };
 
 const WhatsAppButton = () => {
-  const [context, setContext] = useState<ContactContext>(() => getStoredContext());
+  const [context, setContext] = useState<ContactContext>(() =>
+    getStoredContext(),
+  );
 
   useEffect(() => {
     const updateContext = () => setContext(getStoredContext());
@@ -46,8 +48,12 @@ const WhatsAppButton = () => {
   }, []);
 
   const whatsappUrl = useMemo(() => {
-    const courseText = context.courseType ? ` pentru ${courseLabels[context.courseType]}` : " despre cursurile de arabă libaneză";
-    const formatText = context.format ? `, format ${formatLabels[context.format]}` : "";
+    const courseText = context.courseType
+      ? ` pentru ${courseLabels[context.courseType]}`
+      : " despre cursurile de arabă libaneză";
+    const formatText = context.format
+      ? `, format ${formatLabels[context.format]}`
+      : "";
     const message = `Salut! Vreau mai multe detalii${courseText}${formatText}.`;
     return `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`;
   }, [context]);

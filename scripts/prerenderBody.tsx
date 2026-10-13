@@ -25,7 +25,10 @@ import type { ReactNode } from "react";
 import App from "../src/App";
 import { allRoutes } from "./seoPrerender";
 
-const DIST = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "../dist");
+const DIST = path.resolve(
+  path.dirname(fileURLToPath(import.meta.url)),
+  "../dist",
+);
 const ROOT_DIV = '<div id="root"></div>';
 
 /** What one rendered route yields: its markup, and the head Helmet collected. */
@@ -49,11 +52,19 @@ interface HelmetContext {
  */
 function jsonLdFrom(context: HelmetContext): string[] {
   const rendered = context.helmet?.script?.toString() ?? "";
-  return rendered.match(/<script[^>]*application\/ld\+json[^>]*>[\s\S]*?<\/script>/g) ?? [];
+  return (
+    rendered.match(
+      /<script[^>]*application\/ld\+json[^>]*>[\s\S]*?<\/script>/g,
+    ) ?? []
+  );
 }
 
 /** Collects a React stream into a string, or gives up after `ms`. */
-function renderRoute(route: string, lang: "ro" | "en", ms = 20_000): Promise<Rendered> {
+function renderRoute(
+  route: string,
+  lang: "ro" | "en",
+  ms = 20_000,
+): Promise<Rendered> {
   return new Promise((resolve, reject) => {
     const chunks: Buffer[] = [];
     const sink = new Writable({
@@ -125,7 +136,9 @@ async function main() {
   // Redirect aliases render a <Navigate> and produce no markup on purpose —
   // they exist to bounce visitors and to carry a canonical, not to be read. A
   // canonical pointing elsewhere is the tell, so don't flag them as thin.
-  const isAlias = new Map(routes.map((r) => [r.path, !!r.canonical && r.canonical !== r.path]));
+  const isAlias = new Map(
+    routes.map((r) => [r.path, !!r.canonical && r.canonical !== r.path]),
+  );
   const aliasTarget = new Map(
     routes
       .filter((r) => !!r.canonical && r.canonical !== r.path)
@@ -147,22 +160,34 @@ async function main() {
       continue;
     }
     if (!html.includes(ROOT_DIV)) {
-      failures.push({ route, reason: "root div not found — already prerendered?" });
+      failures.push({
+        route,
+        reason: "root div not found — already prerendered?",
+      });
       continue;
     }
 
     let body: string;
     let jsonLd: string[];
     try {
-      ({ body, jsonLd } = await renderRoute(route, lang === "en" ? "en" : "ro"));
+      ({ body, jsonLd } = await renderRoute(
+        route,
+        lang === "en" ? "en" : "ro",
+      ));
     } catch (err) {
-      failures.push({ route, reason: err instanceof Error ? err.message : String(err) });
+      failures.push({
+        route,
+        reason: err instanceof Error ? err.message : String(err),
+      });
       continue;
     }
 
     // A page that renders almost nothing is worse than useless — it would ship
     // an empty-looking body to a crawler while claiming to be prerendered.
-    let text = body.replace(/<[^>]+>/g, " ").replace(/\s+/g, " ").trim();
+    let text = body
+      .replace(/<[^>]+>/g, " ")
+      .replace(/\s+/g, " ")
+      .trim();
 
     // Retired URLs render <Navigate>, which produces no markup at all. The head
     // carried a canonical, but the body was literally empty: no h1, no words, no
@@ -195,10 +220,14 @@ async function main() {
         `<h1>${copy.h1}</h1><p>${copy.p}</p>` +
         `<p><a href="${target}">${copy.cta}</a></p>` +
         `</main>`;
-      text = body.replace(/<[^>]+>/g, " ").replace(/\s+/g, " ").trim();
+      text = body
+        .replace(/<[^>]+>/g, " ")
+        .replace(/\s+/g, " ")
+        .trim();
     }
 
-    if (text.length < 200 && !isAlias.get(route)) thin.push({ route, chars: text.length });
+    if (text.length < 200 && !isAlias.get(route))
+      thin.push({ route, chars: text.length });
 
     let out = html.replace(ROOT_DIV, `<div id="root">${body}</div>`);
 

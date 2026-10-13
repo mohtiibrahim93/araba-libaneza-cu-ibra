@@ -1,6 +1,9 @@
 import { Users } from "lucide-react";
 import { useI18n } from "@/lib/i18n";
-import { useGroupCapacities, type CapacityInfo } from "@/hooks/useGroupCapacity";
+import {
+  useGroupCapacities,
+  type CapacityInfo,
+} from "@/hooks/useGroupCapacity";
 import { useGroupCohorts, type Cohort } from "@/hooks/useGroupCohorts";
 
 interface SpotsBadgeProps {
@@ -11,13 +14,23 @@ interface SpotsBadgeProps {
   className?: string;
 }
 
-const SpotsBadge = ({ formType, level, compact = false, className = "" }: SpotsBadgeProps) => {
+const SpotsBadge = ({
+  formType,
+  level,
+  compact = false,
+  className = "",
+}: SpotsBadgeProps) => {
   const { t } = useI18n();
   const { get, loading } = useGroupCapacities();
   // Groups count the seats of the groups still open to join. The level-wide
   // capacity row also counted groups that are already running, so a full
   // August class made the October ones read "full" while every seat was free.
-  const { cohorts, loading: cohortsLoading } = useGroupCohorts("group", level ?? null, null, null);
+  const { cohorts, loading: cohortsLoading } = useGroupCohorts(
+    "group",
+    level ?? null,
+    null,
+    null,
+  );
 
   if (formType === "kids" ? loading : cohortsLoading) return null;
 
@@ -38,12 +51,17 @@ const SpotsBadge = ({ formType, level, compact = false, className = "" }: SpotsB
   if (present.length === 0) return null;
 
   const allFull = present.every((f) => f.info.full);
-  const anyUrgent = present.some((f) => !f.info.full && f.info.seatsLeft > 0 && f.info.seatsLeft < 5);
+  const anyUrgent = present.some(
+    (f) => !f.info.full && f.info.seatsLeft > 0 && f.info.seatsLeft < 5,
+  );
 
   const label = allFull
     ? t.spotsWaitlist
     : present
-        .map((f) => `${f.info.full ? t.spotsFormatFull : seatsLabel(f.info)} ${f.label}`)
+        .map(
+          (f) =>
+            `${f.info.full ? t.spotsFormatFull : seatsLabel(f.info)} ${f.label}`,
+        )
         .join(" · ");
 
   return renderBadge(label, allFull, anyUrgent);

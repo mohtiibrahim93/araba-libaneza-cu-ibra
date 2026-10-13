@@ -28,7 +28,10 @@ const CapacitiesAdmin = () => {
       if (data?.error) throw new Error(data.error);
       setRows(data.data);
     } catch {
-      toast({ title: "Nu am putut încărca capacitățile", variant: "destructive" });
+      toast({
+        title: "Nu am putut încărca capacitățile",
+        variant: "destructive",
+      });
     } finally {
       setLoading(false);
     }
@@ -75,11 +78,14 @@ const CapacitiesAdmin = () => {
   return (
     <section className="mb-6 rounded-lg border border-border bg-card p-4">
       <div className="mb-4">
-        <h2 className="text-base font-semibold text-foreground">Capacități grupe</h2>
+        <h2 className="text-base font-semibold text-foreground">
+          Capacități grupe
+        </h2>
         <p className="text-sm text-muted-foreground">
-          Setează numărul maxim de locuri și minimul necesar pentru ca grupa să pornească.
-          Grupele au capacități separate pentru fizic și online. Înscrierile din alte surse
-          (WhatsApp, TikTok, direct etc.) se adaugă din panoul „Înscrieri manuale" de mai jos.
+          Setează numărul maxim de locuri și minimul necesar pentru ca grupa să
+          pornească. Grupele au capacități separate pentru fizic și online.
+          Înscrierile din alte surse (WhatsApp, TikTok, direct etc.) se adaugă
+          din panoul „Înscrieri manuale" de mai jos.
         </p>
       </div>
       {loading ? (
@@ -99,7 +105,9 @@ const CapacitiesAdmin = () => {
                   a line of its own -- the labels and their inputs ended up
                   looking like they belonged to different rows. */}
               <div className="w-full sm:flex-1 sm:min-w-[140px]">
-                <p className="text-sm font-semibold text-foreground">{labelFor(r)}</p>
+                <p className="text-sm font-semibold text-foreground">
+                  {labelFor(r)}
+                </p>
               </div>
               <div className="space-y-1">
                 <Label htmlFor={`min-${r.id}`} className="text-xs">
@@ -111,7 +119,9 @@ const CapacitiesAdmin = () => {
                   min={1}
                   className="w-20"
                   value={r.min_seats}
-                  onChange={(e) => update(r.id, { min_seats: Number(e.target.value) })}
+                  onChange={(e) =>
+                    update(r.id, { min_seats: Number(e.target.value) })
+                  }
                 />
               </div>
               <div className="space-y-1">
@@ -124,7 +134,9 @@ const CapacitiesAdmin = () => {
                   min={1}
                   className="w-20"
                   value={r.max_seats}
-                  onChange={(e) => update(r.id, { max_seats: Number(e.target.value) })}
+                  onChange={(e) =>
+                    update(r.id, { max_seats: Number(e.target.value) })
+                  }
                 />
               </div>
               <Button
@@ -133,7 +145,11 @@ const CapacitiesAdmin = () => {
                 onClick={() => save(r)}
                 disabled={savingId === r.id}
               >
-                {savingId === r.id ? <Loader2 className="h-4 w-4 animate-spin" /> : "Salvează"}
+                {savingId === r.id ? (
+                  <Loader2 className="h-4 w-4 animate-spin" />
+                ) : (
+                  "Salvează"
+                )}
               </Button>
             </div>
           ))}

@@ -7,16 +7,34 @@ import { useI18n } from "@/lib/i18n";
 // site stays there, so the same answer never lives on two URLs.
 const FAQ = [
   {
-    q: { ro: "Ce îmi trebuie tehnic pentru o lecție online?", en: "What do I need technically for an online lesson?" },
-    a: { ro: "Un laptop sau un telefon cu cameră, căști și o conexiune stabilă. Lecțiile se țin live pe Zoom, iar materialele se împart pe ecran în timpul ședinței — nu ai nevoie de niciun program suplimentar.", en: "A laptop or phone with a camera, headphones and a stable connection. Lessons run live on Zoom and materials are shared on screen during the session — no extra software is needed." },
+    q: {
+      ro: "Ce îmi trebuie tehnic pentru o lecție online?",
+      en: "What do I need technically for an online lesson?",
+    },
+    a: {
+      ro: "Un laptop sau un telefon cu cameră, căști și o conexiune stabilă. Lecțiile se țin live pe Zoom, iar materialele se împart pe ecran în timpul ședinței — nu ai nevoie de niciun program suplimentar.",
+      en: "A laptop or phone with a camera, headphones and a stable connection. Lessons run live on Zoom and materials are shared on screen during the session — no extra software is needed.",
+    },
   },
   {
-    q: { ro: "Pot participa din altă țară?", en: "Can I join from another country?" },
-    a: { ro: "Da, atâta timp cât programul se potrivește cu fusul orar al Bucureștiului. Există cursanți din diaspora care intră la aceleași ore ca grupele din România.", en: "Yes, as long as the schedule fits Bucharest's time zone. There are students in the diaspora who join at the same hours as the groups in Romania." },
+    q: {
+      ro: "Pot participa din altă țară?",
+      en: "Can I join from another country?",
+    },
+    a: {
+      ro: "Da, atâta timp cât programul se potrivește cu fusul orar al Bucureștiului. Există cursanți din diaspora care intră la aceleași ore ca grupele din România.",
+      en: "Yes, as long as the schedule fits Bucharest's time zone. There are students in the diaspora who join at the same hours as the groups in Romania.",
+    },
   },
   {
-    q: { ro: "Ce se întâmplă dacă îmi pică internetul în timpul lecției?", en: "What happens if my internet drops during a lesson?" },
-    a: { ro: "Reintri în aceeași ședință Zoom cu linkul primit — sesiunea rămâne deschisă. Dacă pierzi o parte semnificativă, se recuperează la începutul lecției următoare.", en: "You rejoin the same Zoom session with the link you received — the session stays open. If you miss a significant part, it is picked up at the start of the next lesson." },
+    q: {
+      ro: "Ce se întâmplă dacă îmi pică internetul în timpul lecției?",
+      en: "What happens if my internet drops during a lesson?",
+    },
+    a: {
+      ro: "Reintri în aceeași ședință Zoom cu linkul primit — sesiunea rămâne deschisă. Dacă pierzi o parte semnificativă, se recuperează la începutul lecției următoare.",
+      en: "You rejoin the same Zoom session with the link you received — the session stays open. If you miss a significant part, it is picked up at the start of the next lesson.",
+    },
   },
 ];
 
@@ -26,7 +44,10 @@ const InvataArabaOnline = () => {
   return (
     <BlogArticleLayout
       slug="invata-araba-libaneza-online"
-      title={{ ro: "Cum înveți araba libaneză online (de oriunde)", en: "How to learn Lebanese Arabic online (from anywhere)" }}
+      title={{
+        ro: "Cum înveți araba libaneză online (de oriunde)",
+        en: "How to learn Lebanese Arabic online (from anywhere)",
+      }}
       description={{
         ro: "Află cum funcționează cursurile de arabă libaneză online, cum arată o lecție pe Zoom și dacă acest format ți se potrivește.",
         en: "How online Lebanese Arabic courses work: what you need, what a Zoom lesson looks like, whether online is as good as in person and who it's for.",
@@ -42,10 +63,22 @@ const InvataArabaOnline = () => {
     >
       <Tldr
         points={[
-          { ro: "Lecțiile online sunt live pe Zoom, nu înregistrări — vorbești și primești corectură pe loc.", en: "Online lessons are live on Zoom, not recordings — you speak and are corrected on the spot." },
-          { ro: "Pentru un dialect vorbit, online funcționează la fel de bine ca fizic.", en: "For a spoken dialect, online works as well as in person." },
-          { ro: "Ai nevoie doar de cameră, căști și o conexiune stabilă.", en: "All you need is a camera, headphones and a stable connection." },
-          { ro: "Poți participa din orice țară cu program compatibil cu ora Bucureștiului.", en: "You can join from any country on a schedule compatible with Bucharest time." },
+          {
+            ro: "Lecțiile online sunt live pe Zoom, nu înregistrări — vorbești și primești corectură pe loc.",
+            en: "Online lessons are live on Zoom, not recordings — you speak and are corrected on the spot.",
+          },
+          {
+            ro: "Pentru un dialect vorbit, online funcționează la fel de bine ca fizic.",
+            en: "For a spoken dialect, online works as well as in person.",
+          },
+          {
+            ro: "Ai nevoie doar de cameră, căști și o conexiune stabilă.",
+            en: "All you need is a camera, headphones and a stable connection.",
+          },
+          {
+            ro: "Poți participa din orice țară cu program compatibil cu ora Bucureștiului.",
+            en: "You can join from any country on a schedule compatible with Bucharest time.",
+          },
         ]}
       />
       <p>
@@ -56,13 +89,31 @@ const InvataArabaOnline = () => {
 
       <h2>{en ? "What you need" : "De ce ai nevoie"}</h2>
       <ul>
-        <li>{en ? "A laptop or phone with a camera and microphone." : "Un laptop sau telefon cu cameră și microfon."}</li>
-        <li>{en ? "A stable internet connection and a quiet spot." : "O conexiune stabilă la internet și un loc liniștit."}</li>
-        <li>{en ? "Zoom (free) — we send you the link before each lesson." : "Zoom (gratuit) — îți trimitem linkul înainte de fiecare lecție."}</li>
-        <li>{en ? "That's it. Audio materials and support are included." : "Atât. Materialele audio și suportul sunt incluse."}</li>
+        <li>
+          {en
+            ? "A laptop or phone with a camera and microphone."
+            : "Un laptop sau telefon cu cameră și microfon."}
+        </li>
+        <li>
+          {en
+            ? "A stable internet connection and a quiet spot."
+            : "O conexiune stabilă la internet și un loc liniștit."}
+        </li>
+        <li>
+          {en
+            ? "Zoom (free) — we send you the link before each lesson."
+            : "Zoom (gratuit) — îți trimitem linkul înainte de fiecare lecție."}
+        </li>
+        <li>
+          {en
+            ? "That's it. Audio materials and support are included."
+            : "Atât. Materialele audio și suportul sunt incluse."}
+        </li>
       </ul>
 
-      <h2>{en ? "What an online lesson looks like" : "Cum arată o lecție online"}</h2>
+      <h2>
+        {en ? "What an online lesson looks like" : "Cum arată o lecție online"}
+      </h2>
       <p>
         {en
           ? "It's a live lesson, not a recording. You see and hear the teacher, you speak from the first minutes, and you get corrected on the spot — exactly the "
@@ -72,10 +123,16 @@ const InvataArabaOnline = () => {
           ? " method. The teacher shares the screen for words and phrases, you practise with "
           : ". Profesorul împarte ecranul pentru cuvinte și expresii, exersezi cu "}
         <Link to="/blog/ce-este-arabizi">{en ? "Arabizi" : "arabizi"}</Link>
-        {en ? " (A1–A2 spoken only; from B1 or B2 the Arabic script if the whole group wants it), and you leave each lesson able to say something new." : " (A1–A2 doar oral; de la B1 sau B2 alfabet arab, dacă toată grupa vrea), iar din fiecare lecție pleci putând spune ceva nou."}
+        {en
+          ? " (A1–A2 spoken only; from B1 or B2 the Arabic script if the whole group wants it), and you leave each lesson able to say something new."
+          : " (A1–A2 doar oral; de la B1 sau B2 alfabet arab, dacă toată grupa vrea), iar din fiecare lecție pleci putând spune ceva nou."}
       </p>
 
-      <h2>{en ? "Is online as good as in person?" : "E online la fel de bun ca fizic?"}</h2>
+      <h2>
+        {en
+          ? "Is online as good as in person?"
+          : "E online la fel de bun ca fizic?"}
+      </h2>
       <p>
         {en
           ? "For a spoken dialect, yes. What matters most is speaking time with a native teacher and immediate feedback on pronunciation — and you get both fully online. Many students actually prefer it: no commute, easier scheduling, and you can review recordings of your own practice. The only thing online can't replace is the coffee afterwards."
@@ -91,12 +148,19 @@ const InvataArabaOnline = () => {
         {en
           ? " — more affordable and more motivating, learning alongside peers at your level — or take "
           : " online — mai accesibil și mai motivant, înveți alături de colegi de nivelul tău — sau poți alege "}
-        <Link to="/cursuri/private">{en ? "private 1:1 lessons" : "lecții private 1:1"}</Link>
-        {en ? " online for a fully personalised pace and schedule." : " online, pentru ritm și program complet personalizate."}
+        <Link to="/cursuri/private">
+          {en ? "private 1:1 lessons" : "lecții private 1:1"}
+        </Link>
+        {en
+          ? " online for a fully personalised pace and schedule."
+          : " online, pentru ritm și program complet personalizate."}
       </p>
 
       <InlineCta
-        title={{ ro: "Vrei să auzi cum sună?", en: "Want to hear how it sounds?" }}
+        title={{
+          ro: "Vrei să auzi cum sună?",
+          en: "Want to hear how it sounds?",
+        }}
         text={{
           ro: "30 de minute cu profesor nativ, gratuit — online sau fizic în București.",
           en: "30 minutes with a native teacher, free — online or in person in Bucharest.",
@@ -105,18 +169,28 @@ const InvataArabaOnline = () => {
         label={{ ro: "Rezervă lecția de probă", en: "Book the trial lesson" }}
       />
 
-
-      <h2>{en ? "The online cohort — and the next one" : "Cohorta online — și următoarea"}</h2>
+      <h2>
+        {en
+          ? "The online cohort — and the next one"
+          : "Cohorta online — și următoarea"}
+      </h2>
       <p>
         {en
           ? "The A1 online group that has already started is full, but registration is open for the new A1 online groups (complete beginners) — one taught in Romanian and one in English, with at most 6 students each. The dates and free places are on the A1 course page. You can also start any time with online private lessons."
           : "Grupa A1 online deja începută e completă, dar sunt deschise înscrierile la grupele A1 online noi (începători compleți) — una predată în română și una în engleză, cu maximum 6 cursanți fiecare. Datele și locurile libere le vezi pe pagina cursului A1. Poți începe oricând și cu lecții private online."}
       </p>
       <p>
-        {en ? "Not sure where you'd start? Take the " : "Nu știi de unde ai porni? Fă "}
-        <Link to="/test-de-nivel">{en ? "free level test" : "testul de nivel gratuit"}</Link>
+        {en
+          ? "Not sure where you'd start? Take the "
+          : "Nu știi de unde ai porni? Fă "}
+        <Link to="/test-de-nivel">
+          {en ? "free level test" : "testul de nivel gratuit"}
+        </Link>
         {en ? " (~15 minutes), or see " : " (~15 minute), sau vezi "}
-        <Link to="/blog/cat-dureaza-sa-inveti-araba-libaneza">{en ? "how long each level takes" : "cât durează fiecare nivel"}</Link>.
+        <Link to="/blog/cat-dureaza-sa-inveti-araba-libaneza">
+          {en ? "how long each level takes" : "cât durează fiecare nivel"}
+        </Link>
+        .
       </p>
     </BlogArticleLayout>
   );

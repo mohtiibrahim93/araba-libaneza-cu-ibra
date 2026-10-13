@@ -353,6 +353,6 @@ export const BLOG_POSTS: BlogPostMeta[] = [
 ];
 
 /** Newest first — the order the index renders. */
-export const blogPostsNewestFirst = [...BLOG_POSTS].sort(
-  (a, b) => b.published.localeCompare(a.published),
+export const blogPostsNewestFirst = [...BLOG_POSTS].sort((a, b) =>
+  b.published.localeCompare(a.published),
 );

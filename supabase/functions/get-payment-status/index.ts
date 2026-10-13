@@ -15,7 +15,8 @@ Deno.serve(async (req) => {
 
   const url = new URL(req.url);
   const id = url.searchParams.get("registration_id") || "";
-  const UUID_RE = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+  const UUID_RE =
+    /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
   if (!UUID_RE.test(id)) return json({ error: "Invalid registration_id" }, 400);
 
   const supabase = createClient(
@@ -35,9 +36,15 @@ Deno.serve(async (req) => {
   }
 
   // Caller must hold the server-signed return link; a typed email is not proof.
-  if (!data || !(await verifyRegistrationSignature(data.id, url.searchParams.get("sig")))) {
+  if (
+    !data ||
+    !(await verifyRegistrationSignature(data.id, url.searchParams.get("sig")))
+  ) {
     return json({ payment_status: null, paid_at: null });
   }
 
-  return json({ payment_status: data.payment_status ?? null, paid_at: data.paid_at ?? null });
+  return json({
+    payment_status: data.payment_status ?? null,
+    paid_at: data.paid_at ?? null,
+  });
 });

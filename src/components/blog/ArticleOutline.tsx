@@ -28,7 +28,11 @@ interface Heading {
   text: string;
 }
 
-const ArticleOutline = ({ containerRef }: { containerRef: RefObject<HTMLElement | null> }) => {
+const ArticleOutline = ({
+  containerRef,
+}: {
+  containerRef: RefObject<HTMLElement | null>;
+}) => {
   const { lang } = useI18n();
   const [headings, setHeadings] = useState<Heading[]>([]);
   const [active, setActive] = useState<string>("");
@@ -68,7 +72,9 @@ const ArticleOutline = ({ containerRef }: { containerRef: RefObject<HTMLElement 
       (entries) => {
         const visible = entries
           .filter((e) => e.isIntersecting)
-          .sort((a, b) => a.boundingClientRect.top - b.boundingClientRect.top)[0];
+          .sort(
+            (a, b) => a.boundingClientRect.top - b.boundingClientRect.top,
+          )[0];
         if (visible) setActive(visible.target.id);
       },
       // Band just below the navbar, so a heading counts as "current" while its

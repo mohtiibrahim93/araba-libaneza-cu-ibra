@@ -6,17 +6,32 @@ import { Label } from "@/components/ui/label";
 import { Calendar, CalendarOff, Users, Loader2 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
-function statusBadge(status: Cohort["status"], t: ReturnType<typeof useI18n>["t"]) {
+function statusBadge(
+  status: Cohort["status"],
+  t: ReturnType<typeof useI18n>["t"],
+) {
   switch (status) {
     case "minimum_reached":
-      return { label: t.cohortStatusMinReached, tone: "bg-amber-500/10 text-amber-700 dark:text-amber-400 border-amber-500/30" };
+      return {
+        label: t.cohortStatusMinReached,
+        tone: "bg-amber-500/10 text-amber-700 dark:text-amber-400 border-amber-500/30",
+      };
     case "confirmed":
-      return { label: t.cohortStatusConfirmed, tone: "bg-emerald-500/10 text-emerald-700 dark:text-emerald-400 border-emerald-500/30" };
+      return {
+        label: t.cohortStatusConfirmed,
+        tone: "bg-emerald-500/10 text-emerald-700 dark:text-emerald-400 border-emerald-500/30",
+      };
     case "in_progress":
-      return { label: t.cohortStatusInProgress, tone: "bg-muted text-muted-foreground border-border" };
+      return {
+        label: t.cohortStatusInProgress,
+        tone: "bg-muted text-muted-foreground border-border",
+      };
     case "forming":
     default:
-      return { label: t.cohortStatusForming, tone: "bg-primary/10 text-primary border-primary/30" };
+      return {
+        label: t.cohortStatusForming,
+        tone: "bg-primary/10 text-primary border-primary/30",
+      };
   }
 }
 
@@ -38,7 +53,13 @@ function formatStart(iso: string, lang: "ro" | "en") {
   }).format(new Date(y, m - 1, d));
 }
 
-const CohortPicker = ({ formType, level, format, selectedCohortId, onSelect }: Props) => {
+const CohortPicker = ({
+  formType,
+  level,
+  format,
+  selectedCohortId,
+  onSelect,
+}: Props) => {
   const { t, lang } = useI18n();
   // Fetch every language, then filter here rather than in the query. The
   // language a student wants to be taught in is not the language they happen to
@@ -54,7 +75,8 @@ const CohortPicker = ({ formType, level, format, selectedCohortId, onSelect }: P
   );
 
   const languagesAvailable = useMemo(
-    () => Array.from(new Set(allCohorts.map((c) => c.teaching_language))).sort(),
+    () =>
+      Array.from(new Set(allCohorts.map((c) => c.teaching_language))).sort(),
     [allCohorts],
   );
 
@@ -72,7 +94,10 @@ const CohortPicker = ({ formType, level, format, selectedCohortId, onSelect }: P
     if (v === "ro" || v === "en") setChosen(v);
   }, []);
   const teachingLanguage: "ro" | "en" =
-    chosen ?? (languagesAvailable.includes(lang) ? lang : (languagesAvailable[0] as "ro" | "en") ?? lang);
+    chosen ??
+    (languagesAvailable.includes(lang)
+      ? lang
+      : ((languagesAvailable[0] as "ro" | "en") ?? lang));
 
   const cohorts = useMemo(
     () => allCohorts.filter((c) => c.teaching_language === teachingLanguage),
@@ -84,14 +109,21 @@ const CohortPicker = ({ formType, level, format, selectedCohortId, onSelect }: P
   const switchLanguage = (next: "ro" | "en") => {
     if (next === teachingLanguage) return;
     setChosen(next);
-    if (selectedCohortId && !allCohorts.some((c) => c.id === selectedCohortId && c.teaching_language === next)) {
+    if (
+      selectedCohortId &&
+      !allCohorts.some(
+        (c) => c.id === selectedCohortId && c.teaching_language === next,
+      )
+    ) {
       onSelect(null);
     }
   };
 
   const languageChoice = languagesAvailable.length > 1 && (
     <div className="space-y-2">
-      <Label>{lang === "en" ? "Language of instruction" : "Limba de predare"} *</Label>
+      <Label>
+        {lang === "en" ? "Language of instruction" : "Limba de predare"} *
+      </Label>
       <div className="flex flex-wrap gap-2">
         {(languagesAvailable as ("ro" | "en")[]).map((code) => (
           <button
@@ -107,8 +139,12 @@ const CohortPicker = ({ formType, level, format, selectedCohortId, onSelect }: P
             )}
           >
             {code === "en"
-              ? lang === "en" ? "English" : "Engleză"
-              : lang === "en" ? "Romanian" : "Română"}
+              ? lang === "en"
+                ? "English"
+                : "Engleză"
+              : lang === "en"
+                ? "Romanian"
+                : "Română"}
           </button>
         ))}
       </div>
@@ -133,7 +169,9 @@ const CohortPicker = ({ formType, level, format, selectedCohortId, onSelect }: P
       <div className="space-y-3">
         {languageChoice}
         <div className="rounded-lg border border-dashed border-border bg-muted/30 px-4 py-3 text-sm text-muted-foreground">
-          {teachingLanguage === "en" ? t.cohortPickerEmptyEn : t.cohortPickerEmpty}
+          {teachingLanguage === "en"
+            ? t.cohortPickerEmptyEn
+            : t.cohortPickerEmpty}
         </div>
       </div>
     );
@@ -158,7 +196,8 @@ const CohortPicker = ({ formType, level, format, selectedCohortId, onSelect }: P
       >
         {cohorts.map((c) => {
           const active = c.id === selectedCohortId;
-          const label = lang === "ro" ? c.schedule_label_ro : c.schedule_label_en;
+          const label =
+            lang === "ro" ? c.schedule_label_ro : c.schedule_label_en;
           const breakNote = lang === "ro" ? c.break_note_ro : c.break_note_en;
           const lowSeats = c.seatsLeft > 0 && c.seatsLeft < 5;
           const badge = statusBadge(c.status, t);
@@ -184,16 +223,25 @@ const CohortPicker = ({ formType, level, format, selectedCohortId, onSelect }: P
               <div className="flex items-center justify-between gap-2">
                 <div className="flex items-center gap-1.5 text-xs font-semibold uppercase tracking-wide text-primary">
                   <Calendar className="w-3.5 h-3.5" />
-                  {c.start_date <= new Date().toLocaleDateString("sv-SE") ? t.cohortStartedOn : t.cohortStartsOn}
+                  {c.start_date <= new Date().toLocaleDateString("sv-SE")
+                    ? t.cohortStartedOn
+                    : t.cohortStartsOn}
                 </div>
-                <span className={cn("inline-flex rounded-full border px-2 py-0.5 text-[10px] font-medium", badge.tone)}>
+                <span
+                  className={cn(
+                    "inline-flex rounded-full border px-2 py-0.5 text-[10px] font-medium",
+                    badge.tone,
+                  )}
+                >
                   {badge.label}
                 </span>
               </div>
               <p className="mt-0.5 text-sm font-semibold text-foreground">
                 {formatStart(c.start_date, lang)}
               </p>
-              {label && <p className="text-xs text-muted-foreground mt-1">{label}</p>}
+              {label && (
+                <p className="text-xs text-muted-foreground mt-1">{label}</p>
+              )}
               {c.end_date && (
                 <p className="text-xs text-muted-foreground mt-1">
                   {t.cohortEndsOn} {formatStart(c.end_date, lang)}
@@ -208,7 +256,10 @@ const CohortPicker = ({ formType, level, format, selectedCohortId, onSelect }: P
               )}
               {breakNote && (
                 <p className="mt-1 flex items-start gap-1.5 text-xs text-muted-foreground">
-                  <CalendarOff className="w-3.5 h-3.5 mt-px flex-shrink-0" aria-hidden="true" />
+                  <CalendarOff
+                    className="w-3.5 h-3.5 mt-px flex-shrink-0"
+                    aria-hidden="true"
+                  />
                   <span>{breakNote}</span>
                 </p>
               )}
@@ -216,13 +267,17 @@ const CohortPicker = ({ formType, level, format, selectedCohortId, onSelect }: P
                 <Users className="w-3.5 h-3.5 text-muted-foreground" />
                 {c.full ? (
                   <span className="font-semibold text-primary">
-                    {lang === "en" ? "Full · join the waiting list" : "Completă · intră pe lista de așteptare"}
+                    {lang === "en"
+                      ? "Full · join the waiting list"
+                      : "Completă · intră pe lista de așteptare"}
                   </span>
                 ) : (
                   <span
                     className={cn(
                       "font-medium",
-                      lowSeats ? "text-primary animate-pulse" : "text-muted-foreground",
+                      lowSeats
+                        ? "text-primary animate-pulse"
+                        : "text-muted-foreground",
                     )}
                   >
                     {c.seatsLeft} {t.cohortSeatsLeft}

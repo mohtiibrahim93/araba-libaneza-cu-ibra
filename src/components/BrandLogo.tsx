@@ -28,7 +28,12 @@ export const CedarMark = ({ className }: { className?: string }) => (
  * and dark mode.
  */
 export const BrandMark = ({ className }: { className?: string }) => (
-  <svg viewBox="0 0 48 48" aria-hidden="true" className={className} focusable="false">
+  <svg
+    viewBox="0 0 48 48"
+    aria-hidden="true"
+    className={className}
+    focusable="false"
+  >
     <rect width="48" height="48" rx="11" fill="#D8443A" />
     {/* bubble tail, then the bubble over it */}
     <path d="M14 35 17.5 38.5 14 42 10.5 38.5z" fill="#FFFFFF" />
@@ -49,7 +54,12 @@ interface BrandLogoProps {
 
 /** "7KI LEBNEENE · حكي لبناني" — the campaign line under the name. */
 const CampaignLine = ({ className }: { className?: string }) => (
-  <span className={cn("font-semibold uppercase tracking-[0.16em] text-muted-foreground", className)}>
+  <span
+    className={cn(
+      "font-semibold uppercase tracking-[0.16em] text-muted-foreground",
+      className,
+    )}
+  >
     7ki Lebneene ·{" "}
     <span dir="rtl" lang="ar" className="font-arabic tracking-normal">
       حكي لبناني
@@ -82,7 +92,9 @@ const BrandLogo = ({ full, className }: BrandLogoProps) => {
   }
 
   return (
-    <span className={cn("flex min-w-0 items-center gap-2.5 sm:gap-3.5", className)}>
+    <span
+      className={cn("flex min-w-0 items-center gap-2.5 sm:gap-3.5", className)}
+    >
       <BrandMark className="h-[38px] w-[38px] shrink-0 sm:h-12 sm:w-12" />
       <span className="flex min-w-0 flex-col gap-[3px] leading-tight">
         {/* Phones: the full name on max two tight lines. */}

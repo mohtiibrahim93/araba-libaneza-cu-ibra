@@ -4,7 +4,6 @@ import type { Cohort, CohortStatus } from "@/lib/cohortTypes";
 
 export type { Cohort, CohortStatus } from "@/lib/cohortTypes";
 
-
 // Statuses that should appear on the public site / registration form.
 // `draft` is admin-only; `completed`/`cancelled` are historical; `in_progress`
 // is mid-cohort and not joinable; `full` is shown but as waitlist.
@@ -24,7 +23,9 @@ async function fetchCohorts(
   const today = new Date().toISOString().slice(0, 10);
   let q = supabase
     .from("group_cohorts")
-    .select("id, form_type, level, format, start_date, end_date, end_date_is_estimate, break_note_ro, break_note_en, schedule_label_ro, schedule_label_en, max_seats, sort_order, status, teaching_language")
+    .select(
+      "id, form_type, level, format, start_date, end_date, end_date_is_estimate, break_note_ro, break_note_en, schedule_label_ro, schedule_label_en, max_seats, sort_order, status, teaching_language",
+    )
     .eq("form_type", formType)
     .in("status", PUBLIC_COHORT_STATUSES)
     .gte("start_date", today)
@@ -117,9 +118,21 @@ export function useGroupCohorts(
 
     const channel = supabase
       .channel(`cohort-updates-${Math.random().toString(36).slice(2)}`)
-      .on("postgres_changes", { event: "*", schema: "public", table: "registrations" }, load)
-      .on("postgres_changes", { event: "*", schema: "public", table: "group_cohorts" }, load)
-      .on("postgres_changes", { event: "*", schema: "public", table: "manual_signups" }, load)
+      .on(
+        "postgres_changes",
+        { event: "*", schema: "public", table: "registrations" },
+        load,
+      )
+      .on(
+        "postgres_changes",
+        { event: "*", schema: "public", table: "group_cohorts" },
+        load,
+      )
+      .on(
+        "postgres_changes",
+        { event: "*", schema: "public", table: "manual_signups" },
+        load,
+      )
       .subscribe();
 
     return () => {

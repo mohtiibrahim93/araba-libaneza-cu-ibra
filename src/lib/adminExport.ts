@@ -10,7 +10,11 @@ import {
   type Registration,
 } from "@/components/admin/types";
 
-function downloadCsv(filename: string, headers: string[], rows: (string | number)[][]) {
+function downloadCsv(
+  filename: string,
+  headers: string[],
+  rows: (string | number)[][],
+) {
   const csv = [headers, ...rows]
     .map((row) =>
       row
@@ -66,7 +70,8 @@ export function exportAllRegistrationsCsv(
     r.notes || "",
   ]);
   const courseSuffix = courseFilter === "all" ? "toate" : courseFilter;
-  const statusSuffix = statusFilter === "all" ? "toate-statusurile" : statusFilter;
+  const statusSuffix =
+    statusFilter === "all" ? "toate-statusurile" : statusFilter;
   const filename = `inscrieri_${courseSuffix}_${statusSuffix}_${new Date()
     .toISOString()
     .slice(0, 10)}.csv`;
@@ -78,7 +83,8 @@ function privateExportFilename(
   statusFilter: LeadStatusFilter,
   search: string,
 ) {
-  const statusSuffix = statusFilter === "all" ? "toate-statusurile" : statusFilter;
+  const statusSuffix =
+    statusFilter === "all" ? "toate-statusurile" : statusFilter;
   const searchSuffix = search.trim()
     ? `_mesaj-${search
         .trim()
@@ -96,7 +102,17 @@ export function exportPrivateLeadsCsv(
   statusFilter: LeadStatusFilter,
   search: string,
 ) {
-  const headers = ["Data", "Nume", "Telefon", "Email", "Format", "Sursă", "Track", "Status lead", "Mesaj"];
+  const headers = [
+    "Data",
+    "Nume",
+    "Telefon",
+    "Email",
+    "Format",
+    "Sursă",
+    "Track",
+    "Status lead",
+    "Mesaj",
+  ];
   const data = rows.map((r) => [
     new Date(r.created_at).toLocaleString("ro-RO"),
     r.name,
@@ -108,7 +124,11 @@ export function exportPrivateLeadsCsv(
     leadStatusLabels[r.lead_status || "new"],
     r.notes || "",
   ]);
-  downloadCsv(privateExportFilename("csv", statusFilter, search), headers, data);
+  downloadCsv(
+    privateExportFilename("csv", statusFilter, search),
+    headers,
+    data,
+  );
 }
 
 export function exportPrivateLeadsPdf(
@@ -118,7 +138,9 @@ export function exportPrivateLeadsPdf(
 ) {
   const doc = new jsPDF({ orientation: "landscape" });
   const statusLabel =
-    statusFilter === "all" ? "Toate statusurile" : leadStatusLabels[statusFilter];
+    statusFilter === "all"
+      ? "Toate statusurile"
+      : leadStatusLabels[statusFilter];
 
   doc.setFont("helvetica", "bold");
   doc.setFontSize(16);
@@ -129,7 +151,19 @@ export function exportPrivateLeadsPdf(
 
   autoTable(doc, {
     startY: 32,
-    head: [["Data", "Nume", "Telefon", "Email", "Format", "Sursă", "Track", "Status", "Mesaj"]],
+    head: [
+      [
+        "Data",
+        "Nume",
+        "Telefon",
+        "Email",
+        "Format",
+        "Sursă",
+        "Track",
+        "Status",
+        "Mesaj",
+      ],
+    ],
     body: rows.map((r) => [
       new Date(r.created_at).toLocaleString("ro-RO"),
       r.name,
@@ -141,7 +175,12 @@ export function exportPrivateLeadsPdf(
       leadStatusLabels[r.lead_status || "new"],
       r.notes || "—",
     ]),
-    styles: { font: "helvetica", fontSize: 8, cellPadding: 2, overflow: "linebreak" },
+    styles: {
+      font: "helvetica",
+      fontSize: 8,
+      cellPadding: 2,
+      overflow: "linebreak",
+    },
     headStyles: { fillColor: [185, 28, 28], textColor: [255, 255, 255] },
     columnStyles: { 8: { cellWidth: 78 } },
     margin: { left: 14, right: 14 },

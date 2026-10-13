@@ -1,8 +1,20 @@
 import GroupStartRule from "@/components/GroupStartRule";
 import { useMemo } from "react";
 import { Helmet } from "react-helmet-async";
-import { Link, useParams, Navigate, useSearchParams } from "@/lib/router-compat";
-import { ChevronRight, MessageCircle, CheckCircle2, BookOpen, Clock, GraduationCap } from "lucide-react";
+import {
+  Link,
+  useParams,
+  Navigate,
+  useSearchParams,
+} from "@/lib/router-compat";
+import {
+  ChevronRight,
+  MessageCircle,
+  CheckCircle2,
+  BookOpen,
+  Clock,
+  GraduationCap,
+} from "lucide-react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import WhatsAppButton from "@/components/WhatsAppButton";
@@ -33,14 +45,32 @@ import posterA2Fizic from "@/assets/poster-a2-fizic-sep2026.webp";
 // this list.
 type PosterFormat = "online" | "fizic";
 const LEVEL_POSTERS: Partial<
-  Record<string, { src: string; alt: string; format: PosterFormat; started?: boolean }[]>
+  Record<
+    string,
+    { src: string; alt: string; format: PosterFormat; started?: boolean }[]
+  >
 > = {
   a1: [
-    { src: posterA1Fizic, alt: "Poster curs A1 de arabă libaneză, fizic la Raduga Creative Center — start miercuri, 2 septembrie 2026 · lecții luni și miercuri, 19:00–20:30, Strada Icoanei 80", format: "fizic", started: true },
-    { src: posterA1Online.url, alt: "Poster A1 online — sâmbătă 12:00–13:30 și duminică 17:30–19:00", format: "online", started: true },
+    {
+      src: posterA1Fizic,
+      alt: "Poster curs A1 de arabă libaneză, fizic la Raduga Creative Center — start miercuri, 2 septembrie 2026 · lecții luni și miercuri, 19:00–20:30, Strada Icoanei 80",
+      format: "fizic",
+      started: true,
+    },
+    {
+      src: posterA1Online.url,
+      alt: "Poster A1 online — sâmbătă 12:00–13:30 și duminică 17:30–19:00",
+      format: "online",
+      started: true,
+    },
   ],
   a2: [
-    { src: posterA2Fizic, alt: "Poster curs A2 de arabă libaneză, fizic la Raduga Creative Center — start marți, 1 septembrie 2026 · lecții marți și joi, 19:00–20:30, Strada Icoanei 80", format: "fizic", started: true },
+    {
+      src: posterA2Fizic,
+      alt: "Poster curs A2 de arabă libaneză, fizic la Raduga Creative Center — start marți, 1 septembrie 2026 · lecții marți și joi, 19:00–20:30, Strada Icoanei 80",
+      format: "fizic",
+      started: true,
+    },
   ],
 };
 
@@ -94,12 +124,14 @@ const CursGrupLevel = () => {
   const selectedFormat: PosterFormat =
     paramFormat && availableFormats.includes(paramFormat)
       ? paramFormat
-      : openFormats[0] ?? availableFormats[0] ?? "fizic";
+      : (openFormats[0] ?? availableFormats[0] ?? "fizic");
   const poster = posters.find((p) => p.format === selectedFormat);
   // Joinable when an open cohort exists in this format. Until the cohorts
   // load (and on the server render, which has none) fall back to the poster:
   // a running group means no.
-  const hasOpenGroup = cohortsLoading ? !poster?.started : openIn(selectedFormat);
+  const hasOpenGroup = cohortsLoading
+    ? !poster?.started
+    : openIn(selectedFormat);
   const cohortStarted = !hasOpenGroup && Boolean(poster?.started);
   const canEnrol = available && hasOpenGroup;
 
@@ -120,13 +152,33 @@ const CursGrupLevel = () => {
     "@context": "https://schema.org",
     "@type": "BreadcrumbList",
     itemListElement: [
-      { "@type": "ListItem", position: 1, name: t.courseBreadcrumbHome, item: `${BASE_URL}/` },
+      {
+        "@type": "ListItem",
+        position: 1,
+        name: t.courseBreadcrumbHome,
+        item: `${BASE_URL}/`,
+      },
       // /cursuri, not /#programs: a breadcrumb step should name a page, and
       // the sibling breadcrumb on /cursuri/grup already points there. A
       // fragment on the homepage made the same trail read two different ways.
-      { "@type": "ListItem", position: 2, name: t.courseBreadcrumbCourses, item: `${BASE_URL}/cursuri` },
-      { "@type": "ListItem", position: 3, name: t.courseGrupH1, item: `${BASE_URL}/cursuri/grup` },
-      { "@type": "ListItem", position: 4, name: curriculum.title, item: canonical },
+      {
+        "@type": "ListItem",
+        position: 2,
+        name: t.courseBreadcrumbCourses,
+        item: `${BASE_URL}/cursuri`,
+      },
+      {
+        "@type": "ListItem",
+        position: 3,
+        name: t.courseGrupH1,
+        item: `${BASE_URL}/cursuri/grup`,
+      },
+      {
+        "@type": "ListItem",
+        position: 4,
+        name: curriculum.title,
+        item: canonical,
+      },
     ],
   };
 
@@ -162,8 +214,12 @@ const CursGrupLevel = () => {
   return (
     <div className="min-h-screen bg-background">
       <Helmet>
-        <script type="application/ld+json">{JSON.stringify(courseJsonLd)}</script>
-        <script type="application/ld+json">{JSON.stringify(breadcrumbJsonLd)}</script>
+        <script type="application/ld+json">
+          {JSON.stringify(courseJsonLd)}
+        </script>
+        <script type="application/ld+json">
+          {JSON.stringify(breadcrumbJsonLd)}
+        </script>
       </Helmet>
       <Navbar />
 
@@ -171,11 +227,25 @@ const CursGrupLevel = () => {
         {/* Breadcrumb */}
         <nav className="w-full max-w-content mx-auto px-gutter pt-6 pb-2 text-xs text-muted-foreground">
           <ol className="flex flex-wrap items-center gap-1">
-            <li><Link to="/" className="hover:text-foreground">{t.courseBreadcrumbHome}</Link></li>
-            <li aria-hidden><ChevronRight className="w-3.5 h-3.5 inline -mt-0.5" /></li>
-            <li><Link to="/cursuri/grup" className="hover:text-foreground">{t.courseGrupH1}</Link></li>
-            <li aria-hidden><ChevronRight className="w-3.5 h-3.5 inline -mt-0.5" /></li>
-            <li className="text-foreground font-medium" aria-current="page">{upperLevel}</li>
+            <li>
+              <Link to="/" className="hover:text-foreground">
+                {t.courseBreadcrumbHome}
+              </Link>
+            </li>
+            <li aria-hidden>
+              <ChevronRight className="w-3.5 h-3.5 inline -mt-0.5" />
+            </li>
+            <li>
+              <Link to="/cursuri/grup" className="hover:text-foreground">
+                {t.courseGrupH1}
+              </Link>
+            </li>
+            <li aria-hidden>
+              <ChevronRight className="w-3.5 h-3.5 inline -mt-0.5" />
+            </li>
+            <li className="text-foreground font-medium" aria-current="page">
+              {upperLevel}
+            </li>
           </ol>
         </nav>
 
@@ -183,7 +253,8 @@ const CursGrupLevel = () => {
         <section className="w-full max-w-content mx-auto px-gutter pt-4 pb-8">
           {/* Label and heading in the homepage's style. */}
           <span className="mb-2 block text-sm font-bold uppercase tracking-[0.1em] text-foreground">
-            {lang === "en" ? "Group course" : "Curs de grup"} · CEFR {upperLevel}
+            {lang === "en" ? "Group course" : "Curs de grup"} · CEFR{" "}
+            {upperLevel}
           </span>
           <h1 className="font-display text-display-xl font-bold tracking-tight text-foreground mb-4">
             {curriculum.title}
@@ -200,29 +271,45 @@ const CursGrupLevel = () => {
               <dl className="flex flex-wrap gap-x-10 gap-y-4">
                 <div>
                   <dt className="flex items-center gap-1.5 text-sm text-muted-foreground">
-                    <BookOpen className="w-4 h-4" aria-hidden="true" /> {t.levelPageStatLessons}
+                    <BookOpen className="w-4 h-4" aria-hidden="true" />{" "}
+                    {t.levelPageStatLessons}
                   </dt>
-                  <dd className="font-display text-3xl font-bold text-foreground">{curriculum.lessons}</dd>
+                  <dd className="font-display text-3xl font-bold text-foreground">
+                    {curriculum.lessons}
+                  </dd>
                 </div>
                 <div>
                   <dt className="flex items-center gap-1.5 text-sm text-muted-foreground">
-                    <Clock className="w-4 h-4" aria-hidden="true" /> {t.levelPageStatHours}
+                    <Clock className="w-4 h-4" aria-hidden="true" />{" "}
+                    {t.levelPageStatHours}
                   </dt>
-                  <dd className="font-display text-3xl font-bold text-foreground">{curriculum.hours}</dd>
+                  <dd className="font-display text-3xl font-bold text-foreground">
+                    {curriculum.hours}
+                  </dd>
                 </div>
                 <div>
                   <dt className="flex items-center gap-1.5 text-sm text-muted-foreground">
-                    <GraduationCap className="w-4 h-4" aria-hidden="true" /> {t.levelPageStatTrack}
+                    <GraduationCap className="w-4 h-4" aria-hidden="true" />{" "}
+                    {t.levelPageStatTrack}
                   </dt>
-                  <dd className="pt-2 font-semibold text-foreground">{curriculum.trackLabel}</dd>
+                  <dd className="pt-2 font-semibold text-foreground">
+                    {curriculum.trackLabel}
+                  </dd>
                 </div>
               </dl>
 
               {curriculum.schedule && (
                 <div className="mt-6 border-t border-[#E7E1D6] pt-5 dark:border-border">
-                  <span className="text-sm font-bold uppercase tracking-[0.1em] text-foreground">{t.levelPageScheduleLabel}</span>
+                  <span className="text-sm font-bold uppercase tracking-[0.1em] text-foreground">
+                    {t.levelPageScheduleLabel}
+                  </span>
                   {curriculum.schedule.map((line, i) => (
-                    <p key={i} className="text-[15px] text-foreground/85 mt-1.5">{line}</p>
+                    <p
+                      key={i}
+                      className="text-[15px] text-foreground/85 mt-1.5"
+                    >
+                      {line}
+                    </p>
                   ))}
                 </div>
               )}
@@ -231,17 +318,33 @@ const CursGrupLevel = () => {
             <div className="flex flex-col justify-between gap-5 rounded-2xl bg-cream p-6">
               <div className="flex flex-wrap items-baseline gap-x-6 gap-y-2">
                 <span>
-                  <span className="block text-sm text-muted-foreground">{t.priceOnlineShort}</span>
-                  <span className="font-display text-3xl font-bold text-foreground">{formatLei(online)}</span>
-                  <span className="text-sm text-muted-foreground"> {t.priceLeiPerMonth}</span>
+                  <span className="block text-sm text-muted-foreground">
+                    {t.priceOnlineShort}
+                  </span>
+                  <span className="font-display text-3xl font-bold text-foreground">
+                    {formatLei(online)}
+                  </span>
+                  <span className="text-sm text-muted-foreground">
+                    {" "}
+                    {t.priceLeiPerMonth}
+                  </span>
                 </span>
                 <span>
-                  <span className="block text-sm text-muted-foreground">{t.priceFizicShort}</span>
-                  <span className="font-display text-3xl font-bold text-foreground">{formatLei(fizic)}</span>
-                  <span className="text-sm text-muted-foreground"> {t.priceLeiPerMonth}</span>
+                  <span className="block text-sm text-muted-foreground">
+                    {t.priceFizicShort}
+                  </span>
+                  <span className="font-display text-3xl font-bold text-foreground">
+                    {formatLei(fizic)}
+                  </span>
+                  <span className="text-sm text-muted-foreground">
+                    {" "}
+                    {t.priceLeiPerMonth}
+                  </span>
                 </span>
               </div>
-              <p className="text-xs text-muted-foreground">{t.priceSurchargeNote}</p>
+              <p className="text-xs text-muted-foreground">
+                {t.priceSurchargeNote}
+              </p>
               <div className="flex flex-wrap gap-3">
                 <a
                   href="#register"
@@ -262,9 +365,12 @@ const CursGrupLevel = () => {
                     {(["fizic", "online"] as PosterFormat[]).map((fmt) => {
                       const enabled = availableFormats.includes(fmt);
                       const active = selectedFormat === fmt;
-                      const label = fmt === "fizic"
-                        ? (lang === "en" ? "In person" : "Fizic")
-                        : "Online";
+                      const label =
+                        fmt === "fizic"
+                          ? lang === "en"
+                            ? "In person"
+                            : "Fizic"
+                          : "Online";
                       return (
                         <button
                           key={fmt}
@@ -275,8 +381,8 @@ const CursGrupLevel = () => {
                             active
                               ? "bg-primary text-primary-foreground"
                               : enabled
-                              ? "text-foreground hover:bg-background"
-                              : "text-muted-foreground cursor-not-allowed"
+                                ? "text-foreground hover:bg-background"
+                                : "text-muted-foreground cursor-not-allowed"
                           }`}
                           aria-pressed={active}
                         >
@@ -295,7 +401,11 @@ const CursGrupLevel = () => {
             </div>
           </div>
           {available && <GroupStartRule className="mt-4" />}
-          <RunningGroups level={upperLevel} defaultTotal={curriculum.lessons} className="mt-6" />
+          <RunningGroups
+            level={upperLevel}
+            defaultTotal={curriculum.lessons}
+            className="mt-6"
+          />
         </section>
 
         {/* Body: curriculum + form */}
@@ -309,7 +419,9 @@ const CursGrupLevel = () => {
               {curriculum.intro && (
                 <div className="mb-8 space-y-4 text-foreground/80 leading-relaxed">
                   {curriculum.intro.map((para, i) => (
-                    <p key={i} className="text-base">{para}</p>
+                    <p key={i} className="text-base">
+                      {para}
+                    </p>
                   ))}
                 </div>
               )}
@@ -330,15 +442,22 @@ const CursGrupLevel = () => {
                 </div>
               )}
 
-              <h2 className="font-display text-display-md font-bold text-foreground mb-5">{t.levelPageCurriculumTitle}</h2>
+              <h2 className="font-display text-display-md font-bold text-foreground mb-5">
+                {t.levelPageCurriculumTitle}
+              </h2>
 
               {/* Flat list (A1, A2, B1, B2) */}
               {curriculum.items && (
                 <ol className="grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-2.5 rounded-3xl border border-[#E7E1D6] bg-card p-6 dark:border-border">
                   {curriculum.items.map((it, i) => (
-                    <li key={i} className="flex min-w-0 items-start gap-2 text-sm">
+                    <li
+                      key={i}
+                      className="flex min-w-0 items-start gap-2 text-sm"
+                    >
                       <CheckCircle2 className="w-4 h-4 text-brand-green mt-0.5 flex-shrink-0" />
-                      <span className="min-w-0 text-foreground [overflow-wrap:anywhere]">{it}</span>
+                      <span className="min-w-0 text-foreground [overflow-wrap:anywhere]">
+                        {it}
+                      </span>
                     </li>
                   ))}
                 </ol>
@@ -348,24 +467,38 @@ const CursGrupLevel = () => {
               {curriculum.spokenCore && (
                 <div className="space-y-4">
                   <div className="rounded-3xl border border-[#E7E1D6] bg-card p-6 dark:border-border">
-                    <h3 className="text-sm font-bold text-foreground mb-3">{curriculum.spokenCore.intro}</h3>
+                    <h3 className="text-sm font-bold text-foreground mb-3">
+                      {curriculum.spokenCore.intro}
+                    </h3>
                     <ol className="grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-2">
                       {curriculum.spokenCore.items.map((it, i) => (
-                        <li key={i} className="flex min-w-0 items-start gap-2 text-sm">
+                        <li
+                          key={i}
+                          className="flex min-w-0 items-start gap-2 text-sm"
+                        >
                           <CheckCircle2 className="w-4 h-4 text-brand-green mt-0.5 flex-shrink-0" />
-                          <span className="min-w-0 text-foreground [overflow-wrap:anywhere]">{it}</span>
+                          <span className="min-w-0 text-foreground [overflow-wrap:anywhere]">
+                            {it}
+                          </span>
                         </li>
                       ))}
                     </ol>
                   </div>
                   {curriculum.writingStrand && (
                     <div className="rounded-2xl border border-primary/30 bg-primary/5 p-5">
-                      <h3 className="text-sm font-bold text-foreground mb-3">{curriculum.writingStrand.intro}</h3>
+                      <h3 className="text-sm font-bold text-foreground mb-3">
+                        {curriculum.writingStrand.intro}
+                      </h3>
                       <ol className="grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-2">
                         {curriculum.writingStrand.items.map((it, i) => (
-                          <li key={i} className="flex min-w-0 items-start gap-2 text-sm">
+                          <li
+                            key={i}
+                            className="flex min-w-0 items-start gap-2 text-sm"
+                          >
                             <CheckCircle2 className="w-4 h-4 text-brand-green mt-0.5 flex-shrink-0" />
-                            <span className="min-w-0 text-foreground [overflow-wrap:anywhere]">{it}</span>
+                            <span className="min-w-0 text-foreground [overflow-wrap:anywhere]">
+                              {it}
+                            </span>
                           </li>
                         ))}
                       </ol>
@@ -378,13 +511,23 @@ const CursGrupLevel = () => {
               {curriculum.blocks && (
                 <div className="space-y-4">
                   {curriculum.blocks.map((b, i) => (
-                    <div key={i} className="rounded-2xl border border-border bg-card p-5">
-                      <h3 className="text-sm font-bold text-foreground mb-3">{b.title}</h3>
+                    <div
+                      key={i}
+                      className="rounded-2xl border border-border bg-card p-5"
+                    >
+                      <h3 className="text-sm font-bold text-foreground mb-3">
+                        {b.title}
+                      </h3>
                       <ul className="space-y-2">
                         {b.items.map((it, j) => (
-                          <li key={j} className="flex items-start gap-2 text-sm">
+                          <li
+                            key={j}
+                            className="flex items-start gap-2 text-sm"
+                          >
                             <CheckCircle2 className="w-4 h-4 text-brand-green mt-0.5 flex-shrink-0" />
-                            <span className="min-w-0 text-foreground [overflow-wrap:anywhere]">{it}</span>
+                            <span className="min-w-0 text-foreground [overflow-wrap:anywhere]">
+                              {it}
+                            </span>
                           </li>
                         ))}
                       </ul>
@@ -394,9 +537,10 @@ const CursGrupLevel = () => {
               )}
 
               {curriculum.note && (
-                <p className="mt-4 text-xs text-muted-foreground italic">{curriculum.note}</p>
+                <p className="mt-4 text-xs text-muted-foreground italic">
+                  {curriculum.note}
+                </p>
               )}
-
             </div>
 
             {/* Sticky form */}

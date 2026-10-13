@@ -73,8 +73,10 @@ const CourseMegaMenu = ({ label, lang, courses, next }: Props) => {
     };
   }, [open]);
 
-  const heading = "mb-3 text-xs font-bold uppercase tracking-[0.1em] text-muted-foreground";
-  const item = "flex items-center justify-between gap-3 rounded-lg px-2 py-1.5 text-[15px] text-foreground transition-colors hover:bg-cream";
+  const heading =
+    "mb-3 text-xs font-bold uppercase tracking-[0.1em] text-muted-foreground";
+  const item =
+    "flex items-center justify-between gap-3 rounded-lg px-2 py-1.5 text-[15px] text-foreground transition-colors hover:bg-cream";
 
   return (
     <div ref={wrapRef}>
@@ -90,7 +92,13 @@ const CourseMegaMenu = ({ label, lang, courses, next }: Props) => {
         )}
       >
         {label}
-        <ChevronDown className={cn("h-3.5 w-3.5 text-muted-foreground transition-transform", open && "rotate-180")} aria-hidden="true" />
+        <ChevronDown
+          className={cn(
+            "h-3.5 w-3.5 text-muted-foreground transition-transform",
+            open && "rotate-180",
+          )}
+          aria-hidden="true"
+        />
       </button>
 
       <div
@@ -101,24 +109,39 @@ const CourseMegaMenu = ({ label, lang, courses, next }: Props) => {
         <div className="mx-auto grid max-w-content gap-7 rounded-b-3xl border border-t-0 border-[#E7E1D6] bg-card p-7 shadow-[0_18px_40px_rgba(26,26,26,0.08)] lg:grid-cols-[1.3fr_1fr_1fr_1.1fr] dark:border-border">
           <div>
             {group && (
-              <Link to={group.to} className={cn(heading, "block hover:text-brand-green")}>
+              <Link
+                to={group.to}
+                className={cn(heading, "block hover:text-brand-green")}
+              >
                 {group.label} →
               </Link>
             )}
             <ul className="flex flex-col gap-0.5">
               {LEVELS.map((l) => (
                 <li key={l.id}>
-                  <Link to={`/cursuri/grup/${l.id.toLowerCase()}`} className={item}>
+                  <Link
+                    to={`/cursuri/grup/${l.id.toLowerCase()}`}
+                    className={item}
+                  >
                     <span>
-                      <b className="font-semibold">{l.id}</b> · {en ? l.en : l.ro}
+                      <b className="font-semibold">{l.id}</b> ·{" "}
+                      {en ? l.en : l.ro}
                     </span>
                     <span
                       className={cn(
                         "shrink-0 rounded-full px-2 py-0.5 text-[11px] font-bold",
-                        OPEN.has(l.id) ? "bg-brand-green/10 text-brand-green" : "bg-cream text-muted-foreground",
+                        OPEN.has(l.id)
+                          ? "bg-brand-green/10 text-brand-green"
+                          : "bg-cream text-muted-foreground",
                       )}
                     >
-                      {OPEN.has(l.id) ? (en ? "Open" : "Înscrieri deschise") : en ? "Coming soon" : "În curând"}
+                      {OPEN.has(l.id)
+                        ? en
+                          ? "Open"
+                          : "Înscrieri deschise"
+                        : en
+                          ? "Coming soon"
+                          : "În curând"}
                     </span>
                   </Link>
                 </li>
@@ -155,16 +178,28 @@ const CourseMegaMenu = ({ label, lang, courses, next }: Props) => {
                 </li>
               ))}
             </ul>
-            <p className={heading}>{en ? "Not sure what to pick?" : "Nu știi ce să alegi?"}</p>
+            <p className={heading}>
+              {en ? "Not sure what to pick?" : "Nu știi ce să alegi?"}
+            </p>
             <ul className="flex flex-col gap-0.5">
               <li>
-                <a href="/quiz" className={item}>{en ? "Quiz · 30 seconds" : "Quiz · 30 de secunde"}</a>
+                <a href="/quiz" className={item}>
+                  {en ? "Quiz · 30 seconds" : "Quiz · 30 de secunde"}
+                </a>
               </li>
               <li>
-                <Link to="/test-de-nivel" className={item}>{en ? "Online level test · 15 min" : "Test de nivel online · 15 min"}</Link>
+                <Link to="/test-de-nivel" className={item}>
+                  {en
+                    ? "Online level test · 15 min"
+                    : "Test de nivel online · 15 min"}
+                </Link>
               </li>
               <li>
-                <Link to="/verificare-nivel" className={item}>{en ? "Level check with Ibra (free)" : "Verificare de nivel cu Ibra (gratuit)"}</Link>
+                <Link to="/verificare-nivel" className={item}>
+                  {en
+                    ? "Level check with Ibra (free)"
+                    : "Verificare de nivel cu Ibra (gratuit)"}
+                </Link>
               </li>
             </ul>
           </div>
@@ -172,12 +207,25 @@ const CourseMegaMenu = ({ label, lang, courses, next }: Props) => {
           <div className="flex flex-col gap-2 rounded-2xl bg-cream p-5">
             {next ? (
               <>
-                <span className="text-sm text-muted-foreground">{en ? "Next course" : "Următorul curs"}</span>
+                <span className="text-sm text-muted-foreground">
+                  {en ? "Next course" : "Următorul curs"}
+                </span>
                 <span className="font-display text-lg font-bold leading-snug text-foreground">
-                  {next.level} {next.format === "fizic" ? (en ? "in person" : "fizic") : "online"} · {longDate(next.start_date, lang)}
+                  {next.level}{" "}
+                  {next.format === "fizic"
+                    ? en
+                      ? "in person"
+                      : "fizic"
+                    : "online"}{" "}
+                  · {longDate(next.start_date, lang)}
                 </span>
                 <span className="text-sm text-foreground/70">
-                  {(en ? next.schedule_label_en : next.schedule_label_ro).split(" · ")[0]}
+                  {
+                    (en
+                      ? next.schedule_label_en
+                      : next.schedule_label_ro
+                    ).split(" · ")[0]
+                  }
                   {" · "}
                   {en
                     ? `taught in ${next.teaching_language === "en" ? "English" : "Romanian"} · ${next.seatsLeft} of ${next.max_seats} seats free`
@@ -193,7 +241,9 @@ const CourseMegaMenu = ({ label, lang, courses, next }: Props) => {
             ) : (
               <>
                 <span className="font-display text-lg font-bold leading-snug text-foreground">
-                  {en ? "The first trial lesson is free." : "Prima lecție de probă e gratuită."}
+                  {en
+                    ? "The first trial lesson is free."
+                    : "Prima lecție de probă e gratuită."}
                 </span>
                 <Link
                   to="/trial"

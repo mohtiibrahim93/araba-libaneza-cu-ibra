@@ -34,15 +34,30 @@ serve(async (req) => {
     );
     const registrationId = session.metadata?.registration_id;
     const { data: reg } = registrationId
-      ? await supabaseAdmin.from("registrations").select("email").eq("id", registrationId).maybeSingle()
+      ? await supabaseAdmin
+          .from("registrations")
+          .select("email")
+          .eq("id", registrationId)
+          .maybeSingle()
       : { data: null };
     // Legacy standalone deposit sessions use the stored Stripe customer email.
     // Never fall back when a registration is referenced but cannot be found.
-    const owner = registrationId ? reg : { email: session.customer_email || session.customer_details?.email };
-    if (!owner || !(await verifiedRegistrationOwner(req, owner, supabaseAdmin.auth))) {
-      return new Response(JSON.stringify({ error: "Sign in with your verified registration email to continue" }), {
-        status: 403, headers: { ...corsHeaders, "Content-Type": "application/json" },
-      });
+    const owner = registrationId
+      ? reg
+      : { email: session.customer_email || session.customer_details?.email };
+    if (
+      !owner ||
+      !(await verifiedRegistrationOwner(req, owner, supabaseAdmin.auth))
+    ) {
+      return new Response(
+        JSON.stringify({
+          error: "Sign in with your verified registration email to continue",
+        }),
+        {
+          status: 403,
+          headers: { ...corsHeaders, "Content-Type": "application/json" },
+        },
+      );
     }
 
     const payload = {
@@ -57,11 +72,17 @@ serve(async (req) => {
       ),
       courseType: session.metadata?.course_type || null,
       lineItems:
-        session.line_items?.data.map((li: { description: string | null; quantity: number | null; amount_total: number }) => ({
-          description: li.description,
-          quantity: li.quantity,
-          amount: li.amount_total,
-        })) ?? [],
+        session.line_items?.data.map(
+          (li: {
+            description: string | null;
+            quantity: number | null;
+            amount_total: number;
+          }) => ({
+            description: li.description,
+            quantity: li.quantity,
+            amount: li.amount_total,
+          }),
+        ) ?? [],
     };
 
     return new Response(JSON.stringify(payload), {

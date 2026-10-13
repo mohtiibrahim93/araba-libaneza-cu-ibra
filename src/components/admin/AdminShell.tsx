@@ -58,7 +58,11 @@ const TZ = "Europe/Bucharest";
 /** "Bună dimineața" before noon, "Bună ziua" until six, then "Bună seara". */
 export function greeting(now = new Date()) {
   const hour = Number(
-    new Intl.DateTimeFormat("en-GB", { timeZone: TZ, hour: "2-digit", hourCycle: "h23" }).format(now),
+    new Intl.DateTimeFormat("en-GB", {
+      timeZone: TZ,
+      hour: "2-digit",
+      hourCycle: "h23",
+    }).format(now),
   );
   if (hour < 12) return "Bună dimineața, Ibra";
   if (hour < 18) return "Bună ziua, Ibra";
@@ -66,9 +70,12 @@ export function greeting(now = new Date()) {
 }
 
 const todayLabel = () =>
-  new Intl.DateTimeFormat("ro-RO", { timeZone: TZ, weekday: "long", day: "numeric", month: "long" }).format(
-    new Date(),
-  );
+  new Intl.DateTimeFormat("ro-RO", {
+    timeZone: TZ,
+    weekday: "long",
+    day: "numeric",
+    month: "long",
+  }).format(new Date());
 
 const Brand = () => (
   <div className="flex items-center gap-2.5">
@@ -79,13 +86,21 @@ const Brand = () => (
       ع
     </span>
     <span className="flex flex-col leading-tight">
-      <span className="font-display text-base font-bold text-foreground">Arabă cu Ibra</span>
+      <span className="font-display text-base font-bold text-foreground">
+        Arabă cu Ibra
+      </span>
       <span className="text-xs text-muted-foreground">Administrare</span>
     </span>
   </div>
 );
 
-const CalendarStatus = ({ ok, onOpen }: { ok: boolean | null; onOpen: () => void }) => (
+const CalendarStatus = ({
+  ok,
+  onOpen,
+}: {
+  ok: boolean | null;
+  onOpen: () => void;
+}) => (
   <button
     type="button"
     onClick={onOpen}
@@ -98,7 +113,11 @@ const CalendarStatus = ({ ok, onOpen }: { ok: boolean | null; onOpen: () => void
         ok === null ? "bg-border" : ok ? "bg-emerald-600" : "bg-amber-600",
       )}
     />
-    {ok === null ? "Calendar…" : ok ? "Calendar sincronizat" : "Calendar: de verificat"}
+    {ok === null
+      ? "Calendar…"
+      : ok
+        ? "Calendar sincronizat"
+        : "Calendar: de verificat"}
   </button>
 );
 
@@ -125,8 +144,11 @@ const AdminShell = ({
   children,
 }: Props) => {
   const [moreOpen, setMoreOpen] = useState(false);
-  const section = (sections.find((s) => s.items.some((i) => i.value === active)) ?? sections[0])!;
-  const current = (section.items.find((i) => i.value === active) ?? section.items[0])!;
+  const section = (sections.find((s) =>
+    s.items.some((i) => i.value === active),
+  ) ?? sections[0])!;
+  const current = (section.items.find((i) => i.value === active) ??
+    section.items[0])!;
   const isHome = section.id === "home";
   const heading = isHome ? greeting() : section.label;
 
@@ -156,7 +178,9 @@ const AdminShell = ({
           aria-current={on ? "page" : undefined}
           className={cn(
             "flex min-h-11 w-full items-center gap-3 rounded-xl px-3 text-[0.9375rem] transition-colors",
-            on ? "bg-brand-green font-semibold text-white" : "font-medium text-foreground hover:bg-muted",
+            on
+              ? "bg-brand-green font-semibold text-white"
+              : "font-medium text-foreground hover:bg-muted",
           )}
         >
           <Icon className="h-5 w-5 shrink-0" aria-hidden />
@@ -165,7 +189,9 @@ const AdminShell = ({
             <span
               className={cn(
                 "min-w-6 rounded-full px-1.5 py-0.5 text-center text-xs font-bold tabular-nums",
-                on ? "bg-white/20 text-white" : "bg-admin-warn-bg text-admin-warn-fg",
+                on
+                  ? "bg-white/20 text-white"
+                  : "bg-admin-warn-bg text-admin-warn-fg",
               )}
             >
               {s.badge}
@@ -188,10 +214,17 @@ const AdminShell = ({
           <div className="px-2.5 pb-5">
             <Brand />
           </div>
-          <nav aria-label="Navigare admin" className="min-h-0 flex-1 overflow-y-auto">
-            <ul className="space-y-1">{sections.filter((s) => !s.secondary).map(railLink)}</ul>
+          <nav
+            aria-label="Navigare admin"
+            className="min-h-0 flex-1 overflow-y-auto"
+          >
+            <ul className="space-y-1">
+              {sections.filter((s) => !s.secondary).map(railLink)}
+            </ul>
             <div className="mx-2 my-3 h-px bg-admin-nav-border" />
-            <ul className="space-y-1">{sections.filter((s) => s.secondary).map(railLink)}</ul>
+            <ul className="space-y-1">
+              {sections.filter((s) => s.secondary).map(railLink)}
+            </ul>
           </nav>
           <div className="space-y-0.5 border-t border-admin-nav-border pt-3">
             <CalendarStatus ok={calendarOk} onOpen={openCalendarHealth} />
@@ -214,7 +247,9 @@ const AdminShell = ({
             >
               <LogOut className="h-4 w-4" aria-hidden /> Ieși din cont
             </button>
-            <p className="truncate px-3 pt-1 text-xs text-admin-nav-muted">{adminEmail || "—"}</p>
+            <p className="truncate px-3 pt-1 text-xs text-admin-nav-muted">
+              {adminEmail || "—"}
+            </p>
           </div>
         </aside>
 
@@ -258,15 +293,20 @@ const AdminShell = ({
                 className="flex h-[46px] flex-1 items-center gap-2.5 rounded-xl border border-border bg-card px-3.5 text-left text-muted-foreground hover:border-brand-green/50"
               >
                 <Search className="h-[18px] w-[18px]" aria-hidden />
-                <span className="flex-1">Caută un cursant după nume, email sau telefon…</span>
-                <kbd className="rounded-md border border-border px-1.5 py-0.5 font-sans text-xs">Ctrl K</kbd>
+                <span className="flex-1">
+                  Caută un cursant după nume, email sau telefon…
+                </span>
+                <kbd className="rounded-md border border-border px-1.5 py-0.5 font-sans text-xs">
+                  Ctrl K
+                </kbd>
               </button>
               <button
                 type="button"
                 onClick={onAddExternal}
                 className="flex h-[46px] items-center gap-2 rounded-xl bg-brand-green px-[18px] font-semibold text-white hover:opacity-90"
               >
-                <Plus className="h-[18px] w-[18px]" aria-hidden /> Înscriere externă
+                <Plus className="h-[18px] w-[18px]" aria-hidden /> Înscriere
+                externă
               </button>
             </div>
 
@@ -280,7 +320,11 @@ const AdminShell = ({
               <h1 className="font-display text-[1.875rem] font-semibold leading-tight sm:text-4xl lg:text-[2.5rem]">
                 {heading}
               </h1>
-              {current?.hint && <p className="max-w-2xl text-[0.9375rem] text-muted-foreground">{current.hint}</p>}
+              {current?.hint && (
+                <p className="max-w-2xl text-[0.9375rem] text-muted-foreground">
+                  {current.hint}
+                </p>
+              )}
             </header>
 
             {section.items.length > 1 && (
@@ -306,7 +350,11 @@ const AdminShell = ({
                       )}
                     >
                       {item.label}
-                      {!!item.badge && <span className="text-xs tabular-nums opacity-80">· {item.badge}</span>}
+                      {!!item.badge && (
+                        <span className="text-xs tabular-nums opacity-80">
+                          · {item.badge}
+                        </span>
+                      )}
                     </button>
                   );
                 })}
@@ -334,7 +382,9 @@ const AdminShell = ({
               aria-current={on ? "page" : undefined}
               className={cn(
                 "relative flex flex-1 flex-col items-center justify-center gap-1 text-xs",
-                on ? "font-bold text-brand-green dark:text-primary" : "font-semibold text-muted-foreground",
+                on
+                  ? "font-bold text-brand-green dark:text-primary"
+                  : "font-semibold text-muted-foreground",
               )}
             >
               <span
@@ -360,10 +410,17 @@ const AdminShell = ({
           aria-expanded={moreOpen}
           className={cn(
             "flex flex-1 flex-col items-center justify-center gap-1 text-xs",
-            moreActive ? "font-bold text-brand-green dark:text-primary" : "font-semibold text-muted-foreground",
+            moreActive
+              ? "font-bold text-brand-green dark:text-primary"
+              : "font-semibold text-muted-foreground",
           )}
         >
-          <span className={cn("flex h-[30px] w-14 items-center justify-center rounded-full", moreActive && "bg-accent")}>
+          <span
+            className={cn(
+              "flex h-[30px] w-14 items-center justify-center rounded-full",
+              moreActive && "bg-accent",
+            )}
+          >
             <MoreHorizontal className="h-5 w-5" aria-hidden />
           </span>
           Mai mult
@@ -372,7 +429,12 @@ const AdminShell = ({
 
       {/* "Mai mult" (phone) */}
       {moreOpen && (
-        <div className="fixed inset-0 z-50 lg:hidden" role="dialog" aria-modal="true" aria-label="Mai mult">
+        <div
+          className="fixed inset-0 z-50 lg:hidden"
+          role="dialog"
+          aria-modal="true"
+          aria-label="Mai mult"
+        >
           <button
             type="button"
             aria-label="Închide"
@@ -394,10 +456,15 @@ const AdminShell = ({
             <div className="space-y-4">
               {more.map((s) => (
                 <div key={s.id} className="space-y-2">
-                  <p className="text-xs font-bold uppercase tracking-[0.12em] text-muted-foreground">{s.label}</p>
+                  <p className="text-xs font-bold uppercase tracking-[0.12em] text-muted-foreground">
+                    {s.label}
+                  </p>
                   <ul className="overflow-hidden rounded-2xl border border-border bg-card">
                     {s.items.map((item) => (
-                      <li key={item.value} className="border-b border-border/60 last:border-0">
+                      <li
+                        key={item.value}
+                        className="border-b border-border/60 last:border-0"
+                      >
                         <button
                           type="button"
                           onClick={() => {
@@ -406,7 +473,8 @@ const AdminShell = ({
                           }}
                           className={cn(
                             "flex min-h-[52px] w-full items-center px-4 text-left font-semibold",
-                            item.value === active && "text-brand-green dark:text-primary",
+                            item.value === active &&
+                              "text-brand-green dark:text-primary",
                           )}
                         >
                           {item.label}
@@ -452,7 +520,9 @@ const AdminShell = ({
               >
                 Ieși din cont
               </button>
-              <p className="truncate text-center text-xs text-muted-foreground">{adminEmail}</p>
+              <p className="truncate text-center text-xs text-muted-foreground">
+                {adminEmail}
+              </p>
             </div>
           </div>
         </div>

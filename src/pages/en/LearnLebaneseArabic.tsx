@@ -1,5 +1,14 @@
 import { Link } from "@/components/LocalizedLink";
-import { CheckCircle2, Globe, Users, GraduationCap, MessageCircle, BookOpen, Star, ShieldCheck } from "lucide-react";
+import {
+  CheckCircle2,
+  Globe,
+  Users,
+  GraduationCap,
+  MessageCircle,
+  BookOpen,
+  Star,
+  ShieldCheck,
+} from "lucide-react";
 import EnLandingLayout from "./EnLandingLayout";
 import DirectAnswer from "@/components/seo/DirectAnswer";
 import { ONLINE_PRICES, PHYSICAL_MULTIPLIER } from "@/lib/pricing";
@@ -62,20 +71,22 @@ const LearnLebaneseArabic = () => (
   >
     <DirectAnswer question="How do you learn Lebanese Arabic?">
       <p>
-        You learn Lebanese Arabic by speaking it from the first lesson with someone who
-        grew up in it, rather than by working through Modern Standard Arabic first. At
-        Centrul de Arabă Libaneză the teacher is <strong>Ibra</strong>,
-        a native Lebanese teacher in Bucharest, and lessons are live — online worldwide,
-        or in person at Strada Icoanei 80. Courses run the full CEFR ladder, A1 to C2:
-        small groups of up to six students, online or in the classroom, meet twice a week for 90
-        minutes, from {ONLINE_PRICES.groupMonthly.A1} RON a month, and private 1-on-1
-        lessons are {ONLINE_PRICES.privateLesson} RON for 60 minutes. In-person courses
-        cost {Math.round((PHYSICAL_MULTIPLIER - 1) * 100)}% more than online. The first
-        30-minute trial lesson is free.
+        You learn Lebanese Arabic by speaking it from the first lesson with
+        someone who grew up in it, rather than by working through Modern
+        Standard Arabic first. At Centrul de Arabă Libaneză the teacher is{" "}
+        <strong>Ibra</strong>, a native Lebanese teacher in Bucharest, and
+        lessons are live — online worldwide, or in person at Strada Icoanei 80.
+        Courses run the full CEFR ladder, A1 to C2: small groups of up to six
+        students, online or in the classroom, meet twice a week for 90 minutes,
+        from {ONLINE_PRICES.groupMonthly.A1} RON a month, and private 1-on-1
+        lessons are {ONLINE_PRICES.privateLesson} RON for 60 minutes. In-person
+        courses cost {Math.round((PHYSICAL_MULTIPLIER - 1) * 100)}% more than
+        online. The first 30-minute trial lesson is free.
       </p>
       <p>
-        Reading and writing the Arabic script is optional and comes later: beginners start
-        in Latin letters (arabizi), which is how Lebanese people text each other anyway.
+        Reading and writing the Arabic script is optional and comes later:
+        beginners start in Latin letters (arabizi), which is how Lebanese people
+        text each other anyway.
       </p>
     </DirectAnswer>
     <div className="rounded-2xl border border-border bg-gradient-to-br from-primary/5 to-primary/[0.02] p-5 md:p-6 not-prose my-6">
@@ -86,26 +97,49 @@ const LearnLebaneseArabic = () => (
               <Star key={i} className="w-4 h-4 fill-primary text-primary" />
             ))}
           </div>
-          <span className="text-sm font-semibold text-foreground">5.0 · 21+ reviews</span>
+          <span className="text-sm font-semibold text-foreground">
+            5.0 · 21+ reviews
+          </span>
         </div>
         <div className="flex items-center gap-2 text-sm text-foreground/80">
           <GraduationCap className="w-4 h-4 text-primary" />
-          <span><strong className="text-foreground">Native Lebanese teacher</strong> — 5+ years experience</span>
+          <span>
+            <strong className="text-foreground">Native Lebanese teacher</strong>{" "}
+            — 5+ years experience
+          </span>
         </div>
         <div className="flex items-center gap-2 text-sm text-foreground/80">
           <ShieldCheck className="w-4 h-4 text-primary" />
-          <span><strong className="text-foreground">Free trial, 0 LEI</strong> — 30 minutes</span>
+          <span>
+            <strong className="text-foreground">Free trial, 0 LEI</strong> — 30
+            minutes
+          </span>
         </div>
       </div>
     </div>
 
     <div className="grid sm:grid-cols-3 gap-4 not-prose my-8">
       {[
-        { icon: Globe, title: "Online worldwide", desc: "Lessons over Zoom in any time zone that overlaps with Bucharest (EET)." },
-        { icon: Users, title: "1-on-1 or small group", desc: "Private lessons tailored to your goals, or groups of at most 6 students online and 8 in person." },
-        { icon: GraduationCap, title: "CEFR A1 → C2", desc: "Six levels, from survival Lebanese to full fluency." },
+        {
+          icon: Globe,
+          title: "Online worldwide",
+          desc: "Lessons over Zoom in any time zone that overlaps with Bucharest (EET).",
+        },
+        {
+          icon: Users,
+          title: "1-on-1 or small group",
+          desc: "Private lessons tailored to your goals, or groups of at most 6 students online and 8 in person.",
+        },
+        {
+          icon: GraduationCap,
+          title: "CEFR A1 → C2",
+          desc: "Six levels, from survival Lebanese to full fluency.",
+        },
       ].map(({ icon: Icon, title, desc }) => (
-        <div key={title} className="rounded-xl border border-border bg-card p-5">
+        <div
+          key={title}
+          className="rounded-xl border border-border bg-card p-5"
+        >
           <Icon className="w-5 h-5 text-primary mb-2" />
           <p className="text-sm font-bold text-foreground mb-1">{title}</p>
           <p className="text-xs text-muted-foreground">{desc}</p>
@@ -115,43 +149,80 @@ const LearnLebaneseArabic = () => (
 
     <h2>Why learn Lebanese Arabic?</h2>
     <p>
-      Lebanese Arabic is the living language of Lebanon — what people use with family, on TikTok, in songs and series, and in daily life. It is also one of the most widely understood Arabic dialects across the Middle East thanks to decades of Lebanese music, cinema and media.
+      Lebanese Arabic is the living language of Lebanon — what people use with
+      family, on TikTok, in songs and series, and in daily life. It is also one
+      of the most widely understood Arabic dialects across the Middle East
+      thanks to decades of Lebanese music, cinema and media.
     </p>
     <ul>
-      <li><strong>Speak from lesson one:</strong> no alphabet gatekeeping; you start with arabizi transliteration.</li>
-      <li><strong>Real conversations at A2:</strong> handle introductions, shopping, directions and small talk — A1 in about 4 months, A2 after about 11.</li>
-      <li><strong>Understand Lebanese media:</strong> songs, series, YouTube and social content in the original dialect.</li>
-      <li><strong>Travel and family:</strong> connect with Lebanese speakers in Lebanon and the diaspora.</li>
-      <li><strong>Gateway to the Levant:</strong> Lebanese is mutually intelligible with Syrian and widely understood in Jordan and Palestine.</li>
+      <li>
+        <strong>Speak from lesson one:</strong> no alphabet gatekeeping; you
+        start with arabizi transliteration.
+      </li>
+      <li>
+        <strong>Real conversations at A2:</strong> handle introductions,
+        shopping, directions and small talk — A1 in about 4 months, A2 after
+        about 11.
+      </li>
+      <li>
+        <strong>Understand Lebanese media:</strong> songs, series, YouTube and
+        social content in the original dialect.
+      </li>
+      <li>
+        <strong>Travel and family:</strong> connect with Lebanese speakers in
+        Lebanon and the diaspora.
+      </li>
+      <li>
+        <strong>Gateway to the Levant:</strong> Lebanese is mutually
+        intelligible with Syrian and widely understood in Jordan and Palestine.
+      </li>
     </ul>
 
     <h2>Learning Levantine Arabic through Lebanese</h2>
     <p>
-      Levantine Arabic (<em>Shami</em>) is the everyday spoken language of the Eastern
-      Mediterranean — 30–35 million native speakers across Lebanon, Syria, Jordan and Palestine.
-      It splits into North Levantine (Lebanese, Syrian) and South Levantine (Jordanian,
-      Palestinian), and the differences between them are accent and a slice of vocabulary, not
-      grammar. Learn one properly and you follow conversations in all four countries.
+      Levantine Arabic (<em>Shami</em>) is the everyday spoken language of the
+      Eastern Mediterranean — 30–35 million native speakers across Lebanon,
+      Syria, Jordan and Palestine. It splits into North Levantine (Lebanese,
+      Syrian) and South Levantine (Jordanian, Palestinian), and the differences
+      between them are accent and a slice of vocabulary, not grammar. Learn one
+      properly and you follow conversations in all four countries.
     </p>
     <p>We teach the Lebanese variety, for three practical reasons:</p>
     <ul>
-      <li><strong>Media reach:</strong> Lebanese songs, series and TV travel across the whole Arab world — endless listening practice, far beyond the Levant.</li>
-      <li><strong>Diaspora density:</strong> the Lebanese diaspora is one of the largest globally (Brazil, France, the US, West Africa), so there are people to practise with almost anywhere.</li>
-      <li><strong>Clarity:</strong> Lebanese is considered an easy Levantine variety to be understood in, which matters when you are still slow.</li>
+      <li>
+        <strong>Media reach:</strong> Lebanese songs, series and TV travel
+        across the whole Arab world — endless listening practice, far beyond the
+        Levant.
+      </li>
+      <li>
+        <strong>Diaspora density:</strong> the Lebanese diaspora is one of the
+        largest globally (Brazil, France, the US, West Africa), so there are
+        people to practise with almost anywhere.
+      </li>
+      <li>
+        <strong>Clarity:</strong> Lebanese is considered an easy Levantine
+        variety to be understood in, which matters when you are still slow.
+      </li>
     </ul>
     <p>
-      For the full linguistic map — how North and South Levantine differ, and where Levantine sits
-      against Egyptian, Gulf and Maghrebi — see{" "}
+      For the full linguistic map — how North and South Levantine differ, and
+      where Levantine sits against Egyptian, Gulf and Maghrebi — see{" "}
       <Link to="/en/arabic-dialects-guide">the Arabic dialects guide</Link>.
     </p>
 
     <h2>Lebanese Arabic vs Modern Standard Arabic</h2>
     <p>
-      Modern Standard Arabic (MSA / Fusha) is the written, formal register used in news, laws and religious texts. Nobody speaks it at home, and native speakers switch to their dialect the moment the camera turns off. If your goal is real conversation, spoken Lebanese Arabic is the shortest path. You can layer MSA on top later for reading and formal writing.
+      Modern Standard Arabic (MSA / Fusha) is the written, formal register used
+      in news, laws and religious texts. Nobody speaks it at home, and native
+      speakers switch to their dialect the moment the camera turns off. If your
+      goal is real conversation, spoken Lebanese Arabic is the shortest path.
+      You can layer MSA on top later for reading and formal writing.
     </p>
     <p>
       Read the full{" "}
-      <Link to="/blog/araba-libaneza-vs-araba-standard">Lebanese Arabic vs Standard Arabic comparison</Link>{" "}
+      <Link to="/blog/araba-libaneza-vs-araba-standard">
+        Lebanese Arabic vs Standard Arabic comparison
+      </Link>{" "}
       for a side-by-side breakdown.
     </p>
 
@@ -162,61 +233,108 @@ const LearnLebaneseArabic = () => (
           <Users className="w-4 h-4 text-primary" /> Group courses
         </h3>
         <p className="text-sm text-muted-foreground">
-          Small groups (max 6 students online, 8 in person), twice a week, 90 minutes per session. Online or in Bucharest. Fixed schedule with a clear CEFR syllabus.
+          Small groups (max 6 students online, 8 in person), twice a week, 90
+          minutes per session. Online or in Bucharest. Fixed schedule with a
+          clear CEFR syllabus.
         </p>
-        <p className="text-sm font-medium text-foreground mt-3">From 500 LEI / month online</p>
+        <p className="text-sm font-medium text-foreground mt-3">
+          From 500 LEI / month online
+        </p>
       </div>
       <div className="rounded-xl border border-border bg-muted/30 p-5">
         <h3 className="text-base font-semibold text-foreground mb-2 flex items-center gap-2">
           <MessageCircle className="w-4 h-4 text-primary" /> Private lessons
         </h3>
         <p className="text-sm text-muted-foreground">
-          1-on-1 lessons tailored to your goals and pace. Flexible scheduling. Online worldwide or in person in Bucharest.
+          1-on-1 lessons tailored to your goals and pace. Flexible scheduling.
+          Online worldwide or in person in Bucharest.
         </p>
-        <p className="text-sm font-medium text-foreground mt-3">150 LEI online · 210 LEI in person / lesson</p>
+        <p className="text-sm font-medium text-foreground mt-3">
+          150 LEI online · 210 LEI in person / lesson
+        </p>
       </div>
     </div>
 
     <h2>How we teach</h2>
     <ul>
-      <li><strong>Oral first:</strong> you speak from lesson one using arabizi (Latin transliteration). A1 and A2 are spoken only; from B1 or B2 a group can add the Arabic script only if all its students want it.</li>
-      <li><strong>Native teacher:</strong> Ibra is a native Lebanese speaker with 5+ years of teaching experience.</li>
-      <li><strong>CEFR structure:</strong> six levels A1 → C2, from survival to full fluency.</li>
-      <li><strong>Real conversations:</strong> every lesson builds toward something you can actually say in daily life.</li>
-      <li><strong>Online worldwide:</strong> live Zoom lessons in any time zone that overlaps with Bucharest (EET). In-person option in Bucharest.</li>
-      <li><strong>Teaching language:</strong> English, French, Arabic or Romanian — you choose the one you're most comfortable in.</li>
+      <li>
+        <strong>Oral first:</strong> you speak from lesson one using arabizi
+        (Latin transliteration). A1 and A2 are spoken only; from B1 or B2 a
+        group can add the Arabic script only if all its students want it.
+      </li>
+      <li>
+        <strong>Native teacher:</strong> Ibra is a native Lebanese speaker with
+        5+ years of teaching experience.
+      </li>
+      <li>
+        <strong>CEFR structure:</strong> six levels A1 → C2, from survival to
+        full fluency.
+      </li>
+      <li>
+        <strong>Real conversations:</strong> every lesson builds toward
+        something you can actually say in daily life.
+      </li>
+      <li>
+        <strong>Online worldwide:</strong> live Zoom lessons in any time zone
+        that overlaps with Bucharest (EET). In-person option in Bucharest.
+      </li>
+      <li>
+        <strong>Teaching language:</strong> English, French, Arabic or Romanian
+        — you choose the one you're most comfortable in.
+      </li>
     </ul>
 
     <h2>What you will be able to say</h2>
     <p>
-      Even after a few lessons you can handle practical situations: introduce yourself, order food, ask for directions, shop, make plans and greet people naturally. By A2 you can hold short conversations about everyday topics; by B1 you can discuss past experiences, give opinions and understand the gist of Lebanese media.
+      Even after a few lessons you can handle practical situations: introduce
+      yourself, order food, ask for directions, shop, make plans and greet
+      people naturally. By A2 you can hold short conversations about everyday
+      topics; by B1 you can discuss past experiences, give opinions and
+      understand the gist of Lebanese media.
     </p>
 
     <h2>Free resources to start learning Lebanese Arabic</h2>
     <p>
-      While you decide on a course, you can already build exposure with free material:
+      While you decide on a course, you can already build exposure with free
+      material:
     </p>
     <ul>
       <li>
-        <Link to="/blog/primele-20-de-expresii-libaneze">The first 20 Lebanese Arabic phrases</Link> — greetings, politeness, café and taxi situations.
+        <Link to="/blog/primele-20-de-expresii-libaneze">
+          The first 20 Lebanese Arabic phrases
+        </Link>{" "}
+        — greetings, politeness, café and taxi situations.
       </li>
       <li>
-        <Link to="/blog/cum-saluti-in-libaneza">How to greet in Lebanese Arabic</Link> — complete politeness guide with pronunciation.
+        <Link to="/blog/cum-saluti-in-libaneza">
+          How to greet in Lebanese Arabic
+        </Link>{" "}
+        — complete politeness guide with pronunciation.
       </li>
       <li>
-        <Link to="/blog/ce-este-arabizi">What is Arabizi</Link> — how to read Arabic written with Latin letters and numbers.
+        <Link to="/blog/ce-este-arabizi">What is Arabizi</Link> — how to read
+        Arabic written with Latin letters and numbers.
       </li>
       <li>
-        <Link to="/blog/cum-inveti-araba-libaneza">How to learn Lebanese Arabic: a beginner's guide</Link> — methods, mistakes and timeline.
+        <Link to="/blog/cum-inveti-araba-libaneza">
+          How to learn Lebanese Arabic: a beginner's guide
+        </Link>{" "}
+        — methods, mistakes and timeline.
       </li>
     </ul>
 
     <div className="rounded-xl border border-border bg-primary/5 p-6 not-prose my-10">
       <h3 className="text-lg font-semibold text-foreground mb-2 flex items-center gap-2">
-        <BookOpen className="w-5 h-5 text-primary" /> Want a step-by-step beginner guide?
+        <BookOpen className="w-5 h-5 text-primary" /> Want a step-by-step
+        beginner guide?
       </h3>
       <p className="text-sm text-muted-foreground mb-4">
-        Read our dedicated guide on <Link to="/en/blog/cum-inveti-araba-libaneza">how to learn Lebanese Arabic</Link> — it covers dialect differences, study methods, common mistakes and your first useful phrases.
+        Read our dedicated guide on{" "}
+        <Link to="/en/blog/cum-inveti-araba-libaneza">
+          how to learn Lebanese Arabic
+        </Link>{" "}
+        — it covers dialect differences, study methods, common mistakes and your
+        first useful phrases.
       </p>
       <Link
         to="/en/blog/cum-inveti-araba-libaneza"
@@ -229,7 +347,9 @@ const LearnLebaneseArabic = () => (
 
     <h2>Start learning Lebanese Arabic today</h2>
     <p>
-      Book a free 30-minute trial lesson. Your card securely confirms the spot, but the trial remains 0 LEI. Join, chat, and see if the method fits you — online worldwide or in person in Bucharest.
+      Book a free 30-minute trial lesson. Your card securely confirms the spot,
+      but the trial remains 0 LEI. Join, chat, and see if the method fits you —
+      online worldwide or in person in Bucharest.
     </p>
     <div className="flex flex-wrap gap-3 not-prose">
       <Link

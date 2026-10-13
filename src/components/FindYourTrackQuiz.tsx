@@ -103,7 +103,15 @@ const FindYourTrackQuiz = () => {
 
   // Compute total/current steps for the dots
   const isKidsPath = audience === "kids";
-  const totalSteps = isKidsPath ? 1 : format === "group" ? 3 : audience === "self" && format === "private" ? 2 : audience === "self" ? 2 : 3;
+  const totalSteps = isKidsPath
+    ? 1
+    : format === "group"
+      ? 3
+      : audience === "self" && format === "private"
+        ? 2
+        : audience === "self"
+          ? 2
+          : 3;
   const currentStep = step;
 
   const reset = () => {
@@ -168,7 +176,9 @@ const FindYourTrackQuiz = () => {
     if (step === 1) {
       return (
         <div className="space-y-4 animate-in fade-in slide-in-from-right-2 duration-300">
-          <h2 className="font-display text-xl sm:text-2xl font-bold text-foreground text-center">{t.quizQ1}</h2>
+          <h2 className="font-display text-xl sm:text-2xl font-bold text-foreground text-center">
+            {t.quizQ1}
+          </h2>
           <div className="grid sm:grid-cols-2 gap-3 pt-2">
             <OptionCard
               title={t.quizQ1OptSelf}
@@ -195,7 +205,9 @@ const FindYourTrackQuiz = () => {
     if (step === 2) {
       return (
         <div className="space-y-4 animate-in fade-in slide-in-from-right-2 duration-300">
-          <h2 className="font-display text-xl sm:text-2xl font-bold text-foreground text-center">{t.quizQ2}</h2>
+          <h2 className="font-display text-xl sm:text-2xl font-bold text-foreground text-center">
+            {t.quizQ2}
+          </h2>
           <div className="grid sm:grid-cols-2 gap-3 pt-2">
             <OptionCard
               title={t.quizQ2OptGroup}
@@ -228,7 +240,9 @@ const FindYourTrackQuiz = () => {
       ];
       return (
         <div className="space-y-4 animate-in fade-in slide-in-from-right-2 duration-300">
-          <h2 className="font-display text-xl sm:text-2xl font-bold text-foreground text-center">{t.quizQ3}</h2>
+          <h2 className="font-display text-xl sm:text-2xl font-bold text-foreground text-center">
+            {t.quizQ3}
+          </h2>
           <div className="grid sm:grid-cols-2 gap-3 pt-2">
             {levels.map((l) => (
               <div key={l.value} className="relative">
@@ -260,7 +274,10 @@ const FindYourTrackQuiz = () => {
               className="font-medium text-primary underline underline-offset-4 hover:text-primary/80"
             >
               {t.quizQ3Placement}
-              <ChevronRight className="inline w-3.5 h-3.5 -mt-0.5" aria-hidden />
+              <ChevronRight
+                className="inline w-3.5 h-3.5 -mt-0.5"
+                aria-hidden
+              />
             </Link>
           </p>
         </div>
@@ -301,9 +318,15 @@ const FindYourTrackQuiz = () => {
             <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-full bg-brand-green text-white">
               <Icon className="w-7 h-7" />
             </div>
-            <h3 className="font-display text-2xl font-bold text-foreground mb-2">{title}</h3>
-            <p className="text-muted-foreground mb-4 max-w-md mx-auto">{desc}</p>
-            <p className="text-lg font-semibold text-foreground mb-6">{price}</p>
+            <h3 className="font-display text-2xl font-bold text-foreground mb-2">
+              {title}
+            </h3>
+            <p className="text-muted-foreground mb-4 max-w-md mx-auto">
+              {desc}
+            </p>
+            <p className="text-lg font-semibold text-foreground mb-6">
+              {price}
+            </p>
             {(track === "group" || track === "kids") && (
               <div className="flex justify-center mb-6 -mt-2">
                 <SpotsBadge
@@ -312,7 +335,11 @@ const FindYourTrackQuiz = () => {
                 />
               </div>
             )}
-            <Button size="lg" className="w-full sm:w-auto" onClick={() => setShowForm(true)}>
+            <Button
+              size="lg"
+              className="w-full sm:w-auto"
+              onClick={() => setShowForm(true)}
+            >
               {t.quizContinueCta}
             </Button>
             <div className="mt-4 flex flex-col items-center gap-2">
@@ -353,7 +380,9 @@ const FindYourTrackQuiz = () => {
     <section id="quiz" className="py-section px-6 bg-cream scroll-mt-20">
       <div className="max-w-3xl mx-auto">
         <div className="text-center mb-8">
-          <span className="mb-3 block text-xs font-semibold uppercase tracking-widest text-brand-green">{t.quizBadge}</span>
+          <span className="mb-3 block text-xs font-semibold uppercase tracking-widest text-brand-green">
+            {t.quizBadge}
+          </span>
           <h1 className="font-display text-display-xl font-bold tracking-tight text-foreground mb-3">
             {t.quizTitle}
           </h1>
@@ -364,14 +393,21 @@ const FindYourTrackQuiz = () => {
           <CardContent className="p-6 sm:p-8">
             {/* Progress dots + step label */}
             <div className="flex items-center justify-between mb-6">
-              <div className="flex items-center gap-2" aria-label={t.quizStepLabel.replace("{n}", String(currentStep)).replace("{total}", String(totalSteps))}>
+              <div
+                className="flex items-center gap-2"
+                aria-label={t.quizStepLabel
+                  .replace("{n}", String(currentStep))
+                  .replace("{total}", String(totalSteps))}
+              >
                 {Array.from({ length: totalSteps }).map((_, i) => {
                   const active = i + 1 <= currentStep;
                   return (
                     <span
                       key={i}
                       className={`h-2 rounded-full transition-all ${
-                        active ? "w-6 bg-brand-green" : "w-2 bg-muted-foreground/30"
+                        active
+                          ? "w-6 bg-brand-green"
+                          : "w-2 bg-muted-foreground/30"
                       }`}
                     />
                   );

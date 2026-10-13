@@ -39,10 +39,13 @@ export interface CohortNoteStrings {
 const DAY_MS = 24 * 60 * 60 * 1000;
 
 const formatDate = (iso: string, lang: "ro" | "en"): string =>
-  new Date(`${iso}T00:00:00`).toLocaleDateString(lang === "en" ? "en-GB" : "ro-RO", {
-    day: "numeric",
-    month: "long",
-  });
+  new Date(`${iso}T00:00:00`).toLocaleDateString(
+    lang === "en" ? "en-GB" : "ro-RO",
+    {
+      day: "numeric",
+      month: "long",
+    },
+  );
 
 /** One line per cohort: level, format, when it starts or that it is running. */
 export function cohortNoteLine(
@@ -66,7 +69,8 @@ export function cohortNoteLine(
         : s.startsOn.replace("{date}", date);
 
   const level = (c.level || "A1").toUpperCase();
-  const format = c.format === "online" ? s.online : c.format === "fizic" ? s.inPerson : "";
+  const format =
+    c.format === "online" ? s.online : c.format === "fizic" ? s.inPerson : "";
   const head = format ? `${level} ${format}` : level;
   // The Romanian and the English class are separate groups with separate
   // seats, so each line names its language and counts its own places.

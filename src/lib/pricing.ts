@@ -65,9 +65,10 @@ export const GROUP_COURSE_MONTHS: Record<LevelType, number> = {
  * pricing-display.test.ts asserts the two ladders stay identical — the site
  * quoting a discount the checkout does not apply is a billing bug.
  */
-export const PRIVATE_DISCOUNT_TIERS: ReadonlyArray<{ from: number; rate: number }> = [
-  { from: 20, rate: 0.15 },
-];
+export const PRIVATE_DISCOUNT_TIERS: ReadonlyArray<{
+  from: number;
+  rate: number;
+}> = [{ from: 20, rate: 0.15 }];
 
 /**
  * Discount for paying a whole group course upfront (adults and kids, online or
@@ -77,7 +78,8 @@ export const PRIVATE_DISCOUNT_TIERS: ReadonlyArray<{ from: number; rate: number 
 export const GROUP_FULL_COURSE_DISCOUNT = 0.15;
 
 /** A discount rate as a label, e.g. 0.15 -> "−15%". */
-export const discountLabel = (rate: number): string => `−${Math.round(rate * 100)}%`;
+export const discountLabel = (rate: number): string =>
+  `−${Math.round(rate * 100)}%`;
 
 /** Discount fraction for a lesson count: 0 below 20, .15 from 20. */
 export const privateDiscountFor = (quantity: number): number =>
@@ -97,7 +99,8 @@ export const nextPrivateTier = (
 
 /** The package headlined on the price card: the top tier. */
 export const PRIVATE_PACKAGE_SIZE = 20;
-export const PRIVATE_PACKAGE_DISCOUNT = privateDiscountFor(PRIVATE_PACKAGE_SIZE);
+export const PRIVATE_PACKAGE_DISCOUNT =
+  privateDiscountFor(PRIVATE_PACKAGE_SIZE);
 
 /** Full price of the package before the discount. */
 export const privatePackageFull = (): number =>

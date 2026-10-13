@@ -36,7 +36,9 @@ export function createLovableAiGatewayRunIdFetch(initialRunId?: string) {
 
       try {
         const response = await fetch(input, { ...init, headers });
-        publishRunId(response.headers.get(LOVABLE_AIG_RUN_ID_HEADER) ?? undefined);
+        publishRunId(
+          response.headers.get(LOVABLE_AIG_RUN_ID_HEADER) ?? undefined,
+        );
         return response;
       } catch (error) {
         publishRunId(undefined);
@@ -78,7 +80,10 @@ export function getLovableAiGatewayResponseHeaders(
   });
 
   if (exposedHeaders.size > 0) {
-    headers.set("Access-Control-Expose-Headers", Array.from(exposedHeaders).join(", "));
+    headers.set(
+      "Access-Control-Expose-Headers",
+      Array.from(exposedHeaders).join(", "),
+    );
   }
 
   return headers;
@@ -94,7 +99,10 @@ export async function withLovableAiGatewayRunIdHeader(
 ): Promise<Response> {
   if (!response.body) {
     const runId = gateway.getRunId();
-    const headers = getLovableAiGatewayResponseHeaders(undefined, response.headers);
+    const headers = getLovableAiGatewayResponseHeaders(
+      undefined,
+      response.headers,
+    );
     new Headers(init).forEach((value, name) => headers.set(name, value));
     if (runId) headers.set(LOVABLE_AIG_RUN_ID_HEADER, runId);
     return new Response(response.body, {
@@ -107,7 +115,10 @@ export async function withLovableAiGatewayRunIdHeader(
   const reader = response.body.getReader();
   const firstChunk = reader.read();
   const runId = await gateway.waitForRunId();
-  const headers = getLovableAiGatewayResponseHeaders(undefined, response.headers);
+  const headers = getLovableAiGatewayResponseHeaders(
+    undefined,
+    response.headers,
+  );
   new Headers(init).forEach((value, name) => headers.set(name, value));
   if (runId) headers.set(LOVABLE_AIG_RUN_ID_HEADER, runId);
 

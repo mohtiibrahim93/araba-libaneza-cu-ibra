@@ -22,7 +22,12 @@ export type CalendarProps = React.ComponentProps<typeof DayPicker>;
  * (node_modules/react-day-picker/dist/cjs/UI.d.ts) against these keys before
  * anything else — a silent rename is the likeliest cause.
  */
-function Calendar({ className, classNames, showOutsideDays = true, ...props }: CalendarProps) {
+function Calendar({
+  className,
+  classNames,
+  showOutsideDays = true,
+  ...props
+}: CalendarProps) {
   return (
     <DayPicker
       showOutsideDays={showOutsideDays}
@@ -45,7 +50,8 @@ function Calendar({ className, classNames, showOutsideDays = true, ...props }: C
         // The header row and its cells have to match the day grid column for
         // column, or the weekday letters bunch up against each other.
         weekdays: "flex",
-        weekday: "text-muted-foreground rounded-md w-11 sm:w-9 font-normal text-[0.8rem]",
+        weekday:
+          "text-muted-foreground rounded-md w-11 sm:w-9 font-normal text-[0.8rem]",
         week: "flex w-full mt-2",
         // 44px touch target on phones, back to the tighter 36px grid from sm:
         // up so desktop density is unchanged.
@@ -66,7 +72,11 @@ function Calendar({ className, classNames, showOutsideDays = true, ...props }: C
       }}
       components={{
         Chevron: ({ orientation }) =>
-          orientation === "left" ? <ChevronLeft className="h-4 w-4" /> : <ChevronRight className="h-4 w-4" />,
+          orientation === "left" ? (
+            <ChevronLeft className="h-4 w-4" />
+          ) : (
+            <ChevronRight className="h-4 w-4" />
+          ),
       }}
       {...props}
     />

@@ -33,7 +33,10 @@ const PrivateFields = ({
   basePriceOnline = ONLINE_PRICES.privateLesson,
 }: Props) => {
   const { t } = useI18n();
-  const unit = priceFor(basePriceOnline, format === "fizic" ? "fizic" : "online");
+  const unit = priceFor(
+    basePriceOnline,
+    format === "fizic" ? "fizic" : "online",
+  );
   const discount = privateDiscountFor(privateQuantity);
   const subtotal = privateQuantity * unit;
   const total = subtotal * (1 - discount);
@@ -87,9 +90,15 @@ const PrivateFields = ({
           )}
           {discount > 0 ? (
             <p className="text-xs font-medium text-primary">
-              {t.privateQuantityDiscountApplied.replace("{p}", String(Math.round(discount * 100)))}
+              {t.privateQuantityDiscountApplied.replace(
+                "{p}",
+                String(Math.round(discount * 100)),
+              )}
               {" · "}
-              {t.privateQuantitySaved.replace("{amount}", formatLei(Math.round(saved)))}
+              {t.privateQuantitySaved.replace(
+                "{amount}",
+                formatLei(Math.round(saved)),
+              )}
             </p>
           ) : next ? (
             <p className="text-xs text-muted-foreground">
@@ -106,7 +115,9 @@ const PrivateFields = ({
 
       {/* Quick-pick chips for popular packs */}
       <div className="flex flex-wrap items-center gap-2 pt-1">
-        <span className="text-xs text-muted-foreground">{t.privateQuantityQuickPick}</span>
+        <span className="text-xs text-muted-foreground">
+          {t.privateQuantityQuickPick}
+        </span>
         {QUICK_PICKS.map((n) => {
           const active = privateQuantity === n;
           const d = privateDiscountFor(n);

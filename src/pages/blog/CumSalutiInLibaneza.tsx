@@ -5,31 +5,74 @@ import { useI18n } from "@/lib/i18n";
 
 // [arabizi, arabic, ro-meaning, en-meaning]
 const GREETINGS: [string, string, string, string][] = [
-  ["Mar7aba", "مرحبا", "Salut / Bună (universal, orice moment)", "Hi / Hello (universal, any time)"],
+  [
+    "Mar7aba",
+    "مرحبا",
+    "Salut / Bună (universal, orice moment)",
+    "Hi / Hello (universal, any time)",
+  ],
   ["Ahla w sahla", "أهلا وسهلا", "Bine ai venit", "Welcome"],
   ["Saba7 el kheir", "صباح الخير", "Bună dimineața", "Good morning"],
-  ["Saba7 el noor", "صباح النور", "Răspuns la „bună dimineața”", "Reply to 'good morning'"],
+  [
+    "Saba7 el noor",
+    "صباح النور",
+    "Răspuns la „bună dimineața”",
+    "Reply to 'good morning'",
+  ],
   ["Masa el kheir", "مساء الخير", "Bună seara", "Good evening"],
   ["Kifak? (m) / Kifik? (f)", "كيفك؟", "Ce faci?", "How are you?"],
-  ["Mnee7, il7amdillah", "منيح، الحمد لله", "Bine, slavă Domnului", "Good, thank God"],
-  ["Yalla bye", "يلا باي", "Hai, pa (informal, foarte folosit)", "Bye (informal, very common)"],
-  ["Bshoufak (m) / Bshoufik (f)", "بشوفك", "Ne vedem / Pe curând", "See you / Soon"],
+  [
+    "Mnee7, il7amdillah",
+    "منيح، الحمد لله",
+    "Bine, slavă Domnului",
+    "Good, thank God",
+  ],
+  [
+    "Yalla bye",
+    "يلا باي",
+    "Hai, pa (informal, foarte folosit)",
+    "Bye (informal, very common)",
+  ],
+  [
+    "Bshoufak (m) / Bshoufik (f)",
+    "بشوفك",
+    "Ne vedem / Pe curând",
+    "See you / Soon",
+  ],
 ];
 
 // Questions specific to this article; anything answered elsewhere on the
 // site stays there, so the same answer never lives on two URLs.
 const FAQ = [
   {
-    q: { ro: "Care e diferența dintre „kifak” și „kifik”?", en: "What is the difference between \"kifak\" and \"kifik\"?" },
-    a: { ro: "Terminația se schimbă după persoana căreia i te adresezi: „kifak” către un bărbat, „kifik” către o femeie. Aceeași logică apare la multe alte cuvinte, așa că merită reținută de la început.", en: "The ending changes according to who you are addressing: \"kifak\" to a man, \"kifik\" to a woman. The same logic shows up in many other words, so it is worth learning from the start." },
+    q: {
+      ro: "Care e diferența dintre „kifak” și „kifik”?",
+      en: 'What is the difference between "kifak" and "kifik"?',
+    },
+    a: {
+      ro: "Terminația se schimbă după persoana căreia i te adresezi: „kifak” către un bărbat, „kifik” către o femeie. Aceeași logică apare la multe alte cuvinte, așa că merită reținută de la început.",
+      en: 'The ending changes according to who you are addressing: "kifak" to a man, "kifik" to a woman. The same logic shows up in many other words, so it is worth learning from the start.',
+    },
   },
   {
-    q: { ro: "Se folosesc formule religioase în salutul de zi cu zi?", en: "Are religious phrases used in everyday greetings?" },
-    a: { ro: "Unele expresii au origine religioasă, dar sunt folosite de toată lumea ca formule sociale obișnuite, indiferent de credință. „Mar7aba” rămâne varianta cea mai neutră și potrivită în orice context.", en: "Some expressions have religious origins but are used by everyone as ordinary social formulas, whatever their faith. \"Mar7aba\" remains the most neutral option and fits any context." },
+    q: {
+      ro: "Se folosesc formule religioase în salutul de zi cu zi?",
+      en: "Are religious phrases used in everyday greetings?",
+    },
+    a: {
+      ro: "Unele expresii au origine religioasă, dar sunt folosite de toată lumea ca formule sociale obișnuite, indiferent de credință. „Mar7aba” rămâne varianta cea mai neutră și potrivită în orice context.",
+      en: 'Some expressions have religious origins but are used by everyone as ordinary social formulas, whatever their faith. "Mar7aba" remains the most neutral option and fits any context.',
+    },
   },
   {
-    q: { ro: "De ce spun libanezii „yalla bye”?", en: "Why do Lebanese people say \"yalla bye\"?" },
-    a: { ro: "Pentru că amestecul de limbi e normal în Liban: „yalla” e arabă, „bye” e engleză, iar împreună au devenit formula standard de încheiere a unei conversații, mai ales la telefon.", en: "Because mixing languages is normal in Lebanon: \"yalla\" is Arabic, \"bye\" is English, and together they have become the standard way to end a conversation, especially on the phone." },
+    q: {
+      ro: "De ce spun libanezii „yalla bye”?",
+      en: 'Why do Lebanese people say "yalla bye"?',
+    },
+    a: {
+      ro: "Pentru că amestecul de limbi e normal în Liban: „yalla” e arabă, „bye” e engleză, iar împreună au devenit formula standard de încheiere a unei conversații, mai ales la telefon.",
+      en: 'Because mixing languages is normal in Lebanon: "yalla" is Arabic, "bye" is English, and together they have become the standard way to end a conversation, especially on the phone.',
+    },
   },
 ];
 
@@ -39,7 +82,10 @@ const CumSalutiInLibaneza = () => {
   return (
     <BlogArticleLayout
       slug="cum-saluti-in-libaneza"
-      title={{ ro: "Cum saluți în arabă libaneză: mar7aba, kifak, yalla bye", en: "How to greet in Lebanese Arabic: mar7aba, kifak, yalla bye" }}
+      title={{
+        ro: "Cum saluți în arabă libaneză: mar7aba, kifak, yalla bye",
+        en: "How to greet in Lebanese Arabic: mar7aba, kifak, yalla bye",
+      }}
       description={{
         ro: "Învață saluturile esențiale în araba libaneză: Mar7aba, Kifak și yalla bye, cu pronunție, scriere arabă și când se folosește fiecare.",
         en: "All the greetings in Lebanese Arabic: good morning, how are you, welcome, bye — with Arabizi pronunciation, Arabic script and when to use each.",
@@ -55,10 +101,22 @@ const CumSalutiInLibaneza = () => {
     >
       <Tldr
         points={[
-          { ro: "„Mar7aba” este salutul neutru care merge în orice situație.", en: "\"Mar7aba\" is the neutral greeting that works in any situation." },
-          { ro: "Terminația se schimbă după gen: „kifak” către un bărbat, „kifik” către o femeie.", en: "The ending changes by gender: \"kifak\" to a man, \"kifik\" to a woman." },
-          { ro: "„Yalla bye” e formula obișnuită de încheiere — arabă plus engleză, exact ca vorbirea reală.", en: "\"Yalla bye\" is the usual sign-off — Arabic plus English, exactly like real speech." },
-          { ro: "Salutul se întoarce aproape întotdeauna: se răspunde, nu doar se confirmă.", en: "A greeting is almost always returned: you answer it, you do not just acknowledge it." },
+          {
+            ro: "„Mar7aba” este salutul neutru care merge în orice situație.",
+            en: '"Mar7aba" is the neutral greeting that works in any situation.',
+          },
+          {
+            ro: "Terminația se schimbă după gen: „kifak” către un bărbat, „kifik” către o femeie.",
+            en: 'The ending changes by gender: "kifak" to a man, "kifik" to a woman.',
+          },
+          {
+            ro: "„Yalla bye” e formula obișnuită de încheiere — arabă plus engleză, exact ca vorbirea reală.",
+            en: '"Yalla bye" is the usual sign-off — Arabic plus English, exactly like real speech.',
+          },
+          {
+            ro: "Salutul se întoarce aproape întotdeauna: se răspunde, nu doar se confirmă.",
+            en: "A greeting is almost always returned: you answer it, you do not just acknowledge it.",
+          },
         ]}
       />
       <p>
@@ -75,30 +133,52 @@ const CumSalutiInLibaneza = () => {
           <thead>
             <tr className="border-b border-border text-left text-muted-foreground">
               <th className="py-2 pr-3 font-semibold">Arabizi</th>
-              <th className="py-2 px-3 font-semibold">{en ? "Arabic" : "Arabă"}</th>
-              <th className="py-2 pl-3 font-semibold">{en ? "When / meaning" : "Când / ce înseamnă"}</th>
+              <th className="py-2 px-3 font-semibold">
+                {en ? "Arabic" : "Arabă"}
+              </th>
+              <th className="py-2 pl-3 font-semibold">
+                {en ? "When / meaning" : "Când / ce înseamnă"}
+              </th>
             </tr>
           </thead>
           <tbody>
             {GREETINGS.map(([arabizi, arabic, ro, enM]) => (
               <tr key={arabizi} className="border-b border-border/60 align-top">
-                <td className="py-2.5 pr-3 font-semibold text-foreground whitespace-nowrap">{arabizi}</td>
-                <td className="py-2.5 px-3 font-arabic text-lg text-brand-green" dir="rtl" lang="ar">{arabic}</td>
-                <td className="py-2.5 pl-3 text-foreground/80">{en ? enM : ro}</td>
+                <td className="py-2.5 pr-3 font-semibold text-foreground whitespace-nowrap">
+                  {arabizi}
+                </td>
+                <td
+                  className="py-2.5 px-3 font-arabic text-lg text-brand-green"
+                  dir="rtl"
+                  lang="ar"
+                >
+                  {arabic}
+                </td>
+                <td className="py-2.5 pl-3 text-foreground/80">
+                  {en ? enM : ro}
+                </td>
               </tr>
             ))}
           </tbody>
         </table>
       </div>
 
-      <h2>{en ? "Masculine or feminine — mind the ending" : "Masculin sau feminin — atenție la terminație"}</h2>
+      <h2>
+        {en
+          ? "Masculine or feminine — mind the ending"
+          : "Masculin sau feminin — atenție la terminație"}
+      </h2>
       <p>
         {en
           ? "Notice 'Kifak?' vs 'Kifik?'. In Lebanese, when you address someone the form changes with their gender: -ak for men, -ik for women. It's a simple rule that shows up everywhere and you pick it up quickly by speaking."
           : "Ai observat „Kifak?” vs „Kifik?”. În libaneză, când te adresezi cuiva, forma se schimbă după genul persoanei: -ak pentru bărbați, -ik pentru femei. E o regulă simplă care apare peste tot și pe care o prinzi repede vorbind."}
       </p>
 
-      <h2>{en ? "'7' and 'kh' — how to pronounce them" : "„7” și „kh” — cum le pronunți"}</h2>
+      <h2>
+        {en
+          ? "'7' and 'kh' — how to pronounce them"
+          : "„7” și „kh” — cum le pronunți"}
+      </h2>
       <p>
         {en
           ? "In 'saba7' and 'el kheir' there are guttural sounds specific to Arabic. The number 7 is a strong 'h' from the throat, and 'kh' is like the 'ch' in German 'Bach'. Don't worry if they don't come out at first — in a lesson you hear them from a native speaker and repeat them on the spot."
@@ -106,7 +186,10 @@ const CumSalutiInLibaneza = () => {
       </p>
 
       <InlineCta
-        title={{ ro: "Vrei să auzi cum sună?", en: "Want to hear how it sounds?" }}
+        title={{
+          ro: "Vrei să auzi cum sună?",
+          en: "Want to hear how it sounds?",
+        }}
         text={{
           ro: "30 de minute cu profesor nativ, gratuit — online sau fizic în București.",
           en: "30 minutes with a native teacher, free — online or in person in Bucharest.",
@@ -115,13 +198,20 @@ const CumSalutiInLibaneza = () => {
         label={{ ro: "Rezervă lecția de probă", en: "Book the trial lesson" }}
       />
 
-
       <h2>{en ? "Practise with a real person" : "Exersează cu cineva real"}</h2>
       <p>
-        {en ? "Greetings are learned best by saying them, not reading them. In a " : "Salutările se învață cel mai bine spunându-le, nu citindu-le. La o "}
-        <Link to="/trial">{en ? "free trial lesson" : "lecție de probă gratuită"}</Link>
-        {en ? " you pronounce them with the teacher and start a first short conversation. See also the " : " le pronunți cu profesorul și pornești o primă conversație scurtă. Vezi și "}
-        <Link to="/blog/primele-20-de-expresii-libaneze">{en ? "first 20 Lebanese phrases" : "primele 20 de expresii libaneze"}</Link>
+        {en
+          ? "Greetings are learned best by saying them, not reading them. In a "
+          : "Salutările se învață cel mai bine spunându-le, nu citindu-le. La o "}
+        <Link to="/trial">
+          {en ? "free trial lesson" : "lecție de probă gratuită"}
+        </Link>
+        {en
+          ? " you pronounce them with the teacher and start a first short conversation. See also the "
+          : " le pronunți cu profesorul și pornești o primă conversație scurtă. Vezi și "}
+        <Link to="/blog/primele-20-de-expresii-libaneze">
+          {en ? "first 20 Lebanese phrases" : "primele 20 de expresii libaneze"}
+        </Link>
         {en ? " to continue." : " ca să continui."}
       </p>
     </BlogArticleLayout>

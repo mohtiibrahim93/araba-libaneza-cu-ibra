@@ -36,10 +36,13 @@ serve(async (req) => {
   try {
     const { registrationId, plan, setup, booking } = await req.json();
     if (!registrationId || typeof registrationId !== "string") {
-      return new Response(JSON.stringify({ error: "registrationId is required" }), {
-        headers: { ...corsHeaders, "Content-Type": "application/json" },
-        status: 400,
-      });
+      return new Response(
+        JSON.stringify({ error: "registrationId is required" }),
+        {
+          headers: { ...corsHeaders, "Content-Type": "application/json" },
+          status: 400,
+        },
+      );
     }
     if (!/^[0-9a-f-]{36}$/i.test(registrationId)) {
       return new Response(JSON.stringify({ error: "Invalid registrationId" }), {
@@ -67,17 +70,30 @@ serve(async (req) => {
       });
     }
     if (!(await verifiedRegistrationOwner(req, reg, supabaseAdmin.auth))) {
-      return new Response(JSON.stringify({ error: "Sign in with your verified registration email to continue" }), {
-        status: 403, headers: { ...corsHeaders, "Content-Type": "application/json" },
-      });
+      return new Response(
+        JSON.stringify({
+          error: "Sign in with your verified registration email to continue",
+        }),
+        {
+          status: 403,
+          headers: { ...corsHeaders, "Content-Type": "application/json" },
+        },
+      );
     }
     const groupError = await groupEnrolmentError(supabaseAdmin, reg);
-    if (groupError) return new Response(JSON.stringify({ error: groupError }), { status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" } });
-    if (reg.payment_status === "paid") {
-      return new Response(JSON.stringify({ error: "Registration already paid" }), {
-        status: 409,
+    if (groupError)
+      return new Response(JSON.stringify({ error: groupError }), {
+        status: 400,
         headers: { ...corsHeaders, "Content-Type": "application/json" },
       });
+    if (reg.payment_status === "paid") {
+      return new Response(
+        JSON.stringify({ error: "Registration already paid" }),
+        {
+          status: 409,
+          headers: { ...corsHeaders, "Content-Type": "application/json" },
+        },
+      );
     }
 
     const stripe = new Stripe(Deno.env.get("STRIPE_SECRET_KEY") || "", {
@@ -103,7 +119,8 @@ serve(async (req) => {
     const bookingMeta: Record<string, string> = {};
     if (booking && typeof booking === "object") {
       const put = (k: string, v: unknown, max = 450) => {
-        if (typeof v === "string" && v.trim()) bookingMeta[k] = v.trim().slice(0, max);
+        if (typeof v === "string" && v.trim())
+          bookingMeta[k] = v.trim().slice(0, max);
       };
       put("booking_start_at", booking.start_at, 40);
       put("booking_event_type", booking.event_type, 40);
@@ -117,16 +134,23 @@ serve(async (req) => {
     // return its URL instead of stacking duplicates.
     // Not when a slot comes with the request: the open session carries the slot
     // picked last time, and reusing it would book that one instead.
-    if (!bookingMeta.booking_start_at && reg.stripe_session_id && reg.stripe_session_id.startsWith("cs_")) {
+    if (
+      !bookingMeta.booking_start_at &&
+      reg.stripe_session_id &&
+      reg.stripe_session_id.startsWith("cs_")
+    ) {
       try {
         const prior = await stripe.checkout.sessions.retrieve(
           reg.stripe_session_id,
         );
         if (prior.status === "open" && prior.url) {
-          return new Response(JSON.stringify({ url: prior.url, sessionId: prior.id }), {
-            headers: { ...corsHeaders, "Content-Type": "application/json" },
-            status: 200,
-          });
+          return new Response(
+            JSON.stringify({ url: prior.url, sessionId: prior.id }),
+            {
+              headers: { ...corsHeaders, "Content-Type": "application/json" },
+              status: 200,
+            },
+          );
         }
       } catch (_e) {
         // fall through to create a new one
@@ -135,10 +159,9 @@ serve(async (req) => {
 
     // A trial lead paying here converts to a private lesson (their freebie
     // is spent) — price it as private instead of failing on the raw type.
-    const courseType = (reg.form_type === "trial" ? "private" : reg.form_type) as
-      | "group"
-      | "private"
-      | "kids";
+    const courseType = (
+      reg.form_type === "trial" ? "private" : reg.form_type
+    ) as "group" | "private" | "kids";
     const isSubscription =
       (courseType === "group" || courseType === "kids") && plan !== "full";
     const quantity = Math.max(
@@ -150,13 +173,18 @@ serve(async (req) => {
     // Find or create customer (best effort, keeps receipts consistent).
     let customerId: string | undefined;
     if (reg.email) {
-      const customers = await stripe.customers.list({ email: reg.email, limit: 1 });
+      const customers = await stripe.customers.list({
+        email: reg.email,
+        limit: 1,
+      });
       customerId =
         customers.data[0]?.id ??
-        (await stripe.customers.create({
-          email: reg.email,
-          name: reg.name || undefined,
-        })).id;
+        (
+          await stripe.customers.create({
+            email: reg.email,
+            name: reg.name || undefined,
+          })
+        ).id;
     }
 
     // Free trial: a 0-lei SETUP-mode session that saves the card without
@@ -175,14 +203,19 @@ serve(async (req) => {
       if (bookingMeta.booking_event_type === "trial" && reg.email) {
         // trial_already_used holds the owner's rule (an excused or early
         // cancellation does not use the trial; a lost one does).
-        const { data: usedBy } = await supabaseAdmin.rpc("trial_already_used", { p_email: String(reg.email) });
+        const { data: usedBy } = await supabaseAdmin.rpc("trial_already_used", {
+          p_email: String(reg.email),
+        });
         if (usedBy) {
           return new Response(
             JSON.stringify({
               error: "Proba gratuită a fost deja folosită pentru acest email.",
               code: "trial_used",
             }),
-            { headers: { ...corsHeaders, "Content-Type": "application/json" }, status: 409 },
+            {
+              headers: { ...corsHeaders, "Content-Type": "application/json" },
+              status: 409,
+            },
           );
         }
       }
@@ -205,7 +238,9 @@ serve(async (req) => {
             ...bookingMeta,
           },
         },
-        { idempotencyKey: `cos_setup_${registrationId}_${Math.floor(Date.now() / 3_600_000)}` },
+        {
+          idempotencyKey: `cos_setup_${registrationId}_${Math.floor(Date.now() / 3_600_000)}`,
+        },
       );
       // Trace only — a setup session is not a payment, so payment_status is
       // left alone here (the webhook marks card_saved on completion).
@@ -213,10 +248,13 @@ serve(async (req) => {
         .from("registrations")
         .update({ stripe_session_id: session.id })
         .eq("id", registrationId);
-      return new Response(JSON.stringify({ url: session.url, sessionId: session.id }), {
-        headers: { ...corsHeaders, "Content-Type": "application/json" },
-        status: 200,
-      });
+      return new Response(
+        JSON.stringify({ url: session.url, sessionId: session.id }),
+        {
+          headers: { ...corsHeaders, "Content-Type": "application/json" },
+          status: 200,
+        },
+      );
     }
 
     let session: Stripe.Checkout.Session;
@@ -277,7 +315,9 @@ serve(async (req) => {
         // Hour-bucketed: a double-click reuses one session, but a retry after
         // the previous session expired (24 h) isn't pinned by Stripe's
         // idempotency layer to the dead session forever.
-        { idempotencyKey: `cos_sub_${registrationId}_${Math.floor(Date.now() / 3_600_000)}` },
+        {
+          idempotencyKey: `cos_sub_${registrationId}_${Math.floor(Date.now() / 3_600_000)}`,
+        },
       );
     } else {
       const isPrivate = courseType === "private";
@@ -337,7 +377,9 @@ serve(async (req) => {
             // Private lessons: the day and time picked before paying. The
             // webhook books them once the payment clears — nothing is booked
             // for someone who leaves on Stripe's page.
-            ...(isPrivate ? { ...bookingMeta, quantity: String(quantity) } : {}),
+            ...(isPrivate
+              ? { ...bookingMeta, quantity: String(quantity) }
+              : {}),
           },
         },
         // Hour-bucketed for the same reason as the subscription branch above.
@@ -364,10 +406,13 @@ serve(async (req) => {
       })
       .eq("id", registrationId);
 
-    return new Response(JSON.stringify({ url: session.url, sessionId: session.id }), {
-      headers: { ...corsHeaders, "Content-Type": "application/json" },
-      status: 200,
-    });
+    return new Response(
+      JSON.stringify({ url: session.url, sessionId: session.id }),
+      {
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+        status: 200,
+      },
+    );
   } catch (error) {
     const message = error instanceof Error ? error.message : "Unknown error";
     console.error("create-checkout-session error:", message);

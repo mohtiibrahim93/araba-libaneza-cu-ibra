@@ -41,7 +41,10 @@ const ActiveCoursesBanner = () => {
               {t.activeNowTitle}
             </h2>
           </div>
-          <Link to="/cursuri/grup" className="shrink-0 whitespace-nowrap text-sm font-semibold text-primary hover:underline underline-offset-4">
+          <Link
+            to="/cursuri/grup"
+            className="shrink-0 whitespace-nowrap text-sm font-semibold text-primary hover:underline underline-offset-4"
+          >
             {lang === "en" ? "All groups →" : "Toate grupele →"}
           </Link>
         </div>
@@ -49,7 +52,9 @@ const ActiveCoursesBanner = () => {
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {upcoming.map((c) => {
             const start = new Date(c.start_date + "T00:00:00");
-            const days = Math.round((start.getTime() - today.getTime()) / dayMs);
+            const days = Math.round(
+              (start.getTime() - today.getTime()) / dayMs,
+            );
             const started = days <= 0;
             const online = c.format === "online";
 
@@ -63,12 +68,15 @@ const ActiveCoursesBanner = () => {
 
             const level = (c.level || "A1").toUpperCase();
             const href = `/cursuri/grup/${level.toLowerCase()}${c.format ? `?mod=${c.format}` : ""}`;
-            const lessons = curriculum.find((l) => l.id === level.toLowerCase())?.lessons;
+            const lessons = curriculum.find(
+              (l) => l.id === level.toLowerCase(),
+            )?.lessons;
             // The admin label repeats the date, lesson count and group size
             // after the times ("… · start sâmbătă, 17 octombrie · 32 de
             // lecții · maximum 6 cursanți"); the card shows those itself, so
             // only the days and times are kept.
-            const label = (lang === "en" ? c.schedule_label_en : c.schedule_label_ro) || "";
+            const label =
+              (lang === "en" ? c.schedule_label_en : c.schedule_label_ro) || "";
             const times = label.split(" · ")[0];
 
             return (
@@ -78,9 +86,16 @@ const ActiveCoursesBanner = () => {
                 className="group flex gap-4 rounded-xl border border-primary/30 bg-primary/5 p-4 transition-colors hover:border-primary hover:bg-primary/10"
               >
                 {/* Calendar tile: the start date at a glance. */}
-                <div className="flex h-16 w-14 shrink-0 flex-col items-center justify-center rounded-lg border border-border bg-background" aria-hidden="true">
-                  <span className="text-[11px] font-bold tracking-wide text-primary">{monthShort(c.start_date)}</span>
-                  <span className="font-display text-2xl font-bold leading-none text-foreground">{dayOfMonth(c.start_date)}</span>
+                <div
+                  className="flex h-16 w-14 shrink-0 flex-col items-center justify-center rounded-lg border border-border bg-background"
+                  aria-hidden="true"
+                >
+                  <span className="text-[11px] font-bold tracking-wide text-primary">
+                    {monthShort(c.start_date)}
+                  </span>
+                  <span className="font-display text-2xl font-bold leading-none text-foreground">
+                    {dayOfMonth(c.start_date)}
+                  </span>
                 </div>
 
                 <div className="flex min-w-0 flex-1 flex-col">
@@ -110,19 +125,36 @@ const ActiveCoursesBanner = () => {
                     </span>
                   </div>
 
-                  {times && <p className="text-xs text-muted-foreground mb-2">{times}</p>}
+                  {times && (
+                    <p className="text-xs text-muted-foreground mb-2">
+                      {times}
+                    </p>
+                  )}
 
                   {/* Each group counts its own seats — the Romanian and the
                       English class are separate groups, never one shared total. */}
                   <p className="flex items-center gap-1.5 text-xs font-medium text-foreground mb-3">
-                    <Users className="w-3.5 h-3.5 shrink-0 text-primary" aria-hidden="true" />
+                    <Users
+                      className="w-3.5 h-3.5 shrink-0 text-primary"
+                      aria-hidden="true"
+                    />
                     <span>
                       {lang === "en" ? "Taught in " : "Predare în "}
                       {c.teaching_language === "en"
-                        ? lang === "en" ? "English" : "engleză"
-                        : lang === "en" ? "Romanian" : "română"}
+                        ? lang === "en"
+                          ? "English"
+                          : "engleză"
+                        : lang === "en"
+                          ? "Romanian"
+                          : "română"}
                       {" · "}
-                      <span className={c.full || c.seatsLeft <= 2 ? "text-amber-600 dark:text-amber-500" : undefined}>
+                      <span
+                        className={
+                          c.full || c.seatsLeft <= 2
+                            ? "text-amber-600 dark:text-amber-500"
+                            : undefined
+                        }
+                      >
                         {c.taken} / {c.max_seats} {t.capSeatsLabel}
                       </span>
                     </span>
@@ -133,7 +165,6 @@ const ActiveCoursesBanner = () => {
                       ? `Starts with minimum ${minGroupSize(c.max_seats)}/${c.max_seats} enrolled`
                       : `Pornește cu minimum ${minGroupSize(c.max_seats)}/${c.max_seats} înscriși`}
                   </p>
-
 
                   <span className="mt-auto inline-flex self-start items-center gap-1 rounded-lg bg-primary px-3 py-1.5 text-sm font-semibold text-primary-foreground transition-colors group-hover:bg-primary/90">
                     {lang === "en" ? "Enroll" : "Înscrie-te"}

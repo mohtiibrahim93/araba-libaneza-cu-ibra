@@ -26,17 +26,21 @@ function addMonthsUnix(fromSeconds: number, months: number): number {
 // across Stripe API versions: on 2025-08-27.basil `invoice.payment_intent` is
 // gone and it lives on `invoice.confirmation_secret`. Read the new shape first,
 // fall back to the legacy PaymentIntent so this keeps working either way.
-type InvoiceLike = {
-  confirmation_secret?: { client_secret?: string | null } | null;
-  payment_intent?: string | { client_secret?: string | null } | null;
-} | null | undefined;
+type InvoiceLike =
+  | {
+      confirmation_secret?: { client_secret?: string | null } | null;
+      payment_intent?: string | { client_secret?: string | null } | null;
+    }
+  | null
+  | undefined;
 
 function firstInvoiceClientSecret(invoice: InvoiceLike): string | undefined {
   if (!invoice || typeof invoice !== "object") return undefined;
   const cs = invoice.confirmation_secret?.client_secret;
   if (cs) return cs;
   const pi = invoice.payment_intent;
-  if (pi && typeof pi === "object" && pi.client_secret) return pi.client_secret ?? undefined;
+  if (pi && typeof pi === "object" && pi.client_secret)
+    return pi.client_secret ?? undefined;
   return undefined;
 }
 
@@ -50,10 +54,13 @@ serve(async (req) => {
     const { email, name, registrationId } = await req.json();
 
     if (!registrationId || typeof registrationId !== "string") {
-      return new Response(JSON.stringify({ error: "registrationId is required" }), {
-        headers: { ...corsHeaders, "Content-Type": "application/json" },
-        status: 400,
-      });
+      return new Response(
+        JSON.stringify({ error: "registrationId is required" }),
+        {
+          headers: { ...corsHeaders, "Content-Type": "application/json" },
+          status: 400,
+        },
+      );
     }
 
     const supabaseAdmin = createClient(
@@ -75,28 +82,48 @@ serve(async (req) => {
       });
     }
     if (!(await verifiedRegistrationOwner(req, regRow, supabaseAdmin.auth))) {
-      return new Response(JSON.stringify({ error: "Sign in with your verified registration email to continue" }), {
-        status: 403, headers: { ...corsHeaders, "Content-Type": "application/json" },
-      });
+      return new Response(
+        JSON.stringify({
+          error: "Sign in with your verified registration email to continue",
+        }),
+        {
+          status: 403,
+          headers: { ...corsHeaders, "Content-Type": "application/json" },
+        },
+      );
     }
     if (regRow.form_type !== "group" && regRow.form_type !== "kids") {
-      return new Response(JSON.stringify({ error: "Subscriptions are for group or kids courses only" }), {
+      return new Response(
+        JSON.stringify({
+          error: "Subscriptions are for group or kids courses only",
+        }),
+        {
+          status: 400,
+          headers: { ...corsHeaders, "Content-Type": "application/json" },
+        },
+      );
+    }
+    const groupError = await groupEnrolmentError(supabaseAdmin, regRow);
+    if (groupError)
+      return new Response(JSON.stringify({ error: groupError }), {
         status: 400,
         headers: { ...corsHeaders, "Content-Type": "application/json" },
       });
-    }
-    const groupError = await groupEnrolmentError(supabaseAdmin, regRow);
-    if (groupError) return new Response(JSON.stringify({ error: groupError }), { status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" } });
     if (regRow.payment_status === "paid") {
-      return new Response(JSON.stringify({ error: "Registration already paid" }), {
-        status: 409,
-        headers: { ...corsHeaders, "Content-Type": "application/json" },
-      });
+      return new Response(
+        JSON.stringify({ error: "Registration already paid" }),
+        {
+          status: 409,
+          headers: { ...corsHeaders, "Content-Type": "application/json" },
+        },
+      );
     }
 
     const stripePublishableKey = Deno.env.get("STRIPE_PUBLISHABLE_KEY") || "";
     if (!stripePublishableKey.startsWith("pk_")) {
-      throw new Error("Stripe publishable key is invalid. Use a key that starts with pk_test_ or pk_live_.");
+      throw new Error(
+        "Stripe publishable key is invalid. Use a key that starts with pk_test_ or pk_live_.",
+      );
     }
 
     const stripe = new Stripe(Deno.env.get("STRIPE_SECRET_KEY") || "", {
@@ -110,8 +137,13 @@ serve(async (req) => {
     const monthlyUnitAmount = isKids
       ? kidsGroupMonthlyUnitAmount(regRow.format)
       : groupMonthlyUnitAmount(regRow.level, regRow.format);
-    const monthsTotal = isKids ? KIDS_GROUP_MONTHS : groupMonthsFor(regRow.level);
-    const quantity = Math.max(1, Math.min(100, Number.parseInt(String(regRow.quantity ?? 1), 10) || 1));
+    const monthsTotal = isKids
+      ? KIDS_GROUP_MONTHS
+      : groupMonthsFor(regRow.level);
+    const quantity = Math.max(
+      1,
+      Math.min(100, Number.parseInt(String(regRow.quantity ?? 1), 10) || 1),
+    );
     // No discount on the monthly plan. The only group discount is for paying
     // the whole course upfront, which goes through create-payment-intent.
     const discountApplied = false;
@@ -120,7 +152,9 @@ serve(async (req) => {
 
     const groupProductId = Deno.env.get("STRIPE_GROUP_PRODUCT_ID") || "";
     if (!groupProductId.startsWith("prod_")) {
-      throw new Error("STRIPE_GROUP_PRODUCT_ID is not configured (expected a prod_… id).");
+      throw new Error(
+        "STRIPE_GROUP_PRODUCT_ID is not configured (expected a prod_… id).",
+      );
     }
 
     const jsonOk = (body: Record<string, unknown>) =>
@@ -131,11 +165,17 @@ serve(async (req) => {
 
     // Reuse an in-flight subscription for this registration (double-click / retry)
     // when it still has a confirmable first invoice, instead of stacking duplicates.
-    if (regRow.stripe_subscription_id && regRow.stripe_subscription_id.startsWith("sub_")) {
+    if (
+      regRow.stripe_subscription_id &&
+      regRow.stripe_subscription_id.startsWith("sub_")
+    ) {
       try {
-        const existing = await stripe.subscriptions.retrieve(regRow.stripe_subscription_id, {
-          expand: ["latest_invoice.confirmation_secret"],
-        });
+        const existing = await stripe.subscriptions.retrieve(
+          regRow.stripe_subscription_id,
+          {
+            expand: ["latest_invoice.confirmation_secret"],
+          },
+        );
         const clientSecret = firstInvoiceClientSecret(
           existing.latest_invoice as unknown as InvoiceLike,
         );
@@ -153,7 +193,10 @@ serve(async (req) => {
           });
         }
       } catch (retrieveErr) {
-        console.warn("existing subscription retrieve failed, will create new:", retrieveErr);
+        console.warn(
+          "existing subscription retrieve failed, will create new:",
+          retrieveErr,
+        );
       }
     }
 
@@ -161,7 +204,9 @@ serve(async (req) => {
     let customerId: string | undefined;
     if (email) {
       const customers = await stripe.customers.list({ email, limit: 1 });
-      customerId = customers.data[0]?.id ?? (await stripe.customers.create({ email, name: name || undefined })).id;
+      customerId =
+        customers.data[0]?.id ??
+        (await stripe.customers.create({ email, name: name || undefined })).id;
     }
 
     const startSeconds = Math.floor(Date.now() / 1000);
@@ -208,7 +253,9 @@ serve(async (req) => {
       subscription.latest_invoice as unknown as InvoiceLike,
     );
     if (!clientSecret) {
-      throw new Error("Subscription created without a confirmable first invoice");
+      throw new Error(
+        "Subscription created without a confirmable first invoice",
+      );
     }
 
     // Persist the subscription id + length. /payment-status polls the DB (set by

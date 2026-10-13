@@ -4,6 +4,9 @@
  * decision page, then the survey, then one pair in depth.
  */
 export const DIALECT_PARENTS_EN = [
-  { name: "Which Arabic to learn", href: "/en/lebanese-arabic-vs-msa-vs-egyptian" },
+  {
+    name: "Which Arabic to learn",
+    href: "/en/lebanese-arabic-vs-msa-vs-egyptian",
+  },
   { name: "Arabic dialects", href: "/en/arabic-dialects-guide" },
 ];

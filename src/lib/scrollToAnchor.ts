@@ -2,7 +2,10 @@
  * Smoothly scroll to an in-page anchor by id or "#id" hash.
  * Returns true when the target element was found and scrolled to.
  */
-export function scrollToAnchor(target: string, options?: { updateHash?: boolean }): boolean {
+export function scrollToAnchor(
+  target: string,
+  options?: { updateHash?: boolean },
+): boolean {
   const id = target.replace(/^#/, "");
   if (!id) return false;
   const el = document.getElementById(id);

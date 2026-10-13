@@ -7,16 +7,34 @@ import { useI18n } from "@/lib/i18n";
 // site stays there, so the same answer never lives on two URLs.
 const FAQ = [
   {
-    q: { ro: "De ce costă mai mult cursul fizic decât cel online?", en: "Why does the in-person course cost more than the online one?" },
-    a: { ro: "Diferența acoperă închirierea sălii la Raduga Creative Center. Conținutul, profesorul și numărul de lecții sunt identice — plătești spațiul, nu un curs diferit.", en: "The difference covers renting the room at Raduga Creative Center. The content, the teacher and the number of lessons are identical — you are paying for the space, not for a different course." },
+    q: {
+      ro: "De ce costă mai mult cursul fizic decât cel online?",
+      en: "Why does the in-person course cost more than the online one?",
+    },
+    a: {
+      ro: "Diferența acoperă închirierea sălii la Raduga Creative Center. Conținutul, profesorul și numărul de lecții sunt identice — plătești spațiul, nu un curs diferit.",
+      en: "The difference covers renting the room at Raduga Creative Center. The content, the teacher and the number of lessons are identical — you are paying for the space, not for a different course.",
+    },
   },
   {
-    q: { ro: "Pot plăti lunar sau trebuie tot nivelul odată?", en: "Can I pay monthly, or must I pay for the whole level at once?" },
-    a: { ro: "Poți plăti lunar. Plata integrală a nivelului este opțională și vine cu 15% reducere — util dacă știi sigur că duci nivelul până la capăt.", en: "You can pay monthly. Paying for the full level up front is optional and comes with a 15% discount — useful if you are confident you will finish the level." },
+    q: {
+      ro: "Pot plăti lunar sau trebuie tot nivelul odată?",
+      en: "Can I pay monthly, or must I pay for the whole level at once?",
+    },
+    a: {
+      ro: "Poți plăti lunar. Plata integrală a nivelului este opțională și vine cu 15% reducere — util dacă știi sigur că duci nivelul până la capăt.",
+      en: "You can pay monthly. Paying for the full level up front is optional and comes with a 15% discount — useful if you are confident you will finish the level.",
+    },
   },
   {
-    q: { ro: "Lecțiile private se ieftinesc dacă iau mai multe?", en: "Do private lessons get cheaper if I book more?" },
-    a: { ro: "Da, la pachetul de 20 de lecții reducerea de −15% se aplică automat. Alte reduceri la lecțiile private nu există. Prețul de pornire este 150 lei pentru o lecție de 60 de minute.", en: "Yes, a package of 20 lessons gets −15% automatically. There are no other private-lesson discounts. The starting price is 150 lei for a 60-minute lesson." },
+    q: {
+      ro: "Lecțiile private se ieftinesc dacă iau mai multe?",
+      en: "Do private lessons get cheaper if I book more?",
+    },
+    a: {
+      ro: "Da, la pachetul de 20 de lecții reducerea de −15% se aplică automat. Alte reduceri la lecțiile private nu există. Prețul de pornire este 150 lei pentru o lecție de 60 de minute.",
+      en: "Yes, a package of 20 lessons gets −15% automatically. There are no other private-lesson discounts. The starting price is 150 lei for a 60-minute lesson.",
+    },
   },
 ];
 
@@ -26,7 +44,10 @@ const CatCostaCursurile = () => {
   return (
     <BlogArticleLayout
       slug="cat-costa-cursurile-de-araba-libaneza"
-      title={{ ro: "Cât costă cursurile de arabă libaneză în 2026?", en: "How much do Lebanese Arabic courses cost in 2026?" }}
+      title={{
+        ro: "Cât costă cursurile de arabă libaneză în 2026?",
+        en: "How much do Lebanese Arabic courses cost in 2026?",
+      }}
       description={{
         ro: "Prețurile cursurilor de arabă libaneză: grup lunar sau plată integrală cu reducere, lecții private, curs pentru copii și proba gratuită. Fără costuri ascunse.",
         en: "Lebanese Arabic course prices: monthly group or discounted pay-in-full, private lessons, kids course and the free trial. No hidden fees.",
@@ -42,10 +63,22 @@ const CatCostaCursurile = () => {
     >
       <Tldr
         points={[
-          { ro: "Grupele pornesc de la 500 lei/lună online; varianta fizică e mai scumpă pentru că include sala.", en: "Group courses start at 500 lei/month online; the in-person option costs more because it includes the room." },
-          { ro: "Lecțiile private sunt 150 lei online și 210 lei fizic, pentru 60 de minute, cu −15% la 20 de lecții plătite în avans.", en: "Private lessons are 150 lei online and 210 lei in person per 60-minute lesson, with −15% for 20 lessons paid in advance." },
-          { ro: "Plata integrală a unui nivel aduce 15% reducere, dar plata lunară rămâne disponibilă.", en: "Paying for a full level brings a 15% discount, but monthly payment stays available." },
-          { ro: "Prima lecție de probă este 0 lei; locul se confirmă cu cardul, iar la neprezentare se reține 150 lei.", en: "The first trial lesson is 0 lei; the spot is confirmed with a card, and a no-show is charged 150 lei." },
+          {
+            ro: "Grupele pornesc de la 500 lei/lună online; varianta fizică e mai scumpă pentru că include sala.",
+            en: "Group courses start at 500 lei/month online; the in-person option costs more because it includes the room.",
+          },
+          {
+            ro: "Lecțiile private sunt 150 lei online și 210 lei fizic, pentru 60 de minute, cu −15% la 20 de lecții plătite în avans.",
+            en: "Private lessons are 150 lei online and 210 lei in person per 60-minute lesson, with −15% for 20 lessons paid in advance.",
+          },
+          {
+            ro: "Plata integrală a unui nivel aduce 15% reducere, dar plata lunară rămâne disponibilă.",
+            en: "Paying for a full level brings a 15% discount, but monthly payment stays available.",
+          },
+          {
+            ro: "Prima lecție de probă este 0 lei; locul se confirmă cu cardul, iar la neprezentare se reține 150 lei.",
+            en: "The first trial lesson is 0 lei; the spot is confirmed with a card, and a no-show is charged 150 lei.",
+          },
         ]}
       />
       <p>
@@ -54,7 +87,11 @@ const CatCostaCursurile = () => {
           : "Una dintre primele întrebări firești când vrei să înveți o limbă nouă este „cât costă?”. La Centrul de Arabă Libaneză prețurile sunt transparente și depind de un singur lucru: formatul pe care îl alegi. Mai jos ai toate opțiunile."}
       </p>
 
-      <h2>{en ? "Group courses (adults, A1–C2)" : "Cursuri de grup (adulți, A1–C2)"}</h2>
+      <h2>
+        {en
+          ? "Group courses (adults, A1–C2)"
+          : "Cursuri de grup (adulți, A1–C2)"}
+      </h2>
       <p>
         {en
           ? "Group courses are the most affordable and motivating option — you learn alongside peers at your level, with 2 lessons a week. You can pay in two ways:"
@@ -68,16 +105,24 @@ const CatCostaCursurile = () => {
             : " — plătești lună de lună, iar abonamentul se oprește automat când se termină cursul. Prețul pe lună pornește de la 500 lei pentru nivelul A1 online și crește pe niveluri; formatul fizic în București are un tarif ușor mai mare."}
         </li>
         <li>
-          <strong>{en ? "Pay in full up front" : "Plată integrală în avans"}</strong>
-          {en ? " — if you pay for the whole course at once, you get a " : " — dacă plătești tot cursul o dată, primești "}
-          <strong>{en ? "15% discount" : "15% reducere"}</strong>{en ? " on the total." : " la total."}
+          <strong>
+            {en ? "Pay in full up front" : "Plată integrală în avans"}
+          </strong>
+          {en
+            ? " — if you pay for the whole course at once, you get a "
+            : " — dacă plătești tot cursul o dată, primești "}
+          <strong>{en ? "15% discount" : "15% reducere"}</strong>
+          {en ? " on the total." : " la total."}
         </li>
       </ul>
       <p>
         {en
           ? "Each level lasts a fixed number of months (A1 four months, A2 seven, etc.), so you know your total from the start. See the exact figures per level on the "
           : "Fiecare nivel durează un număr fix de luni (A1 patru luni, A2 șapte luni etc.), așa că știi din start cât plătești în total. Vezi cifrele exacte pe nivel în pagina de "}
-        <Link to="/cursuri/grup">{en ? "group courses" : "cursuri de grup"}</Link>.
+        <Link to="/cursuri/grup">
+          {en ? "group courses" : "cursuri de grup"}
+        </Link>
+        .
       </p>
 
       <h2>{en ? "Private lessons (1:1)" : "Lecții private (1:1)"}</h2>
@@ -85,11 +130,22 @@ const CatCostaCursurile = () => {
         {en
           ? "If you want a personalized pace or a flexible schedule, private lessons cost "
           : "Dacă vrei ritm personalizat sau un program flexibil, lecțiile private costă "}
-        <strong>{en ? "150 lei / lesson online, 210 lei in person" : "150 lei / lecție online, 210 lei fizic"}</strong>
-        {en ? " (60 minutes). Paid in advance, " : " (60 de minute). Plătite în avans, "}
-        <strong>{en ? "20 lessons get 15% off" : "20 de lecții au 15% reducere"}</strong>
+        <strong>
+          {en
+            ? "150 lei / lesson online, 210 lei in person"
+            : "150 lei / lecție online, 210 lei fizic"}
+        </strong>
+        {en
+          ? " (60 minutes). Paid in advance, "
+          : " (60 de minute). Plătite în avans, "}
+        <strong>
+          {en ? "20 lessons get 15% off" : "20 de lecții au 15% reducere"}
+        </strong>
         {en ? ". Details on the " : ". Detalii pe pagina de "}
-        <Link to="/cursuri/private">{en ? "private lessons" : "lecții private"}</Link>{en ? " page." : "."}
+        <Link to="/cursuri/private">
+          {en ? "private lessons" : "lecții private"}
+        </Link>
+        {en ? " page." : "."}
       </p>
 
       <h2>{en ? "Kids course (ages 6–11)" : "Curs pentru copii (6–11 ani)"}</h2>
@@ -97,12 +153,17 @@ const CatCostaCursurile = () => {
         {en
           ? "The kids course is an interactive, game-based program, online. We don't have kids' courses at the moment — leave your details and we'll let you know, on the "
           : "Cursul pentru copii este un program interactiv, bazat pe joc, fizic, la centru. Momentan nu avem cursuri pentru copii — lasă-ți datele și te anunțăm pe "}
-        <Link to="/cursuri/copii">{en ? "kids course page" : "pagina cursului pentru copii"}</Link>.
+        <Link to="/cursuri/copii">
+          {en ? "kids course page" : "pagina cursului pentru copii"}
+        </Link>
+        .
       </p>
 
       <h2>{en ? "The trial is free" : "Proba este gratuită"}</h2>
       <p>
-        {en ? "You don't have to pay anything to start. The first lesson is a " : "Nu trebuie să plătești nimic ca să începi. Prima lecție este o "}
+        {en
+          ? "You don't have to pay anything to start. The first lesson is a "
+          : "Nu trebuie să plătești nimic ca să începi. Prima lecție este o "}
         <Link to="/trial">{en ? "free trial" : "probă gratuită"}</Link>
         {en
           ? " of 30 minutes, with no obligation — you book it online, pick a slot and talk to the teacher. Only after you see how it is do you decide whether to enrol."
@@ -110,15 +171,20 @@ const CatCostaCursurile = () => {
       </p>
 
       <InlineCta
-        title={{ ro: "Toate prețurile, într-un singur loc", en: "Every price in one place" }}
+        title={{
+          ro: "Toate prețurile, într-un singur loc",
+          en: "Every price in one place",
+        }}
         text={{
           ro: "Grupe A1–C2, lecții private și cursul pentru copii — cu prețul lunar și cel pentru tot nivelul, afișate.",
           en: "Groups A1–C2, private lessons and the kids course — monthly and whole-level prices, shown.",
         }}
         href="/cursuri-limba-araba"
-        label={{ ro: "Vezi cursurile și prețurile", en: "See courses and prices" }}
+        label={{
+          ro: "Vezi cursurile și prețurile",
+          en: "See courses and prices",
+        }}
       />
-
 
       <h2>{en ? "Are there hidden costs?" : "Există costuri ascunse?"}</h2>
       <p>

@@ -35,7 +35,10 @@ const RegistrationFilters = ({
     <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-[180px_180px_minmax(260px,360px)]">
       <div className="space-y-1.5">
         <Label>Tip curs</Label>
-        <Select value={courseType} onValueChange={(v) => onCourseTypeChange(v as CourseTypeFilter)}>
+        <Select
+          value={courseType}
+          onValueChange={(v) => onCourseTypeChange(v as CourseTypeFilter)}
+        >
           <SelectTrigger className="w-full sm:w-[180px]">
             <SelectValue />
           </SelectTrigger>
@@ -45,13 +48,18 @@ const RegistrationFilters = ({
             <SelectItem value="private">Lead-uri lecții private</SelectItem>
             <SelectItem value="kids">{formTypeLabels["kids"]}</SelectItem>
             <SelectItem value="trial">{formTypeLabels["trial"]}</SelectItem>
-            <SelectItem value="level_check">{formTypeLabels["level_check"]}</SelectItem>
+            <SelectItem value="level_check">
+              {formTypeLabels["level_check"]}
+            </SelectItem>
           </SelectContent>
         </Select>
       </div>
       <div className="space-y-1.5">
         <Label>Status lead</Label>
-        <Select value={leadStatus} onValueChange={(v) => onLeadStatusChange(v as LeadStatusFilter)}>
+        <Select
+          value={leadStatus}
+          onValueChange={(v) => onLeadStatusChange(v as LeadStatusFilter)}
+        >
           <SelectTrigger className="w-full sm:w-[180px]">
             <SelectValue />
           </SelectTrigger>

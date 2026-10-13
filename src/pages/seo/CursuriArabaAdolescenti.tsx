@@ -46,7 +46,10 @@ const CursuriArabaAdolescenti = () => (
   <LandingLayout
     slug="cursuri-araba-adolescenti"
     enHref="/en/arabic-for-teenagers"
-    courseInstances={courseInstances({ workload: GROUP_WEEKLY_WORKLOAD, repeatFrequency: "Weekly" })}
+    courseInstances={courseInstances({
+      workload: GROUP_WEEKLY_WORKLOAD,
+      repeatFrequency: "Weekly",
+    })}
     title="Cursuri de arabă libaneză pentru adolescenți (12–17 ani) — București și online"
     metaTitle="Arabă Libaneză pentru Adolescenți | Curs 12–17 ani"
     description="Adolescenții de 12–17 ani învață arabă libaneză prin conversație, muzică și social media, online sau în București. Lecție de probă gratuită."
@@ -55,10 +58,11 @@ const CursuriArabaAdolescenti = () => (
     faq={FAQ}
   >
     <p>
-      Adolescenții învață o limbă când o pot folosi imediat. De asta grupele noastre de{" "}
-      <strong>arabă libaneză pentru adolescenți</strong> (12–17 ani) pornesc de la limba vie —
-      dialectul levantin vorbit în Liban, Siria, Iordania și Palestina — și nu de la araba standard
-      din manuale, pe care nimeni nu o folosește în conversație.
+      Adolescenții învață o limbă când o pot folosi imediat. De asta grupele
+      noastre de <strong>arabă libaneză pentru adolescenți</strong> (12–17 ani)
+      pornesc de la limba vie — dialectul levantin vorbit în Liban, Siria,
+      Iordania și Palestina — și nu de la araba standard din manuale, pe care
+      nimeni nu o folosește în conversație.
     </p>
 
     {/* Above the fold: the page ranks (466 impressions) but sat at position
@@ -68,15 +72,37 @@ const CursuriArabaAdolescenti = () => (
     <div className="not-prose">
       <ul className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
         {[
-          ["Vârsta", "12–17 ani (de la 16 ani se poate intra și în grupele de adulți, cu acordul părintelui)"],
-          ["Format", "fizic în București, Strada Icoanei 80, sau online pe Zoom"],
-          ["Ritm", "două lecții de 90 de minute pe săptămână, în grupe mici (max. 6 cursanți online, 8 fizic)"],
-          ["Preț", "de la 500 lei/lună online (700 lei/lună fizic); meditații 1:1 — 150 lei/lecție online sau 210 lei fizic, de 60 min"],
-          ["Nivel de start", "de la zero, fără alfabet arab — se începe oral, cu arabizi"],
+          [
+            "Vârsta",
+            "12–17 ani (de la 16 ani se poate intra și în grupele de adulți, cu acordul părintelui)",
+          ],
+          [
+            "Format",
+            "fizic în București, Strada Icoanei 80, sau online pe Zoom",
+          ],
+          [
+            "Ritm",
+            "două lecții de 90 de minute pe săptămână, în grupe mici (max. 6 cursanți online, 8 fizic)",
+          ],
+          [
+            "Preț",
+            "de la 500 lei/lună online (700 lei/lună fizic); meditații 1:1 — 150 lei/lecție online sau 210 lei fizic, de 60 min",
+          ],
+          [
+            "Nivel de start",
+            "de la zero, fără alfabet arab — se începe oral, cu arabizi",
+          ],
         ].map(([k, v]) => (
-          <li key={k} className="rounded-2xl border border-[#E7E1D6] bg-card p-4 dark:border-border">
-            <span className="block text-xs font-bold uppercase tracking-[0.1em] text-brand-green">{k}</span>
-            <span className="mt-1 block text-[15px] leading-relaxed text-foreground">{v}</span>
+          <li
+            key={k}
+            className="rounded-2xl border border-[#E7E1D6] bg-card p-4 dark:border-border"
+          >
+            <span className="block text-xs font-bold uppercase tracking-[0.1em] text-brand-green">
+              {k}
+            </span>
+            <span className="mt-1 block text-[15px] leading-relaxed text-foreground">
+              {v}
+            </span>
           </li>
         ))}
         <li className="flex items-center rounded-2xl bg-cream p-4">
@@ -93,19 +119,31 @@ const CursuriArabaAdolescenti = () => (
 
     <h2>Pentru cine este cursul</h2>
     <ul>
-      <li><strong>Adolescenți din familii libaneze / arabe</strong> care vor să vorbească cu bunicii, verii sau rudele din Liban.</li>
-      <li><strong>Adolescenți fără legătură cu limba</strong>, dar interesați de muzică arabă, seriale, TikTok sau călătorii.</li>
-      <li><strong>Elevi care vor o a treia limbă</strong> utilă și rară în CV-ul viitor (arabă = peste 400 de milioane de vorbitori).</li>
-      <li><strong>Familii mixte</strong> în care un părinte e vorbitor nativ — vezi și{" "}
-        <Link to="/araba-in-familie">arabă în familie</Link>.</li>
+      <li>
+        <strong>Adolescenți din familii libaneze / arabe</strong> care vor să
+        vorbească cu bunicii, verii sau rudele din Liban.
+      </li>
+      <li>
+        <strong>Adolescenți fără legătură cu limba</strong>, dar interesați de
+        muzică arabă, seriale, TikTok sau călătorii.
+      </li>
+      <li>
+        <strong>Elevi care vor o a treia limbă</strong> utilă și rară în CV-ul
+        viitor (arabă = peste 400 de milioane de vorbitori).
+      </li>
+      <li>
+        <strong>Familii mixte</strong> în care un părinte e vorbitor nativ —
+        vezi și <Link to="/araba-in-familie">arabă în familie</Link>.
+      </li>
     </ul>
 
     <h2>Cum arată o lecție</h2>
     <p>
-      90 de minute, ritm alert: 10 min recap, 25 min vocabular și structuri noi prin exemple reale
-      (mesaje, versuri, scene de film), 40 min conversație și joc de rol, 15 min feedback pe
-      pronunție. Fără dictări, fără liste de memorat acasă — temele sunt scurte și audio. Metoda se
-      numește <strong>Oral First</strong>: vorbești din prima lecție, folosind{" "}
+      90 de minute, ritm alert: 10 min recap, 25 min vocabular și structuri noi
+      prin exemple reale (mesaje, versuri, scene de film), 40 min conversație și
+      joc de rol, 15 min feedback pe pronunție. Fără dictări, fără liste de
+      memorat acasă — temele sunt scurte și audio. Metoda se numește{" "}
+      <strong>Oral First</strong>: vorbești din prima lecție, folosind{" "}
       <Link to="/arabizi">arabizi</Link>.
     </p>
 
@@ -122,86 +160,149 @@ const CursuriArabaAdolescenti = () => (
         <tbody>
           <tr className="border-b border-border/60 align-top">
             <td className="py-2 pr-3 font-semibold">6–11 ani</td>
-            <td className="py-2 px-3"><Link to="/curs-araba-copii">Curs pentru copii, prin joc</Link> (momentan fără grupe)</td>
+            <td className="py-2 px-3">
+              <Link to="/curs-araba-copii">Curs pentru copii, prin joc</Link>{" "}
+              (momentan fără grupe)
+            </td>
             <td className="py-2 pl-3">Fizic, București</td>
           </tr>
           <tr className="border-b border-border/60 align-top">
             <td className="py-2 pr-3 font-semibold">12–15 ani</td>
-            <td className="py-2 px-3">Grupă de adolescenți (în formare) sau meditații 1:1</td>
+            <td className="py-2 px-3">
+              Grupă de adolescenți (în formare) sau meditații 1:1
+            </td>
             <td className="py-2 pl-3">Fizic sau online</td>
           </tr>
           <tr className="border-b border-border/60 align-top">
             <td className="py-2 pr-3 font-semibold">16–17 ani</td>
-            <td className="py-2 px-3"><Link to="/cursuri/grup">Grupele de adulți A1–C2</Link>, cu acordul părintelui</td>
+            <td className="py-2 px-3">
+              <Link to="/cursuri/grup">Grupele de adulți A1–C2</Link>, cu
+              acordul părintelui
+            </td>
             <td className="py-2 pl-3">Fizic sau online</td>
           </tr>
         </tbody>
       </table>
     </div>
     <p>
-      Grupele dedicate 12–15 ani se formează pe măsură ce se strâng 4–8 înscrieri. Îți poți rezerva
-      locul mai jos — te anunțăm imediat ce
-      pornește grupa, iar până atunci poți începe cu{" "}
+      Grupele dedicate 12–15 ani se formează pe măsură ce se strâng 4–8
+      înscrieri. Îți poți rezerva locul mai jos — te anunțăm imediat ce pornește
+      grupa, iar până atunci poți începe cu{" "}
       <Link to="/meditatii-araba">meditații 1:1</Link>.
     </p>
 
     <h2>Prețuri</h2>
     <ul>
-      <li><strong>Grup:</strong> de la 500 lei/lună (2 lecții de 90 min/săptămână), cu 15% reducere la plata integrală a nivelului.</li>
-      <li><strong>Meditații 1:1:</strong> 150 lei/lecție online sau 210 lei fizic, de 60 min, cu −15% de la 20 de lecții.</li>
-      <li><strong>Lecție de probă (30 min):</strong> gratuită, cu părintele prezent dacă dorește.</li>
+      <li>
+        <strong>Grup:</strong> de la 500 lei/lună (2 lecții de 90
+        min/săptămână), cu 15% reducere la plata integrală a nivelului.
+      </li>
+      <li>
+        <strong>Meditații 1:1:</strong> 150 lei/lecție online sau 210 lei fizic,
+        de 60 min, cu −15% de la 20 de lecții.
+      </li>
+      <li>
+        <strong>Lecție de probă (30 min):</strong> gratuită, cu părintele
+        prezent dacă dorește.
+      </li>
     </ul>
 
     <h2>Ce vorbește adolescentul după primele 4 săptămâni</h2>
     <p>
-      Patru săptămâni înseamnă opt lecții. Nu e o promisiune de fluență — e ce acoperă efectiv
-      primele opt lecții din programa A1, în ordinea în care le predăm:
+      Patru săptămâni înseamnă opt lecții. Nu e o promisiune de fluență — e ce
+      acoperă efectiv primele opt lecții din programa A1, în ordinea în care le
+      predăm:
     </p>
     <ul>
-      <li>Sunetele care nu există în română (ح، ع، ط، غ، ق) și sistemul <Link to="/arabizi">arabizi</Link>, ca să poată scrie de pe telefon din prima săptămână.</li>
-      <li><Link to="/blog/cum-saluti-in-libaneza">Salutări și formule de politețe</Link> — <em>mar7aba</em>, <em>kifak</em>, <em>yalla bye</em> — folosite corect, nu doar recunoscute.</li>
+      <li>
+        Sunetele care nu există în română (ح، ع، ط، غ، ق) și sistemul{" "}
+        <Link to="/arabizi">arabizi</Link>, ca să poată scrie de pe telefon din
+        prima săptămână.
+      </li>
+      <li>
+        <Link to="/blog/cum-saluti-in-libaneza">
+          Salutări și formule de politețe
+        </Link>{" "}
+        — <em>mar7aba</em>, <em>kifak</em>, <em>yalla bye</em> — folosite
+        corect, nu doar recunoscute.
+      </li>
       <li>Prezentarea personală: nume, vârstă, de unde e, ce face.</li>
       <li>Familia, naționalitățile și țările, profesiile.</li>
-      <li>Posesivele (<em>-i</em>, <em>-ak</em>, <em>-ek</em>) — diferența dintre „casa mea” și „casa ta”.</li>
+      <li>
+        Posesivele (<em>-i</em>, <em>-ak</em>, <em>-ek</em>) — diferența dintre
+        „casa mea” și „casa ta”.
+      </li>
     </ul>
     <p>
-      Concret: după o lună poate purta o conversație scurtă de prezentare cu o rudă din Liban, în
-      dialect, fără să fi învățat alfabetul arab. Programa completă A1 are 32 de lecții — vezi{" "}
+      Concret: după o lună poate purta o conversație scurtă de prezentare cu o
+      rudă din Liban, în dialect, fără să fi învățat alfabetul arab. Programa
+      completă A1 are 32 de lecții — vezi{" "}
       <Link to="/cursuri/grup/a1">tot ce acoperă nivelul A1</Link>.
     </p>
 
     <h2>Pentru părinți</h2>
-    <p>
-      Întrebările pe care le primim cel mai des, cu răspunsuri scurte:
-    </p>
+    <p>Întrebările pe care le primim cel mai des, cu răspunsuri scurte:</p>
     <ul>
-      <li><strong>Cât durează și când?</strong> Două ședințe de 90 de minute pe săptămână. Zilele și orele exacte ale grupei active sunt pe <Link to="/cursuri/grup">pagina cursului de grup</Link> — le ținem acolo ca să fie mereu la zi.</li>
-      <li><strong>Cât de mare e grupa?</strong> Între 3 și 6 cursanți online, între 4 și 8 fizic, ca fiecare să apuce să vorbească în fiecare lecție.</li>
-      <li><strong>Unde?</strong> Fizic la Raduga Creative Center, Strada Icoanei 80, sector 2, sau online pe Zoom. Formatul se alege la înscriere.</li>
-      <li><strong>Ce temă are acasă?</strong> Scurtă și audio — ascultare și repetare, nu liste de memorat. Progresul se vede în conversație, la lecția următoare.</li>
-      <li><strong>Trebuie să știe alfabetul arab?</strong> Nu. Se începe oral; alfabetul arab e opțional, de la B1 sau B2, dacă toată grupa vrea.</li>
-      <li><strong>Cum verific dacă i se potrivește?</strong> Cu <Link to="/trial">lecția de probă gratuită de 30 de minute</Link>, înainte de orice plată. Dacă nu i se potrivește, nu urmează nimic.</li>
+      <li>
+        <strong>Cât durează și când?</strong> Două ședințe de 90 de minute pe
+        săptămână. Zilele și orele exacte ale grupei active sunt pe{" "}
+        <Link to="/cursuri/grup">pagina cursului de grup</Link> — le ținem acolo
+        ca să fie mereu la zi.
+      </li>
+      <li>
+        <strong>Cât de mare e grupa?</strong> Între 3 și 6 cursanți online,
+        între 4 și 8 fizic, ca fiecare să apuce să vorbească în fiecare lecție.
+      </li>
+      <li>
+        <strong>Unde?</strong> Fizic la Raduga Creative Center, Strada Icoanei
+        80, sector 2, sau online pe Zoom. Formatul se alege la înscriere.
+      </li>
+      <li>
+        <strong>Ce temă are acasă?</strong> Scurtă și audio — ascultare și
+        repetare, nu liste de memorat. Progresul se vede în conversație, la
+        lecția următoare.
+      </li>
+      <li>
+        <strong>Trebuie să știe alfabetul arab?</strong> Nu. Se începe oral;
+        alfabetul arab e opțional, de la B1 sau B2, dacă toată grupa vrea.
+      </li>
+      <li>
+        <strong>Cum verific dacă i se potrivește?</strong> Cu{" "}
+        <Link to="/trial">lecția de probă gratuită de 30 de minute</Link>,
+        înainte de orice plată. Dacă nu i se potrivește, nu urmează nimic.
+      </li>
     </ul>
 
     <h2>Profesor nativ, în București sau online</h2>
     <p>
-      Ibra este vorbitor nativ de arabă libaneză, cu peste 5 ani de experiență în predare, și predă
-      în română, engleză, franceză sau arabă — alegi limba în care adolescentul se simte confortabil.
-      Lecțiile fizice au loc la Raduga Creative Center (Strada Icoanei 80, sector 2), iar cele online
-      pe Zoom. Vezi și <Link to="/cursuri-araba-bucuresti">cursurile de arabă în București</Link> sau{" "}
-      <Link to="/cel-mai-bun-curs-de-araba">cum alegi cel mai bun curs de arabă</Link>.
+      Ibra este vorbitor nativ de arabă libaneză, cu peste 5 ani de experiență
+      în predare, și predă în română, engleză, franceză sau arabă — alegi limba
+      în care adolescentul se simte confortabil. Lecțiile fizice au loc la
+      Raduga Creative Center (Strada Icoanei 80, sector 2), iar cele online pe
+      Zoom. Vezi și{" "}
+      <Link to="/cursuri-araba-bucuresti">cursurile de arabă în București</Link>{" "}
+      sau{" "}
+      <Link to="/cel-mai-bun-curs-de-araba">
+        cum alegi cel mai bun curs de arabă
+      </Link>
+      .
     </p>
     {/* Its own green section, so a parent looking for "when does it start"
         finds it without reading the whole page. */}
     <section className="not-prose rounded-3xl bg-brand-green/5 p-5 sm:p-8">
-      <span className="mb-2 block text-sm font-bold uppercase tracking-[0.1em] text-brand-green">Grupe în formare</span>
-      <h2 id="lista-asteptare" className="font-display text-2xl font-bold text-foreground md:text-3xl">
+      <span className="mb-2 block text-sm font-bold uppercase tracking-[0.1em] text-brand-green">
+        Grupe în formare
+      </span>
+      <h2
+        id="lista-asteptare"
+        className="font-display text-2xl font-bold text-foreground md:text-3xl"
+      >
         Anunță-mă când pornește grupa
       </h2>
       <p className="mt-2 leading-relaxed text-foreground/80">
-        Grupele dedicate adolescenților (12–17 ani) sunt în formare: pornim o cohortă imediat ce avem
-        suficienți înscriși. Lasă-ți datele și te anunțăm primul, fără nicio obligație. Între timp,
-        poți începe oricând cu{" "}
+        Grupele dedicate adolescenților (12–17 ani) sunt în formare: pornim o
+        cohortă imediat ce avem suficienți înscriși. Lasă-ți datele și te
+        anunțăm primul, fără nicio obligație. Între timp, poți începe oricând cu{" "}
         <Link to="/meditatii-araba" className="text-primary underline">
           meditații de arabă 1:1
         </Link>

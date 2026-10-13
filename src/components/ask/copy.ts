@@ -20,11 +20,13 @@ export const COPY = {
     close: "Închide",
     reset: "Conversație nouă",
     emptyTitle: "Ce vrei să afli?",
-    emptyDesc: "Prețuri, niveluri, orar, cursuri pentru copii sau lecția de probă.",
+    emptyDesc:
+      "Prețuri, niveluri, orar, cursuri pentru copii sau lecția de probă.",
     placeholder: "Scrie întrebarea ta…",
     thinking: "Se gândește…",
     loading: "Se încarcă…",
-    error: "Nu am putut răspunde acum. Încearcă din nou în câteva momente sau scrie-ne pe WhatsApp.",
+    error:
+      "Nu am putut răspunde acum. Încearcă din nou în câteva momente sau scrie-ne pe WhatsApp.",
     disclaimer: "Asistent automat. Pentru confirmări, vorbește cu Ibra.",
     suggestions: [
       "Cât costă cursul de grup?",
@@ -39,11 +41,13 @@ export const COPY = {
     close: "Close",
     reset: "New conversation",
     emptyTitle: "What would you like to know?",
-    emptyDesc: "Prices, levels, schedule, kids' courses or the free trial lesson.",
+    emptyDesc:
+      "Prices, levels, schedule, kids' courses or the free trial lesson.",
     placeholder: "Type your question…",
     thinking: "Thinking…",
     loading: "Loading…",
-    error: "I couldn't answer just now. Try again in a moment, or message us on WhatsApp.",
+    error:
+      "I couldn't answer just now. Try again in a moment, or message us on WhatsApp.",
     disclaimer: "Automated assistant. For confirmations, talk to Ibra.",
     suggestions: [
       "How much is the group course?",

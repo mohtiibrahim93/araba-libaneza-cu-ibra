@@ -41,34 +41,47 @@ async function bookPrivateLessons(
   const format = meta.booking_format || "online";
   const language = meta.booking_language || updated.language || "ro";
   const seriesNote =
-    starts.length > 1 ? `Serie săptămânală: ${starts.length} lecții, aceeași zi și oră.` : null;
+    starts.length > 1
+      ? `Serie săptămânală: ${starts.length} lecții, aceeași zi și oră.`
+      : null;
   // All at once rather than one after another: a 20-lesson series booked
   // in sequence could outlast Stripe's wait for this response, and a
   // redelivered event is skipped by the log above — the late weeks
   // would silently never be booked.
-  const bookOne = async (startAt: string, i: number): Promise<string | null> => {
-    const res = await fetch(`${Deno.env.get("SUPABASE_URL")}/functions/v1/booking-create`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")}`,
+  const bookOne = async (
+    startAt: string,
+    i: number,
+  ): Promise<string | null> => {
+    const res = await fetch(
+      `${Deno.env.get("SUPABASE_URL")}/functions/v1/booking-create`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")}`,
+        },
+        body: JSON.stringify({
+          registration_id: updated.id,
+          event_type: meta.booking_event_type || "paid",
+          start_at: startAt,
+          format,
+          student_name: updated.name,
+          student_email: updated.email,
+          student_phone: updated.phone || undefined,
+          notes:
+            [seriesNote, meta.booking_notes].filter(Boolean).join(" ") ||
+            undefined,
+          language,
+          gdpr_consent: true,
+          // One confirmation for the purchase, not one per week.
+          quiet: i > 0,
+        }),
       },
-      body: JSON.stringify({
-        registration_id: updated.id,
-        event_type: meta.booking_event_type || "paid",
-        start_at: startAt,
-        format,
-        student_name: updated.name,
-        student_email: updated.email,
-        student_phone: updated.phone || undefined,
-        notes: [seriesNote, meta.booking_notes].filter(Boolean).join(" ") || undefined,
-        language,
-        gdpr_consent: true,
-        // One confirmation for the purchase, not one per week.
-        quiet: i > 0,
-      }),
-    }).catch((e) => {
-      console.error(`Registration ${updated.id}: booking-create call failed`, e);
+    ).catch((e) => {
+      console.error(
+        `Registration ${updated.id}: booking-create call failed`,
+        e,
+      );
       return null;
     });
     if (res && res.ok) return null;
@@ -77,7 +90,10 @@ async function bookPrivateLessons(
       : "booking-create could not be reached";
     // A redelivered event (or the other of the two payment events) finds its
     // own booking already there; that is not a failure worth an alarm.
-    if (res?.status === 409 && (detail.includes("conflict") || detail.includes("lessons_used_up"))) {
+    if (
+      res?.status === 409 &&
+      (detail.includes("conflict") || detail.includes("lessons_used_up"))
+    ) {
       const { data: own } = await supabase
         .from("bookings")
         .select("id")
@@ -89,14 +105,16 @@ async function bookPrivateLessons(
     }
     return `${startAt} — ${detail}`;
   };
-  const failed = (await Promise.all(starts.map((iso, i) => bookOne(iso, i)))).filter(
-    (f): f is string => f !== null,
-  );
+  const failed = (
+    await Promise.all(starts.map((iso, i) => bookOne(iso, i)))
+  ).filter((f): f is string => f !== null);
   if (failed.length > 0) {
     // Paid, told it is confirmed, and one or more lessons are not in the
     // calendar. Never throw (Stripe would redo the payment update);
     // tell the owner, with what is needed to book them by hand.
-    console.error(`Registration ${updated.id}: ${failed.length} private lesson(s) not booked`);
+    console.error(
+      `Registration ${updated.id}: ${failed.length} private lesson(s) not booked`,
+    );
     await sendTemplateEmail("admin-trial-booking-failed", ADMIN_RECIPIENT, {
       templateData: {
         kind: "private",
@@ -109,7 +127,12 @@ async function bookPrivateLessons(
         reason: failed.join(" | ").slice(0, 900),
       },
       idempotencyKey: `private-booking-failed-${updated.id}`,
-    }).catch((e) => console.error(`Registration ${updated.id}: could not send the failure alert`, e));
+    }).catch((e) =>
+      console.error(
+        `Registration ${updated.id}: could not send the failure alert`,
+        e,
+      ),
+    );
   }
 }
 
@@ -122,7 +145,10 @@ serve(async (req) => {
   }
 
   if (req.method !== "POST") {
-    return new Response("Method not allowed", { status: 405, headers: corsHeaders });
+    return new Response("Method not allowed", {
+      status: 405,
+      headers: corsHeaders,
+    });
   }
 
   const stripe = new Stripe(Deno.env.get("STRIPE_SECRET_KEY") || "", {
@@ -144,7 +170,11 @@ serve(async (req) => {
 
   let event: Stripe.Event;
   try {
-    event = await stripe.webhooks.constructEventAsync(rawBody, signature, webhookSecret);
+    event = await stripe.webhooks.constructEventAsync(
+      rawBody,
+      signature,
+      webhookSecret,
+    );
   } catch (err) {
     const message = err instanceof Error ? err.message : "Invalid signature";
     console.error("Webhook signature verification failed:", message);
@@ -217,22 +247,42 @@ serve(async (req) => {
             // The card's fingerprint identifies the card across Stripe
             // customers: one free trial per card, not only per email.
             let cardFingerprint: string | null = null;
-            const setupIntentId = typeof session.setup_intent === "string" ? session.setup_intent : session.setup_intent?.id;
+            const setupIntentId =
+              typeof session.setup_intent === "string"
+                ? session.setup_intent
+                : session.setup_intent?.id;
             if (setupIntentId) {
               try {
-                const intent = await stripe.setupIntents.retrieve(setupIntentId, { expand: ["payment_method"] });
+                const intent = await stripe.setupIntents.retrieve(
+                  setupIntentId,
+                  { expand: ["payment_method"] },
+                );
                 const method = intent.payment_method;
-                cardFingerprint = method && typeof method !== "string" ? method.card?.fingerprint ?? null : null;
+                cardFingerprint =
+                  method && typeof method !== "string"
+                    ? (method.card?.fingerprint ?? null)
+                    : null;
               } catch (e) {
-                console.error(`Registration ${registrationId}: could not read the card fingerprint`, e);
+                console.error(
+                  `Registration ${registrationId}: could not read the card fingerprint`,
+                  e,
+                );
               }
             }
             if (trialRow && trialRow.payment_status !== "paid") {
               await supabase
                 .from("registrations")
-                .update({ payment_status: "card_saved", stripe_session_id: sessionId, ...(cardFingerprint ? { card_fingerprint: cardFingerprint } : {}) })
+                .update({
+                  payment_status: "card_saved",
+                  stripe_session_id: sessionId,
+                  ...(cardFingerprint
+                    ? { card_fingerprint: cardFingerprint }
+                    : {}),
+                })
                 .eq("id", registrationId);
-              console.log(`Registration ${registrationId}: trial card saved (setup session ${sessionId})`);
+              console.log(
+                `Registration ${registrationId}: trial card saved (setup session ${sessionId})`,
+              );
             }
 
             // The trial slot is booked HERE, not before the redirect. The card
@@ -250,69 +300,98 @@ serve(async (req) => {
               // the conflict checks, the Zoom link and both emails. Calling it
               // keeps one implementation rather than a second one here that
               // would drift.
-              const res = await fetch(`${Deno.env.get("SUPABASE_URL")}/functions/v1/booking-create`, {
-                method: "POST",
-                headers: {
-                  "Content-Type": "application/json",
-                  Authorization: `Bearer ${Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")}`,
+              const res = await fetch(
+                `${Deno.env.get("SUPABASE_URL")}/functions/v1/booking-create`,
+                {
+                  method: "POST",
+                  headers: {
+                    "Content-Type": "application/json",
+                    Authorization: `Bearer ${Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")}`,
+                  },
+                  body: JSON.stringify({
+                    registration_id: registrationId,
+                    event_type: session.metadata?.booking_event_type || "trial",
+                    start_at: startAt,
+                    format: session.metadata?.booking_format || "online",
+                    student_name: trialRow.name,
+                    student_email: trialRow.email,
+                    student_phone: trialRow.phone || undefined,
+                    notes: session.metadata?.booking_notes || undefined,
+                    language:
+                      session.metadata?.booking_language ||
+                      trialRow.language ||
+                      "ro",
+                    // Consent was given on the form, before the redirect to
+                    // Stripe; the booking is the same submission finishing.
+                    gdpr_consent: true,
+                    ...(cardFingerprint
+                      ? { card_fingerprint: cardFingerprint }
+                      : {}),
+                  }),
                 },
-                body: JSON.stringify({
-                  registration_id: registrationId,
-                  event_type: session.metadata?.booking_event_type || "trial",
-                  start_at: startAt,
-                  format: session.metadata?.booking_format || "online",
-                  student_name: trialRow.name,
-                  student_email: trialRow.email,
-                  student_phone: trialRow.phone || undefined,
-                  notes: session.metadata?.booking_notes || undefined,
-                  language: session.metadata?.booking_language || trialRow.language || "ro",
-                  // Consent was given on the form, before the redirect to
-                  // Stripe; the booking is the same submission finishing.
-                  gdpr_consent: true,
-                  ...(cardFingerprint ? { card_fingerprint: cardFingerprint } : {}),
-                }),
-              }).catch((e) => {
-                console.error(`Registration ${registrationId}: booking-create call failed`, e);
+              ).catch((e) => {
+                console.error(
+                  `Registration ${registrationId}: booking-create call failed`,
+                  e,
+                );
                 return null;
               });
               if (res && res.ok) {
-                console.log(`Registration ${registrationId}: trial booked for ${startAt} after card save`);
+                console.log(
+                  `Registration ${registrationId}: trial booked for ${startAt} after card save`,
+                );
               } else {
                 // Never throw: Stripe would retry the whole event and the card
                 // update above would run again. The card is saved either way.
                 const body = res ? await res.text().catch(() => "") : "";
-                const code = (() => { try { return JSON.parse(body)?.code; } catch { return undefined; } })();
+                const code = (() => {
+                  try {
+                    return JSON.parse(body)?.code;
+                  } catch {
+                    return undefined;
+                  }
+                })();
                 // A refused trial is not a failure to fix by hand: say why, in
                 // the owner's words, so he knows to offer a paid lesson.
-                const detail = code === "trial_card_used"
-                  ? "Cardul a mai fost folosit pentru o probă gratuită, cu alt email. Nu s-a programat: proba se poate face doar plătit."
-                  : code === "trial_used"
-                    ? "Acest email și-a folosit deja proba gratuită. Nu s-a programat: proba se poate face doar plătit."
-                    : res
-                      ? `${res.status} ${body}`.slice(0, 300)
-                      : "booking-create could not be reached";
-                console.error(`Registration ${registrationId}: booking-create failed — ${detail}`);
+                const detail =
+                  code === "trial_card_used"
+                    ? "Cardul a mai fost folosit pentru o probă gratuită, cu alt email. Nu s-a programat: proba se poate face doar plătit."
+                    : code === "trial_used"
+                      ? "Acest email și-a folosit deja proba gratuită. Nu s-a programat: proba se poate face doar plătit."
+                      : res
+                        ? `${res.status} ${body}`.slice(0, 300)
+                        : "booking-create could not be reached";
+                console.error(
+                  `Registration ${registrationId}: booking-create failed — ${detail}`,
+                );
 
                 // This is the one failure that strands a person: the card is on
                 // file and they have been told their spot is confirmed, but no
                 // booking exists and nothing else will notice. Mail it to the
                 // owner with everything needed to create it by hand, because
                 // the booking that would have held them is not there to look up.
-                await sendTemplateEmail("admin-trial-booking-failed", ADMIN_RECIPIENT, {
-                  templateData: {
-                    name: trialRow.name,
-                    email: trialRow.email,
-                    phone: trialRow.phone,
-                    startAt,
-                    format: session.metadata?.booking_format || "online",
-                    registrationId,
-                    reason: detail,
+                await sendTemplateEmail(
+                  "admin-trial-booking-failed",
+                  ADMIN_RECIPIENT,
+                  {
+                    templateData: {
+                      name: trialRow.name,
+                      email: trialRow.email,
+                      phone: trialRow.phone,
+                      startAt,
+                      format: session.metadata?.booking_format || "online",
+                      registrationId,
+                      reason: detail,
+                    },
+                    idempotencyKey: `trial-booking-failed-${registrationId}`,
                   },
-                  idempotencyKey: `trial-booking-failed-${registrationId}`,
-                }).catch((e) =>
+                ).catch((e) =>
                   // A failed alert must not take the handler down with it; the
                   // log line above is still the backstop.
-                  console.error(`Registration ${registrationId}: could not send the failure alert`, e),
+                  console.error(
+                    `Registration ${registrationId}: could not send the failure alert`,
+                    e,
+                  ),
                 );
               }
             }
@@ -321,7 +400,9 @@ serve(async (req) => {
         }
 
         if (!paid) {
-          console.log(`Session ${sessionId} not paid yet (status=${session.payment_status}), skipping`);
+          console.log(
+            `Session ${sessionId} not paid yet (status=${session.payment_status}), skipping`,
+          );
           break;
         }
 
@@ -333,14 +414,19 @@ serve(async (req) => {
         // id (so invoice.paid can match it), set months_total from metadata,
         // and cap the sub at cancel_at = start + months_total months. This
         // mirrors what create-subscription does for the embedded flow.
-        const subId = typeof session.subscription === "string"
-          ? session.subscription
-          : session.subscription?.id;
+        const subId =
+          typeof session.subscription === "string"
+            ? session.subscription
+            : session.subscription?.id;
         let monthsTotal: number | null = null;
         let monthsPaid: number | null = null;
         if (session.mode === "subscription" && subId) {
-          const rawMonths = Number.parseInt(String(session.metadata?.months_total ?? ""), 10);
-          monthsTotal = Number.isFinite(rawMonths) && rawMonths > 0 ? rawMonths : null;
+          const rawMonths = Number.parseInt(
+            String(session.metadata?.months_total ?? ""),
+            10,
+          );
+          monthsTotal =
+            Number.isFinite(rawMonths) && rawMonths > 0 ? rawMonths : null;
           if (monthsTotal) {
             try {
               // Anchor to the subscription's real start and skip if already
@@ -370,7 +456,10 @@ serve(async (req) => {
             });
             monthsPaid = Math.max(1, paidInvoices.data.length);
           } catch (listErr) {
-            console.warn("could not count paid invoices, defaulting months_paid:", listErr);
+            console.warn(
+              "could not count paid invoices, defaulting months_paid:",
+              listErr,
+            );
           }
         }
 
@@ -381,7 +470,9 @@ serve(async (req) => {
             paid_at: new Date().toISOString(),
             lead_status: "converted",
             stripe_session_id: sessionId,
-            ...(subId ? { stripe_subscription_id: subId, subscription_status: "active" } : {}),
+            ...(subId
+              ? { stripe_subscription_id: subId, subscription_status: "active" }
+              : {}),
             ...(monthsTotal ? { months_total: monthsTotal } : {}),
             ...(monthsPaid ? { months_paid: monthsPaid } : {}),
           })
@@ -395,7 +486,9 @@ serve(async (req) => {
         }
 
         if (!updated) {
-          console.warn(`No registration found for ${matchColumn}=${matchValue}`);
+          console.warn(
+            `No registration found for ${matchColumn}=${matchValue}`,
+          );
         } else {
           console.log(`Registration ${updated.id} marked as paid`);
         }
@@ -413,7 +506,8 @@ serve(async (req) => {
       case "checkout.session.async_payment_failed":
       case "checkout.session.expired": {
         const session = event.data.object as Stripe.Checkout.Session;
-        const newStatus = event.type === "checkout.session.expired" ? "expired" : "failed";
+        const newStatus =
+          event.type === "checkout.session.expired" ? "expired" : "failed";
 
         // Never overwrite money that already settled: a late or redelivered
         // event for an old session must not turn paid/refunded into failed.
@@ -424,7 +518,10 @@ serve(async (req) => {
           .not("payment_status", "in", SETTLED_PAYMENT_STATES);
 
         if (updateError) {
-          console.error(`Failed to mark registration as ${newStatus}:`, updateError);
+          console.error(
+            `Failed to mark registration as ${newStatus}:`,
+            updateError,
+          );
         }
         break;
       }
@@ -434,7 +531,9 @@ serve(async (req) => {
         // Subscription-invoice PaymentIntents are handled by invoice.paid (which
         // also advances months_paid); skip them here to avoid double-processing.
         if (intent.invoice) {
-          console.log(`PI ${intent.id} belongs to invoice ${intent.invoice}, handled via invoice.paid`);
+          console.log(
+            `PI ${intent.id} belongs to invoice ${intent.invoice}, handled via invoice.paid`,
+          );
           break;
         }
         const registrationId = intent.metadata?.registration_id;
@@ -454,18 +553,27 @@ serve(async (req) => {
           .maybeSingle();
 
         if (updateError) {
-          console.error("Failed to mark registration as paid (PI):", updateError);
+          console.error(
+            "Failed to mark registration as paid (PI):",
+            updateError,
+          );
           throw updateError;
         }
         if (!updated) {
-          console.warn(`No registration found for PI ${matchColumn}=${matchValue}`);
+          console.warn(
+            `No registration found for PI ${matchColumn}=${matchValue}`,
+          );
         }
 
         // Embedded private payment (the day-and-time picker): the slot rides on
         // the PaymentIntent's metadata. A hosted-Checkout payment's intent
         // carries no booking_start_at, so this books nothing there — that
         // purchase is booked on checkout.session.completed instead.
-        if (updated && intent.metadata?.course_type === "private" && intent.metadata?.booking_start_at) {
+        if (
+          updated &&
+          intent.metadata?.course_type === "private" &&
+          intent.metadata?.booking_start_at
+        ) {
           await bookPrivateLessons(supabase, updated, intent.metadata ?? {});
         }
         break;
@@ -503,7 +611,10 @@ serve(async (req) => {
           });
           monthsPaid = Math.max(1, paidInvoices.data.length);
         } catch (listErr) {
-          console.warn("could not count paid invoices, defaulting months_paid:", listErr);
+          console.warn(
+            "could not count paid invoices, defaulting months_paid:",
+            listErr,
+          );
         }
 
         const { error: updateError } = await supabase
@@ -531,13 +642,20 @@ serve(async (req) => {
         // later paid (or an event delivered late) must not mark a paying
         // student past due.
         try {
-          const current = invoice.id ? await stripe.invoices.retrieve(invoice.id) : null;
+          const current = invoice.id
+            ? await stripe.invoices.retrieve(invoice.id)
+            : null;
           if (current && current.status !== "open") {
-            console.log(`Invoice ${invoice.id} is ${current.status} now; past_due not applied`);
+            console.log(
+              `Invoice ${invoice.id} is ${current.status} now; past_due not applied`,
+            );
             break;
           }
         } catch (e) {
-          console.warn(`Invoice ${invoice.id}: could not re-check status, applying past_due`, e);
+          console.warn(
+            `Invoice ${invoice.id}: could not re-check status, applying past_due`,
+            e,
+          );
         }
         await supabase
           .from("registrations")
@@ -557,9 +675,13 @@ serve(async (req) => {
         const subscription = event.data.object as Stripe.Subscription;
         let status: string = subscription.status;
         try {
-          status = (await stripe.subscriptions.retrieve(subscription.id)).status;
+          status = (await stripe.subscriptions.retrieve(subscription.id))
+            .status;
         } catch (e) {
-          console.warn(`Subscription ${subscription.id}: could not re-check status, using the event's`, e);
+          console.warn(
+            `Subscription ${subscription.id}: could not re-check status, using the event's`,
+            e,
+          );
         }
         await supabase
           .from("registrations")
@@ -588,7 +710,10 @@ serve(async (req) => {
 
       case "charge.refunded": {
         const charge = event.data.object as Stripe.Charge;
-        const intentId = typeof charge.payment_intent === "string" ? charge.payment_intent : charge.payment_intent?.id;
+        const intentId =
+          typeof charge.payment_intent === "string"
+            ? charge.payment_intent
+            : charge.payment_intent?.id;
         if (!intentId) break;
         // Find the registration however it was paid: the embedded card form
         // and /checkout use a PaymentIntent (registration id in its metadata,
@@ -601,13 +726,24 @@ serve(async (req) => {
           console.warn(`Refund: could not read PaymentIntent ${intentId}`, e);
         }
         if (!registrationId) {
-          const { data: byIntent } = await supabase.from("registrations").select("id").eq("stripe_session_id", intentId).maybeSingle();
+          const { data: byIntent } = await supabase
+            .from("registrations")
+            .select("id")
+            .eq("stripe_session_id", intentId)
+            .maybeSingle();
           registrationId = byIntent?.id ?? null;
         }
         if (!registrationId) {
-          const sessions = await stripe.checkout.sessions.list({ payment_intent: intentId, limit: 1 });
+          const sessions = await stripe.checkout.sessions.list({
+            payment_intent: intentId,
+            limit: 1,
+          });
           if (sessions.data.length > 0) {
-            const { data: bySession } = await supabase.from("registrations").select("id").eq("stripe_session_id", sessions.data[0].id).maybeSingle();
+            const { data: bySession } = await supabase
+              .from("registrations")
+              .select("id")
+              .eq("stripe_session_id", sessions.data[0].id)
+              .maybeSingle();
             registrationId = bySession?.id ?? null;
           }
         }
@@ -641,12 +777,20 @@ serve(async (req) => {
       headers: { ...corsHeaders, "Content-Type": "application/json" },
     });
   } catch (err) {
-    const message = err instanceof Error ? err.message : "Webhook processing error";
+    const message =
+      err instanceof Error ? err.message : "Webhook processing error";
     console.error("Webhook handler error:", message);
     // Release the claim so Stripe's retry is processed instead of skipped.
     if (claimed) {
-      const { error: releaseErr } = await supabase.from("stripe_events").delete().eq("id", event.id);
-      if (releaseErr) console.error(`Event ${event.id}: could not release the idempotency claim`, releaseErr);
+      const { error: releaseErr } = await supabase
+        .from("stripe_events")
+        .delete()
+        .eq("id", event.id);
+      if (releaseErr)
+        console.error(
+          `Event ${event.id}: could not release the idempotency claim`,
+          releaseErr,
+        );
     }
     return new Response(JSON.stringify({ error: message }), {
       status: 500,

@@ -31,14 +31,19 @@ const FAQSection = () => {
   const allHref = lang === "en" ? "/en/faq" : "/intrebari-frecvente";
 
   return (
-    <section id="faq" className="py-section px-gutter bg-background scroll-mt-20">
+    <section
+      id="faq"
+      className="py-section px-gutter bg-background scroll-mt-20"
+    >
       {/* The homepage's FAQPage is served by the route head (see FAQ_ROUTES in
           src/lib/seoHead.ts). Emitting it here too appended a second, identical
           block — JSON-LD scripts are not replaced by Helmet the way title and
           canonical are — and a page with two FAQPage blocks is invalid. */}
       {!seoEmitsFaq("/") && (
         <Helmet>
-          <script type="application/ld+json">{JSON.stringify(faqJsonLd(featured))}</script>
+          <script type="application/ld+json">
+            {JSON.stringify(faqJsonLd(featured))}
+          </script>
         </Helmet>
       )}
       {/* max-w-content, like every other section. This was max-w-6xl, which
@@ -47,7 +52,9 @@ const FAQSection = () => {
           columns for no reason. */}
       <div className="max-w-content mx-auto">
         <div className="mb-10 max-w-3xl">
-          <span className="mb-2 block text-sm font-bold uppercase tracking-[0.1em] text-foreground">{t.faqBadge}</span>
+          <span className="mb-2 block text-sm font-bold uppercase tracking-[0.1em] text-foreground">
+            {t.faqBadge}
+          </span>
           <h2 className="font-display text-display-lg font-bold tracking-tight text-foreground mb-3">
             {t.faqTitle}
           </h2>
@@ -83,7 +90,9 @@ const FAQSection = () => {
             {t.faqSeeAll.replace("{n}", String(total))}
             <ArrowRight className="w-4 h-4" aria-hidden="true" />
           </Link>
-          <p className="mt-3 text-sm text-muted-foreground">{t.faqSeeAllHint}</p>
+          <p className="mt-3 text-sm text-muted-foreground">
+            {t.faqSeeAllHint}
+          </p>
         </div>
       </div>
     </section>

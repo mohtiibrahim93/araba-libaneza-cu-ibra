@@ -39,47 +39,74 @@ const ArabicClassesNearMe = () => (
     lead="In-person Arabic classes in Bucharest and live online classes worldwide, taught by a native Lebanese teacher. Small groups (max 6 students online, 8 in person), CEFR-aligned A1–C2, or private 1-on-1 if you prefer."
   >
     <p>
-      Looking for <strong>Arabic classes near you</strong>? Two options, same native teacher, same
-      method:
+      Looking for <strong>Arabic classes near you</strong>? Two options, same
+      native teacher, same method:
     </p>
     <ul>
-      <li><strong>In-person in Bucharest:</strong> Strada Icoanei 80, sector 2 — the groups running now meet Monday & Wednesday (A1) and Tuesday & Thursday (A2), 19:00–20:30.</li>
-      <li><strong>Live online, worldwide:</strong> over Zoom, two 90-minute lessons a week (Bucharest time); new A1 groups taught in Romanian and in English are open — dates and times on the <Link to="/en/courses/group/a1">A1 page</Link>.</li>
+      <li>
+        <strong>In-person in Bucharest:</strong> Strada Icoanei 80, sector 2 —
+        the groups running now meet Monday & Wednesday (A1) and Tuesday &
+        Thursday (A2), 19:00–20:30.
+      </li>
+      <li>
+        <strong>Live online, worldwide:</strong> over Zoom, two 90-minute
+        lessons a week (Bucharest time); new A1 groups taught in Romanian and in
+        English are open — dates and times on the{" "}
+        <Link to="/en/courses/group/a1">A1 page</Link>.
+      </li>
     </ul>
 
     <h2>Why "near me" often means online</h2>
     <p>
-      Outside a handful of European capitals, quality in-person Arabic classes with a native
-      Levantine teacher are rare — most local schools teach Modern Standard Arabic, not the
-      spoken dialect you'd actually use. Live online with a native teacher is usually closer to
-      "near you" than driving 40 minutes to a class that teaches the wrong Arabic.
+      Outside a handful of European capitals, quality in-person Arabic classes
+      with a native Levantine teacher are rare — most local schools teach Modern
+      Standard Arabic, not the spoken dialect you'd actually use. Live online
+      with a native teacher is usually closer to "near you" than driving 40
+      minutes to a class that teaches the wrong Arabic.
     </p>
 
     <h2>What the classes cover</h2>
     <p>
       <Link to="/en/learn-lebanese-arabic">Lebanese Arabic</Link> — a variety of{" "}
-      <Link to="/en/arabic-dialects-guide">Levantine Arabic</Link> understood across Lebanon,
-      Syria, Jordan and Palestine. Oral-first: you speak from lesson one, using arabizi (Latin
-      transliteration), A1–A2 spoken only, with the Arabic script added from B1 or B2 if the whole group wants it. CEFR levels A1 → C2.
+      <Link to="/en/arabic-dialects-guide">Levantine Arabic</Link> understood
+      across Lebanon, Syria, Jordan and Palestine. Oral-first: you speak from
+      lesson one, using arabizi (Latin transliteration), A1–A2 spoken only, with
+      the Arabic script added from B1 or B2 if the whole group wants it. CEFR
+      levels A1 → C2.
     </p>
 
     <h2>Class formats</h2>
     <ul>
-      <li><strong>Group course, in person (Bucharest):</strong> 700 LEI / month, 2 lessons of 90 min per week, max 8 students.</li>
-      <li><strong>Group course, online:</strong> 500 LEI / month, 2 lessons of 90 min per week, max 6 students.</li>
-      <li><strong>Private 1-on-1:</strong> 150 LEI online / 210 LEI in person, per 60 min — see the <Link to="/en/arabic-tutor">private Arabic tutor page</Link>.</li>
-      <li><strong>Kids (6–11):</strong> in person at the centre, small groups, playful method — not running at the moment.</li>
+      <li>
+        <strong>Group course, in person (Bucharest):</strong> 700 LEI / month, 2
+        lessons of 90 min per week, max 8 students.
+      </li>
+      <li>
+        <strong>Group course, online:</strong> 500 LEI / month, 2 lessons of 90
+        min per week, max 6 students.
+      </li>
+      <li>
+        <strong>Private 1-on-1:</strong> 150 LEI online / 210 LEI in person, per
+        60 min — see the{" "}
+        <Link to="/en/arabic-tutor">private Arabic tutor page</Link>.
+      </li>
+      <li>
+        <strong>Kids (6–11):</strong> in person at the centre, small groups,
+        playful method — not running at the moment.
+      </li>
     </ul>
 
     <h2>Bucharest location</h2>
     <p>
-      Strada Icoanei 80, sector 2, Bucharest — the closest metro stations are Piața Romană (M2)
-      and Ștefan cel Mare (M1). Free WhatsApp support to plan your first visit.
+      Strada Icoanei 80, sector 2, Bucharest — the closest metro stations are
+      Piața Romană (M2) and Ștefan cel Mare (M1). Free WhatsApp support to plan
+      your first visit.
     </p>
 
     <p>
-      <Link to="/trial">Book the free 30-minute trial</Link> — you'll meet Ibra, see the method
-      live, and decide whether in-person or online fits your life better.
+      <Link to="/trial">Book the free 30-minute trial</Link> — you'll meet Ibra,
+      see the method live, and decide whether in-person or online fits your life
+      better.
     </p>
   </EnLandingLayout>
 );

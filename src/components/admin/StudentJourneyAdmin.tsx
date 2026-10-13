@@ -1,7 +1,15 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { invokeAdmin } from "@/lib/adminAuth";
 import { toast } from "@/hooks/use-toast";
-import { Loader2, CheckCircle2, Circle, Calendar, CreditCard, UserPlus, GraduationCap } from "lucide-react";
+import {
+  Loader2,
+  CheckCircle2,
+  Circle,
+  Calendar,
+  CreditCard,
+  UserPlus,
+  GraduationCap,
+} from "lucide-react";
 import { cn } from "@/lib/utils";
 import { formTypeLabels, paymentStatusLabels } from "./types";
 
@@ -19,7 +27,11 @@ interface JourneyRow {
   lead_status: string;
   bookings_count: number;
   confirmed_count: number;
-  next_booking: { start_at: string; format: string; event_type_slug: string } | null;
+  next_booking: {
+    start_at: string;
+    format: string;
+    event_type_slug: string;
+  } | null;
   last_booking: { start_at: string; end_at: string } | null;
   class_completed: boolean;
 }
@@ -50,12 +62,17 @@ const StudentJourneyAdmin = () => {
   const load = useCallback(async () => {
     setLoading(true);
     try {
-      const { data, error } = await invokeAdmin({ action: "list_student_journey" });
+      const { data, error } = await invokeAdmin({
+        action: "list_student_journey",
+      });
       if (error) throw error;
       if (data?.error) throw new Error(data.error);
       setRows(data.data ?? []);
     } catch {
-      toast({ title: "Nu am putut încărca parcursul studenților", variant: "destructive" });
+      toast({
+        title: "Nu am putut încărca parcursul studenților",
+        variant: "destructive",
+      });
     } finally {
       setLoading(false);
     }
@@ -98,9 +115,9 @@ const StudentJourneyAdmin = () => {
                 : "—",
           },
         };
-        const completedCount = (["registration", "booking", "payment", "class"] as StageKey[]).filter(
-          (k) => stages[k].done,
-        ).length;
+        const completedCount = (
+          ["registration", "booking", "payment", "class"] as StageKey[]
+        ).filter((k) => stages[k].done).length;
         return { ...r, stages, completedCount };
       }),
     [rows],
@@ -108,7 +125,8 @@ const StudentJourneyAdmin = () => {
 
   const filtered = useMemo(() => {
     if (filter === "all") return enriched;
-    if (filter === "completed") return enriched.filter((r) => r.completedCount === 4);
+    if (filter === "completed")
+      return enriched.filter((r) => r.completedCount === 4);
     return enriched.filter((r) => r.completedCount < 4);
   }, [enriched, filter]);
 
@@ -116,9 +134,12 @@ const StudentJourneyAdmin = () => {
     <section className="mb-6 rounded-lg border border-border bg-card p-4">
       <div className="mb-4 flex items-start justify-between gap-4 flex-wrap">
         <div>
-          <h2 className="text-base font-semibold text-foreground">Parcursul studenților</h2>
+          <h2 className="text-base font-semibold text-foreground">
+            Parcursul studenților
+          </h2>
           <p className="text-sm text-muted-foreground">
-            Înscriere → Programare → Plată → Lecție. Vedere unificată pentru fiecare lead.
+            Înscriere → Programare → Plată → Lecție. Vedere unificată pentru
+            fiecare lead.
           </p>
         </div>
         <div className="inline-flex rounded-md border border-border p-0.5 bg-muted/40">
@@ -151,15 +172,21 @@ const StudentJourneyAdmin = () => {
           <Loader2 className="h-4 w-4 animate-spin" /> Se încarcă…
         </div>
       ) : filtered.length === 0 ? (
-        <p className="text-sm text-muted-foreground py-4">Nicio înscriere pentru filtrul selectat.</p>
+        <p className="text-sm text-muted-foreground py-4">
+          Nicio înscriere pentru filtrul selectat.
+        </p>
       ) : (
         <ul className="divide-y divide-border">
           {filtered.map((r) => (
             <li key={r.id} className="py-3">
               <div className="flex flex-wrap items-baseline justify-between gap-2 mb-2">
                 <div className="flex items-baseline gap-2 min-w-0">
-                  <span className="font-medium text-foreground truncate">{r.name}</span>
-                  <span className="text-xs text-muted-foreground truncate">{r.email || r.phone}</span>
+                  <span className="font-medium text-foreground truncate">
+                    {r.name}
+                  </span>
+                  <span className="text-xs text-muted-foreground truncate">
+                    {r.email || r.phone}
+                  </span>
                   <span className="inline-flex px-1.5 py-0.5 rounded-[4px] text-[10px] font-medium bg-primary/10 text-primary">
                     {formTypeLabels[r.form_type] || r.form_type}
                   </span>
@@ -195,7 +222,9 @@ const StudentJourneyAdmin = () => {
                         <div
                           className={cn(
                             "text-xs truncate",
-                            s.done ? "text-foreground" : "text-muted-foreground",
+                            s.done
+                              ? "text-foreground"
+                              : "text-muted-foreground",
                           )}
                         >
                           {s.detail}

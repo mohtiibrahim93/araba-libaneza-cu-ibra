@@ -1,7 +1,21 @@
 import { useEffect, useRef, useState } from "react";
 import { useI18n } from "@/lib/i18n";
-import { courseMenu as courseLinks, resourceMenu as resourceLinks } from "@/lib/siteNav";
-import { ChevronDown, Menu, X, GraduationCap, Calendar, Sun, Moon, Phone, MessageCircle, MapPin } from "lucide-react";
+import {
+  courseMenu as courseLinks,
+  resourceMenu as resourceLinks,
+} from "@/lib/siteNav";
+import {
+  ChevronDown,
+  Menu,
+  X,
+  GraduationCap,
+  Calendar,
+  Sun,
+  Moon,
+  Phone,
+  MessageCircle,
+  MapPin,
+} from "lucide-react";
 import { useLocation, useNavigate } from "@/lib/router-compat";
 import { Link } from "@/components/LocalizedLink";
 import { scrollToAnchor, scrollToAnchorWhenReady } from "@/lib/scrollToAnchor";
@@ -12,7 +26,12 @@ import BrandLogo from "@/components/BrandLogo";
 /* Real SVG flags: emoji flags render as bare letters ("RO") on Windows, so
    the language toggle needs proper vectors. Simplified but accurate. */
 const FlagRO = ({ className }: { className?: string }) => (
-  <svg viewBox="0 0 24 16" aria-hidden="true" focusable="false" className={className}>
+  <svg
+    viewBox="0 0 24 16"
+    aria-hidden="true"
+    focusable="false"
+    className={className}
+  >
     <rect width="8" height="16" fill="#002B7F" />
     <rect x="8" width="8" height="16" fill="#FCD116" />
     <rect x="16" width="8" height="16" fill="#CE1126" />
@@ -20,7 +39,12 @@ const FlagRO = ({ className }: { className?: string }) => (
 );
 
 const FlagGB = ({ className }: { className?: string }) => (
-  <svg viewBox="0 0 24 16" aria-hidden="true" focusable="false" className={className}>
+  <svg
+    viewBox="0 0 24 16"
+    aria-hidden="true"
+    focusable="false"
+    className={className}
+  >
     <rect width="24" height="16" fill="#012169" />
     <path d="M0 0l24 16M24 0L0 16" stroke="#fff" strokeWidth="3.2" />
     <path d="M0 0l24 16M24 0L0 16" stroke="#C8102E" strokeWidth="1.6" />
@@ -42,7 +66,6 @@ import { cn } from "@/lib/utils";
 
 /** Height of the green band above the menu, in px (kept in step with h-[38px]). */
 const BAND_H = 38;
-
 
 const Navbar = () => {
   const { t, setLang, lang } = useI18n();
@@ -160,7 +183,8 @@ const Navbar = () => {
     if (!el) return;
     const apply = () => {
       const h = Math.round(el.getBoundingClientRect().height);
-      if (h > 0) document.documentElement.style.setProperty("--nav-h", `${h}px`);
+      if (h > 0)
+        document.documentElement.style.setProperty("--nav-h", `${h}px`);
     };
     apply();
     const ro = new ResizeObserver(apply);
@@ -203,7 +227,11 @@ const Navbar = () => {
           ) : (
             <FlagGB className="h-3.5 w-5 rounded-[2px] shadow-xs" />
           )}
-          <span className={cn("uppercase", tone === "light" && "hidden sm:inline")}>{lang}</span>
+          <span
+            className={cn("uppercase", tone === "light" && "hidden sm:inline")}
+          >
+            {lang}
+          </span>
           <ChevronDown className="h-3.5 w-3.5" />
         </button>
       </DropdownMenuTrigger>
@@ -227,7 +255,9 @@ const Navbar = () => {
       aria-label={isDark ? "Switch to light mode" : "Switch to dark mode"}
       className={cn(
         "inline-flex items-center justify-center transition-colors",
-        tone === "dark" ? "h-7 w-7 text-white/90 hover:text-white" : "h-10 w-10 rounded-full hover:bg-muted text-foreground",
+        tone === "dark"
+          ? "h-7 w-7 text-white/90 hover:text-white"
+          : "h-10 w-10 rounded-full hover:bg-muted text-foreground",
       )}
     >
       {isDark ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
@@ -275,7 +305,9 @@ const Navbar = () => {
               tabIndex={scrolled ? -1 : undefined}
               className="inline-flex min-w-0 items-center gap-1 truncate rounded-full bg-white/[0.12] px-3 py-1 font-semibold transition-colors hover:bg-white/20"
             >
-              <span className="hidden sm:inline">{lang === "en" ? "Next course:" : "Următorul curs:"}</span>
+              <span className="hidden sm:inline">
+                {lang === "en" ? "Next course:" : "Următorul curs:"}
+              </span>
               <span className="text-[#E9C77B]">{nextLabel}</span>
               <span className="hidden md:inline">· {seatsLabel}</span>
               <span aria-hidden="true">→</span>
@@ -286,7 +318,9 @@ const Navbar = () => {
               tabIndex={scrolled ? -1 : undefined}
               className="inline-flex items-center gap-1 rounded-full bg-white/[0.12] px-3 py-1 font-semibold hover:bg-white/20"
             >
-              {lang === "en" ? "The first trial lesson is free →" : "Prima lecție de probă e gratuită →"}
+              {lang === "en"
+                ? "The first trial lesson is free →"
+                : "Prima lecție de probă e gratuită →"}
             </Link>
           )}
           <span className="hidden items-center gap-1.5 text-white/90 lg:inline-flex">
@@ -296,7 +330,11 @@ const Navbar = () => {
           {/* WhatsApp and Programare are buttons, not plain links: the owner
               wants them found at a glance, on phones too. */}
           <div className="ml-auto flex items-center gap-2 md:gap-3">
-            <a href="tel:+40763124514" tabIndex={scrolled ? -1 : undefined} className="mr-2 hidden items-center gap-1.5 text-white/90 hover:text-white md:inline-flex">
+            <a
+              href="tel:+40763124514"
+              tabIndex={scrolled ? -1 : undefined}
+              className="mr-2 hidden items-center gap-1.5 text-white/90 hover:text-white md:inline-flex"
+            >
               <Phone className="h-3.5 w-3.5" aria-hidden="true" />
               +40 763 124 514
             </a>
@@ -319,7 +357,12 @@ const Navbar = () => {
               <Calendar className="h-3.5 w-3.5" aria-hidden="true" />
               {t.navBooking}
             </Link>
-            {isXl && <span className="ml-2 h-3.5 w-px bg-white/30" aria-hidden="true" />}
+            {isXl && (
+              <span
+                className="ml-2 h-3.5 w-px bg-white/30"
+                aria-hidden="true"
+              />
+            )}
             {isXl && (
               <span className="flex items-center gap-3">
                 {themeButton("dark")}
@@ -371,14 +414,25 @@ const Navbar = () => {
               next={next}
             />
             <div className="relative px-3 py-2 text-foreground">
-              <NavDropdown label={lang === "en" ? "Resources" : "Resurse"} items={resourceMenu} />
+              <NavDropdown
+                label={lang === "en" ? "Resources" : "Resurse"}
+                items={resourceMenu}
+              />
             </div>
-            <Link to={lang === "en" ? "/en/blog" : "/blog"} onClick={() => setOpen(false)} className={navLinkClass(false)}>
+            <Link
+              to={lang === "en" ? "/en/blog" : "/blog"}
+              onClick={() => setOpen(false)}
+              className={navLinkClass(false)}
+            >
               {t.navBlog}
             </Link>
             {/* Prices have their own page now (every price in one place); the
                 other links below are sections of the homepage. */}
-            <Link to="/preturi" onClick={() => setOpen(false)} className={navLinkClass(location.pathname === "/preturi")}>
+            <Link
+              to="/preturi"
+              onClick={() => setOpen(false)}
+              className={navLinkClass(location.pathname === "/preturi")}
+            >
               {t.navPricing}
             </Link>
             {links.map((l) => (
@@ -423,7 +477,11 @@ const Navbar = () => {
               aria-expanded={open}
               aria-controls="mobile-navigation"
             >
-              {open ? <X className="w-5 h-5" aria-hidden="true" /> : <Menu className="w-5 h-5" aria-hidden="true" />}
+              {open ? (
+                <X className="w-5 h-5" aria-hidden="true" />
+              ) : (
+                <Menu className="w-5 h-5" aria-hidden="true" />
+              )}
             </button>
           </div>
         </div>
@@ -431,7 +489,10 @@ const Navbar = () => {
 
       {/* Mobile menu */}
       {open && (
-        <div id="mobile-navigation" className="xl:hidden max-h-[calc(100vh-8rem)] overflow-y-auto border-b border-border bg-background/95 backdrop-blur-md animate-in slide-in-from-top-2 duration-200">
+        <div
+          id="mobile-navigation"
+          className="xl:hidden max-h-[calc(100vh-8rem)] overflow-y-auto border-b border-border bg-background/95 backdrop-blur-md animate-in slide-in-from-top-2 duration-200"
+        >
           <div className="flex flex-col px-6 py-2 gap-1">
             <div className="flex flex-wrap gap-2 py-3">
               <Link
@@ -485,14 +546,33 @@ const Navbar = () => {
             {/* Same three as the desktop course menu's "Nu știi ce să alegi?" —
                 the mobile menu had none of them. */}
             <p className="pt-3 text-xs font-semibold uppercase tracking-wide text-muted-foreground">
-              {lang === "en" ? "Not sure what to pick?" : "Nu știi ce să alegi?"}
+              {lang === "en"
+                ? "Not sure what to pick?"
+                : "Nu știi ce să alegi?"}
             </p>
             <div className="flex flex-col pl-6">
-              {([
-                ["/quiz", lang === "en" ? "Quiz · 30 seconds" : "Quiz · 30 de secunde"],
-                ["/test-de-nivel", lang === "en" ? "Online level test · 15 min" : "Test de nivel online · 15 min"],
-                ["/verificare-nivel", lang === "en" ? "Level check with Ibra (free)" : "Verificare de nivel cu Ibra (gratuit)"],
-              ] as const).map(([to, label]) => (
+              {(
+                [
+                  [
+                    "/quiz",
+                    lang === "en"
+                      ? "Quiz · 30 seconds"
+                      : "Quiz · 30 de secunde",
+                  ],
+                  [
+                    "/test-de-nivel",
+                    lang === "en"
+                      ? "Online level test · 15 min"
+                      : "Test de nivel online · 15 min",
+                  ],
+                  [
+                    "/verificare-nivel",
+                    lang === "en"
+                      ? "Level check with Ibra (free)"
+                      : "Verificare de nivel cu Ibra (gratuit)",
+                  ],
+                ] as const
+              ).map(([to, label]) => (
                 <Link
                   key={to}
                   to={to}

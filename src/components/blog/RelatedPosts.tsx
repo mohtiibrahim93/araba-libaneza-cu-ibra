@@ -26,14 +26,20 @@ const RelatedPosts = ({ currentSlug }: { currentSlug: string }) => {
   // An unknown slug (a draft, or a post pulled from the registry) still gets a
   // block rather than a blank: fall back to the front of the list.
   const start = here === -1 ? 0 : here + 1;
-  const posts = Array.from({ length: Math.min(3, Math.max(all.length - 1, 0)) }, (_, i) =>
-    all[(start + i) % all.length]!,
+  const posts = Array.from(
+    { length: Math.min(3, Math.max(all.length - 1, 0)) },
+    (_, i) => all[(start + i) % all.length]!,
   ).filter((p) => p.slug !== currentSlug);
   if (posts.length === 0) return null;
 
   return (
-    <section className="mt-16 border-t border-border pt-10" aria-label={lang === "en" ? "Related articles" : "Articole conexe"}>
-      <h2 className="font-display text-xl font-bold text-foreground mb-5">{lang === "en" ? "Read next" : "Citește și"}</h2>
+    <section
+      className="mt-16 border-t border-border pt-10"
+      aria-label={lang === "en" ? "Related articles" : "Articole conexe"}
+    >
+      <h2 className="font-display text-xl font-bold text-foreground mb-5">
+        {lang === "en" ? "Read next" : "Citește și"}
+      </h2>
       <ul className="grid sm:grid-cols-3 gap-4">
         {posts.map((p) => (
           <li key={p.slug}>
@@ -48,7 +54,8 @@ const RelatedPosts = ({ currentSlug }: { currentSlug: string }) => {
                 {L(p.title, lang)}
               </span>
               <span className="mt-3 inline-flex items-center gap-1 text-xs font-medium text-primary">
-                {lang === "en" ? "Read" : "Citește"} <ArrowRight className="w-3.5 h-3.5" />
+                {lang === "en" ? "Read" : "Citește"}{" "}
+                <ArrowRight className="w-3.5 h-3.5" />
               </span>
             </Link>
           </li>

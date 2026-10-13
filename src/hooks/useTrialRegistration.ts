@@ -18,7 +18,9 @@ import { useI18n } from "@/lib/i18n";
  * the gain is that nobody is asked for anything until they have seen a time
  * they want.
  */
-export function useTrialRegistration(formType: "trial" | "level_check" = "trial") {
+export function useTrialRegistration(
+  formType: "trial" | "level_check" = "trial",
+) {
   const { t, lang } = useI18n();
   // The registration this visit created, if any. Held in a ref so a retry
   // after a clashing slot reuses the row instead of writing a second one.

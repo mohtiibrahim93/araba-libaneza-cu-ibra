@@ -69,7 +69,8 @@ const EnLandingLayout = ({
   crumb,
   parents = [],
   lead: leadProp,
-  faq: faqProp, faqVisible = true,
+  faq: faqProp,
+  faqVisible = true,
   courseSchema = true,
   roHref = null,
   deHref = null,
@@ -91,7 +92,8 @@ const EnLandingLayout = ({
   const titleOverride = override?.meta_title?.trim() || "";
   const descriptionOverride = override?.meta_description?.trim() || "";
   const metaTitle = titleOverride || routeMeta?.title || metaTitleProp;
-  const description = descriptionOverride || routeMeta?.description || descriptionProp;
+  const description =
+    descriptionOverride || routeMeta?.description || descriptionProp;
   // Same rule as the Romanian LandingLayout: the route already served this
   // page's head, so what follows is only what that HTML cannot hold — the
   // fallback for a page missing from the table, and the owner's edit, which is
@@ -150,28 +152,48 @@ const EnLandingLayout = ({
       <Helmet>
         <html lang="en" />
         {!served || titleOverride ? <title>{metaTitle}</title> : null}
-        {!served || descriptionOverride ? <meta name="description" content={description} /> : null}
-        {!served || titleOverride ? <meta property="og:title" content={metaTitle} /> : null}
+        {!served || descriptionOverride ? (
+          <meta name="description" content={description} />
+        ) : null}
+        {!served || titleOverride ? (
+          <meta property="og:title" content={metaTitle} />
+        ) : null}
         {!served || descriptionOverride ? (
           <meta property="og:description" content={description} />
         ) : null}
         {!served ? <link rel="canonical" href={url} /> : null}
-        {!served && roAlt ? <link rel="alternate" hrefLang="ro" href={roAlt} /> : null}
-        {!served && roAlt ? <link rel="alternate" hrefLang="en" href={url} /> : null}
+        {!served && roAlt ? (
+          <link rel="alternate" hrefLang="ro" href={roAlt} />
+        ) : null}
+        {!served && roAlt ? (
+          <link rel="alternate" hrefLang="en" href={url} />
+        ) : null}
         {/* Only the /en/learn-lebanese-arabic page has a German sibling, and
             the cluster is only honoured if every member names every other. */}
-        {!served && roAlt && deAlt ? <link rel="alternate" hrefLang="de" href={deAlt} /> : null}
-        {!served && roAlt ? <link rel="alternate" hrefLang="x-default" href={roAlt} /> : null}
+        {!served && roAlt && deAlt ? (
+          <link rel="alternate" hrefLang="de" href={deAlt} />
+        ) : null}
+        {!served && roAlt ? (
+          <link rel="alternate" hrefLang="x-default" href={roAlt} />
+        ) : null}
         {!served ? <meta property="og:url" content={url} /> : null}
         <meta property="og:locale:alternate" content="ro_RO" />
-        {courseJsonLd && <script type="application/ld+json">{JSON.stringify(courseJsonLd)}</script>}
-        <script type="application/ld+json">{JSON.stringify(breadcrumbJsonLd)}</script>
-          {/* Skipped when the route head already carries it: a JSON-LD script
+        {courseJsonLd && (
+          <script type="application/ld+json">
+            {JSON.stringify(courseJsonLd)}
+          </script>
+        )}
+        <script type="application/ld+json">
+          {JSON.stringify(breadcrumbJsonLd)}
+        </script>
+        {/* Skipped when the route head already carries it: a JSON-LD script
               is appended rather than replaced, so both firing left the page
               with two FAQPage blocks, which Google reads as invalid. */}
-          {faqJsonLd && !seoEmitsFaq(`/en/${slug}`) && (
-            <script type="application/ld+json">{JSON.stringify(faqJsonLd)}</script>
-          )}
+        {faqJsonLd && !seoEmitsFaq(`/en/${slug}`) && (
+          <script type="application/ld+json">
+            {JSON.stringify(faqJsonLd)}
+          </script>
+        )}
       </Helmet>
 
       <Navbar />
@@ -182,67 +204,79 @@ const EnLandingLayout = ({
             <ArticleOutline containerRef={bodyRef} />
           </aside>
           <article className="min-w-0 w-full max-w-3xl lg:max-w-4xl 2xl:max-w-5xl">
-          <nav aria-label="Breadcrumb" className="flex items-center justify-between gap-3 text-sm text-muted-foreground mb-6">
-            <span>
-              {trail.slice(0, -1).map((step) => (
-                <span key={step.href}>
-                  <Link to={step.href} className="hover:text-primary">{step.name}</Link>
-                  <ChevronRight className="w-3.5 h-3.5 inline mx-1 -mt-0.5" aria-hidden />
-                </span>
-              ))}
-              <span className="text-foreground">{crumb}</span>
-            </span>
-          </nav>
+            <nav
+              aria-label="Breadcrumb"
+              className="flex items-center justify-between gap-3 text-sm text-muted-foreground mb-6"
+            >
+              <span>
+                {trail.slice(0, -1).map((step) => (
+                  <span key={step.href}>
+                    <Link to={step.href} className="hover:text-primary">
+                      {step.name}
+                    </Link>
+                    <ChevronRight
+                      className="w-3.5 h-3.5 inline mx-1 -mt-0.5"
+                      aria-hidden
+                    />
+                  </span>
+                ))}
+                <span className="text-foreground">{crumb}</span>
+              </span>
+            </nav>
 
-          <header className="mb-10 space-y-4">
-            <h1 className="font-display text-display-xl font-bold tracking-tight text-foreground">{title}</h1>
-            <p className="text-lg text-muted-foreground">{lead}</p>
-          </header>
+            <header className="mb-10 space-y-4">
+              <h1 className="font-display text-display-xl font-bold tracking-tight text-foreground">
+                {title}
+              </h1>
+              <p className="text-lg text-muted-foreground">{lead}</p>
+            </header>
 
-          <div ref={bodyRef}>
-          <div className="space-y-8 text-foreground/80 leading-relaxed [&_h2]:font-display [&_h2]:text-2xl [&_h2]:md:text-3xl [&_h2]:font-bold [&_h2]:text-foreground [&_h2]:mt-10 [&_h2]:mb-3 [&_h3]:font-semibold [&_h3]:text-foreground [&_h3]:text-lg [&_h3]:mt-6 [&_h3]:mb-2 [&_p]:leading-relaxed [&_ul]:list-disc [&_ul]:list-inside [&_ul]:space-y-2 [&_a:not([data-cta])]:text-primary [&_a:not([data-cta])]:underline">
-            {bodyMd ? <MarkdownBody markdown={bodyMd} /> : children}
+            <div ref={bodyRef}>
+              <div className="space-y-8 text-foreground/80 leading-relaxed [&_h2]:font-display [&_h2]:text-2xl [&_h2]:md:text-3xl [&_h2]:font-bold [&_h2]:text-foreground [&_h2]:mt-10 [&_h2]:mb-3 [&_h3]:font-semibold [&_h3]:text-foreground [&_h3]:text-lg [&_h3]:mt-6 [&_h3]:mb-2 [&_p]:leading-relaxed [&_ul]:list-disc [&_ul]:list-inside [&_ul]:space-y-2 [&_a:not([data-cta])]:text-primary [&_a:not([data-cta])]:underline">
+                {bodyMd ? <MarkdownBody markdown={bodyMd} /> : children}
 
-            {faqVisible && faq?.length ? (
-              <section>
-                <h2>Frequently asked questions</h2>
-                <div className="space-y-4 mt-4">
-                  {faq.map(({ q, a }) => (
-                    <div key={q} className="rounded-lg border border-border bg-muted/30 p-4">
-                      <h3 className="font-semibold text-foreground">{q}</h3>
-                      <p className="text-sm mt-1">{a}</p>
+                {faqVisible && faq?.length ? (
+                  <section>
+                    <h2>Frequently asked questions</h2>
+                    <div className="space-y-4 mt-4">
+                      {faq.map(({ q, a }) => (
+                        <div
+                          key={q}
+                          className="rounded-lg border border-border bg-muted/30 p-4"
+                        >
+                          <h3 className="font-semibold text-foreground">{q}</h3>
+                          <p className="text-sm mt-1">{a}</p>
+                        </div>
+                      ))}
                     </div>
-                  ))}
-                </div>
-              </section>
-            ) : null}
-          </div>
-
-          </div>
-
-
-          <div className="mt-16 rounded-xl border border-border bg-primary/5 p-6 md:p-8 text-center space-y-4">
-            <h2 className="font-display text-2xl font-bold text-foreground">
-              Start with a free trial lesson
-            </h2>
-            <p className="text-muted-foreground">
-              30 minutes with a native teacher — online worldwide or in person in Bucharest. No obligation.
-            </p>
-            <div className="flex flex-col sm:flex-row gap-3 justify-center">
-              <Link
-                to="/trial"
-                className="inline-block bg-primary text-primary-foreground px-6 py-3 rounded-lg font-semibold hover:bg-primary/90 transition"
-              >
-                Book a free trial
-              </Link>
-              <Link
-                to="/en/learn-lebanese-arabic"
-                className="inline-block border border-border px-6 py-3 rounded-lg font-semibold text-foreground hover:bg-muted transition"
-              >
-                See the Lebanese course
-              </Link>
+                  </section>
+                ) : null}
+              </div>
             </div>
-          </div>
+
+            <div className="mt-16 rounded-xl border border-border bg-primary/5 p-6 md:p-8 text-center space-y-4">
+              <h2 className="font-display text-2xl font-bold text-foreground">
+                Start with a free trial lesson
+              </h2>
+              <p className="text-muted-foreground">
+                30 minutes with a native teacher — online worldwide or in person
+                in Bucharest. No obligation.
+              </p>
+              <div className="flex flex-col sm:flex-row gap-3 justify-center">
+                <Link
+                  to="/trial"
+                  className="inline-block bg-primary text-primary-foreground px-6 py-3 rounded-lg font-semibold hover:bg-primary/90 transition"
+                >
+                  Book a free trial
+                </Link>
+                <Link
+                  to="/en/learn-lebanese-arabic"
+                  className="inline-block border border-border px-6 py-3 rounded-lg font-semibold text-foreground hover:bg-muted transition"
+                >
+                  See the Lebanese course
+                </Link>
+              </div>
+            </div>
           </article>
         </div>
       </main>

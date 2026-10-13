@@ -7,16 +7,34 @@ import { useI18n } from "@/lib/i18n";
 // site stays there, so the same answer never lives on two URLs.
 const FAQ = [
   {
-    q: { ro: "Ce vârstă are grupa de copii și ce urmează după?", en: "What age is the kids group, and what comes after it?" },
-    a: { ro: "Cursul pentru copii este gândit pentru 6–11 ani, fizic, la centru. De la 12 ani există grupa de adolescenți, cu o abordare diferită: conversație, muzică și limbaj de social media.", en: "The kids course is built for ages 6–11, in person at the centre. From 12 there is the teen group, with a different approach: conversation, music and social-media language." },
+    q: {
+      ro: "Ce vârstă are grupa de copii și ce urmează după?",
+      en: "What age is the kids group, and what comes after it?",
+    },
+    a: {
+      ro: "Cursul pentru copii este gândit pentru 6–11 ani, fizic, la centru. De la 12 ani există grupa de adolescenți, cu o abordare diferită: conversație, muzică și limbaj de social media.",
+      en: "The kids course is built for ages 6–11, in person at the centre. From 12 there is the teen group, with a different approach: conversation, music and social-media language.",
+    },
   },
   {
-    q: { ro: "Trebuie să știu și eu arabă ca să-mi ajut copilul?", en: "Do I need to know Arabic myself to support my child?" },
-    a: { ro: "Nu. Lecțiile sunt construite să funcționeze independent de ce știu părinții. Ajută însă enorm expunerea acasă — muzică, desene sau câteva cuvinte repetate în joacă.", en: "No. Lessons are built to work regardless of what the parents know. What helps enormously is exposure at home — music, cartoons, or a few words repeated in play." },
+    q: {
+      ro: "Trebuie să știu și eu arabă ca să-mi ajut copilul?",
+      en: "Do I need to know Arabic myself to support my child?",
+    },
+    a: {
+      ro: "Nu. Lecțiile sunt construite să funcționeze independent de ce știu părinții. Ajută însă enorm expunerea acasă — muzică, desene sau câteva cuvinte repetate în joacă.",
+      en: "No. Lessons are built to work regardless of what the parents know. What helps enormously is exposure at home — music, cartoons, or a few words repeated in play.",
+    },
   },
   {
-    q: { ro: "Cum arată o lecție pentru copii?", en: "What does a lesson for children look like?" },
-    a: { ro: "Prin joc, cântece și povești, cu mult mai puțină scriere decât la adulți. Accentul cade pe ureche și pe pronunție, exact vârsta la care se prind cel mai ușor sunetele noi.", en: "Through play, songs and stories, with far less writing than for adults. The focus is on the ear and on pronunciation — exactly the age when new sounds are picked up most easily." },
+    q: {
+      ro: "Cum arată o lecție pentru copii?",
+      en: "What does a lesson for children look like?",
+    },
+    a: {
+      ro: "Prin joc, cântece și povești, cu mult mai puțină scriere decât la adulți. Accentul cade pe ureche și pe pronunție, exact vârsta la care se prind cel mai ușor sunetele noi.",
+      en: "Through play, songs and stories, with far less writing than for adults. The focus is on the ear and on pronunciation — exactly the age when new sounds are picked up most easily.",
+    },
   },
 ];
 
@@ -26,7 +44,10 @@ const ArabaPentruCopii = () => {
   return (
     <BlogArticleLayout
       slug="araba-pentru-copii-ghidul-parintilor"
-      title={{ ro: "Cursuri de arabă pentru copii: ghidul părinților", en: "Arabic courses for kids: a parents' guide" }}
+      title={{
+        ro: "Cursuri de arabă pentru copii: ghidul părinților",
+        en: "Arabic courses for kids: a parents' guide",
+      }}
       description={{
         ro: "De la ce vârstă pot învăța copiii arabă libaneză, cum arată o lecție, ce metode funcționează și cum îi ajuți acasă. Ghid practic pentru părinți.",
         en: "From what age kids can learn Lebanese Arabic, what a lesson looks like, which methods work and how to help at home. A practical guide for parents.",
@@ -42,10 +63,22 @@ const ArabaPentruCopii = () => {
     >
       <Tldr
         points={[
-          { ro: "Cursul pentru copii acoperă 6–11 ani, fizic, la centru; de la 12 ani urmează grupa de adolescenți.", en: "The kids course covers ages 6–11, in person at the centre; from 12 the teen group follows." },
-          { ro: "Se învață prin joc, cântece și povești, nu prin gramatică și caiete.", en: "Learning happens through play, songs and stories, not grammar and workbooks." },
-          { ro: "Copiii prind sunetele noi mai ușor decât adulții — e vârsta potrivită pentru pronunție.", en: "Children pick up new sounds more easily than adults — it is the right age for pronunciation." },
-          { ro: "Nu trebuie să știi arabă ca părinte; expunerea acasă contează mai mult.", en: "You do not need to know Arabic as a parent; exposure at home matters more." },
+          {
+            ro: "Cursul pentru copii acoperă 6–11 ani, fizic, la centru; de la 12 ani urmează grupa de adolescenți.",
+            en: "The kids course covers ages 6–11, in person at the centre; from 12 the teen group follows.",
+          },
+          {
+            ro: "Se învață prin joc, cântece și povești, nu prin gramatică și caiete.",
+            en: "Learning happens through play, songs and stories, not grammar and workbooks.",
+          },
+          {
+            ro: "Copiii prind sunetele noi mai ușor decât adulții — e vârsta potrivită pentru pronunție.",
+            en: "Children pick up new sounds more easily than adults — it is the right age for pronunciation.",
+          },
+          {
+            ro: "Nu trebuie să știi arabă ca părinte; expunerea acasă contează mai mult.",
+            en: "You do not need to know Arabic as a parent; exposure at home matters more.",
+          },
         ]}
       />
       <p>
@@ -56,42 +89,105 @@ const ArabaPentruCopii = () => {
 
       <h2>{en ? "From what age?" : "De la ce vârstă?"}</h2>
       <p>
-        {en ? "At the Lebanese Arabic Center, the " : "La Centrul de Arabă Libaneză, "}
-        <Link to="/cursuri/copii">{en ? "kids course" : "cursul pentru copii"}</Link>
+        {en
+          ? "At the Lebanese Arabic Center, the "
+          : "La Centrul de Arabă Libaneză, "}
+        <Link to="/cursuri/copii">
+          {en ? "kids course" : "cursul pentru copii"}
+        </Link>
         {en ? " is designed for ages " : " este gândit pentru "}
-        <strong>{en ? "6–11" : "6–11 ani"}</strong>{en ? ", online." : ", online."}
-        {en ? " Under 6, we recommend exposure at home (songs, cartoons) before a structured course. We don't have kids' courses at the moment — leave your details and we'll let you know." : " Sub 6 ani, recomandăm expunerea acasă (cântece, desene) înainte de un curs structurat. Momentan nu avem cursuri pentru copii — lasă-ți datele și te anunțăm."}
+        <strong>{en ? "6–11" : "6–11 ani"}</strong>
+        {en ? ", online." : ", online."}
+        {en
+          ? " Under 6, we recommend exposure at home (songs, cartoons) before a structured course. We don't have kids' courses at the moment — leave your details and we'll let you know."
+          : " Sub 6 ani, recomandăm expunerea acasă (cântece, desene) înainte de un curs structurat. Momentan nu avem cursuri pentru copii — lasă-ți datele și te anunțăm."}
       </p>
 
       <h2>{en ? "What a lesson looks like" : "Cum arată o lecție"}</h2>
       <ul>
-        <li>{en ? "Small groups, so every child is actively involved." : "Grupe mici, ca fiecare copil să fie implicat activ."}</li>
-        <li>{en ? "The " : "Metoda "}<strong>Oral First</strong>{en ? " method — kids speak from the start, with no pressure to write." : " — copiii vorbesc de la început, fără presiunea scrisului."}</li>
-        <li><Link to="/blog/ce-este-arabizi">{en ? "Arabizi" : "Arabizi"}</Link>{en ? " or the Arabic alphabet (Lebanese written in Arabic letters, not standard Arabic) — the parents choose, and the other one can be added later." : " sau alfabetul arab (libaneza scrisă cu litere arabe, nu araba standard) — alegerea e a părinților, iar celălalt sistem se poate adăuga mai târziu."}</li>
-        <li>{en ? "Songs, role-play and words tied to their world: family, animals, food, colours." : "Cântece, jocuri de rol și cuvinte legate de viața lor: familie, animale, mâncare, culori."}</li>
-        <li>{en ? "Age-appropriate Lebanese culture — " : "Cultură libaneză adaptată vârstei — "}<Link to="/blog/cultura-libaneza-obiceiuri-mancare-traditii">{en ? "customs and food" : "obiceiuri și mâncare"}</Link>.</li>
+        <li>
+          {en
+            ? "Small groups, so every child is actively involved."
+            : "Grupe mici, ca fiecare copil să fie implicat activ."}
+        </li>
+        <li>
+          {en ? "The " : "Metoda "}
+          <strong>Oral First</strong>
+          {en
+            ? " method — kids speak from the start, with no pressure to write."
+            : " — copiii vorbesc de la început, fără presiunea scrisului."}
+        </li>
+        <li>
+          <Link to="/blog/ce-este-arabizi">{en ? "Arabizi" : "Arabizi"}</Link>
+          {en
+            ? " or the Arabic alphabet (Lebanese written in Arabic letters, not standard Arabic) — the parents choose, and the other one can be added later."
+            : " sau alfabetul arab (libaneza scrisă cu litere arabe, nu araba standard) — alegerea e a părinților, iar celălalt sistem se poate adăuga mai târziu."}
+        </li>
+        <li>
+          {en
+            ? "Songs, role-play and words tied to their world: family, animals, food, colours."
+            : "Cântece, jocuri de rol și cuvinte legate de viața lor: familie, animale, mâncare, culori."}
+        </li>
+        <li>
+          {en
+            ? "Age-appropriate Lebanese culture — "
+            : "Cultură libaneză adaptată vârstei — "}
+          <Link to="/blog/cultura-libaneza-obiceiuri-mancare-traditii">
+            {en ? "customs and food" : "obiceiuri și mâncare"}
+          </Link>
+          .
+        </li>
       </ul>
 
-      <h2>{en ? "Why Lebanese Arabic and not Classical?" : "De ce arabă libaneză și nu clasică?"}</h2>
+      <h2>
+        {en
+          ? "Why Lebanese Arabic and not Classical?"
+          : "De ce arabă libaneză și nu clasică?"}
+      </h2>
       <p>
-        {en ? "For kids with Lebanese roots or a speaking family, the " : "Pentru copiii cu rădăcini libaneze sau cu familie vorbitoare, dialectul "}
-        <Link to="/blog/araba-libaneza-vs-araba-standard">{en ? "Lebanese dialect" : "libanez"}</Link>
+        {en
+          ? "For kids with Lebanese roots or a speaking family, the "
+          : "Pentru copiii cu rădăcini libaneze sau cu familie vorbitoare, dialectul "}
+        <Link to="/blog/araba-libaneza-vs-araba-standard">
+          {en ? "Lebanese dialect" : "libanez"}
+        </Link>
         {en
           ? " is the language they hear at home and on the phone with their grandparents — the living one, not the Arabic of textbooks. That's how they learn a language they actually "
           : " este limba pe care o aud acasă și la telefon cu bunicii — cea vie, nu araba din manuale. Așa învață o limbă pe care o și "}
         <em>{en ? "use" : "folosesc"}</em>.
       </p>
 
-      <h2>{en ? "How to help your child at home" : "Cum îți ajuți copilul acasă"}</h2>
+      <h2>
+        {en ? "How to help your child at home" : "Cum îți ajuți copilul acasă"}
+      </h2>
       <ul>
-        <li>{en ? "Listen to Lebanese children's music together." : "Ascultați împreună muzică libanească pentru copii."}</li>
-        <li>{en ? "Use newly learned words in the daily routine (good morning, thank you)." : "Folosiți cuvintele nou învățate în rutina zilnică (bună dimineața, mulțumesc)."}</li>
-        <li>{en ? "No pressure — praise and play work far better than correction." : "Fără presiune — lauda și jocul funcționează mult mai bine decât corectarea."}</li>
-        <li>{en ? "A short call with speaking relatives works wonders for motivation." : "Un apel scurt cu rude vorbitoare face minuni pentru motivație."}</li>
+        <li>
+          {en
+            ? "Listen to Lebanese children's music together."
+            : "Ascultați împreună muzică libanească pentru copii."}
+        </li>
+        <li>
+          {en
+            ? "Use newly learned words in the daily routine (good morning, thank you)."
+            : "Folosiți cuvintele nou învățate în rutina zilnică (bună dimineața, mulțumesc)."}
+        </li>
+        <li>
+          {en
+            ? "No pressure — praise and play work far better than correction."
+            : "Fără presiune — lauda și jocul funcționează mult mai bine decât corectarea."}
+        </li>
+        <li>
+          {en
+            ? "A short call with speaking relatives works wonders for motivation."
+            : "Un apel scurt cu rude vorbitoare face minuni pentru motivație."}
+        </li>
       </ul>
 
       <InlineCta
-        title={{ ro: "Cursul pentru copii, în detaliu", en: "The kids course, in detail" }}
+        title={{
+          ro: "Cursul pentru copii, în detaliu",
+          en: "The kids course, in detail",
+        }}
         text={{
           ro: "6–11 ani, prin joc, poveste și activitate — nu prin gramatică. Grupă mică, online.",
           en: "Ages 6–11, through play, story and activity — not grammar. Small group, online.",
@@ -100,13 +196,25 @@ const ArabaPentruCopii = () => {
         label={{ ro: "Vezi cursul pentru copii", en: "See the kids course" }}
       />
 
-
       <h2>{en ? "How to start" : "Cum începeți"}</h2>
       <p>
-        {en ? "The simplest way is a short chat so we can gauge your child's level and interest. Message us on " : "Cel mai simplu e o discuție scurtă ca să vedem nivelul și interesul copilului. Scrie-ne pe "}
-        <a href="https://wa.me/40763124514" target="_blank" rel="noopener noreferrer">WhatsApp</a>
-        {en ? " or see the details and price on the " : " sau vezi detaliile și prețul pe pagina de "}
-        <Link to="/cursuri/copii">{en ? "kids course" : "curs pentru copii"}</Link> {en ? "page." : ""}
+        {en
+          ? "The simplest way is a short chat so we can gauge your child's level and interest. Message us on "
+          : "Cel mai simplu e o discuție scurtă ca să vedem nivelul și interesul copilului. Scrie-ne pe "}
+        <a
+          href="https://wa.me/40763124514"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          WhatsApp
+        </a>
+        {en
+          ? " or see the details and price on the "
+          : " sau vezi detaliile și prețul pe pagina de "}
+        <Link to="/cursuri/copii">
+          {en ? "kids course" : "curs pentru copii"}
+        </Link>{" "}
+        {en ? "page." : ""}
       </p>
     </BlogArticleLayout>
   );

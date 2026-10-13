@@ -19,7 +19,9 @@ async function fetchSlots(): Promise<KidsSlot[]> {
   const [{ data: slots, error }, { data: counts }] = await Promise.all([
     supabase
       .from("kids_class_slots")
-      .select("id, weekday, start_time, duration_min, format, location, max_seats, sort_order")
+      .select(
+        "id, weekday, start_time, duration_min, format, location, max_seats, sort_order",
+      )
       .eq("is_active", true)
       .order("weekday", { ascending: true })
       .order("start_time", { ascending: true }),
@@ -69,8 +71,16 @@ export function useKidsSlots() {
 
     const channel = supabase
       .channel(`kids-slot-updates-${Math.random().toString(36).slice(2)}`)
-      .on("postgres_changes", { event: "*", schema: "public", table: "registrations" }, load)
-      .on("postgres_changes", { event: "*", schema: "public", table: "kids_class_slots" }, load)
+      .on(
+        "postgres_changes",
+        { event: "*", schema: "public", table: "registrations" },
+        load,
+      )
+      .on(
+        "postgres_changes",
+        { event: "*", schema: "public", table: "kids_class_slots" },
+        load,
+      )
       .subscribe();
 
     return () => {

@@ -75,11 +75,20 @@ export const resourceMenu = (lang: "ro" | "en"): NavLink[] =>
         { to: "/joc", label: "The Yalla game (in Romanian)" },
         { to: "/en/learn-lebanese-arabic", label: "Learn Lebanese Arabic" },
         { to: "/en/how-to-learn-lebanese-arabic", label: "How to learn it" },
-        { to: "/blog/lebanese-arabic-learning-resources", label: "Free learning resources" },
+        {
+          to: "/blog/lebanese-arabic-learning-resources",
+          label: "Free learning resources",
+        },
         { to: "/blog/lebanese-arabic-phrases", label: "Essential phrases" },
         { to: "/en/arabic-dialects-guide", label: "Arabic dialects guide" },
-        { to: "/en/lebanese-arabic-vs-msa-vs-egyptian", label: "Lebanese vs MSA vs Egyptian" },
-        { to: "/en/arabic-classes-near-me", label: "Arabic classes in Bucharest" },
+        {
+          to: "/en/lebanese-arabic-vs-msa-vs-egyptian",
+          label: "Lebanese vs MSA vs Egyptian",
+        },
+        {
+          to: "/en/arabic-classes-near-me",
+          label: "Arabic classes in Bucharest",
+        },
         { to: "/en/arabic-tutor", label: "1-on-1 Arabic tutor" },
       ]
     : [
@@ -92,12 +101,18 @@ export const resourceMenu = (lang: "ro" | "en"): NavLink[] =>
         { to: "/ce-araba-sa-inveti", label: "Ce arabă să înveți" },
         { to: "/araba-pentru-partener", label: "Arabă pentru partener" },
         { to: "/araba-in-familie", label: "Arabă în familie" },
-        { to: "/cursuri-araba-bucuresti", label: "Cursuri de arabă în București" },
+        {
+          to: "/cursuri-araba-bucuresti",
+          label: "Cursuri de arabă în București",
+        },
         { to: "/meditatii-araba", label: "Meditații arabă 1:1" },
       ];
 
 /** Both menus with their headings — what the footer renders as a site map. */
 export const navGroups = (lang: "ro" | "en"): NavGroup[] => [
   { heading: lang === "en" ? "Courses" : "Cursuri", links: courseMenu(lang) },
-  { heading: lang === "en" ? "Resources" : "Resurse", links: resourceMenu(lang) },
+  {
+    heading: lang === "en" ? "Resources" : "Resurse",
+    links: resourceMenu(lang),
+  },
 ];

@@ -18,7 +18,9 @@ const AdminNav = ({ onLogout, rightSlot }: AdminNavProps) => {
         <div className="flex items-center gap-1 min-w-0">
           {isPrivateLead ? (
             <Button asChild variant="ghost" size="sm">
-              <Link to="/admin"><ArrowLeft className="w-4 h-4" /> Admin</Link>
+              <Link to="/admin">
+                <ArrowLeft className="w-4 h-4" /> Admin
+              </Link>
             </Button>
           ) : (
             <>

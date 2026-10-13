@@ -27,15 +27,58 @@ export interface FoundPage {
 }
 
 /** Never recommended: private, transactional or dead-end routes. */
-const EXCLUDED = /^\/(admin|auth|checkout|booking\/|plata|payment|thank-you|multumesc|unsubscribe|dezabonare|stergere-date)/;
+const EXCLUDED =
+  /^\/(admin|auth|checkout|booking\/|plata|payment|thank-you|multumesc|unsubscribe|dezabonare|stergere-date)/;
 
 const STOPWORDS = new Set([
   // Romanian
-  "de", "la", "in", "cu", "si", "pe", "pentru", "din", "un", "o", "un", "ale", "al", "a", "ce",
-  "cum", "sa", "se", "te", "mai", "cel", "cea", "este", "sunt", "va", "vor", "fara", "prin",
+  "de",
+  "la",
+  "in",
+  "cu",
+  "si",
+  "pe",
+  "pentru",
+  "din",
+  "un",
+  "o",
+  "un",
+  "ale",
+  "al",
+  "a",
+  "ce",
+  "cum",
+  "sa",
+  "se",
+  "te",
+  "mai",
+  "cel",
+  "cea",
+  "este",
+  "sunt",
+  "va",
+  "vor",
+  "fara",
+  "prin",
   // English
-  "the", "a", "an", "of", "for", "and", "to", "in", "on", "with", "your", "you", "how", "what",
-  "is", "are", "best", "learn",
+  "the",
+  "a",
+  "an",
+  "of",
+  "for",
+  "and",
+  "to",
+  "in",
+  "on",
+  "with",
+  "your",
+  "you",
+  "how",
+  "what",
+  "is",
+  "are",
+  "best",
+  "learn",
 ]);
 
 /** Lowercase, strip diacritics, split into comparable word stems. */
@@ -57,9 +100,24 @@ export function tokenize(input: string): string[] {
 function stem(word: string): string {
   let w = word;
   if (w.length > 5 && w.endsWith("urile")) w = w.slice(0, -5);
-  else if (w.length > 4 && (w.endsWith("uri") || w.endsWith("ile") || w.endsWith("ing"))) w = w.slice(0, -3);
-  else if (w.length > 3 && (w.endsWith("le") || w.endsWith("ul") || w.endsWith("ii") || w.endsWith("es"))) w = w.slice(0, -2);
-  else if (w.length > 3 && (w.endsWith("i") || w.endsWith("e") || w.endsWith("s") || w.endsWith("a"))) w = w.slice(0, -1);
+  else if (
+    w.length > 4 &&
+    (w.endsWith("uri") || w.endsWith("ile") || w.endsWith("ing"))
+  )
+    w = w.slice(0, -3);
+  else if (
+    w.length > 3 &&
+    (w.endsWith("le") ||
+      w.endsWith("ul") ||
+      w.endsWith("ii") ||
+      w.endsWith("es"))
+  )
+    w = w.slice(0, -2);
+  else if (
+    w.length > 3 &&
+    (w.endsWith("i") || w.endsWith("e") || w.endsWith("s") || w.endsWith("a"))
+  )
+    w = w.slice(0, -1);
   return w;
 }
 
@@ -70,13 +128,18 @@ export function searchablePages(): FoundPage[] {
   if (index) return index;
   const articles = new Set(BLOG_POSTS.map((p) => p.slug));
   index = allSeoRoutes()
-    .filter((r) => !r.canonical && !r.noindex && r.lang !== "de" && !EXCLUDED.test(r.path))
+    .filter(
+      (r) =>
+        !r.canonical && !r.noindex && r.lang !== "de" && !EXCLUDED.test(r.path),
+    )
     .map((r) => ({
       path: r.path,
       title: r.title,
       description: r.description,
       lang: (r.lang === "en" ? "en" : "ro") as "ro" | "en",
-      article: articles.has(r.path.replace(/^\/(en\/)?blog\//, "")) && r.path.includes("/blog/"),
+      article:
+        articles.has(r.path.replace(/^\/(en\/)?blog\//, "")) &&
+        r.path.includes("/blog/"),
     }));
   return index;
 }
@@ -103,7 +166,11 @@ function score(page: FoundPage, wanted: string[]): number {
   return s - page.path.split("/").length * 0.1;
 }
 
-function rank(pages: FoundPage[], wanted: string[], limit: number): FoundPage[] {
+function rank(
+  pages: FoundPage[],
+  wanted: string[],
+  limit: number,
+): FoundPage[] {
   const scored: Scored[] = pages
     .map((page) => ({ page, score: score(page, wanted) }))
     .filter((s) => s.score > 0)
@@ -118,18 +185,24 @@ function rank(pages: FoundPage[], wanted: string[], limit: number): FoundPage[] 
  * English visitor is not handed Romanian pages.
  */
 export function suggestFor(pathname: string, limit = 3): FoundPage[] {
-  const lang: "ro" | "en" = pathname.startsWith("/en/") || pathname === "/en" ? "en" : "ro";
+  const lang: "ro" | "en" =
+    pathname.startsWith("/en/") || pathname === "/en" ? "en" : "ro";
   const wanted = tokenize(pathname.replace(/^\/en\//, "/"));
   const sameLang = searchablePages().filter((p) => p.lang === lang);
   const hits = rank(sameLang, wanted, limit);
   // A Romanian-only page (the game, the resources) is still the right answer
   // for an English reader when nothing English matches.
-  if (hits.length === 0 && lang === "en") return rank(searchablePages(), wanted, limit);
+  if (hits.length === 0 && lang === "en")
+    return rank(searchablePages(), wanted, limit);
   return hits;
 }
 
 /** Free-text search over the same index, filtered to one language. */
-export function searchPages(query: string, lang: "ro" | "en", limit = 8): FoundPage[] {
+export function searchPages(
+  query: string,
+  lang: "ro" | "en",
+  limit = 8,
+): FoundPage[] {
   const wanted = tokenize(query);
   if (wanted.length === 0) return [];
   return rank(
@@ -150,17 +223,26 @@ export const COURSE_PICKS: Recommendation[] = [
   {
     to: "/cursuri/grup",
     label: { ro: "Curs de grup (A1–C2)", en: "Group course (A1–C2)" },
-    note: { ro: "Grupe mici, București sau online", en: "Small groups, Bucharest or online" },
+    note: {
+      ro: "Grupe mici, București sau online",
+      en: "Small groups, Bucharest or online",
+    },
   },
   {
     to: "/cursuri/private",
     label: { ro: "Lecții private", en: "Private lessons" },
-    note: { ro: "Program flexibil, 1:1 cu Ibra", en: "Flexible schedule, 1-on-1 with Ibra" },
+    note: {
+      ro: "Program flexibil, 1:1 cu Ibra",
+      en: "Flexible schedule, 1-on-1 with Ibra",
+    },
   },
   {
     to: "/cursuri/copii",
     label: { ro: "Copii (6–11 ani)", en: "Kids (6–11)" },
-    note: { ro: "Doar fizic, prin joc și povești", en: "In person only, through play and stories" },
+    note: {
+      ro: "Doar fizic, prin joc și povești",
+      en: "In person only, through play and stories",
+    },
   },
   {
     to: "/cursuri-araba-adolescenti",
@@ -186,16 +268,25 @@ export const RESOURCE_PICKS: Recommendation[] = [
   {
     to: "/test-de-nivel",
     label: { ro: "Test de nivel", en: "Level test" },
-    note: { ro: "~15 minute, îți spune de unde pornești", en: "~15 minutes, tells you where to start" },
+    note: {
+      ro: "~15 minute, îți spune de unde pornești",
+      en: "~15 minutes, tells you where to start",
+    },
   },
   {
     to: "/resurse",
     label: { ro: "Resurse gratuite (PDF)", en: "Free resources (PDF)" },
-    note: { ro: "Arabizi, 100 de expresii, plan de 30 de zile", en: "Arabizi, 100 phrases, 30-day plan" },
+    note: {
+      ro: "Arabizi, 100 de expresii, plan de 30 de zile",
+      en: "Arabizi, 100 phrases, 30-day plan",
+    },
   },
   {
     to: "/arabizi",
     label: { ro: "Ghidul arabizi", en: "The arabizi guide" },
-    note: { ro: "Citește libaneza fără alfabetul arab", en: "Read Lebanese without the Arabic script" },
+    note: {
+      ro: "Citește libaneza fără alfabetul arab",
+      en: "Read Lebanese without the Arabic script",
+    },
   },
 ];

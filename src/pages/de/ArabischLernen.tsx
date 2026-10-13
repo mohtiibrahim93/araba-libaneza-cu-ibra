@@ -1,6 +1,12 @@
 import { Helmet } from "react-helmet-async";
 import { Link } from "@/lib/router-compat";
-import { ChevronRight, Globe, Users, GraduationCap, MessageCircle } from "lucide-react";
+import {
+  ChevronRight,
+  Globe,
+  Users,
+  GraduationCap,
+  MessageCircle,
+} from "lucide-react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import WhatsAppButton from "@/components/WhatsAppButton";
@@ -81,7 +87,9 @@ const ArabischLernen = () => (
     <Helmet>
       <html lang="de" />
       <script type="application/ld+json">{JSON.stringify(courseJsonLd)}</script>
-      <script type="application/ld+json">{JSON.stringify(breadcrumbJsonLd)}</script>
+      <script type="application/ld+json">
+        {JSON.stringify(breadcrumbJsonLd)}
+      </script>
       <script type="application/ld+json">{JSON.stringify(faqJsonLd)}</script>
     </Helmet>
 
@@ -89,9 +97,17 @@ const ArabischLernen = () => (
 
     <main id="main-content" className="pt-24 pb-16">
       <article className="w-full max-w-3xl 2xl:max-w-4xl mx-auto px-gutter">
-        <nav aria-label="Breadcrumb" className="text-sm text-muted-foreground mb-6">
-          <Link to="/" className="hover:text-primary">Home</Link>
-          <ChevronRight className="w-3.5 h-3.5 inline mx-1 -mt-0.5" aria-hidden />
+        <nav
+          aria-label="Breadcrumb"
+          className="text-sm text-muted-foreground mb-6"
+        >
+          <Link to="/" className="hover:text-primary">
+            Home
+          </Link>
+          <ChevronRight
+            className="w-3.5 h-3.5 inline mx-1 -mt-0.5"
+            aria-hidden
+          />
           <span className="text-foreground">Arabisch lernen</span>
         </nav>
 
@@ -100,19 +116,35 @@ const ArabischLernen = () => (
             Arabisch lernen online — libanesisch mit Muttersprachler
           </h1>
           <p className="text-lg text-muted-foreground">
-            Live-Kurse in libanesischem Arabisch — der levantinische Dialekt, den rund 30 Millionen
-            Menschen im Libanon, Syrien, Jordanien und Palästina sprechen. Sprich ab Lektion eins,
-            ohne mit dem Alphabet zu beginnen. A1 bis C2.
+            Live-Kurse in libanesischem Arabisch — der levantinische Dialekt,
+            den rund 30 Millionen Menschen im Libanon, Syrien, Jordanien und
+            Palästina sprechen. Sprich ab Lektion eins, ohne mit dem Alphabet zu
+            beginnen. A1 bis C2.
           </p>
         </header>
 
         <div className="grid sm:grid-cols-3 gap-4 my-8">
           {[
-            { icon: Globe, title: "Online weltweit", desc: "Zoom-Kurse aus D/A/CH — nur eine Stunde Zeitunterschied zu Bukarest." },
-            { icon: Users, title: "Einzeln oder in Gruppen", desc: "1:1-Unterricht nach deinen Zielen oder Kleingruppen: max. 6 Teilnehmende online, 8 vor Ort." },
-            { icon: GraduationCap, title: "CEFR A1 → C2", desc: "Sechs Niveaus, vom Überleben bis zur vollen Flüssigkeit." },
+            {
+              icon: Globe,
+              title: "Online weltweit",
+              desc: "Zoom-Kurse aus D/A/CH — nur eine Stunde Zeitunterschied zu Bukarest.",
+            },
+            {
+              icon: Users,
+              title: "Einzeln oder in Gruppen",
+              desc: "1:1-Unterricht nach deinen Zielen oder Kleingruppen: max. 6 Teilnehmende online, 8 vor Ort.",
+            },
+            {
+              icon: GraduationCap,
+              title: "CEFR A1 → C2",
+              desc: "Sechs Niveaus, vom Überleben bis zur vollen Flüssigkeit.",
+            },
           ].map(({ icon: Icon, title, desc }) => (
-            <div key={title} className="rounded-xl border border-border bg-card p-5">
+            <div
+              key={title}
+              className="rounded-xl border border-border bg-card p-5"
+            >
               <Icon className="w-5 h-5 text-primary mb-2" />
               <p className="text-sm font-bold text-foreground mb-1">{title}</p>
               <p className="text-xs text-muted-foreground">{desc}</p>
@@ -123,25 +155,42 @@ const ArabischLernen = () => (
         <div className="space-y-8 text-foreground/80 leading-relaxed [&_h2]:font-display [&_h2]:text-2xl [&_h2]:md:text-3xl [&_h2]:font-bold [&_h2]:text-foreground [&_h2]:mt-10 [&_h2]:mb-3 [&_h3]:font-semibold [&_h3]:text-foreground [&_h3]:text-lg [&_h3]:mt-6 [&_h3]:mb-2 [&_ul]:list-disc [&_ul]:list-inside [&_ul]:space-y-2 [&_a:not([data-cta])]:text-primary [&_a:not([data-cta])]:underline">
           <h2>Warum libanesisches Arabisch lernen?</h2>
           <p>
-            Libanesisches Arabisch ist die lebendige Sprache des Libanon — was Menschen zu Hause,
-            auf TikTok, in Musik und in Serien sprechen. Dank jahrzehntelanger libanesischer
-            Medienpräsenz ist es einer der am weitesten verstandenen arabischen Dialekte im gesamten
-            Nahen Osten.
+            Libanesisches Arabisch ist die lebendige Sprache des Libanon — was
+            Menschen zu Hause, auf TikTok, in Musik und in Serien sprechen. Dank
+            jahrzehntelanger libanesischer Medienpräsenz ist es einer der am
+            weitesten verstandenen arabischen Dialekte im gesamten Nahen Osten.
           </p>
           <ul>
-            <li><strong>Sprechen ab Lektion eins:</strong> kein Alphabet als Hürde — du startest mit Arabizi (lateinische Umschrift).</li>
-            <li><strong>Echte Gespräche auf A2:</strong> Vorstellung, Einkauf, Wegbeschreibung, Smalltalk — A1 in etwa 4 Monaten, A2 nach etwa 11.</li>
-            <li><strong>Verstehe libanesische Medien:</strong> Musik, Serien, YouTube — im Original.</li>
-            <li><strong>Reisen und Familie:</strong> mit libanesischsprachigen Menschen im Libanon und der Diaspora sprechen.</li>
-            <li><strong>Tor zum Levant:</strong> libanesisch ist gegenseitig verständlich mit syrisch, jordanisch und palästinensisch.</li>
+            <li>
+              <strong>Sprechen ab Lektion eins:</strong> kein Alphabet als Hürde
+              — du startest mit Arabizi (lateinische Umschrift).
+            </li>
+            <li>
+              <strong>Echte Gespräche auf A2:</strong> Vorstellung, Einkauf,
+              Wegbeschreibung, Smalltalk — A1 in etwa 4 Monaten, A2 nach etwa
+              11.
+            </li>
+            <li>
+              <strong>Verstehe libanesische Medien:</strong> Musik, Serien,
+              YouTube — im Original.
+            </li>
+            <li>
+              <strong>Reisen und Familie:</strong> mit libanesischsprachigen
+              Menschen im Libanon und der Diaspora sprechen.
+            </li>
+            <li>
+              <strong>Tor zum Levant:</strong> libanesisch ist gegenseitig
+              verständlich mit syrisch, jordanisch und palästinensisch.
+            </li>
           </ul>
 
           <h2>Libanesisches Arabisch vs. Hocharabisch (MSA)</h2>
           <p>
-            Hocharabisch (Modern Standard Arabic, MSA / Fusha) ist die geschriebene, formelle
-            Sprache — in Nachrichten, Gesetzen, religiösen Texten. Zu Hause spricht sie niemand.
-            Wenn dein Ziel echtes Sprechen ist, ist der libanesische Dialekt der kürzere Weg. MSA
-            kannst du später für Lesen und formelles Schreiben dazulernen.
+            Hocharabisch (Modern Standard Arabic, MSA / Fusha) ist die
+            geschriebene, formelle Sprache — in Nachrichten, Gesetzen,
+            religiösen Texten. Zu Hause spricht sie niemand. Wenn dein Ziel
+            echtes Sprechen ist, ist der libanesische Dialekt der kürzere Weg.
+            MSA kannst du später für Lesen und formelles Schreiben dazulernen.
           </p>
 
           <h2>Kursformate</h2>
@@ -151,36 +200,60 @@ const ArabischLernen = () => (
                 <Users className="w-4 h-4 text-primary" /> Gruppenkurse
               </h3>
               <p className="text-sm text-muted-foreground">
-                Kleine Gruppen (max. 6 Personen online, 8 vor Ort), 2× pro Woche, 90 Minuten pro Einheit. Online oder in
-                Bukarest. Fester Stundenplan mit klarem CEFR-Curriculum.
+                Kleine Gruppen (max. 6 Personen online, 8 vor Ort), 2× pro
+                Woche, 90 Minuten pro Einheit. Online oder in Bukarest. Fester
+                Stundenplan mit klarem CEFR-Curriculum.
               </p>
-              <p className="text-sm font-medium text-foreground mt-3">Ab 500 LEI / Monat (~100 €) online</p>
+              <p className="text-sm font-medium text-foreground mt-3">
+                Ab 500 LEI / Monat (~100 €) online
+              </p>
             </div>
             <div className="rounded-xl border border-border bg-muted/30 p-5">
               <h3 className="text-base font-semibold text-foreground mb-2 flex items-center gap-2">
                 <MessageCircle className="w-4 h-4 text-primary" /> Privatstunden
               </h3>
               <p className="text-sm text-muted-foreground">
-                1:1-Unterricht nach deinen Zielen und deinem Tempo. Flexibler Zeitplan. Online
-                weltweit oder Präsenz in Bukarest.
+                1:1-Unterricht nach deinen Zielen und deinem Tempo. Flexibler
+                Zeitplan. Online weltweit oder Präsenz in Bukarest.
               </p>
-              <p className="text-sm font-medium text-foreground mt-3">150 LEI online · 210 LEI vor Ort / Lektion</p>
+              <p className="text-sm font-medium text-foreground mt-3">
+                150 LEI online · 210 LEI vor Ort / Lektion
+              </p>
             </div>
           </div>
 
           <h2>Wie wir unterrichten</h2>
           <ul>
-            <li><strong>Oral first:</strong> Sprechen ab Lektion eins mit Arabizi. A1–A2 rein mündlich, ab B1 oder B2 wenn die ganze Gruppe es will mit arabischer Schrift.</li>
-            <li><strong>Muttersprachler:</strong> Ibra ist libanesischer Muttersprachler mit über 5 Jahren Unterrichtserfahrung.</li>
-            <li><strong>CEFR-Struktur:</strong> sechs Niveaus A1 → C2, vom Überleben bis zur vollen Flüssigkeit.</li>
-            <li><strong>Echte Konversation:</strong> jede Lektion baut auf etwas, das du im Alltag sagen kannst.</li>
-            <li><strong>Unterrichtssprache:</strong> Englisch, Französisch, Arabisch oder Rumänisch — du wählst.</li>
+            <li>
+              <strong>Oral first:</strong> Sprechen ab Lektion eins mit Arabizi.
+              A1–A2 rein mündlich, ab B1 oder B2 wenn die ganze Gruppe es will
+              mit arabischer Schrift.
+            </li>
+            <li>
+              <strong>Muttersprachler:</strong> Ibra ist libanesischer
+              Muttersprachler mit über 5 Jahren Unterrichtserfahrung.
+            </li>
+            <li>
+              <strong>CEFR-Struktur:</strong> sechs Niveaus A1 → C2, vom
+              Überleben bis zur vollen Flüssigkeit.
+            </li>
+            <li>
+              <strong>Echte Konversation:</strong> jede Lektion baut auf etwas,
+              das du im Alltag sagen kannst.
+            </li>
+            <li>
+              <strong>Unterrichtssprache:</strong> Englisch, Französisch,
+              Arabisch oder Rumänisch — du wählst.
+            </li>
           </ul>
 
           <h2>Häufig gestellte Fragen</h2>
           <div className="space-y-4 mt-4">
             {FAQ.map(({ q, a }) => (
-              <div key={q} className="rounded-lg border border-border bg-muted/30 p-4">
+              <div
+                key={q}
+                className="rounded-lg border border-border bg-muted/30 p-4"
+              >
                 <h3 className="font-semibold text-foreground">{q}</h3>
                 <p className="text-sm mt-1">{a}</p>
               </div>
@@ -193,14 +266,16 @@ const ArabischLernen = () => (
             Starte mit einer kostenlosen Probestunde
           </h2>
           <p className="text-muted-foreground">
-            30 Minuten mit einem Muttersprachler — online weltweit oder in Präsenz in Bukarest.
-            Kostenlos: Zur Reservierung hinterlegst du eine Karte, die nur bei Nichterscheinen oder einer Absage unter 24 Stunden mit 150 LEI belastet wird.
+            30 Minuten mit einem Muttersprachler — online weltweit oder in
+            Präsenz in Bukarest. Kostenlos: Zur Reservierung hinterlegst du eine
+            Karte, die nur bei Nichterscheinen oder einer Absage unter 24
+            Stunden mit 150 LEI belastet wird.
           </p>
           <div className="flex flex-col sm:flex-row gap-3 justify-center">
             <Link
               to="/trial"
               data-cta
-        className="inline-block bg-primary text-primary-foreground px-gutter py-3 rounded-lg font-semibold hover:bg-primary/90 transition"
+              className="inline-block bg-primary text-primary-foreground px-gutter py-3 rounded-lg font-semibold hover:bg-primary/90 transition"
             >
               Probestunde buchen
             </Link>

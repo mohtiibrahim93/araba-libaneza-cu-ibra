@@ -27,7 +27,9 @@ const CourseRequestsAdmin = () => {
     setLoading(true);
     setError(null);
     try {
-      const { data, error: fnError } = await invokeAdmin({ action: "list_course_requests" });
+      const { data, error: fnError } = await invokeAdmin({
+        action: "list_course_requests",
+      });
       if (fnError) throw fnError;
       if (data?.error) throw new Error(data.error);
       setRows(data.data || []);
@@ -51,22 +53,32 @@ const CourseRequestsAdmin = () => {
           </span>
           <div>
             <h2 className="text-base font-semibold text-foreground">
-              Cereri „anunță-mă” <span className="text-muted-foreground font-normal">({rows.length})</span>
+              Cereri „anunță-mă”{" "}
+              <span className="text-muted-foreground font-normal">
+                ({rows.length})
+              </span>
             </h2>
             <p className="text-sm text-muted-foreground">
-              Persoane care așteaptă să pornească o grupă (grupe tineri, niveluri viitoare).
+              Persoane care așteaptă să pornească o grupă (grupe tineri,
+              niveluri viitoare).
             </p>
           </div>
         </div>
         <Button variant="outline" size="sm" onClick={load} disabled={loading}>
-          {loading ? <Loader2 className="h-4 w-4 animate-spin" /> : <RefreshCw className="h-4 w-4" />}
+          {loading ? (
+            <Loader2 className="h-4 w-4 animate-spin" />
+          ) : (
+            <RefreshCw className="h-4 w-4" />
+          )}
         </Button>
       </div>
 
       {error ? (
         <p className="text-sm text-destructive">{error}</p>
       ) : rows.length === 0 && !loading ? (
-        <p className="text-sm text-muted-foreground py-4">Nicio cerere momentan.</p>
+        <p className="text-sm text-muted-foreground py-4">
+          Nicio cerere momentan.
+        </p>
       ) : (
         <div className="overflow-x-auto">
           <table className="w-full text-sm">
@@ -84,17 +96,38 @@ const CourseRequestsAdmin = () => {
                 <tr key={r.id} className="border-b border-border/60 align-top">
                   <td className="py-2.5 pr-3 whitespace-nowrap text-xs text-muted-foreground">
                     {new Date(r.created_at).toLocaleDateString("ro-RO", {
-                      day: "2-digit", month: "short", year: "numeric",
+                      day: "2-digit",
+                      month: "short",
+                      year: "numeric",
                     })}
                   </td>
-                  <td className="py-2.5 px-3 font-medium text-foreground">{r.name}</td>
-                  <td className="py-2.5 px-3">
-                    <a href={`tel:${r.phone}`} className="block text-foreground hover:text-primary">{r.phone}</a>
-                    {r.email && <a href={`mailto:${r.email}`} className="block text-xs text-muted-foreground hover:text-primary">{r.email}</a>}
+                  <td className="py-2.5 px-3 font-medium text-foreground">
+                    {r.name}
                   </td>
-                  <td className="py-2.5 px-3 text-muted-foreground">{r.format || "—"}</td>
+                  <td className="py-2.5 px-3">
+                    <a
+                      href={`tel:${r.phone}`}
+                      className="block text-foreground hover:text-primary"
+                    >
+                      {r.phone}
+                    </a>
+                    {r.email && (
+                      <a
+                        href={`mailto:${r.email}`}
+                        className="block text-xs text-muted-foreground hover:text-primary"
+                      >
+                        {r.email}
+                      </a>
+                    )}
+                  </td>
+                  <td className="py-2.5 px-3 text-muted-foreground">
+                    {r.format || "—"}
+                  </td>
                   <td className="py-2.5 pl-3 text-muted-foreground max-w-[240px]">
-                    {(r.notes || r.lesson_type || "—").replace(/^Cerere „anunță-mă”:\s*/, "")}
+                    {(r.notes || r.lesson_type || "—").replace(
+                      /^Cerere „anunță-mă”:\s*/,
+                      "",
+                    )}
                   </td>
                 </tr>
               ))}

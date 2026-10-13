@@ -8,7 +8,8 @@ import BookingLanding from "@/components/booking/BookingLanding";
 const BookingInner = () => {
   const { t } = useI18n();
   const [params] = useSearchParams();
-  const type = (params.get("type") === "paid" ? "paid" : "trial") as "trial" | "paid";
+  const type = (params.get("type") === "paid" ? "paid" : "trial") as
+    "trial" | "paid";
   const registrationId = params.get("registration_id");
   const hasValidRegistration =
     !!registrationId && /^[0-9a-f-]{36}$/i.test(registrationId);
@@ -44,7 +45,9 @@ const BookingInner = () => {
           {type === "paid" ? t.bookingPageTitlePaid : t.bookingPageTitleTrial}
         </h1>
         <p className="text-muted-foreground mb-8">
-          {type === "paid" ? t.bookingPageSubtitlePaid : t.bookingPageSubtitleTrial}
+          {type === "paid"
+            ? t.bookingPageSubtitlePaid
+            : t.bookingPageSubtitleTrial}
         </p>
         <NativeScheduler eventType={type} registrationId={registrationId} />
       </div>

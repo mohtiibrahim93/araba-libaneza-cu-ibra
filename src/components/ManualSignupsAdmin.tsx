@@ -25,7 +25,14 @@ interface ManualSignup {
 }
 
 const LEVELS = ["A1", "A2", "B1", "B2", "C1", "C2"];
-const SOURCES = ["whatsapp", "tiktok", "instagram", "direct", "telefon", "other"];
+const SOURCES = [
+  "whatsapp",
+  "tiktok",
+  "instagram",
+  "direct",
+  "telefon",
+  "other",
+];
 const SOURCE_LABELS: Record<string, string> = {
   whatsapp: "WhatsApp",
   tiktok: "TikTok",
@@ -61,12 +68,17 @@ const ManualSignupsAdmin = () => {
   const load = useCallback(async () => {
     setLoading(true);
     try {
-      const { data, error } = await invokeAdmin({ action: "list_manual_signups" });
+      const { data, error } = await invokeAdmin({
+        action: "list_manual_signups",
+      });
       if (error) throw error;
       if (data?.error) throw new Error(data.error);
       setRows(data.data);
     } catch {
-      toast({ title: "Nu am putut încărca înscrierile manuale", variant: "destructive" });
+      toast({
+        title: "Nu am putut încărca înscrierile manuale",
+        variant: "destructive",
+      });
     } finally {
       setLoading(false);
     }
@@ -108,10 +120,18 @@ const ManualSignupsAdmin = () => {
   };
 
   const remove = async (id: string) => {
-    if (!confirm("Ștergi această înscriere manuală? Locurile ocupate se recalculează.")) return;
+    if (
+      !confirm(
+        "Ștergi această înscriere manuală? Locurile ocupate se recalculează.",
+      )
+    )
+      return;
     setDeletingId(id);
     try {
-      const { data, error } = await invokeAdmin({ action: "delete_manual_signup", id });
+      const { data, error } = await invokeAdmin({
+        action: "delete_manual_signup",
+        id,
+      });
       if (error) throw error;
       if (data?.error) throw new Error(data.error);
       setRows((prev) => prev.filter((r) => r.id !== id));
@@ -124,17 +144,21 @@ const ManualSignupsAdmin = () => {
 
   const rowLabel = (r: ManualSignup) => {
     if (r.form_type === "kids") return "Copii";
-    const fmt = r.format === "fizic" ? "Fizic" : r.format === "online" ? "Online" : "—";
+    const fmt =
+      r.format === "fizic" ? "Fizic" : r.format === "online" ? "Online" : "—";
     return `Grup · ${r.level ?? "—"} · ${fmt}`;
   };
 
   return (
     <section className="mb-6 rounded-lg border border-border bg-card p-4">
       <div className="mb-4">
-        <h2 className="text-base font-semibold text-foreground">Înscrieri manuale (alte surse)</h2>
+        <h2 className="text-base font-semibold text-foreground">
+          Înscrieri manuale (alte surse)
+        </h2>
         <p className="text-sm text-muted-foreground">
-          Adaugă doar un număr de locuri ocupate pentru un nivel. Pentru un cursant cu nume, telefon și
-          plată, folosește „Adaugă un cursant manual” de mai sus — acolo alegi exact grupa.
+          Adaugă doar un număr de locuri ocupate pentru un nivel. Pentru un
+          cursant cu nume, telefon și plată, folosește „Adaugă un cursant
+          manual” de mai sus — acolo alegi exact grupa.
         </p>
       </div>
 
@@ -144,9 +168,13 @@ const ManualSignupsAdmin = () => {
           <Label className="text-xs">Tip</Label>
           <Select
             value={draft.form_type}
-            onValueChange={(v) => setDraft((d) => ({ ...d, form_type: v as "group" | "kids" }))}
+            onValueChange={(v) =>
+              setDraft((d) => ({ ...d, form_type: v as "group" | "kids" }))
+            }
           >
-            <SelectTrigger className="w-28"><SelectValue /></SelectTrigger>
+            <SelectTrigger className="w-28">
+              <SelectValue />
+            </SelectTrigger>
             <SelectContent>
               <SelectItem value="group">Grup</SelectItem>
               <SelectItem value="kids">Copii</SelectItem>
@@ -158,10 +186,19 @@ const ManualSignupsAdmin = () => {
           <>
             <div className="space-y-1">
               <Label className="text-xs">Nivel</Label>
-              <Select value={draft.level} onValueChange={(v) => setDraft((d) => ({ ...d, level: v }))}>
-                <SelectTrigger className="w-24"><SelectValue /></SelectTrigger>
+              <Select
+                value={draft.level}
+                onValueChange={(v) => setDraft((d) => ({ ...d, level: v }))}
+              >
+                <SelectTrigger className="w-24">
+                  <SelectValue />
+                </SelectTrigger>
                 <SelectContent>
-                  {LEVELS.map((l) => <SelectItem key={l} value={l}>{l}</SelectItem>)}
+                  {LEVELS.map((l) => (
+                    <SelectItem key={l} value={l}>
+                      {l}
+                    </SelectItem>
+                  ))}
                 </SelectContent>
               </Select>
             </div>
@@ -169,9 +206,13 @@ const ManualSignupsAdmin = () => {
               <Label className="text-xs">Format</Label>
               <Select
                 value={draft.format}
-                onValueChange={(v) => setDraft((d) => ({ ...d, format: v as "fizic" | "online" }))}
+                onValueChange={(v) =>
+                  setDraft((d) => ({ ...d, format: v as "fizic" | "online" }))
+                }
               >
-                <SelectTrigger className="w-28"><SelectValue /></SelectTrigger>
+                <SelectTrigger className="w-28">
+                  <SelectValue />
+                </SelectTrigger>
                 <SelectContent>
                   <SelectItem value="fizic">Fizic</SelectItem>
                   <SelectItem value="online">Online</SelectItem>
@@ -183,10 +224,19 @@ const ManualSignupsAdmin = () => {
 
         <div className="space-y-1">
           <Label className="text-xs">Sursă</Label>
-          <Select value={draft.source} onValueChange={(v) => setDraft((d) => ({ ...d, source: v }))}>
-            <SelectTrigger className="w-32"><SelectValue /></SelectTrigger>
+          <Select
+            value={draft.source}
+            onValueChange={(v) => setDraft((d) => ({ ...d, source: v }))}
+          >
+            <SelectTrigger className="w-32">
+              <SelectValue />
+            </SelectTrigger>
             <SelectContent>
-              {SOURCES.map((s) => <SelectItem key={s} value={s}>{SOURCE_LABELS[s]}</SelectItem>)}
+              {SOURCES.map((s) => (
+                <SelectItem key={s} value={s}>
+                  {SOURCE_LABELS[s]}
+                </SelectItem>
+              ))}
             </SelectContent>
           </Select>
         </div>
@@ -203,7 +253,11 @@ const ManualSignupsAdmin = () => {
         </div>
 
         <Button type="button" size="sm" onClick={add} disabled={saving}>
-          {saving ? <Loader2 className="h-4 w-4 animate-spin" /> : <Plus className="h-4 w-4" />}
+          {saving ? (
+            <Loader2 className="h-4 w-4 animate-spin" />
+          ) : (
+            <Plus className="h-4 w-4" />
+          )}
           Adaugă
         </Button>
       </div>
@@ -214,7 +268,9 @@ const ManualSignupsAdmin = () => {
           <Loader2 className="h-4 w-4 animate-spin" /> Se încarcă…
         </div>
       ) : rows.length === 0 ? (
-        <p className="text-sm text-muted-foreground">Nicio înscriere manuală încă.</p>
+        <p className="text-sm text-muted-foreground">
+          Nicio înscriere manuală încă.
+        </p>
       ) : (
         <div className="space-y-2">
           {rows.map((r) => (
@@ -222,8 +278,12 @@ const ManualSignupsAdmin = () => {
               key={r.id}
               className="flex flex-wrap items-center gap-3 rounded-md border border-border bg-background px-3 py-2 text-sm"
             >
-              <span className="font-medium text-foreground min-w-[150px]">{rowLabel(r)}</span>
-              <span className="text-muted-foreground">{SOURCE_LABELS[r.source] || r.source}</span>
+              <span className="font-medium text-foreground min-w-[150px]">
+                {rowLabel(r)}
+              </span>
+              <span className="text-muted-foreground">
+                {SOURCE_LABELS[r.source] || r.source}
+              </span>
               <span className="font-semibold text-primary">+{r.count}</span>
               <Button
                 type="button"

@@ -25,12 +25,18 @@ const EN_FOR_RO: Record<string, string> = {
   "/cursuri-araba-adolescenti": "/en/arabic-for-teenagers",
   // Dialect cluster
   "/dialecte-arabe": "/en/arabic-dialects-guide",
-  "/dialecte-arabe/libaneza-vs-egipteana": "/en/arabic-dialects-guide/lebanese-vs-egyptian-arabic",
-  "/dialecte-arabe/libaneza-vs-siriana": "/en/arabic-dialects-guide/lebanese-vs-syrian-arabic",
-  "/dialecte-arabe/levantina-vs-golf": "/en/arabic-dialects-guide/levantine-vs-gulf-arabic",
-  "/dialecte-arabe/levantina-vs-irakiana": "/en/arabic-dialects-guide/levantine-vs-iraqi-arabic",
-  "/dialecte-arabe/levantina-vs-maghrebina": "/en/arabic-dialects-guide/levantine-vs-maghrebi-arabic",
-  "/dialecte-arabe/levantina-vs-peninsulara": "/en/arabic-dialects-guide/levantine-vs-peninsular-arabic",
+  "/dialecte-arabe/libaneza-vs-egipteana":
+    "/en/arabic-dialects-guide/lebanese-vs-egyptian-arabic",
+  "/dialecte-arabe/libaneza-vs-siriana":
+    "/en/arabic-dialects-guide/lebanese-vs-syrian-arabic",
+  "/dialecte-arabe/levantina-vs-golf":
+    "/en/arabic-dialects-guide/levantine-vs-gulf-arabic",
+  "/dialecte-arabe/levantina-vs-irakiana":
+    "/en/arabic-dialects-guide/levantine-vs-iraqi-arabic",
+  "/dialecte-arabe/levantina-vs-maghrebina":
+    "/en/arabic-dialects-guide/levantine-vs-maghrebi-arabic",
+  "/dialecte-arabe/levantina-vs-peninsulara":
+    "/en/arabic-dialects-guide/levantine-vs-peninsular-arabic",
   "/ce-araba-sa-inveti": "/en/lebanese-arabic-vs-msa-vs-egyptian",
   // Resources / method
   // These three point at the resources article, which now has an English URL
@@ -74,11 +80,15 @@ const EN_FOR_RO: Record<string, string> = {
   "/intrebari-frecvente": "/en/faq",
   // Blog: every article has an exact English twin at the same slug.
   "/blog": "/en/blog",
-  "/blog/lebanese-arabic-learning-resources": "/en/blog/lebanese-arabic-learning-resources",
+  "/blog/lebanese-arabic-learning-resources":
+    "/en/blog/lebanese-arabic-learning-resources",
   "/blog/siriaca-in-araba-libaneza": "/en/blog/siriaca-in-araba-libaneza",
-  "/blog/fenicienii-si-identitatea-libaneza": "/en/blog/fenicienii-si-identitatea-libaneza",
-  "/blog/garshuni-si-tiparnita-de-la-qozhaya": "/en/blog/garshuni-si-tiparnita-de-la-qozhaya",
-  "/blog/sfantul-efrem-sirul-si-biserica-maronita": "/en/blog/sfantul-efrem-sirul-si-biserica-maronita",
+  "/blog/fenicienii-si-identitatea-libaneza":
+    "/en/blog/fenicienii-si-identitatea-libaneza",
+  "/blog/garshuni-si-tiparnita-de-la-qozhaya":
+    "/en/blog/garshuni-si-tiparnita-de-la-qozhaya",
+  "/blog/sfantul-efrem-sirul-si-biserica-maronita":
+    "/en/blog/sfantul-efrem-sirul-si-biserica-maronita",
   "/blog/limbile-vorbite-in-liban": "/en/blog/limbile-vorbite-in-liban",
   "/blog/de-ce-invatam-araba-in-2026": "/en/blog/de-ce-invatam-araba-in-2026",
   "/blog/lebanese-arabic-phrases": "/en/blog/lebanese-arabic-phrases",
@@ -86,15 +96,22 @@ const EN_FOR_RO: Record<string, string> = {
   "/blog/invata-araba-libaneza-online": "/en/blog/invata-araba-libaneza-online",
   "/blog/numere-in-araba-libaneza": "/en/blog/numere-in-araba-libaneza",
   "/blog/cum-alegi-profesor-de-araba": "/en/blog/cum-alegi-profesor-de-araba",
-  "/blog/cat-dureaza-sa-inveti-araba-libaneza": "/en/blog/cat-dureaza-sa-inveti-araba-libaneza",
-  "/blog/araba-pentru-copii-ghidul-parintilor": "/en/blog/araba-pentru-copii-ghidul-parintilor",
-  "/blog/cat-costa-cursurile-de-araba-libaneza": "/en/blog/cat-costa-cursurile-de-araba-libaneza",
-  "/blog/alfabetul-arab-pentru-incepatori": "/en/blog/alfabetul-arab-pentru-incepatori",
+  "/blog/cat-dureaza-sa-inveti-araba-libaneza":
+    "/en/blog/cat-dureaza-sa-inveti-araba-libaneza",
+  "/blog/araba-pentru-copii-ghidul-parintilor":
+    "/en/blog/araba-pentru-copii-ghidul-parintilor",
+  "/blog/cat-costa-cursurile-de-araba-libaneza":
+    "/en/blog/cat-costa-cursurile-de-araba-libaneza",
+  "/blog/alfabetul-arab-pentru-incepatori":
+    "/en/blog/alfabetul-arab-pentru-incepatori",
   "/blog/ce-este-arabizi": "/en/blog/ce-este-arabizi",
-  "/blog/cultura-libaneza-obiceiuri-mancare-traditii": "/en/blog/cultura-libaneza-obiceiuri-mancare-traditii",
+  "/blog/cultura-libaneza-obiceiuri-mancare-traditii":
+    "/en/blog/cultura-libaneza-obiceiuri-mancare-traditii",
   "/blog/cum-saluti-in-libaneza": "/en/blog/cum-saluti-in-libaneza",
-  "/blog/primele-20-de-expresii-libaneze": "/en/blog/primele-20-de-expresii-libaneze",
-  "/blog/araba-libaneza-vs-araba-standard": "/en/blog/araba-libaneza-vs-araba-standard",
+  "/blog/primele-20-de-expresii-libaneze":
+    "/en/blog/primele-20-de-expresii-libaneze",
+  "/blog/araba-libaneza-vs-araba-standard":
+    "/en/blog/araba-libaneza-vs-araba-standard",
   "/blog/cum-inveti-araba-libaneza": "/en/blog/cum-inveti-araba-libaneza",
   "/blog/gramatica-arabei-libaneze": "/en/blog/gramatica-arabei-libaneze",
   // German landing: send English speakers to the English hub
@@ -109,12 +126,18 @@ const RO_FOR_EN: Record<string, string> = {
   "/en/arabic-for-teenagers": "/cursuri-araba-adolescenti",
   "/en/learn-lebanese-arabic": "/cursuri-limba-araba",
   "/en/arabic-dialects-guide": "/dialecte-arabe",
-  "/en/arabic-dialects-guide/lebanese-vs-egyptian-arabic": "/dialecte-arabe/libaneza-vs-egipteana",
-  "/en/arabic-dialects-guide/lebanese-vs-syrian-arabic": "/dialecte-arabe/libaneza-vs-siriana",
-  "/en/arabic-dialects-guide/levantine-vs-gulf-arabic": "/dialecte-arabe/levantina-vs-golf",
-  "/en/arabic-dialects-guide/levantine-vs-iraqi-arabic": "/dialecte-arabe/levantina-vs-irakiana",
-  "/en/arabic-dialects-guide/levantine-vs-maghrebi-arabic": "/dialecte-arabe/levantina-vs-maghrebina",
-  "/en/arabic-dialects-guide/levantine-vs-peninsular-arabic": "/dialecte-arabe/levantina-vs-peninsulara",
+  "/en/arabic-dialects-guide/lebanese-vs-egyptian-arabic":
+    "/dialecte-arabe/libaneza-vs-egipteana",
+  "/en/arabic-dialects-guide/lebanese-vs-syrian-arabic":
+    "/dialecte-arabe/libaneza-vs-siriana",
+  "/en/arabic-dialects-guide/levantine-vs-gulf-arabic":
+    "/dialecte-arabe/levantina-vs-golf",
+  "/en/arabic-dialects-guide/levantine-vs-iraqi-arabic":
+    "/dialecte-arabe/levantina-vs-irakiana",
+  "/en/arabic-dialects-guide/levantine-vs-maghrebi-arabic":
+    "/dialecte-arabe/levantina-vs-maghrebina",
+  "/en/arabic-dialects-guide/levantine-vs-peninsular-arabic":
+    "/dialecte-arabe/levantina-vs-peninsulara",
   "/en/arabic-classes-near-me": "/cursuri-araba-bucuresti",
   "/en/lebanese-arabic-vs-msa-vs-egyptian": "/ce-araba-sa-inveti",
   "/en/how-to-learn-lebanese-arabic": "/blog/cum-inveti-araba-libaneza",
@@ -145,11 +168,15 @@ const RO_FOR_EN: Record<string, string> = {
   "/en/courses/group/c2": "/cursuri/grup/c2",
   // Blog twins, the other way round.
   "/en/blog": "/blog",
-  "/en/blog/lebanese-arabic-learning-resources": "/blog/lebanese-arabic-learning-resources",
+  "/en/blog/lebanese-arabic-learning-resources":
+    "/blog/lebanese-arabic-learning-resources",
   "/en/blog/siriaca-in-araba-libaneza": "/blog/siriaca-in-araba-libaneza",
-  "/en/blog/fenicienii-si-identitatea-libaneza": "/blog/fenicienii-si-identitatea-libaneza",
-  "/en/blog/garshuni-si-tiparnita-de-la-qozhaya": "/blog/garshuni-si-tiparnita-de-la-qozhaya",
-  "/en/blog/sfantul-efrem-sirul-si-biserica-maronita": "/blog/sfantul-efrem-sirul-si-biserica-maronita",
+  "/en/blog/fenicienii-si-identitatea-libaneza":
+    "/blog/fenicienii-si-identitatea-libaneza",
+  "/en/blog/garshuni-si-tiparnita-de-la-qozhaya":
+    "/blog/garshuni-si-tiparnita-de-la-qozhaya",
+  "/en/blog/sfantul-efrem-sirul-si-biserica-maronita":
+    "/blog/sfantul-efrem-sirul-si-biserica-maronita",
   "/en/blog/limbile-vorbite-in-liban": "/blog/limbile-vorbite-in-liban",
   "/en/blog/de-ce-invatam-araba-in-2026": "/blog/de-ce-invatam-araba-in-2026",
   "/en/blog/lebanese-arabic-phrases": "/blog/lebanese-arabic-phrases",
@@ -157,15 +184,22 @@ const RO_FOR_EN: Record<string, string> = {
   "/en/blog/invata-araba-libaneza-online": "/blog/invata-araba-libaneza-online",
   "/en/blog/numere-in-araba-libaneza": "/blog/numere-in-araba-libaneza",
   "/en/blog/cum-alegi-profesor-de-araba": "/blog/cum-alegi-profesor-de-araba",
-  "/en/blog/cat-dureaza-sa-inveti-araba-libaneza": "/blog/cat-dureaza-sa-inveti-araba-libaneza",
-  "/en/blog/araba-pentru-copii-ghidul-parintilor": "/blog/araba-pentru-copii-ghidul-parintilor",
-  "/en/blog/cat-costa-cursurile-de-araba-libaneza": "/blog/cat-costa-cursurile-de-araba-libaneza",
-  "/en/blog/alfabetul-arab-pentru-incepatori": "/blog/alfabetul-arab-pentru-incepatori",
+  "/en/blog/cat-dureaza-sa-inveti-araba-libaneza":
+    "/blog/cat-dureaza-sa-inveti-araba-libaneza",
+  "/en/blog/araba-pentru-copii-ghidul-parintilor":
+    "/blog/araba-pentru-copii-ghidul-parintilor",
+  "/en/blog/cat-costa-cursurile-de-araba-libaneza":
+    "/blog/cat-costa-cursurile-de-araba-libaneza",
+  "/en/blog/alfabetul-arab-pentru-incepatori":
+    "/blog/alfabetul-arab-pentru-incepatori",
   "/en/blog/ce-este-arabizi": "/blog/ce-este-arabizi",
-  "/en/blog/cultura-libaneza-obiceiuri-mancare-traditii": "/blog/cultura-libaneza-obiceiuri-mancare-traditii",
+  "/en/blog/cultura-libaneza-obiceiuri-mancare-traditii":
+    "/blog/cultura-libaneza-obiceiuri-mancare-traditii",
   "/en/blog/cum-saluti-in-libaneza": "/blog/cum-saluti-in-libaneza",
-  "/en/blog/primele-20-de-expresii-libaneze": "/blog/primele-20-de-expresii-libaneze",
-  "/en/blog/araba-libaneza-vs-araba-standard": "/blog/araba-libaneza-vs-araba-standard",
+  "/en/blog/primele-20-de-expresii-libaneze":
+    "/blog/primele-20-de-expresii-libaneze",
+  "/en/blog/araba-libaneza-vs-araba-standard":
+    "/blog/araba-libaneza-vs-araba-standard",
   "/en/blog/cum-inveti-araba-libaneza": "/blog/cum-inveti-araba-libaneza",
   "/en/blog/gramatica-arabei-libaneze": "/blog/gramatica-arabei-libaneze",
 };
@@ -175,7 +209,10 @@ const RO_FOR_EN: Record<string, string> = {
  * current page has no dedicated twin (the toggle then just swaps strings in
  * place, as everywhere else on the site).
  */
-export function languageCounterpart(path: string, target: "ro" | "en"): string | null {
+export function languageCounterpart(
+  path: string,
+  target: "ro" | "en",
+): string | null {
   const clean = path.replace(/\/+$/, "") || "/";
   return (target === "en" ? EN_FOR_RO : RO_FOR_EN)[clean] ?? null;
 }

@@ -13,7 +13,9 @@ const PrivateLeadStats = ({ counts, onSelect }: Props) => (
       onClick={() => onSelect("all")}
       className="rounded-lg border border-border bg-card p-4 text-left transition-colors hover:bg-muted"
     >
-      <p className="text-xs font-medium text-muted-foreground">Lead-uri private</p>
+      <p className="text-xs font-medium text-muted-foreground">
+        Lead-uri private
+      </p>
       <p className="mt-1 text-2xl font-bold text-foreground">{counts.total}</p>
     </button>
     {/* Only the statuses that have someone in them. With six private leads and
@@ -30,7 +32,9 @@ const PrivateLeadStats = ({ counts, onSelect }: Props) => (
         <p className="text-xs font-medium text-muted-foreground">
           Private · {leadStatusLabels[status]}
         </p>
-        <p className="mt-1 text-2xl font-bold text-foreground">{counts[status]}</p>
+        <p className="mt-1 text-2xl font-bold text-foreground">
+          {counts[status]}
+        </p>
       </button>
     ))}
   </div>

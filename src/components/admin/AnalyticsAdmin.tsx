@@ -98,7 +98,9 @@ const count = (w: WeekRow, key: string): number => {
 };
 
 const weekLabel = (iso: string) =>
-  new Intl.DateTimeFormat("ro-RO", { day: "2-digit", month: "short" }).format(new Date(iso));
+  new Intl.DateTimeFormat("ro-RO", { day: "2-digit", month: "short" }).format(
+    new Date(iso),
+  );
 
 /** A count list, biggest first, with the raw key kept when it is unlabelled. */
 const Breakdown = ({
@@ -119,7 +121,9 @@ const Breakdown = ({
       <p className="text-sm font-semibold text-foreground">{title}</p>
       {note && <p className="mt-0.5 text-xs text-muted-foreground">{note}</p>}
       {rows.length === 0 ? (
-        <p className="mt-3 text-sm text-muted-foreground">Nimic în această perioadă.</p>
+        <p className="mt-3 text-sm text-muted-foreground">
+          Nimic în această perioadă.
+        </p>
       ) : (
         <ul className="mt-3 space-y-2">
           {rows.map(([key, n]) => (
@@ -129,7 +133,9 @@ const Breakdown = ({
                 <span className="tabular-nums text-muted-foreground">
                   {n}
                   {total > 0 && (
-                    <span className="ml-1.5 text-xs">({Math.round((n / total) * 100)}%)</span>
+                    <span className="ml-1.5 text-xs">
+                      ({Math.round((n / total) * 100)}%)
+                    </span>
                   )}
                 </span>
               </div>
@@ -157,7 +163,10 @@ const AnalyticsAdmin = () => {
     setLoading(true);
     setError("");
     try {
-      const { data: res, error: err } = await invokeAdmin({ action: "list_analytics", days: window });
+      const { data: res, error: err } = await invokeAdmin({
+        action: "list_analytics",
+        days: window,
+      });
       if (err) throw err;
       if (res?.error) throw new Error(res.error);
       setData(res?.data ?? null);
@@ -174,7 +183,10 @@ const AnalyticsAdmin = () => {
   }, [days, load]);
 
   const weeks = useMemo(() => data?.signups.byWeek ?? [], [data]);
-  const peak = useMemo(() => Math.max(1, ...weeks.map((w) => w.total)), [weeks]);
+  const peak = useMemo(
+    () => Math.max(1, ...weeks.map((w) => w.total)),
+    [weeks],
+  );
 
   const cards = data
     ? [
@@ -192,9 +204,10 @@ const AnalyticsAdmin = () => {
         },
         {
           label: "Zile până la plată",
-          value: data.conversion.medianDaysToPay === null
-            ? "—"
-            : Math.round(data.conversion.medianDaysToPay * 10) / 10,
+          value:
+            data.conversion.medianDaysToPay === null
+              ? "—"
+              : Math.round(data.conversion.medianDaysToPay * 10) / 10,
           hint: "mediană, nu medie",
           icon: TrendingUp,
         },
@@ -227,8 +240,18 @@ const AnalyticsAdmin = () => {
             </button>
           ))}
         </div>
-        <Button variant="outline" size="sm" onClick={() => void load(days)} disabled={loading} aria-label="Reîncarcă">
-          {loading ? <Loader2 className="h-4 w-4 animate-spin" /> : <RefreshCw className="h-4 w-4" />}
+        <Button
+          variant="outline"
+          size="sm"
+          onClick={() => void load(days)}
+          disabled={loading}
+          aria-label="Reîncarcă"
+        >
+          {loading ? (
+            <Loader2 className="h-4 w-4 animate-spin" />
+          ) : (
+            <RefreshCw className="h-4 w-4" />
+          )}
         </Button>
       </ScreenToolbar>
 
@@ -240,7 +263,13 @@ const AnalyticsAdmin = () => {
         <>
           <div className="grid grid-cols-2 gap-3 lg:grid-cols-4">
             {cards.map((c) => (
-              <StatTile key={c.label} label={c.label} value={c.value} hint={c.hint} icon={c.icon} />
+              <StatTile
+                key={c.label}
+                label={c.label}
+                value={c.value}
+                hint={c.hint}
+                icon={c.icon}
+              />
             ))}
           </div>
 
@@ -250,10 +279,15 @@ const AnalyticsAdmin = () => {
               the only way to read this. */}
           <div className="rounded-2xl border border-border bg-background p-5">
             <div className="flex flex-wrap items-baseline justify-between gap-2">
-              <h3 className="text-sm font-semibold text-foreground">Înscrieri pe săptămână</h3>
+              <h3 className="text-sm font-semibold text-foreground">
+                Înscrieri pe săptămână
+              </h3>
               <ul className="flex flex-wrap items-center gap-3">
                 {FORM_TYPES.map((f) => (
-                  <li key={f.key} className="flex items-center gap-1.5 text-xs text-muted-foreground">
+                  <li
+                    key={f.key}
+                    className="flex items-center gap-1.5 text-xs text-muted-foreground"
+                  >
                     <span
                       className="h-2.5 w-2.5 rounded-sm"
                       style={{ backgroundColor: f.css }}
@@ -290,19 +324,21 @@ const AnalyticsAdmin = () => {
                         style={{ height: `${(w.total / peak) * 100}%` }}
                         title={`Săptămâna ${weekLabel(w.week)} — ${w.total} înscrieri`}
                       >
-                        {FORM_TYPES.filter((f) => count(w, f.key) > 0).map((f, i) => (
-                          <div
-                            key={f.key}
-                            className={i === 0 ? "rounded-t" : ""}
-                            style={{
-                              backgroundColor: f.css,
-                              // Share of this week's bar, so the segments add
-                              // up to the bar's own height.
-                              flexGrow: count(w, f.key),
-                              minHeight: 2,
-                            }}
-                          />
-                        ))}
+                        {FORM_TYPES.filter((f) => count(w, f.key) > 0).map(
+                          (f, i) => (
+                            <div
+                              key={f.key}
+                              className={i === 0 ? "rounded-t" : ""}
+                              style={{
+                                backgroundColor: f.css,
+                                // Share of this week's bar, so the segments add
+                                // up to the bar's own height.
+                                flexGrow: count(w, f.key),
+                                minHeight: 2,
+                              }}
+                            />
+                          ),
+                        )}
                       </div>
                     </div>
                   ))}
@@ -326,9 +362,14 @@ const AnalyticsAdmin = () => {
                     <tbody>
                       {[...weeks].reverse().map((w) => (
                         <tr key={w.week} className="border-b border-border/60">
-                          <td className="py-2 pr-3 text-foreground">{weekLabel(w.week)}</td>
+                          <td className="py-2 pr-3 text-foreground">
+                            {weekLabel(w.week)}
+                          </td>
                           {FORM_TYPES.map((f) => (
-                            <td key={f.key} className="py-2 pr-3 tabular-nums text-muted-foreground">
+                            <td
+                              key={f.key}
+                              className="py-2 pr-3 tabular-nums text-muted-foreground"
+                            >
                               {count(w, f.key)}
                             </td>
                           ))}
@@ -346,33 +387,53 @@ const AnalyticsAdmin = () => {
 
           {/* Lessons: the numbers the 24-hour rule is about. */}
           <div className="rounded-2xl border border-border bg-background p-5">
-            <h3 className="text-sm font-semibold text-foreground">Lecții în perioadă</h3>
+            <h3 className="text-sm font-semibold text-foreground">
+              Lecții în perioadă
+            </h3>
             <p className="mt-0.5 text-xs text-muted-foreground">
               După data lecției, nu după data rezervării.
             </p>
             <div className="mt-4 grid grid-cols-2 gap-3 lg:grid-cols-4">
               {[
-                { label: "Confirmate", value: data.lessons.byStatus["confirmed"] ?? 0, icon: BarChart3 },
-                { label: "Anulate", value: data.lessons.byStatus["cancelled"] ?? 0, icon: Undo2 },
-                { label: "Reprogramate", value: data.lessons.rescheduled, icon: RotateCcw },
+                {
+                  label: "Confirmate",
+                  value: data.lessons.byStatus["confirmed"] ?? 0,
+                  icon: BarChart3,
+                },
+                {
+                  label: "Anulate",
+                  value: data.lessons.byStatus["cancelled"] ?? 0,
+                  icon: Undo2,
+                },
+                {
+                  label: "Reprogramate",
+                  value: data.lessons.rescheduled,
+                  icon: RotateCcw,
+                },
                 {
                   label: "Anulate sub 24h",
                   value: data.lessons.lateCancels,
                   icon: CalendarX2,
                 },
               ].map(({ label, value, icon: Icon }) => (
-                <div key={label} className="rounded-xl border border-border p-4">
+                <div
+                  key={label}
+                  className="rounded-xl border border-border p-4"
+                >
                   <div className="flex items-center gap-2 text-xs text-muted-foreground">
                     <Icon className="h-4 w-4 text-primary" />
                     {label}
                   </div>
-                  <p className="mt-1.5 text-2xl font-bold tabular-nums text-foreground">{value}</p>
+                  <p className="mt-1.5 text-2xl font-bold tabular-nums text-foreground">
+                    {value}
+                  </p>
                 </div>
               ))}
             </div>
             <p className="mt-3 text-xs text-muted-foreground">
-              Anulările sub 24 de ore nu mai sunt posibile din linkul cursantului. Dacă acest număr
-              crește, sunt anulări făcute din panou — adică situații pe care le-ai aprobat tu.
+              Anulările sub 24 de ore nu mai sunt posibile din linkul
+              cursantului. Dacă acest număr crește, sunt anulări făcute din
+              panou — adică situații pe care le-ai aprobat tu.
             </p>
           </div>
 
@@ -380,7 +441,12 @@ const AnalyticsAdmin = () => {
             <Breakdown
               title="Tip de curs"
               counts={data.signups.byFormType}
-              labels={{ trial: "Probă", group: "Grupă", private: "Privat", kids: "Copii" }}
+              labels={{
+                trial: "Probă",
+                group: "Grupă",
+                private: "Privat",
+                kids: "Copii",
+              }}
             />
             <Breakdown
               title="Format"
@@ -423,36 +489,52 @@ const AnalyticsAdmin = () => {
               labels={leadStatusLabels}
             />
             {Object.keys(data.signups.byReferral ?? {}).length > 0 && (
-              <Breakdown title="Cod de recomandare" counts={data.signups.byReferral} />
+              <Breakdown
+                title="Cod de recomandare"
+                counts={data.signups.byReferral}
+              />
             )}
             <div className="rounded-xl border border-border p-4">
-              <p className="text-sm font-semibold text-foreground">Rambursări</p>
+              <p className="text-sm font-semibold text-foreground">
+                Rambursări
+              </p>
               <p className="mt-3 text-2xl font-bold tabular-nums text-foreground">
                 {data.refunds.count}
               </p>
               <p className="mt-0.5 text-xs text-muted-foreground">
                 {data.refunds.count === 0
                   ? "Nicio rambursare în perioadă."
-                  : `${(data.refunds.totalMinorUnits / 100).toLocaleString("ro-RO", {
-                      minimumFractionDigits: 2,
-                      maximumFractionDigits: 2,
-                    })} lei returnați`}
+                  : `${(data.refunds.totalMinorUnits / 100).toLocaleString(
+                      "ro-RO",
+                      {
+                        minimumFractionDigits: 2,
+                        maximumFractionDigits: 2,
+                      },
+                    )} lei returnați`}
               </p>
             </div>
           </div>
 
           {/* Traffic is Google's job, and the property is already collecting. */}
           <div className="rounded-2xl border border-border bg-muted/30 p-5">
-            <h3 className="text-sm font-semibold text-foreground">Trafic și căutări</h3>
+            <h3 className="text-sm font-semibold text-foreground">
+              Trafic și căutări
+            </h3>
             <p className="mt-1 text-sm text-muted-foreground">
-              Vizitatori, surse de trafic și cuvinte căutate nu sunt aici: le colectează Google
-              Analytics (proprietatea <span className="font-mono text-xs">G-F167Y815JL</span>), doar
-              pentru vizitatorii care acceptă cookie-urile de analiză. Pagina aceasta arată ce știe
-              baza ta de date — adică ce s-a întâmplat după ce cineva a completat un formular.
+              Vizitatori, surse de trafic și cuvinte căutate nu sunt aici: le
+              colectează Google Analytics (proprietatea{" "}
+              <span className="font-mono text-xs">G-F167Y815JL</span>), doar
+              pentru vizitatorii care acceptă cookie-urile de analiză. Pagina
+              aceasta arată ce știe baza ta de date — adică ce s-a întâmplat
+              după ce cineva a completat un formular.
             </p>
             <div className="mt-4 flex flex-wrap gap-2">
               <Button asChild variant="outline" size="sm">
-                <a href="https://analytics.google.com/" target="_blank" rel="noopener noreferrer">
+                <a
+                  href="https://analytics.google.com/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
                   Google Analytics
                   <ExternalLink className="h-3.5 w-3.5" />
                 </a>
@@ -471,9 +553,11 @@ const AnalyticsAdmin = () => {
           </div>
 
           <p className="text-xs text-muted-foreground">
-            Perioadă: ultimele {data.range.days} de zile. Înscrierile anonimizate (GDPR) nu sunt
-            numărate. Încasările nu apar aici: nu există o coloană de sumă pe înscrieri, iar o cifră
-            calculată din prețurile de listă ar ignora reducerile. Rambursările sunt sume reale.
+            Perioadă: ultimele {data.range.days} de zile. Înscrierile
+            anonimizate (GDPR) nu sunt numărate. Încasările nu apar aici: nu
+            există o coloană de sumă pe înscrieri, iar o cifră calculată din
+            prețurile de listă ar ignora reducerile. Rambursările sunt sume
+            reale.
           </p>
         </>
       )}

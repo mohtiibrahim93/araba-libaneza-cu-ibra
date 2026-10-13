@@ -32,7 +32,10 @@ type YallaGameProps = {
 };
 
 const COPY = {
-  ro: { open: "Deschide pe tot ecranul", label: "Yalla — joc de arabă libaneză" },
+  ro: {
+    open: "Deschide pe tot ecranul",
+    label: "Yalla — joc de arabă libaneză",
+  },
   en: { open: "Open full screen", label: "Yalla — Lebanese Arabic game" },
 } as const;
 
@@ -43,7 +46,12 @@ const TITLES: Record<NonNullable<YallaGameProps["mode"]>, string> = {
   exports: "Yalla — exporturi",
 };
 
-const YallaGame = ({ mode = "journey", lang = "ro", focus = false, version = 0 }: YallaGameProps) => {
+const YallaGame = ({
+  mode = "journey",
+  lang = "ro",
+  focus = false,
+  version = 0,
+}: YallaGameProps) => {
   // The frame follows the language the visitor is reading the site in:
   // public/yalla/i18n.js reads ?lang= and switches the game's interface, and
   // deck-language.js switches the content — card meanings, drills and their
@@ -98,7 +106,9 @@ const YallaGame = ({ mode = "journey", lang = "ro", focus = false, version = 0 }
     try {
       let local: CardOverrides = {};
       try {
-        local = JSON.parse(win!.localStorage.getItem("yalla-teacher-edits-v1") || "{}");
+        local = JSON.parse(
+          win!.localStorage.getItem("yalla-teacher-edits-v1") || "{}",
+        );
       } catch {
         /* unreadable local edits are not a reason to skip published ones */
       }
@@ -118,7 +128,9 @@ const YallaGame = ({ mode = "journey", lang = "ro", focus = false, version = 0 }
   // write policy, so a signed-in non-admin pressing this gets a refusal from
   // the server rather than a write.
   const [signedIn, setSignedIn] = useState(false);
-  const [publishing, setPublishing] = useState<"idle" | "saving" | "done" | "error">("idle");
+  const [publishing, setPublishing] = useState<
+    "idle" | "saving" | "done" | "error"
+  >("idle");
   useEffect(() => {
     let cancelled = false;
     void (async () => {
@@ -130,7 +142,9 @@ const YallaGame = ({ mode = "journey", lang = "ro", focus = false, version = 0 }
         // only a real admin (ADMIN_EMAILS, checked by the function) gets the
         // teacher controls.
         const { invokeAdmin } = await import("@/lib/adminAuth");
-        const { data: who } = await invokeAdmin<{ isAdmin?: boolean }>({ action: "whoami" });
+        const { data: who } = await invokeAdmin<{ isAdmin?: boolean }>({
+          action: "whoami",
+        });
         if (!cancelled) setSignedIn(Boolean(who?.isAdmin));
       } catch {
         /* not signed in, or offline — the control simply stays hidden */
@@ -146,10 +160,17 @@ const YallaGame = ({ mode = "journey", lang = "ro", focus = false, version = 0 }
     if (!win) return;
     setPublishing("saving");
     try {
-      const edits = JSON.parse(win.localStorage.getItem("yalla-teacher-edits-v1") || "{}");
+      const edits = JSON.parse(
+        win.localStorage.getItem("yalla-teacher-edits-v1") || "{}",
+      );
       const { invokeAdmin } = await import("@/lib/adminAuth");
-      const { data, error } = await invokeAdmin({ action: "save_card_overrides", edits });
-      setPublishing(error || (data as { error?: string })?.error ? "error" : "done");
+      const { data, error } = await invokeAdmin({
+        action: "save_card_overrides",
+        edits,
+      });
+      setPublishing(
+        error || (data as { error?: string })?.error ? "error" : "done",
+      );
     } catch {
       setPublishing("error");
     }
@@ -163,7 +184,8 @@ const YallaGame = ({ mode = "journey", lang = "ro", focus = false, version = 0 }
     if (!mounted || !signedIn) return;
     let tries = 0;
     const flag = () => {
-      const win = frameRef.current?.contentWindow as (Window & { YALLA_TEACHER?: boolean }) | null;
+      const win = frameRef.current?.contentWindow as
+        (Window & { YALLA_TEACHER?: boolean }) | null;
       if (!win) return false;
       try {
         win.YALLA_TEACHER = true;
@@ -192,9 +214,14 @@ const YallaGame = ({ mode = "journey", lang = "ro", focus = false, version = 0 }
   }, [mounted, published, applyOverrides]);
 
   return (
-    <section aria-label={c.label} className="w-full overflow-hidden rounded-xl border border-border bg-card shadow-xs">
+    <section
+      aria-label={c.label}
+      className="w-full overflow-hidden rounded-xl border border-border bg-card shadow-xs"
+    >
       <div className="flex min-h-12 items-center justify-between gap-4 border-b border-border bg-muted/30 px-4 sm:px-5">
-        <span className="truncate text-sm font-semibold text-foreground">Yalla</span>
+        <span className="truncate text-sm font-semibold text-foreground">
+          Yalla
+        </span>
         {signedIn && (
           <button
             type="button"

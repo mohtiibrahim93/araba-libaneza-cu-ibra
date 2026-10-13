@@ -2,7 +2,12 @@ import { useEffect, useState } from "react";
 import { Link } from "@/components/LocalizedLink";
 import { Button } from "@/components/ui/button";
 import { useI18n } from "@/lib/i18n";
-import { OPEN_CONSENT_EVENT, readConsent, saveConsent, type ConsentChoice } from "@/lib/cookieConsent";
+import {
+  OPEN_CONSENT_EVENT,
+  readConsent,
+  saveConsent,
+  type ConsentChoice,
+} from "@/lib/cookieConsent";
 
 /**
  * Bottom card asking for cookie consent (Google Consent Mode v2). Shown only
@@ -16,7 +21,11 @@ const CookieConsentBanner = ({ force = false }: { force?: boolean }) => {
   const [open, setOpen] = useState(false);
 
   useEffect(() => {
-    if (typeof window === "undefined" || typeof window.localStorage === "undefined") return;
+    if (
+      typeof window === "undefined" ||
+      typeof window.localStorage === "undefined"
+    )
+      return;
     if (!force && import.meta.env.MODE === "test") return;
     if (readConsent() === null) setOpen(true);
     const reopen = () => setOpen(true);
@@ -49,15 +58,27 @@ const CookieConsentBanner = ({ force = false }: { force?: boolean }) => {
         <p className="text-sm font-semibold">{t.cookieTitle}</p>
         <p className="mt-1 text-sm text-muted-foreground">
           {t.cookieMessage}{" "}
-          <Link to={lang === "en" ? "/en/privacy" : "/privacy"} className="text-primary underline">
+          <Link
+            to={lang === "en" ? "/en/privacy" : "/privacy"}
+            className="text-primary underline"
+          >
             {t.cookiePrivacyLink}
           </Link>
         </p>
         <div className="mt-4 flex flex-col-reverse gap-2 sm:flex-row sm:justify-end">
-          <Button type="button" variant="outline" className="rounded-xl" onClick={() => choose("essential")}>
+          <Button
+            type="button"
+            variant="outline"
+            className="rounded-xl"
+            onClick={() => choose("essential")}
+          >
             {t.cookieEssentialOnly}
           </Button>
-          <Button type="button" className="rounded-xl" onClick={() => choose("all")}>
+          <Button
+            type="button"
+            className="rounded-xl"
+            onClick={() => choose("all")}
+          >
             {t.cookieAcceptAll}
           </Button>
         </div>

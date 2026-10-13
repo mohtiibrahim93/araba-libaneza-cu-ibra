@@ -41,35 +41,70 @@ const EN = "content/yalla-content-en.json";
 
 /** Cards the owner dropped by accident — their siblings are in the same topic. */
 const RESTORED = [
-  { id: "c3atshan0001", ar: "3atshan", ro: "Însetat (masculin)", en: "Thirsty (masculine)", level: "A1", topic: "Stări & sentimente" },
-  { id: "c3atshane0002", ar: "3atshane", ro: "Însetată", en: "Thirsty (feminine)", level: "A1", topic: "Stări & sentimente" },
+  {
+    id: "c3atshan0001",
+    ar: "3atshan",
+    ro: "Însetat (masculin)",
+    en: "Thirsty (masculine)",
+    level: "A1",
+    topic: "Stări & sentimente",
+  },
+  {
+    id: "c3atshane0002",
+    ar: "3atshane",
+    ro: "Însetată",
+    en: "Thirsty (feminine)",
+    level: "A1",
+    topic: "Stări & sentimente",
+  },
 ];
 
 function parseCsv(text) {
   const rows = [];
-  let row = [], cell = "", quoted = false;
+  let row = [],
+    cell = "",
+    quoted = false;
   for (let i = 0; i < text.length; i += 1) {
     const ch = text[i];
     if (quoted) {
-      if (ch === '"' && text[i + 1] === '"') { cell += '"'; i += 1; }
-      else if (ch === '"') quoted = false;
+      if (ch === '"' && text[i + 1] === '"') {
+        cell += '"';
+        i += 1;
+      } else if (ch === '"') quoted = false;
       else cell += ch;
     } else if (ch === '"') quoted = true;
-    else if (ch === ",") { row.push(cell); cell = ""; }
-    else if (ch === "\n") { row.push(cell); rows.push(row); row = []; cell = ""; }
-    else if (ch !== "\r") cell += ch;
+    else if (ch === ",") {
+      row.push(cell);
+      cell = "";
+    } else if (ch === "\n") {
+      row.push(cell);
+      rows.push(row);
+      row = [];
+      cell = "";
+    } else if (ch !== "\r") cell += ch;
   }
-  if (cell || row.length) { row.push(cell); rows.push(row); }
+  if (cell || row.length) {
+    row.push(cell);
+    rows.push(row);
+  }
   const head = rows.shift().map((s) => s.trim());
   return rows
     .filter((r) => r.length >= head.length && r[head.indexOf("id")]?.trim())
-    .map((r) => Object.fromEntries(head.map((h, i) => [h, (r[i] ?? "").trim()])));
+    .map((r) =>
+      Object.fromEntries(head.map((h, i) => [h, (r[i] ?? "").trim()])),
+    );
 }
 
 const slug = (s) =>
-  s.toLowerCase()
-    .replace(/ă/g, "a").replace(/â/g, "a").replace(/î/g, "i").replace(/ș/g, "s").replace(/ț/g, "t")
-    .replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
+  s
+    .toLowerCase()
+    .replace(/ă/g, "a")
+    .replace(/â/g, "a")
+    .replace(/î/g, "i")
+    .replace(/ș/g, "s")
+    .replace(/ț/g, "t")
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-|-$/g, "");
 
 // content/yalla-source-bank.js is the bank as it was before this restructure:
 // 3,470 cards, 122 units, and the 722 cards authored in English still holding
@@ -89,16 +124,35 @@ const unknown = [];
 
 for (const r of rows) {
   const old = before.get(r.id);
-  if (!old) { unknown.push(r.id); continue; }
+  if (!old) {
+    unknown.push(r.id);
+    continue;
+  }
   seen.add(r.id);
-  const card = { ...old, ar: r.arabizi, ro: r.sens_ro, en: r.gloss_en, level: r.nivel, topic: slug(r.tema_curriculum) };
+  const card = {
+    ...old,
+    ar: r.arabizi,
+    ro: r.sens_ro,
+    en: r.gloss_en,
+    level: r.nivel,
+    topic: slug(r.tema_curriculum),
+  };
   // Cards authored in English keep that original where synthesis.js expects it.
   if (old.lang === "en") card.sourceGloss = old.ro;
   cards.push(card);
 }
 for (const r of RESTORED) {
-  cards.push({ id: r.id, unit: before.get("c814a78015c21")?.unit ?? "l2", source: "restored",
-    lang: "ro", ar: r.ar, ro: r.ro, en: r.en, level: r.level, topic: slug(r.topic) });
+  cards.push({
+    id: r.id,
+    unit: before.get("c814a78015c21")?.unit ?? "l2",
+    source: "restored",
+    lang: "ro",
+    ar: r.ar,
+    ro: r.ro,
+    en: r.en,
+    level: r.level,
+    topic: slug(r.topic),
+  });
 }
 
 // Topics in the order the CSV presents them, which is the order the owner
@@ -125,7 +179,9 @@ const levels = [...new Set(rows.map((r) => r.nivel))].map((id) => ({
 // journey filters on this flag instead.
 const cardsPerUnit = {};
 for (const c of cards) cardsPerUnit[c.unit] = (cardsPerUnit[c.unit] ?? 0) + 1;
-const units = bank.units.map((u) => (cardsPerUnit[u.id] ? u : { ...u, empty: true }));
+const units = bank.units.map((u) =>
+  cardsPerUnit[u.id] ? u : { ...u, empty: true },
+);
 const emptied = units.filter((u) => u.empty);
 
 // English for the prose the CSV does not carry: a card's learning note, the
@@ -144,32 +200,58 @@ const say = (romanian) => {
   // need no translation, and a report full of those is a report nobody reads.
   const romanianLooking =
     /[ăâîșțĂÂÎȘȚ]/.test(romanian) ||
-    /\b(este|sunt|care|pentru|folose\w+|spune|alege|vrei|acum|fără|dacă)\b/i.test(romanian);
+    /\b(este|sunt|care|pentru|folose\w+|spune|alege|vrei|acum|fără|dacă)\b/i.test(
+      romanian,
+    );
   if (!hit && romanianLooking) missing.add(romanian);
   return hit;
 };
-for (const c of cards) { const t = say(c.note); if (t) c.noteEn = t; }
+for (const c of cards) {
+  const t = say(c.note);
+  if (t) c.noteEn = t;
+}
 const drills = bank.drills.map((d) => {
   const out = { ...d };
-  const p = say(d.prompt); if (p) out.promptEn = p;
-  const n = say(d.note); if (n) out.noteEn = n;
-  const x = say(d.context); if (x) out.contextEn = x;
+  const p = say(d.prompt);
+  if (p) out.promptEn = p;
+  const n = say(d.note);
+  if (n) out.noteEn = n;
+  const x = say(d.context);
+  if (x) out.contextEn = x;
   return out;
 });
 const sources = bank.sources.map((s2) => {
   const out = { ...s2 };
-  const t = say(s2.title); if (t) out.titleEn = t;
-  const d = say(s2.detail); if (d) out.detailEn = d;
+  const t = say(s2.title);
+  if (t) out.titleEn = t;
+  const d = say(s2.detail);
+  if (d) out.detailEn = d;
   return out;
 });
 const notes = bank.notes.map((n) => {
   const out = { ...n };
-  const r = say(n.reason); if (r) out.reasonEn = r;
+  const r = say(n.reason);
+  if (r) out.reasonEn = r;
   return out;
 });
 
-const out = { ...bank, version: 3, levels, topics, cards, units, drills, sources, notes };
-writeFileSync(OUT, "window.YALLA_PACKAGED = true;\nwindow.YALLA = " + JSON.stringify(out) + ";\n");
+const out = {
+  ...bank,
+  version: 3,
+  levels,
+  topics,
+  cards,
+  units,
+  drills,
+  sources,
+  notes,
+};
+writeFileSync(
+  OUT,
+  "window.YALLA_PACKAGED = true;\nwindow.YALLA = " +
+    JSON.stringify(out) +
+    ";\n",
+);
 
 // The same English prose, as a lookup the game can use at runtime. synthesis.js
 // generates several hundred more cards and drills in the browser, after this
@@ -182,13 +264,26 @@ writeFileSync(
 
 const dropped = [...before.keys()].filter((id) => !seen.has(id));
 console.log(`cards: ${before.size} in the bank -> ${cards.length} written`);
-console.log(`  matched from the CSV: ${seen.size} | restored by hand: ${RESTORED.length} | dropped: ${dropped.length}`);
-console.log(`levels: ${levels.map((l) => `${l.id} (${l.topics} topics, ${l.cards} cards)`).join(" · ")}`);
-console.log(`topics: ${topics.length} | units: ${units.length} (${emptied.length} flagged empty) | drills: ${out.drills.length} | notes: ${out.notes.length}`);
-if (emptied.length) console.log("  flagged empty:", emptied.map((u) => u.title).join(", "));
-console.log(`english for content prose: ${cards.filter((c) => c.noteEn).length} card notes, ${drills.filter((d) => d.promptEn).length}/${drills.length} drill prompts, ${sources.filter((s2) => s2.titleEn).length}/${sources.length} sources, ${notes.filter((n) => n.reasonEn).length}/${notes.length} review notes`);
+console.log(
+  `  matched from the CSV: ${seen.size} | restored by hand: ${RESTORED.length} | dropped: ${dropped.length}`,
+);
+console.log(
+  `levels: ${levels.map((l) => `${l.id} (${l.topics} topics, ${l.cards} cards)`).join(" · ")}`,
+);
+console.log(
+  `topics: ${topics.length} | units: ${units.length} (${emptied.length} flagged empty) | drills: ${out.drills.length} | notes: ${out.notes.length}`,
+);
+if (emptied.length)
+  console.log("  flagged empty:", emptied.map((u) => u.title).join(", "));
+console.log(
+  `english for content prose: ${cards.filter((c) => c.noteEn).length} card notes, ${drills.filter((d) => d.promptEn).length}/${drills.length} drill prompts, ${sources.filter((s2) => s2.titleEn).length}/${sources.length} sources, ${notes.filter((n) => n.reasonEn).length}/${notes.length} review notes`,
+);
 if (missing.size) {
   console.log(`NOT TRANSLATED (${missing.size}) — add them to ${EN}:`);
   for (const m of [...missing].slice(0, 20)) console.log("  " + m);
 }
-if (unknown.length) console.log(`CSV rows with an id the bank does not have: ${unknown.length}`, unknown.slice(0, 5));
+if (unknown.length)
+  console.log(
+    `CSV rows with an id the bank does not have: ${unknown.length}`,
+    unknown.slice(0, 5),
+  );

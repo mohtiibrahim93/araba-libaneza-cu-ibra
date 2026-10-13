@@ -31,17 +31,26 @@ export function useCardOverrides() {
     queryFn: async (): Promise<CardOverrides> => {
       const { supabase } = await import("@/integrations/supabase/client");
       // Read through the published-only function: the table itself is private.
-      interface Row { card_id: string; ar: string; ro: string; variants: unknown }
-      const { data, error } = await (supabase as unknown as {
-        rpc: (fn: string) => Promise<{ data: Row[] | null; error: unknown }>;
-      }).rpc("get_published_card_overrides");
+      interface Row {
+        card_id: string;
+        ar: string;
+        ro: string;
+        variants: unknown;
+      }
+      const { data, error } = await (
+        supabase as unknown as {
+          rpc: (fn: string) => Promise<{ data: Row[] | null; error: unknown }>;
+        }
+      ).rpc("get_published_card_overrides");
       if (error || !data) return {};
       const out: CardOverrides = {};
       for (const row of data) {
         out[row.card_id] = {
           ar: row.ar,
           ro: row.ro,
-          variants: Array.isArray(row.variants) ? (row.variants as string[]) : [],
+          variants: Array.isArray(row.variants)
+            ? (row.variants as string[])
+            : [],
         };
       }
 

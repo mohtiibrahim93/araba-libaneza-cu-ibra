@@ -21,7 +21,9 @@ const ComparisonTable = ({ columns, rows, caption }: ComparisonTableProps) => (
       <thead className="bg-muted">
         <tr>
           {columns.map((c) => (
-            <th key={c} className="p-3 text-sm font-semibold text-foreground">{c}</th>
+            <th key={c} className="p-3 text-sm font-semibold text-foreground">
+              {c}
+            </th>
           ))}
         </tr>
       </thead>
@@ -31,7 +33,11 @@ const ComparisonTable = ({ columns, rows, caption }: ComparisonTableProps) => (
             {row.map((cell, i) => (
               <td
                 key={i}
-                className={i === 0 ? "p-3 text-sm font-medium text-foreground" : "p-3 text-sm text-muted-foreground"}
+                className={
+                  i === 0
+                    ? "p-3 text-sm font-medium text-foreground"
+                    : "p-3 text-sm text-muted-foreground"
+                }
               >
                 {cell}
               </td>

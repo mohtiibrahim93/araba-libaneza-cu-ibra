@@ -29,7 +29,13 @@ export interface PickerItem {
   fileHref: string;
 }
 
-const ResourcePicker = ({ items, source }: { items: PickerItem[]; source: string }) => {
+const ResourcePicker = ({
+  items,
+  source,
+}: {
+  items: PickerItem[];
+  source: string;
+}) => {
   const { toast } = useToast();
   const { lang } = useI18n();
   const en = lang === "en";
@@ -42,13 +48,17 @@ const ResourcePicker = ({ items, source }: { items: PickerItem[]; source: string
       return {
         ...it,
         title: (row && (en ? row.title_en : row.title_ro)) || it.title,
-        description: (row && (en ? row.description_en : row.description_ro)) || it.description,
+        description:
+          (row && (en ? row.description_en : row.description_ro)) ||
+          it.description,
         fileHref: row?.file_url || it.fileHref,
       };
     })
     .filter((x): x is PickerItem => x !== null);
 
-  const [picked, setPicked] = useState<string[]>(() => items.map((i) => i.resource));
+  const [picked, setPicked] = useState<string[]>(() =>
+    items.map((i) => i.resource),
+  );
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [consent, setConsent] = useState(false);
@@ -56,19 +66,25 @@ const ResourcePicker = ({ items, source }: { items: PickerItem[]; source: string
   const [sent, setSent] = useState<PickerItem[] | null>(null);
 
   const chosen = visible.filter((v) => picked.includes(v.resource));
-  const toggle = (r: string) => setPicked((p) => (p.includes(r) ? p.filter((x) => x !== r) : [...p, r]));
+  const toggle = (r: string) =>
+    setPicked((p) => (p.includes(r) ? p.filter((x) => x !== r) : [...p, r]));
 
   const submit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (loading) return;
     if (!chosen.length) {
-      toast({ title: en ? "Pick at least one PDF" : "Alege cel puțin un PDF", variant: "destructive" });
+      toast({
+        title: en ? "Pick at least one PDF" : "Alege cel puțin un PDF",
+        variant: "destructive",
+      });
       return;
     }
     if (!consent) {
       toast({
         title: en ? "Please tick the consent box" : "Bifează acordul",
-        description: en ? "We need your consent to send you the PDFs." : "Avem nevoie de acordul tău ca să îți trimitem PDF-urile.",
+        description: en
+          ? "We need your consent to send you the PDFs."
+          : "Avem nevoie de acordul tău ca să îți trimitem PDF-urile.",
         variant: "destructive",
       });
       return;
@@ -78,14 +94,22 @@ const ResourcePicker = ({ items, source }: { items: PickerItem[]; source: string
     let lastError = "";
     for (const it of chosen) {
       try {
-        const { data, error } = await supabase.functions.invoke("resource-download", {
-          body: { email, name, consent, resource: it.resource, source },
-        });
+        const { data, error } = await supabase.functions.invoke(
+          "resource-download",
+          {
+            body: { email, name, consent, resource: it.resource, source },
+          },
+        );
         const msg = (data as { error?: string } | null)?.error;
         if (error || msg) throw new Error(msg || error?.message);
         ok.push(it);
       } catch (err) {
-        lastError = err instanceof Error && err.message ? err.message : en ? "Sending failed." : "Trimiterea a eșuat.";
+        lastError =
+          err instanceof Error && err.message
+            ? err.message
+            : en
+              ? "Sending failed."
+              : "Trimiterea a eșuat.";
       }
     }
     setLoading(false);
@@ -93,8 +117,12 @@ const ResourcePicker = ({ items, source }: { items: PickerItem[]; source: string
     if (ok.length < chosen.length) {
       toast({
         title: ok.length
-          ? en ? "Some PDFs could not be sent" : "Unele PDF-uri nu au putut fi trimise"
-          : en ? "We couldn't send the PDFs" : "Nu am putut trimite PDF-urile",
+          ? en
+            ? "Some PDFs could not be sent"
+            : "Unele PDF-uri nu au putut fi trimise"
+          : en
+            ? "We couldn't send the PDFs"
+            : "Nu am putut trimite PDF-urile",
         description: lastError,
         variant: "destructive",
       });
@@ -105,11 +133,18 @@ const ResourcePicker = ({ items, source }: { items: PickerItem[]; source: string
     return (
       <div className="not-prose rounded-2xl border border-brand-green/30 bg-brand-green/5 p-6 space-y-4">
         <p className="flex items-center gap-2 font-semibold text-foreground">
-          <CheckCircle2 className="h-5 w-5 text-brand-green" aria-hidden /> {en ? "Done — check your email" : "Gata — verifică-ți emailul"}
+          <CheckCircle2 className="h-5 w-5 text-brand-green" aria-hidden />{" "}
+          {en ? "Done — check your email" : "Gata — verifică-ți emailul"}
         </p>
         <p className="text-sm text-muted-foreground">
           {en ? "We've sent " : "Ți-am trimis "}
-          {sent.length === 1 ? (en ? "the PDF" : "PDF-ul") : en ? `${sent.length} PDFs` : `${sent.length} PDF-uri`}
+          {sent.length === 1
+            ? en
+              ? "the PDF"
+              : "PDF-ul"
+            : en
+              ? `${sent.length} PDFs`
+              : `${sent.length} PDF-uri`}
           {en ? " to " : " pe "}
           <strong>{email}</strong>
           {en
@@ -119,8 +154,12 @@ const ResourcePicker = ({ items, source }: { items: PickerItem[]; source: string
         <ul className="space-y-2">
           {sent.map((s) => (
             <li key={s.resource}>
-              <a href={s.fileHref} className="inline-flex items-center gap-2 text-sm font-semibold text-brand-green underline-offset-4 hover:underline">
-                <FileText className="h-4 w-4" aria-hidden /> {en ? "Download now: " : "Descarcă acum: "}
+              <a
+                href={s.fileHref}
+                className="inline-flex items-center gap-2 text-sm font-semibold text-brand-green underline-offset-4 hover:underline"
+              >
+                <FileText className="h-4 w-4" aria-hidden />{" "}
+                {en ? "Download now: " : "Descarcă acum: "}
                 {s.title}
               </a>
             </li>
@@ -130,7 +169,9 @@ const ResourcePicker = ({ items, source }: { items: PickerItem[]; source: string
           to="/trial"
           className="inline-block rounded-lg bg-primary px-5 py-2.5 text-sm font-semibold text-primary-foreground no-underline transition hover:bg-primary/90"
         >
-          {en ? "Book the free trial lesson" : "Rezervă lecția de probă gratuită"}
+          {en
+            ? "Book the free trial lesson"
+            : "Rezervă lecția de probă gratuită"}
         </Link>
       </div>
     );
@@ -140,7 +181,9 @@ const ResourcePicker = ({ items, source }: { items: PickerItem[]; source: string
     <form onSubmit={submit} className="not-prose space-y-5">
       <fieldset>
         <legend className="mb-3 text-sm font-semibold text-foreground">
-          {en ? "1. Pick the PDFs you want" : "1. Alege PDF-urile pe care le vrei"}
+          {en
+            ? "1. Pick the PDFs you want"
+            : "1. Alege PDF-urile pe care le vrei"}
         </legend>
         <div className="grid gap-3 sm:grid-cols-3">
           {visible.map((it) => {
@@ -150,14 +193,23 @@ const ResourcePicker = ({ items, source }: { items: PickerItem[]; source: string
                 key={it.resource}
                 className={cn(
                   "relative flex cursor-pointer flex-col rounded-2xl border bg-card p-4 transition sm:p-5",
-                  on ? "border-brand-green bg-brand-green/5 shadow-sm" : "border-[#E7E1D6] hover:border-brand-green/50",
+                  on
+                    ? "border-brand-green bg-brand-green/5 shadow-sm"
+                    : "border-[#E7E1D6] hover:border-brand-green/50",
                 )}
               >
-                <input type="checkbox" className="sr-only" checked={on} onChange={() => toggle(it.resource)} />
+                <input
+                  type="checkbox"
+                  className="sr-only"
+                  checked={on}
+                  onChange={() => toggle(it.resource)}
+                />
                 <span
                   className={cn(
                     "absolute right-4 top-4 flex h-6 w-6 items-center justify-center rounded-full border-2 transition",
-                    on ? "border-brand-green bg-brand-green text-white" : "border-[#D8D0C2] bg-white",
+                    on
+                      ? "border-brand-green bg-brand-green text-white"
+                      : "border-[#D8D0C2] bg-white",
                   )}
                   aria-hidden
                 >
@@ -166,8 +218,12 @@ const ResourcePicker = ({ items, source }: { items: PickerItem[]; source: string
                 <span className="mb-4 hidden h-11 w-11 items-center justify-center rounded-xl bg-brand-green/10 text-brand-green sm:flex">
                   <FileText className="h-5 w-5" aria-hidden />
                 </span>
-                <span className="pr-6 font-display text-lg font-bold leading-snug text-foreground">{it.title}</span>
-                <span className="mt-2 text-sm leading-relaxed text-muted-foreground">{it.description}</span>
+                <span className="pr-6 font-display text-lg font-bold leading-snug text-foreground">
+                  {it.title}
+                </span>
+                <span className="mt-2 text-sm leading-relaxed text-muted-foreground">
+                  {it.description}
+                </span>
                 <span className="mt-auto pt-3 text-xs font-semibold uppercase tracking-wide text-brand-green">
                   {en ? "PDF · free" : "PDF · gratuit"}
                 </span>
@@ -178,14 +234,28 @@ const ResourcePicker = ({ items, source }: { items: PickerItem[]; source: string
       </fieldset>
 
       <div className="rounded-2xl bg-cream p-6 space-y-4">
-        <p className="text-sm font-semibold text-foreground">{en ? "2. Where should we send them?" : "2. Unde ți le trimitem?"}</p>
+        <p className="text-sm font-semibold text-foreground">
+          {en ? "2. Where should we send them?" : "2. Unde ți le trimitem?"}
+        </p>
         <div className="grid gap-3 sm:grid-cols-2">
           <div className="space-y-1.5">
-            <Label htmlFor="rp-name" className="text-sm">{en ? "First name" : "Prenume"}</Label>
-            <Input id="rp-name" value={name} onChange={(e) => setName(e.target.value)} placeholder="Maria" autoComplete="given-name" maxLength={120} className="bg-white" />
+            <Label htmlFor="rp-name" className="text-sm">
+              {en ? "First name" : "Prenume"}
+            </Label>
+            <Input
+              id="rp-name"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+              placeholder="Maria"
+              autoComplete="given-name"
+              maxLength={120}
+              className="bg-white"
+            />
           </div>
           <div className="space-y-1.5">
-            <Label htmlFor="rp-email" className="text-sm">Email *</Label>
+            <Label htmlFor="rp-email" className="text-sm">
+              Email *
+            </Label>
             <Input
               id="rp-email"
               type="email"
@@ -200,21 +270,41 @@ const ResourcePicker = ({ items, source }: { items: PickerItem[]; source: string
           </div>
         </div>
         <div className="flex items-start gap-2">
-          <Checkbox id="rp-consent" checked={consent} onCheckedChange={(v) => setConsent(v === true)} className="mt-0.5" />
-          <Label htmlFor="rp-consent" className="cursor-pointer text-xs font-normal leading-relaxed text-muted-foreground">
+          <Checkbox
+            id="rp-consent"
+            checked={consent}
+            onCheckedChange={(v) => setConsent(v === true)}
+            className="mt-0.5"
+          />
+          <Label
+            htmlFor="rp-consent"
+            className="cursor-pointer text-xs font-normal leading-relaxed text-muted-foreground"
+          >
             {en
               ? "I agree to receive the PDFs and occasional information about courses. I can unsubscribe at any time. See the "
               : "Sunt de acord să primesc PDF-urile și ocazional informații despre cursuri. Mă pot dezabona oricând. Vezi "}
-            <Link to="/privacy" className="text-primary underline">{en ? "privacy policy" : "politica de confidențialitate"}</Link>.
+            <Link to="/privacy" className="text-primary underline">
+              {en ? "privacy policy" : "politica de confidențialitate"}
+            </Link>
+            .
           </Label>
         </div>
-        <Button type="submit" disabled={loading || !chosen.length} className="w-full sm:w-auto">
+        <Button
+          type="submit"
+          disabled={loading || !chosen.length}
+          className="w-full sm:w-auto"
+        >
           {loading ? (
             <>
-              <Loader2 className="mr-2 h-4 w-4 animate-spin" /> {en ? "Sending…" : "Se trimite…"}
+              <Loader2 className="mr-2 h-4 w-4 animate-spin" />{" "}
+              {en ? "Sending…" : "Se trimite…"}
             </>
           ) : chosen.length === 1 ? (
-            en ? "Send me the PDF" : "Trimite-mi PDF-ul"
+            en ? (
+              "Send me the PDF"
+            ) : (
+              "Trimite-mi PDF-ul"
+            )
           ) : en ? (
             `Send me the ${chosen.length} PDFs`
           ) : (

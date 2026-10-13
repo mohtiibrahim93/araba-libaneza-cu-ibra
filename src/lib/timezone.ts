@@ -50,7 +50,8 @@ export function bucharestCivilToUtc(
       hour: "2-digit",
       minute: "2-digit",
     }).formatToParts(new Date(guess));
-    const g = (t: string) => parseInt(parts.find((p) => p.type === t)!.value, 10);
+    const g = (t: string) =>
+      parseInt(parts.find((p) => p.type === t)!.value, 10);
     const seenH = g("hour") % 24;
     const seenMi = g("minute");
     const seenD = g("day");
@@ -85,9 +86,17 @@ export function weeklyBucharestInTz(
   const mo = parseInt(todayParts.find((p) => p.type === "month")!.value, 10);
   const d = parseInt(todayParts.find((p) => p.type === "day")!.value, 10);
   const wdShort = todayParts.find((p) => p.type === "weekday")!.value;
-  const map: Record<string, number> = { Mon: 1, Tue: 2, Wed: 3, Thu: 4, Fri: 5, Sat: 6, Sun: 7 };
+  const map: Record<string, number> = {
+    Mon: 1,
+    Tue: 2,
+    Wed: 3,
+    Thu: 4,
+    Fri: 5,
+    Sat: 6,
+    Sun: 7,
+  };
   const todayWd = map[wdShort] ?? 1;
-  const addDays = ((weekday - todayWd) + 7) % 7;
+  const addDays = (weekday - todayWd + 7) % 7;
   // Build a Date for the target Bucharest civil moment
   const utc = bucharestCivilToUtc(y, mo, d + addDays, h, m);
   // Format in target TZ
@@ -104,7 +113,10 @@ export function weeklyBucharestInTz(
   return {
     weekday: newWd,
     time: `${newH === "24" ? "00" : newH}:${newMi}`,
-    sameAsSource: newWd === weekday && `${newH}:${newMi}` === `${String(h).padStart(2, "0")}:${String(m).padStart(2, "0")}`,
+    sameAsSource:
+      newWd === weekday &&
+      `${newH}:${newMi}` ===
+        `${String(h).padStart(2, "0")}:${String(m).padStart(2, "0")}`,
   };
 }
 

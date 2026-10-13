@@ -10,7 +10,9 @@ const ResourcesTeaser = () => {
     {
       to: "/blog/alfabetul-arab-pentru-incepatori",
       icon: BookOpen,
-      title: isEn ? "Arabic alphabet for beginners" : "Alfabetul arab pentru începători",
+      title: isEn
+        ? "Arabic alphabet for beginners"
+        : "Alfabetul arab pentru începători",
       desc: isEn
         ? "All 28 letters, pronunciation and writing direction."
         : "Cele 28 de litere, pronunție și sensul de scriere. Cu tabel complet.",
@@ -18,7 +20,9 @@ const ResourcesTeaser = () => {
     {
       to: "/blog/lebanese-arabic-phrases",
       icon: MessageCircle,
-      title: isEn ? "35+ Lebanese Arabic phrases" : "35+ expresii în araba libaneză",
+      title: isEn
+        ? "35+ Lebanese Arabic phrases"
+        : "35+ expresii în araba libaneză",
       desc: isEn
         ? "Daily phrases for greetings, café, taxi and family."
         : "Expresii zilnice: salut, restaurant, taxi, familie — cu PDF gratuit.",
@@ -37,7 +41,9 @@ const ResourcesTeaser = () => {
     <section className="py-section bg-cream">
       <div className="w-full max-w-content mx-auto px-gutter">
         <div className="mb-10 max-w-3xl">
-          <span className="mb-2 block text-sm font-bold uppercase tracking-[0.1em] text-foreground">{isEn ? "Free" : "Gratuit"}</span>
+          <span className="mb-2 block text-sm font-bold uppercase tracking-[0.1em] text-foreground">
+            {isEn ? "Free" : "Gratuit"}
+          </span>
           <h2 className="font-display text-display-lg font-bold tracking-tight text-foreground mb-3">
             {isEn ? "Free resources" : "Resurse gratuite"}
           </h2>
@@ -61,10 +67,14 @@ const ResourcesTeaser = () => {
               <h3 className="text-lg font-semibold mb-2 group-hover:text-primary transition-colors">
                 {r.title}
               </h3>
-              <p className="text-sm text-muted-foreground flex-grow">{r.desc}</p>
+              <p className="text-sm text-muted-foreground flex-grow">
+                {r.desc}
+              </p>
               <span className="mt-4 text-sm font-medium text-primary inline-flex items-center">
                 {isEn ? "Read more" : "Citește mai mult"}
-                <span className="ml-1 group-hover:translate-x-1 transition-transform">→</span>
+                <span className="ml-1 group-hover:translate-x-1 transition-transform">
+                  →
+                </span>
               </span>
             </Link>
           ))}

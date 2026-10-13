@@ -16,8 +16,14 @@ const NotFound = () => {
 
   useEffect(() => {
     if (redirect) return;
-    console.error("404 Error: User attempted to access non-existent route:", location.pathname);
-    trackEvent("404NotFound", { path: location.pathname, referrer: document.referrer || "" });
+    console.error(
+      "404 Error: User attempted to access non-existent route:",
+      location.pathname,
+    );
+    trackEvent("404NotFound", {
+      path: location.pathname,
+      referrer: document.referrer || "",
+    });
   }, [location.pathname, redirect]);
 
   // Legacy or "obvious" URLs (/contact, /preturi, /en/courses, …) are sent to
@@ -47,7 +53,9 @@ const NotFound = () => {
       <ScrollToTop />
       <Navbar />
       <main className="mx-auto max-w-5xl px-gutter pt-36 pb-16">
-        <p className="text-xs font-semibold uppercase tracking-widest text-brand-green">404</p>
+        <p className="text-xs font-semibold uppercase tracking-widest text-brand-green">
+          404
+        </p>
         <h1 className="mt-3 font-display text-display-lg font-bold tracking-tight text-foreground">
           {en ? "We couldn't find that page" : "Nu am găsit pagina căutată"}
         </h1>
@@ -64,7 +72,10 @@ const NotFound = () => {
             to={en ? "/en/find-your-page" : "/te-ajutam"}
             className="font-medium text-primary hover:underline"
           >
-            {en ? "See every page on the site" : "Vezi toate paginile site-ului"} →
+            {en
+              ? "See every page on the site"
+              : "Vezi toate paginile site-ului"}{" "}
+            →
           </Link>
         </p>
       </main>

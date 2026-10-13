@@ -21,27 +21,62 @@ type StatusMeta = { label: string; tone: string; open: boolean };
 
 // How each cohort status reads at a glance, and whether it still accepts sign-ups.
 const STATUS_META: Record<string, StatusMeta> = {
-  draft: { label: "Draft (ascuns)", tone: "bg-muted text-muted-foreground border-border", open: false },
-  forming: { label: "În formare", tone: "bg-primary/10 text-primary border-primary/30", open: true },
-  minimum_reached: { label: "Minim atins", tone: "bg-amber-500/10 text-amber-700 dark:text-amber-400 border-amber-500/30", open: true },
-  confirmed: { label: "Confirmată", tone: "bg-emerald-500/10 text-emerald-700 dark:text-emerald-400 border-emerald-500/30", open: true },
-  full: { label: "Plină (waitlist)", tone: "bg-amber-500/10 text-amber-700 dark:text-amber-400 border-amber-500/30", open: false },
-  in_progress: { label: "În desfășurare", tone: "bg-blue-500/10 text-blue-700 dark:text-blue-400 border-blue-500/30", open: false },
-  completed: { label: "Încheiată", tone: "bg-muted text-muted-foreground border-border", open: false },
-  cancelled: { label: "Anulată", tone: "bg-destructive/10 text-destructive border-destructive/30", open: false },
+  draft: {
+    label: "Draft (ascuns)",
+    tone: "bg-muted text-muted-foreground border-border",
+    open: false,
+  },
+  forming: {
+    label: "În formare",
+    tone: "bg-primary/10 text-primary border-primary/30",
+    open: true,
+  },
+  minimum_reached: {
+    label: "Minim atins",
+    tone: "bg-amber-500/10 text-amber-700 dark:text-amber-400 border-amber-500/30",
+    open: true,
+  },
+  confirmed: {
+    label: "Confirmată",
+    tone: "bg-emerald-500/10 text-emerald-700 dark:text-emerald-400 border-emerald-500/30",
+    open: true,
+  },
+  full: {
+    label: "Plină (waitlist)",
+    tone: "bg-amber-500/10 text-amber-700 dark:text-amber-400 border-amber-500/30",
+    open: false,
+  },
+  in_progress: {
+    label: "În desfășurare",
+    tone: "bg-blue-500/10 text-blue-700 dark:text-blue-400 border-blue-500/30",
+    open: false,
+  },
+  completed: {
+    label: "Încheiată",
+    tone: "bg-muted text-muted-foreground border-border",
+    open: false,
+  },
+  cancelled: {
+    label: "Anulată",
+    tone: "bg-destructive/10 text-destructive border-destructive/30",
+    open: false,
+  },
 };
 
 const LEVEL_ORDER = ["A1", "A2", "B1", "B2", "C1", "C2"] as const;
-const FORMATS: { key: "online" | "fizic"; label: string; icon: typeof Wifi }[] = [
-  { key: "online", label: "Online", icon: Wifi },
-  { key: "fizic", label: "Fizic", icon: MapPin },
-];
+const FORMATS: { key: "online" | "fizic"; label: string; icon: typeof Wifi }[] =
+  [
+    { key: "online", label: "Online", icon: Wifi },
+    { key: "fizic", label: "Fizic", icon: MapPin },
+  ];
 
 function fmtDate(iso: string) {
   const [y = 1970, m = 1, d = 1] = iso.split("-").map(Number);
-  return new Intl.DateTimeFormat("ro-RO", { day: "numeric", month: "short", year: "numeric" }).format(
-    new Date(y, m - 1, d),
-  );
+  return new Intl.DateTimeFormat("ro-RO", {
+    day: "numeric",
+    month: "short",
+    year: "numeric",
+  }).format(new Date(y, m - 1, d));
 }
 
 /**
@@ -61,14 +96,21 @@ const CohortLine = ({ c, taken }: { c: Cohort; taken: number }) => {
   const meta = STATUS_META[c.status] ?? STATUS_META["forming"]!;
   const seatsLeft = Math.max(0, c.max_seats - taken);
   // Clamped: an over-booked cohort (waitlist) would otherwise overflow the bar.
-  const pct = c.max_seats > 0 ? Math.min(100, Math.round((taken / c.max_seats) * 100)) : 0;
+  const pct =
+    c.max_seats > 0
+      ? Math.min(100, Math.round((taken / c.max_seats) * 100))
+      : 0;
   const full = seatsLeft === 0;
   return (
     <div className="space-y-2 rounded-md border border-border bg-background px-2.5 py-2 text-xs">
       <div className="flex flex-wrap items-center gap-x-2 gap-y-1">
         <Calendar className="h-3.5 w-3.5 shrink-0 text-muted-foreground" />
-        <span className="font-medium text-foreground">{fmtDate(c.start_date)}</span>
-        <span className={`inline-flex rounded-full border px-1.5 py-0.5 text-[10px] font-medium ${meta.tone}`}>
+        <span className="font-medium text-foreground">
+          {fmtDate(c.start_date)}
+        </span>
+        <span
+          className={`inline-flex rounded-full border px-1.5 py-0.5 text-[10px] font-medium ${meta.tone}`}
+        >
           {meta.label}
         </span>
       </div>
@@ -77,10 +119,14 @@ const CohortLine = ({ c, taken }: { c: Cohort; taken: number }) => {
         <div className="flex items-baseline justify-between gap-2">
           <span className="flex items-center gap-1 text-muted-foreground">
             <Users className="h-3.5 w-3.5 shrink-0" />
-            <span className="text-sm font-semibold tabular-nums text-foreground">{taken}</span>
+            <span className="text-sm font-semibold tabular-nums text-foreground">
+              {taken}
+            </span>
             <span className="tabular-nums">/ {c.max_seats} înscriși</span>
           </span>
-          <span className={`tabular-nums ${full ? "font-medium text-amber-700 dark:text-amber-400" : "text-muted-foreground"}`}>
+          <span
+            className={`tabular-nums ${full ? "font-medium text-amber-700 dark:text-amber-400" : "text-muted-foreground"}`}
+          >
             {full ? "niciun loc liber" : `${seatsLeft} libere`}
           </span>
         </div>
@@ -110,7 +156,9 @@ const FormatColumn = ({
   cohorts: Cohort[];
   counts: Map<string, number>;
 }) => {
-  const openCount = cohorts.filter((c) => (STATUS_META[c.status] ?? STATUS_META["forming"]!).open).length;
+  const openCount = cohorts.filter(
+    (c) => (STATUS_META[c.status] ?? STATUS_META["forming"]!).open,
+  ).length;
   return (
     <div className="rounded-lg border border-border bg-muted/20 p-2.5">
       <div className="mb-2 flex items-center justify-between">
@@ -125,11 +173,17 @@ const FormatColumn = ({
               : "bg-muted text-muted-foreground"
           }`}
         >
-          {openCount === 0 ? "închis" : openCount === 1 ? "1 deschisă" : `${openCount} deschise`}
+          {openCount === 0
+            ? "închis"
+            : openCount === 1
+              ? "1 deschisă"
+              : `${openCount} deschise`}
         </span>
       </div>
       {cohorts.length === 0 ? (
-        <p className="text-[11px] text-muted-foreground italic px-1 py-1">Nicio cohortă</p>
+        <p className="text-[11px] text-muted-foreground italic px-1 py-1">
+          Nicio cohortă
+        </p>
       ) : (
         <div className="space-y-1.5">
           {cohorts.map((c) => (
@@ -149,10 +203,11 @@ const GroupOverview = () => {
   const load = useCallback(async () => {
     setLoading(true);
     try {
-      const [{ data: adminData, error: adminErr }, { data: countRows }] = await Promise.all([
-        invokeAdmin({ action: "list_cohorts" }),
-        supabase.rpc("get_cohort_signup_counts"),
-      ]);
+      const [{ data: adminData, error: adminErr }, { data: countRows }] =
+        await Promise.all([
+          invokeAdmin({ action: "list_cohorts" }),
+          supabase.rpc("get_cohort_signup_counts"),
+        ]);
       if (adminErr) throw adminErr;
       if (adminData?.error) throw new Error(adminData.error);
       setCohorts((adminData?.data as Cohort[]) || []);
@@ -162,7 +217,10 @@ const GroupOverview = () => {
       );
       setCounts(map);
     } catch {
-      toast({ title: "Nu am putut încărca privirea de ansamblu", variant: "destructive" });
+      toast({
+        title: "Nu am putut încărca privirea de ansamblu",
+        variant: "destructive",
+      });
     } finally {
       setLoading(false);
     }
@@ -176,24 +234,33 @@ const GroupOverview = () => {
   const kidsCohorts = cohorts.filter((c) => c.form_type === "kids");
   const cohortsFor = (level: string, format: "online" | "fizic") =>
     groupCohorts
-      .filter((c) => c.level === level && (c.format === format || c.format == null))
+      .filter(
+        (c) => c.level === level && (c.format === format || c.format == null),
+      )
       .sort((a, b) => a.start_date.localeCompare(b.start_date));
 
-  const totalOpen = cohorts.filter((c) => (STATUS_META[c.status] ?? STATUS_META["forming"]!).open).length;
+  const totalOpen = cohorts.filter(
+    (c) => (STATUS_META[c.status] ?? STATUS_META["forming"]!).open,
+  ).length;
 
   return (
     <section className="mb-6 rounded-lg border border-border bg-card p-4">
       <div className="mb-4 flex flex-wrap items-center justify-between gap-2">
         <div>
-          <h2 className="text-base font-semibold text-foreground">Privire de ansamblu — cohorte</h2>
+          <h2 className="text-base font-semibold text-foreground">
+            Privire de ansamblu — cohorte
+          </h2>
           <p className="text-sm text-muted-foreground">
-            Fiecare nivel, cu variantele online și fizic alături. Statusul și locurele se actualizează
-            din înscrieri. Editează detaliile în „Cohorte grupe" mai jos.
+            Fiecare nivel, cu variantele online și fizic alături. Statusul și
+            locurele se actualizează din înscrieri. Editează detaliile în
+            „Cohorte grupe" mai jos.
           </p>
         </div>
         {!loading && (
           <span className="rounded-full border border-emerald-500/30 bg-emerald-500/10 px-2.5 py-1 text-xs font-medium text-emerald-700 dark:text-emerald-400">
-            {totalOpen === 1 ? "1 cohortă deschisă" : `${totalOpen} cohorte deschise`}
+            {totalOpen === 1
+              ? "1 cohortă deschisă"
+              : `${totalOpen} cohorte deschise`}
           </span>
         )}
       </div>
@@ -205,8 +272,13 @@ const GroupOverview = () => {
       ) : (
         <div className="grid gap-3 lg:grid-cols-2">
           {LEVEL_ORDER.map((level) => (
-            <div key={level} className="rounded-lg border border-border bg-background p-3">
-              <h3 className="mb-2 text-sm font-bold text-foreground">{level}</h3>
+            <div
+              key={level}
+              className="rounded-lg border border-border bg-background p-3"
+            >
+              <h3 className="mb-2 text-sm font-bold text-foreground">
+                {level}
+              </h3>
               <div className="grid grid-cols-2 gap-2">
                 {FORMATS.map((f) => (
                   <FormatColumn
@@ -227,7 +299,9 @@ const GroupOverview = () => {
               <FormatColumn
                 label="Curs copii"
                 icon={Users}
-                cohorts={[...kidsCohorts].sort((a, b) => a.start_date.localeCompare(b.start_date))}
+                cohorts={[...kidsCohorts].sort((a, b) =>
+                  a.start_date.localeCompare(b.start_date),
+                )}
                 counts={counts}
               />
             </div>

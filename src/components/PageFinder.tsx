@@ -31,7 +31,10 @@ interface Props {
 }
 
 const T = {
-  suggestions: { ro: "Cel mai probabil căutai", en: "You were probably looking for" },
+  suggestions: {
+    ro: "Cel mai probabil căutai",
+    en: "You were probably looking for",
+  },
   searchLabel: { ro: "Caută în site", en: "Search the site" },
   searchPlaceholder: {
     ro: "Ex: curs pentru copii, alfabet, prețuri…",
@@ -42,7 +45,10 @@ const T = {
     en: "Nothing for that word. Try “course”, “kids”, “alphabet” or “prices”.",
   },
   courses: { ro: "Cursuri", en: "Courses" },
-  resources: { ro: "Resurse gratuite și jocul", en: "Free resources and the game" },
+  resources: {
+    ro: "Resurse gratuite și jocul",
+    en: "Free resources and the game",
+  },
   blog: { ro: "Articole din blog", en: "From the blog" },
   allBlog: { ro: "Vezi toate articolele", en: "See all articles" },
 } as const;
@@ -50,7 +56,15 @@ const T = {
 const cardClass =
   "block rounded-lg border border-border bg-card p-4 text-left transition-colors hover:border-primary";
 
-function ResultLink({ page, event, lang }: { page: FoundPage; event: string; lang: "ro" | "en" }) {
+function ResultLink({
+  page,
+  event,
+  lang,
+}: {
+  page: FoundPage;
+  event: string;
+  lang: "ro" | "en";
+}) {
   return (
     <Link
       to={page.path}
@@ -58,16 +72,23 @@ function ResultLink({ page, event, lang }: { page: FoundPage; event: string; lan
       onClick={() => trackEvent(event, { target: page.path, lang })}
     >
       <span className="block text-sm font-semibold">{page.title}</span>
-      <span className="mt-1 block text-xs text-muted-foreground">{page.description}</span>
+      <span className="mt-1 block text-xs text-muted-foreground">
+        {page.description}
+      </span>
     </Link>
   );
 }
 
 const PageFinder = ({ lang, wrongPath, full = false }: Props) => {
   const [query, setQuery] = useState("");
-  const suggestions = useMemo(() => (wrongPath ? suggestFor(wrongPath) : []), [wrongPath]);
+  const suggestions = useMemo(
+    () => (wrongPath ? suggestFor(wrongPath) : []),
+    [wrongPath],
+  );
   const results = useMemo(() => searchPages(query, lang), [query, lang]);
-  const posts = full ? blogPostsNewestFirst.slice(0, 9) : blogPostsNewestFirst.slice(0, 3);
+  const posts = full
+    ? blogPostsNewestFirst.slice(0, 9)
+    : blogPostsNewestFirst.slice(0, 3);
   const courses = full ? COURSE_PICKS : COURSE_PICKS.slice(0, 3);
   const resources = full ? RESOURCE_PICKS : RESOURCE_PICKS.slice(0, 3);
 
@@ -80,7 +101,12 @@ const PageFinder = ({ lang, wrongPath, full = false }: Props) => {
           </h2>
           <div className="mt-4 grid gap-3 sm:grid-cols-3">
             {suggestions.map((p) => (
-              <ResultLink key={p.path} page={p} event="404Suggestion" lang={lang} />
+              <ResultLink
+                key={p.path}
+                page={p}
+                event="404Suggestion"
+                lang={lang}
+              />
             ))}
           </div>
         </section>
@@ -107,11 +133,18 @@ const PageFinder = ({ lang, wrongPath, full = false }: Props) => {
         {query.trim().length > 1 && (
           <div className="mt-4" aria-live="polite">
             {results.length === 0 ? (
-              <p className="text-sm text-muted-foreground">{T.noResults[lang]}</p>
+              <p className="text-sm text-muted-foreground">
+                {T.noResults[lang]}
+              </p>
             ) : (
               <div className="grid gap-3 sm:grid-cols-2">
                 {results.map((p) => (
-                  <ResultLink key={p.path} page={p} event="PageFinderSearchClick" lang={lang} />
+                  <ResultLink
+                    key={p.path}
+                    page={p}
+                    event="PageFinderSearchClick"
+                    lang={lang}
+                  />
                 ))}
               </div>
             )}
@@ -126,8 +159,12 @@ const PageFinder = ({ lang, wrongPath, full = false }: Props) => {
         <div className="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
           {courses.map((c) => (
             <Link key={c.to} to={c.to} className={cardClass}>
-              <span className="block text-sm font-semibold">{c.label[lang]}</span>
-              <span className="mt-1 block text-xs text-muted-foreground">{c.note[lang]}</span>
+              <span className="block text-sm font-semibold">
+                {c.label[lang]}
+              </span>
+              <span className="mt-1 block text-xs text-muted-foreground">
+                {c.note[lang]}
+              </span>
             </Link>
           ))}
         </div>
@@ -140,8 +177,12 @@ const PageFinder = ({ lang, wrongPath, full = false }: Props) => {
         <div className="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
           {resources.map((r) => (
             <Link key={r.to} to={r.to} className={cardClass}>
-              <span className="block text-sm font-semibold">{r.label[lang]}</span>
-              <span className="mt-1 block text-xs text-muted-foreground">{r.note[lang]}</span>
+              <span className="block text-sm font-semibold">
+                {r.label[lang]}
+              </span>
+              <span className="mt-1 block text-xs text-muted-foreground">
+                {r.note[lang]}
+              </span>
             </Link>
           ))}
         </div>
@@ -171,7 +212,9 @@ const PageFinder = ({ lang, wrongPath, full = false }: Props) => {
                   />
                 )}
                 <span className="block p-4">
-                  <span className="block text-sm font-semibold">{L(p.title, lang)}</span>
+                  <span className="block text-sm font-semibold">
+                    {L(p.title, lang)}
+                  </span>
                   <span className="mt-1 block text-xs text-muted-foreground">
                     {L(p.description, lang)}
                   </span>
@@ -181,7 +224,10 @@ const PageFinder = ({ lang, wrongPath, full = false }: Props) => {
           })}
         </div>
         <p className="mt-4 text-sm">
-          <Link to={lang === "en" ? "/en/blog" : "/blog"} className="font-medium text-primary hover:underline">
+          <Link
+            to={lang === "en" ? "/en/blog" : "/blog"}
+            className="font-medium text-primary hover:underline"
+          >
             {T.allBlog[lang]} →
           </Link>
         </p>

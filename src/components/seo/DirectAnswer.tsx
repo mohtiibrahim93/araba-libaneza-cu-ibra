@@ -16,7 +16,13 @@ import type { ReactNode } from "react";
  * Prices come from src/lib/pricing.ts wherever they appear here, so the passage
  * that gets quoted cannot end up naming last term's fee.
  */
-const DirectAnswer = ({ question, children }: { question: string; children: ReactNode }) => (
+const DirectAnswer = ({
+  question,
+  children,
+}: {
+  question: string;
+  children: ReactNode;
+}) => (
   <aside
     aria-label={question}
     className="not-prose mb-10 rounded-2xl border border-border bg-muted/40 px-5 py-4"
@@ -24,7 +30,9 @@ const DirectAnswer = ({ question, children }: { question: string; children: Reac
     <p className="mb-1.5 text-xs font-semibold uppercase tracking-wide text-primary">
       {question}
     </p>
-    <div className="text-[0.975rem] leading-relaxed text-foreground [&>p+p]:mt-2">{children}</div>
+    <div className="text-[0.975rem] leading-relaxed text-foreground [&>p+p]:mt-2">
+      {children}
+    </div>
   </aside>
 );
 

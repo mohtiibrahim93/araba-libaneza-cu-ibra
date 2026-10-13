@@ -153,77 +153,115 @@ const organizationJsonLd = JSON.stringify({
   ],
 });
 
-export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()({
-  head: () => ({
-    meta: [
-      { charSet: "utf-8" },
-      { name: "viewport", content: "width=device-width, initial-scale=1.0" },
-      { "data-rh": "true", title: "Cursuri de Arabă Libaneză în București și Online — Ibra" },
-      {
-        "data-rh": "true",
-        name: "description",
-        content:
-          "Cursuri de arabă libaneză în București și online, pentru toate nivelurile, cu Ibra, profesor nativ din Liban. Vorbești din primele lecții.",
-      },
-      { name: "author", content: "Centrul de Arabă Libaneză" },
-      // Google Search Console ownership (re-added by the owner on 13 October
-      // 2026). The domain is also verified by DNS; keep this unless he says
-      // otherwise, since Search Console re-checks it.
-      { name: "google-site-verification", content: "O4lPkW4s-d2rF0NNhpyeNU-6yhLxvox4c73Hz2lcoKU" },
-      { "data-rh": "true", property: "og:type", content: "website" },
-      { "data-rh": "true", property: "og:url", content: "https://centruldearabalibaneza.com/" },
-      { "data-rh": "true", property: "og:title", content: "Cursuri de arabă în București și online — Arabă libaneză cu Ibra" },
-      {
-        "data-rh": "true",
-        property: "og:description",
-        content:
-          "Cursuri de arabă libaneză în București și online, pentru toate nivelurile, cu Ibra, profesor nativ din Liban. Vorbești din primele lecții.",
-      },
-      { "data-rh": "true", property: "og:image", content: "https://centruldearabalibaneza.com/og-image.png" },
-      { "data-rh": "true", name: "twitter:card", content: "summary_large_image" },
-      { "data-rh": "true", name: "twitter:title", content: "Cursuri de arabă în București și online — Arabă libaneză cu Ibra" },
-      {
-        "data-rh": "true",
-        name: "twitter:description",
-        content:
-          "Cursuri de arabă libaneză în București și online, pentru toate nivelurile, cu Ibra, profesor nativ din Liban. Vorbești din primele lecții.",
-      },
-      { "data-rh": "true", name: "twitter:image", content: "https://centruldearabalibaneza.com/og-image.png" },
-    ],
-    links: [
-      { rel: "stylesheet", href: appCss },
-      { rel: "icon", type: "image/png", href: "/favicon.png" },
-      { rel: "apple-touch-icon", href: "/apple-touch-icon.png" },
-      { rel: "preconnect", href: "https://fonts.googleapis.com" },
-      { rel: "preconnect", href: "https://fonts.gstatic.com", crossOrigin: "anonymous" },
-      {
-        rel: "preload",
-        as: "style",
-        href: "https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap",
-      },
-      {
-        rel: "stylesheet",
-        href: "https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap",
-      },
-    ],
-    scripts: [
-      { children: analyticsBootstrap },
-      { children: cmpLegacyCleanup },
-      { children: themeBootstrap },
-      { children: gtagBootstrap },
-      {
-        src: "https://www.google.com/recaptcha/api.js?render=6Le9mPssAAAAAOEV4BSPnuBGmJDDQiPtQgOwkzjc",
-        async: true,
-        defer: true,
-      },
-      { type: "application/ld+json", children: organizationJsonLd },
-    ],
-  }),
-  shellComponent: RootShell,
-  component: RootComponent,
-  notFoundComponent: () => <NotFound />,
-  errorComponent: RootErrorComponent,
-});
+export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
+  {
+    head: () => ({
+      meta: [
+        { charSet: "utf-8" },
+        { name: "viewport", content: "width=device-width, initial-scale=1.0" },
+        {
+          "data-rh": "true",
+          title: "Cursuri de Arabă Libaneză în București și Online — Ibra",
+        },
+        {
+          "data-rh": "true",
+          name: "description",
+          content:
+            "Cursuri de arabă libaneză în București și online, pentru toate nivelurile, cu Ibra, profesor nativ din Liban. Vorbești din primele lecții.",
+        },
+        { name: "author", content: "Centrul de Arabă Libaneză" },
+        // Google Search Console ownership (re-added by the owner on 13 October
+        // 2026). The domain is also verified by DNS; keep this unless he says
+        // otherwise, since Search Console re-checks it.
+        {
+          name: "google-site-verification",
+          content: "O4lPkW4s-d2rF0NNhpyeNU-6yhLxvox4c73Hz2lcoKU",
+        },
+        { "data-rh": "true", property: "og:type", content: "website" },
+        {
+          "data-rh": "true",
+          property: "og:url",
+          content: "https://centruldearabalibaneza.com/",
+        },
+        {
+          "data-rh": "true",
+          property: "og:title",
+          content:
+            "Cursuri de arabă în București și online — Arabă libaneză cu Ibra",
+        },
+        {
+          "data-rh": "true",
+          property: "og:description",
+          content:
+            "Cursuri de arabă libaneză în București și online, pentru toate nivelurile, cu Ibra, profesor nativ din Liban. Vorbești din primele lecții.",
+        },
+        {
+          "data-rh": "true",
+          property: "og:image",
+          content: "https://centruldearabalibaneza.com/og-image.png",
+        },
+        {
+          "data-rh": "true",
+          name: "twitter:card",
+          content: "summary_large_image",
+        },
+        {
+          "data-rh": "true",
+          name: "twitter:title",
+          content:
+            "Cursuri de arabă în București și online — Arabă libaneză cu Ibra",
+        },
+        {
+          "data-rh": "true",
+          name: "twitter:description",
+          content:
+            "Cursuri de arabă libaneză în București și online, pentru toate nivelurile, cu Ibra, profesor nativ din Liban. Vorbești din primele lecții.",
+        },
+        {
+          "data-rh": "true",
+          name: "twitter:image",
+          content: "https://centruldearabalibaneza.com/og-image.png",
+        },
+      ],
+      links: [
+        { rel: "stylesheet", href: appCss },
+        { rel: "icon", type: "image/png", href: "/favicon.png" },
+        { rel: "apple-touch-icon", href: "/apple-touch-icon.png" },
+        { rel: "preconnect", href: "https://fonts.googleapis.com" },
+        {
+          rel: "preconnect",
+          href: "https://fonts.gstatic.com",
+          crossOrigin: "anonymous",
+        },
+        {
+          rel: "preload",
+          as: "style",
+          href: "https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap",
+        },
+        {
+          rel: "stylesheet",
+          href: "https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap",
+        },
+      ],
+      scripts: [
+        { children: analyticsBootstrap },
+        { children: cmpLegacyCleanup },
+        { children: themeBootstrap },
+        { children: gtagBootstrap },
+        {
+          src: "https://www.google.com/recaptcha/api.js?render=6Le9mPssAAAAAOEV4BSPnuBGmJDDQiPtQgOwkzjc",
+          async: true,
+          defer: true,
+        },
+        { type: "application/ld+json", children: organizationJsonLd },
+      ],
+    }),
+    shellComponent: RootShell,
+    component: RootComponent,
+    notFoundComponent: () => <NotFound />,
+    errorComponent: RootErrorComponent,
+  },
+);
 
 function RootShell({ children }: { children: ReactNode }) {
   // English pages live under /en/, the one German landing under /de/;
@@ -276,7 +314,10 @@ function RootComponent() {
   // SSR renders /en/* pages with English chrome so the server HTML matches
   // the client's first render (the client initializer also picks "en" there).
   const { pathname } = useLocation();
-  const initialLang = pathname === "/en" || pathname.startsWith("/en/") ? ("en" as const) : ("ro" as const);
+  const initialLang =
+    pathname === "/en" || pathname.startsWith("/en/")
+      ? ("en" as const)
+      : ("ro" as const);
 
   // ported from main.tsx
   useEffect(() => {
@@ -328,7 +369,8 @@ function RootErrorComponent({ error, reset }: ErrorComponentProps) {
       <div className="max-w-md w-full text-center space-y-4">
         <h1 className="text-2xl font-bold">This page didn't load</h1>
         <p className="text-muted-foreground">
-          Something went wrong on our end. You can try again or head back to the homepage.
+          Something went wrong on our end. You can try again or head back to the
+          homepage.
         </p>
         <div className="flex items-center justify-center gap-3 pt-2">
           <button

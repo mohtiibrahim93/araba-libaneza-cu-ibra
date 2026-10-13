@@ -78,7 +78,22 @@ interface Props {
  * vizibil, hreflang către varianta EN (când există) și CTA-ul de probă gratuită.
  * Conținutul e doar în română — paginile țintesc căutări românești.
  */
-const LandingLayout = ({ slug, title: titleProp, metaTitle: metaTitleProp, description: descriptionProp, crumb, parents = [], lead: leadProp, faq: faqProp, faqVisible = true, enHref = null, deHref = null, courseInstances, canonicalHref, children }: Props) => {
+const LandingLayout = ({
+  slug,
+  title: titleProp,
+  metaTitle: metaTitleProp,
+  description: descriptionProp,
+  crumb,
+  parents = [],
+  lead: leadProp,
+  faq: faqProp,
+  faqVisible = true,
+  enHref = null,
+  deHref = null,
+  courseInstances,
+  canonicalHref,
+  children,
+}: Props) => {
   const url = `${BASE}/${slug}`;
   // Scoped so the outline lists this page\'s own sections.
   const bodyRef = useRef<HTMLDivElement>(null);
@@ -101,7 +116,8 @@ const LandingLayout = ({ slug, title: titleProp, metaTitle: metaTitleProp, descr
   const titleOverride = override?.meta_title?.trim() || "";
   const descriptionOverride = override?.meta_description?.trim() || "";
   const metaTitle = titleOverride || routeMeta?.title || metaTitleProp;
-  const description = descriptionOverride || routeMeta?.description || descriptionProp;
+  const description =
+    descriptionOverride || routeMeta?.description || descriptionProp;
   /**
    * True when the route table already served this page's head, which is the
    * case for every page in it. Rendering the same head again here is what put
@@ -162,29 +178,45 @@ const LandingLayout = ({ slug, title: titleProp, metaTitle: metaTitleProp, descr
     <div className="min-h-screen bg-background">
       <Helmet>
         {!served || titleOverride ? <title>{metaTitle}</title> : null}
-        {!served || descriptionOverride ? <meta name="description" content={description} /> : null}
-        {!served || titleOverride ? <meta property="og:title" content={metaTitle} /> : null}
+        {!served || descriptionOverride ? (
+          <meta name="description" content={description} />
+        ) : null}
+        {!served || titleOverride ? (
+          <meta property="og:title" content={metaTitle} />
+        ) : null}
         {!served || descriptionOverride ? (
           <meta property="og:description" content={description} />
         ) : null}
         {!served ? <link rel="canonical" href={canonical} /> : null}
-        {!served && hreflang ? <link rel="alternate" hrefLang="ro" href={url} /> : null}
-        {!served && hreflang ? <link rel="alternate" hrefLang="en" href={`${BASE}${enHref}`} /> : null}
+        {!served && hreflang ? (
+          <link rel="alternate" hrefLang="ro" href={url} />
+        ) : null}
+        {!served && hreflang ? (
+          <link rel="alternate" hrefLang="en" href={`${BASE}${enHref}`} />
+        ) : null}
         {/* Only /cursuri-araba has a German sibling. A cluster is honoured only
             when every member names every other, so this closes the group. */}
         {!served && hreflang && deHref ? (
           <link rel="alternate" hrefLang="de" href={`${BASE}${deHref}`} />
         ) : null}
-        {!served && hreflang ? <link rel="alternate" hrefLang="x-default" href={url} /> : null}
+        {!served && hreflang ? (
+          <link rel="alternate" hrefLang="x-default" href={url} />
+        ) : null}
         {!served ? <meta property="og:url" content={canonical} /> : null}
-        <script type="application/ld+json">{JSON.stringify(courseJsonLd)}</script>
-        <script type="application/ld+json">{JSON.stringify(breadcrumbJsonLd)}</script>
-          {/* Skipped when the route head already carries it: a JSON-LD script
+        <script type="application/ld+json">
+          {JSON.stringify(courseJsonLd)}
+        </script>
+        <script type="application/ld+json">
+          {JSON.stringify(breadcrumbJsonLd)}
+        </script>
+        {/* Skipped when the route head already carries it: a JSON-LD script
               is appended rather than replaced, so both firing left the page
               with two FAQPage blocks, which Google reads as invalid. */}
-          {faqJsonLd && !seoEmitsFaq(`/${slug}`) && (
-            <script type="application/ld+json">{JSON.stringify(faqJsonLd)}</script>
-          )}
+        {faqJsonLd && !seoEmitsFaq(`/${slug}`) && (
+          <script type="application/ld+json">
+            {JSON.stringify(faqJsonLd)}
+          </script>
+        )}
       </Helmet>
 
       <Navbar />
@@ -195,89 +227,107 @@ const LandingLayout = ({ slug, title: titleProp, metaTitle: metaTitleProp, descr
             <ArticleOutline containerRef={bodyRef} />
           </aside>
           <article className="min-w-0 w-full max-w-3xl lg:max-w-4xl 2xl:max-w-5xl">
-          <nav aria-label="Breadcrumb" className="flex items-center justify-between gap-3 text-sm text-muted-foreground mb-6">
-            <span>
-              {trail.slice(0, -1).map((step) => (
-                <span key={step.href}>
-                  <Link to={step.href} className="hover:text-primary">{step.name}</Link>
-                  <ChevronRight className="w-3.5 h-3.5 inline mx-1 -mt-0.5" aria-hidden />
-                </span>
-              ))}
-              <span className="text-foreground">{crumb}</span>
-            </span>
-          </nav>
+            <nav
+              aria-label="Breadcrumb"
+              className="flex items-center justify-between gap-3 text-sm text-muted-foreground mb-6"
+            >
+              <span>
+                {trail.slice(0, -1).map((step) => (
+                  <span key={step.href}>
+                    <Link to={step.href} className="hover:text-primary">
+                      {step.name}
+                    </Link>
+                    <ChevronRight
+                      className="w-3.5 h-3.5 inline mx-1 -mt-0.5"
+                      aria-hidden
+                    />
+                  </span>
+                ))}
+                <span className="text-foreground">{crumb}</span>
+              </span>
+            </nav>
 
-          <header className="mb-10 space-y-4">
-            <h1 className="font-display text-display-xl font-bold tracking-tight text-foreground">{title}</h1>
-            <p className="text-lg text-muted-foreground">{lead}</p>
-          </header>
+            <header className="mb-10 space-y-4">
+              <h1 className="font-display text-display-xl font-bold tracking-tight text-foreground">
+                {title}
+              </h1>
+              <p className="text-lg text-muted-foreground">{lead}</p>
+            </header>
 
-          <div ref={bodyRef}>
-          <div className="space-y-8 text-foreground/80 leading-relaxed [&_h2]:font-display [&_h2]:text-2xl [&_h2]:md:text-3xl [&_h2]:font-bold [&_h2]:text-foreground [&_h2]:mt-10 [&_h2]:mb-3 [&_p]:leading-relaxed [&_ul]:list-disc [&_ul]:list-inside [&_ul]:space-y-2 [&_a:not([data-cta])]:text-primary [&_a:not([data-cta])]:underline">
-            {bodyMd ? <MarkdownBody markdown={bodyMd} /> : children}
+            <div ref={bodyRef}>
+              <div className="space-y-8 text-foreground/80 leading-relaxed [&_h2]:font-display [&_h2]:text-2xl [&_h2]:md:text-3xl [&_h2]:font-bold [&_h2]:text-foreground [&_h2]:mt-10 [&_h2]:mb-3 [&_p]:leading-relaxed [&_ul]:list-disc [&_ul]:list-inside [&_ul]:space-y-2 [&_a:not([data-cta])]:text-primary [&_a:not([data-cta])]:underline">
+                {bodyMd ? <MarkdownBody markdown={bodyMd} /> : children}
 
-            {faqVisible && faq?.length ? (
-              <section>
-                <h2>Întrebări frecvente</h2>
-                <div className="space-y-4 mt-4">
-                  {faq.map(({ q, a }) => (
-                    <div key={q} className="rounded-2xl border border-[#E7E1D6] bg-card p-5 dark:border-border">
-                      <h3 className="font-semibold text-foreground">{q}</h3>
-                      <p className="text-sm mt-1">{a}</p>
+                {faqVisible && faq?.length ? (
+                  <section>
+                    <h2>Întrebări frecvente</h2>
+                    <div className="space-y-4 mt-4">
+                      {faq.map(({ q, a }) => (
+                        <div
+                          key={q}
+                          className="rounded-2xl border border-[#E7E1D6] bg-card p-5 dark:border-border"
+                        >
+                          <h3 className="font-semibold text-foreground">{q}</h3>
+                          <p className="text-sm mt-1">{a}</p>
+                        </div>
+                      ))}
                     </div>
-                  ))}
-                </div>
-              </section>
-            ) : null}
-          </div>
-
-          </div>
-
-
-          <div className="mt-16 rounded-3xl bg-brand-green p-6 md:p-10 text-center space-y-4">
-            <h2 className="font-display text-2xl font-bold text-white md:text-3xl">
-              Începe cu o lecție de probă gratuită
-            </h2>
-            <p className="text-white/85">
-              30 de minute cu profesor nativ — online sau fizic în București. Fără nicio obligație.
-            </p>
-            <div className="flex flex-col sm:flex-row gap-3 justify-center">
-              <Link
-                to="/trial"
-                className="inline-flex h-12 items-center justify-center bg-white text-brand-green px-6 rounded-xl font-semibold hover:opacity-90 transition"
-              >
-                Rezervă proba gratuită
-              </Link>
-              <Link
-                to="/test-de-nivel"
-                className="inline-flex h-12 items-center justify-center border border-white/40 px-6 rounded-xl font-semibold text-white hover:bg-white/10 transition"
-              >
-                Fă testul de nivel (~15 min)
-              </Link>
+                  </section>
+                ) : null}
+              </div>
             </div>
-            {/* Cross-links to the two priority pages — skipped on those pages
+
+            <div className="mt-16 rounded-3xl bg-brand-green p-6 md:p-10 text-center space-y-4">
+              <h2 className="font-display text-2xl font-bold text-white md:text-3xl">
+                Începe cu o lecție de probă gratuită
+              </h2>
+              <p className="text-white/85">
+                30 de minute cu profesor nativ — online sau fizic în București.
+                Fără nicio obligație.
+              </p>
+              <div className="flex flex-col sm:flex-row gap-3 justify-center">
+                <Link
+                  to="/trial"
+                  className="inline-flex h-12 items-center justify-center bg-white text-brand-green px-6 rounded-xl font-semibold hover:opacity-90 transition"
+                >
+                  Rezervă proba gratuită
+                </Link>
+                <Link
+                  to="/test-de-nivel"
+                  className="inline-flex h-12 items-center justify-center border border-white/40 px-6 rounded-xl font-semibold text-white hover:bg-white/10 transition"
+                >
+                  Fă testul de nivel (~15 min)
+                </Link>
+              </div>
+              {/* Cross-links to the two priority pages — skipped on those pages
                 themselves, where they would be links to the current URL. */}
-            <p className="text-sm text-white/80">
-              {slug !== "meditatii-araba" && (
-                <>
-                  Preferi un program flexibil? Vezi{" "}
-                  <Link to="/meditatii-araba" className="font-medium text-white underline">
-                    meditațiile de arabă 1:1
-                  </Link>
-                  .{" "}
-                </>
-              )}
-              {slug !== "cursuri-araba-bucuresti" && (
-                <>
-                  Cauți cursuri fizice? Descoperă{" "}
-                  <Link to="/cursuri-araba-bucuresti" className="font-medium text-white underline">
-                    cursurile de arabă în București
-                  </Link>
-                  .
-                </>
-              )}
-            </p>
-          </div>
+              <p className="text-sm text-white/80">
+                {slug !== "meditatii-araba" && (
+                  <>
+                    Preferi un program flexibil? Vezi{" "}
+                    <Link
+                      to="/meditatii-araba"
+                      className="font-medium text-white underline"
+                    >
+                      meditațiile de arabă 1:1
+                    </Link>
+                    .{" "}
+                  </>
+                )}
+                {slug !== "cursuri-araba-bucuresti" && (
+                  <>
+                    Cauți cursuri fizice? Descoperă{" "}
+                    <Link
+                      to="/cursuri-araba-bucuresti"
+                      className="font-medium text-white underline"
+                    >
+                      cursurile de arabă în București
+                    </Link>
+                    .
+                  </>
+                )}
+              </p>
+            </div>
           </article>
         </div>
       </main>

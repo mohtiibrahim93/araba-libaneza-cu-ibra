@@ -26,7 +26,8 @@ export function useRouteAnalytics() {
     lastPath.current = path;
 
     const title = typeof document !== "undefined" ? document.title : undefined;
-    const url = typeof window !== "undefined" ? window.location.href : undefined;
+    const url =
+      typeof window !== "undefined" ? window.location.href : undefined;
 
     // GA4 — standard SPA page_view
     trackEvent("page_view", {

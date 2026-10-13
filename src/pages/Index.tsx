@@ -19,7 +19,13 @@ import ScrollToTop from "@/components/ScrollToTop";
 import MobileEnrollmentCTA from "@/components/MobileEnrollmentCTA";
 import { toast } from "sonner";
 import { trackEvent } from "@/lib/tracking";
-import { COURSE_PROVIDER, courseInstances, GROUP_WEEKLY_WORKLOAD, ORGANIZATION_SAME_AS, PRIVATE_LESSON_WORKLOAD } from "@/lib/courseSchema";
+import {
+  COURSE_PROVIDER,
+  courseInstances,
+  GROUP_WEEKLY_WORKLOAD,
+  ORGANIZATION_SAME_AS,
+  PRIVATE_LESSON_WORKLOAD,
+} from "@/lib/courseSchema";
 
 /**
  * The only two homepage sections that read from Supabase, split out of the
@@ -39,7 +45,9 @@ import { COURSE_PROVIDER, courseInstances, GROUP_WEEKLY_WORKLOAD, ORGANIZATION_S
  *
  * The fallbacks reserve height so the page does not jump when each arrives.
  */
-const ActiveCoursesBanner = lazy(() => import("@/components/ActiveCoursesBanner"));
+const ActiveCoursesBanner = lazy(
+  () => import("@/components/ActiveCoursesBanner"),
+);
 const ProgramsSection = lazy(() => import("@/components/ProgramsSection"));
 
 const PageContent = () => {
@@ -73,7 +81,9 @@ const PageContent = () => {
           duration: 15000,
           action: {
             label: t.paymentSuccessPrivateCta,
-            onClick: () => { window.location.href = "/booking?type=paid"; },
+            onClick: () => {
+              window.location.href = "/booking?type=paid";
+            },
           },
         });
       } else {
@@ -103,7 +113,10 @@ const PageContent = () => {
       // browser never sees booking-create for it: this return is the trial
       // conversion. (It used to be a non-standard "TrialCardSaved" event, and
       // trial_booking_complete had stopped firing for website trials.)
-      trackEvent("trial_booking_complete", { event_type: "trial", source: "card_saved" });
+      trackEvent("trial_booking_complete", {
+        event_type: "trial",
+        source: "card_saved",
+      });
       window.history.replaceState({}, "", "/");
     } else if (trialCard === "canceled") {
       // The card IS the booking now: nothing is reserved until it is saved, so
@@ -135,7 +148,9 @@ const PageContent = () => {
     // Ties this location to the Organization node declared once in index.html.
     // Without the link the two read as separate businesses that happen to share
     // a name, address and phone number.
-    parentOrganization: { "@id": "https://centruldearabalibaneza.com/#organization" },
+    parentOrganization: {
+      "@id": "https://centruldearabalibaneza.com/#organization",
+    },
     name: "Centrul de Arabă Libaneză cu Ibra",
     description: homeDescription,
     url: "https://centruldearabalibaneza.com/",
@@ -191,14 +206,38 @@ const PageContent = () => {
     "@type": "ItemList",
     itemListElement: [
       lang === "en"
-        ? { url: "/cursuri/grup", name: "Group course — Lebanese Arabic (A1–C2)", desc: "Group course, 32–72 lessons per level (90 min, twice a week), in person in Bucharest or online." }
-        : { url: "/cursuri/grup", name: "Curs de grup — Arabă Libaneză (A1–C2)", desc: "Curs de grup, 32–72 de lecții pe nivel (90 min, de 2 ori pe săptămână), fizic în București sau online." },
+        ? {
+            url: "/cursuri/grup",
+            name: "Group course — Lebanese Arabic (A1–C2)",
+            desc: "Group course, 32–72 lessons per level (90 min, twice a week), in person in Bucharest or online.",
+          }
+        : {
+            url: "/cursuri/grup",
+            name: "Curs de grup — Arabă Libaneză (A1–C2)",
+            desc: "Curs de grup, 32–72 de lecții pe nivel (90 min, de 2 ori pe săptămână), fizic în București sau online.",
+          },
       lang === "en"
-        ? { url: "/cursuri/private", name: "Private lessons — Lebanese Arabic", desc: "1:1 lessons with a native teacher, all levels, in person or online." }
-        : { url: "/cursuri/private", name: "Lecții private — Arabă Libaneză", desc: "Lecții 1:1 cu profesor nativ, toate nivelurile, fizic sau online." },
+        ? {
+            url: "/cursuri/private",
+            name: "Private lessons — Lebanese Arabic",
+            desc: "1:1 lessons with a native teacher, all levels, in person or online.",
+          }
+        : {
+            url: "/cursuri/private",
+            name: "Lecții private — Arabă Libaneză",
+            desc: "Lecții 1:1 cu profesor nativ, toate nivelurile, fizic sau online.",
+          },
       lang === "en"
-        ? { url: "/cursuri/copii", name: "Kids courses — Lebanese Arabic", desc: "Interactive online courses for children (not running at the moment)." }
-        : { url: "/cursuri/copii", name: "Cursuri pentru copii — Arabă Libaneză", desc: "Cursuri interactive pentru copii, fizic, la centru (momentan nu avem grupe)." },
+        ? {
+            url: "/cursuri/copii",
+            name: "Kids courses — Lebanese Arabic",
+            desc: "Interactive online courses for children (not running at the moment).",
+          }
+        : {
+            url: "/cursuri/copii",
+            name: "Cursuri pentru copii — Arabă Libaneză",
+            desc: "Cursuri interactive pentru copii, fizic, la centru (momentan nu avem grupe).",
+          },
     ].map((c, i) => ({
       "@type": "ListItem",
       position: i + 1,
@@ -233,14 +272,23 @@ const PageContent = () => {
           hreflang needs a URL per language. The three-language cluster lives on
           /cursuri-araba; see src/lib/hreflangCluster.ts. */}
       <Helmet>
-        <meta property="og:locale:alternate" content={lang === "en" ? "ro_RO" : "en_US"} />
-        <script type="application/ld+json">{JSON.stringify(localBusinessJsonLd)}</script>
-        <script type="application/ld+json">{JSON.stringify(courseJsonLd)}</script>
+        <meta
+          property="og:locale:alternate"
+          content={lang === "en" ? "ro_RO" : "en_US"}
+        />
+        <script type="application/ld+json">
+          {JSON.stringify(localBusinessJsonLd)}
+        </script>
+        <script type="application/ld+json">
+          {JSON.stringify(courseJsonLd)}
+        </script>
       </Helmet>
       <Navbar />
       <main id="main-content">
         <HeroSection />
-        <Suspense fallback={<div className="min-h-[18rem]" aria-hidden="true" />}>
+        <Suspense
+          fallback={<div className="min-h-[18rem]" aria-hidden="true" />}
+        >
           <ActiveCoursesBanner />
         </Suspense>
         {/* Order agreed with the owner: who Ibra is, why learn with him,
@@ -250,7 +298,9 @@ const PageContent = () => {
         <WhySection />
         <ArabiziShowcase />
         <TestimonialsSection />
-        <Suspense fallback={<div className="min-h-[32rem]" aria-hidden="true" />}>
+        <Suspense
+          fallback={<div className="min-h-[32rem]" aria-hidden="true" />}
+        >
           <ProgramsSection />
         </Suspense>
         <FAQSection />

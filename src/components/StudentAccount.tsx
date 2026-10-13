@@ -28,13 +28,22 @@ import {
  */
 type Row = { state: GameState } | null;
 const progressTable = () =>
-  (supabase as unknown as {
-    from: (t: string) => {
-      select: (c: string) => { eq: (k: string, v: string) => { maybeSingle: () => Promise<{ data: Row; error: unknown }> } };
-      upsert: (v: Record<string, unknown>) => Promise<{ error: unknown }>;
-      delete: () => { eq: (k: string, v: string) => Promise<{ error: unknown }> };
-    };
-  }).from("student_progress");
+  (
+    supabase as unknown as {
+      from: (t: string) => {
+        select: (c: string) => {
+          eq: (
+            k: string,
+            v: string,
+          ) => { maybeSingle: () => Promise<{ data: Row; error: unknown }> };
+        };
+        upsert: (v: Record<string, unknown>) => Promise<{ error: unknown }>;
+        delete: () => {
+          eq: (k: string, v: string) => Promise<{ error: unknown }>;
+        };
+      };
+    }
+  ).from("student_progress");
 
 async function upload(user: User, state: GameState) {
   const { error } = await progressTable().upsert({
@@ -60,8 +69,12 @@ export function useStudentSync() {
 
   useEffect(() => {
     let cancelled = false;
-    supabase.auth.getSession().then(({ data }) => !cancelled && setUser(data.session?.user ?? null));
-    const { data: sub } = supabase.auth.onAuthStateChange((_e, session) => setUser(session?.user ?? null));
+    supabase.auth
+      .getSession()
+      .then(({ data }) => !cancelled && setUser(data.session?.user ?? null));
+    const { data: sub } = supabase.auth.onAuthStateChange((_e, session) =>
+      setUser(session?.user ?? null),
+    );
     return () => {
       cancelled = true;
       sub.subscription.unsubscribe();
@@ -75,7 +88,10 @@ export function useStudentSync() {
     void (async () => {
       setSyncing(true);
       try {
-        const { data, error } = await progressTable().select("state").eq("user_id", user.id).maybeSingle();
+        const { data, error } = await progressTable()
+          .select("state")
+          .eq("user_id", user.id)
+          .maybeSingle();
         if (error) throw error;
         const local = readLocalState();
         const merged = mergeStates(local, data?.state ?? null);
@@ -136,7 +152,8 @@ const COPY = {
     sending: "Se trimite…",
     google: "Continuă cu Google",
     sent: "Ți-am trimis un link pe email. Deschide-l pe acest dispozitiv ca să intri.",
-    consent: "Salvăm emailul și progresul din joc ca să le vezi pe orice dispozitiv. Detalii în",
+    consent:
+      "Salvăm emailul și progresul din joc ca să le vezi pe orice dispozitiv. Detalii în",
     privacy: "politica de confidențialitate",
     signedIn: "Progresul se salvează în contul",
     syncing: "Se sincronizează…",
@@ -153,7 +170,8 @@ const COPY = {
     sending: "Sending…",
     google: "Continue with Google",
     sent: "We've emailed you a link. Open it on this device to sign in.",
-    consent: "We store your email and game progress so you can see them on any device. Details in the",
+    consent:
+      "We store your email and game progress so you can see them on any device. Details in the",
     privacy: "privacy policy",
     signedIn: "Your progress is saved to the account",
     syncing: "Syncing…",
@@ -165,22 +183,35 @@ const COPY = {
 } as const;
 
 /** The sign-in box shown next to the game, the level test and the score. */
-export const StudentAccountBox = ({ user, syncing }: { user: User | null; syncing: boolean }) => {
+export const StudentAccountBox = ({
+  user,
+  syncing,
+}: {
+  user: User | null;
+  syncing: boolean;
+}) => {
   const { lang } = useI18n();
   const c = COPY[lang];
   const [email, setEmail] = useState("");
   const [sending, setSending] = useState(false);
   const [sent, setSent] = useState(false);
-  const redirect = typeof window !== "undefined" ? window.location.href.split("#")[0] : undefined;
+  const redirect =
+    typeof window !== "undefined"
+      ? window.location.href.split("#")[0]
+      : undefined;
 
   const sendLink = useCallback(
     async (e: React.FormEvent) => {
       e.preventDefault();
-      if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email.trim())) return void toast.error(c.invalid);
+      if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email.trim()))
+        return void toast.error(c.invalid);
       setSending(true);
       const { error } = await supabase.auth.signInWithOtp({
         email: email.trim(),
-        options: { ...(redirect ? { emailRedirectTo: redirect } : {}), shouldCreateUser: true },
+        options: {
+          ...(redirect ? { emailRedirectTo: redirect } : {}),
+          shouldCreateUser: true,
+        },
       });
       setSending(false);
       if (error) {
@@ -194,24 +225,39 @@ export const StudentAccountBox = ({ user, syncing }: { user: User | null; syncin
   );
 
   const google = useCallback(async () => {
-    const result = await lovable.auth.signInWithOAuth("google", redirect ? { redirect_uri: redirect } : undefined);
+    const result = await lovable.auth.signInWithOAuth(
+      "google",
+      redirect ? { redirect_uri: redirect } : undefined,
+    );
     if (result.error) toast.error(c.error);
   }, [redirect, c]);
 
-  const card = "rounded-2xl border border-[#E7E1D6] bg-card p-5 dark:border-border";
+  const card =
+    "rounded-2xl border border-[#E7E1D6] bg-card p-5 dark:border-border";
 
   if (user) {
     return (
-      <div className={`${card} flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between`}>
+      <div
+        className={`${card} flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between`}
+      >
         <p className="flex items-center gap-2 text-sm text-foreground">
-          {syncing ? <Loader2 className="h-4 w-4 animate-spin text-brand-green" /> : <CheckCircle2 className="h-4 w-4 text-brand-green" />}
+          {syncing ? (
+            <Loader2 className="h-4 w-4 animate-spin text-brand-green" />
+          ) : (
+            <CheckCircle2 className="h-4 w-4 text-brand-green" />
+          )}
           <span>
-            {syncing ? c.syncing : c.signedIn} <strong className="break-all">{user.email}</strong>
+            {syncing ? c.syncing : c.signedIn}{" "}
+            <strong className="break-all">{user.email}</strong>
           </span>
         </p>
         <button
           type="button"
-          onClick={() => void supabase.auth.signOut().then(() => toast.success(c.signOutNote))}
+          onClick={() =>
+            void supabase.auth
+              .signOut()
+              .then(() => toast.success(c.signOutNote))
+          }
           className="inline-flex items-center gap-2 self-start text-sm font-semibold text-muted-foreground hover:text-foreground sm:self-auto"
         >
           <LogOut className="h-4 w-4" /> {c.signOut}
@@ -232,8 +278,13 @@ export const StudentAccountBox = ({ user, syncing }: { user: User | null; syncin
         </p>
       ) : (
         <>
-          <form onSubmit={sendLink} className="mt-4 flex flex-col gap-2 sm:flex-row">
-            <label className="sr-only" htmlFor="student-email">{c.email}</label>
+          <form
+            onSubmit={sendLink}
+            className="mt-4 flex flex-col gap-2 sm:flex-row"
+          >
+            <label className="sr-only" htmlFor="student-email">
+              {c.email}
+            </label>
             <input
               id="student-email"
               type="email"
@@ -250,7 +301,11 @@ export const StudentAccountBox = ({ user, syncing }: { user: User | null; syncin
               disabled={sending}
               className="inline-flex h-11 items-center justify-center gap-2 rounded-xl bg-brand-green px-5 text-sm font-semibold text-white transition hover:opacity-90 disabled:opacity-60"
             >
-              {sending ? <Loader2 className="h-4 w-4 animate-spin" /> : <Mail className="h-4 w-4" />}
+              {sending ? (
+                <Loader2 className="h-4 w-4 animate-spin" />
+              ) : (
+                <Mail className="h-4 w-4" />
+              )}
               {sending ? c.sending : c.send}
             </button>
             <button
@@ -262,7 +317,11 @@ export const StudentAccountBox = ({ user, syncing }: { user: User | null; syncin
             </button>
           </form>
           <p className="mt-2 text-xs text-muted-foreground">
-            {c.consent} <Link to="/privacy" className="underline">{c.privacy}</Link>.
+            {c.consent}{" "}
+            <Link to="/privacy" className="underline">
+              {c.privacy}
+            </Link>
+            .
           </p>
         </>
       )}

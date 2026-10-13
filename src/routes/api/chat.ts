@@ -36,7 +36,9 @@ export const Route = createFileRoute("/api/chat")({
         const sanitizedMessages = (messages as UIMessage[])
           .filter(
             (m) =>
-              m && typeof m === "object" && (m.role === "user" || m.role === "assistant"),
+              m &&
+              typeof m === "object" &&
+              (m.role === "user" || m.role === "assistant"),
           )
           .map((m) => ({
             id: typeof m.id === "string" ? m.id.slice(0, 100) : "",
@@ -45,11 +47,19 @@ export const Route = createFileRoute("/api/chat")({
             // invented prior answer the model's authoritative assistant role.
             role: "user" as const,
             parts: (Array.isArray(m.parts) ? m.parts : [])
-              .filter((p) => p && p.type === "text" && typeof p.text === "string")
-              .map((p) => ({ type: "text" as const, text: (p as { text: string }).text.slice(0, 4000) })),
+              .filter(
+                (p) => p && p.type === "text" && typeof p.text === "string",
+              )
+              .map((p) => ({
+                type: "text" as const,
+                text: (p as { text: string }).text.slice(0, 4000),
+              })),
           }))
           .filter((m) => m.parts.length > 0) as UIMessage[];
-        if ((messages.at(-1) as UIMessage | undefined)?.role !== "user" || sanitizedMessages.length === 0) {
+        if (
+          (messages.at(-1) as UIMessage | undefined)?.role !== "user" ||
+          sanitizedMessages.length === 0
+        ) {
           return new Response("Invalid messages", { status: 400 });
         }
 
@@ -64,17 +74,18 @@ export const Route = createFileRoute("/api/chat")({
         // spent on this handler's dependencies is the first byte of a page that
         // never calls it. Warm requests already serve HTML as fast as a static
         // file; the slow ones are the isolate booting.
-        const [{ createOpenAI }, { convertToModelMessages, streamText }] = await Promise.all([
-          import("@ai-sdk/openai"),
-          import("ai"),
-        ]);
+        const [{ createOpenAI }, { convertToModelMessages, streamText }] =
+          await Promise.all([import("@ai-sdk/openai"), import("ai")]);
 
         const initialRunId = getLovableAiGatewayRunId(request);
         const runIdFetch = createLovableAiGatewayRunIdFetch(initialRunId);
         const lovable = createOpenAI({
           baseURL: "https://ai.gateway.lovable.dev/v1",
           apiKey: key, // satisfies the SDK; the gateway authenticates on the header
-          headers: { "Lovable-API-Key": key, "X-Lovable-AIG-SDK": "vercel-ai-sdk" },
+          headers: {
+            "Lovable-API-Key": key,
+            "X-Lovable-AIG-SDK": "vercel-ai-sdk",
+          },
           fetch: runIdFetch.fetch,
         });
 

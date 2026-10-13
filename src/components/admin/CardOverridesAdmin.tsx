@@ -2,7 +2,17 @@ import { useCallback, useEffect, useState } from "react";
 import { ExternalLink, Gamepad2, RefreshCw, SquarePen } from "lucide-react";
 import { invokeAdmin } from "@/lib/adminAuth";
 import { Button } from "@/components/ui/button";
-import { Empty, ErrorNote, Loading, ScreenToolbar, Section, TableWrap, Td, Th, Tr } from "./ui";
+import {
+  Empty,
+  ErrorNote,
+  Loading,
+  ScreenToolbar,
+  Section,
+  TableWrap,
+  Td,
+  Th,
+  Tr,
+} from "./ui";
 
 /**
  * The game cards that have been corrected by hand.
@@ -51,7 +61,9 @@ const CardOverridesAdmin = () => {
     setLoading(true);
     setError("");
     try {
-      const { data, error: err } = await invokeAdmin({ action: "list_card_overrides" });
+      const { data, error: err } = await invokeAdmin({
+        action: "list_card_overrides",
+      });
       if (err) throw err;
       if (data?.error) throw new Error(data.error);
       setRows(data?.data ?? []);
@@ -81,7 +93,13 @@ const CardOverridesAdmin = () => {
     <div className="space-y-5">
       <ScreenToolbar>
         {openGame}
-        <Button variant="outline" size="sm" onClick={() => void load()} disabled={loading} aria-label="Reîncarcă">
+        <Button
+          variant="outline"
+          size="sm"
+          onClick={() => void load()}
+          disabled={loading}
+          aria-label="Reîncarcă"
+        >
           <RefreshCw className="h-4 w-4" />
         </Button>
       </ScreenToolbar>
@@ -93,9 +111,10 @@ const CardOverridesAdmin = () => {
         description="Corectarea se face peste cartonaș, în joc — acolo vezi ce schimbi. Deschide /joc fiind autentificat și apar controalele „Corectează”. Butonul de mai sus face exact asta."
       >
         <p className="text-xs leading-relaxed text-muted-foreground">
-          Controalele apar doar dacă ești autentificat, dar asta e o comoditate, nu bariera:
-          publicarea trece prin funcția de admin, care verifică adresa față de lista de
-          administratori, iar tabelul nu permite scriere publică.
+          Controalele apar doar dacă ești autentificat, dar asta e o comoditate,
+          nu bariera: publicarea trece prin funcția de admin, care verifică
+          adresa față de lista de administratori, iar tabelul nu permite scriere
+          publică.
         </p>
       </Section>
 
@@ -113,7 +132,10 @@ const CardOverridesAdmin = () => {
       )}
 
       {rows.length > 0 && (
-        <Section title={`Cartonașe corectate (${rows.length})`} icon={SquarePen}>
+        <Section
+          title={`Cartonașe corectate (${rows.length})`}
+          icon={SquarePen}
+        >
           <TableWrap label="Cartonașe corectate">
             <thead>
               <tr>
@@ -126,9 +148,15 @@ const CardOverridesAdmin = () => {
             <tbody>
               {rows.map((r) => (
                 <Tr key={r.card_id}>
-                  <Td className="font-mono text-xs text-muted-foreground">{r.card_id}</Td>
-                  <Td className="max-w-[16rem] truncate text-foreground">{r.ar || "—"}</Td>
-                  <Td className="max-w-[16rem] truncate text-muted-foreground">{r.ro || "—"}</Td>
+                  <Td className="font-mono text-xs text-muted-foreground">
+                    {r.card_id}
+                  </Td>
+                  <Td className="max-w-[16rem] truncate text-foreground">
+                    {r.ar || "—"}
+                  </Td>
+                  <Td className="max-w-[16rem] truncate text-muted-foreground">
+                    {r.ro || "—"}
+                  </Td>
                   <Td className="whitespace-nowrap tabular-nums text-xs text-muted-foreground">
                     {stamp.format(new Date(r.updated_at))}
                   </Td>

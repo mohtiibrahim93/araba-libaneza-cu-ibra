@@ -9,7 +9,12 @@ const LETTERS: [string, string, string, string][] = [
   ["ب", "ba", "b", "b"],
   ["ت", "ta", "t", "t"],
   ["ث", "tha", "th (ca în engl. „think”)", "th (as in 'think')"],
-  ["ج", "jim", "j (în libaneză: „j” ca în „jurnal”)", "j (in Lebanese: 'j' as in 'journal')"],
+  [
+    "ج",
+    "jim",
+    "j (în libaneză: „j” ca în „jurnal”)",
+    "j (in Lebanese: 'j' as in 'journal')",
+  ],
   ["ح", "ḥa", "h aspru din gât", "harsh h from the throat"],
   ["خ", "kha", "h gutural (ca „ch” germană)", "guttural h (like German 'ch')"],
   ["د", "dal", "d", "d"],
@@ -22,10 +27,20 @@ const LETTERS: [string, string, string, string][] = [
   ["ض", "ḍad", "d emfatic", "emphatic d"],
   ["ط", "ṭa", "t emfatic", "emphatic t"],
   ["ظ", "ẓa", "z emfatic", "emphatic z"],
-  ["ع", "ʿayn", "sunet gutural (redat „3” în arabizi)", "guttural sound (written '3' in Arabizi)"],
+  [
+    "ع",
+    "ʿayn",
+    "sunet gutural (redat „3” în arabizi)",
+    "guttural sound (written '3' in Arabizi)",
+  ],
   ["غ", "ghayn", "gh (ca un „r” franțuzesc)", "gh (like a French 'r')"],
   ["ف", "fa", "f", "f"],
-  ["ق", "qaf", "q gutural (în libaneză adesea oprire glotală)", "guttural q (in Lebanese often a glottal stop)"],
+  [
+    "ق",
+    "qaf",
+    "q gutural (în libaneză adesea oprire glotală)",
+    "guttural q (in Lebanese often a glottal stop)",
+  ],
   ["ك", "kaf", "k", "k"],
   ["ل", "lam", "l", "l"],
   ["م", "mim", "m", "m"],
@@ -39,20 +54,44 @@ const LETTERS: [string, string, string, string][] = [
 // site stays there, so the same answer never lives on two URLs.
 const FAQ = [
   {
-    q: { ro: "Cât durează până citești alfabetul arab?", en: "How long does it take to read the Arabic alphabet?" },
-    a: { ro: "Recunoașterea celor 28 de litere vine în câteva săptămâni de exersare scurtă și zilnică. Citirea fluentă durează mai mult, pentru că majoritatea textelor nu notează vocalele scurte și le deduci din context.", en: "Recognising the 28 letters comes within a few weeks of short daily practice. Fluent reading takes longer, because most texts leave the short vowels out and you infer them from context." },
+    q: {
+      ro: "Cât durează până citești alfabetul arab?",
+      en: "How long does it take to read the Arabic alphabet?",
+    },
+    a: {
+      ro: "Recunoașterea celor 28 de litere vine în câteva săptămâni de exersare scurtă și zilnică. Citirea fluentă durează mai mult, pentru că majoritatea textelor nu notează vocalele scurte și le deduci din context.",
+      en: "Recognising the 28 letters comes within a few weeks of short daily practice. Fluent reading takes longer, because most texts leave the short vowels out and you infer them from context.",
+    },
   },
   {
-    q: { ro: "De ce nu se scriu vocalele scurte?", en: "Why aren't the short vowels written?" },
-    a: { ro: "Araba se scrie în mod normal doar cu consoane și vocale lungi. Vocalele scurte există ca semne diacritice, dar se folosesc aproape exclusiv în Coran, în poezie și în manualele pentru începători. Vorbitorii le completează din context.", en: "Arabic is normally written with consonants and long vowels only. The short vowels exist as diacritics, but they appear almost exclusively in the Quran, in poetry and in beginner textbooks. Speakers fill them in from context." },
+    q: {
+      ro: "De ce nu se scriu vocalele scurte?",
+      en: "Why aren't the short vowels written?",
+    },
+    a: {
+      ro: "Araba se scrie în mod normal doar cu consoane și vocale lungi. Vocalele scurte există ca semne diacritice, dar se folosesc aproape exclusiv în Coran, în poezie și în manualele pentru începători. Vorbitorii le completează din context.",
+      en: "Arabic is normally written with consonants and long vowels only. The short vowels exist as diacritics, but they appear almost exclusively in the Quran, in poetry and in beginner textbooks. Speakers fill them in from context.",
+    },
   },
   {
-    q: { ro: "Literele arată la fel oriunde în cuvânt?", en: "Do the letters look the same everywhere in a word?" },
-    a: { ro: "Nu. Majoritatea literelor au forme diferite la început, la mijloc și la sfârșitul cuvântului, plus o formă izolată. Sunt variații ale aceleiași litere, nu litere noi — după câteva zile ochiul le leagă automat.", en: "No. Most letters take different shapes at the start, middle and end of a word, plus a standalone form. They are variations of the same letter, not new ones — after a few days the eye connects them automatically." },
+    q: {
+      ro: "Literele arată la fel oriunde în cuvânt?",
+      en: "Do the letters look the same everywhere in a word?",
+    },
+    a: {
+      ro: "Nu. Majoritatea literelor au forme diferite la început, la mijloc și la sfârșitul cuvântului, plus o formă izolată. Sunt variații ale aceleiași litere, nu litere noi — după câteva zile ochiul le leagă automat.",
+      en: "No. Most letters take different shapes at the start, middle and end of a word, plus a standalone form. They are variations of the same letter, not new ones — after a few days the eye connects them automatically.",
+    },
   },
   {
-    q: { ro: "Am nevoie de alfabet ca să vorbesc libaneză?", en: "Do I need the alphabet to speak Lebanese?" },
-    a: { ro: "Nu pentru a vorbi. Dialectul libanez este în primul rând o limbă vorbită, iar la început se scrie cu arabizi (litere latine). Alfabetul devine util când vrei să citești meniuri, semne, mesaje sau texte în arabă standard.", en: "Not in order to speak. Lebanese is primarily a spoken language, and at the start it is written in arabizi (Latin letters). The alphabet becomes useful when you want to read menus, signs, messages or Modern Standard Arabic." },
+    q: {
+      ro: "Am nevoie de alfabet ca să vorbesc libaneză?",
+      en: "Do I need the alphabet to speak Lebanese?",
+    },
+    a: {
+      ro: "Nu pentru a vorbi. Dialectul libanez este în primul rând o limbă vorbită, iar la început se scrie cu arabizi (litere latine). Alfabetul devine util când vrei să citești meniuri, semne, mesaje sau texte în arabă standard.",
+      en: "Not in order to speak. Lebanese is primarily a spoken language, and at the start it is written in arabizi (Latin letters). The alphabet becomes useful when you want to read menus, signs, messages or Modern Standard Arabic.",
+    },
   },
 ];
 
@@ -62,7 +101,10 @@ const AlfabetulArab = () => {
   return (
     <BlogArticleLayout
       slug="alfabetul-arab-pentru-incepatori"
-      title={{ ro: "Alfabetul arab: cele 28 de litere, cu pronunție în română", en: "The Arabic alphabet: all 28 letters, with pronunciation" }}
+      title={{
+        ro: "Alfabetul arab: cele 28 de litere, cu pronunție în română",
+        en: "The Arabic alphabet: all 28 letters, with pronunciation",
+      }}
       description={{
         ro: "Tabel cu cele 28 de litere arabe, pronunția în română, formele la început/mijloc/sfârșit și scrierea dreapta-la-stânga. Plus cum vorbești fără alfabet.",
         en: "Complete Arabic alphabet table: all 28 letters, pronunciation, right-to-left writing. Plus how to start speaking Lebanese without learning the alphabet first.",
@@ -78,24 +120,39 @@ const AlfabetulArab = () => {
     >
       <Tldr
         points={[
-          { ro: "Alfabetul arab are 28 de litere și se scrie de la dreapta la stânga.", en: "The Arabic alphabet has 28 letters and is written right to left." },
-          { ro: "Majoritatea literelor își schimbă forma după poziția din cuvânt — aceeași literă, nu una nouă.", en: "Most letters change shape depending on their position in the word — the same letter, not a new one." },
-          { ro: "Vocalele scurte nu se notează în textele obișnuite; le deduci din context.", en: "Short vowels are not written in ordinary text; you infer them from context." },
-          { ro: "Ca să vorbești libaneză nu ai nevoie de alfabet: începi cu arabizi și îl adaugi mai târziu.", en: "You do not need the alphabet to speak Lebanese: start with arabizi and add it later." },
+          {
+            ro: "Alfabetul arab are 28 de litere și se scrie de la dreapta la stânga.",
+            en: "The Arabic alphabet has 28 letters and is written right to left.",
+          },
+          {
+            ro: "Majoritatea literelor își schimbă forma după poziția din cuvânt — aceeași literă, nu una nouă.",
+            en: "Most letters change shape depending on their position in the word — the same letter, not a new one.",
+          },
+          {
+            ro: "Vocalele scurte nu se notează în textele obișnuite; le deduci din context.",
+            en: "Short vowels are not written in ordinary text; you infer them from context.",
+          },
+          {
+            ro: "Ca să vorbești libaneză nu ai nevoie de alfabet: începi cu arabizi și îl adaugi mai târziu.",
+            en: "You do not need the alphabet to speak Lebanese: start with arabizi and add it later.",
+          },
         ]}
       />
       <p>
         {en
           ? "The Arabic alphabet looks intimidating at first, but it has a simple logic. It has "
           : "Alfabetul arab pare intimidant la prima vedere, dar are o logică simplă. Are "}
-        <strong>{en ? "28 letters" : "28 de litere"}</strong>{en ? ", is written " : ", se scrie de la "}
+        <strong>{en ? "28 letters" : "28 de litere"}</strong>
+        {en ? ", is written " : ", se scrie de la "}
         <strong>{en ? "right to left" : "dreapta la stânga"}</strong>
         {en
           ? ", and letters change shape slightly depending on their position in the word (start, middle, end). There are no upper- and lower-case letters."
           : ", iar literele își schimbă ușor forma în funcție de poziția din cuvânt (început, mijloc, sfârșit). Nu există litere mari și mici."}
       </p>
 
-      <h2>{en ? "The complete letter table" : "Tabelul complet al literelor"}</h2>
+      <h2>
+        {en ? "The complete letter table" : "Tabelul complet al literelor"}
+      </h2>
       <p>
         {en
           ? "Below is each letter, its name and the approximate sound. 'Emphatic' means a sound pronounced more heavily, from the back of the mouth."
@@ -105,24 +162,44 @@ const AlfabetulArab = () => {
         <table className="w-full text-sm border-collapse">
           <thead>
             <tr className="border-b border-border text-left text-muted-foreground">
-              <th className="py-2 pr-3 font-semibold">{en ? "Letter" : "Literă"}</th>
-              <th className="py-2 px-3 font-semibold">{en ? "Name" : "Nume"}</th>
-              <th className="py-2 pl-3 font-semibold">{en ? "Sound" : "Sunet"}</th>
+              <th className="py-2 pr-3 font-semibold">
+                {en ? "Letter" : "Literă"}
+              </th>
+              <th className="py-2 px-3 font-semibold">
+                {en ? "Name" : "Nume"}
+              </th>
+              <th className="py-2 pl-3 font-semibold">
+                {en ? "Sound" : "Sunet"}
+              </th>
             </tr>
           </thead>
           <tbody>
             {LETTERS.map(([letter, name, soundRo, soundEn]) => (
               <tr key={name} className="border-b border-border/60 align-top">
-                <td className="py-2 pr-3 font-arabic text-2xl text-brand-green" dir="rtl" lang="ar">{letter}</td>
-                <td className="py-2 px-3 font-semibold text-foreground whitespace-nowrap">{name}</td>
-                <td className="py-2 pl-3 text-foreground/80">{en ? soundEn : soundRo}</td>
+                <td
+                  className="py-2 pr-3 font-arabic text-2xl text-brand-green"
+                  dir="rtl"
+                  lang="ar"
+                >
+                  {letter}
+                </td>
+                <td className="py-2 px-3 font-semibold text-foreground whitespace-nowrap">
+                  {name}
+                </td>
+                <td className="py-2 pl-3 text-foreground/80">
+                  {en ? soundEn : soundRo}
+                </td>
               </tr>
             ))}
           </tbody>
         </table>
       </div>
 
-      <h2>{en ? "Short vowels are usually not written" : "Vocalele scurte nu se scriu de obicei"}</h2>
+      <h2>
+        {en
+          ? "Short vowels are usually not written"
+          : "Vocalele scurte nu se scriu de obicei"}
+      </h2>
       <p>
         {en
           ? "An important quirk: in Arabic, short vowels (a, i, u) are marked with small signs above or below the letters, but in ordinary text they "
@@ -133,30 +210,57 @@ const AlfabetulArab = () => {
           : ". Cititorul le deduce din context. De aceea alfabetul de mai sus are mai ales consoane și vocale lungi."}
       </p>
 
-      <h2>{en ? "Do you need the alphabet to speak?" : "Trebuie să știi alfabetul ca să vorbești?"}</h2>
+      <h2>
+        {en
+          ? "Do you need the alphabet to speak?"
+          : "Trebuie să știi alfabetul ca să vorbești?"}
+      </h2>
       <p>
-        {en ? "No — and that's the good news. At the Lebanese Arabic Center we use the " : "Nu — și aici e vestea bună. La Centrul de Arabă Libaneză folosim metoda "}
-        <strong>Oral First</strong>{en ? " method: you start by speaking, with the help of " : ": începi vorbind, cu ajutorul "}
+        {en
+          ? "No — and that's the good news. At the Lebanese Arabic Center we use the "
+          : "Nu — și aici e vestea bună. La Centrul de Arabă Libaneză folosim metoda "}
+        <strong>Oral First</strong>
+        {en
+          ? " method: you start by speaking, with the help of "
+          : ": începi vorbind, cu ajutorul "}
         <Link to="/blog/ce-este-arabizi">{en ? "Arabizi" : "arabizi"}</Link>{" "}
         {en
           ? "(Arabic written in Latin letters), without getting stuck on the alphabet: A1 and A2 are spoken only, and from B1 or B2 a group can add writing in Arabic letters only if all its students want it. You can hold whole conversations in Lebanese before writing your first letter."
           : "(araba scrisă cu litere latine), fără să te blochezi la alfabet: la A1 și A2 cursul e doar oral, iar de la B1 sau B2 grupa poate adăuga scrisul cu litere arabe, doar dacă toți cursanții vor. Poți purta conversații întregi în libaneză înainte să scrii prima literă."}
       </p>
 
-      <h2>{en ? "When you actually need the alphabet" : "Când chiar ai nevoie de alfabet"}</h2>
+      <h2>
+        {en
+          ? "When you actually need the alphabet"
+          : "Când chiar ai nevoie de alfabet"}
+      </h2>
       <p>
         {en
           ? "You need the Arabic script if you want to read texts, study Modern Standard Arabic, work with documents, or read religious texts. Realistically: 2-4 weeks of 20-30 minutes a day to recognise the letters, a few months to read fluently. You do "
           : "Ai nevoie de alfabet dacă vrei să citești texte, să studiezi araba standard, să lucrezi cu documente sau să citești texte religioase. Realist: 2-4 săptămâni de 20-30 de minute pe zi pentru recunoașterea literelor și câteva luni pentru citire fluentă. "}
-        <strong>{en ? "not" : "Nu"}</strong>{en ? " need it to hold a conversation — see " : " ai nevoie de el ca să porți o conversație — vezi "}
-        <Link to="/fara-alfabet-arab">{en ? "learning Arabic without the alphabet" : "cum înveți araba fără alfabet"}</Link>
+        <strong>{en ? "not" : "Nu"}</strong>
+        {en
+          ? " need it to hold a conversation — see "
+          : " ai nevoie de el ca să porți o conversație — vezi "}
+        <Link to="/fara-alfabet-arab">
+          {en
+            ? "learning Arabic without the alphabet"
+            : "cum înveți araba fără alfabet"}
+        </Link>
         {en ? ", and the full " : " și "}
-        <Link to="/arabizi">{en ? "Arabizi decoding guide" : "ghidul complet Arabizi"}</Link>
-        {en ? ". From B1 or B2 the alphabet is an option for groups whose students all want it, alongside speaking. In private lessons the alphabet is added on request — usually once you've started speaking. You can have it from the start, but then it can confuse your pronunciation. And note: the alphabet doesn't teach you standard Arabic (newspapers, books) — it's only the script; the language is still Lebanese." : ". De la B1 sau B2, alfabetul e o opțiune pentru grupele în care toți cursanții îl vor, în paralel cu vorbirea. La lecțiile private, alfabetul se adaugă la cerere — de obicei după ce ai început să vorbești. Îl poți avea și de la început, dar atunci poate încurca pronunția. Și atenție: alfabetul nu te învață araba standard (presă, cărți) — e doar scrierea; limba rămâne libaneza."}
+        <Link to="/arabizi">
+          {en ? "Arabizi decoding guide" : "ghidul complet Arabizi"}
+        </Link>
+        {en
+          ? ". From B1 or B2 the alphabet is an option for groups whose students all want it, alongside speaking. In private lessons the alphabet is added on request — usually once you've started speaking. You can have it from the start, but then it can confuse your pronunciation. And note: the alphabet doesn't teach you standard Arabic (newspapers, books) — it's only the script; the language is still Lebanese."
+          : ". De la B1 sau B2, alfabetul e o opțiune pentru grupele în care toți cursanții îl vor, în paralel cu vorbirea. La lecțiile private, alfabetul se adaugă la cerere — de obicei după ce ai început să vorbești. Îl poți avea și de la început, dar atunci poate încurca pronunția. Și atenție: alfabetul nu te învață araba standard (presă, cărți) — e doar scrierea; limba rămâne libaneza."}
       </p>
 
       <InlineCta
-        title={{ ro: "Vrei să auzi cum sună?", en: "Want to hear how it sounds?" }}
+        title={{
+          ro: "Vrei să auzi cum sună?",
+          en: "Want to hear how it sounds?",
+        }}
         text={{
           ro: "30 de minute cu profesor nativ, gratuit — online sau fizic în București.",
           en: "30 minutes with a native teacher, free — online or in person in Bucharest.",
@@ -165,19 +269,47 @@ const AlfabetulArab = () => {
         label={{ ro: "Rezervă lecția de probă", en: "Book the trial lesson" }}
       />
 
-
-      <h2>{en ? "How to learn the alphabet more easily" : "Cum înveți alfabetul mai ușor"}</h2>
+      <h2>
+        {en
+          ? "How to learn the alphabet more easily"
+          : "Cum înveți alfabetul mai ușor"}
+      </h2>
       <ul>
-        <li>{en ? "Group the letters by shape — many look alike and differ only by dots (ب ت ث)." : "Grupează literele după formă — multe se aseamănă și diferă doar prin puncte (ب ت ث)."}</li>
-        <li>{en ? "Learn to recognise them first, then to write them." : "Învață mai întâi să le recunoști, apoi să le scrii."}</li>
-        <li>{en ? "Associate each letter with a word you already know from speaking." : "Asociază fiecare literă cu un cuvânt pe care deja îl știi din vorbire."}</li>
-        <li>{en ? "Practise with a teacher who corrects the guttural sounds (ع، ح، ق)." : "Exersează cu un profesor care îți corectează pronunția sunetelor guturale (ع، ح، ق)."}</li>
+        <li>
+          {en
+            ? "Group the letters by shape — many look alike and differ only by dots (ب ت ث)."
+            : "Grupează literele după formă — multe se aseamănă și diferă doar prin puncte (ب ت ث)."}
+        </li>
+        <li>
+          {en
+            ? "Learn to recognise them first, then to write them."
+            : "Învață mai întâi să le recunoști, apoi să le scrii."}
+        </li>
+        <li>
+          {en
+            ? "Associate each letter with a word you already know from speaking."
+            : "Asociază fiecare literă cu un cuvânt pe care deja îl știi din vorbire."}
+        </li>
+        <li>
+          {en
+            ? "Practise with a teacher who corrects the guttural sounds (ع، ح، ق)."
+            : "Exersează cu un profesor care îți corectează pronunția sunetelor guturale (ع، ح، ق)."}
+        </li>
       </ul>
       <p>
-        {en ? "Want to see where you start? Take the " : "Vrei să vezi de unde pornești? Fă "}
-        <Link to="/test-de-nivel">{en ? "free level test" : "testul de nivel gratuit"}</Link>
+        {en
+          ? "Want to see where you start? Take the "
+          : "Vrei să vezi de unde pornești? Fă "}
+        <Link to="/test-de-nivel">
+          {en ? "free level test" : "testul de nivel gratuit"}
+        </Link>
         {en ? " or read the " : " sau citește "}
-        <Link to="/blog/cum-inveti-araba-libaneza">{en ? "complete beginner's guide" : "ghidul complet pentru începători"}</Link>.
+        <Link to="/blog/cum-inveti-araba-libaneza">
+          {en
+            ? "complete beginner's guide"
+            : "ghidul complet pentru începători"}
+        </Link>
+        .
       </p>
     </BlogArticleLayout>
   );

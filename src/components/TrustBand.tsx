@@ -32,7 +32,10 @@ const TrustBand = () => {
           key={item.label}
           className="flex items-center gap-2 rounded-xl border border-[#E7E1D6] bg-card px-3 py-2.5 text-xs font-medium leading-tight text-foreground dark:border-border"
         >
-          <item.icon className="h-4 w-4 shrink-0 text-brand-green" aria-hidden="true" />
+          <item.icon
+            className="h-4 w-4 shrink-0 text-brand-green"
+            aria-hidden="true"
+          />
           <span>{item.label}</span>
         </li>
       ))}

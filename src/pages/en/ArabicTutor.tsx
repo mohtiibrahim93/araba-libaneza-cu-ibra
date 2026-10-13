@@ -69,30 +69,50 @@ const ArabicTutor = () => (
   >
     <DirectAnswer question="What does a private Arabic tutor cost, and who teaches?">
       <p>
-        A private Arabic lesson here is {ONLINE_PRICES.privateLesson} RON for 60 minutes
-        one-to-one, with {Math.round(privateDiscountFor(10) * 100)}% off from ten lessons
-        and {Math.round(PRIVATE_PACKAGE_DISCOUNT * 100)}% off from{" "}
-        {PRIVATE_PACKAGE_SIZE} — no subscription, no minimum term. The tutor is{" "}
-        <strong>Ibra</strong>, a native Lebanese speaker teaching
-        from Bucharest for more than five years, live over video anywhere in the world or
-        in person at Strada Icoanei 80. Lessons cover CEFR A1 to C2 in Lebanese Arabic —
-        the Levantine dialect of Lebanon, Syria, Jordan and Palestine — and you speak in
-        the first one, with the Arabic script kept optional.
+        A private Arabic lesson here is {ONLINE_PRICES.privateLesson} RON for 60
+        minutes one-to-one, with {Math.round(privateDiscountFor(10) * 100)}% off
+        from ten lessons and {Math.round(PRIVATE_PACKAGE_DISCOUNT * 100)}% off
+        from {PRIVATE_PACKAGE_SIZE} — no subscription, no minimum term. The
+        tutor is <strong>Ibra</strong>, a native Lebanese speaker teaching from
+        Bucharest for more than five years, live over video anywhere in the
+        world or in person at Strada Icoanei 80. Lessons cover CEFR A1 to C2 in
+        Lebanese Arabic — the Levantine dialect of Lebanon, Syria, Jordan and
+        Palestine — and you speak in the first one, with the Arabic script kept
+        optional.
       </p>
       <p>
-        The first 30-minute lesson is free: a card confirms the slot, and nothing is
-        charged for it.
+        The first 30-minute lesson is free: a card confirms the slot, and
+        nothing is charged for it.
       </p>
     </DirectAnswer>
 
     <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-3 not-prose my-6">
       {[
-        { icon: Star, title: "5.0 rating", desc: "21+ verified reviews across Preply and independent students." },
-        { icon: GraduationCap, title: "5+ years teaching", desc: "Adult learners across Europe, N. America and the Gulf." },
-        { icon: Globe2, title: "Native Lebanese", desc: "Born and raised speaker — real Levantine, not textbook Arabic." },
-        { icon: ShieldCheck, title: "Free 30-min trial", desc: "Card confirmation secures the spot; the trial remains 0 LEI." },
+        {
+          icon: Star,
+          title: "5.0 rating",
+          desc: "21+ verified reviews across Preply and independent students.",
+        },
+        {
+          icon: GraduationCap,
+          title: "5+ years teaching",
+          desc: "Adult learners across Europe, N. America and the Gulf.",
+        },
+        {
+          icon: Globe2,
+          title: "Native Lebanese",
+          desc: "Born and raised speaker — real Levantine, not textbook Arabic.",
+        },
+        {
+          icon: ShieldCheck,
+          title: "Free 30-min trial",
+          desc: "Card confirmation secures the spot; the trial remains 0 LEI.",
+        },
       ].map(({ icon: Icon, title, desc }) => (
-        <div key={title} className="rounded-xl border border-border bg-card p-4">
+        <div
+          key={title}
+          className="rounded-xl border border-border bg-card p-4"
+        >
           <Icon className="w-4 h-4 text-primary mb-2" />
           <p className="text-sm font-semibold text-foreground">{title}</p>
           <p className="text-xs text-muted-foreground mt-1">{desc}</p>
@@ -101,47 +121,70 @@ const ArabicTutor = () => (
     </div>
 
     <p>
-      Looking for an <strong>Arabic tutor</strong> who actually speaks the dialect you'll use in
-      real life, and who has more than just native fluency? Ibra is a native Lebanese speaker with
-      5+ years of teaching experience, working with students from Europe, North America and the
-      Gulf on Zoom, and with in-person students in Bucharest.
+      Looking for an <strong>Arabic tutor</strong> who actually speaks the
+      dialect you'll use in real life, and who has more than just native
+      fluency? Ibra is a native Lebanese speaker with 5+ years of teaching
+      experience, working with students from Europe, North America and the Gulf
+      on Zoom, and with in-person students in Bucharest.
     </p>
 
     <h2>What you get from a private tutor (vs a group course or app)</h2>
     <ul>
-      <li><strong>100% attention:</strong> every minute is you speaking, being corrected, and moving forward — not waiting for other students.</li>
-      <li><strong>Your goal, not a curriculum:</strong> travel, family, work, exam, kids, religion — the material bends to fit.</li>
-      <li><strong>Flexible schedule:</strong> reschedule any lesson up to 24h before. No lock-in.</li>
-      <li><strong>Faster progress:</strong> most 1-on-1 students hit A2 in 3–5 months vs about 11 in a group.</li>
+      <li>
+        <strong>100% attention:</strong> every minute is you speaking, being
+        corrected, and moving forward — not waiting for other students.
+      </li>
+      <li>
+        <strong>Your goal, not a curriculum:</strong> travel, family, work,
+        exam, kids, religion — the material bends to fit.
+      </li>
+      <li>
+        <strong>Flexible schedule:</strong> reschedule any lesson up to 24h
+        before. No lock-in.
+      </li>
+      <li>
+        <strong>Faster progress:</strong> most 1-on-1 students hit A2 in 3–5
+        months vs about 11 in a group.
+      </li>
     </ul>
 
     <h2>How lessons work</h2>
     <p>
-      Each private lesson is 60 minutes, structured: a short recap of the previous lesson, new
-      material (vocabulary + grammar via examples), applied conversation and role-play — the
-      largest part — and feedback + homework. You leave the lesson tired in a good way — not from
-      grammar drills, but from having actually spoken Arabic for an hour.
+      Each private lesson is 60 minutes, structured: a short recap of the
+      previous lesson, new material (vocabulary + grammar via examples), applied
+      conversation and role-play — the largest part — and feedback + homework.
+      You leave the lesson tired in a good way — not from grammar drills, but
+      from having actually spoken Arabic for an hour.
     </p>
 
     <h2>What we teach</h2>
     <p>
-      Primary focus: <Link to="/en/learn-lebanese-arabic">Lebanese Arabic</Link>, which gives you
-      comprehension across the whole{" "}
-      Levantine region (Lebanon, Syria, Jordan,
-      Palestine). Optional MSA / Fusha for reading and formal contexts. For the wider dialect
-      landscape, see the <Link to="/en/arabic-dialects-guide">Arabic dialects guide</Link>.
+      Primary focus: <Link to="/en/learn-lebanese-arabic">Lebanese Arabic</Link>
+      , which gives you comprehension across the whole Levantine region
+      (Lebanon, Syria, Jordan, Palestine). Optional MSA / Fusha for reading and
+      formal contexts. For the wider dialect landscape, see the{" "}
+      <Link to="/en/arabic-dialects-guide">Arabic dialects guide</Link>.
     </p>
 
     <h2>Pricing</h2>
     <ul>
-      <li><strong>Single lesson:</strong> 150 LEI online / 210 LEI in person, 60 min (~€30 / €42)</li>
-      <li><strong>Package of 20:</strong> 2,550 LEI online / 3,570 LEI in person (15% off)</li>
-      <li><strong>Trial lesson:</strong> free, 30 min</li>
+      <li>
+        <strong>Single lesson:</strong> 150 LEI online / 210 LEI in person, 60
+        min (~€30 / €42)
+      </li>
+      <li>
+        <strong>Package of 20:</strong> 2,550 LEI online / 3,570 LEI in person
+        (15% off)
+      </li>
+      <li>
+        <strong>Trial lesson:</strong> free, 30 min
+      </li>
     </ul>
 
     <p>
-      <Link to="/trial">Book the free trial</Link> — 30 minutes, 0 LEI, no obligation. If it
-      clicks, we schedule your first paid lesson before you leave the call.
+      <Link to="/trial">Book the free trial</Link> — 30 minutes, 0 LEI, no
+      obligation. If it clicks, we schedule your first paid lesson before you
+      leave the call.
     </p>
   </EnLandingLayout>
 );

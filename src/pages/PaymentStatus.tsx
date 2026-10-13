@@ -2,7 +2,13 @@ import { useEffect, useRef, useState } from "react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { Link, useNavigate, useSearchParams } from "@/lib/router-compat";
-import { CheckCircle2, XCircle, Loader2, ArrowLeft, RefreshCcw } from "lucide-react";
+import {
+  CheckCircle2,
+  XCircle,
+  Loader2,
+  ArrowLeft,
+  RefreshCcw,
+} from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { trackPurchase } from "@/lib/tracking";
@@ -12,7 +18,9 @@ type Status = "pending" | "succeeded" | "failed" | "canceled";
 const MAX_POLLS = 12;
 const POLL_INTERVAL_MS = 1500;
 
-function mapRegistrationPaymentStatus(s: string | null | undefined): Status | null {
+function mapRegistrationPaymentStatus(
+  s: string | null | undefined,
+): Status | null {
   if (!s) return null;
   if (s === "paid") return "succeeded";
   if (s === "failed") return "failed";
@@ -42,7 +50,9 @@ const PaymentStatus = () => {
   // Stripe's PaymentIntent id, recovered from the client secret. It identifies
   // the payment itself, so it is the right transaction_id — GA4 deduplicates on
   // it, which is what makes a page reload harmless.
-  const paymentIntentId = piClientSecret ? piClientSecret.split("_secret")[0] : "";
+  const paymentIntentId = piClientSecret
+    ? piClientSecret.split("_secret")[0]
+    : "";
 
   useEffect(() => {
     let cancelled = false;
@@ -61,7 +71,9 @@ const PaymentStatus = () => {
       if (registrationId) {
         try {
           const base = import.meta.env["VITE_SUPABASE_URL"] as string;
-          const anon = import.meta.env["VITE_SUPABASE_PUBLISHABLE_KEY"] as string;
+          const anon = import.meta.env[
+            "VITE_SUPABASE_PUBLISHABLE_KEY"
+          ] as string;
           const res = await fetch(
             `${base}/functions/v1/get-payment-status?registration_id=${encodeURIComponent(registrationId)}&sig=${encodeURIComponent(params.get("sig") || "")}&email=${encodeURIComponent(params.get("email") || "")}`,
             {
@@ -80,8 +92,10 @@ const PaymentStatus = () => {
 
       // 3) Final fallback: redirect_status from Stripe. Shown to the visitor,
       //    never counted as a sale — hence confirmed: false.
-      if (redirectStatus === "succeeded") return { status: "succeeded", confirmed: false };
-      if (redirectStatus === "failed") return { status: "failed", confirmed: false };
+      if (redirectStatus === "succeeded")
+        return { status: "succeeded", confirmed: false };
+      if (redirectStatus === "failed")
+        return { status: "failed", confirmed: false };
       return { status: "pending", confirmed: false };
     };
 
@@ -97,7 +111,12 @@ const PaymentStatus = () => {
             // transaction id must be a real one: "unknown" would collapse
             // every such sale into a single GA4 transaction.
             const transactionId = paymentIntentId || registrationId;
-            if (s === "succeeded" && confirmed && transactionId && !purchaseSent.current) {
+            if (
+              s === "succeeded" &&
+              confirmed &&
+              transactionId &&
+              !purchaseSent.current
+            ) {
               purchaseSent.current = true;
               trackPurchase({
                 transactionId,
@@ -143,80 +162,94 @@ const PaymentStatus = () => {
     <div className="min-h-screen bg-cream flex flex-col">
       <Navbar />
       <main id="main-content" className="flex-1 px-gutter pt-36 pb-16">
-      <div className="max-w-xl mx-auto">
-        <Card className="rounded-2xl border-[#E7E1D6] shadow-xs dark:border-border">
-          <CardContent className="p-8 text-center space-y-4">
-            {status === "pending" && (
-              <>
-                <Loader2 className="w-10 h-10 animate-spin text-brand-green mx-auto" />
-                <h1 className="font-display text-2xl font-bold">Confirmăm plata</h1>
-                <p className="text-sm text-muted-foreground">{message}</p>
-              </>
-            )}
+        <div className="max-w-xl mx-auto">
+          <Card className="rounded-2xl border-[#E7E1D6] shadow-xs dark:border-border">
+            <CardContent className="p-8 text-center space-y-4">
+              {status === "pending" && (
+                <>
+                  <Loader2 className="w-10 h-10 animate-spin text-brand-green mx-auto" />
+                  <h1 className="font-display text-2xl font-bold">
+                    Confirmăm plata
+                  </h1>
+                  <p className="text-sm text-muted-foreground">{message}</p>
+                </>
+              )}
 
-            {status === "succeeded" && (
-              <>
-                <span className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-brand-green">
-                  <CheckCircle2 className="h-9 w-9 text-white" strokeWidth={2.5} />
-                </span>
-                <h1 className="font-display text-display-md font-bold tracking-tight">Plată reușită</h1>
-                <p className="text-sm text-muted-foreground">
-                  Îți mulțumim! Am înregistrat plata cu succes.
-                </p>
-                {formattedAmount && (
-                  <p className="text-lg font-semibold text-foreground">{formattedAmount}</p>
-                )}
-                <div className="pt-3 flex flex-col sm:flex-row gap-2 justify-center">
-                  <Button asChild size="lg">
-                    <Link
-                      to={`/thank-you?type=${encodeURIComponent(courseType)}&amount=${amount}&currency=${currency.toLowerCase()}${registrationId ? `&registration_id=${registrationId}` : ""}`}
-                    >
-                      Continuă
-                    </Link>
-                  </Button>
-                  <Button asChild variant="ghost">
-                    <Link to="/">
-                      <ArrowLeft className="w-4 h-4 mr-1" />
-                      Acasă
-                    </Link>
-                  </Button>
-                </div>
-              </>
-            )}
+              {status === "succeeded" && (
+                <>
+                  <span className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-brand-green">
+                    <CheckCircle2
+                      className="h-9 w-9 text-white"
+                      strokeWidth={2.5}
+                    />
+                  </span>
+                  <h1 className="font-display text-display-md font-bold tracking-tight">
+                    Plată reușită
+                  </h1>
+                  <p className="text-sm text-muted-foreground">
+                    Îți mulțumim! Am înregistrat plata cu succes.
+                  </p>
+                  {formattedAmount && (
+                    <p className="text-lg font-semibold text-foreground">
+                      {formattedAmount}
+                    </p>
+                  )}
+                  <div className="pt-3 flex flex-col sm:flex-row gap-2 justify-center">
+                    <Button asChild size="lg">
+                      <Link
+                        to={`/thank-you?type=${encodeURIComponent(courseType)}&amount=${amount}&currency=${currency.toLowerCase()}${registrationId ? `&registration_id=${registrationId}` : ""}`}
+                      >
+                        Continuă
+                      </Link>
+                    </Button>
+                    <Button asChild variant="ghost">
+                      <Link to="/">
+                        <ArrowLeft className="w-4 h-4 mr-1" />
+                        Acasă
+                      </Link>
+                    </Button>
+                  </div>
+                </>
+              )}
 
-            {(status === "failed" || status === "canceled") && (
-              <>
-                <XCircle className="w-12 h-12 text-destructive mx-auto" strokeWidth={2.5} />
-                <h1 className="font-display text-2xl font-bold">
-                  {status === "canceled" ? "Plata a fost anulată" : "Plata a eșuat"}
-                </h1>
-                <p className="text-sm text-muted-foreground">
-                  Nu am reușit să procesăm plata. Poți să încerci din nou sau să ne scrii pe
-                  WhatsApp la 0763 124 514.
-                </p>
-                <div className="pt-3 flex flex-col sm:flex-row gap-2 justify-center">
-                  <Button onClick={() => navigate(-1)} size="lg">
-                    <RefreshCcw className="w-4 h-4 mr-1" />
-                    Încearcă din nou
-                  </Button>
-                  <Button asChild variant="ghost">
-                    <Link to="/">
-                      <ArrowLeft className="w-4 h-4 mr-1" />
-                      Acasă
-                    </Link>
-                  </Button>
-                </div>
-              </>
-            )}
-          </CardContent>
-        </Card>
+              {(status === "failed" || status === "canceled") && (
+                <>
+                  <XCircle
+                    className="w-12 h-12 text-destructive mx-auto"
+                    strokeWidth={2.5}
+                  />
+                  <h1 className="font-display text-2xl font-bold">
+                    {status === "canceled"
+                      ? "Plata a fost anulată"
+                      : "Plata a eșuat"}
+                  </h1>
+                  <p className="text-sm text-muted-foreground">
+                    Nu am reușit să procesăm plata. Poți să încerci din nou sau
+                    să ne scrii pe WhatsApp la 0763 124 514.
+                  </p>
+                  <div className="pt-3 flex flex-col sm:flex-row gap-2 justify-center">
+                    <Button onClick={() => navigate(-1)} size="lg">
+                      <RefreshCcw className="w-4 h-4 mr-1" />
+                      Încearcă din nou
+                    </Button>
+                    <Button asChild variant="ghost">
+                      <Link to="/">
+                        <ArrowLeft className="w-4 h-4 mr-1" />
+                        Acasă
+                      </Link>
+                    </Button>
+                  </div>
+                </>
+              )}
+            </CardContent>
+          </Card>
 
-        {registrationId && (
-          <p className="text-center text-[11px] text-muted-foreground mt-4">
-            Ref înscriere: {registrationId.slice(0, 8)}
-          </p>
-        )}
-      </div>
+          {registrationId && (
+            <p className="text-center text-[11px] text-muted-foreground mt-4">
+              Ref înscriere: {registrationId.slice(0, 8)}
+            </p>
+          )}
+        </div>
       </main>
       <Footer />
     </div>

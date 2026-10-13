@@ -1,7 +1,10 @@
 import type { ReactNode } from "react";
 import { Loader2, type LucideIcon } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { scrollRegionProps, useHorizontalOverflow } from "@/hooks/useHorizontalOverflow";
+import {
+  scrollRegionProps,
+  useHorizontalOverflow,
+} from "@/hooks/useHorizontalOverflow";
 
 /**
  * The admin panel's design vocabulary.
@@ -46,7 +49,9 @@ import { scrollRegionProps, useHorizontalOverflow } from "@/hooks/useHorizontalO
 export function ScreenToolbar({ children }: { children?: ReactNode }) {
   if (!children) return null;
   return (
-    <div className="-mt-1 mb-5 flex flex-wrap items-center justify-end gap-2">{children}</div>
+    <div className="-mt-1 mb-5 flex flex-wrap items-center justify-end gap-2">
+      {children}
+    </div>
   );
 }
 
@@ -57,7 +62,8 @@ type Tone = "raised" | "flush" | "alert" | "quiet";
 const TONE: Record<Tone, string> = {
   // The default: a white card lifting off the cream canvas. A hairline plus a
   // whisper of shadow reads cleaner than the heavy border it replaces.
-  raised: "rounded-xl border border-border/70 bg-card shadow-[0_1px_2px_rgba(16,24,40,0.04)]",
+  raised:
+    "rounded-xl border border-border/70 bg-card shadow-[0_1px_2px_rgba(16,24,40,0.04)]",
   // No chrome. For a block that is already inside something.
   flush: "",
   // Loud on purpose, and the only tone that uses colour for its surface.
@@ -101,14 +107,18 @@ export function Section({
             <h3
               className={cn(
                 "flex items-center gap-2 text-[0.9375rem] font-semibold leading-snug",
-                alert ? "text-amber-700 dark:text-amber-400" : "text-foreground",
+                alert
+                  ? "text-amber-700 dark:text-amber-400"
+                  : "text-foreground",
               )}
             >
               {Icon && (
                 <Icon
                   className={cn(
                     "h-[1.05rem] w-[1.05rem] shrink-0",
-                    alert ? "text-amber-600 dark:text-amber-400" : "text-primary",
+                    alert
+                      ? "text-amber-600 dark:text-amber-400"
+                      : "text-primary",
                   )}
                 />
               )}
@@ -118,17 +128,23 @@ export function Section({
               <p
                 className={cn(
                   "mt-1 max-w-prose text-xs leading-relaxed",
-                  alert ? "text-amber-700/80 dark:text-amber-400/80" : "text-muted-foreground",
+                  alert
+                    ? "text-amber-700/80 dark:text-amber-400/80"
+                    : "text-muted-foreground",
                 )}
               >
                 {description}
               </p>
             )}
           </div>
-          {actions && <div className="flex shrink-0 items-center gap-1.5">{actions}</div>}
+          {actions && (
+            <div className="flex shrink-0 items-center gap-1.5">{actions}</div>
+          )}
         </header>
       )}
-      <div className={cn(tone === "flush" ? "" : "px-4 py-3.5", bodyClassName)}>{children}</div>
+      <div className={cn(tone === "flush" ? "" : "px-4 py-3.5", bodyClassName)}>
+        {children}
+      </div>
     </section>
   );
 }
@@ -155,7 +171,9 @@ export function Empty({
   return (
     <div className="flex flex-col items-center justify-center rounded-xl border border-dashed border-border bg-card/40 px-6 py-12 text-center">
       {Icon && <Icon className="mb-3 h-7 w-7 text-muted-foreground/50" />}
-      <p className="font-display text-base font-semibold text-foreground">{title}</p>
+      <p className="font-display text-base font-semibold text-foreground">
+        {title}
+      </p>
       {description && (
         <p className="mt-1.5 max-w-sm text-sm leading-relaxed text-muted-foreground">
           {description}
@@ -220,7 +238,8 @@ export function TableWrap({
   /** Names the scrollable region for screen readers, e.g. "Înscrieri". */
   label?: string;
 }) {
-  const { ref, overflows, atEnd, measure } = useHorizontalOverflow<HTMLDivElement>();
+  const { ref, overflows, atEnd, measure } =
+    useHorizontalOverflow<HTMLDivElement>();
 
   return (
     <div className="relative -mx-4">
@@ -233,7 +252,8 @@ export function TableWrap({
         <table
           className={cn(
             "w-full min-w-[34rem] border-collapse text-sm",
-            stickyHeader && "[&_thead_th]:sticky [&_thead_th]:top-0 [&_thead_th]:z-10 [&_thead_th]:bg-card",
+            stickyHeader &&
+              "[&_thead_th]:sticky [&_thead_th]:top-0 [&_thead_th]:z-10 [&_thead_th]:bg-card",
           )}
         >
           {children}
@@ -294,8 +314,18 @@ export function Td({
 }
 
 /** Row with a hover tint, so the eye can track across a wide table. */
-export function Tr({ children, className }: { children: ReactNode; className?: string }) {
-  return <tr className={cn("transition-colors hover:bg-muted/40", className)}>{children}</tr>;
+export function Tr({
+  children,
+  className,
+}: {
+  children: ReactNode;
+  className?: string;
+}) {
+  return (
+    <tr className={cn("transition-colors hover:bg-muted/40", className)}>
+      {children}
+    </tr>
+  );
 }
 
 /* ── Figures ───────────────────────────────────────────────────────────── */
@@ -323,7 +353,11 @@ export function StatTile({
       <p className="mt-1.5 font-display text-[1.75rem] font-semibold leading-none tabular-nums text-foreground">
         {value}
       </p>
-      {hint && <p className="mt-1.5 text-xs leading-snug text-muted-foreground">{hint}</p>}
+      {hint && (
+        <p className="mt-1.5 text-xs leading-snug text-muted-foreground">
+          {hint}
+        </p>
+      )}
     </div>
   );
 }

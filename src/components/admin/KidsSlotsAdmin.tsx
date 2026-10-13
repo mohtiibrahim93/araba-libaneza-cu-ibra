@@ -17,7 +17,17 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
-import { Empty, ErrorNote, Loading, ScreenToolbar, Section, TableWrap, Td, Th, Tr } from "./ui";
+import {
+  Empty,
+  ErrorNote,
+  Loading,
+  ScreenToolbar,
+  Section,
+  TableWrap,
+  Td,
+  Th,
+  Tr,
+} from "./ui";
 
 /**
  * The weekly slots a kids' course can be booked into.
@@ -35,7 +45,15 @@ import { Empty, ErrorNote, Loading, ScreenToolbar, Section, TableWrap, Td, Th, T
  */
 
 /** Index with `weekday - 1`. Monday first, because 1 is Monday. */
-const WEEKDAYS = ["Luni", "Marți", "Miercuri", "Joi", "Vineri", "Sâmbătă", "Duminică"] as const;
+const WEEKDAYS = [
+  "Luni",
+  "Marți",
+  "Miercuri",
+  "Joi",
+  "Vineri",
+  "Sâmbătă",
+  "Duminică",
+] as const;
 
 interface Slot {
   id: string;
@@ -75,7 +93,9 @@ const KidsSlotsAdmin = () => {
     setLoading(true);
     setError("");
     try {
-      const { data, error: err } = await invokeAdmin({ action: "list_kids_slots" });
+      const { data, error: err } = await invokeAdmin({
+        action: "list_kids_slots",
+      });
       if (err) throw err;
       if (data?.error) throw new Error(data.error);
       setSlots(data?.data ?? []);
@@ -94,7 +114,10 @@ const KidsSlotsAdmin = () => {
   const save = async (s: Draft) => {
     setSaving(s.id ?? "new");
     try {
-      const { data, error: err } = await invokeAdmin({ action: "upsert_kids_slot", ...s });
+      const { data, error: err } = await invokeAdmin({
+        action: "upsert_kids_slot",
+        ...s,
+      });
       if (err) throw err;
       // The server validates weekday, time, format, seats and duration, and
       // answers with a Romanian message. Showing it beats a generic failure.
@@ -115,7 +138,10 @@ const KidsSlotsAdmin = () => {
   const remove = async (id: string) => {
     setSaving(id);
     try {
-      const { data, error: err } = await invokeAdmin({ action: "delete_kids_slot", id });
+      const { data, error: err } = await invokeAdmin({
+        action: "delete_kids_slot",
+        id,
+      });
       if (err) throw err;
       if (data?.error) throw new Error(data.error);
       toast({ title: "Interval șters" });
@@ -130,14 +156,22 @@ const KidsSlotsAdmin = () => {
     }
   };
 
-  const Fields = ({ value, onChange }: { value: Draft; onChange: (d: Draft) => void }) => (
+  const Fields = ({
+    value,
+    onChange,
+  }: {
+    value: Draft;
+    onChange: (d: Draft) => void;
+  }) => (
     <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
       <div className="space-y-1.5">
         <Label className="text-xs">Ziua</Label>
         <select
           className="h-9 w-full rounded-md border border-input bg-background px-2 text-sm"
           value={value.weekday}
-          onChange={(e) => onChange({ ...value, weekday: Number(e.target.value) })}
+          onChange={(e) =>
+            onChange({ ...value, weekday: Number(e.target.value) })
+          }
         >
           {WEEKDAYS.map((d, i) => (
             <option key={d} value={i + 1}>
@@ -161,7 +195,9 @@ const KidsSlotsAdmin = () => {
           min={15}
           className="h-9"
           value={value.duration_min}
-          onChange={(e) => onChange({ ...value, duration_min: Number(e.target.value) })}
+          onChange={(e) =>
+            onChange({ ...value, duration_min: Number(e.target.value) })
+          }
         />
       </div>
       <div className="space-y-1.5">
@@ -171,7 +207,9 @@ const KidsSlotsAdmin = () => {
           min={1}
           className="h-9"
           value={value.max_seats}
-          onChange={(e) => onChange({ ...value, max_seats: Number(e.target.value) })}
+          onChange={(e) =>
+            onChange({ ...value, max_seats: Number(e.target.value) })
+          }
         />
       </div>
       <div className="space-y-1.5">
@@ -179,7 +217,9 @@ const KidsSlotsAdmin = () => {
         <select
           className="h-9 w-full rounded-md border border-input bg-background px-2 text-sm"
           value={value.format}
-          onChange={(e) => onChange({ ...value, format: e.target.value as Slot["format"] })}
+          onChange={(e) =>
+            onChange({ ...value, format: e.target.value as Slot["format"] })
+          }
         >
           <option value="online">Online</option>
           <option value="physical">La centru</option>
@@ -191,7 +231,9 @@ const KidsSlotsAdmin = () => {
           className="h-9"
           placeholder="opțional"
           value={value.location ?? ""}
-          onChange={(e) => onChange({ ...value, location: e.target.value || null })}
+          onChange={(e) =>
+            onChange({ ...value, location: e.target.value || null })
+          }
         />
       </div>
       <div className="space-y-1.5">
@@ -200,7 +242,9 @@ const KidsSlotsAdmin = () => {
           type="number"
           className="h-9"
           value={value.sort_order}
-          onChange={(e) => onChange({ ...value, sort_order: Number(e.target.value) })}
+          onChange={(e) =>
+            onChange({ ...value, sort_order: Number(e.target.value) })
+          }
         />
       </div>
       <div className="flex items-end">
@@ -209,7 +253,9 @@ const KidsSlotsAdmin = () => {
             type="checkbox"
             className="h-4 w-4"
             checked={value.is_active}
-            onChange={(e) => onChange({ ...value, is_active: e.target.checked })}
+            onChange={(e) =>
+              onChange({ ...value, is_active: e.target.checked })
+            }
           />
           Activ pe site
         </label>
@@ -234,7 +280,11 @@ const KidsSlotsAdmin = () => {
         <Section title="Interval nou" icon={Plus}>
           <Fields value={draft} onChange={setDraft} />
           <div className="mt-4 flex gap-2">
-            <Button size="sm" onClick={() => void save(draft)} disabled={saving === "new"}>
+            <Button
+              size="sm"
+              onClick={() => void save(draft)}
+              disabled={saving === "new"}
+            >
               <Save className="h-4 w-4" />
               Salvează
             </Button>
@@ -278,14 +328,20 @@ const KidsSlotsAdmin = () => {
             <tbody>
               {slots.map((s) => (
                 <Tr key={s.id}>
-                  <Td className="font-medium text-foreground">{WEEKDAYS[s.weekday - 1]}</Td>
+                  <Td className="font-medium text-foreground">
+                    {WEEKDAYS[s.weekday - 1]}
+                  </Td>
                   <Td className="tabular-nums">{hhmm(s.start_time)}</Td>
-                  <Td numeric className="text-muted-foreground">{s.duration_min} min</Td>
+                  <Td numeric className="text-muted-foreground">
+                    {s.duration_min} min
+                  </Td>
                   <Td className="text-muted-foreground">
                     {s.format === "online" ? "Online" : "La centru"}
                     {s.location ? ` · ${s.location}` : ""}
                   </Td>
-                  <Td numeric className="text-muted-foreground">{s.max_seats}</Td>
+                  <Td numeric className="text-muted-foreground">
+                    {s.max_seats}
+                  </Td>
                   <Td>
                     {s.is_active ? (
                       <span className="rounded-full bg-primary/10 px-2 py-0.5 text-xs text-primary">
@@ -311,23 +367,31 @@ const KidsSlotsAdmin = () => {
                           reads this table live, so it asks first. */}
                       <AlertDialog>
                         <AlertDialogTrigger asChild>
-                          <Button size="sm" variant="ghost" disabled={saving === s.id}>
+                          <Button
+                            size="sm"
+                            variant="ghost"
+                            disabled={saving === s.id}
+                          >
                             <Trash2 className="h-4 w-4 text-destructive" />
                           </Button>
                         </AlertDialogTrigger>
                         <AlertDialogContent>
                           <AlertDialogHeader>
                             <AlertDialogTitle>
-                              Ștergi intervalul de {WEEKDAYS[s.weekday - 1]}, {hhmm(s.start_time)}?
+                              Ștergi intervalul de {WEEKDAYS[s.weekday - 1]},{" "}
+                              {hhmm(s.start_time)}?
                             </AlertDialogTitle>
                             <AlertDialogDescription>
-                              Dispare imediat de pe site. Înscrierile deja făcute pe acest interval
-                              rămân, dar nu vor mai arăta un interval valid.
+                              Dispare imediat de pe site. Înscrierile deja
+                              făcute pe acest interval rămân, dar nu vor mai
+                              arăta un interval valid.
                             </AlertDialogDescription>
                           </AlertDialogHeader>
                           <AlertDialogFooter>
                             <AlertDialogCancel>Renunță</AlertDialogCancel>
-                            <AlertDialogAction onClick={() => void remove(s.id)}>
+                            <AlertDialogAction
+                              onClick={() => void remove(s.id)}
+                            >
                               Șterge
                             </AlertDialogAction>
                           </AlertDialogFooter>

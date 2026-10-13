@@ -17,7 +17,10 @@ const requestSchema = z.object({
 });
 
 async function digest(value: string): Promise<string> {
-  const bytes = await crypto.subtle.digest("SHA-256", new TextEncoder().encode(value));
+  const bytes = await crypto.subtle.digest(
+    "SHA-256",
+    new TextEncoder().encode(value),
+  );
   return Buffer.from(bytes).toString("hex");
 }
 
@@ -25,8 +28,11 @@ export const Route = createFileRoute("/api/public/contact")({
   server: {
     handlers: {
       POST: async ({ request }) => {
-        const parsed = requestSchema.safeParse(await request.json().catch(() => null));
-        if (!parsed.success) return Response.json({ error: "invalid request" }, { status: 400 });
+        const parsed = requestSchema.safeParse(
+          await request.json().catch(() => null),
+        );
+        if (!parsed.success)
+          return Response.json({ error: "invalid request" }, { status: 400 });
 
         const { name, email, phone, message, language } = parsed.data;
         const ip =
@@ -34,11 +40,15 @@ export const Route = createFileRoute("/api/public/contact")({
           request.headers.get("x-forwarded-for")?.split(",")[0]?.trim() ??
           "unknown";
 
-        const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+        const { supabaseAdmin } =
+          await import("@/integrations/supabase/client.server");
 
         // Same abuse guard the table trigger applied for direct inserts: five
         // messages per hour per connection, and three per email address.
-        const [ipBucket, emailBucket] = await Promise.all([digest(ip), digest(email.toLowerCase())]);
+        const [ipBucket, emailBucket] = await Promise.all([
+          digest(ip),
+          digest(email.toLowerCase()),
+        ]);
         const [ipLimit, emailLimit] = await Promise.all([
           supabaseAdmin.rpc("check_and_record_rate_limit", {
             p_bucket: `contact_form_ip:${ipBucket}`,
@@ -52,8 +62,14 @@ export const Route = createFileRoute("/api/public/contact")({
           }),
         ]);
         if (ipLimit.error || emailLimit.error) {
-          console.error("[contact] rate limit check failed", ipLimit.error ?? emailLimit.error);
-          return Response.json({ error: "service unavailable" }, { status: 503 });
+          console.error(
+            "[contact] rate limit check failed",
+            ipLimit.error ?? emailLimit.error,
+          );
+          return Response.json(
+            { error: "service unavailable" },
+            { status: 503 },
+          );
         }
         if (!ipLimit.data || !emailLimit.data) {
           return Response.json({ error: "too many requests" }, { status: 429 });
@@ -74,14 +90,24 @@ export const Route = createFileRoute("/api/public/contact")({
 
         if (insertError || !inserted) {
           console.error("[contact] insert failed", insertError);
-          return Response.json({ error: "service unavailable" }, { status: 503 });
+          return Response.json(
+            { error: "service unavailable" },
+            { status: 503 },
+          );
         }
 
         // The message is safely stored; a mail failure must not lose it.
         try {
-          const { sendTemplateEmail } = await import("@/lib/email-templates/send-email");
+          const { sendTemplateEmail } =
+            await import("@/lib/email-templates/send-email");
           await sendTemplateEmail("admin-contact-message", "", {
-            templateData: { name, email, phone: phone || undefined, language, message },
+            templateData: {
+              name,
+              email,
+              phone: phone || undefined,
+              language,
+              message,
+            },
             idempotencyKey: `contact-msg-${inserted.id}`,
             replyTo: email,
           });

@@ -1,5 +1,9 @@
 import { useEffect } from "react";
-import { createFileRoute, useLocation, useNavigate } from "@tanstack/react-router";
+import {
+  createFileRoute,
+  useLocation,
+  useNavigate,
+} from "@tanstack/react-router";
 import { seoHead } from "@/lib/seoHead";
 import Index from "@/pages/Index";
 

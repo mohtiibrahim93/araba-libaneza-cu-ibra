@@ -1,12 +1,12 @@
-import * as React from 'react'
-import { createFileRoute } from '@tanstack/react-router'
+import * as React from "react";
+import { createFileRoute } from "@tanstack/react-router";
 
 // Configuration
-const SITE_NAME = "Centrul de Araba Libaneza"
-const SENDER_DOMAIN = "notify.centruldearabalibaneza.com"
-const ROOT_DOMAIN = "centruldearabalibaneza.com"
-const FROM_DOMAIN = "notify.centruldearabalibaneza.com"
-const SITE_URL = `https://${ROOT_DOMAIN}`
+const SITE_NAME = "Centrul de Araba Libaneza";
+const SENDER_DOMAIN = "notify.centruldearabalibaneza.com";
+const ROOT_DOMAIN = "centruldearabalibaneza.com";
+const FROM_DOMAIN = "notify.centruldearabalibaneza.com";
+const SITE_URL = `https://${ROOT_DOMAIN}`;
 
 // The SDK handler owns verification, dispatch, and retry semantics; this file
 // owns only the email decisions: subjects, templates, and per-type props.
@@ -31,26 +31,26 @@ export const Route = createFileRoute("/lovable/email/auth/webhook")({
           { EmailChangeEmail },
           { ReauthenticationEmail },
         ] = await Promise.all([
-          import('@lovable.dev/email-js'),
-          import('@/lib/email-templates/signup'),
-          import('@/lib/email-templates/invite'),
-          import('@/lib/email-templates/magic-link'),
-          import('@/lib/email-templates/recovery'),
-          import('@/lib/email-templates/email-change'),
-          import('@/lib/email-templates/reauthentication'),
-        ])
+          import("@lovable.dev/email-js"),
+          import("@/lib/email-templates/signup"),
+          import("@/lib/email-templates/invite"),
+          import("@/lib/email-templates/magic-link"),
+          import("@/lib/email-templates/recovery"),
+          import("@/lib/email-templates/email-change"),
+          import("@/lib/email-templates/reauthentication"),
+        ]);
 
         const handler = createAuthEmailHandler({
-          apiKey: process.env['LOVABLE_API_KEY']!,
+          apiKey: process.env["LOVABLE_API_KEY"]!,
           from: `${SITE_NAME} <noreply@${FROM_DOMAIN}>`,
           senderDomain: SENDER_DOMAIN,
-          sendUrl: process.env['LOVABLE_SEND_URL'],
+          sendUrl: process.env["LOVABLE_SEND_URL"],
           emails: {
             signup: {
               // This is the one a free-trial visitor gets: they have never
               // signed in, so Supabase calls their email confirmation a
               // signup. The code has to be here, not only in magiclink.
-              subject: 'Your confirmation code',
+              subject: "Your confirmation code",
               render: (data) =>
                 React.createElement(SignupEmail, {
                   siteName: SITE_NAME,
@@ -74,7 +74,7 @@ export const Route = createFileRoute("/lovable/email/auth/webhook")({
               // where following a link would abandon a selected slot in
               // another tab, and the link for the admin and student sign-ins
               // that have always used one.
-              subject: 'Your login code',
+              subject: "Your login code",
               render: (data) =>
                 React.createElement(MagicLinkEmail, {
                   siteName: SITE_NAME,
@@ -83,7 +83,7 @@ export const Route = createFileRoute("/lovable/email/auth/webhook")({
                 }),
             },
             recovery: {
-              subject: 'Reset your password',
+              subject: "Reset your password",
               render: (data) =>
                 React.createElement(RecoveryEmail, {
                   siteName: SITE_NAME,
@@ -91,25 +91,27 @@ export const Route = createFileRoute("/lovable/email/auth/webhook")({
                 }),
             },
             email_change: {
-              subject: 'Confirm your new email',
+              subject: "Confirm your new email",
               render: (data) =>
                 React.createElement(EmailChangeEmail, {
                   siteName: SITE_NAME,
-                  oldEmail: data.old_email ?? '',
+                  oldEmail: data.old_email ?? "",
                   email: data.email,
-                  newEmail: data.new_email ?? '',
+                  newEmail: data.new_email ?? "",
                   confirmationUrl: data.url,
                 }),
             },
             reauthentication: {
-              subject: 'Your verification code',
+              subject: "Your verification code",
               render: (data) =>
-                React.createElement(ReauthenticationEmail, { token: data.token ?? '' }),
+                React.createElement(ReauthenticationEmail, {
+                  token: data.token ?? "",
+                }),
             },
           },
-        })
-        return handler(request)
+        });
+        return handler(request);
       },
     },
   },
-})
+});

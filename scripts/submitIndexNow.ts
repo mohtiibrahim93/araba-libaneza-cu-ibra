@@ -48,7 +48,10 @@ const dryRun = args.includes("--dry-run");
 
 /** Sitemap entries as { url, lastmod }, preferring the built file. */
 function sitemapEntries(): Map<string, string> {
-  const candidates = [resolve(root, "dist/sitemap.xml"), resolve(root, "public/sitemap.xml")];
+  const candidates = [
+    resolve(root, "dist/sitemap.xml"),
+    resolve(root, "public/sitemap.xml"),
+  ];
   const file = candidates.find((c) => existsSync(c));
   if (!file) throw new Error("no sitemap.xml found — run the build first");
   const xml = readFileSync(file, "utf8");
@@ -59,7 +62,9 @@ function sitemapEntries(): Map<string, string> {
     entries.set(loc, block.match(/<lastmod>(.*?)<\/lastmod>/)?.[1] ?? "");
   }
   if (entries.size === 0) throw new Error(`no <loc> entries in ${file}`);
-  console.log(`[indexnow] read ${entries.size} URLs from ${file.replace(root + "/", "")}`);
+  console.log(
+    `[indexnow] read ${entries.size} URLs from ${file.replace(root + "/", "")}`,
+  );
   return entries;
 }
 
@@ -68,7 +73,9 @@ function previous(): Record<string, string> {
   try {
     return JSON.parse(readFileSync(STATE, "utf8")) as Record<string, string>;
   } catch {
-    console.warn("[indexnow] state file unreadable — treating every URL as new");
+    console.warn(
+      "[indexnow] state file unreadable — treating every URL as new",
+    );
     return {};
   }
 }
@@ -78,7 +85,9 @@ const seen = previous();
 
 const changed = submitAll
   ? [...entries.keys()]
-  : [...entries].filter(([url, lastmod]) => seen[url] !== lastmod).map(([url]) => url);
+  : [...entries]
+      .filter(([url, lastmod]) => seen[url] !== lastmod)
+      .map(([url]) => url);
 
 if (changed.length === 0) {
   // Not the same as "nothing to submit": a rewritten page cannot be seen from
@@ -91,11 +100,15 @@ if (changed.length === 0) {
   process.exit(0);
 }
 if (changed.length > MAX_URLS) {
-  console.warn(`[indexnow] ${changed.length} URLs exceeds the ${MAX_URLS} cap — sending the first ${MAX_URLS}`);
+  console.warn(
+    `[indexnow] ${changed.length} URLs exceeds the ${MAX_URLS} cap — sending the first ${MAX_URLS}`,
+  );
 }
 const urlList = changed.slice(0, MAX_URLS);
 
-console.log(`[indexnow] ${submitAll ? "submitting all" : "changed since last run"}: ${urlList.length} URL(s)`);
+console.log(
+  `[indexnow] ${submitAll ? "submitting all" : "changed since last run"}: ${urlList.length} URL(s)`,
+);
 for (const u of urlList.slice(0, 10)) console.log("   ", u);
 if (urlList.length > 10) console.log(`    … and ${urlList.length - 10} more`);
 
@@ -122,7 +135,9 @@ const res = await fetch(ENDPOINT, {
 // otherwise the next run would skip them and they would never be resubmitted.
 if (res.status !== 200 && res.status !== 202) {
   const text = await res.text().catch(() => "");
-  console.error(`[indexnow] submission failed: ${res.status} ${res.statusText} ${text.slice(0, 300)}`);
+  console.error(
+    `[indexnow] submission failed: ${res.status} ${res.statusText} ${text.slice(0, 300)}`,
+  );
   process.exit(1);
 }
 

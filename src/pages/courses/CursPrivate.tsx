@@ -40,7 +40,12 @@ const CursPrivate = () => {
       h1={t.coursePrivateH1}
       intro={t.coursePrivateIntro}
       priceLine={`${t.priceOnlineShort} ${formatLei(online)} · ${t.priceFizicShort} ${formatLei(fizic)} ${t.priceLeiPer90Min}`}
-      features={[t.coursePrivateFeat1, t.coursePrivateFeat2, t.coursePrivateFeat3, t.coursePrivateFeat4]}
+      features={[
+        t.coursePrivateFeat1,
+        t.coursePrivateFeat2,
+        t.coursePrivateFeat3,
+        t.coursePrivateFeat4,
+      ]}
       primaryCtaLabel={t.courseCtaSeeForm}
       primaryCtaHref="#register"
       otherCourses={[
@@ -50,9 +55,15 @@ const CursPrivate = () => {
     >
       {/* Personalized + MSA partners */}
       <section className="mt-4 rounded-3xl bg-cream p-6 sm:p-10">
-        <h2 className="font-display text-display-md font-bold text-foreground mb-3">{t.privatePersonalizedTitle}</h2>
-        <p className="text-base text-foreground/80 leading-relaxed max-w-3xl">{t.privatePersonalizedDesc}</p>
-        <p className="text-xs text-muted-foreground mt-4">{t.priceSurchargeNote}</p>
+        <h2 className="font-display text-display-md font-bold text-foreground mb-3">
+          {t.privatePersonalizedTitle}
+        </h2>
+        <p className="text-base text-foreground/80 leading-relaxed max-w-3xl">
+          {t.privatePersonalizedDesc}
+        </p>
+        <p className="text-xs text-muted-foreground mt-4">
+          {t.priceSurchargeNote}
+        </p>
       </section>
 
       {/* Absorbed from the retired /cursuri/privat duplicate: the private-vs-group
@@ -60,18 +71,33 @@ const CursPrivate = () => {
           did not. The steps now read as steps, right before the form. */}
       <section className="mt-section grid gap-5 lg:grid-cols-[minmax(0,1fr)_minmax(0,2fr)]">
         <div className="rounded-3xl border border-[#E7E1D6] bg-card p-6 sm:p-7 dark:border-border">
-          <h2 className="mb-3 font-display text-xl font-bold text-foreground">{t.privateVsGroupTitle}</h2>
-          <p className="text-[15px] text-foreground/75 leading-relaxed">{t.privateVsGroupDesc}</p>
+          <h2 className="mb-3 font-display text-xl font-bold text-foreground">
+            {t.privateVsGroupTitle}
+          </h2>
+          <p className="text-[15px] text-foreground/75 leading-relaxed">
+            {t.privateVsGroupDesc}
+          </p>
         </div>
         <div>
-          <h2 className="mb-4 font-display text-xl font-bold text-foreground">{t.privateProcessTitle}</h2>
+          <h2 className="mb-4 font-display text-xl font-bold text-foreground">
+            {t.privateProcessTitle}
+          </h2>
           <ol className="grid gap-4 sm:grid-cols-3">
-            {[t.privateProcessStep1, t.privateProcessStep2, t.privateProcessStep3].map((step, i) => (
-              <li key={i} className="flex flex-col gap-3 rounded-3xl border border-[#E7E1D6] bg-card p-5 dark:border-border">
+            {[
+              t.privateProcessStep1,
+              t.privateProcessStep2,
+              t.privateProcessStep3,
+            ].map((step, i) => (
+              <li
+                key={i}
+                className="flex flex-col gap-3 rounded-3xl border border-[#E7E1D6] bg-card p-5 dark:border-border"
+              >
                 <span className="inline-flex h-9 w-9 items-center justify-center rounded-full bg-brand-green text-sm font-bold text-white">
                   {i + 1}
                 </span>
-                <span className="text-[15px] leading-relaxed text-foreground/85">{step}</span>
+                <span className="text-[15px] leading-relaxed text-foreground/85">
+                  {step}
+                </span>
               </li>
             ))}
           </ol>
@@ -79,18 +105,29 @@ const CursPrivate = () => {
       </section>
 
       <section id="register" className="scroll-mt-24 mt-section">
-        <h2 className="font-display text-display-md font-bold text-foreground mb-2">{t.coursePageRegisterTitle}</h2>
-        <p className="text-base text-muted-foreground mb-6">{t.coursePageRegisterDesc}</p>
+        <h2 className="font-display text-display-md font-bold text-foreground mb-2">
+          {t.coursePageRegisterTitle}
+        </h2>
+        <p className="text-base text-muted-foreground mb-6">
+          {t.coursePageRegisterDesc}
+        </p>
         {/* Back from Stripe without paying: say plainly that nothing was booked. */}
         {cancelled && (
-          <p role="status" className="mb-6 rounded-2xl border border-amber-300 bg-amber-50 px-5 py-4 text-sm text-amber-900">
+          <p
+            role="status"
+            className="mb-6 rounded-2xl border border-amber-300 bg-amber-50 px-5 py-4 text-sm text-amber-900"
+          >
             {lang === "en"
               ? "The payment was cancelled, so nothing was booked. You can pick a time and pay again below."
               : "Plata a fost anulată, așa că nu s-a rezervat nimic. Poți alege din nou ora și plăti mai jos."}
           </p>
         )}
         <div className="rounded-3xl border border-[#E7E1D6] bg-card p-4 sm:p-8 dark:border-border">
-          <RegistrationFormSection defaultCourseType="private" lockSelection embedded />
+          <RegistrationFormSection
+            defaultCourseType="private"
+            lockSelection
+            embedded
+          />
         </div>
       </section>
     </CourseLayout>

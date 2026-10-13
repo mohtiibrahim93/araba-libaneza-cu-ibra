@@ -19,8 +19,18 @@ const ANSWERS: { arabizi: string; arabic: string; correct: boolean }[] = [
   { arabizi: "Kifak?", arabic: "كيفك؟", correct: false },
 ];
 
-const Wrapper = ({ compact, children }: { compact: boolean; children: ReactNode }) =>
-  compact ? <>{children}</> : <section className="py-section px-gutter bg-background">{children}</section>;
+const Wrapper = ({
+  compact,
+  children,
+}: {
+  compact: boolean;
+  children: ReactNode;
+}) =>
+  compact ? (
+    <>{children}</>
+  ) : (
+    <section className="py-section px-gutter bg-background">{children}</section>
+  );
 
 /** `compact`: the card inside "Cum începi" (no section of its own, stacked). */
 const YallaGameBand = ({ compact = false }: { compact?: boolean }) => {
@@ -45,8 +55,15 @@ const YallaGameBand = ({ compact = false }: { compact?: boolean }) => {
           <span className="text-sm font-bold uppercase tracking-[0.1em] text-[#E9C77B]">
             {en ? "Free · no account" : "Gratuit · fără cont"}
           </span>
-          <Heading className={cn("font-display font-bold leading-tight", compact ? "text-2xl sm:text-[1.75rem]" : "text-display-lg")}>
-            {en ? "Play Yalla. 4,300+ expressions, right in your browser." : "Joacă Yalla. 4.300+ expresii, direct în browser."}
+          <Heading
+            className={cn(
+              "font-display font-bold leading-tight",
+              compact ? "text-2xl sm:text-[1.75rem]" : "text-display-lg",
+            )}
+          >
+            {en
+              ? "Play Yalla. 4,300+ expressions, right in your browser."
+              : "Joacă Yalla. 4.300+ expresii, direct în browser."}
           </Heading>
           <p className="text-[17px] leading-relaxed text-[#CFE0D6]">
             {en
@@ -69,18 +86,35 @@ const YallaGameBand = ({ compact = false }: { compact?: boolean }) => {
           </div>
         </div>
 
-        <div className={cn("flex flex-col gap-3.5 rounded-[22px] bg-white p-6 text-[#1A1A1A] sm:p-7", !compact && "lg:col-span-5 lg:col-start-8")}>
+        <div
+          className={cn(
+            "flex flex-col gap-3.5 rounded-[22px] bg-white p-6 text-[#1A1A1A] sm:p-7",
+            !compact && "lg:col-span-5 lg:col-start-8",
+          )}
+        >
           <div className="flex justify-between text-[13px] font-semibold text-[#5B5A57]">
             <span>{en ? "Sample question" : "Întrebare de probă"}</span>
             <span className="text-[#204F3A]">{en ? "Try it" : "Încearcă"}</span>
           </div>
           <div className="h-1.5 rounded-full bg-[#EFEAE0]" aria-hidden="true">
-            <div className={cn("h-1.5 rounded-full bg-[#204F3A] transition-all", answered ? "w-full" : "w-1/3")} />
+            <div
+              className={cn(
+                "h-1.5 rounded-full bg-[#204F3A] transition-all",
+                answered ? "w-full" : "w-1/3",
+              )}
+            />
           </div>
-          <span className="font-display text-2xl font-bold sm:text-[26px]" id="yalla-sample-q">
+          <span
+            className="font-display text-2xl font-bold sm:text-[26px]"
+            id="yalla-sample-q"
+          >
             {en ? "How do you say “Welcome”?" : "Cum spui „Bine ai venit”?"}
           </span>
-          <div role="group" aria-labelledby="yalla-sample-q" className="flex flex-col gap-3">
+          <div
+            role="group"
+            aria-labelledby="yalla-sample-q"
+            className="flex flex-col gap-3"
+          >
             {ANSWERS.map((a, i) => {
               const showRight = answered && a.correct;
               const showWrong = picked === i && !a.correct;
@@ -94,12 +128,18 @@ const YallaGameBand = ({ compact = false }: { compact?: boolean }) => {
                     "flex h-[52px] items-center justify-between rounded-xl px-[18px] text-[17px] font-semibold transition-colors",
                     showRight && "border-2 border-[#204F3A] bg-[#E6EFEA]",
                     showWrong && "border-2 border-[#DC2828] bg-[#FBE9E7]",
-                    !showRight && !showWrong && "border border-[#E7E1D6] bg-white",
+                    !showRight &&
+                      !showWrong &&
+                      "border border-[#E7E1D6] bg-white",
                     !answered && "hover:border-[#204F3A]",
                   )}
                 >
                   <span lang="apc-Latn">{a.arabizi}</span>
-                  <span dir="rtl" lang="ar" className="font-arabic font-medium text-[#5B5A57]">
+                  <span
+                    dir="rtl"
+                    lang="ar"
+                    className="font-arabic font-medium text-[#5B5A57]"
+                  >
                     {a.arabic}
                   </span>
                 </button>
@@ -109,12 +149,24 @@ const YallaGameBand = ({ compact = false }: { compact?: boolean }) => {
           <p aria-live="polite" className="min-h-[1.5rem] text-sm">
             {answered && (
               <>
-                <span className={cn("font-semibold", right ? "text-[#204F3A]" : "text-[#DC2828]")}>
+                <span
+                  className={cn(
+                    "font-semibold",
+                    right ? "text-[#204F3A]" : "text-[#DC2828]",
+                  )}
+                >
                   {right
-                    ? en ? "Correct! " : "Corect! "
-                    : en ? "Not quite — it's Ahla w sahla. " : "Nu chiar — e Ahla w sahla. "}
+                    ? en
+                      ? "Correct! "
+                      : "Corect! "
+                    : en
+                      ? "Not quite — it's Ahla w sahla. "
+                      : "Nu chiar — e Ahla w sahla. "}
                 </span>
-                <Link to="/joc" className="font-semibold text-[#204F3A] underline underline-offset-4">
+                <Link
+                  to="/joc"
+                  className="font-semibold text-[#204F3A] underline underline-offset-4"
+                >
                   {en ? "Keep playing →" : "Joacă mai departe →"}
                 </Link>
               </>

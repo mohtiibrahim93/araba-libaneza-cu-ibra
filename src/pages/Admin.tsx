@@ -78,9 +78,15 @@ import AdminLogin from "@/components/admin/AdminLogin";
 import SettingsTab from "@/components/admin/SettingsTab";
 import RegistrationFilters from "@/components/admin/RegistrationFilters";
 import CourseFilters from "@/components/admin/CourseFilters";
-import { describeRegistrationCourse, emptyCourseFilters, matchesCourseFilters } from "@/lib/adminCourseFilters";
+import {
+  describeRegistrationCourse,
+  emptyCourseFilters,
+  matchesCourseFilters,
+} from "@/lib/adminCourseFilters";
 import PrivateLeadStats from "@/components/admin/PrivateLeadStats";
-import RegistrationsTable, { type RefundPreview } from "@/components/admin/RegistrationsTable";
+import RegistrationsTable, {
+  type RefundPreview,
+} from "@/components/admin/RegistrationsTable";
 import {
   leadSegment,
   leadSegmentLabels,
@@ -112,14 +118,20 @@ const Admin = () => {
   const [deleting, setDeleting] = useState(false);
   const [refundingId, setRefundingId] = useState<string | null>(null);
   const [cancelingId, setCancelingId] = useState<string | null>(null);
-  const [courseTypeFilter, setCourseTypeFilter] = useState<CourseTypeFilter>("all");
-  const [leadStatusFilter, setLeadStatusFilter] = useState<LeadStatusFilter>("all");
+  const [courseTypeFilter, setCourseTypeFilter] =
+    useState<CourseTypeFilter>("all");
+  const [leadStatusFilter, setLeadStatusFilter] =
+    useState<LeadStatusFilter>("all");
   // Lead-uri / Cursanți / Închise. A specific status or group chosen below
   // shows everyone with it, whichever tab they belong to.
   const [segment, setSegment] = useState<LeadSegment>("leads");
   const [privateMessageSearch, setPrivateMessageSearch] = useState("");
-  const [courseDetailsFilter, setCourseDetailsFilter] = useState(emptyCourseFilters);
-  const [selectedGroup, setSelectedGroup] = useState<{ id: string; name: string } | null>(null);
+  const [courseDetailsFilter, setCourseDetailsFilter] =
+    useState(emptyCourseFilters);
+  const [selectedGroup, setSelectedGroup] = useState<{
+    id: string;
+    name: string;
+  } | null>(null);
   const [emailSettings, setEmailSettings] = useState<EmailSettings>({
     sender_name: "Arabă Libaneză cu Ibra",
     sender_email: "noreply@centruldearabalibaneza.com",
@@ -127,9 +139,10 @@ const Admin = () => {
   const [savingEmailSettings, setSavingEmailSettings] = useState(false);
   const [testEmail, setTestEmail] = useState("");
   const [sendingTestEmail, setSendingTestEmail] = useState(false);
-  const [updatingStatus, setUpdatingStatus] = useState<{ id: string; status: LeadStatus } | null>(
-    null,
-  );
+  const [updatingStatus, setUpdatingStatus] = useState<{
+    id: string;
+    status: LeadStatus;
+  } | null>(null);
   const undoTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const loadData = useCallback(async () => {
@@ -206,27 +219,55 @@ const Admin = () => {
       .filter(Boolean);
 
     return registrations.filter((r) => {
-      const matchesCourse = courseTypeFilter === "all" || r.form_type === courseTypeFilter;
+      const matchesCourse =
+        courseTypeFilter === "all" || r.form_type === courseTypeFilter;
       const status = (r.lead_status || "new") as LeadStatus;
       // "Toate" means every real lead. Trial forms abandoned before a slot was
       // chosen are kept as a record but stay out of the default list — they are
       // not bookings, and mixing them in is what made the admin unusable. They
       // are still one click away by selecting the "Incomplet" status.
       const matchesStatus =
-        leadStatusFilter === "all" ? (!!selectedGroup || status !== "incomplete") : status === leadStatusFilter;
-      const matchesSegment = leadStatusFilter !== "all" || !!selectedGroup || leadSegment(r) === segment;
+        leadStatusFilter === "all"
+          ? !!selectedGroup || status !== "incomplete"
+          : status === leadStatusFilter;
+      const matchesSegment =
+        leadStatusFilter !== "all" ||
+        !!selectedGroup ||
+        leadSegment(r) === segment;
       const matchesPrivateMessage =
         messageTerms.length === 0 ||
         (r.form_type === "private" &&
           messageTerms.every((term) =>
             (r.notes || "").toLocaleLowerCase("ro-RO").includes(term),
           ));
-      return matchesCourse && matchesStatus && matchesSegment && matchesPrivateMessage && matchesCourseFilters(describeRegistrationCourse(r), courseDetailsFilter) && (!selectedGroup || r.cohort_id === selectedGroup.id);
+      return (
+        matchesCourse &&
+        matchesStatus &&
+        matchesSegment &&
+        matchesPrivateMessage &&
+        matchesCourseFilters(
+          describeRegistrationCourse(r),
+          courseDetailsFilter,
+        ) &&
+        (!selectedGroup || r.cohort_id === selectedGroup.id)
+      );
     });
-  }, [registrations, courseTypeFilter, leadStatusFilter, privateMessageSearch, courseDetailsFilter, selectedGroup, segment]);
+  }, [
+    registrations,
+    courseTypeFilter,
+    leadStatusFilter,
+    privateMessageSearch,
+    courseDetailsFilter,
+    selectedGroup,
+    segment,
+  ]);
 
   const segmentCounts = useMemo(() => {
-    const counts: Record<LeadSegment, number> = { leads: 0, students: 0, closed: 0 };
+    const counts: Record<LeadSegment, number> = {
+      leads: 0,
+      students: 0,
+      closed: 0,
+    };
     for (const r of registrations) {
       if ((r.lead_status || "new") === "incomplete") continue;
       counts[leadSegment(r)] += 1;
@@ -275,9 +316,14 @@ const Admin = () => {
   const newLast7 = useMemo(() => {
     const since = Date.now() - 7 * 86_400_000;
     const recent = registrations.filter(
-      (r) => Date.parse(r.created_at) >= since && (r.lead_status || "new") !== "incomplete",
+      (r) =>
+        Date.parse(r.created_at) >= since &&
+        (r.lead_status || "new") !== "incomplete",
     );
-    return { total: recent.length, trials: recent.filter((r) => r.form_type === "trial").length };
+    return {
+      total: recent.length,
+      trials: recent.filter((r) => r.form_type === "trial").length,
+    };
   }, [registrations]);
 
   const stats = useMemo(() => {
@@ -285,7 +331,9 @@ const Admin = () => {
       (r) => (r.lead_status || "new") === "incomplete",
     ).length;
     const total = registrations.length - incomplete;
-    const paid = registrations.filter((r) => r.payment_status === "paid").length;
+    const paid = registrations.filter(
+      (r) => r.payment_status === "paid",
+    ).length;
     const activeSubs = registrations.filter(
       (r) => r.subscription_status === "active",
     ).length;
@@ -351,7 +399,8 @@ const Admin = () => {
       if (fnError) throw fnError;
       if (data?.error) throw new Error(data.error);
       await loadData();
-      const deleted = typeof data?.deleted === "number" ? data.deleted : selected.size;
+      const deleted =
+        typeof data?.deleted === "number" ? data.deleted : selected.size;
       const blocked = typeof data?.blocked === "number" ? data.blocked : 0;
       toast({
         title: `${deleted} șters${deleted === 1 ? "ă" : "e"}`,
@@ -383,7 +432,8 @@ const Admin = () => {
       await loadData();
       toast({
         title: `${data?.anonymized ?? 0} înscrieri anonimizate`,
-        description: "Datele personale au fost șterse; plățile și istoricul rămân.",
+        description:
+          "Datele personale au fost șterse; plățile și istoricul rămân.",
       });
       setSelected(new Set());
     } catch {
@@ -398,18 +448,25 @@ const Admin = () => {
    * `lessonsTaken` is the owner's input: the lessons already delivered are not
    * refundable, and nothing in the system knows how many those are.
    */
-  const previewRefund = useCallback(async (id: string, lessonsTaken: number) => {
-    const { data, error: fnError } = await invokeAdmin({
-      action: "preview_refund",
-      id,
-      lessons_taken: lessonsTaken,
-    });
-    if (fnError) throw fnError;
-    if (data?.error) throw new Error(data.error);
-    return data.data as RefundPreview;
-  }, []);
+  const previewRefund = useCallback(
+    async (id: string, lessonsTaken: number) => {
+      const { data, error: fnError } = await invokeAdmin({
+        action: "preview_refund",
+        id,
+        lessons_taken: lessonsTaken,
+      });
+      if (fnError) throw fnError;
+      if (data?.error) throw new Error(data.error);
+      return data.data as RefundPreview;
+    },
+    [],
+  );
 
-  const handleRefund = async (id: string, reason: string, lessonsTaken: number) => {
+  const handleRefund = async (
+    id: string,
+    reason: string,
+    lessonsTaken: number,
+  ) => {
     setRefundingId(id);
     try {
       const { data, error: fnError } = await invokeAdmin({
@@ -420,7 +477,9 @@ const Admin = () => {
       });
       if (fnError) throw fnError;
       if (data?.error) throw new Error(data.error);
-      setRegistrations((prev) => prev.map((r) => (r.id === id ? { ...r, ...data.data } : r)));
+      setRegistrations((prev) =>
+        prev.map((r) => (r.id === id ? { ...r, ...data.data } : r)),
+      );
       toast({
         title: "Rambursare procesată",
         description: data?.refund_label
@@ -462,8 +521,11 @@ const Admin = () => {
       });
       if (fnError) throw fnError;
       if (data?.error) throw new Error(data.error);
-      setRegistrations((prev) => prev.map((r) => (r.id === id ? { ...r, ...data.data } : r)));
-      const refunded = typeof data.refund_amount === "number" ? data.refund_amount : 0;
+      setRegistrations((prev) =>
+        prev.map((r) => (r.id === id ? { ...r, ...data.data } : r)),
+      );
+      const refunded =
+        typeof data.refund_amount === "number" ? data.refund_amount : 0;
       toast({
         title: "Abonament anulat",
         description:
@@ -520,22 +582,30 @@ const Admin = () => {
               }
               setUpdatingStatus({ id, status: previousStatus });
               setRegistrations((current) =>
-                current.map((r) => (r.id === id ? { ...r, lead_status: previousStatus } : r)),
+                current.map((r) =>
+                  r.id === id ? { ...r, lead_status: previousStatus } : r,
+                ),
               );
               try {
-                const { data: undoData, error: undoFnError } = await invokeAdmin({
-                  action: "update_status",
-                  id,
-                  lead_status: previousStatus,
-                });
+                const { data: undoData, error: undoFnError } =
+                  await invokeAdmin({
+                    action: "update_status",
+                    id,
+                    lead_status: previousStatus,
+                  });
                 if (undoFnError) throw undoFnError;
                 if (undoData?.error) throw new Error(undoData.error);
                 undoToast.dismiss();
               } catch {
                 setRegistrations((current) =>
-                  current.map((r) => (r.id === id ? { ...r, lead_status: leadStatus } : r)),
+                  current.map((r) =>
+                    r.id === id ? { ...r, lead_status: leadStatus } : r,
+                  ),
                 );
-                toast({ title: "Undo nu a putut fi aplicat", variant: "destructive" });
+                toast({
+                  title: "Undo nu a putut fi aplicat",
+                  variant: "destructive",
+                });
               } finally {
                 setUpdatingStatus(null);
               }
@@ -552,7 +622,10 @@ const Admin = () => {
       }, 6000);
     } catch {
       setRegistrations(previous);
-      toast({ title: "Statusul nu a putut fi actualizat", variant: "destructive" });
+      toast({
+        title: "Statusul nu a putut fi actualizat",
+        variant: "destructive",
+      });
     } finally {
       setUpdatingStatus((current) =>
         current?.id === id && current.status === leadStatus ? null : current,
@@ -560,7 +633,9 @@ const Admin = () => {
     }
   };
 
-  const handleEmailSettingsSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+  const handleEmailSettingsSubmit = async (
+    e: React.FormEvent<HTMLFormElement>,
+  ) => {
     e.preventDefault();
     setSavingEmailSettings(true);
     try {
@@ -574,7 +649,10 @@ const Admin = () => {
       if (data?.settings) setEmailSettings(data.settings);
       toast({ title: "Setările expeditorului au fost salvate" });
     } catch {
-      toast({ title: "Setările nu au putut fi salvate", variant: "destructive" });
+      toast({
+        title: "Setările nu au putut fi salvate",
+        variant: "destructive",
+      });
     } finally {
       setSavingEmailSettings(false);
     }
@@ -594,28 +672,43 @@ const Admin = () => {
       if (fnError) throw fnError;
       if (data?.error) throw new Error(data.error);
       toast({ title: "Emailul de test a fost trimis" });
-
     } catch {
-      toast({ title: "Emailul de test nu a putut fi trimis", variant: "destructive" });
+      toast({
+        title: "Emailul de test nu a putut fi trimis",
+        variant: "destructive",
+      });
     } finally {
       setSendingTestEmail(false);
     }
   };
 
   const handleExport = useCallback(
-    () => exportAllRegistrationsCsv(filteredRegistrations, courseTypeFilter, leadStatusFilter),
+    () =>
+      exportAllRegistrationsCsv(
+        filteredRegistrations,
+        courseTypeFilter,
+        leadStatusFilter,
+      ),
     [filteredRegistrations, courseTypeFilter, leadStatusFilter],
   );
 
   const handlePrivateCsvExport = useCallback(
     () =>
-      exportPrivateLeadsCsv(privateFilteredRegistrations, leadStatusFilter, privateMessageSearch),
+      exportPrivateLeadsCsv(
+        privateFilteredRegistrations,
+        leadStatusFilter,
+        privateMessageSearch,
+      ),
     [privateFilteredRegistrations, leadStatusFilter, privateMessageSearch],
   );
 
   const handlePrivatePdfExport = useCallback(
     () =>
-      exportPrivateLeadsPdf(privateFilteredRegistrations, leadStatusFilter, privateMessageSearch),
+      exportPrivateLeadsPdf(
+        privateFilteredRegistrations,
+        leadStatusFilter,
+        privateMessageSearch,
+      ),
     [privateFilteredRegistrations, leadStatusFilter, privateMessageSearch],
   );
 
@@ -628,9 +721,14 @@ const Admin = () => {
   }
 
   if (!authenticated) {
-    return <AdminLogin loading={loading} error={error} onGoogleSignIn={handleGoogleSignIn} />;
+    return (
+      <AdminLogin
+        loading={loading}
+        error={error}
+        onGoogleSignIn={handleGoogleSignIn}
+      />
+    );
   }
-
 
   /**
    * The seven places (October 2026 redesign, drawn in Claude Design). The
@@ -704,8 +802,18 @@ const Admin = () => {
       icon: CalendarDays,
       primary: true,
       items: [
-        { value: "week", label: "Săptămâna", icon: CalendarDays, hint: "Lecțiile rezervate, pe zile și ore" },
-        { value: "bookings", label: "Toate lecțiile", icon: ClipboardList, hint: "Rezervările cursanților" },
+        {
+          value: "week",
+          label: "Săptămâna",
+          icon: CalendarDays,
+          hint: "Lecțiile rezervate, pe zile și ore",
+        },
+        {
+          value: "bookings",
+          label: "Toate lecțiile",
+          icon: ClipboardList,
+          hint: "Rezervările cursanților",
+        },
         {
           value: "availability",
           label: "Disponibilitate",
@@ -732,7 +840,12 @@ const Admin = () => {
       icon: Layers,
       primary: true,
       items: [
-        { value: "cohorts", label: "Grupele", icon: GraduationCap, hint: "Fiecare grupă, programul și starea ei" },
+        {
+          value: "cohorts",
+          label: "Grupele",
+          icon: GraduationCap,
+          hint: "Fiecare grupă, programul și starea ei",
+        },
         {
           value: "capacities",
           label: "Capacități",
@@ -746,7 +859,14 @@ const Admin = () => {
       label: "Lecții private",
       icon: CalendarClock,
       primary: true,
-      items: [{ value: "private-lessons", label: "Înscrieri și lecții", icon: CalendarClock, hint: "Online și în persoană, de pe site sau adăugate manual" }],
+      items: [
+        {
+          value: "private-lessons",
+          label: "Înscrieri și lecții",
+          icon: CalendarClock,
+          hint: "Online și în persoană, de pe site sau adăugate manual",
+        },
+      ],
     },
     {
       id: "reports",
@@ -767,9 +887,24 @@ const Admin = () => {
       icon: Newspaper,
       secondary: true,
       items: [
-        { value: "blog", label: "Blog", icon: Newspaper, hint: "Articolele de pe site" },
-        { value: "resources", label: "Resurse", icon: FileText, hint: "Materiale descărcabile" },
-        { value: "pages", label: "Pagini", icon: FileText, hint: "Texte și SEO pe pagini" },
+        {
+          value: "blog",
+          label: "Blog",
+          icon: Newspaper,
+          hint: "Articolele de pe site",
+        },
+        {
+          value: "resources",
+          label: "Resurse",
+          icon: FileText,
+          hint: "Materiale descărcabile",
+        },
+        {
+          value: "pages",
+          label: "Pagini",
+          icon: FileText,
+          hint: "Texte și SEO pe pagini",
+        },
         {
           value: "site-texts",
           label: "Texte site",
@@ -782,7 +917,12 @@ const Admin = () => {
           icon: Gamepad2,
           hint: "Corecturile pe cartonașele din joc",
         },
-        { value: "seo", label: "SEO", icon: LineChart, hint: "Backlink-uri și sănătatea domeniului" },
+        {
+          value: "seo",
+          label: "SEO",
+          icon: LineChart,
+          hint: "Backlink-uri și sănătatea domeniului",
+        },
       ],
     },
     {
@@ -791,7 +931,12 @@ const Admin = () => {
       icon: Settings,
       secondary: true,
       items: [
-        { value: "settings", label: "Setări", icon: Settings, hint: "Email, plăți și cont" },
+        {
+          value: "settings",
+          label: "Setări",
+          icon: Settings,
+          hint: "Email, plăți și cont",
+        },
         {
           value: "audit-log",
           label: "Jurnal",
@@ -802,7 +947,9 @@ const Admin = () => {
     },
   ];
 
-  const person = personId ? registrations.find((r) => r.id === personId) ?? null : null;
+  const person = personId
+    ? (registrations.find((r) => r.id === personId) ?? null)
+    : null;
 
   return (
     <AdminShell
@@ -823,14 +970,23 @@ const Admin = () => {
       />
       <PersonSheet
         person={person}
-        onChanged={() => void loadData().catch(() => toast({ title: "Contact salvat; reîncarcă lista pentru datele noi.", variant: "destructive" }))}
+        onChanged={() =>
+          void loadData().catch(() =>
+            toast({
+              title: "Contact salvat; reîncarcă lista pentru datele noi.",
+              variant: "destructive",
+            }),
+          )
+        }
         onClose={() => setPersonId(null)}
         onStatusChange={handleStatusChange}
         updating={!!person && updatingStatus?.id === person.id}
         onShowInTable={() => {
           setSelectedGroup(null);
           setCourseTypeFilter("all");
-          setLeadStatusFilter(person?.lead_status === "incomplete" ? "incomplete" : "all");
+          setLeadStatusFilter(
+            person?.lead_status === "incomplete" ? "incomplete" : "all",
+          );
           if (person) setSegment(leadSegment(person));
           setPrivateMessageSearch("");
           setCourseDetailsFilter(emptyCourseFilters());
@@ -839,153 +995,191 @@ const Admin = () => {
         }}
       />
       <Tabs value={activeTab} onValueChange={setActiveTab}>
-          {/* ── Panou general: cifrele zilei + funnel-uri ────────────────── */}
-          <TabsContent value="today" className="mt-0 space-y-6">
-            <TodayAdmin
-              onGoToLeads={() => setActiveTab("leads")}
-              onOpenPerson={setPersonId}
-              onGo={setActiveTab}
-              newLast7={newLast7}
-              onLoaded={onTodayLoaded}
-            />
-          </TabsContent>
+        {/* ── Panou general: cifrele zilei + funnel-uri ────────────────── */}
+        <TabsContent value="today" className="mt-0 space-y-6">
+          <TodayAdmin
+            onGoToLeads={() => setActiveTab("leads")}
+            onOpenPerson={setPersonId}
+            onGo={setActiveTab}
+            newLast7={newLast7}
+            onLoaded={onTodayLoaded}
+          />
+        </TabsContent>
 
-          {/* ── Parcurs: de la prima cerere până la înscriere ─────────────── */}
-          <TabsContent value="journey" className="mt-0 space-y-6">
-            <StudentJourneyAdmin />
-            <TrialFunnelAdmin />
-          </TabsContent>
+        {/* ── Parcurs: de la prima cerere până la înscriere ─────────────── */}
+        <TabsContent value="journey" className="mt-0 space-y-6">
+          <StudentJourneyAdmin />
+          <TrialFunnelAdmin />
+        </TabsContent>
 
-          {/* ── Elevi cu cont: test de nivel + progres din joc ─────────────── */}
-          <TabsContent value="student-progress" className="mt-0 space-y-6">
-            <StudentProgressAdmin />
-          </TabsContent>
+        {/* ── Elevi cu cont: test de nivel + progres din joc ─────────────── */}
+        <TabsContent value="student-progress" className="mt-0 space-y-6">
+          <StudentProgressAdmin />
+        </TabsContent>
 
-          {/* ── Analiză: aceleași date, dar pe o perioadă ────────────────── */}
-          <TabsContent value="analytics" className="mt-0">
-            <AnalyticsAdmin />
-          </TabsContent>
+        {/* ── Analiză: aceleași date, dar pe o perioadă ────────────────── */}
+        <TabsContent value="analytics" className="mt-0">
+          <AnalyticsAdmin />
+        </TabsContent>
 
-          {/* ── Înscrieri: filtre + tabel + export ───────────────────────── */}
-          <TabsContent value="leads" className="mt-0 space-y-4">
-            {/* The private-lead status counts, above the table they filter —
+        {/* ── Înscrieri: filtre + tabel + export ───────────────────────── */}
+        <TabsContent value="leads" className="mt-0 space-y-4">
+          {/* The private-lead status counts, above the table they filter —
                 clicking one sets the filter below rather than navigating. */}
-            <PrivateLeadStats
-              counts={privateLeadCounts}
-              onSelect={(status) => {
-                setSelectedGroup(null);
-                setCourseTypeFilter("private");
-                setLeadStatusFilter(status === "all" ? "all" : status);
-              }}
-            />
-            <div role="tablist" aria-label="Înscrieri" className="flex flex-wrap gap-2">
-              {(Object.keys(leadSegmentLabels) as LeadSegment[]).map((key) => {
-                const active = leadStatusFilter === "all" && !selectedGroup && segment === key;
-                return (
-                  <button
-                    key={key}
-                    type="button"
-                    role="tab"
-                    aria-selected={active}
-                    onClick={() => { setSegment(key); setLeadStatusFilter("all"); setSelectedGroup(null); }}
-                    className={`min-h-10 rounded-full border px-4 text-sm font-semibold transition-colors ${active ? "border-brand-green bg-brand-green text-white" : "border-border hover:border-brand-green/60"}`}
-                  >
-                    {leadSegmentLabels[key]} · {segmentCounts[key]}
-                  </button>
-                );
-              })}
-            </div>
-            <div className="flex flex-wrap items-center justify-between gap-2">
-              <h2 className="text-lg font-bold text-foreground">
-                Înscrieri{" "}
-                <span className="text-muted-foreground font-normal">
-                  ({filteredRegistrations.length}/{stats.total})
-                </span>
-                {leadStatusFilter === "all" && !selectedGroup && stats.incomplete > 0 && (
+          <PrivateLeadStats
+            counts={privateLeadCounts}
+            onSelect={(status) => {
+              setSelectedGroup(null);
+              setCourseTypeFilter("private");
+              setLeadStatusFilter(status === "all" ? "all" : status);
+            }}
+          />
+          <div
+            role="tablist"
+            aria-label="Înscrieri"
+            className="flex flex-wrap gap-2"
+          >
+            {(Object.keys(leadSegmentLabels) as LeadSegment[]).map((key) => {
+              const active =
+                leadStatusFilter === "all" && !selectedGroup && segment === key;
+              return (
+                <button
+                  key={key}
+                  type="button"
+                  role="tab"
+                  aria-selected={active}
+                  onClick={() => {
+                    setSegment(key);
+                    setLeadStatusFilter("all");
+                    setSelectedGroup(null);
+                  }}
+                  className={`min-h-10 rounded-full border px-4 text-sm font-semibold transition-colors ${active ? "border-brand-green bg-brand-green text-white" : "border-border hover:border-brand-green/60"}`}
+                >
+                  {leadSegmentLabels[key]} · {segmentCounts[key]}
+                </button>
+              );
+            })}
+          </div>
+          <div className="flex flex-wrap items-center justify-between gap-2">
+            <h2 className="text-lg font-bold text-foreground">
+              Înscrieri{" "}
+              <span className="text-muted-foreground font-normal">
+                ({filteredRegistrations.length}/{stats.total})
+              </span>
+              {leadStatusFilter === "all" &&
+                !selectedGroup &&
+                stats.incomplete > 0 && (
                   <button
                     type="button"
                     onClick={() => setLeadStatusFilter("incomplete")}
                     className="ml-2 rounded-full border border-border px-2 py-0.5 text-xs font-normal text-muted-foreground hover:text-foreground"
                     title="Formulare începute fără interval ales — nu sunt rezervări, deci nu apar în listă"
                   >
-                    +{stats.incomplete} incomplet{stats.incomplete === 1 ? "" : "e"}
+                    +{stats.incomplete} incomplet
+                    {stats.incomplete === 1 ? "" : "e"}
                   </button>
                 )}
-              </h2>
-              <div className="flex items-center gap-2">
-                <Button
-                  variant="outline"
-                  size="sm"
-                  onClick={handleExport}
-                  disabled={filteredRegistrations.length === 0}
-                >
-                  <Download className="w-4 h-4" />
-                  CSV
-                </Button>
-                <Button
-                  variant="outline"
-                  size="sm"
-                  onClick={handlePrivateCsvExport}
-                  disabled={privateFilteredRegistrations.length === 0}
-                >
-                  <Download className="w-4 h-4" />
-                  <span className="hidden sm:inline">Private CSV</span>
-                </Button>
-                <Button
-                  variant="outline"
-                  size="sm"
-                  onClick={handlePrivatePdfExport}
-                  disabled={privateFilteredRegistrations.length === 0}
-                >
-                  <Download className="w-4 h-4" />
-                  <span className="hidden sm:inline">Private PDF</span>
-                </Button>
-              </div>
+            </h2>
+            <div className="flex items-center gap-2">
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={handleExport}
+                disabled={filteredRegistrations.length === 0}
+              >
+                <Download className="w-4 h-4" />
+                CSV
+              </Button>
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={handlePrivateCsvExport}
+                disabled={privateFilteredRegistrations.length === 0}
+              >
+                <Download className="w-4 h-4" />
+                <span className="hidden sm:inline">Private CSV</span>
+              </Button>
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={handlePrivatePdfExport}
+                disabled={privateFilteredRegistrations.length === 0}
+              >
+                <Download className="w-4 h-4" />
+                <span className="hidden sm:inline">Private PDF</span>
+              </Button>
             </div>
+          </div>
 
-            <RegistrationFilters
-              courseType={courseTypeFilter}
-              leadStatus={leadStatusFilter}
-              privateMessageSearch={privateMessageSearch}
-              onCourseTypeChange={(value) => { setCourseTypeFilter(value); setSelectedGroup(null); }}
-              onLeadStatusChange={setLeadStatusFilter}
-              onPrivateMessageSearchChange={setPrivateMessageSearch}
-              onReset={() => {
-                setCourseTypeFilter("all");
-                setLeadStatusFilter("all");
-                setPrivateMessageSearch("");
-                setCourseDetailsFilter(emptyCourseFilters());
-                setSelectedGroup(null);
-              }}
-            />
+          <RegistrationFilters
+            courseType={courseTypeFilter}
+            leadStatus={leadStatusFilter}
+            privateMessageSearch={privateMessageSearch}
+            onCourseTypeChange={(value) => {
+              setCourseTypeFilter(value);
+              setSelectedGroup(null);
+            }}
+            onLeadStatusChange={setLeadStatusFilter}
+            onPrivateMessageSearchChange={setPrivateMessageSearch}
+            onReset={() => {
+              setCourseTypeFilter("all");
+              setLeadStatusFilter("all");
+              setPrivateMessageSearch("");
+              setCourseDetailsFilter(emptyCourseFilters());
+              setSelectedGroup(null);
+            }}
+          />
 
-            {selectedGroup && <div className="flex items-center gap-2 text-sm"><span>Grupă: {selectedGroup.name}</span><Button variant="ghost" size="sm" onClick={() => setSelectedGroup(null)}>Toate grupele</Button></div>}
-            <CourseFilters rows={registrations.map(describeRegistrationCourse)} value={courseDetailsFilter} onChange={setCourseDetailsFilter} />
+          {selectedGroup && (
+            <div className="flex items-center gap-2 text-sm">
+              <span>Grupă: {selectedGroup.name}</span>
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={() => setSelectedGroup(null)}
+              >
+                Toate grupele
+              </Button>
+            </div>
+          )}
+          <CourseFilters
+            rows={registrations.map(describeRegistrationCourse)}
+            value={courseDetailsFilter}
+            onChange={setCourseDetailsFilter}
+          />
 
-            {selected.size > 0 && (
-              <div className="rounded-lg border border-border bg-background px-gutter h-12 flex items-center justify-between shadow-xs">
-                <span className="text-sm text-muted-foreground">
-                  {selected.size} selectat{selected.size > 1 ? "e" : "ă"}
-                </span>
-                <div className="flex items-center gap-2">
+          {selected.size > 0 && (
+            <div className="rounded-lg border border-border bg-background px-gutter h-12 flex items-center justify-between shadow-xs">
+              <span className="text-sm text-muted-foreground">
+                {selected.size} selectat{selected.size > 1 ? "e" : "ă"}
+              </span>
+              <div className="flex items-center gap-2">
                 <AlertDialog>
                   <AlertDialogTrigger asChild>
                     <Button variant="outline" size="sm" disabled={anonymizing}>
-                      {anonymizing && <Loader2 className="w-4 h-4 animate-spin" />}
+                      {anonymizing && (
+                        <Loader2 className="w-4 h-4 animate-spin" />
+                      )}
                       Anonimizează
                     </Button>
                   </AlertDialogTrigger>
                   <AlertDialogContent>
                     <AlertDialogHeader>
-                      <AlertDialogTitle>Anonimizezi {selected.size} înscrier{selected.size === 1 ? "e" : "i"}?</AlertDialogTitle>
+                      <AlertDialogTitle>
+                        Anonimizezi {selected.size} înscrier
+                        {selected.size === 1 ? "e" : "i"}?
+                      </AlertDialogTitle>
                       <AlertDialogDescription>
-                        Numele, emailul, telefonul și notele se șterg definitiv (GDPR). Plățile,
-                        statusul și istoricul rămân intacte. Acțiunea nu poate fi anulată.
+                        Numele, emailul, telefonul și notele se șterg definitiv
+                        (GDPR). Plățile, statusul și istoricul rămân intacte.
+                        Acțiunea nu poate fi anulată.
                       </AlertDialogDescription>
                     </AlertDialogHeader>
                     <AlertDialogFooter>
                       <AlertDialogCancel>Anulează</AlertDialogCancel>
-                      <AlertDialogAction onClick={handleAnonymize}>Anonimizează definitiv</AlertDialogAction>
+                      <AlertDialogAction onClick={handleAnonymize}>
+                        Anonimizează definitiv
+                      </AlertDialogAction>
                     </AlertDialogFooter>
                   </AlertDialogContent>
                 </AlertDialog>
@@ -1002,12 +1196,15 @@ const Admin = () => {
                       <AlertDialogTitle>Confirmare ștergere</AlertDialogTitle>
                       <AlertDialogDescription>
                         Ești sigur că vrei să ștergi {selected.size} înscrier
-                        {selected.size === 1 ? "e" : "i"}? Acțiunea nu poate fi anulată.
+                        {selected.size === 1 ? "e" : "i"}? Acțiunea nu poate fi
+                        anulată.
                       </AlertDialogDescription>
                     </AlertDialogHeader>
                     <AlertDialogFooter>
                       <AlertDialogCancel>Anulează</AlertDialogCancel>
-                      <AlertDialogAction onClick={() => handleDelete()}>Șterge definitiv</AlertDialogAction>
+                      <AlertDialogAction onClick={() => handleDelete()}>
+                        Șterge definitiv
+                      </AlertDialogAction>
                     </AlertDialogFooter>
                   </AlertDialogContent>
                 </AlertDialog>
@@ -1022,8 +1219,10 @@ const Admin = () => {
                     <AlertDialogHeader>
                       <AlertDialogTitle>Ștergere forțată</AlertDialogTitle>
                       <AlertDialogDescription>
-                        Șterge {selected.size} înscrier{selected.size === 1 ? "e" : "i"} chiar dacă au plăți, inclusiv rezervările legate.
-                        Folosește doar pentru înscrieri de test. Scrie STERGE pentru a confirma.
+                        Șterge {selected.size} înscrier
+                        {selected.size === 1 ? "e" : "i"} chiar dacă au plăți,
+                        inclusiv rezervările legate. Folosește doar pentru
+                        înscrieri de test. Scrie STERGE pentru a confirma.
                       </AlertDialogDescription>
                     </AlertDialogHeader>
                     <input
@@ -1043,138 +1242,164 @@ const Admin = () => {
                     </AlertDialogFooter>
                   </AlertDialogContent>
                 </AlertDialog>
-                </div>
               </div>
-            )}
+            </div>
+          )}
 
-            {registrations.length === 0 ? (
-              <p className="text-center text-muted-foreground py-12">
-                Nu există înscrieri momentan.
-              </p>
-            ) : filteredRegistrations.length === 0 ? (
-              <p className="text-center text-muted-foreground py-12">
-                Nu există lead-uri pentru filtrele selectate.
-              </p>
-            ) : (
-              <div className="bg-background rounded-xl shadow-xs">
-                <RegistrationsTable
-                  rows={filteredRegistrations}
-                  selected={selected}
-                  updatingStatus={updatingStatus}
-                  refundingId={refundingId}
-                  cancelingId={cancelingId}
-                  onToggleSelect={toggleSelect}
-                  onToggleAll={toggleAll}
-                  onStatusChange={handleStatusChange}
-                  onRefund={handleRefund}
-                  onPreviewRefund={previewRefund}
-                  onPreviewCancel={previewCancelSubscription}
-                  onCancelSubscription={handleCancelSubscription}
-                  onOpen={setPersonId}
-                />
-              </div>
-            )}
-          </TabsContent>
+          {registrations.length === 0 ? (
+            <p className="text-center text-muted-foreground py-12">
+              Nu există înscrieri momentan.
+            </p>
+          ) : filteredRegistrations.length === 0 ? (
+            <p className="text-center text-muted-foreground py-12">
+              Nu există lead-uri pentru filtrele selectate.
+            </p>
+          ) : (
+            <div className="bg-background rounded-xl shadow-xs">
+              <RegistrationsTable
+                rows={filteredRegistrations}
+                selected={selected}
+                updatingStatus={updatingStatus}
+                refundingId={refundingId}
+                cancelingId={cancelingId}
+                onToggleSelect={toggleSelect}
+                onToggleAll={toggleAll}
+                onStatusChange={handleStatusChange}
+                onRefund={handleRefund}
+                onPreviewRefund={previewRefund}
+                onPreviewCancel={previewCancelSubscription}
+                onCancelSubscription={handleCancelSubscription}
+                onOpen={setPersonId}
+              />
+            </div>
+          )}
+        </TabsContent>
 
-          {/* ── Program: săptămâna, lecții, disponibilitate ───────────────── */}
-          <TabsContent value="week" className="mt-0 space-y-6">
-            <WeekLessons />
-          </TabsContent>
+        {/* ── Program: săptămâna, lecții, disponibilitate ───────────────── */}
+        <TabsContent value="week" className="mt-0 space-y-6">
+          <WeekLessons />
+        </TabsContent>
 
-          <TabsContent value="bookings" className="mt-0 space-y-6">
-            <BookingsAdmin onChanged={() => { void loadData().catch(() => toast({ title: "Reîncarcă înscrierile pentru datele actualizate", variant: "destructive" })); }} />
-          </TabsContent>
+        <TabsContent value="bookings" className="mt-0 space-y-6">
+          <BookingsAdmin
+            onChanged={() => {
+              void loadData().catch(() =>
+                toast({
+                  title: "Reîncarcă înscrierile pentru datele actualizate",
+                  variant: "destructive",
+                }),
+              );
+            }}
+          />
+        </TabsContent>
 
-          <TabsContent value="private-lessons" className="mt-0 space-y-6">
-            <PrivateLessonsAdmin registrations={registrations} onOpen={setPersonId}
-              onChanged={() => { void loadData().catch(() => toast({ title: "Reîncarcă înscrierile pentru datele actualizate", variant: "destructive" })); }} />
-          </TabsContent>
+        <TabsContent value="private-lessons" className="mt-0 space-y-6">
+          <PrivateLessonsAdmin
+            registrations={registrations}
+            onOpen={setPersonId}
+            onChanged={() => {
+              void loadData().catch(() =>
+                toast({
+                  title: "Reîncarcă înscrierile pentru datele actualizate",
+                  variant: "destructive",
+                }),
+              );
+            }}
+          />
+        </TabsContent>
 
-          <TabsContent value="availability" className="mt-0 space-y-6">
-            <BookingSettingsAdmin />
-          </TabsContent>
+        <TabsContent value="availability" className="mt-0 space-y-6">
+          <BookingSettingsAdmin />
+        </TabsContent>
 
-          <TabsContent value="kids-slots" className="mt-0 space-y-6">
-            <KidsSlotsAdmin />
-          </TabsContent>
+        <TabsContent value="kids-slots" className="mt-0 space-y-6">
+          <KidsSlotsAdmin />
+        </TabsContent>
 
-          <TabsContent value="calendar-health" className="mt-0 space-y-6">
-            <CalendarHealth />
-          </TabsContent>
+        <TabsContent value="calendar-health" className="mt-0 space-y-6">
+          <CalendarHealth />
+        </TabsContent>
 
-          {/* ── Grupe: capacitate, contoare manuale, cohorte, cereri ─────── */}
-          <TabsContent value="cohorts" className="mt-0 space-y-6">
-            <CohortSessionsAdmin key={calendarNamesVersion} />
-            <CohortCalendarNames onChanged={() => setCalendarNamesVersion((v) => v + 1)} />
-            <CourseOverviewAdmin onShowRegistrations={(id, name) => {
-              setSelectedGroup({ id, name }); setCourseTypeFilter("all"); setLeadStatusFilter("all");
-              setPrivateMessageSearch(""); setCourseDetailsFilter(emptyCourseFilters()); setActiveTab("leads");
-            }} />
-            <CohortsAdmin />
-          </TabsContent>
+        {/* ── Grupe: capacitate, contoare manuale, cohorte, cereri ─────── */}
+        <TabsContent value="cohorts" className="mt-0 space-y-6">
+          <CohortSessionsAdmin key={calendarNamesVersion} />
+          <CohortCalendarNames
+            onChanged={() => setCalendarNamesVersion((v) => v + 1)}
+          />
+          <CourseOverviewAdmin
+            onShowRegistrations={(id, name) => {
+              setSelectedGroup({ id, name });
+              setCourseTypeFilter("all");
+              setLeadStatusFilter("all");
+              setPrivateMessageSearch("");
+              setCourseDetailsFilter(emptyCourseFilters());
+              setActiveTab("leads");
+            }}
+          />
+          <CohortsAdmin />
+        </TabsContent>
 
-          <TabsContent value="capacities" className="mt-0 space-y-6">
-            <CapacitiesAdmin />
-          </TabsContent>
+        <TabsContent value="capacities" className="mt-0 space-y-6">
+          <CapacitiesAdmin />
+        </TabsContent>
 
-          <TabsContent value="course-requests" className="mt-0 space-y-6">
-            <CourseRequestsAdmin />
-          </TabsContent>
+        <TabsContent value="course-requests" className="mt-0 space-y-6">
+          <CourseRequestsAdmin />
+        </TabsContent>
 
-          <TabsContent value="manual-signups" className="mt-0 space-y-6">
-            <ManualStudentForm />
-            <ManualSignupsAdmin />
-          </TabsContent>
+        <TabsContent value="manual-signups" className="mt-0 space-y-6">
+          <ManualStudentForm />
+          <ManualSignupsAdmin />
+        </TabsContent>
 
-          {/* ── Blog: editare articole (CMS override) ────────────────────── */}
-          <TabsContent value="blog" className="mt-0">
-            <BlogAdmin />
-          </TabsContent>
+        {/* ── Blog: editare articole (CMS override) ────────────────────── */}
+        <TabsContent value="blog" className="mt-0">
+          <BlogAdmin />
+        </TabsContent>
 
-          {/* ── SEO: backlink-uri și sănătate domeniu ─────────────────────── */}
-          <TabsContent value="resources" className="mt-0">
-            <ResourcesAdmin />
-          </TabsContent>
+        {/* ── SEO: backlink-uri și sănătate domeniu ─────────────────────── */}
+        <TabsContent value="resources" className="mt-0">
+          <ResourcesAdmin />
+        </TabsContent>
 
-          <TabsContent value="pages" className="mt-0">
-            <PagesAdmin />
-          </TabsContent>
+        <TabsContent value="pages" className="mt-0">
+          <PagesAdmin />
+        </TabsContent>
 
-          <TabsContent value="site-texts" className="mt-0">
-            <SiteTextsAdmin />
-          </TabsContent>
+        <TabsContent value="site-texts" className="mt-0">
+          <SiteTextsAdmin />
+        </TabsContent>
 
-          <TabsContent value="card-overrides" className="mt-0">
-            <CardOverridesAdmin />
-          </TabsContent>
+        <TabsContent value="card-overrides" className="mt-0">
+          <CardOverridesAdmin />
+        </TabsContent>
 
-          <TabsContent value="seo" className="mt-0">
-            <BacklinksAdmin />
-          </TabsContent>
+        <TabsContent value="seo" className="mt-0">
+          <BacklinksAdmin />
+        </TabsContent>
 
-          {/* ── Setări: email, notificări, servicii, cont ────────────────── */}
-          <TabsContent value="audit-log" className="mt-0">
-            <AuditLogAdmin />
-          </TabsContent>
+        {/* ── Setări: email, notificări, servicii, cont ────────────────── */}
+        <TabsContent value="audit-log" className="mt-0">
+          <AuditLogAdmin />
+        </TabsContent>
 
-          <TabsContent value="settings" className="mt-0">
-            <SettingsTab
-              emailSettings={emailSettings}
-              savingEmailSettings={savingEmailSettings}
-              onEmailSettingsChange={setEmailSettings}
-              onEmailSettingsSubmit={handleEmailSettingsSubmit}
-              testEmail={testEmail}
-              sendingTestEmail={sendingTestEmail}
-              onTestEmailChange={setTestEmail}
-              onTestEmailSubmit={handleTestEmailSubmit}
-              adminEmail={adminEmail}
-              onLogout={handleLogout}
-            />
-          </TabsContent>
+        <TabsContent value="settings" className="mt-0">
+          <SettingsTab
+            emailSettings={emailSettings}
+            savingEmailSettings={savingEmailSettings}
+            onEmailSettingsChange={setEmailSettings}
+            onEmailSettingsSubmit={handleEmailSettingsSubmit}
+            testEmail={testEmail}
+            sendingTestEmail={sendingTestEmail}
+            onTestEmailChange={setTestEmail}
+            onTestEmailSubmit={handleTestEmailSubmit}
+            adminEmail={adminEmail}
+            onLogout={handleLogout}
+          />
+        </TabsContent>
       </Tabs>
     </AdminShell>
   );
-
 };
 
 export default Admin;

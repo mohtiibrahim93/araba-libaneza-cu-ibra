@@ -35,11 +35,15 @@ function lastCommit(files: string[]): string | undefined {
   for (const file of files) {
     if (!existsSync(resolve(root, file))) continue;
     try {
-      const out = execFileSync("git", ["log", "-1", "--format=%cI", "--", file], {
-        cwd: root,
-        encoding: "utf8",
-        stdio: ["ignore", "pipe", "ignore"],
-      }).trim();
+      const out = execFileSync(
+        "git",
+        ["log", "-1", "--format=%cI", "--", file],
+        {
+          cwd: root,
+          encoding: "utf8",
+          stdio: ["ignore", "pipe", "ignore"],
+        },
+      ).trim();
       if (out && (!newest || out > newest)) newest = out;
     } catch {
       return undefined; // no git here; the sitemap simply carries no dates
@@ -52,7 +56,9 @@ function lastCommit(files: string[]): string | undefined {
 function routeSources(): Map<string, string[]> {
   const byPath = new Map<string, string[]>();
   const walk = (dir: string) => {
-    for (const entry of readdirSync(resolve(root, dir), { withFileTypes: true })) {
+    for (const entry of readdirSync(resolve(root, dir), {
+      withFileTypes: true,
+    })) {
       if (entry.isDirectory()) {
         walk(`${dir}/${entry.name}`);
         continue;
@@ -81,9 +87,12 @@ function committedLastmods(): Map<string, string> {
   if (!existsSync(file)) return out;
   const xml = readFileSync(file, "utf8");
   for (const block of xml.split("<url>").slice(1)) {
-    const loc = /<loc>https:\/\/centruldearabalibaneza\.com([^<]*)<\/loc>/.exec(block)?.[1];
+    const loc = /<loc>https:\/\/centruldearabalibaneza\.com([^<]*)<\/loc>/.exec(
+      block,
+    )?.[1];
     const mod = /<lastmod>([^<]*)<\/lastmod>/.exec(block)?.[1];
-    if (loc !== undefined && mod) out.set(loc.replace(/&amp;/g, "&") || "/", mod);
+    if (loc !== undefined && mod)
+      out.set(loc.replace(/&amp;/g, "&") || "/", mod);
   }
   return out;
 }
@@ -100,7 +109,10 @@ for (const route of allSeoRoutes().filter(belongsInSitemap)) {
 }
 
 // The paginated index changes when the registry of articles does.
-const blogDate = lastCommit(["src/lib/blogPosts.ts", "src/pages/blog/BlogIndex.tsx"]);
+const blogDate = lastCommit([
+  "src/lib/blogPosts.ts",
+  "src/pages/blog/BlogIndex.tsx",
+]);
 if (blogDate) for (const path of blogIndexPages()) lastmods.set(path, blogDate);
 
 /**

@@ -1,4 +1,11 @@
-import { CalendarDays, Clock, ExternalLink, MapPin, Star, Wallet } from "lucide-react";
+import {
+  CalendarDays,
+  Clock,
+  ExternalLink,
+  MapPin,
+  Star,
+  Wallet,
+} from "lucide-react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import NativeScheduler from "@/components/NativeScheduler";
@@ -32,7 +39,10 @@ const TrialPage = () => {
   return (
     <>
       <Navbar />
-      <main id="main-content" className="min-h-screen bg-background px-gutter pb-section pt-28">
+      <main
+        id="main-content"
+        className="min-h-screen bg-background px-gutter pb-section pt-28"
+      >
         <div className="mx-auto w-full max-w-content">
           <span className="mb-2 block text-sm font-bold uppercase tracking-[0.1em] text-foreground">
             {en ? "Free lesson" : "Lecție gratuită"}
@@ -42,7 +52,10 @@ const TrialPage = () => {
           </h1>
           <ul className="mt-4 flex flex-wrap gap-x-6 gap-y-2">
             {facts.map(({ Icon, text }) => (
-              <li key={text} className="flex items-center gap-2 text-[15px] font-medium text-foreground/85">
+              <li
+                key={text}
+                className="flex items-center gap-2 text-[15px] font-medium text-foreground/85"
+              >
                 <Icon className="h-4 w-4 text-brand-green" aria-hidden="true" />
                 {text}
               </li>
@@ -56,15 +69,24 @@ const TrialPage = () => {
               {/* booking-create promotes the lead from "incomplete" to a real one
                   server-side once the slot is taken; RLS blocks browser updates,
                   and the scheduler shows its own confirmation. */}
-              <NativeScheduler eventType="trial" ensureRegistration={ensureRegistration} />
+              <NativeScheduler
+                eventType="trial"
+                ensureRegistration={ensureRegistration}
+              />
             </div>
 
-            <aside className={`${card} flex items-center gap-4 self-start p-4 lg:flex-col lg:items-stretch lg:p-6`}>
+            <aside
+              className={`${card} flex items-center gap-4 self-start p-4 lg:flex-col lg:items-stretch lg:p-6`}
+            >
               <picture className="w-20 shrink-0 lg:w-full">
                 <source srcSet={instructorPhotoWebp} type="image/webp" />
                 <img
                   src={instructorPhotoJpg}
-                  alt={en ? "Ibra, native Lebanese Arabic teacher" : "Ibra, profesor nativ de arabă libaneză"}
+                  alt={
+                    en
+                      ? "Ibra, native Lebanese Arabic teacher"
+                      : "Ibra, profesor nativ de arabă libaneză"
+                  }
                   width={320}
                   height={320}
                   loading="lazy"
@@ -73,24 +95,29 @@ const TrialPage = () => {
                 />
               </picture>
               <div className="flex flex-col gap-2 lg:gap-4">
-              <div>
-                <p className="font-display text-xl font-bold text-foreground">
-                  {en ? "With Ibra" : "Cu Ibra"}
-                </p>
-                <p className="text-[15px] text-foreground/75">
-                  {en ? "Native teacher from Lebanon" : "Profesor nativ din Liban"}
-                </p>
-              </div>
-              <a
-                href="https://preply.com/en/tutor/471612"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex w-fit items-center gap-1.5 rounded-full border border-primary/30 bg-primary/5 px-3 py-1.5 text-sm font-semibold text-primary transition-colors hover:bg-primary/10"
-              >
-                <Star className="h-3.5 w-3.5 fill-primary" aria-hidden="true" />
-                {t.instructorPreplyBadge}
-                <ExternalLink className="h-3 w-3" aria-hidden="true" />
-              </a>
+                <div>
+                  <p className="font-display text-xl font-bold text-foreground">
+                    {en ? "With Ibra" : "Cu Ibra"}
+                  </p>
+                  <p className="text-[15px] text-foreground/75">
+                    {en
+                      ? "Native teacher from Lebanon"
+                      : "Profesor nativ din Liban"}
+                  </p>
+                </div>
+                <a
+                  href="https://preply.com/en/tutor/471612"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex w-fit items-center gap-1.5 rounded-full border border-primary/30 bg-primary/5 px-3 py-1.5 text-sm font-semibold text-primary transition-colors hover:bg-primary/10"
+                >
+                  <Star
+                    className="h-3.5 w-3.5 fill-primary"
+                    aria-hidden="true"
+                  />
+                  {t.instructorPreplyBadge}
+                  <ExternalLink className="h-3 w-3" aria-hidden="true" />
+                </a>
               </div>
             </aside>
           </div>
@@ -100,14 +127,18 @@ const TrialPage = () => {
               — and to crawlers, for which 67 words of visible text was too thin
               to be worth indexing. */}
           <section className="mt-section">
-            <h2 className="mb-5 font-display text-display-md font-bold text-foreground">{t.trialHowH2}</h2>
+            <h2 className="mb-5 font-display text-display-md font-bold text-foreground">
+              {t.trialHowH2}
+            </h2>
             <ol className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
               {steps.map((step, i) => (
                 <li key={i} className={`${card} flex flex-col gap-3 p-5`}>
                   <span className="inline-flex h-9 w-9 items-center justify-center rounded-full bg-brand-green text-sm font-bold text-white">
                     {i + 1}
                   </span>
-                  <span className="text-[15px] leading-relaxed text-foreground/85">{step}</span>
+                  <span className="text-[15px] leading-relaxed text-foreground/85">
+                    {step}
+                  </span>
                 </li>
               ))}
             </ol>
@@ -115,17 +146,27 @@ const TrialPage = () => {
 
           <section className="mt-section grid gap-5 md:grid-cols-2">
             <div className={`${card} p-6 sm:p-7`}>
-              <h2 className="mb-3 font-display text-xl font-bold text-foreground">{t.trialWhatH2}</h2>
-              <p className="leading-relaxed text-foreground/80">{t.trialWhatP}</p>
+              <h2 className="mb-3 font-display text-xl font-bold text-foreground">
+                {t.trialWhatH2}
+              </h2>
+              <p className="leading-relaxed text-foreground/80">
+                {t.trialWhatP}
+              </p>
             </div>
             <div className={`${card} p-6 sm:p-7`}>
-              <h2 className="mb-3 font-display text-xl font-bold text-foreground">{t.trialWhyH2}</h2>
-              <p className="leading-relaxed text-foreground/80">{t.trialWhyP}</p>
+              <h2 className="mb-3 font-display text-xl font-bold text-foreground">
+                {t.trialWhyH2}
+              </h2>
+              <p className="leading-relaxed text-foreground/80">
+                {t.trialWhyP}
+              </p>
             </div>
           </section>
 
           <section className="mt-5 rounded-3xl bg-cream p-6 sm:p-8">
-            <h2 className="mb-3 font-display text-xl font-bold text-foreground">{t.trialRulesH2}</h2>
+            <h2 className="mb-3 font-display text-xl font-bold text-foreground">
+              {t.trialRulesH2}
+            </h2>
             <ul className="list-disc space-y-2 pl-5 text-foreground/80">
               {rules.map((r, i) => (
                 <li key={i}>{r}</li>

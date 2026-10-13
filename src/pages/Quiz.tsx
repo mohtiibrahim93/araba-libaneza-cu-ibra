@@ -23,10 +23,23 @@ const Quiz = () => {
       <Navbar />
       <main id="main-content" className="flex-1">
         <div className="bg-cream pt-24">
-          <nav aria-label="Breadcrumb" className="mx-auto w-full max-w-content px-gutter pt-8 text-sm text-muted-foreground">
-            <Link to={lang === "en" ? "/en" : "/"} className="hover:text-foreground">{lang === "en" ? "Home" : "Acasă"}</Link>
-            <ChevronRight className="mx-1 -mt-0.5 inline h-3.5 w-3.5" aria-hidden />
-            <span className="text-foreground">{lang === "en" ? "Find your course" : "Găsește cursul potrivit"}</span>
+          <nav
+            aria-label="Breadcrumb"
+            className="mx-auto w-full max-w-content px-gutter pt-8 text-sm text-muted-foreground"
+          >
+            <Link
+              to={lang === "en" ? "/en" : "/"}
+              className="hover:text-foreground"
+            >
+              {lang === "en" ? "Home" : "Acasă"}
+            </Link>
+            <ChevronRight
+              className="mx-1 -mt-0.5 inline h-3.5 w-3.5"
+              aria-hidden
+            />
+            <span className="text-foreground">
+              {lang === "en" ? "Find your course" : "Găsește cursul potrivit"}
+            </span>
           </nav>
         </div>
         <FindYourTrackQuiz />
@@ -41,18 +54,28 @@ const Quiz = () => {
               { n: 2, h: t.quizNotH2, p: t.quizNotP, levelLink: true },
               { n: 3, h: t.quizAfterH2, p: t.quizAfterP },
             ].map((card) => (
-              <div key={card.n} className="rounded-2xl border border-[#E7E1D6] bg-card p-6 dark:border-border">
+              <div
+                key={card.n}
+                className="rounded-2xl border border-[#E7E1D6] bg-card p-6 dark:border-border"
+              >
                 <span className="mb-4 flex h-9 w-9 items-center justify-center rounded-full bg-brand-green text-sm font-bold text-white">
                   {card.n}
                 </span>
-                <h2 className="font-display text-xl font-bold text-foreground">{card.h}</h2>
-                <p className="mt-2 text-sm leading-relaxed text-muted-foreground">{card.p}</p>
+                <h2 className="font-display text-xl font-bold text-foreground">
+                  {card.h}
+                </h2>
+                <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
+                  {card.p}
+                </p>
                 {/* The paragraph names the level test; this makes it reachable,
                     including for a crawler reading the page without running the
                     quiz. */}
                 {card.levelLink && (
                   <p className="mt-3 text-sm">
-                    <Link to="/test-de-nivel" className="font-semibold text-brand-green underline underline-offset-4">
+                    <Link
+                      to="/test-de-nivel"
+                      className="font-semibold text-brand-green underline underline-offset-4"
+                    >
                       {t.quizLevelTestCta}
                     </Link>
                   </p>

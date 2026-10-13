@@ -46,15 +46,13 @@ interface Health {
    * difference matters, because "nothing to report" and "I could not look" read
    * identically if you print them the same way.
    */
-  drift:
-    | null
-    | Array<{
-        id: string;
-        student_name: string | null;
-        booked_at: string;
-        google_at: string | null;
-        kind: "moved" | "cancelled_in_google" | "not_found";
-      }>;
+  drift: null | Array<{
+    id: string;
+    student_name: string | null;
+    booked_at: string;
+    google_at: string | null;
+    kind: "moved" | "cancelled_in_google" | "not_found";
+  }>;
 }
 
 const fmt = (iso: string) =>
@@ -75,9 +73,15 @@ const Row = ({
 }) => (
   <li className="flex items-start gap-2 text-sm">
     {ok ? (
-      <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0 text-emerald-600" aria-hidden />
+      <CheckCircle2
+        className="mt-0.5 h-4 w-4 shrink-0 text-emerald-600"
+        aria-hidden
+      />
     ) : (
-      <XCircle className="mt-0.5 h-4 w-4 shrink-0 text-destructive" aria-hidden />
+      <XCircle
+        className="mt-0.5 h-4 w-4 shrink-0 text-destructive"
+        aria-hidden
+      />
     )}
     <span className="min-w-0">
       <span className="text-foreground">{label}</span>
@@ -100,10 +104,13 @@ const Row = ({
  * for the owner to recognise the right link without reading the secret out.
  */
 function maskToken(url: string): string {
-  return url.replace(/([?&]token=)([^&]+)/i, (_m, prefix: string, token: string) => {
-    const tail = token.length > 4 ? token.slice(-4) : "";
-    return `${prefix}${"•".repeat(12)}${tail}`;
-  });
+  return url.replace(
+    /([?&]token=)([^&]+)/i,
+    (_m, prefix: string, token: string) => {
+      const tail = token.length > 4 ? token.slice(-4) : "";
+      return `${prefix}${"•".repeat(12)}${tail}`;
+    },
+  );
 }
 
 const CalendarHealth = () => {
@@ -126,7 +133,14 @@ const CalendarHealth = () => {
       const normalized: Health = {
         keys: { lovable: false, googleCalendar: false, ...(raw.keys ?? {}) },
         read: { ok: false, status: null, detail: null, ...(raw.read ?? {}) },
-        write: raw.write ? { ok: false, status: null, detail: null, ...(raw.write as Partial<NonNullable<Health["write"]>>) } : null,
+        write: raw.write
+          ? {
+              ok: false,
+              status: null,
+              detail: null,
+              ...(raw.write as Partial<NonNullable<Health["write"]>>),
+            }
+          : null,
         bookings: {
           total: 0,
           synced: 0,
@@ -189,7 +203,12 @@ const CalendarHealth = () => {
           </p>
         </div>
         <div className="flex flex-wrap gap-2">
-          <Button variant="outline" size="sm" onClick={() => run(false)} disabled={loading}>
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() => run(false)}
+            disabled={loading}
+          >
             {loading ? (
               <Loader2 className="mr-1.5 h-4 w-4 animate-spin" aria-hidden />
             ) : (
@@ -207,7 +226,9 @@ const CalendarHealth = () => {
                 : "Disponibil doar după ce conexiunea de citire funcționează"
             }
           >
-            {probing ? <Loader2 className="mr-1.5 h-4 w-4 animate-spin" aria-hidden /> : null}
+            {probing ? (
+              <Loader2 className="mr-1.5 h-4 w-4 animate-spin" aria-hidden />
+            ) : null}
             Test complet
           </Button>
         </div>
@@ -216,17 +237,20 @@ const CalendarHealth = () => {
       {loading && !health ? (
         <p className="text-sm text-muted-foreground">Se verifică…</p>
       ) : !health ? (
-        <p className="text-sm text-muted-foreground">Verificarea nu a putut fi rulată.</p>
+        <p className="text-sm text-muted-foreground">
+          Verificarea nu a putut fi rulată.
+        </p>
       ) : (
         <div className="space-y-4">
           {!syncOk && (
             <div className="flex items-start gap-2 rounded-md border border-amber-300 bg-amber-50 p-3 text-sm text-amber-900 dark:border-amber-800 dark:bg-amber-950 dark:text-amber-100">
               <AlertTriangle className="mt-0.5 h-4 w-4 shrink-0" aria-hidden />
               <p className="min-w-0">
-                Rezervările <strong>nu</strong> ajung în Google Calendar și intervalele ocupate
-                din calendar <strong>nu</strong> blochează sloturile de pe site. Rezervările sunt
-                salvate corect în baza de date și confirmările pleacă normal — doar calendarul
-                lipsește. Folosește feed-ul de abonare de mai jos până când conexiunea e
+                Rezervările <strong>nu</strong> ajung în Google Calendar și
+                intervalele ocupate din calendar <strong>nu</strong> blochează
+                sloturile de pe site. Rezervările sunt salvate corect în baza de
+                date și confirmările pleacă normal — doar calendarul lipsește.
+                Folosește feed-ul de abonare de mai jos până când conexiunea e
                 reparată.
               </p>
             </div>
@@ -236,7 +260,9 @@ const CalendarHealth = () => {
             <Row
               ok={health.keys.lovable}
               label="Secret LOVABLE_API_KEY"
-              detail={health.keys.lovable ? null : "Lipsește din secretele Supabase."}
+              detail={
+                health.keys.lovable ? null : "Lipsește din secretele Supabase."
+              }
             />
             <Row
               ok={health.keys.googleCalendar}
@@ -275,25 +301,28 @@ const CalendarHealth = () => {
             </p>
             {health.bookings.latest.total === 0 ? (
               <p className="mt-1 text-sm text-muted-foreground">
-                Nicio rezervare nouă în ultimele 30 de zile, deci nu există nimic recent de
-                verificat. Istoricul de mai jos rămâne valabil.
+                Nicio rezervare nouă în ultimele 30 de zile, deci nu există
+                nimic recent de verificat. Istoricul de mai jos rămâne valabil.
               </p>
-            ) : health.bookings.latest.synced === health.bookings.latest.total ? (
+            ) : health.bookings.latest.synced ===
+              health.bookings.latest.total ? (
               <p className="mt-1 text-sm text-emerald-700 dark:text-emerald-400">
-                Funcționează: toate cele {health.bookings.latest.total} rezervări din ultimele 30
-                de zile au ajuns în Google Calendar.
+                Funcționează: toate cele {health.bookings.latest.total}{" "}
+                rezervări din ultimele 30 de zile au ajuns în Google Calendar.
               </p>
             ) : (
               <p className="mt-1 text-sm text-amber-700 dark:text-amber-400">
-                {health.bookings.latest.synced} din {health.bookings.latest.total} rezervări din
-                ultimele 30 de zile au ajuns în Google Calendar. Asta e o problemă acum.
+                {health.bookings.latest.synced} din{" "}
+                {health.bookings.latest.total} rezervări din ultimele 30 de zile
+                au ajuns în Google Calendar. Asta e o problemă acum.
               </p>
             )}
             {/* The six-month figure used to be the only one here, so a run of
                 failures months ago read as a fault happening today. It is
                 history, and it is labelled as history. */}
             <p className="mt-2 text-xs text-muted-foreground">
-              Istoric, ultimele 6 luni: {health.bookings.synced} din {health.bookings.total}.
+              Istoric, ultimele 6 luni: {health.bookings.synced} din{" "}
+              {health.bookings.total}.
               {health.bookings.failed > 0 &&
                 " Rezervările trecute care nu au ajuns nu mai pot fi recuperate — evenimentul nu va apărea retroactiv."}
             </p>
@@ -316,8 +345,9 @@ const CalendarHealth = () => {
             {health.feed.configured && health.feed.url ? (
               <>
                 <p className="mt-1 text-sm text-muted-foreground">
-                  În Google Calendar: <em>Alte calendare → + → De la URL</em>, lipește linkul de
-                  mai jos. Rezervările apar automat, în sens unic.
+                  În Google Calendar: <em>Alte calendare → + → De la URL</em>,
+                  lipește linkul de mai jos. Rezervările apar automat, în sens
+                  unic.
                 </p>
                 {/* The link carries OWNER_CALENDAR_TOKEN, and the token is the
                     whole of the authentication: anyone holding this URL can
@@ -348,15 +378,19 @@ const CalendarHealth = () => {
                   </Button>
                 </div>
                 <p className="mt-1.5 text-xs text-muted-foreground">
-                  Linkul conține o cheie secretă: cine îl are poate citi toate rezervările. Nu
-                  îl arăta pe ecran partajat și nu îl pune într-un calendar public.
+                  Linkul conține o cheie secretă: cine îl are poate citi toate
+                  rezervările. Nu îl arăta pe ecran partajat și nu îl pune
+                  într-un calendar public.
                 </p>
               </>
             ) : (
               <p className="mt-1 text-sm text-muted-foreground">
                 Neconfigurat. Adaugă în Supabase secretul{" "}
-                <code className="rounded-[4px] bg-muted px-1">OWNER_CALENDAR_TOKEN</code> cu o valoare
-                lungă și aleatorie, apoi reverifică — linkul de abonare va apărea aici.
+                <code className="rounded-[4px] bg-muted px-1">
+                  OWNER_CALENDAR_TOKEN
+                </code>{" "}
+                cu o valoare lungă și aleatorie, apoi reverifică — linkul de
+                abonare va apărea aici.
               </p>
             )}
           </div>
@@ -371,19 +405,20 @@ const CalendarHealth = () => {
             </h3>
             {health.drift === null ? (
               <p className="mt-1 text-sm text-muted-foreground">
-                N-am putut verifica acum (Google Calendar n-a răspuns). Restul verificărilor de
-                mai sus sunt valabile.
+                N-am putut verifica acum (Google Calendar n-a răspuns). Restul
+                verificărilor de mai sus sunt valabile.
               </p>
             ) : health.drift.length === 0 ? (
               <p className="mt-1 text-sm text-muted-foreground">
-                Toate lecțiile viitoare au în Google aceeași oră pe care o arată panoul.
+                Toate lecțiile viitoare au în Google aceeași oră pe care o arată
+                panoul.
               </p>
             ) : (
               <>
                 <p className="mt-1 text-sm text-muted-foreground">
-                  Astea au fost schimbate direct în Google, așa că panoul, emailurile și
-                  memento-urile folosesc încă ora veche. Pune ora nouă din Programări → Mută
-                  lecția, ca să afle și cursantul.
+                  Astea au fost schimbate direct în Google, așa că panoul,
+                  emailurile și memento-urile folosesc încă ora veche. Pune ora
+                  nouă din Programări → Mută lecția, ca să afle și cursantul.
                 </p>
                 <ul className="mt-3 space-y-2">
                   {health.drift.map((d) => (
@@ -391,19 +426,26 @@ const CalendarHealth = () => {
                       key={d.id}
                       className="rounded-lg border border-amber-300/70 bg-amber-50 px-3 py-2 text-sm text-amber-900 dark:border-amber-500/30 dark:bg-amber-500/10 dark:text-amber-200"
                     >
-                      <span className="font-medium">{d.student_name ?? "Cursant necunoscut"}</span>
+                      <span className="font-medium">
+                        {d.student_name ?? "Cursant necunoscut"}
+                      </span>
                       {d.kind === "moved" && d.google_at ? (
                         <>
                           {" "}
-                          — în panou {fmt(d.booked_at)}, în Google {fmt(d.google_at)}.
+                          — în panou {fmt(d.booked_at)}, în Google{" "}
+                          {fmt(d.google_at)}.
                         </>
                       ) : d.kind === "cancelled_in_google" ? (
-                        <> — {fmt(d.booked_at)}, dar evenimentul e anulat în Google.</>
+                        <>
+                          {" "}
+                          — {fmt(d.booked_at)}, dar evenimentul e anulat în
+                          Google.
+                        </>
                       ) : (
                         <>
                           {" "}
-                          — {fmt(d.booked_at)}, dar evenimentul nu mai există în Google (șters, sau
-                          mutat foarte departe).
+                          — {fmt(d.booked_at)}, dar evenimentul nu mai există în
+                          Google (șters, sau mutat foarte departe).
                         </>
                       )}
                     </li>

@@ -3,7 +3,8 @@ import { buildCorsHeaders } from "../_shared/cors.ts";
 
 const TARGET_DOMAIN = "centruldearabalibaneza.com";
 const GATEWAY_BASE = "https://connector-gateway.lovable.dev/semrush";
-const OPR_ENDPOINT = "https://openpagerank.keywordseverywhere.com/v1/domains/bulk";
+const OPR_ENDPOINT =
+  "https://openpagerank.keywordseverywhere.com/v1/domains/bulk";
 
 function jsonResponseWith(cors: Record<string, string>) {
   return (body: unknown, status = 200) =>
@@ -27,14 +28,17 @@ function normalizeNumber(value: unknown): number | null {
 
 function parseSemrushBacklinksOverview(json: unknown) {
   const data = (json as Record<string, unknown>)?.data;
-  const columns = Array.isArray(data?.columnNames) ? data.columnNames as string[] : [];
-  const rows = Array.isArray(data?.rows) ? data.rows as unknown[] : [];
+  const columns = Array.isArray(data?.columnNames)
+    ? (data.columnNames as string[])
+    : [];
+  const rows = Array.isArray(data?.rows) ? (data.rows as unknown[]) : [];
 
   if (columns.length === 0 || rows.length === 0) {
     return null;
   }
 
-  const idx = (name: string) => columns.findIndex((c) => c.toLowerCase() === name.toLowerCase());
+  const idx = (name: string) =>
+    columns.findIndex((c) => c.toLowerCase() === name.toLowerCase());
 
   const asIdx = idx("ascore");
   const trustIdx = idx("trust_score");
@@ -99,18 +103,32 @@ Deno.serve(async (req) => {
 
     // Cron callers may only trigger the live refresh.
     if (
-      isCron && !isAdminEmail(callerEmail, adminEmails) &&
-      action !== "fetch_live" && action !== "fetch_free"
+      isCron &&
+      !isAdminEmail(callerEmail, adminEmails) &&
+      action !== "fetch_live" &&
+      action !== "fetch_free"
     ) {
-      return jsonResponse({ error: "Acțiune nepermisă pentru job programat" }, 403);
+      return jsonResponse(
+        { error: "Acțiune nepermisă pentru job programat" },
+        403,
+      );
     }
 
     // Record every refresh attempt — including failures — so the dashboard can
     // tell "the API isn't available on this plan" apart from "the weekly job
     // stopped running". Logging must never break the request it describes.
     const logAttempt = async (
-      outcome: "success" | "not_configured" | "api_unavailable" | "parse_error" | "error",
-      opts: { provider?: "semrush" | "open_pagerank"; httpStatus?: number; detail?: string } = {},
+      outcome:
+        | "success"
+        | "not_configured"
+        | "api_unavailable"
+        | "parse_error"
+        | "error",
+      opts: {
+        provider?: "semrush" | "open_pagerank";
+        httpStatus?: number;
+        detail?: string;
+      } = {},
     ) => {
       try {
         await supabase.from("backlink_fetch_attempts").insert({
@@ -196,7 +214,10 @@ Deno.serve(async (req) => {
         const text = await response.text();
         // No snapshot is written here: the last successful snapshot stays
         // untouched and is still what the dashboard shows.
-        await logAttempt("api_unavailable", { httpStatus: response.status, detail: text });
+        await logAttempt("api_unavailable", {
+          httpStatus: response.status,
+          detail: text,
+        });
         return jsonResponse(
           {
             error: "Cererea Semrush a eșuat",
@@ -253,8 +274,10 @@ Deno.serve(async (req) => {
     }
 
     if (action === "fetch_free") {
-      const rawOprKey = Deno.env.get("OPENPAGERANK_API_KEY") ??
-        Deno.env.get("OPEN_PAGERANK_API_KEY") ?? "";
+      const rawOprKey =
+        Deno.env.get("OPENPAGERANK_API_KEY") ??
+        Deno.env.get("OPEN_PAGERANK_API_KEY") ??
+        "";
       // Defensive cleanup: quotes, invisible characters and stray whitespace from
       // an imperfect copy/paste would otherwise be sent verbatim in the header.
       const oprKey = rawOprKey
@@ -291,35 +314,49 @@ Deno.serve(async (req) => {
           Authorization: `Bearer ${oprKey}`,
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ domains: [TARGET_DOMAIN], include_history: false }),
+        body: JSON.stringify({
+          domains: [TARGET_DOMAIN],
+          include_history: false,
+        }),
       });
 
       if (!response.ok) {
         const text = await response.text();
-        console.error(`Open PageRank request failed [${response.status}]: ${text}`);
+        console.error(
+          `Open PageRank request failed [${response.status}]: ${text}`,
+        );
         await logAttempt("api_unavailable", {
           provider: "open_pagerank",
           httpStatus: response.status,
           detail: text,
         });
         return jsonResponse(
-          { error: "Cererea Open PageRank a eșuat", status: response.status, details: text },
+          {
+            error: "Cererea Open PageRank a eșuat",
+            status: response.status,
+            details: text,
+          },
           response.status,
         );
       }
 
-      const oprJson = await response.json() as Record<string, unknown>;
+      const oprJson = (await response.json()) as Record<string, unknown>;
       // Current bulk endpoint returns { results: [...] }; older shapes: data / response.
-      const list = (Array.isArray(oprJson.results)
-        ? oprJson.results
-        : Array.isArray(oprJson.data)
-        ? oprJson.data
-        : Array.isArray(oprJson.response)
-        ? oprJson.response
-        : []) as Array<Record<string, unknown>>;
+      const list = (
+        Array.isArray(oprJson.results)
+          ? oprJson.results
+          : Array.isArray(oprJson.data)
+            ? oprJson.data
+            : Array.isArray(oprJson.response)
+              ? oprJson.response
+              : []
+      ) as Array<Record<string, unknown>>;
       const entry = list[0];
       const decimal = normalizeNumber(
-        entry?.page_rank_decimal ?? entry?.pageRankDecimal ?? entry?.page_rank ?? entry?.open_page_rank,
+        entry?.page_rank_decimal ??
+          entry?.pageRankDecimal ??
+          entry?.page_rank ??
+          entry?.open_page_rank,
       );
 
       // Domain simply not (yet) indexed by Open PageRank — not a parse failure.
@@ -364,8 +401,12 @@ Deno.serve(async (req) => {
         .limit(1)
         .maybeSingle();
 
-      const prevSources = (previous?.metric_sources ?? {}) as Record<string, string>;
-      const carried = (key: string) => prevSources[key] ?? (previous ? "manual" : "unknown");
+      const prevSources = (previous?.metric_sources ?? {}) as Record<
+        string,
+        string
+      >;
+      const carried = (key: string) =>
+        prevSources[key] ?? (previous ? "manual" : "unknown");
 
       const snapshot = {
         snapshot_date: snapshotDate,
@@ -396,7 +437,10 @@ Deno.serve(async (req) => {
         .single();
 
       if (error) throw error;
-      await logAttempt("success", { provider: "open_pagerank", httpStatus: response.status });
+      await logAttempt("success", {
+        provider: "open_pagerank",
+        httpStatus: response.status,
+      });
       return jsonResponse({ data });
     }
 
@@ -415,8 +459,14 @@ Deno.serve(async (req) => {
         metric_sources,
       } = body;
 
-      if (typeof snapshot_date !== "string" || !/^\d{4}-\d{2}-\d{2}$/.test(snapshot_date)) {
-        return jsonResponse({ error: "Data snapshot-ului trebuie să fie YYYY-MM-DD" }, 400);
+      if (
+        typeof snapshot_date !== "string" ||
+        !/^\d{4}-\d{2}-\d{2}$/.test(snapshot_date)
+      ) {
+        return jsonResponse(
+          { error: "Data snapshot-ului trebuie să fie YYYY-MM-DD" },
+          400,
+        );
       }
 
       const snapshot = {
@@ -428,10 +478,17 @@ Deno.serve(async (req) => {
         referring_domains: normalizeNumber(referring_domains),
         follow_links: normalizeNumber(follow_links),
         nofollow_links: normalizeNumber(nofollow_links),
-        top_referring_domains: Array.isArray(top_referring_domains) ? top_referring_domains : [],
-        anchor_distribution: Array.isArray(anchor_distribution) ? anchor_distribution : [],
+        top_referring_domains: Array.isArray(top_referring_domains)
+          ? top_referring_domains
+          : [],
+        anchor_distribution: Array.isArray(anchor_distribution)
+          ? anchor_distribution
+          : [],
         source: source === "gsc_csv" ? "gsc_csv" : "manual",
-        metric_sources: metric_sources && typeof metric_sources === "object" ? metric_sources : {},
+        metric_sources:
+          metric_sources && typeof metric_sources === "object"
+            ? metric_sources
+            : {},
       };
 
       const { data, error } = await supabase

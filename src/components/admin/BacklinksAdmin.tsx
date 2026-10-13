@@ -1,8 +1,18 @@
 import { useEffect, useMemo, useRef, useState } from "react";
-import { invokeBacklinks, formatNumber, type BacklinkSnapshot } from "@/lib/backlinks";
+import {
+  invokeBacklinks,
+  formatNumber,
+  type BacklinkSnapshot,
+} from "@/lib/backlinks";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import {
   Table,
   TableBody,
@@ -11,7 +21,16 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { Loader2, RefreshCw, Upload, Trash2, Link2, TrendingUp, ShieldAlert, Globe } from "lucide-react";
+import {
+  Loader2,
+  RefreshCw,
+  Upload,
+  Trash2,
+  Link2,
+  TrendingUp,
+  ShieldAlert,
+  Globe,
+} from "lucide-react";
 import { toast } from "@/hooks/use-toast";
 import { Badge } from "@/components/ui/badge";
 
@@ -106,7 +125,9 @@ function parseGscLinksCsv(
     );
   if (!looksLikeGsc) return null;
 
-  const siteIdx = headers.findIndex((h) => h.includes("site") || h.includes("domeniu"));
+  const siteIdx = headers.findIndex(
+    (h) => h.includes("site") || h.includes("domeniu"),
+  );
   const linksIdx = headers.findIndex(
     (h) =>
       h.includes("linking pages") ||
@@ -140,7 +161,9 @@ function parseCsvOverview(text: string): Partial<SnapshotForm> {
   const lines = text.split(/\r?\n/).filter((l) => l.trim());
   if (lines.length < 2) return {};
 
-  const headers = (lines[0] ?? "").split(",").map((h) => h.trim().toLowerCase());
+  const headers = (lines[0] ?? "")
+    .split(",")
+    .map((h) => h.trim().toLowerCase());
   const values = (lines[1] ?? "").split(",").map((v) => v.trim());
 
   const get = (names: string[]) => {
@@ -162,9 +185,11 @@ function parseCsvOverview(text: string): Partial<SnapshotForm> {
   };
 }
 
-function parseCsv(
-  text: string,
-): { form: Partial<SnapshotForm>; topDomains: TopDomain[]; source: "gsc_csv" | "manual" } {
+function parseCsv(text: string): {
+  form: Partial<SnapshotForm>;
+  topDomains: TopDomain[];
+  source: "gsc_csv" | "manual";
+} {
   const lines = text.split(/\r?\n/).filter((l) => l.trim());
   if (lines.length < 2) return { form: {}, topDomains: [], source: "manual" };
 
@@ -174,7 +199,13 @@ function parseCsv(
   return { form: parseCsvOverview(text), topDomains: [], source: "manual" };
 }
 
-function Sparkline({ values, color = "#3B82F6" }: { values: number[]; color?: string }) {
+function Sparkline({
+  values,
+  color = "#3B82F6",
+}: {
+  values: number[];
+  color?: string;
+}) {
   if (values.length < 2) return null;
   const min = Math.min(...values);
   const max = Math.max(...values);
@@ -189,7 +220,11 @@ function Sparkline({ values, color = "#3B82F6" }: { values: number[]; color?: st
   });
 
   return (
-    <svg viewBox={`0 0 ${width} ${height}`} className="w-full h-16" preserveAspectRatio="none">
+    <svg
+      viewBox={`0 0 ${width} ${height}`}
+      className="w-full h-16"
+      preserveAspectRatio="none"
+    >
       <polyline
         fill="none"
         stroke={color}
@@ -197,7 +232,13 @@ function Sparkline({ values, color = "#3B82F6" }: { values: number[]; color?: st
         points={points.join(" ")}
       />
       {points.map((p, i) => (
-        <circle key={i} cx={p.split(",")[0]} cy={p.split(",")[1]} r="3" fill={color} />
+        <circle
+          key={i}
+          cx={p.split(",")[0]}
+          cy={p.split(",")[1]}
+          r="3"
+          fill={color}
+        />
       ))}
     </svg>
   );
@@ -208,7 +249,8 @@ interface FetchAttempt {
   attempted_at: string;
   trigger_source: "manual" | "cron";
   provider: string;
-  outcome: "success" | "not_configured" | "api_unavailable" | "parse_error" | "error";
+  outcome:
+    "success" | "not_configured" | "api_unavailable" | "parse_error" | "error";
   http_status: number | null;
   detail: string | null;
 }
@@ -236,26 +278,46 @@ function RefreshStatus({
   const lastAttempt = attempts[0];
   const lastSuccess = attempts.find((a) => a.outcome === "success");
   const fmt = (iso?: string | null) =>
-    iso ? new Date(iso).toLocaleString("ro-RO", { dateStyle: "medium", timeStyle: "short" }) : "—";
+    iso
+      ? new Date(iso).toLocaleString("ro-RO", {
+          dateStyle: "medium",
+          timeStyle: "short",
+        })
+      : "—";
 
   return (
     <div className="mb-4 grid gap-3 rounded-lg border border-border bg-muted/30 p-4 sm:grid-cols-2 lg:grid-cols-4">
       <div>
-        <p className="text-xs uppercase tracking-wide text-muted-foreground">Ultimul snapshot valid</p>
-        <p className="text-sm font-semibold text-foreground">{latest?.snapshot_date ?? "—"}</p>
+        <p className="text-xs uppercase tracking-wide text-muted-foreground">
+          Ultimul snapshot valid
+        </p>
+        <p className="text-sm font-semibold text-foreground">
+          {latest?.snapshot_date ?? "—"}
+        </p>
         <p className="text-xs text-muted-foreground">
-          Sursă: {latest?.source ? SOURCE_LABELS[latest.source] ?? latest.source : "—"}
+          Sursă:{" "}
+          {latest?.source
+            ? (SOURCE_LABELS[latest.source] ?? latest.source)
+            : "—"}
         </p>
       </div>
       <div>
-        <p className="text-xs uppercase tracking-wide text-muted-foreground">Ultima încercare automată</p>
-        <p className="text-sm font-semibold text-foreground">{fmt(lastAttempt?.attempted_at)}</p>
+        <p className="text-xs uppercase tracking-wide text-muted-foreground">
+          Ultima încercare automată
+        </p>
+        <p className="text-sm font-semibold text-foreground">
+          {fmt(lastAttempt?.attempted_at)}
+        </p>
         <p className="text-xs text-muted-foreground">
-          {lastAttempt ? `${lastAttempt.trigger_source === "cron" ? "Programat" : "Manual"}` : "Nicio încercare înregistrată"}
+          {lastAttempt
+            ? `${lastAttempt.trigger_source === "cron" ? "Programat" : "Manual"}`
+            : "Nicio încercare înregistrată"}
         </p>
       </div>
       <div>
-        <p className="text-xs uppercase tracking-wide text-muted-foreground">Status reîmprospătare</p>
+        <p className="text-xs uppercase tracking-wide text-muted-foreground">
+          Status reîmprospătare
+        </p>
         <p
           className={`text-sm font-semibold ${
             !lastAttempt
@@ -268,14 +330,22 @@ function RefreshStatus({
           {lastAttempt ? OUTCOME_LABELS[lastAttempt.outcome] : "Necunoscut"}
         </p>
         {lastAttempt?.http_status ? (
-          <p className="text-xs text-muted-foreground">HTTP {lastAttempt.http_status}</p>
+          <p className="text-xs text-muted-foreground">
+            HTTP {lastAttempt.http_status}
+          </p>
         ) : null}
       </div>
       <div>
-        <p className="text-xs uppercase tracking-wide text-muted-foreground">Ultima reușită prin API</p>
-        <p className="text-sm font-semibold text-foreground">{fmt(lastSuccess?.attempted_at)}</p>
+        <p className="text-xs uppercase tracking-wide text-muted-foreground">
+          Ultima reușită prin API
+        </p>
+        <p className="text-sm font-semibold text-foreground">
+          {fmt(lastSuccess?.attempted_at)}
+        </p>
         <p className="text-xs text-muted-foreground">
-          {lastSuccess ? "API funcțional" : "Datele curente provin din import manual"}
+          {lastSuccess
+            ? "API funcțional"
+            : "Datele curente provin din import manual"}
         </p>
       </div>
     </div>
@@ -296,12 +366,16 @@ export default function BacklinksAdmin() {
   const load = async () => {
     setLoading(true);
     try {
-      const { data, error } = await invokeBacklinks<{ data: BacklinkSnapshot[] }>({ action: "list" });
+      const { data, error } = await invokeBacklinks<{
+        data: BacklinkSnapshot[];
+      }>({ action: "list" });
       if (error) throw error;
       setSnapshots(data?.data ?? []);
       // Refresh history is informational: never let it fail the snapshot load.
       try {
-        const { data: att } = await invokeBacklinks<{ data: FetchAttempt[] }>({ action: "attempts" });
+        const { data: att } = await invokeBacklinks<{ data: FetchAttempt[] }>({
+          action: "attempts",
+        });
         setAttempts(att?.data ?? []);
       } catch {
         /* older deployed function without the "attempts" action */
@@ -324,23 +398,33 @@ export default function BacklinksAdmin() {
   const latest = snapshots[0];
 
   const trends = useMemo(() => {
-    const ordered = [...snapshots].sort((a, b) =>
-      new Date(a.snapshot_date).getTime() - new Date(b.snapshot_date).getTime()
+    const ordered = [...snapshots].sort(
+      (a, b) =>
+        new Date(a.snapshot_date).getTime() -
+        new Date(b.snapshot_date).getTime(),
     );
     return {
-      authority: ordered.map((s) => s.authority_score ?? 0).filter((v) => v > 0),
+      authority: ordered
+        .map((s) => s.authority_score ?? 0)
+        .filter((v) => v > 0),
       trust: ordered.map((s) => s.trust_score ?? 0).filter((v) => v > 0),
-      backlinks: ordered.map((s) => s.backlinks_total ?? 0).filter((v) => v > 0),
-      domains: ordered.map((s) => s.referring_domains ?? 0).filter((v) => v > 0),
+      backlinks: ordered
+        .map((s) => s.backlinks_total ?? 0)
+        .filter((v) => v > 0),
+      domains: ordered
+        .map((s) => s.referring_domains ?? 0)
+        .filter((v) => v > 0),
     };
   }, [snapshots]);
 
   const handleFreeRefresh = async () => {
     setRefreshingFree(true);
     try {
-      const { data, error } = await invokeBacklinks<{ data: BacklinkSnapshot }>({
-        action: "fetch_free",
-      });
+      const { data, error } = await invokeBacklinks<{ data: BacklinkSnapshot }>(
+        {
+          action: "fetch_free",
+        },
+      );
       if (error) throw error;
       if (data && typeof data === "object" && "error" in data) {
         throw new Error((data as { error: string }).error);
@@ -369,7 +453,10 @@ export default function BacklinksAdmin() {
       setCsvTopDomains(topDomains);
       setCsvSource(source);
       toast({
-        title: source === "gsc_csv" ? "CSV Google Search Console detectat" : "Date CSV extrase",
+        title:
+          source === "gsc_csv"
+            ? "CSV Google Search Console detectat"
+            : "Date CSV extrase",
         description:
           source === "gsc_csv"
             ? `${topDomains.length > 0 ? parsed.referring_domains : 0} domenii referitoare detectate. Verifică valorile înainte de salvare.`
@@ -448,14 +535,22 @@ export default function BacklinksAdmin() {
     <div className="space-y-6">
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
         <div>
-          <h2 className="text-lg font-bold text-foreground">Sănătate backlink-uri</h2>
+          <h2 className="text-lg font-bold text-foreground">
+            Sănătate backlink-uri
+          </h2>
           <p className="text-sm text-muted-foreground">
-            Urmărește evoluția profilului de link-uri pentru {latest?.domain ?? "centruldearabalibaneza.com"}.
+            Urmărește evoluția profilului de link-uri pentru{" "}
+            {latest?.domain ?? "centruldearabalibaneza.com"}.
           </p>
         </div>
         <div className="flex flex-wrap gap-2">
-          <Button onClick={handleFreeRefresh} disabled={refreshingFree || loading}>
-            {refreshingFree && <Loader2 className="w-4 h-4 animate-spin mr-2" />}
+          <Button
+            onClick={handleFreeRefresh}
+            disabled={refreshingFree || loading}
+          >
+            {refreshingFree && (
+              <Loader2 className="w-4 h-4 animate-spin mr-2" />
+            )}
             {!refreshingFree && <RefreshCw className="w-4 h-4 mr-2" />}
             Actualizează automat (gratuit)
           </Button>
@@ -470,7 +565,9 @@ export default function BacklinksAdmin() {
             <CardHeader className="pb-2">
               <CardDescription className="flex items-center gap-1.5 flex-wrap">
                 <TrendingUp className="w-3.5 h-3.5" /> Authority Score
-                <SourceBadge source={latest.metric_sources?.["authority_score"]} />
+                <SourceBadge
+                  source={latest.metric_sources?.["authority_score"]}
+                />
               </CardDescription>
               <CardTitle>{latest.authority_score ?? "—"}</CardTitle>
             </CardHeader>
@@ -494,7 +591,9 @@ export default function BacklinksAdmin() {
             <CardHeader className="pb-2">
               <CardDescription className="flex items-center gap-1.5 flex-wrap">
                 <Link2 className="w-3.5 h-3.5" /> Backlink-uri totale
-                <SourceBadge source={latest.metric_sources?.["backlinks_total"]} />
+                <SourceBadge
+                  source={latest.metric_sources?.["backlinks_total"]}
+                />
               </CardDescription>
               <CardTitle>{formatNumber(latest.backlinks_total)}</CardTitle>
             </CardHeader>
@@ -506,7 +605,9 @@ export default function BacklinksAdmin() {
             <CardHeader className="pb-2">
               <CardDescription className="flex items-center gap-1.5 flex-wrap">
                 <Globe className="w-3.5 h-3.5" /> Domenii referitoare
-                <SourceBadge source={latest.metric_sources?.["referring_domains"]} />
+                <SourceBadge
+                  source={latest.metric_sources?.["referring_domains"]}
+                />
               </CardDescription>
               <CardTitle>{formatNumber(latest.referring_domains)}</CardTitle>
             </CardHeader>
@@ -539,7 +640,8 @@ export default function BacklinksAdmin() {
                   />
                 </div>
                 <span className="text-sm font-medium whitespace-nowrap">
-                  {formatNumber(latest.follow_links)} / {formatNumber(latest.nofollow_links)}
+                  {formatNumber(latest.follow_links)} /{" "}
+                  {formatNumber(latest.nofollow_links)}
                 </span>
               </div>
             </CardContent>
@@ -552,7 +654,10 @@ export default function BacklinksAdmin() {
             </CardHeader>
             <CardContent>
               <p className="text-sm text-muted-foreground">
-                {snapshots.length} snapshot{snapshots.length === 1 ? "" : "-uri"} salvate în baza de date. O încercare eșuată nu suprascrie niciodată ultimul snapshot valid.
+                {snapshots.length} snapshot
+                {snapshots.length === 1 ? "" : "-uri"} salvate în baza de date.
+                O încercare eșuată nu suprascrie niciodată ultimul snapshot
+                valid.
               </p>
             </CardContent>
           </Card>
@@ -570,7 +675,8 @@ export default function BacklinksAdmin() {
             </div>
           ) : snapshots.length === 0 ? (
             <p className="text-center text-muted-foreground py-12">
-              Nicio înregistrare. Apasă „Actualizează automat (gratuit)” sau adaugă manual un snapshot.
+              Nicio înregistrare. Apasă „Actualizează automat (gratuit)” sau
+              adaugă manual un snapshot.
             </p>
           ) : (
             <Table aria-label="Backlink-uri">
@@ -589,7 +695,9 @@ export default function BacklinksAdmin() {
               <TableBody>
                 {snapshots.map((s) => (
                   <TableRow key={s.id}>
-                    <TableCell className="font-medium">{s.snapshot_date}</TableCell>
+                    <TableCell className="font-medium">
+                      {s.snapshot_date}
+                    </TableCell>
                     <TableCell>{formatNumber(s.authority_score)}</TableCell>
                     <TableCell>{formatNumber(s.trust_score)}</TableCell>
                     <TableCell>{formatNumber(s.backlinks_total)}</TableCell>
@@ -618,9 +726,10 @@ export default function BacklinksAdmin() {
         <CardHeader>
           <CardTitle>Adaugă snapshot manual</CardTitle>
           <CardDescription>
-            Sursa gratuită automată (Open PageRank) actualizează doar Authority Score. Pentru
-            numărul de backlink-uri și domenii referitoare, exportă CSV-ul „Linkuri → Site-uri care
-            fac linkuri” din Google Search Console și încarcă-l aici sau completează direct câmpurile.
+            Sursa gratuită automată (Open PageRank) actualizează doar Authority
+            Score. Pentru numărul de backlink-uri și domenii referitoare,
+            exportă CSV-ul „Linkuri → Site-uri care fac linkuri” din Google
+            Search Console și încarcă-l aici sau completează direct câmpurile.
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
@@ -641,20 +750,25 @@ export default function BacklinksAdmin() {
               onChange={handleFileChange}
             />
             {csvSource === "gsc_csv" && (
-              <Badge variant="secondary">Format Google Search Console detectat</Badge>
+              <Badge variant="secondary">
+                Format Google Search Console detectat
+              </Badge>
             )}
           </div>
 
           {csvTopDomains.length > 0 && (
             <div className="rounded-md border p-3">
               <p className="text-sm font-medium mb-2">
-                Top domenii referitoare detectate ({csvTopDomains.length} afișate)
+                Top domenii referitoare detectate ({csvTopDomains.length}{" "}
+                afișate)
               </p>
               <ul className="grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-1 text-sm text-muted-foreground">
                 {csvTopDomains.map((d) => (
                   <li key={d.domain} className="flex justify-between gap-3">
                     <span className="truncate">{d.domain}</span>
-                    <span className="tabular-nums">{formatNumber(d.links)}</span>
+                    <span className="tabular-nums">
+                      {formatNumber(d.links)}
+                    </span>
                   </li>
                 ))}
               </ul>
@@ -667,14 +781,18 @@ export default function BacklinksAdmin() {
               <Input
                 type="date"
                 value={form.snapshot_date}
-                onChange={(e) => setForm((p) => ({ ...p, snapshot_date: e.target.value }))}
+                onChange={(e) =>
+                  setForm((p) => ({ ...p, snapshot_date: e.target.value }))
+                }
               />
             </div>
             <div className="space-y-1.5">
               <label className="text-sm font-medium">Authority Score</label>
               <Input
                 value={form.authority_score}
-                onChange={(e) => setForm((p) => ({ ...p, authority_score: e.target.value }))}
+                onChange={(e) =>
+                  setForm((p) => ({ ...p, authority_score: e.target.value }))
+                }
                 placeholder="0"
               />
             </div>
@@ -682,7 +800,9 @@ export default function BacklinksAdmin() {
               <label className="text-sm font-medium">Trust Score</label>
               <Input
                 value={form.trust_score}
-                onChange={(e) => setForm((p) => ({ ...p, trust_score: e.target.value }))}
+                onChange={(e) =>
+                  setForm((p) => ({ ...p, trust_score: e.target.value }))
+                }
                 placeholder="0"
               />
             </div>
@@ -690,7 +810,9 @@ export default function BacklinksAdmin() {
               <label className="text-sm font-medium">Backlink-uri totale</label>
               <Input
                 value={form.backlinks_total}
-                onChange={(e) => setForm((p) => ({ ...p, backlinks_total: e.target.value }))}
+                onChange={(e) =>
+                  setForm((p) => ({ ...p, backlinks_total: e.target.value }))
+                }
                 placeholder="0"
               />
             </div>
@@ -698,7 +820,9 @@ export default function BacklinksAdmin() {
               <label className="text-sm font-medium">Domenii referitoare</label>
               <Input
                 value={form.referring_domains}
-                onChange={(e) => setForm((p) => ({ ...p, referring_domains: e.target.value }))}
+                onChange={(e) =>
+                  setForm((p) => ({ ...p, referring_domains: e.target.value }))
+                }
                 placeholder="0"
               />
             </div>
@@ -706,7 +830,9 @@ export default function BacklinksAdmin() {
               <label className="text-sm font-medium">Follow</label>
               <Input
                 value={form.follow_links}
-                onChange={(e) => setForm((p) => ({ ...p, follow_links: e.target.value }))}
+                onChange={(e) =>
+                  setForm((p) => ({ ...p, follow_links: e.target.value }))
+                }
                 placeholder="0"
               />
             </div>
@@ -714,7 +840,9 @@ export default function BacklinksAdmin() {
               <label className="text-sm font-medium">Nofollow</label>
               <Input
                 value={form.nofollow_links}
-                onChange={(e) => setForm((p) => ({ ...p, nofollow_links: e.target.value }))}
+                onChange={(e) =>
+                  setForm((p) => ({ ...p, nofollow_links: e.target.value }))
+                }
                 placeholder="0"
               />
             </div>

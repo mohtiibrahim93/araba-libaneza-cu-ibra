@@ -9,7 +9,10 @@
 import { useState } from "react";
 import { MapPin } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { GOOGLE_MAPS_EMBED_URL, GOOGLE_MAPS_PROFILE_URL } from "@/lib/googleBusiness";
+import {
+  GOOGLE_MAPS_EMBED_URL,
+  GOOGLE_MAPS_PROFILE_URL,
+} from "@/lib/googleBusiness";
 
 const COPY = {
   ro: {
@@ -41,7 +44,9 @@ const GoogleMapEmbed = ({
   const [loaded, setLoaded] = useState(false);
 
   return (
-    <div className={`overflow-hidden rounded-2xl border border-border bg-card ${className}`}>
+    <div
+      className={`overflow-hidden rounded-2xl border border-border bg-card ${className}`}
+    >
       {loaded ? (
         // Clicks inside the frame stay inside Google's map (drag, zoom); the
         // link row underneath is the way out to the Business Profile.
@@ -54,9 +59,15 @@ const GoogleMapEmbed = ({
           allowFullScreen
         />
       ) : (
-        <div className={`flex ${height} flex-col items-center justify-center gap-3 bg-muted/40 p-6 text-center`}>
+        <div
+          className={`flex ${height} flex-col items-center justify-center gap-3 bg-muted/40 p-6 text-center`}
+        >
           <MapPin className="h-8 w-8 text-primary" />
-          <Button type="button" variant="outline" onClick={() => setLoaded(true)}>
+          <Button
+            type="button"
+            variant="outline"
+            onClick={() => setLoaded(true)}
+          >
             {c.show}
           </Button>
           <p className="max-w-xs text-xs text-muted-foreground">{c.note}</p>

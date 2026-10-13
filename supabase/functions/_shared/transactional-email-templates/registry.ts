@@ -1,48 +1,48 @@
 /// <reference types="npm:@types/react@19.3.0" />
-import * as React from 'npm:react@19.3.0'
+import * as React from "npm:react@19.3.0";
 
 export interface TemplateEntry {
-  component: React.ComponentType<any>
-  subject: string | ((data: Record<string, any>) => string)
-  to?: string
-  displayName?: string
-  previewData?: Record<string, any>
+  component: React.ComponentType<any>;
+  subject: string | ((data: Record<string, any>) => string);
+  to?: string;
+  displayName?: string;
+  previewData?: Record<string, any>;
 }
 
-import { template as registrationConfirmation } from './registration-confirmation.tsx'
-import { template as groupRegistrationConfirmation } from './group-registration-confirmation.tsx'
-import { template as privateRegistrationConfirmation } from './private-registration-confirmation.tsx'
-import { template as kidsRegistrationConfirmation } from './kids-registration-confirmation.tsx'
-import { template as bookingConfirmation } from './booking-confirmation.tsx'
-import { template as bookingReminder } from './booking-reminder.tsx'
-import { template as bookingCancelled } from './booking-cancelled.tsx'
-import { template as bookingRescheduled } from './booking-rescheduled.tsx'
-import { template as trialFollowup } from './trial-followup.tsx'
-import { template as adminNewRegistration } from './admin-new-registration.tsx'
-import { template as adminTrialBookingFailed } from './admin-trial-booking-failed.tsx'
-import { template as adminBooking } from './admin-booking.tsx'
-import { template as groupConfirmed } from './group-confirmed.tsx'
-import { template as gdprErasureRequest } from './gdpr-erasure-request.tsx'
-import { template as arabiziCheatSheet } from './arabizi-cheat-sheet.tsx'
-import { template as expresiiLibaneze } from './expresii-libaneze.tsx'
-import { template as plan30Zile } from './plan-30-zile.tsx'
+import { template as registrationConfirmation } from "./registration-confirmation.tsx";
+import { template as groupRegistrationConfirmation } from "./group-registration-confirmation.tsx";
+import { template as privateRegistrationConfirmation } from "./private-registration-confirmation.tsx";
+import { template as kidsRegistrationConfirmation } from "./kids-registration-confirmation.tsx";
+import { template as bookingConfirmation } from "./booking-confirmation.tsx";
+import { template as bookingReminder } from "./booking-reminder.tsx";
+import { template as bookingCancelled } from "./booking-cancelled.tsx";
+import { template as bookingRescheduled } from "./booking-rescheduled.tsx";
+import { template as trialFollowup } from "./trial-followup.tsx";
+import { template as adminNewRegistration } from "./admin-new-registration.tsx";
+import { template as adminTrialBookingFailed } from "./admin-trial-booking-failed.tsx";
+import { template as adminBooking } from "./admin-booking.tsx";
+import { template as groupConfirmed } from "./group-confirmed.tsx";
+import { template as gdprErasureRequest } from "./gdpr-erasure-request.tsx";
+import { template as arabiziCheatSheet } from "./arabizi-cheat-sheet.tsx";
+import { template as expresiiLibaneze } from "./expresii-libaneze.tsx";
+import { template as plan30Zile } from "./plan-30-zile.tsx";
 
 export const TEMPLATES: Record<string, TemplateEntry> = {
-  'registration-confirmation': registrationConfirmation,
-  'group-registration-confirmation': groupRegistrationConfirmation,
-  'private-registration-confirmation': privateRegistrationConfirmation,
-  'kids-registration-confirmation': kidsRegistrationConfirmation,
-  'booking-confirmation': bookingConfirmation,
-  'booking-reminder': bookingReminder,
-  'booking-cancelled': bookingCancelled,
-  'booking-rescheduled': bookingRescheduled,
-  'trial-followup': trialFollowup,
-  'admin-new-registration': adminNewRegistration,
-  'admin-trial-booking-failed': adminTrialBookingFailed,
-  'admin-booking': adminBooking,
-  'group-confirmed': groupConfirmed,
-  'gdpr-erasure-request': gdprErasureRequest,
-  'arabizi-cheat-sheet': arabiziCheatSheet,
-  'expresii-libaneze': expresiiLibaneze,
-  'plan-30-zile': plan30Zile,
-}
+  "registration-confirmation": registrationConfirmation,
+  "group-registration-confirmation": groupRegistrationConfirmation,
+  "private-registration-confirmation": privateRegistrationConfirmation,
+  "kids-registration-confirmation": kidsRegistrationConfirmation,
+  "booking-confirmation": bookingConfirmation,
+  "booking-reminder": bookingReminder,
+  "booking-cancelled": bookingCancelled,
+  "booking-rescheduled": bookingRescheduled,
+  "trial-followup": trialFollowup,
+  "admin-new-registration": adminNewRegistration,
+  "admin-trial-booking-failed": adminTrialBookingFailed,
+  "admin-booking": adminBooking,
+  "group-confirmed": groupConfirmed,
+  "gdpr-erasure-request": gdprErasureRequest,
+  "arabizi-cheat-sheet": arabiziCheatSheet,
+  "expresii-libaneze": expresiiLibaneze,
+  "plan-30-zile": plan30Zile,
+};

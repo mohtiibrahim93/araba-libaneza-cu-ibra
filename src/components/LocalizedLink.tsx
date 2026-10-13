@@ -25,7 +25,12 @@ export const Link = ({ to, ...rest }: LinkProps) => {
   const { lang } = useI18n();
 
   let dest = to;
-  if (lang === "en" && typeof to === "string" && to.startsWith("/") && !to.startsWith("/en/")) {
+  if (
+    lang === "en" &&
+    typeof to === "string" &&
+    to.startsWith("/") &&
+    !to.startsWith("/en/")
+  ) {
     const cut = to.search(/[?#]/);
     const path = cut === -1 ? to : to.slice(0, cut);
     const tail = cut === -1 ? "" : to.slice(cut);

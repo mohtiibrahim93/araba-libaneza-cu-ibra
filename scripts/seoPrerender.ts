@@ -5,7 +5,11 @@ import type { Plugin } from "vite";
 import { BLOG_POSTS } from "../src/lib/blogPosts";
 import { getCurriculum } from "../src/data/curriculum";
 import { LEVEL_TITLE_RO, LEVEL_TITLE_EN } from "../src/lib/levelMeta";
-import { LEARN_CLUSTER, LEARN_X_DEFAULT, isLearnClusterPath } from "../src/lib/hreflangCluster";
+import {
+  LEARN_CLUSTER,
+  LEARN_X_DEFAULT,
+  isLearnClusterPath,
+} from "../src/lib/hreflangCluster";
 import { allFaqs, faqJsonLd, featuredFaqs } from "../src/data/faq";
 import { CURSURI_ARABA_META, HOME_META, JOACA_META } from "../src/lib/pageMeta";
 
@@ -58,90 +62,406 @@ const STATIC_ROUTES: Route[] = [
   // Head from src/lib/pageMeta.ts, shared with the component so the static and
   // runtime <title> cannot drift apart. Brand-first: the transactional "cursuri
   // de arabă libaneză" query belongs to /cursuri-araba, not here.
-  { path: "/", title: HOME_META.ro.title, description: HOME_META.ro.description },
+  {
+    path: "/",
+    title: HOME_META.ro.title,
+    description: HOME_META.ro.description,
+  },
   // Not a listing — a three-step chooser (who it is for, how to attend, group
   // or private) ending on the courses that match. Titled as the tool it is, so
   // it stops reading like a second copy of /cursuri-limba-araba, which is the
   // guide that covers the same ground in prose.
-  { path: "/cursuri", title: "Găsește cursul de arabă potrivit pentru tine", description: "Răspunde la trei întrebări scurte — pentru cine, online sau fizic, grup sau privat — și îți arătăm cursurile de arabă libaneză care ți se potrivesc." },
-  { path: "/cursuri/grup", title: "Curs de Grup de Arabă Libaneză (A1–C2) — București & online", description: "Curs de grup de arabă libaneză cu profesor nativ. Niveluri A1–C2, grupe mici (max. 6 online, 10 fizic), fizic în București sau online. De la 500 LEI / lună." },
-  { path: "/cursuri/private", title: "Lecții Private de Arabă Libaneză 1:1 — București & online", description: "Lecții 1:1 de arabă libaneză cu profesor nativ. Program flexibil, curriculum adaptat ție, fizic în București sau online. 150 LEI / lecție." },
-  { path: "/cursuri/copii", title: "Cursuri de Arabă Libaneză pentru Copii — București", description: "Cursuri de arabă libaneză pentru copii 6–10 ani, în București. Învățare prin jocuri, activități și povești, cu profesor nativ libanez." },
-  { path: "/cursuri/adulti", title: "Cursuri Arabă Libaneză — Adulți (18+)", description: "Cursuri de arabă libaneză pentru adulți (18+): grupe mici A1–C2 de la 500 lei/lună sau lecții private 1:1, online sau fizic în București." },
-  { path: "/cursuri/tineri", title: "Curs de Arabă pentru Adolescenți | Pagina Actualizată", description: "Pagina cursului pentru adolescenți s-a mutat. Vezi programul actual, opțiunile din București și online și rezervă o lecție de probă.", canonical: "/cursuri-araba-adolescenti" },
-  { path: "/cursuri-araba", title: "Cursuri de arabă: pagina s-a mutat | Ibra", description: "Adresa /cursuri-araba s-a mutat. Vezi pagina actualizată cu niveluri A1–C2, prețuri, grupe și lecții private de arabă libaneză.", canonical: "/cursuri-limba-araba" },
-  { path: "/cursuri-limba-araba", title: CURSURI_ARABA_META.title, description: CURSURI_ARABA_META.description },
+  {
+    path: "/cursuri",
+    title: "Găsește cursul de arabă potrivit pentru tine",
+    description:
+      "Răspunde la trei întrebări scurte — pentru cine, online sau fizic, grup sau privat — și îți arătăm cursurile de arabă libaneză care ți se potrivesc.",
+  },
+  {
+    path: "/cursuri/grup",
+    title: "Curs de Grup de Arabă Libaneză (A1–C2) — București & online",
+    description:
+      "Curs de grup de arabă libaneză cu profesor nativ. Niveluri A1–C2, grupe mici (max. 6 online, 10 fizic), fizic în București sau online. De la 500 LEI / lună.",
+  },
+  {
+    path: "/cursuri/private",
+    title: "Lecții Private de Arabă Libaneză 1:1 — București & online",
+    description:
+      "Lecții 1:1 de arabă libaneză cu profesor nativ. Program flexibil, curriculum adaptat ție, fizic în București sau online. 150 LEI / lecție.",
+  },
+  {
+    path: "/cursuri/copii",
+    title: "Cursuri de Arabă Libaneză pentru Copii — București",
+    description:
+      "Cursuri de arabă libaneză pentru copii 6–10 ani, în București. Învățare prin jocuri, activități și povești, cu profesor nativ libanez.",
+  },
+  {
+    path: "/cursuri/adulti",
+    title: "Cursuri Arabă Libaneză — Adulți (18+)",
+    description:
+      "Cursuri de arabă libaneză pentru adulți (18+): grupe mici A1–C2 de la 500 lei/lună sau lecții private 1:1, online sau fizic în București.",
+  },
+  {
+    path: "/cursuri/tineri",
+    title: "Curs de Arabă pentru Adolescenți | Pagina Actualizată",
+    description:
+      "Pagina cursului pentru adolescenți s-a mutat. Vezi programul actual, opțiunile din București și online și rezervă o lecție de probă.",
+    canonical: "/cursuri-araba-adolescenti",
+  },
+  {
+    path: "/cursuri-araba",
+    title: "Cursuri de arabă: pagina s-a mutat | Ibra",
+    description:
+      "Adresa /cursuri-araba s-a mutat. Vezi pagina actualizată cu niveluri A1–C2, prețuri, grupe și lecții private de arabă libaneză.",
+    canonical: "/cursuri-limba-araba",
+  },
+  {
+    path: "/cursuri-limba-araba",
+    title: CURSURI_ARABA_META.title,
+    description: CURSURI_ARABA_META.description,
+  },
   // Free practice, not a sixth course page. No twin: the card bank is Romanian
   // only, so an /en URL would advertise a translation that does not exist.
-  { path: "/joaca", title: JOACA_META.title, description: JOACA_META.description },
-  { path: "/araba-pentru-incepatori", title: "Arabă Libaneză pentru Începători | Curs de la Zero", description: "Învață arabă libaneză de la zero cu profesor nativ. Cursuri pentru începători, în București sau online. Vorbești din primele lecții.", canonical: "/cursuri-limba-araba" },
-  { path: "/araba-online", title: "Cursuri de Arabă Libaneză Online | Profesor Nativ", description: "Cursuri live de arabă libaneză online cu profesor nativ. Grupe A1–C2 și lecții private 1:1. Vorbești din primele lecții. Probă gratuită.", canonical: "/cursuri-limba-araba" },
-  { path: "/meditatii-araba", title: "Meditații Arabă 1:1 București & Online | 150 lei/oră", description: "Meditații de arabă libaneză 1:1 cu profesor nativ, în București sau online. 150 lei/lecție de 60 min, pachete −20%, prima lecție de probă gratuită." },
-  { path: "/intrebari-frecvente", title: "Întrebări frecvente — cursuri de arabă libaneză | Ibra", description: "Răspunsuri despre araba libaneză: preț, orar, format online sau fizic, cât durează până vorbești, ce dialect să înveți și cum arată gramatica." },
-  { path: "/invata-araba", title: "Învață Arabă Libaneză de la Zero | Ghid și Cursuri", description: "Ghid pas cu pas pentru a învăța araba libaneză de la zero: ce dialect alegi, cât durează, ce metodă folosești. Plus cursuri cu profesor nativ, online sau fizic.", canonical: "/cursuri-limba-araba" },
-  { path: "/cursuri-araba-bucuresti", title: "Cursuri Arabă București 2026 | Prima Lecție Gratuită", description: "Cursuri de arabă în București, str. Icoanei 80: grupe mici A1–C2 de la 700 lei/lună, meditații 1:1 și curs pentru copii. Prima lecție de probă e gratuită." },
-  { path: "/curs-araba-copii", title: "Curs de Arabă pentru Copii în București | 6–10 ani", description: "Curs de arabă libaneză pentru copii de 6–10 ani în București. Lecții prin joc, cântece și povești, în grupă mică, cu profesor nativ libanez." },
-  { path: "/arabizi", title: "Arabizi: ce înseamnă 2, 3, 5 și 7 în arabă", description: "Învață ce înseamnă cifrele 2, 3, 5, 7 și 8 în Arabizi, cu tabel complet, exemple din mesaje și cheat-sheet PDF gratuit." },
-  { path: "/invata-araba-gratis", title: "Învață Arabă Libaneză Gratis: PDF-uri și Lecții", description: "Învață arabă libaneză gratuit cu PDF-uri, 100 de expresii utile, un plan de 30 de zile și o mini-lecție de pronunție pentru începători." },
-  { path: "/resurse", title: "Resurse Gratuite Arabă Libaneză | PDF-uri de Descărcat", description: "Descarcă gratuit fișe Arabizi, 100 de expresii libaneze și un plan de 30 de zile. Primești PDF-urile pe email, fără costuri ascunse." },
-  { path: "/fara-alfabet-arab", title: "Pot Învăța Araba Fără Alfabet? Ghid Practic", description: "Învață araba libaneză fără alfabet: vorbești din prima lecție cu arabizi. Vezi ce înveți în 4 săptămâni și când merită alfabetul." },
-  { path: "/dialecte-arabe", title: "Dialecte Arabe: Levantin, Egiptean, Golf și Maghreb", description: "Ghid clar al dialectelor arabe: levantin, egiptean, din Golf, maghrebin și irakian. Vezi cine pe cine înțelege și ce dialect merită învățat." },
-  { path: "/ce-araba-sa-inveti", title: "Ce Arabă Să Înveți în 2026: Libaneză, Standard sau Egipteană", description: "Compară araba libaneză, standard și egipteană. Vezi ce se vorbește în familie, la muncă sau în călătorii și alege varianta potrivită în 5 minute." },
-  { path: "/araba-pentru-partener", title: "Arabă Libaneză pentru Partener și Familie | Curs 1:1", description: "Învață expresii libaneze pentru partener și familie, de la alintări la urări la masă. Curs 1:1 cu profesor nativ, online sau în București." },
-  { path: "/araba-in-familie", title: "Arabă Libaneză în Familie — Copii Bilingvi și Părinți | Ghid", description: "Cum crești un copil bilingv româno-libanez: rutine zilnice, expresii de acasă și cursuri pentru copii și părinți, în București sau online." },
+  {
+    path: "/joaca",
+    title: JOACA_META.title,
+    description: JOACA_META.description,
+  },
+  {
+    path: "/araba-pentru-incepatori",
+    title: "Arabă Libaneză pentru Începători | Curs de la Zero",
+    description:
+      "Învață arabă libaneză de la zero cu profesor nativ. Cursuri pentru începători, în București sau online. Vorbești din primele lecții.",
+    canonical: "/cursuri-limba-araba",
+  },
+  {
+    path: "/araba-online",
+    title: "Cursuri de Arabă Libaneză Online | Profesor Nativ",
+    description:
+      "Cursuri live de arabă libaneză online cu profesor nativ. Grupe A1–C2 și lecții private 1:1. Vorbești din primele lecții. Probă gratuită.",
+    canonical: "/cursuri-limba-araba",
+  },
+  {
+    path: "/meditatii-araba",
+    title: "Meditații Arabă 1:1 București & Online | 150 lei/oră",
+    description:
+      "Meditații de arabă libaneză 1:1 cu profesor nativ, în București sau online. 150 lei/lecție de 60 min, pachete −20%, prima lecție de probă gratuită.",
+  },
+  {
+    path: "/intrebari-frecvente",
+    title: "Întrebări frecvente — cursuri de arabă libaneză | Ibra",
+    description:
+      "Răspunsuri despre araba libaneză: preț, orar, format online sau fizic, cât durează până vorbești, ce dialect să înveți și cum arată gramatica.",
+  },
+  {
+    path: "/invata-araba",
+    title: "Învață Arabă Libaneză de la Zero | Ghid și Cursuri",
+    description:
+      "Ghid pas cu pas pentru a învăța araba libaneză de la zero: ce dialect alegi, cât durează, ce metodă folosești. Plus cursuri cu profesor nativ, online sau fizic.",
+    canonical: "/cursuri-limba-araba",
+  },
+  {
+    path: "/cursuri-araba-bucuresti",
+    title: "Cursuri Arabă București 2026 | Prima Lecție Gratuită",
+    description:
+      "Cursuri de arabă în București, str. Icoanei 80: grupe mici A1–C2 de la 700 lei/lună, meditații 1:1 și curs pentru copii. Prima lecție de probă e gratuită.",
+  },
+  {
+    path: "/curs-araba-copii",
+    title: "Curs de Arabă pentru Copii în București | 6–10 ani",
+    description:
+      "Curs de arabă libaneză pentru copii de 6–10 ani în București. Lecții prin joc, cântece și povești, în grupă mică, cu profesor nativ libanez.",
+  },
+  {
+    path: "/arabizi",
+    title: "Arabizi: ce înseamnă 2, 3, 5 și 7 în arabă",
+    description:
+      "Învață ce înseamnă cifrele 2, 3, 5, 7 și 8 în Arabizi, cu tabel complet, exemple din mesaje și cheat-sheet PDF gratuit.",
+  },
+  {
+    path: "/invata-araba-gratis",
+    title: "Învață Arabă Libaneză Gratis: PDF-uri și Lecții",
+    description:
+      "Învață arabă libaneză gratuit cu PDF-uri, 100 de expresii utile, un plan de 30 de zile și o mini-lecție de pronunție pentru începători.",
+  },
+  {
+    path: "/resurse",
+    title: "Resurse Gratuite Arabă Libaneză | PDF-uri de Descărcat",
+    description:
+      "Descarcă gratuit fișe Arabizi, 100 de expresii libaneze și un plan de 30 de zile. Primești PDF-urile pe email, fără costuri ascunse.",
+  },
+  {
+    path: "/fara-alfabet-arab",
+    title: "Pot Învăța Araba Fără Alfabet? Ghid Practic",
+    description:
+      "Învață araba libaneză fără alfabet: vorbești din prima lecție cu arabizi. Vezi ce înveți în 4 săptămâni și când merită alfabetul.",
+  },
+  {
+    path: "/dialecte-arabe",
+    title: "Dialecte Arabe: Levantin, Egiptean, Golf și Maghreb",
+    description:
+      "Ghid clar al dialectelor arabe: levantin, egiptean, din Golf, maghrebin și irakian. Vezi cine pe cine înțelege și ce dialect merită învățat.",
+  },
+  {
+    path: "/ce-araba-sa-inveti",
+    title: "Ce Arabă Să Înveți în 2026: Libaneză, Standard sau Egipteană",
+    description:
+      "Compară araba libaneză, standard și egipteană. Vezi ce se vorbește în familie, la muncă sau în călătorii și alege varianta potrivită în 5 minute.",
+  },
+  {
+    path: "/araba-pentru-partener",
+    title: "Arabă Libaneză pentru Partener și Familie | Curs 1:1",
+    description:
+      "Învață expresii libaneze pentru partener și familie, de la alintări la urări la masă. Curs 1:1 cu profesor nativ, online sau în București.",
+  },
+  {
+    path: "/araba-in-familie",
+    title: "Arabă Libaneză în Familie — Copii Bilingvi și Părinți | Ghid",
+    description:
+      "Cum crești un copil bilingv româno-libanez: rutine zilnice, expresii de acasă și cursuri pentru copii și părinți, în București sau online.",
+  },
   // Self-canonical, unlike the retired aliases above. This is a comparison
   // guide ("which course should I pick"), not another way to say "Arabic
   // courses": it carries its own tables, competitor price ranges and criteria,
   // and it is the reciprocal half of /en/best-arabic-course. Canonicalising it
   // into the hub meant it could never rank for the comparison queries it was
   // written for, while still costing a crawl.
-  { path: "/cel-mai-bun-curs-de-araba", title: "Cel mai bun curs de arabă în 2026 | Ghid de alegere", description: "Compară cursurile de arabă: libaneză sau standard, grup, privat, online ori aplicații. Vezi prețuri, criterii și greșeli de evitat înainte să alegi." },
-  { path: "/cursuri-araba-adolescenti", title: "Arabă Libaneză pentru Adolescenți | Curs 11–17 ani", description: "Adolescenții de 11–17 ani învață arabă libaneză prin conversație, muzică și social media, online sau în București. Lecție de probă gratuită." },
-  { path: "/blog", title: "Blog — ghiduri și articole despre araba libaneză", description: "Articole despre învățarea arabei libaneze: alfabet, expresii uzuale, cultură, cât durează să înveți și cum alegi un profesor de arabă." },
+  {
+    path: "/cel-mai-bun-curs-de-araba",
+    title: "Cel mai bun curs de arabă în 2026 | Ghid de alegere",
+    description:
+      "Compară cursurile de arabă: libaneză sau standard, grup, privat, online ori aplicații. Vezi prețuri, criterii și greșeli de evitat înainte să alegi.",
+  },
+  {
+    path: "/cursuri-araba-adolescenti",
+    title: "Arabă Libaneză pentru Adolescenți | Curs 11–17 ani",
+    description:
+      "Adolescenții de 11–17 ani învață arabă libaneză prin conversație, muzică și social media, online sau în București. Lecție de probă gratuită.",
+  },
+  {
+    path: "/blog",
+    title: "Blog — ghiduri și articole despre araba libaneză",
+    description:
+      "Articole despre învățarea arabei libaneze: alfabet, expresii uzuale, cultură, cât durează să înveți și cum alegi un profesor de arabă.",
+  },
   // English twins of the course pages. The components are the same bilingual
   // ones the Romanian URLs render; only the URL and this head differ.
   // English twins of the remaining bilingual pages. The components already
   // carry both languages; these give the English side an address.
-  { path: "/en/trial", title: "Free Lebanese Arabic Trial Lesson | Ibra", description: "Book a free Lebanese Arabic trial lesson with a native teacher — online or in person in Bucharest. 30 minutes, no obligation.", lang: "en" },
-  { path: "/en/booking", title: "Book a Lesson — Lebanese Arabic with Ibra", description: "Book a free 30-minute trial lesson or enrol on a Lebanese Arabic course with a native teacher — online, or in person in Bucharest. No card needed.", lang: "en" },
-  { path: "/en/quiz", title: "Free Level Test — Lebanese Arabic with Ibra", description: "Find out your Lebanese Arabic level (A1–C2) in two minutes and see which course fits. Free, no sign-up needed.", lang: "en" },
-  { path: "/en/privacy", title: "Privacy Policy — Lebanese Arabic with Ibra", description: "How the Lebanese Arabic Center collects, uses, stores and protects your personal data, in line with GDPR — and how to ask for a copy or its deletion.", lang: "en" },
-  { path: "/en/terms", title: "Terms and Conditions — Lebanese Arabic with Ibra", description: "The terms for enrolling on a Lebanese Arabic course with Ibra: bookings, payment, rescheduling, cancellations and refunds, and how the lessons run.", lang: "en" },
-  { path: "/en/courses", title: "Lebanese Arabic Courses — Group, 1-on-1 & Kids", description: "Lebanese Arabic courses with a native teacher: small groups A1–C2, private 1-on-1 lessons and a children's course. Online or in person in Bucharest.", lang: "en" },
-  { path: "/en/courses/group", title: "Lebanese Arabic Group Course (A1–C2) — Online & Bucharest", description: "Small-group Lebanese Arabic classes with a native teacher. Levels A1 to C2, max 6 online and 10 in person, from 500 LEI a month. Free trial lesson.", lang: "en" },
-  { path: "/en/courses/private", title: "Private 1-on-1 Lebanese Arabic Lessons — Online & Bucharest", description: "One-to-one Lebanese Arabic lessons with a native teacher. Flexible schedule, a curriculum built around you, online or in Bucharest. 150 LEI per lesson.", lang: "en" },
-  { path: "/en/courses/children", title: "Lebanese Arabic for Children (6–10) — Bucharest", description: "Lebanese Arabic classes for children aged 6 to 10 in Bucharest. Learning through games, songs and stories with a native Lebanese teacher.", lang: "en" },
-  { path: "/en/courses/adults", title: "Lebanese Arabic Courses for Adults (18+)", description: "Lebanese Arabic for adults: A1–C2 group classes or private 1-on-1 lessons, online or in person in Bucharest, with a native teacher.", lang: "en" },
-  { path: "/en/blog", title: "Blog — guides and articles about Lebanese Arabic", description: "Articles about learning Lebanese Arabic: the alphabet, everyday phrases, culture, how long it takes and how to choose an Arabic teacher.", lang: "en" },
-  { path: "/en/learn-lebanese-arabic", title: "Learn Lebanese Arabic Online | Native Teacher & Free Trial", description: "Learn Lebanese (Levantine) Arabic online with a native teacher. Live 1-on-1 and small-group lessons from A1 to C2. Speak from lesson one—book a free trial." },
-  { path: "/en/learn-levantine-arabic", title: "Learn Levantine Arabic Online | Native Lebanese Teacher", description: "Learn Levantine Arabic online with native Lebanese teacher Ibra. Join live private or small-group lessons and start speaking from lesson one.", lang: "en", canonical: "/en/learn-lebanese-arabic" },
-  { path: "/en/arabic-tutor", title: "Arabic Tutor Online — 1-on-1 Lessons | Native Teacher", description: "Private Lebanese Arabic (Levantine) tutor — 1-on-1 lessons with a native teacher, 5+ years experience. CEFR A1–C2, flexible hours, free trial. 150 LEI / 60 min." },
-  { path: "/en/faq", title: "Lebanese Arabic Course FAQ | Price, Schedule, Levels", description: "Answers about learning Lebanese Arabic: price, schedule, online or in person, how long until you can hold a conversation, and which dialect to learn." },
-  { path: "/en/arabic-dialects-guide", title: "Arabic Dialects & Map: Levantine, Egyptian, Gulf & More", description: "Explore Arabic dialects with a clear map of Levantine, Egyptian, Gulf, Maghrebi and Iraqi Arabic, plus MSA, explained by a native Lebanese teacher." },
-  { path: "/en/levantine-arabic-dialects-map", title: "Arabic Dialects & Map: Levantine, Egyptian, Gulf & More", description: "Explore Arabic dialects with a clear map of Levantine, Egyptian, Gulf, Maghrebi and Iraqi Arabic, plus MSA, explained by a native Lebanese teacher.", lang: "en", canonical: "/en/arabic-dialects-guide" },
-  { path: "/en/arabic-classes-near-me", title: "Arabic Classes Near Me — Bucharest & Online | Native Teacher", description: "Arabic classes in Bucharest or live online with a native Lebanese teacher. Small groups, CEFR A1–C2, practical conversation, free trial. From €100/month." },
-  { path: "/en/lebanese-arabic-vs-msa-vs-egyptian", title: "Lebanese vs MSA vs Egyptian Arabic — Full Comparison (2026)", description: "Compare Lebanese Arabic, MSA/Fusha, and Egyptian Arabic by pronunciation, grammar, reach, and learning goals. A practical guide from a native teacher." },
-  { path: "/en/how-to-learn-lebanese-arabic", title: "How to Learn Lebanese Arabic — Step-by-Step Guide (2026)", description: "Learn Lebanese Arabic step by step in 2026 with a weekly routine, level-by-level timeline, and practical guidance from native Lebanese teacher Ibra." },
-  { path: "/en/best-arabic-course", title: "Best Arabic Course 2026 — How to Choose | Lebanese vs MSA", description: "Compare Lebanese Arabic, MSA, group, private and online courses. See prices, common mistakes and choose the best Arabic course for your goals." },
-  { path: "/en/arabic-for-teenagers", title: "Lebanese Arabic Classes for Teenagers | Bucharest & Online", description: "Lebanese Arabic classes for ages 11–17 with a native teacher, online or in Bucharest. Build real conversation skills from the first lesson. Free trial." },
-  { path: "/de/arabisch-lernen", lang: "de", title: "Arabisch lernen online — Libanesisch mit Muttersprachler", description: "Arabisch lernen online — libanesischer Dialekt mit Muttersprachler. Sprich ab Lektion eins. Einzel- & Gruppenkurse, A1–C2. Kostenlose Probestunde." },
+  {
+    path: "/en/trial",
+    title: "Free Lebanese Arabic Trial Lesson | Ibra",
+    description:
+      "Book a free Lebanese Arabic trial lesson with a native teacher — online or in person in Bucharest. 30 minutes, no obligation.",
+    lang: "en",
+  },
+  {
+    path: "/en/booking",
+    title: "Book a Lesson — Lebanese Arabic with Ibra",
+    description:
+      "Book a free 30-minute trial lesson or enrol on a Lebanese Arabic course with a native teacher — online, or in person in Bucharest. No card needed.",
+    lang: "en",
+  },
+  {
+    path: "/en/quiz",
+    title: "Free Level Test — Lebanese Arabic with Ibra",
+    description:
+      "Find out your Lebanese Arabic level (A1–C2) in two minutes and see which course fits. Free, no sign-up needed.",
+    lang: "en",
+  },
+  {
+    path: "/en/privacy",
+    title: "Privacy Policy — Lebanese Arabic with Ibra",
+    description:
+      "How the Lebanese Arabic Center collects, uses, stores and protects your personal data, in line with GDPR — and how to ask for a copy or its deletion.",
+    lang: "en",
+  },
+  {
+    path: "/en/terms",
+    title: "Terms and Conditions — Lebanese Arabic with Ibra",
+    description:
+      "The terms for enrolling on a Lebanese Arabic course with Ibra: bookings, payment, rescheduling, cancellations and refunds, and how the lessons run.",
+    lang: "en",
+  },
+  {
+    path: "/en/courses",
+    title: "Lebanese Arabic Courses — Group, 1-on-1 & Kids",
+    description:
+      "Lebanese Arabic courses with a native teacher: small groups A1–C2, private 1-on-1 lessons and a children's course. Online or in person in Bucharest.",
+    lang: "en",
+  },
+  {
+    path: "/en/courses/group",
+    title: "Lebanese Arabic Group Course (A1–C2) — Online & Bucharest",
+    description:
+      "Small-group Lebanese Arabic classes with a native teacher. Levels A1 to C2, max 6 online and 10 in person, from 500 LEI a month. Free trial lesson.",
+    lang: "en",
+  },
+  {
+    path: "/en/courses/private",
+    title: "Private 1-on-1 Lebanese Arabic Lessons — Online & Bucharest",
+    description:
+      "One-to-one Lebanese Arabic lessons with a native teacher. Flexible schedule, a curriculum built around you, online or in Bucharest. 150 LEI per lesson.",
+    lang: "en",
+  },
+  {
+    path: "/en/courses/children",
+    title: "Lebanese Arabic for Children (6–10) — Bucharest",
+    description:
+      "Lebanese Arabic classes for children aged 6 to 10 in Bucharest. Learning through games, songs and stories with a native Lebanese teacher.",
+    lang: "en",
+  },
+  {
+    path: "/en/courses/adults",
+    title: "Lebanese Arabic Courses for Adults (18+)",
+    description:
+      "Lebanese Arabic for adults: A1–C2 group classes or private 1-on-1 lessons, online or in person in Bucharest, with a native teacher.",
+    lang: "en",
+  },
+  {
+    path: "/en/blog",
+    title: "Blog — guides and articles about Lebanese Arabic",
+    description:
+      "Articles about learning Lebanese Arabic: the alphabet, everyday phrases, culture, how long it takes and how to choose an Arabic teacher.",
+    lang: "en",
+  },
+  {
+    path: "/en/learn-lebanese-arabic",
+    title: "Learn Lebanese Arabic Online | Native Teacher & Free Trial",
+    description:
+      "Learn Lebanese (Levantine) Arabic online with a native teacher. Live 1-on-1 and small-group lessons from A1 to C2. Speak from lesson one—book a free trial.",
+  },
+  {
+    path: "/en/learn-levantine-arabic",
+    title: "Learn Levantine Arabic Online | Native Lebanese Teacher",
+    description:
+      "Learn Levantine Arabic online with native Lebanese teacher Ibra. Join live private or small-group lessons and start speaking from lesson one.",
+    lang: "en",
+    canonical: "/en/learn-lebanese-arabic",
+  },
+  {
+    path: "/en/arabic-tutor",
+    title: "Arabic Tutor Online — 1-on-1 Lessons | Native Teacher",
+    description:
+      "Private Lebanese Arabic (Levantine) tutor — 1-on-1 lessons with a native teacher, 5+ years experience. CEFR A1–C2, flexible hours, free trial. 150 LEI / 60 min.",
+  },
+  {
+    path: "/en/faq",
+    title: "Lebanese Arabic Course FAQ | Price, Schedule, Levels",
+    description:
+      "Answers about learning Lebanese Arabic: price, schedule, online or in person, how long until you can hold a conversation, and which dialect to learn.",
+  },
+  {
+    path: "/en/arabic-dialects-guide",
+    title: "Arabic Dialects & Map: Levantine, Egyptian, Gulf & More",
+    description:
+      "Explore Arabic dialects with a clear map of Levantine, Egyptian, Gulf, Maghrebi and Iraqi Arabic, plus MSA, explained by a native Lebanese teacher.",
+  },
+  {
+    path: "/en/levantine-arabic-dialects-map",
+    title: "Arabic Dialects & Map: Levantine, Egyptian, Gulf & More",
+    description:
+      "Explore Arabic dialects with a clear map of Levantine, Egyptian, Gulf, Maghrebi and Iraqi Arabic, plus MSA, explained by a native Lebanese teacher.",
+    lang: "en",
+    canonical: "/en/arabic-dialects-guide",
+  },
+  {
+    path: "/en/arabic-classes-near-me",
+    title: "Arabic Classes Near Me — Bucharest & Online | Native Teacher",
+    description:
+      "Arabic classes in Bucharest or live online with a native Lebanese teacher. Small groups, CEFR A1–C2, practical conversation, free trial. From €100/month.",
+  },
+  {
+    path: "/en/lebanese-arabic-vs-msa-vs-egyptian",
+    title: "Lebanese vs MSA vs Egyptian Arabic — Full Comparison (2026)",
+    description:
+      "Compare Lebanese Arabic, MSA/Fusha, and Egyptian Arabic by pronunciation, grammar, reach, and learning goals. A practical guide from a native teacher.",
+  },
+  {
+    path: "/en/how-to-learn-lebanese-arabic",
+    title: "How to Learn Lebanese Arabic — Step-by-Step Guide (2026)",
+    description:
+      "Learn Lebanese Arabic step by step in 2026 with a weekly routine, level-by-level timeline, and practical guidance from native Lebanese teacher Ibra.",
+  },
+  {
+    path: "/en/best-arabic-course",
+    title: "Best Arabic Course 2026 — How to Choose | Lebanese vs MSA",
+    description:
+      "Compare Lebanese Arabic, MSA, group, private and online courses. See prices, common mistakes and choose the best Arabic course for your goals.",
+  },
+  {
+    path: "/en/arabic-for-teenagers",
+    title: "Lebanese Arabic Classes for Teenagers | Bucharest & Online",
+    description:
+      "Lebanese Arabic classes for ages 11–17 with a native teacher, online or in Bucharest. Build real conversation skills from the first lesson. Free trial.",
+  },
+  {
+    path: "/de/arabisch-lernen",
+    lang: "de",
+    title: "Arabisch lernen online — Libanesisch mit Muttersprachler",
+    description:
+      "Arabisch lernen online — libanesischer Dialekt mit Muttersprachler. Sprich ab Lektion eins. Einzel- & Gruppenkurse, A1–C2. Kostenlose Probestunde.",
+  },
   // Retired alias, like the four below it. It was the only one without
   // noindex, which also made it the only indexable page missing from the
   // sitemap — an inconsistency, not a decision.
-  { path: "/cursuri/privat", title: "Lecții Private de Arabă Libaneză 1:1 — București & online", description: "Lecții 1:1 de arabă libaneză cu profesor nativ. Program flexibil, curriculum adaptat ție, fizic în București sau online. 150 LEI / lecție.", canonical: "/cursuri/private" },
-  { path: "/trial", title: "Lecție gratuită de arabă libaneză | Ibra", description: "Rezervă o lecție de probă gratuită de arabă libaneză cu profesor nativ — online sau fizic în București. Fără nicio obligație." },
-  { path: "/booking", title: "Rezervă o lecție — Arabă Libaneză cu Ibra", description: "Rezervă o lecție de probă gratuită de 30 de minute sau înscrie-te la un curs de arabă libaneză cu profesor nativ — online sau fizic în București." },
-  { path: "/quiz", title: "Test de nivel gratuit — Arabă Libaneză cu Ibra", description: "Află în 2 minute ce nivel de arabă libaneză ai (A1–C2) și ce curs ți se potrivește. Test gratuit, fără înregistrare." },
-  { path: "/privacy", title: "Politica de confidențialitate — Arabă Libaneză cu Ibra", description: "Cum colectează, folosește, stochează și protejează Centrul de Arabă Libaneză datele tale personale, conform GDPR — și cum ceri o copie sau ștergerea lor." },
+  {
+    path: "/cursuri/privat",
+    title: "Lecții Private de Arabă Libaneză 1:1 — București & online",
+    description:
+      "Lecții 1:1 de arabă libaneză cu profesor nativ. Program flexibil, curriculum adaptat ție, fizic în București sau online. 150 LEI / lecție.",
+    canonical: "/cursuri/private",
+  },
+  {
+    path: "/trial",
+    title: "Lecție gratuită de arabă libaneză | Ibra",
+    description:
+      "Rezervă o lecție de probă gratuită de arabă libaneză cu profesor nativ — online sau fizic în București. Fără nicio obligație.",
+  },
+  {
+    path: "/booking",
+    title: "Rezervă o lecție — Arabă Libaneză cu Ibra",
+    description:
+      "Rezervă o lecție de probă gratuită de 30 de minute sau înscrie-te la un curs de arabă libaneză cu profesor nativ — online sau fizic în București.",
+  },
+  {
+    path: "/quiz",
+    title: "Test de nivel gratuit — Arabă Libaneză cu Ibra",
+    description:
+      "Află în 2 minute ce nivel de arabă libaneză ai (A1–C2) și ce curs ți se potrivește. Test gratuit, fără înregistrare.",
+  },
+  {
+    path: "/privacy",
+    title: "Politica de confidențialitate — Arabă Libaneză cu Ibra",
+    description:
+      "Cum colectează, folosește, stochează și protejează Centrul de Arabă Libaneză datele tale personale, conform GDPR — și cum ceri o copie sau ștergerea lor.",
+  },
   // Both of these are app routes that had no prerendered page. Anything not
   // prerendered falls back to the SPA shell, which is the homepage's HTML —
   // so a crawler asking for them got the homepage's <head>, canonical and
   // body under a different URL. /stergere-date is the worse of the two: it is
   // linked from the footer of all 62 pages, so it was guaranteed to be
   // crawled. Neither is an SEO target, hence noindex.
-  { path: "/stergere-date", title: "Ștergerea datelor (GDPR) — Arabă Libaneză cu Ibra", description: "Cere ștergerea datelor tale personale din evidențele Centrului de Arabă Libaneză, conform GDPR. Îți confirmăm pe email în cel mult 30 de zile.", noindex: true },
-  { path: "/cursuri/online", title: "Cursuri de Arabă Libaneză Online — Arabă Libaneză cu Ibra", description: "Pagina cursurilor online s-a mutat. Vezi toate cursurile de arabă libaneză — grup A1–C2, lecții private și curs pentru copii, online sau în București.", canonical: "/cursuri" },
-  { path: "/terms", title: "Termeni și condiții — Arabă Libaneză cu Ibra", description: "Termenii înscrierii la cursurile de arabă libaneză cu Ibra: rezervări, plată, reprogramare, anulare și politica de rambursare, plus cum se desfășoară lecțiile." },
+  {
+    path: "/stergere-date",
+    title: "Ștergerea datelor (GDPR) — Arabă Libaneză cu Ibra",
+    description:
+      "Cere ștergerea datelor tale personale din evidențele Centrului de Arabă Libaneză, conform GDPR. Îți confirmăm pe email în cel mult 30 de zile.",
+    noindex: true,
+  },
+  {
+    path: "/cursuri/online",
+    title: "Cursuri de Arabă Libaneză Online — Arabă Libaneză cu Ibra",
+    description:
+      "Pagina cursurilor online s-a mutat. Vezi toate cursurile de arabă libaneză — grup A1–C2, lecții private și curs pentru copii, online sau în București.",
+    canonical: "/cursuri",
+  },
+  {
+    path: "/terms",
+    title: "Termeni și condiții — Arabă Libaneză cu Ibra",
+    description:
+      "Termenii înscrierii la cursurile de arabă libaneză cu Ibra: rezervări, plată, reprogramare, anulare și politica de rambursare, plus cum se desfășoară lecțiile.",
+  },
 ];
 
 /**
@@ -253,19 +573,26 @@ export function allRoutes(): Route[] {
     lang: "en" as const,
     ...(p.canonicalTo ? { canonical: `/en/blog/${p.canonicalTo}` } : {}),
   }));
-  return [...STATIC_ROUTES, ...levelRoutes(), ...levelRoutesEn(), ...blog, ...blogEn]
-    .map((route) =>
-      route.path === "/cursuri/grup/b2"
-        ? { ...route, title: "Curs B2 de Arabă Libaneză — Grup, București & Online" }
-        : route,
-    )
-    // Everything under /en/ is English whether or not the entry says so — only
-    // two of the ten did. Deriving it here means the body prerender picks the
-    // right UI language too, instead of wrapping English copy in Romanian
-    // navigation.
-    .map((route) =>
-      route.lang ? route : { ...route, lang: route.path.startsWith("/en/") ? "en" : "ro" },
-    );
+  return (
+    [...STATIC_ROUTES, ...levelRoutes(), ...levelRoutesEn(), ...blog, ...blogEn]
+      .map((route) =>
+        route.path === "/cursuri/grup/b2"
+          ? {
+              ...route,
+              title: "Curs B2 de Arabă Libaneză — Grup, București & Online",
+            }
+          : route,
+      )
+      // Everything under /en/ is English whether or not the entry says so — only
+      // two of the ten did. Deriving it here means the body prerender picks the
+      // right UI language too, instead of wrapping English copy in Romanian
+      // navigation.
+      .map((route) =>
+        route.lang
+          ? route
+          : { ...route, lang: route.path.startsWith("/en/") ? "en" : "ro" },
+      )
+  );
 }
 
 /**
@@ -304,7 +631,9 @@ const STR = `"((?:[^"\\\\]|\\\\.)*)"`;
  */
 const attrAll = (src: string, name: string): (string | null)[] => {
   const ternary = src.match(
-    new RegExp(`${name}=\\{[^?{}]*\\?\\s*(?:${STR}|null)\\s*:\\s*(?:${STR}|null)\\s*\\}`),
+    new RegExp(
+      `${name}=\\{[^?{}]*\\?\\s*(?:${STR}|null)\\s*:\\s*(?:${STR}|null)\\s*\\}`,
+    ),
   );
   if (ternary) return [ternary[1] ?? null, ternary[2] ?? null];
   const literal = src.match(new RegExp(`${name}=${STR}`));
@@ -333,7 +662,8 @@ function landingAnnotations(): Annotation[] {
       const twins = attrAll(src, twinProp);
       // One entry per route the file serves; a prop with a single value applies
       // to every branch, which is the common case.
-      const at = (v: (string | null)[], i: number) => (v.length > 1 ? v[i] : v[0]);
+      const at = (v: (string | null)[], i: number) =>
+        v.length > 1 ? v[i] : v[0];
       slugs.forEach((slug, i) => {
         if (!slug) return;
         out.push({
@@ -361,7 +691,8 @@ function hreflangPairs(): Map<string, { ro: string; en: string }> {
   const byPath = new Map(landingAnnotations().map((a) => [a.routePath, a]));
   const pairs = new Map<string, { ro: string; en: string }>();
   for (const a of byPath.values()) {
-    if (a.routePath.startsWith("/en/") || !a.twin || a.canonicalOverride) continue;
+    if (a.routePath.startsWith("/en/") || !a.twin || a.canonicalOverride)
+      continue;
     const twin = byPath.get(a.twin);
     if (!twin || twin.twin !== a.routePath || twin.canonicalOverride) continue;
     const pair = { ro: a.routePath, en: twin.routePath };
@@ -395,7 +726,8 @@ function hreflangPairs(): Map<string, { ro: string; en: string }> {
     ["/cursuri/copii", "/en/courses/children"],
     ["/cursuri/adulti", "/en/courses/adults"],
     ...(["a1", "a2", "b1", "b2", "c1", "c2"] as const).map(
-      (id) => [`/cursuri/grup/${id}`, `/en/courses/group/${id}`] as [string, string],
+      (id) =>
+        [`/cursuri/grup/${id}`, `/en/courses/group/${id}`] as [string, string],
     ),
   ];
   for (const [ro, en] of coursePairs) {
@@ -405,7 +737,6 @@ function hreflangPairs(): Map<string, { ro: string; en: string }> {
   }
   return pairs;
 }
-
 
 /**
  * Last commit date for a file, as YYYY-MM-DD. Null when git is unavailable —
@@ -452,7 +783,9 @@ function routeSourceFiles(): Map<string, string> {
     return map;
   }
   const byName = new Map<string, string>();
-  for (const m of src.matchAll(/(?:const\s+(\w+)\s*=\s*lazyWithRetry\(\(\)\s*=>\s*import|import\s+(\w+)\s+from)\s*\(?["']\.\/([^"']+)["']/g)) {
+  for (const m of src.matchAll(
+    /(?:const\s+(\w+)\s*=\s*lazyWithRetry\(\(\)\s*=>\s*import|import\s+(\w+)\s+from)\s*\(?["']\.\/([^"']+)["']/g,
+  )) {
     const name = m[1] ?? m[2];
     if (name) byName.set(name, `src/${m[3]}.tsx`);
   }
@@ -477,13 +810,16 @@ function routeSourceFiles(): Map<string, string> {
  */
 function writeSitemap(root: string, routes: Route[]): number {
   const files = routeSourceFiles();
-  const floor = SITE_WIDE_SOURCES.map(gitDate).filter(Boolean).sort().pop() ?? null;
+  const floor =
+    SITE_WIDE_SOURCES.map(gitDate).filter(Boolean).sort().pop() ?? null;
   const today = new Date().toISOString().slice(0, 10);
 
   const entries = routes
     .filter((r) => !r.noindex && !r.canonical)
     .map((r) => {
-      const own = r.published?.slice(0, 10) ?? (files.has(r.path) ? gitDate(files.get(r.path)!) : null);
+      const own =
+        r.published?.slice(0, 10) ??
+        (files.has(r.path) ? gitDate(files.get(r.path)!) : null);
       const lastmod = [own, floor].filter(Boolean).sort().pop() ?? today;
       return `  <url>\n    <loc>${BASE}${r.path === "/" ? "/" : r.path}</loc>\n    <lastmod>${lastmod}</lastmod>\n  </url>`;
     });
@@ -527,7 +863,8 @@ function writeLlmsTxt(root: string, routes: Route[]): number {
 
   const isEn = (r: Route) => r.path.startsWith("/en/");
   const isBlog = (r: Route) => r.path.startsWith("/blog");
-  const isCourse = (r: Route) => r.path.startsWith("/cursuri") || r.path.startsWith("/curs-");
+  const isCourse = (r: Route) =>
+    r.path.startsWith("/cursuri") || r.path.startsWith("/curs-");
   const legal = ["/privacy", "/terms", "/stergere-date"];
 
   const body =
@@ -538,7 +875,15 @@ function writeLlmsTxt(root: string, routes: Route[]): number {
     "Generat la build din registrul de rute — nu edita manual.\n\n" +
     section("Cursuri", (r) => isCourse(r) && !isEn(r)) +
     "\n" +
-    section("Ghiduri și resurse", (r) => !isCourse(r) && !isBlog(r) && !isEn(r) && !legal.includes(r.path) && r.path !== "/") +
+    section(
+      "Ghiduri și resurse",
+      (r) =>
+        !isCourse(r) &&
+        !isBlog(r) &&
+        !isEn(r) &&
+        !legal.includes(r.path) &&
+        r.path !== "/",
+    ) +
     "\n" +
     section("Blog", (r) => isBlog(r) && !isEn(r)) +
     "\n" +
@@ -551,7 +896,11 @@ function writeLlmsTxt(root: string, routes: Route[]): number {
 }
 
 const escAttr = (s: string): string =>
-  s.replace(/&/g, "&amp;").replace(/"/g, "&quot;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+  s
+    .replace(/&/g, "&amp;")
+    .replace(/"/g, "&quot;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;");
 
 /**
  * Replace the content="" of a specific <meta> tag if present, and hand the tag
@@ -566,7 +915,12 @@ const escAttr = (s: string): string =>
  */
 const RH = 'data-rh="true"';
 
-function setMeta(html: string, attr: "property" | "name", key: string, value: string): string {
+function setMeta(
+  html: string,
+  attr: "property" | "name",
+  key: string,
+  value: string,
+): string {
   const re = new RegExp(`<meta ${attr}="${key}" content="[^"]*"`);
   return html.replace(re, `<meta ${RH} ${attr}="${key}" content="${value}"`);
 }
@@ -599,7 +953,10 @@ function renderRoute(
   // English page was shipping <html lang="ro"> around English copy, telling
   // Google the wrong language for the document it was about to read. Stamp the
   // route's own language instead.
-  html = html.replace(/(<html[^>]*\blang=")[^"]*(")/, `$1${route.lang ?? "ro"}$2`);
+  html = html.replace(
+    /(<html[^>]*\blang=")[^"]*(")/,
+    `$1${route.lang ?? "ro"}$2`,
+  );
   html = html.replace(/<title>[\s\S]*?<\/title>/, `<title>${title}</title>`);
   html = setMeta(html, "name", "description", desc);
   html = setMeta(html, "property", "og:type", route.type ?? "website");
@@ -620,7 +977,9 @@ function renderRoute(
   // for blog posts, the Article JSON-LD + article:* tags) before </head>, so
   // non-JS crawlers see the same head React would render at runtime.
   let inject =
-    (route.noindex ? `    <meta ${RH} name="robots" content="noindex,follow" />\n` : "") +
+    (route.noindex
+      ? `    <meta ${RH} name="robots" content="noindex,follow" />\n`
+      : "") +
     `    <link ${RH} rel="canonical" href="${canonicalHref}" />\n` +
     `    <meta ${RH} property="og:locale" content="${ogLocale}" />\n`;
   // hreflang for reciprocal RO/EN twins only, matching what the layouts render
@@ -658,7 +1017,10 @@ function renderRoute(
   // Only what the page actually shows is marked up — six on the homepage, all
   // of them on the FAQ pages — because Google requires the structured data to
   // match the visible content.
-  const FAQ_ROUTES: Record<string, { lang: "ro" | "en"; items: () => { q: string; a: string }[] }> = {
+  const FAQ_ROUTES: Record<
+    string,
+    { lang: "ro" | "en"; items: () => { q: string; a: string }[] }
+  > = {
     "/": { lang: "ro", items: () => featuredFaqs("ro") },
     "/intrebari-frecvente": { lang: "ro", items: () => allFaqs("ro") },
     "/en/faq": { lang: "en", items: () => allFaqs("en") },
@@ -666,8 +1028,7 @@ function renderRoute(
   const faqRoute = FAQ_ROUTES[route.path];
   if (faqRoute) {
     const items = faqRoute.items();
-    inject +=
-      `    <script type="application/ld+json">${JSON.stringify(faqJsonLd(items)).replace(/</g, "\\u003c")}</script>\n`;
+    inject += `    <script type="application/ld+json">${JSON.stringify(faqJsonLd(items)).replace(/</g, "\\u003c")}</script>\n`;
   }
 
   if (route.type === "article") {
@@ -704,7 +1065,9 @@ function renderRoute(
  * Reads the published page overrides from the database at build time. Fails
  * soft: on any error the code-shipped meta is used.
  */
-async function fetchCmsMeta(): Promise<Record<string, { meta_title: string; meta_description: string }>> {
+async function fetchCmsMeta(): Promise<
+  Record<string, { meta_title: string; meta_description: string }>
+> {
   const url = process.env.VITE_SUPABASE_URL;
   const key = process.env.VITE_SUPABASE_PUBLISHABLE_KEY;
   if (!url || !key) return {};
@@ -714,8 +1077,15 @@ async function fetchCmsMeta(): Promise<Record<string, { meta_title: string; meta
       { headers: { apikey: key, Authorization: `Bearer ${key}` } },
     );
     if (!res.ok) return {};
-    const rows = (await res.json()) as { path: string; meta_title: string; meta_description: string }[];
-    const map: Record<string, { meta_title: string; meta_description: string }> = {};
+    const rows = (await res.json()) as {
+      path: string;
+      meta_title: string;
+      meta_description: string;
+    }[];
+    const map: Record<
+      string,
+      { meta_title: string; meta_description: string }
+    > = {};
     for (const r of rows) map[r.path] = r;
     return map;
   } catch {
@@ -775,7 +1145,10 @@ export function seoPrerenderPlugin(): Plugin {
         // bare SPA shell to crawlers. That silently happened when new pages were
         // added to the sitemap but not here, so surface it loudly at build time.
         try {
-          const sitemap = fs.readFileSync(path.resolve("public/sitemap.xml"), "utf8");
+          const sitemap = fs.readFileSync(
+            path.resolve("public/sitemap.xml"),
+            "utf8",
+          );
           const known = new Set(allRoutes().map((r) => r.path));
           const missing = [...sitemap.matchAll(/<loc>([^<]+)<\/loc>/g)]
             .map((m) => m[1].replace(BASE, "").replace(/\/$/, "") || "/")
@@ -806,8 +1179,14 @@ export function seoPrerenderPlugin(): Plugin {
           // A route is allowed to skip prerendering only if robots.txt keeps
           // crawlers off it.
           {
-            const appSrc = fs.readFileSync(path.join(root, "src/App.tsx"), "utf8");
-            const robots = fs.readFileSync(path.join(root, "public/robots.txt"), "utf8");
+            const appSrc = fs.readFileSync(
+              path.join(root, "src/App.tsx"),
+              "utf8",
+            );
+            const robots = fs.readFileSync(
+              path.join(root, "public/robots.txt"),
+              "utf8",
+            );
             const disallowed = robots
               .split("\n")
               .filter((l) => l.trim().toLowerCase().startsWith("disallow:"))
@@ -818,7 +1197,12 @@ export function seoPrerenderPlugin(): Plugin {
               const routePath = m[1];
               if (routePath.includes(":") || routePath === "*") continue;
               if (known.has(routePath)) continue;
-              if (disallowed.some((d) => routePath === d || routePath.startsWith(d))) continue;
+              if (
+                disallowed.some(
+                  (d) => routePath === d || routePath.startsWith(d),
+                )
+              )
+                continue;
               problems.push(
                 `${routePath}: routed in App.tsx but not prerendered and not disallowed in robots.txt — ` +
                   "it will serve the homepage shell to crawlers",
@@ -868,37 +1252,59 @@ export function seoPrerenderPlugin(): Plugin {
           const routes = allRoutes();
           const annotations = landingAnnotations();
 
-          const compare = (routePath: string, file: string, title?: string, desc?: string) => {
+          const compare = (
+            routePath: string,
+            file: string,
+            title?: string,
+            desc?: string,
+          ) => {
             const route = routes.find((r) => r.path === routePath);
             if (!route) {
-              problems.push(`${routePath} (${file}): page exists but is not prerendered — add it to STATIC_ROUTES`);
+              problems.push(
+                `${routePath} (${file}): page exists but is not prerendered — add it to STATIC_ROUTES`,
+              );
               return;
             }
             if (title && route.title !== title) {
-              problems.push(`${routePath} (${file}): <title> — prerender "${route.title}" vs page "${title}"`);
+              problems.push(
+                `${routePath} (${file}): <title> — prerender "${route.title}" vs page "${title}"`,
+              );
             }
             if (desc && route.description !== desc) {
-              problems.push(`${routePath} (${file}): description — prerender "${route.description}" vs page "${desc}"`);
+              problems.push(
+                `${routePath} (${file}): description — prerender "${route.description}" vs page "${desc}"`,
+              );
             }
           };
 
-          for (const a of annotations) compare(a.routePath, a.file, a.metaTitle, a.description);
+          for (const a of annotations)
+            compare(a.routePath, a.file, a.metaTitle, a.description);
 
           // The /cursuri/* funnel pages build their head from i18n keys instead
           // of literal props, so resolve the key against the Romanian dictionary
           // (the first of the two in i18n.tsx) before comparing.
           try {
-            const i18n = fs.readFileSync(path.resolve("src/lib/i18n.tsx"), "utf8");
+            const i18n = fs.readFileSync(
+              path.resolve("src/lib/i18n.tsx"),
+              "utf8",
+            );
             const ro = (key: string): string | undefined =>
               i18n.match(new RegExp(`\\b${key}: "((?:[^"\\\\]|\\\\.)*)"`))?.[1];
             const dir = path.resolve("src/pages/courses");
-            for (const file of fs.readdirSync(dir).filter((f) => f.endsWith(".tsx"))) {
+            for (const file of fs
+              .readdirSync(dir)
+              .filter((f) => f.endsWith(".tsx"))) {
               const src = fs.readFileSync(path.join(dir, file), "utf8");
               const routePath = src.match(/path="(\/cursuri[^"]*)"/)?.[1];
               if (!routePath) continue;
               const titleKey = src.match(/metaTitle=\{t\.(\w+)\}/)?.[1];
               const descKey = src.match(/metaDescription=\{t\.(\w+)\}/)?.[1];
-              compare(routePath, file, titleKey && ro(titleKey), descKey && ro(descKey));
+              compare(
+                routePath,
+                file,
+                titleKey && ro(titleKey),
+                descKey && ro(descKey),
+              );
             }
           } catch {
             /* i18n-backed pages are best-effort */
@@ -912,7 +1318,9 @@ export function seoPrerenderPlugin(): Plugin {
           try {
             const dir = path.resolve("src/pages/blog");
             const bySlug = new Map(BLOG_POSTS.map((b) => [b.slug, b]));
-            for (const file of fs.readdirSync(dir).filter((f) => f.endsWith(".tsx"))) {
+            for (const file of fs
+              .readdirSync(dir)
+              .filter((f) => f.endsWith(".tsx"))) {
               const src = fs.readFileSync(path.join(dir, file), "utf8");
               const slug = attr(src, "slug");
               const post = slug ? bySlug.get(slug) : undefined;
@@ -943,12 +1351,17 @@ export function seoPrerenderPlugin(): Plugin {
           for (const a of annotations) {
             if (!a.twin) continue;
             const prev = claimed.get(a.twin);
-            if (prev) problems.push(`hreflang: ${a.twin} is claimed by both ${prev} and ${a.routePath} — it must be 1:1`);
+            if (prev)
+              problems.push(
+                `hreflang: ${a.twin} is claimed by both ${prev} and ${a.routePath} — it must be 1:1`,
+              );
             else claimed.set(a.twin, a.routePath);
 
             const twin = byPath.get(a.twin);
             if (!twin) {
-              problems.push(`hreflang: ${a.routePath} points at ${a.twin}, which is not a landing page — no hreflang will be emitted`);
+              problems.push(
+                `hreflang: ${a.routePath} points at ${a.twin}, which is not a landing page — no hreflang will be emitted`,
+              );
             } else if (twin.twin !== a.routePath) {
               problems.push(
                 `hreflang: ${a.routePath} -> ${a.twin}, but ${a.twin} -> ${twin.twin ?? "(none)"} — ` +
@@ -966,7 +1379,9 @@ export function seoPrerenderPlugin(): Plugin {
           /* guard must never fail the build */
         }
       } catch (err) {
-        this.warn(`[seo-prerender] skipped (${(err as Error).message}). SPA shell left intact.`);
+        this.warn(
+          `[seo-prerender] skipped (${(err as Error).message}). SPA shell left intact.`,
+        );
       }
     },
   };

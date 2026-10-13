@@ -12,7 +12,10 @@ const CTASection = () => {
   const en = lang === "en";
 
   return (
-    <section id="contact" className="py-section px-gutter bg-background scroll-mt-20">
+    <section
+      id="contact"
+      className="py-section px-gutter bg-background scroll-mt-20"
+    >
       <div className="max-w-content mx-auto">
         {/* The closing invitation, as in the design: a greeting, the free
             trial, and the two ways to act on it. */}
@@ -20,10 +23,18 @@ const CTASection = () => {
           <div className="flex flex-col gap-2.5">
             <span className="text-lg sm:text-xl font-bold text-brand-green">
               <span lang="apc-Latn">Ahla w sahla!</span>{" "}
-              <span dir="rtl" lang="ar" className="font-arabic font-medium text-muted-foreground">أهلا وسهلا</span>
+              <span
+                dir="rtl"
+                lang="ar"
+                className="font-arabic font-medium text-muted-foreground"
+              >
+                أهلا وسهلا
+              </span>
             </span>
             <h2 className="font-display text-3xl sm:text-4xl lg:text-[2.75rem] font-bold leading-tight tracking-tight text-foreground">
-              {en ? "The first trial lesson is free." : "Prima lecție de probă e gratuită."}
+              {en
+                ? "The first trial lesson is free."
+                : "Prima lecție de probă e gratuită."}
             </h2>
           </div>
           <div className="flex flex-wrap gap-3 md:shrink-0">
@@ -50,38 +61,67 @@ const CTASection = () => {
             row rendered as four cramped columns. The prose below keeps its own
             reading width. */}
         <div className="max-w-content mx-auto">
-        <div className="mb-6">
-          <span className="text-sm font-bold uppercase tracking-[0.1em] text-foreground block">{t.ctaBadge}</span>
-        </div>
-
-        <div className="grid gap-6 mb-10 sm:grid-cols-2 lg:grid-cols-4">
-          <a href={WHATSAPP_URL} target="_blank" rel="noopener noreferrer" className="min-w-0 [overflow-wrap:anywhere] bg-card rounded-2xl border border-[#E7E1D6] p-5 sm:p-6 text-center hover:border-brand-green/50 transition-colors dark:border-border">
-            <MessageCircle className="w-6 h-6 text-brand-green mx-auto mb-3" />
-            <h3 className="font-semibold text-foreground text-sm">{t.ctaWhatsapp}</h3>
-            <p className="text-sm text-muted-foreground mt-1">{t.ctaWhatsappDesc}</p>
-          </a>
-          <a href={PHONE_URL} className="min-w-0 [overflow-wrap:anywhere] bg-card rounded-2xl border border-[#E7E1D6] p-5 sm:p-6 text-center hover:border-brand-green/50 transition-colors dark:border-border">
-            <Phone className="w-6 h-6 text-brand-green mx-auto mb-3" />
-            <h3 className="font-semibold text-foreground text-sm">{t.ctaPhone}</h3>
-            <p className="text-sm text-muted-foreground mt-1">{t.ctaPhoneVal}</p>
-          </a>
-          <a href={`mailto:${EMAIL}`} className="min-w-0 [overflow-wrap:anywhere] bg-card rounded-2xl border border-[#E7E1D6] p-5 sm:p-6 text-center hover:border-brand-green/50 transition-colors dark:border-border">
-            <Mail className="w-6 h-6 text-brand-green mx-auto mb-3" />
-            <h3 className="font-semibold text-foreground text-sm">{t.ctaEmail}</h3>
-            <p className="text-sm text-muted-foreground mt-1">{t.ctaEmailVal}</p>
-          </a>
-          <div className="min-w-0 [overflow-wrap:anywhere] bg-card rounded-2xl border border-[#E7E1D6] p-5 sm:p-6 text-center dark:border-border">
-            <MapPin className="w-6 h-6 text-brand-green mx-auto mb-3" />
-            <h3 className="font-semibold text-foreground text-sm">{t.ctaLocation}</h3>
-            <p className="text-sm text-muted-foreground mt-1">{t.ctaLocationVal}</p>
+          <div className="mb-6">
+            <span className="text-sm font-bold uppercase tracking-[0.1em] text-foreground block">
+              {t.ctaBadge}
+            </span>
           </div>
-        </div>
 
-        {/* The course schedule box that used to sit here repeated the start
+          <div className="grid gap-6 mb-10 sm:grid-cols-2 lg:grid-cols-4">
+            <a
+              href={WHATSAPP_URL}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="min-w-0 [overflow-wrap:anywhere] bg-card rounded-2xl border border-[#E7E1D6] p-5 sm:p-6 text-center hover:border-brand-green/50 transition-colors dark:border-border"
+            >
+              <MessageCircle className="w-6 h-6 text-brand-green mx-auto mb-3" />
+              <h3 className="font-semibold text-foreground text-sm">
+                {t.ctaWhatsapp}
+              </h3>
+              <p className="text-sm text-muted-foreground mt-1">
+                {t.ctaWhatsappDesc}
+              </p>
+            </a>
+            <a
+              href={PHONE_URL}
+              className="min-w-0 [overflow-wrap:anywhere] bg-card rounded-2xl border border-[#E7E1D6] p-5 sm:p-6 text-center hover:border-brand-green/50 transition-colors dark:border-border"
+            >
+              <Phone className="w-6 h-6 text-brand-green mx-auto mb-3" />
+              <h3 className="font-semibold text-foreground text-sm">
+                {t.ctaPhone}
+              </h3>
+              <p className="text-sm text-muted-foreground mt-1">
+                {t.ctaPhoneVal}
+              </p>
+            </a>
+            <a
+              href={`mailto:${EMAIL}`}
+              className="min-w-0 [overflow-wrap:anywhere] bg-card rounded-2xl border border-[#E7E1D6] p-5 sm:p-6 text-center hover:border-brand-green/50 transition-colors dark:border-border"
+            >
+              <Mail className="w-6 h-6 text-brand-green mx-auto mb-3" />
+              <h3 className="font-semibold text-foreground text-sm">
+                {t.ctaEmail}
+              </h3>
+              <p className="text-sm text-muted-foreground mt-1">
+                {t.ctaEmailVal}
+              </p>
+            </a>
+            <div className="min-w-0 [overflow-wrap:anywhere] bg-card rounded-2xl border border-[#E7E1D6] p-5 sm:p-6 text-center dark:border-border">
+              <MapPin className="w-6 h-6 text-brand-green mx-auto mb-3" />
+              <h3 className="font-semibold text-foreground text-sm">
+                {t.ctaLocation}
+              </h3>
+              <p className="text-sm text-muted-foreground mt-1">
+                {t.ctaLocationVal}
+              </p>
+            </div>
+          </div>
+
+          {/* The course schedule box that used to sit here repeated the start
             dates a third time (they are in "Cursuri care încep acum" and on the
             group card), so it was removed with the owner's agreement. */}
-        {/* Official social channels — renders only the configured ones. */}
-        <SocialLinks variant="cards" />
+          {/* Official social channels — renders only the configured ones. */}
+          <SocialLinks variant="cards" />
         </div>
       </div>
     </section>

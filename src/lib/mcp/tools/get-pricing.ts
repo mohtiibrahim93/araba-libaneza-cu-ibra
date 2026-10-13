@@ -3,7 +3,14 @@ import { defineTool } from "@lovable.dev/mcp-js";
 // Inlined from src/lib/pricing.ts to keep this tool import-safe in the
 // Deno-bundled MCP function (which does not resolve the Vite "@/..." alias).
 const ONLINE_PRICES = {
-  groupMonthly: { A1: 500, A2: 600, B1: 700, B2: 800, C1: 900, C2: 1000 } as Record<string, number>,
+  groupMonthly: {
+    A1: 500,
+    A2: 600,
+    B1: 700,
+    B2: 800,
+    C1: 900,
+    C2: 1000,
+  } as Record<string, number>,
   privateLesson: 150,
   kidsPrivateLesson: 150,
   kidsGroupMonthly: 500,
@@ -17,7 +24,11 @@ export default defineTool({
   description:
     "Return current pricing (LEI) for all course formats offered by Arabă Libaneză cu Ibra: group monthly per CEFR level, private 1:1, and kids programs. Includes both online and physical (in-center) prices.",
   inputSchema: {},
-  annotations: { readOnlyHint: true, idempotentHint: true, openWorldHint: false },
+  annotations: {
+    readOnlyHint: true,
+    idempotentHint: true,
+    openWorldHint: false,
+  },
   handler: () => {
     const groupMonthly = Object.fromEntries(
       Object.entries(ONLINE_PRICES.groupMonthly).map(([lvl, online]) => [

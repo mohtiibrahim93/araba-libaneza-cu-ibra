@@ -25,7 +25,9 @@ const AskAssistant = () => {
   const { lang } = useI18n();
   const copy = COPY[lang];
   const [open, setOpen] = useState(false);
-  const [initialMessages, setInitialMessages] = useState<UIMessage[] | null>(null);
+  const [initialMessages, setInitialMessages] = useState<UIMessage[] | null>(
+    null,
+  );
 
   const openPanel = () => {
     // Read the saved conversation at open time: the server HTML never contains it.
@@ -74,7 +76,9 @@ const AskAssistant = () => {
           </div>
           <Suspense
             fallback={
-              <p className="flex-1 px-4 py-6 text-sm text-muted-foreground">{copy.loading}</p>
+              <p className="flex-1 px-4 py-6 text-sm text-muted-foreground">
+                {copy.loading}
+              </p>
             }
           >
             <AskChat initialMessages={initialMessages} lang={lang} />

@@ -72,7 +72,10 @@ const NavDropdown = ({ label, items }: NavDropdownProps) => {
       >
         {label}
         <ChevronDown
-          className={cn("h-3.5 w-3.5 transition-transform", open && "rotate-180")}
+          className={cn(
+            "h-3.5 w-3.5 transition-transform",
+            open && "rotate-180",
+          )}
           aria-hidden="true"
         />
       </button>

@@ -6,7 +6,11 @@ export default defineTool({
   description:
     "Return public contact details (email, website) for Arabă Libaneză cu Ibra.",
   inputSchema: {},
-  annotations: { readOnlyHint: true, idempotentHint: true, openWorldHint: false },
+  annotations: {
+    readOnlyHint: true,
+    idempotentHint: true,
+    openWorldHint: false,
+  },
   handler: () => {
     const info = {
       name: "Arabă Libaneză cu Ibra",

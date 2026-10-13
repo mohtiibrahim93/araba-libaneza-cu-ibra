@@ -19,8 +19,10 @@ export interface SeedBody {
 
 export const BLOG_SEED: Record<string, SeedBody> = {
   "cum-saluti-in-libaneza": {
-    lead_ro: "De la „mar7aba” la „yalla bye” — formulele de salut pe care le auzi zilnic în Liban, cu pronunție și context.",
-    lead_en: "From 'mar7aba' to 'yalla bye' — the greetings you hear daily in Lebanon, with pronunciation and context.",
+    lead_ro:
+      "De la „mar7aba” la „yalla bye” — formulele de salut pe care le auzi zilnic în Liban, cu pronunție și context.",
+    lead_en:
+      "From 'mar7aba' to 'yalla bye' — the greetings you hear daily in Lebanon, with pronunciation and context.",
     ro: `Salutul este prima ta interacțiune în orice limbă — și în libaneză e cald și expresiv. Vestea bună: câteva formule te duc foarte departe. Iată-le pe cele mai folosite, cu [arabizi](/blog/ce-este-arabizi) și scriere arabă.
 
 ## Formulele esențiale
@@ -78,8 +80,10 @@ Greetings are learned best by saying them, not reading them. In a [free trial le
   },
 
   "cat-costa-cursurile-de-araba-libaneza": {
-    lead_ro: "Grup sau privat, online sau fizic — iată cum se calculează prețul, ce reduceri există și de ce prima lecție e gratuită.",
-    lead_en: "Group or private, online or in person — here's how the price works, what discounts exist and why the first lesson is free.",
+    lead_ro:
+      "Grup sau privat, online sau fizic — iată cum se calculează prețul, ce reduceri există și de ce prima lecție e gratuită.",
+    lead_en:
+      "Group or private, online or in person — here's how the price works, what discounts exist and why the first lesson is free.",
     ro: `Una dintre primele întrebări firești când vrei să înveți o limbă nouă este „cât costă?”. La Centrul de Arabă Libaneză prețurile sunt transparente și depind de un singur lucru: formatul pe care îl alegi. Mai jos ai toate opțiunile.
 
 ## Cursuri de grup (adulți, A1–C2)
@@ -135,8 +139,10 @@ No. Audio materials and support are included. You can pay by card (securely, via
   },
 
   "cum-alegi-profesor-de-araba": {
-    lead_ro: "Ce să întrebi înainte să te înscrii — despre experiență, metodă, preț și rezultate — ca să nu pierzi timp și bani.",
-    lead_en: "What to ask before you enrol — about experience, method, price and results — so you don't waste time or money.",
+    lead_ro:
+      "Ce să întrebi înainte să te înscrii — despre experiență, metodă, preț și rezultate — ca să nu pierzi timp și bani.",
+    lead_en:
+      "What to ask before you enrol — about experience, method, price and results — so you don't waste time or money.",
     ro: `Un profesor bun face diferența dintre a abandona după trei lecții și a ajunge să vorbești cu încredere. Înainte să alegi, merită să pui câteva întrebări clare. Iată-le, grupate, cu răspunsurile noastre la fiecare.
 
 ## Despre experiență și limbă
@@ -208,8 +214,10 @@ The simplest test? A [free trial lesson](/trial) — you see the method directly
   },
 
   "cat-dureaza-sa-inveti-araba-libaneza": {
-    lead_ro: "Depinde de nivelul-țintă și de ritm — dar iată estimări realiste pe fiecare nivel, ca să știi la ce să te aștepți.",
-    lead_en: "It depends on your target level and pace — but here are realistic estimates per level, so you know what to expect.",
+    lead_ro:
+      "Depinde de nivelul-țintă și de ritm — dar iată estimări realiste pe fiecare nivel, ca să știi la ce să te aștepți.",
+    lead_en:
+      "It depends on your target level and pace — but here are realistic estimates per level, so you know what to expect.",
     ro: `„Cât durează?” este întrebarea la care toată lumea vrea un răspuns simplu. Adevărul onest: depinde de cât de departe vrei să ajungi și cât de des exersezi. Vestea bună pentru libaneză e că, fiind un dialect vorbit, începi să comunici din primele lecții — nu aștepți luni întregi ca să spui ceva util.
 
 ## Durata pe fiecare nivel
@@ -269,8 +277,10 @@ If you already know a few words, you can skip A1. Take the [free level test](/te
   },
 
   "alfabetul-arab-pentru-incepatori": {
-    lead_ro: "Cele 28 de litere, pronunția lor și un adevăr liniștitor: nu ai nevoie de alfabet ca să începi să vorbești.",
-    lead_en: "The 28 letters, their pronunciation and a reassuring truth: you don't need the alphabet to start speaking.",
+    lead_ro:
+      "Cele 28 de litere, pronunția lor și un adevăr liniștitor: nu ai nevoie de alfabet ca să începi să vorbești.",
+    lead_en:
+      "The 28 letters, their pronunciation and a reassuring truth: you don't need the alphabet to start speaking.",
     ro: `Alfabetul arab pare intimidant la prima vedere, dar are o logică simplă. Are **28 de litere**, se scrie de la **dreapta la stânga**, iar literele își schimbă ușor forma în funcție de poziția din cuvânt (început, mijloc, sfârșit). Nu există litere mari și mici.
 
 ## Tabelul complet al literelor
@@ -380,8 +390,10 @@ Want to see where you start? Take the [free level test](/test-de-nivel) or read 
   },
 
   "ce-este-arabizi": {
-    lead_ro: "Araba scrisă cu litere latine și cifre — cum funcționează, ce înseamnă „3” și „7”, și de ce te ajută să vorbești din prima zi.",
-    lead_en: "Arabic written in Latin letters and numbers — how it works, what '3' and '7' mean, and why it helps you speak from day one.",
+    lead_ro:
+      "Araba scrisă cu litere latine și cifre — cum funcționează, ce înseamnă „3” și „7”, și de ce te ajută să vorbești din prima zi.",
+    lead_en:
+      "Arabic written in Latin letters and numbers — how it works, what '3' and '7' mean, and why it helps you speak from day one.",
     ro: `**Arabizi** (numit și „arabish” sau „franco-arab”) este modul în care milioane de arabi scriu dialectul lor pe telefon și pe rețelele sociale: **cu litere latine și câteva cifre**. În loc să înveți întâi [alfabetul arab](/blog/alfabetul-arab-pentru-incepatori), poți citi și scrie libaneză imediat, folosind litere pe care deja le știi.
 
 ## De ce cifre?
@@ -425,8 +437,10 @@ Not at all. Arabizi is the real way Lebanese people write to each other every da
   },
 
   "cultura-libaneza-obiceiuri-mancare-traditii": {
-    lead_ro: "Ospitalitate, mezze, muzică și un amestec unic de influențe — contextul viu care dă sens limbii pe care o înveți.",
-    lead_en: "Hospitality, mezze, music and a unique mix of influences — the living context that gives meaning to the language you're learning.",
+    lead_ro:
+      "Ospitalitate, mezze, muzică și un amestec unic de influențe — contextul viu care dă sens limbii pe care o înveți.",
+    lead_en:
+      "Hospitality, mezze, music and a unique mix of influences — the living context that gives meaning to the language you're learning.",
     ro: `Nu înveți doar o limbă — intri într-o cultură. Libanul este o țară mică de la Marea Mediterană, dar cu o densitate culturală uriașă: un loc de întâlnire între Orient și Occident, cu o istorie de mii de ani. Iată ce dă farmec culturii libaneze.
 
 ## Ospitalitatea, mai presus de toate
@@ -482,8 +496,10 @@ Curious? Start with a [free trial lesson](/trial) or see [all the courses](/curs
   },
 
   "araba-pentru-copii-ghidul-parintilor": {
-    lead_ro: "De la ce vârstă, cum arată o lecție și cum îți susții copilul — tot ce vor să știe părinții înainte de primul curs.",
-    lead_en: "From what age, what a lesson looks like and how to support your child — everything parents want to know before the first course.",
+    lead_ro:
+      "De la ce vârstă, cum arată o lecție și cum îți susții copilul — tot ce vor să știe părinții înainte de primul curs.",
+    lead_en:
+      "From what age, what a lesson looks like and how to support your child — everything parents want to know before the first course.",
     ro: `Copiii învață limbile altfel decât adulții: prin joc, repetiție și context, nu prin reguli. De aceea cursurile de arabă libaneză pentru copii nu seamănă deloc cu o lecție clasică — sunt interactive, cu jocuri, cântece și povești.
 
 ## De la ce vârstă?
@@ -543,8 +559,10 @@ The simplest way is a short chat so we can gauge your child's level and interest
   },
 
   "primele-20-de-expresii-libaneze": {
-    lead_ro: "Scrise în arabizi (litere latine), cu grafia arabă și traducere. Exact expresiile pe care le folosești din prima zi în Liban — sau cu prietenii libanezi.",
-    lead_en: "Written in Arabizi (Latin letters), with Arabic script and translation. Exactly the phrases you use from day one in Lebanon — or with Lebanese friends.",
+    lead_ro:
+      "Scrise în arabizi (litere latine), cu grafia arabă și traducere. Exact expresiile pe care le folosești din prima zi în Liban — sau cu prietenii libanezi.",
+    lead_en:
+      "Written in Arabizi (Latin letters), with Arabic script and translation. Exactly the phrases you use from day one in Lebanon — or with Lebanese friends.",
     ro: `**Cum citești tabelul:** „3” se pronunță ca un „a” gutural (litera ع), „7” ca un „h” aspru din gât (ح), iar „2” marchează o oprire scurtă a vocii (ء). Nu-ți face griji — la curs le auzi și le repeți natural, metoda noastră e *Oral First*.
 
 ## Salut și politețe
@@ -644,8 +662,10 @@ If you liked the phrases above, the natural next step is to put them in context 
   },
 
   "araba-libaneza-vs-araba-standard": {
-    lead_ro: "Nu există „o singură arabă”. Există o limbă scrisă (Fusha / MSA) și zeci de dialecte vorbite. Alegerea corectă depinde de ce vrei să faci cu limba — călătorii, familie, muncă, studiu academic sau muzică și seriale.",
-    lead_en: "There's no 'single Arabic'. There's a written language (Fusha / MSA) and dozens of spoken dialects. The right choice depends on what you want to do with the language — travel, family, work, academic study, or music and series.",
+    lead_ro:
+      "Nu există „o singură arabă”. Există o limbă scrisă (Fusha / MSA) și zeci de dialecte vorbite. Alegerea corectă depinde de ce vrei să faci cu limba — călătorii, familie, muncă, studiu academic sau muzică și seriale.",
+    lead_en:
+      "There's no 'single Arabic'. There's a written language (Fusha / MSA) and dozens of spoken dialects. The right choice depends on what you want to do with the language — travel, family, work, academic study, or music and series.",
     ro: `## 1. Ce este araba standard (MSA / Fusha) și ce este libaneza
 
 **Araba standard modernă** (MSA, sau „Fusha” în arabă) este forma scrisă și oficială a limbii, folosită în toată lumea arabă în știri, ziare, cărți, documente juridice și predici religioase. Este o limbă învățată — nimeni nu o vorbește nativ acasă.
@@ -793,8 +813,10 @@ Concrete steps:
   },
 
   "cum-inveti-araba-libaneza": {
-    lead_ro: "Diferențe față de araba standard, cât timp îți ia, cele mai bune metode de învățare, greșeli frecvente și primele fraze utile — tot ce trebuie să știi înainte să începi.",
-    lead_en: "How it differs from Standard Arabic, how long it takes, the best learning methods, common mistakes and the first useful phrases — everything you need to know before you start.",
+    lead_ro:
+      "Diferențe față de araba standard, cât timp îți ia, cele mai bune metode de învățare, greșeli frecvente și primele fraze utile — tot ce trebuie să știi înainte să începi.",
+    lead_en:
+      "How it differs from Standard Arabic, how long it takes, the best learning methods, common mistakes and the first useful phrases — everything you need to know before you start.",
     ro: `## 1. Ce este araba libaneză și cum diferă de celelalte dialecte
 
 Araba libaneză face parte din familia dialectelor levantine (împreună cu araba siriană, palestiniană și iordaniană), care sunt în mare parte inteligibile reciproc. Se deosebește de araba egipteană și de cea din Golf prin pronunție, vocabular și intonație, dar și prin influențele puternice din franceză, engleză, aramaică și turcă.
@@ -920,8 +942,10 @@ The most important step is to start speaking with someone this week — not in a
   },
 
   "invata-araba-libaneza-online": {
-    lead_ro: "Cu profesor nativ, de oriunde din lume — cum arată o lecție online, ce îți trebuie și de ce funcționează la fel de bine ca la clasă.",
-    lead_en: "With a native teacher, from anywhere in the world — what an online lesson looks like, what you need and why it works just as well as the classroom.",
+    lead_ro:
+      "Cu profesor nativ, de oriunde din lume — cum arată o lecție online, ce îți trebuie și de ce funcționează la fel de bine ca la clasă.",
+    lead_en:
+      "With a native teacher, from anywhere in the world — what an online lesson looks like, what you need and why it works just as well as the classroom.",
     ro: `Nu trebuie să locuiești în București — și nici măcar în România — ca să înveți araba libaneză cu profesor nativ. Cursurile noastre online se țin pe Zoom, cu aceeași metodă și același profesor ca cele fizice. Dacă faci parte din diaspora libaneză, ai familie libaneză sau vrei pur și simplu dialectul viu de oriunde te-ai afla, online e făcut pentru tine.
 
 ## De ce ai nevoie
@@ -977,8 +1001,10 @@ Not sure where you'd start? Take the [free level test](/test-de-nivel) (~15 minu
   },
 
   "numere-in-araba-libaneza": {
-    lead_ro: "Cifrele de care ai nevoie în piață, în taxi și la cafenea — cu pronunție în arabizi și scriere arabă.",
-    lead_en: "The numbers you need at the market, in a taxi and at the café — with Arabizi pronunciation and Arabic script.",
+    lead_ro:
+      "Cifrele de care ai nevoie în piață, în taxi și la cafenea — cu pronunție în arabizi și scriere arabă.",
+    lead_en:
+      "The numbers you need at the market, in a taxi and at the café — with Arabizi pronunciation and Arabic script.",
     ro: `Numerele sunt printre primele lucruri pe care le și folosești într-o limbă nouă — prețuri, ore, numere de telefon, vârsta. Vestea bună: în libaneză îți ajung câteva ca să te descurci. Iată-le, cu [arabizi](/blog/ce-este-arabizi) și scriere arabă.
 
 ## De la 0 la 10

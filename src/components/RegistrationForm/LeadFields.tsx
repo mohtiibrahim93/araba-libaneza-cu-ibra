@@ -73,7 +73,8 @@ const LeadFields = ({
   const [phoneTouched, setPhoneTouched] = useState(false);
   const [emailTouched, setEmailTouched] = useState(false);
   const phoneError = (phoneTouched || showErrors) && !isValidPhone(phone);
-  const emailError = (emailTouched || showErrors) && Boolean(email) && !isValidEmail(email);
+  const emailError =
+    (emailTouched || showErrors) && Boolean(email) && !isValidEmail(email);
 
   return (
     <>
@@ -119,7 +120,11 @@ const LeadFields = ({
             placeholder={t.placeholderEmail}
             maxLength={255}
             aria-invalid={emailError || undefined}
-            className={emailError ? "border-destructive focus-visible:ring-destructive" : ""}
+            className={
+              emailError
+                ? "border-destructive focus-visible:ring-destructive"
+                : ""
+            }
           />
           {emailError && (
             <p className="text-xs text-destructive">{t.validEmailError}</p>

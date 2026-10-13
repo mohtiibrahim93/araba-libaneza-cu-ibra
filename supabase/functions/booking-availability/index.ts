@@ -12,7 +12,12 @@ import {
   ACTIVE_COHORT_STATUSES,
 } from "../_shared/booking.ts";
 import { buildCorsHeaders } from "../_shared/cors.ts";
-import { LEVEL_CHECK_RULES, LEVEL_CHECK_SLUG, inBlackout, rulesForEventType } from "../_shared/schedule-rules.ts";
+import {
+  LEVEL_CHECK_RULES,
+  LEVEL_CHECK_SLUG,
+  inBlackout,
+  rulesForEventType,
+} from "../_shared/schedule-rules.ts";
 
 Deno.serve(async (req) => {
   const corsHeaders = buildCorsHeaders(req);
@@ -21,7 +26,8 @@ Deno.serve(async (req) => {
     for (const [k, v] of Object.entries(corsHeaders)) res.headers.set(k, v);
     return res;
   };
-  if (req.method === "OPTIONS") return new Response(null, { headers: corsHeaders });
+  if (req.method === "OPTIONS")
+    return new Response(null, { headers: corsHeaders });
 
   try {
     const url = new URL(req.url);
@@ -30,8 +36,10 @@ Deno.serve(async (req) => {
     const dateTo = url.searchParams.get("date_to"); // YYYY-MM-DD inclusive
     // The scheduler re-asks whenever the visitor switches format, because an
     // in-person trial is only offered at weekends.
-    const format = url.searchParams.get("format") === "physical" ? "physical" : "online";
-    if (!dateFrom || !dateTo) return json({ error: "date_from and date_to required" }, 400);
+    const format =
+      url.searchParams.get("format") === "physical" ? "physical" : "online";
+    if (!dateFrom || !dateTo)
+      return json({ error: "date_from and date_to required" }, 400);
 
     const supabase = createClient(
       Deno.env.get("SUPABASE_URL")!,
@@ -49,8 +57,15 @@ Deno.serve(async (req) => {
     // Weekly hours (general, or this lesson type's own) and the owner's days
     // off, both edited in Admin › Program › Disponibilitate.
     const [{ data: rules }, { data: blackouts }] = await Promise.all([
-      supabase.from("availability_rules").select("weekday,start_time,end_time,event_type_slug").eq("is_active", true),
-      supabase.from("availability_blackouts").select("start_date,end_date").gte("end_date", dateFrom).lte("start_date", dateTo),
+      supabase
+        .from("availability_rules")
+        .select("weekday,start_time,end_time,event_type_slug")
+        .eq("is_active", true),
+      supabase
+        .from("availability_blackouts")
+        .select("start_date,end_date")
+        .gte("end_date", dateFrom)
+        .lte("start_date", dateTo),
     ]);
 
     // Iterate dates in local tz between dateFrom and dateTo.
@@ -61,7 +76,11 @@ Deno.serve(async (req) => {
     const days: Array<{ y: number; m: number; d: number }> = [];
     for (let t = fromUtc; t <= toUtc; t += 86400000) {
       const dt = new Date(t);
-      days.push({ y: dt.getUTCFullYear(), m: dt.getUTCMonth() + 1, d: dt.getUTCDate() });
+      days.push({
+        y: dt.getUTCFullYear(),
+        m: dt.getUTCMonth() + 1,
+        d: dt.getUTCDate(),
+      });
     }
 
     // Raw candidates, then min-notice / max-advance / in-person-trial rules.
@@ -69,20 +88,32 @@ Deno.serve(async (req) => {
     // A lesson type with hours of its own (the level check) uses only those.
     const candidates = candidateSlotsForDays(
       days,
-      rulesForEventType(rules ?? [], slug, slug === LEVEL_CHECK_SLUG ? LEVEL_CHECK_RULES : undefined),
+      rulesForEventType(
+        rules ?? [],
+        slug,
+        slug === LEVEL_CHECK_SLUG ? LEVEL_CHECK_RULES : undefined,
+      ),
       et.duration_min,
     );
     const now = Date.now();
-    let filtered = candidates.filter((iso) => passesTimingRules(et, format, iso, now) && !inBlackout(iso, blackouts ?? []));
+    let filtered = candidates.filter(
+      (iso) =>
+        passesTimingRules(et, format, iso, now) &&
+        !inBlackout(iso, blackouts ?? []),
+    );
 
     if (filtered.length === 0) {
       return json({ event_type: et, slots: [], slots_by_date: {}, tz: TZ });
     }
 
     // Window for freebusy & DB lookups
-    const windowStart = new Date(Math.min(...filtered.map((s) => Date.parse(s)))).toISOString();
+    const windowStart = new Date(
+      Math.min(...filtered.map((s) => Date.parse(s))),
+    ).toISOString();
     const lastStartMs = Math.max(...filtered.map((s) => Date.parse(s)));
-    const windowEnd = new Date(lastStartMs + et.duration_min * 60_000 + et.buffer_after_min * 60_000).toISOString();
+    const windowEnd = new Date(
+      lastStartMs + et.duration_min * 60_000 + et.buffer_after_min * 60_000,
+    ).toISOString();
 
     const [busy, { data: existing }, { data: cohorts }] = await Promise.all([
       gcalFreebusy(windowStart, windowEnd),
@@ -108,7 +139,10 @@ Deno.serve(async (req) => {
       start: Date.parse(b.start_at) - et.buffer_before_min * 60_000,
       end: Date.parse(b.end_at) + et.buffer_after_min * 60_000,
     }));
-    const gcalBusy = busy.map((b) => ({ start: Date.parse(b.start), end: Date.parse(b.end) }));
+    const gcalBusy = busy.map((b) => ({
+      start: Date.parse(b.start),
+      end: Date.parse(b.end),
+    }));
 
     // Concrete lesson times each active cohort occupies within the requested
     // days (per-weekday cohort_meetings rows win over start_time/end_time).
@@ -116,10 +150,16 @@ Deno.serve(async (req) => {
 
     filtered = filtered.filter((iso) => {
       const s = Date.parse(iso) - et.buffer_before_min * 60_000;
-      const e = Date.parse(iso) + et.duration_min * 60_000 + et.buffer_after_min * 60_000;
-      for (const b of bookingBusy) if (overlaps(s, e, b.start, b.end)) return false;
-      for (const b of gcalBusy) if (overlaps(s, e, b.start, b.end)) return false;
-      for (const b of cohortBusy) if (overlaps(s, e, b.start, b.end)) return false;
+      const e =
+        Date.parse(iso) +
+        et.duration_min * 60_000 +
+        et.buffer_after_min * 60_000;
+      for (const b of bookingBusy)
+        if (overlaps(s, e, b.start, b.end)) return false;
+      for (const b of gcalBusy)
+        if (overlaps(s, e, b.start, b.end)) return false;
+      for (const b of cohortBusy)
+        if (overlaps(s, e, b.start, b.end)) return false;
       return true;
     });
 

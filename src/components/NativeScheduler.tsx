@@ -1,5 +1,14 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import { Calendar, Loader2, MessageCircle, ArrowLeft, CheckCircle2, Download, Home, CreditCard } from "lucide-react";
+import {
+  Calendar,
+  Loader2,
+  MessageCircle,
+  ArrowLeft,
+  CheckCircle2,
+  Download,
+  Home,
+  CreditCard,
+} from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useI18n } from "@/lib/i18n";
 import { isValidPhone } from "@/components/RegistrationForm/LeadFields";
@@ -16,9 +25,19 @@ import LocalTimezoneToggle from "@/components/LocalTimezoneToggle";
 import CheckoutEmailGate from "@/components/CheckoutEmailGate";
 import { trackCheckoutStart } from "@/lib/tracking";
 import { getLocalTz, shortTzLabel, useShowLocalTz } from "@/lib/timezone";
-import { ONLINE_PRICES, formatLei, priceFor, privateDiscountFor } from "@/lib/pricing";
+import {
+  ONLINE_PRICES,
+  formatLei,
+  priceFor,
+  privateDiscountFor,
+} from "@/lib/pricing";
 import { loadStripe, type Stripe as StripeJs } from "@stripe/stripe-js";
-import { Elements, PaymentElement, useElements, useStripe } from "@stripe/react-stripe-js";
+import {
+  Elements,
+  PaymentElement,
+  useElements,
+  useStripe,
+} from "@stripe/react-stripe-js";
 
 /**
  * The embedded card form for a private purchase — the same Stripe Elements
@@ -75,8 +94,14 @@ const InlinePrivatePay = ({
         disabled={!stripe || paying}
         className="w-full inline-flex h-12 items-center justify-center gap-2 rounded-xl bg-primary px-4 font-semibold text-primary-foreground hover:bg-primary/90 disabled:opacity-60"
       >
-        {paying ? <Loader2 className="w-4 h-4 animate-spin" /> : <CreditCard className="w-4 h-4" />}
-        {lang === "ro" ? `Plătește ${formatLei(amount / 100)} lei` : `Pay ${formatLei(amount / 100)} lei`}
+        {paying ? (
+          <Loader2 className="w-4 h-4 animate-spin" />
+        ) : (
+          <CreditCard className="w-4 h-4" />
+        )}
+        {lang === "ro"
+          ? `Plătește ${formatLei(amount / 100)} lei`
+          : `Pay ${formatLei(amount / 100)} lei`}
       </button>
       <p className="text-center text-xs text-muted-foreground">
         {lang === "ro"
@@ -99,7 +124,11 @@ interface Props {
   eventType?: EventType;
   prefill?: { name?: string; email?: string; phone?: string };
   defaultFormat?: Format;
-  onBooked?: (b: { booking_id: string; manage_token: string; meet_link?: string | null | undefined }) => void;
+  onBooked?: (b: {
+    booking_id: string;
+    manage_token: string;
+    meet_link?: string | null | undefined;
+  }) => void;
   /**
    * "create" (default) shows the full booking form and creates a new booking.
    * "pick" simply calls onPick(iso) after the user selects a slot — used in the
@@ -161,14 +190,27 @@ interface AvailabilityResp {
 }
 
 function localDateKey(d: Date) {
-  const fmt = new Intl.DateTimeFormat("en-CA", { timeZone: TZ, year: "numeric", month: "2-digit", day: "2-digit" });
+  const fmt = new Intl.DateTimeFormat("en-CA", {
+    timeZone: TZ,
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+  });
   return fmt.format(d); // YYYY-MM-DD
 }
 function fmtSlotTime(iso: string) {
-  return new Intl.DateTimeFormat("ro-RO", { timeZone: TZ, hour: "2-digit", minute: "2-digit" }).format(new Date(iso));
+  return new Intl.DateTimeFormat("ro-RO", {
+    timeZone: TZ,
+    hour: "2-digit",
+    minute: "2-digit",
+  }).format(new Date(iso));
 }
 function fmtTimeInTz(iso: string, tz: string) {
-  return new Intl.DateTimeFormat("ro-RO", { timeZone: tz, hour: "2-digit", minute: "2-digit" }).format(new Date(iso));
+  return new Intl.DateTimeFormat("ro-RO", {
+    timeZone: tz,
+    hour: "2-digit",
+    minute: "2-digit",
+  }).format(new Date(iso));
 }
 /**
  * How many digits the emailed code has.
@@ -247,7 +289,8 @@ const NativeScheduler = ({
 
   // Kept in step with the `selectedSlot && mode === "create" && purchase`
   // branch below, which is the screen that asks for the card.
-  const payPhase = Boolean(selectedSlot) && mode === "create" && Boolean(purchase);
+  const payPhase =
+    Boolean(selectedSlot) && mode === "create" && Boolean(purchase);
   useEffect(() => {
     onPhaseChange?.(payPhase ? "pay" : "pick");
   }, [payPhase, onPhaseChange]);
@@ -276,11 +319,16 @@ const NativeScheduler = ({
    * and not a different page. Nothing is re-entered, and the code screen
    * shows the slot so it is visible that nothing was lost.
    */
-  const [verifyFor, setVerifyFor] = useState<{ email: string; registrationId: string } | null>(null);
+  const [verifyFor, setVerifyFor] = useState<{
+    email: string;
+    registrationId: string;
+  } | null>(null);
   // A paid purchase needs the same confirmed email: create-payment-intent and
   // create-checkout-session refuse a caller without one, so the card form is
   // only offered once the registration's address is verified here.
-  const [purchaseVerifiedEmail, setPurchaseVerifiedEmail] = useState<string | null>(null);
+  const [purchaseVerifiedEmail, setPurchaseVerifiedEmail] = useState<
+    string | null
+  >(null);
   const [code, setCode] = useState("");
   const [codeError, setCodeError] = useState<string | null>(null);
   const [resendIn, setResendIn] = useState(0);
@@ -307,7 +355,9 @@ const NativeScheduler = ({
   // The registration this booking ended up attached to. On /trial the row is
   // created at confirm time, so without keeping it here the card-confirmation
   // step never rendered (the prop is undefined for a fresh visitor).
-  const [bookedRegistrationId, setBookedRegistrationId] = useState<string | null>(null);
+  const [bookedRegistrationId, setBookedRegistrationId] = useState<
+    string | null
+  >(null);
   // Either the one handed in by the page, or the one created at confirm time.
   const effectiveRegistrationId = registrationId ?? bookedRegistrationId;
 
@@ -321,15 +371,15 @@ const NativeScheduler = ({
       <div className="rounded-lg border border-amber-500/40 bg-amber-500/10 p-3 text-xs leading-relaxed text-amber-700 dark:text-amber-400">
         {lang === "ro" ? (
           <>
-            Poți anula sau reprograma gratuit cu cel puțin 24 de ore înainte. Dacă nu te prezinți
-            sau anulezi mai târziu de 24 de ore, se reține <strong>150 lei</strong>, cât o lecție
-            privată.
+            Poți anula sau reprograma gratuit cu cel puțin 24 de ore înainte.
+            Dacă nu te prezinți sau anulezi mai târziu de 24 de ore, se reține{" "}
+            <strong>150 lei</strong>, cât o lecție privată.
           </>
         ) : (
           <>
-            You can cancel or reschedule free of charge at least 24 hours ahead. If you do not show
-            up, or cancel later than 24 hours, <strong>150 lei</strong> is charged — the price of a
-            private lesson.
+            You can cancel or reschedule free of charge at least 24 hours ahead.
+            If you do not show up, or cancel later than 24 hours,{" "}
+            <strong>150 lei</strong> is charged — the price of a private lesson.
           </>
         )}
       </div>
@@ -337,30 +387,32 @@ const NativeScheduler = ({
       <div className="rounded-lg border border-amber-500/40 bg-amber-500/10 p-3 text-xs leading-relaxed text-amber-700 dark:text-amber-400">
         {lang === "ro" ? (
           <>
-            <strong>Înainte să alegi ora:</strong> proba costă 0 lei, dar la final îți confirmi locul
-            cu cardul prin Stripe (nu se încasează nimic acum). Poți anula sau reprograma gratuit cu
-            cel puțin 24 de ore înainte. Dacă nu te prezinți sau anulezi mai târziu de 24 de ore, se
-            reține <strong>150 lei</strong>, cât o lecție privată.
+            <strong>Înainte să alegi ora:</strong> proba costă 0 lei, dar la
+            final îți confirmi locul cu cardul prin Stripe (nu se încasează
+            nimic acum). Poți anula sau reprograma gratuit cu cel puțin 24 de
+            ore înainte. Dacă nu te prezinți sau anulezi mai târziu de 24 de
+            ore, se reține <strong>150 lei</strong>, cât o lecție privată.
           </>
         ) : (
           <>
-            <strong>Before you pick a time:</strong> the trial costs 0 lei, but at the end you
-            confirm your spot with your card through Stripe (nothing is charged now). You can cancel
-            or reschedule free of charge at least 24 hours ahead. If you do not show up, or cancel
-            later than 24 hours, <strong>150 lei</strong> is charged — the price of a private lesson.
+            <strong>Before you pick a time:</strong> the trial costs 0 lei, but
+            at the end you confirm your spot with your card through Stripe
+            (nothing is charged now). You can cancel or reschedule free of
+            charge at least 24 hours ahead. If you do not show up, or cancel
+            later than 24 hours, <strong>150 lei</strong> is charged — the price
+            of a private lesson.
           </>
         )}
       </div>
     ) : null;
 
-
-
-
   // Form fields
   const [name, setName] = useState(prefill?.name ?? "");
   const [email, setEmail] = useState(prefill?.email ?? "");
   const [phone, setPhone] = useState(prefill?.phone ?? "");
-  const [format, setFormat] = useState<Format>(purchase?.format ?? defaultFormat);
+  const [format, setFormat] = useState<Format>(
+    purchase?.format ?? defaultFormat,
+  );
   // Purchase only: book the first lesson, or the same slot every week.
   const [weekly, setWeekly] = useState(false);
   const [notes, setNotes] = useState("");
@@ -396,7 +448,8 @@ const NativeScheduler = ({
         setData((prev) => {
           // Detect a selected slot that just got taken
           const stillAvailable: boolean =
-            !selectedSlotRef.current || (json.slots ?? []).includes(selectedSlotRef.current);
+            !selectedSlotRef.current ||
+            (json.slots ?? []).includes(selectedSlotRef.current);
           if (prev && !stillAvailable && selectedSlotRef.current) {
             toast.info(t.schedulerSlotTaken);
             setSelectedSlot(null);
@@ -404,7 +457,8 @@ const NativeScheduler = ({
           return json;
         });
         setSelectedDate((prev) => {
-          if (prev && (json.slots_by_date?.[prev]?.length ?? 0) > 0) return prev;
+          if (prev && (json.slots_by_date?.[prev]?.length ?? 0) > 0)
+            return prev;
           return Object.keys(json.slots_by_date ?? {}).sort()[0] ?? null;
         });
       } catch (e) {
@@ -446,13 +500,16 @@ const NativeScheduler = ({
   const openHostedCheckout = async () => {
     if (!selectedSlot || !purchase || !registrationId) return;
     setSubmitting(true);
-    const { data, error: fnError } = await supabase.functions.invoke("create-checkout-session", {
-      body: {
-        registrationId,
-        email: purchase.email,
-        booking: purchaseBooking(),
+    const { data, error: fnError } = await supabase.functions.invoke(
+      "create-checkout-session",
+      {
+        body: {
+          registrationId,
+          email: purchase.email,
+          booking: purchaseBooking(),
+        },
       },
-    });
+    );
     if (fnError || !data?.url) {
       console.error("[scheduler] could not open the payment page", fnError);
       toast.error(
@@ -475,16 +532,24 @@ const NativeScheduler = ({
     // (and its Google Ads conversion) the group checkout page sends.
     trackCheckoutStart("private");
     try {
-      const { data, error: fnError } = await supabase.functions.invoke("create-payment-intent", {
-        body: {
-          courseType: "private",
-          email: purchase.email,
-          name: prefill?.name,
-          registrationId,
-          booking: purchaseBooking(),
+      const { data, error: fnError } = await supabase.functions.invoke(
+        "create-payment-intent",
+        {
+          body: {
+            courseType: "private",
+            email: purchase.email,
+            name: prefill?.name,
+            registrationId,
+            booking: purchaseBooking(),
+          },
         },
-      });
-      if (fnError || !data?.clientSecret || !data?.publishableKey || !(data.amount > 0)) {
+      );
+      if (
+        fnError ||
+        !data?.clientSecret ||
+        !data?.publishableKey ||
+        !(data.amount > 0)
+      ) {
         throw new Error("payment intent unavailable");
       }
       const stripe = await Promise.race<StripeJs | null>([
@@ -500,7 +565,10 @@ const NativeScheduler = ({
       });
       setSubmitting(false);
     } catch (e) {
-      console.warn("[scheduler] embedded payment unavailable, using hosted checkout", e);
+      console.warn(
+        "[scheduler] embedded payment unavailable, using hosted checkout",
+        e,
+      );
       await openHostedCheckout();
     }
   };
@@ -513,7 +581,9 @@ const NativeScheduler = ({
   // Non-2xx from an edge function arrives as a FunctionsHttpError with the
   // original Response on .context; without reading it the structured codes
   // (trial_used, conflict) degrade to a generic failure toast.
-  const readFunctionError = async (err: unknown): Promise<{ code?: string; error?: string } | null> => {
+  const readFunctionError = async (
+    err: unknown,
+  ): Promise<{ code?: string; error?: string } | null> => {
     const ctx = (err as { context?: Response } | null)?.context;
     if (!ctx || typeof ctx.json !== "function") return null;
     try {
@@ -525,20 +595,23 @@ const NativeScheduler = ({
 
   /** Hands the visitor to Stripe for the 0-lei card save. */
   const startTrialCardStep = async (regId: string, slotIso: string) => {
-    const { data: res, error: fnError } = await supabase.functions.invoke("create-checkout-session", {
-      body: {
-        registrationId: regId,
-        setup: true,
-        email: email.trim(),
-        booking: {
-          event_type: eventType,
-          start_at: slotIso,
-          format,
-          notes: notes.trim() || undefined,
-          language: lang,
+    const { data: res, error: fnError } = await supabase.functions.invoke(
+      "create-checkout-session",
+      {
+        body: {
+          registrationId: regId,
+          setup: true,
+          email: email.trim(),
+          booking: {
+            event_type: eventType,
+            start_at: slotIso,
+            format,
+            notes: notes.trim() || undefined,
+            language: lang,
+          },
         },
       },
-    });
+    );
     if (fnError || !res?.url) {
       const payload = await readFunctionError(fnError);
       // Checked before Stripe now, so a second trial is refused here rather
@@ -567,7 +640,11 @@ const NativeScheduler = ({
   const alreadyVerified = async (addr: string) => {
     const { data } = await supabase.auth.getUser();
     const user = data.user;
-    if (user?.email_confirmed_at && !user.is_anonymous && user.email?.trim().toLowerCase() === addr) {
+    if (
+      user?.email_confirmed_at &&
+      !user.is_anonymous &&
+      user.email?.trim().toLowerCase() === addr
+    ) {
       return true;
     }
     // A session for a different address has to go: Supabase keeps one per
@@ -621,7 +698,11 @@ const NativeScheduler = ({
       // what was just typed. Never both, and never a booking without one.
       const resolvedRegistrationId =
         registrationId ??
-        (await ensureRegistration?.({ name: name.trim(), email: email.trim(), phone: phone.trim() })) ??
+        (await ensureRegistration?.({
+          name: name.trim(),
+          email: email.trim(),
+          phone: phone.trim(),
+        })) ??
         null;
       if (mode === "create" && !resolvedRegistrationId) {
         toast.error(t.schedulerBookingFailed);
@@ -637,7 +718,11 @@ const NativeScheduler = ({
       //
       // The lead is already safe: ensureRegistration wrote name, email and
       // phone above, so an abandoned card step still leaves someone to contact.
-      if (eventType === "trial" && mode === "create" && resolvedRegistrationId) {
+      if (
+        eventType === "trial" &&
+        mode === "create" &&
+        resolvedRegistrationId
+      ) {
         // The card step needs a confirmed email, so it is asked for here if
         // Auth does not already have one. The slot and the typed details stay
         // in state; nothing is repeated afterwards.
@@ -646,7 +731,10 @@ const NativeScheduler = ({
           setCodeError(null);
           setCode("");
           const sent = await sendCode(addr);
-          setVerifyFor({ email: email.trim(), registrationId: resolvedRegistrationId });
+          setVerifyFor({
+            email: email.trim(),
+            registrationId: resolvedRegistrationId,
+          });
           if (!sent) {
             // Still show the screen: the message says why, and Resend is there.
             console.warn("[scheduler] could not send the confirmation code");
@@ -710,7 +798,16 @@ const NativeScheduler = ({
         }
         throw new Error(errPayload?.error ?? t.schedulerBookingFailed);
       }
-      const payload = res.data as { ok: boolean; booking_id: string; manage_token: string; meet_link?: string | null; start_at: string; end_at?: string; code?: string; error?: string };
+      const payload = res.data as {
+        ok: boolean;
+        booking_id: string;
+        manage_token: string;
+        meet_link?: string | null;
+        start_at: string;
+        end_at?: string;
+        code?: string;
+        error?: string;
+      };
       if (!payload?.ok) {
         if (payload?.code === "conflict") {
           toast.error(t.schedulerSlotTaken);
@@ -735,7 +832,11 @@ const NativeScheduler = ({
         manage_token: payload.manage_token,
         booking_id: payload.booking_id,
       });
-      onBooked?.({ booking_id: payload.booking_id, manage_token: payload.manage_token, meet_link: payload.meet_link });
+      onBooked?.({
+        booking_id: payload.booking_id,
+        manage_token: payload.manage_token,
+        meet_link: payload.meet_link,
+      });
     } catch (e) {
       toast.error(e instanceof Error ? e.message : t.schedulerBookingFailed);
     } finally {
@@ -752,7 +853,13 @@ const NativeScheduler = ({
             : "You have already booked all the lessons you paid for. For more lessons, book a new package from the private lessons page."}
         </p>
         <Button asChild>
-          <Link to={lang === "ro" ? "/cursuri/private#register" : "/en/courses/private#register"}>
+          <Link
+            to={
+              lang === "ro"
+                ? "/cursuri/private#register"
+                : "/en/courses/private#register"
+            }
+          >
             <Calendar className="w-4 h-4 mr-2" />
             {lang === "ro" ? "Lecțiile private" : "Private lessons"}
           </Link>
@@ -765,7 +872,9 @@ const NativeScheduler = ({
     return (
       <div className="rounded-xl border border-amber-500/40 bg-amber-500/10 p-6 space-y-4">
         <h3 className="font-bold text-foreground">
-          {lang === "ro" ? "Proba gratuită a fost deja folosită" : "The free trial was already used"}
+          {lang === "ro"
+            ? "Proba gratuită a fost deja folosită"
+            : "The free trial was already used"}
         </h3>
         <p className="text-sm text-muted-foreground">
           {lang === "ro"
@@ -777,7 +886,9 @@ const NativeScheduler = ({
             {/* The private-lessons form: details, day and time, then payment. */}
             <Link to="/cursuri/private#register">
               <Calendar className="w-4 h-4 mr-2" />
-              {lang === "ro" ? "Programează o lecție plătită" : "Book a paid lesson"}
+              {lang === "ro"
+                ? "Programează o lecție plătită"
+                : "Book a paid lesson"}
             </Link>
           </Button>
           {effectiveRegistrationId && (
@@ -791,7 +902,11 @@ const NativeScheduler = ({
             </Button>
           )}
           <Button asChild variant="outline" className="flex-1">
-            <a href={WHATSAPP_FALLBACK} target="_blank" rel="noopener noreferrer">
+            <a
+              href={WHATSAPP_FALLBACK}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
               <MessageCircle className="w-4 h-4 mr-2" />
               WhatsApp
             </a>
@@ -807,7 +922,9 @@ const NativeScheduler = ({
       const token = code.replace(/\D/g, "");
       if (token.length < CODE_MIN_DIGITS) {
         setCodeError(
-          en ? "Type the whole code from the email." : "Scrie codul întreg din email.",
+          en
+            ? "Type the whole code from the email."
+            : "Scrie codul întreg din email.",
         );
         return;
       }
@@ -854,14 +971,21 @@ const NativeScheduler = ({
           <p className="mt-1 text-sm text-muted-foreground">
             {en ? (
               <>
-                We sent a code to <span className="font-medium text-foreground">{verifyFor.email}</span>.
-                Type it here and we go straight on — you will not have to enter anything again.
+                We sent a code to{" "}
+                <span className="font-medium text-foreground">
+                  {verifyFor.email}
+                </span>
+                . Type it here and we go straight on — you will not have to
+                enter anything again.
               </>
             ) : (
               <>
                 Ți-am trimis un cod la{" "}
-                <span className="font-medium text-foreground">{verifyFor.email}</span>. Scrie-l aici și continuăm
-                direct — nu mai trebuie să reintroduci nimic.
+                <span className="font-medium text-foreground">
+                  {verifyFor.email}
+                </span>
+                . Scrie-l aici și continuăm direct — nu mai trebuie să
+                reintroduci nimic.
               </>
             )}
           </p>
@@ -870,7 +994,9 @@ const NativeScheduler = ({
         {/* Shown so it is visible that the slot is still held in this screen. */}
         {selectedSlot && (
           <div className="rounded-xl bg-brand-green/5 border border-brand-green/20 px-4 py-3 text-sm">
-            <span className="font-semibold text-foreground">{fmtFullLocal(selectedSlot, lang)}</span>
+            <span className="font-semibold text-foreground">
+              {fmtFullLocal(selectedSlot, lang)}
+            </span>
             <span className="text-muted-foreground">
               {" "}
               · {en ? "your slot, still selected" : "intervalul tău, încă ales"}
@@ -879,13 +1005,20 @@ const NativeScheduler = ({
         )}
 
         <div className="space-y-2">
-          <label htmlFor="trial-code" className="block text-sm font-semibold text-foreground">
+          <label
+            htmlFor="trial-code"
+            className="block text-sm font-semibold text-foreground"
+          >
             {en ? "The code from the email" : "Codul din email"}
           </label>
           <input
             id="trial-code"
             value={code}
-            onChange={(e) => setCode(e.target.value.replace(/\D/g, "").slice(0, CODE_MAX_DIGITS))}
+            onChange={(e) =>
+              setCode(
+                e.target.value.replace(/\D/g, "").slice(0, CODE_MAX_DIGITS),
+              )
+            }
             onKeyDown={(e) => {
               if (e.key === "Enter") void submitCode();
             }}
@@ -901,7 +1034,11 @@ const NativeScheduler = ({
             placeholder="········"
           />
           {codeError && (
-            <p id="trial-code-error" role="alert" className="text-sm font-medium text-destructive">
+            <p
+              id="trial-code-error"
+              role="alert"
+              className="text-sm font-medium text-destructive"
+            >
               {codeError}
             </p>
           )}
@@ -913,7 +1050,11 @@ const NativeScheduler = ({
           disabled={submitting || code.length < CODE_MIN_DIGITS}
           className="w-full inline-flex h-12 items-center justify-center gap-2 rounded-xl bg-primary px-4 font-semibold text-primary-foreground hover:bg-primary/90 disabled:opacity-60"
         >
-          {submitting ? <Loader2 className="w-4 h-4 animate-spin" /> : <CheckCircle2 className="w-4 h-4" />}
+          {submitting ? (
+            <Loader2 className="w-4 h-4 animate-spin" />
+          ) : (
+            <CheckCircle2 className="w-4 h-4" />
+          )}
           {en ? "Confirm and continue" : "Confirmă și continuă"}
         </button>
 
@@ -962,7 +1103,9 @@ const NativeScheduler = ({
         <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center">
           <Calendar className="w-5 h-5 text-primary" />
         </div>
-        <p className="text-sm text-muted-foreground max-w-md">{t.bookingPlaceholder}</p>
+        <p className="text-sm text-muted-foreground max-w-md">
+          {t.bookingPlaceholder}
+        </p>
         <a
           href={WHATSAPP_FALLBACK}
           target="_blank"
@@ -981,14 +1124,19 @@ const NativeScheduler = ({
     const handleIcs = () => {
       const endIso =
         confirmed.end_at ??
-        new Date(new Date(confirmed.start_at).getTime() + (data?.event_type.duration_min ?? 60) * 60000).toISOString();
+        new Date(
+          new Date(confirmed.start_at).getTime() +
+            (data?.event_type.duration_min ?? 60) * 60000,
+        ).toISOString();
       const ics = buildIcs({
         uid: `${confirmed.booking_id ?? confirmed.manage_token}@centruldearabalibaneza.com`,
         title: `${t.icsTitlePrefix} — ${(lang === "ro" ? data?.event_type.name_ro : data?.event_type.name_en) ?? ""}`,
         description: confirmed.meet_link
           ? `${t.icsZoomLabel}: ${confirmed.meet_link}\n${t.icsManageLabel}: ${manageUrl}`
           : `${t.icsManageLabel}: ${manageUrl}`,
-        location: confirmed.meet_link ?? "Raduga Creative Center, Strada Icoanei 80, București",
+        location:
+          confirmed.meet_link ??
+          "Raduga Creative Center, Strada Icoanei 80, București",
         startISO: confirmed.start_at,
         endISO: endIso,
         url: manageUrl,
@@ -999,26 +1147,35 @@ const NativeScheduler = ({
       });
       downloadIcs(`lectie-${confirmed.booking_id ?? "araba"}.ics`, ics);
     };
-    const courseName = lang === "ro" ? data.event_type.name_ro : data.event_type.name_en;
-    const formatLabel = format === "online" ? t.bookingFormatOnline : t.bookingFormatPhysical;
+    const courseName =
+      lang === "ro" ? data.event_type.name_ro : data.event_type.name_en;
+    const formatLabel =
+      format === "online" ? t.bookingFormatOnline : t.bookingFormatPhysical;
     const startDate = new Date(confirmed.start_at);
     const dateStr = new Intl.DateTimeFormat(lang === "ro" ? "ro-RO" : "en-GB", {
-      timeZone: TZ, weekday: "long", day: "numeric", month: "long", year: "numeric",
+      timeZone: TZ,
+      weekday: "long",
+      day: "numeric",
+      month: "long",
+      year: "numeric",
     }).format(startDate);
     const timeStr = new Intl.DateTimeFormat(lang === "ro" ? "ro-RO" : "en-GB", {
-      timeZone: TZ, hour: "2-digit", minute: "2-digit",
+      timeZone: TZ,
+      hour: "2-digit",
+      minute: "2-digit",
     }).format(startDate);
     return (
       <div className="rounded-xl border border-border bg-card p-8 text-center space-y-6 shadow-xs">
         <div className="flex justify-center">
           <div className="w-16 h-16 rounded-full bg-green-500/10 flex items-center justify-center">
-            <CheckCircle2 className="w-9 h-9 text-green-600" strokeWidth={2.5} />
+            <CheckCircle2
+              className="w-9 h-9 text-green-600"
+              strokeWidth={2.5}
+            />
           </div>
         </div>
         <div className="space-y-2">
-          <h3 className="text-2xl font-bold">
-            {t.confirmedHeading}
-          </h3>
+          <h3 className="text-2xl font-bold">{t.confirmedHeading}</h3>
           <p className="text-sm text-muted-foreground">
             {t.confirmedEmailNote}
           </p>
@@ -1026,30 +1183,44 @@ const NativeScheduler = ({
 
         <div className="rounded-lg bg-muted/40 border border-border p-4 text-left space-y-2 text-sm">
           <div className="flex justify-between gap-4">
-            <span className="text-muted-foreground">{t.confirmedDateLabel}</span>
+            <span className="text-muted-foreground">
+              {t.confirmedDateLabel}
+            </span>
             <span className="font-medium text-right">{dateStr}</span>
           </div>
           <div className="flex justify-between gap-4">
-            <span className="text-muted-foreground">{t.confirmedTimeLabel}</span>
+            <span className="text-muted-foreground">
+              {t.confirmedTimeLabel}
+            </span>
             <span className="font-medium text-right">{timeStr}</span>
           </div>
           {showLocalTz && localTz !== TZ && (
             <div className="flex justify-between gap-4">
-              <span className="text-muted-foreground">{t.tzYourTime} ({localTzLabel})</span>
-              <span className="font-medium text-right">{fmtTimeInTz(confirmed.start_at, localTz)}</span>
+              <span className="text-muted-foreground">
+                {t.tzYourTime} ({localTzLabel})
+              </span>
+              <span className="font-medium text-right">
+                {fmtTimeInTz(confirmed.start_at, localTz)}
+              </span>
             </div>
           )}
           <div className="flex justify-between gap-4">
-            <span className="text-muted-foreground">{t.confirmedCourseLabel}</span>
+            <span className="text-muted-foreground">
+              {t.confirmedCourseLabel}
+            </span>
             <span className="font-medium text-right">{courseName}</span>
           </div>
           <div className="flex justify-between gap-4">
-            <span className="text-muted-foreground">{t.confirmedFormatLabel}</span>
+            <span className="text-muted-foreground">
+              {t.confirmedFormatLabel}
+            </span>
             <span className="font-medium text-right">{formatLabel}</span>
           </div>
           {format === "online" && (
             <div className="pt-2 border-t border-border">
-              <p className="text-xs text-muted-foreground">{t.bookingZoomNotice}</p>
+              <p className="text-xs text-muted-foreground">
+                {t.bookingZoomNotice}
+              </p>
             </div>
           )}
         </div>
@@ -1097,7 +1268,7 @@ const NativeScheduler = ({
     slotsByDate[key] = list;
   }
   const mergedDateKeys = Object.keys(slotsByDate).sort();
-  const slotsForDate = selectedDate ? slotsByDate[selectedDate] ?? [] : [];
+  const slotsForDate = selectedDate ? (slotsByDate[selectedDate] ?? []) : [];
   const availableDateSet = new Set(mergedDateKeys);
   const availableDates = mergedDateKeys.map((k) => {
     const [y = 1970, m = 1, d = 1] = k.split("-").map(Number);
@@ -1134,7 +1305,10 @@ const NativeScheduler = ({
   // Purchase: how to book, the total, and the way to Stripe.
   if (selectedSlot && mode === "create" && purchase) {
     const qty = Math.max(1, purchase.quantity);
-    const unit = priceFor(ONLINE_PRICES.privateLesson, format === "physical" ? "fizic" : "online");
+    const unit = priceFor(
+      ONLINE_PRICES.privateLesson,
+      format === "physical" ? "fizic" : "online",
+    );
     const total = Math.round(unit * qty * (1 - privateDiscountFor(qty)));
     const when = fmtFullLocal(selectedSlot, lang);
     const choices: { id: boolean; title: string; text: string }[] = [
@@ -1176,10 +1350,16 @@ const NativeScheduler = ({
         </button>
         <div className="rounded-xl bg-brand-green/5 border border-brand-green/20 px-4 py-3">
           <span className="font-semibold text-foreground">{when}</span>
-          <span className="text-muted-foreground"> · {data.event_type.duration_min} min</span>
+          <span className="text-muted-foreground">
+            {" "}
+            · {data.event_type.duration_min} min
+          </span>
           {showLocalTz && localTz !== TZ && (
             <div className="mt-1 text-xs text-muted-foreground">
-              {t.tzYourTime} ({localTzLabel}): <span className="font-medium text-foreground">{fmtFullInTz(selectedSlot, lang, localTz)}</span>
+              {t.tzYourTime} ({localTzLabel}):{" "}
+              <span className="font-medium text-foreground">
+                {fmtFullInTz(selectedSlot, lang, localTz)}
+              </span>
             </div>
           )}
         </div>
@@ -1192,7 +1372,9 @@ const NativeScheduler = ({
               key={String(c.id)}
               className={cn(
                 "flex cursor-pointer items-start gap-3 rounded-xl border p-4 transition-colors",
-                weekly === c.id ? "border-brand-green bg-brand-green/5" : "border-border hover:border-brand-green/50",
+                weekly === c.id
+                  ? "border-brand-green bg-brand-green/5"
+                  : "border-border hover:border-brand-green/50",
               )}
             >
               <input
@@ -1203,17 +1385,26 @@ const NativeScheduler = ({
                 className="mt-1 accent-[hsl(var(--brand-green))]"
               />
               <span>
-                <span className="block font-semibold text-foreground">{c.title}</span>
-                <span className="block text-sm text-muted-foreground">{c.text}</span>
+                <span className="block font-semibold text-foreground">
+                  {c.title}
+                </span>
+                <span className="block text-sm text-muted-foreground">
+                  {c.text}
+                </span>
               </span>
             </label>
           ))}
         </fieldset>
         <div className="flex items-baseline justify-between border-t border-border pt-4">
           <span className="text-sm text-muted-foreground">
-            {qty} × {formatLei(unit)} lei{privateDiscountFor(qty) > 0 ? ` · −${Math.round(privateDiscountFor(qty) * 100)}%` : ""}
+            {qty} × {formatLei(unit)} lei
+            {privateDiscountFor(qty) > 0
+              ? ` · −${Math.round(privateDiscountFor(qty) * 100)}%`
+              : ""}
           </span>
-          <span className="font-display text-2xl font-bold text-foreground">{formatLei(total)} lei</span>
+          <span className="font-display text-2xl font-bold text-foreground">
+            {formatLei(total)} lei
+          </span>
         </div>
         <p className="text-xs leading-relaxed text-muted-foreground">
           {lang === "ro"
@@ -1229,7 +1420,10 @@ const NativeScheduler = ({
         ) : embeddedPay && registrationId ? (
           <Elements
             stripe={embeddedPay.stripe}
-            options={{ clientSecret: embeddedPay.clientSecret, appearance: { theme: "stripe" } }}
+            options={{
+              clientSecret: embeddedPay.clientSecret,
+              appearance: { theme: "stripe" },
+            }}
           >
             <InlinePrivatePay
               amount={embeddedPay.amount}
@@ -1249,8 +1443,14 @@ const NativeScheduler = ({
             disabled={submitting}
             className="w-full inline-flex h-12 items-center justify-center gap-2 rounded-xl bg-primary px-4 font-semibold text-primary-foreground hover:bg-primary/90 disabled:opacity-60"
           >
-            {submitting ? <Loader2 className="w-4 h-4 animate-spin" /> : <CreditCard className="w-4 h-4" />}
-            {lang === "ro" ? `Plătește ${formatLei(total)} lei` : `Pay ${formatLei(total)} lei`}
+            {submitting ? (
+              <Loader2 className="w-4 h-4 animate-spin" />
+            ) : (
+              <CreditCard className="w-4 h-4" />
+            )}
+            {lang === "ro"
+              ? `Plătește ${formatLei(total)} lei`
+              : `Pay ${formatLei(total)} lei`}
           </button>
         )}
       </div>
@@ -1268,11 +1468,19 @@ const NativeScheduler = ({
           <ArrowLeft className="w-4 h-4" /> {t.schedulerBackToSlots}
         </button>
         <div className="rounded-md bg-primary/5 border border-primary/20 px-3 py-2 text-sm">
-          <span className="font-semibold">{fmtFullLocal(selectedSlot, lang)}</span>
-          <span className="text-muted-foreground"> · {data.event_type.duration_min} min</span>
+          <span className="font-semibold">
+            {fmtFullLocal(selectedSlot, lang)}
+          </span>
+          <span className="text-muted-foreground">
+            {" "}
+            · {data.event_type.duration_min} min
+          </span>
           {showLocalTz && localTz !== TZ && (
             <div className="mt-1 text-xs text-muted-foreground">
-              {t.tzYourTime} ({localTzLabel}): <span className="font-medium text-foreground">{fmtFullInTz(selectedSlot, lang, localTz)}</span>
+              {t.tzYourTime} ({localTzLabel}):{" "}
+              <span className="font-medium text-foreground">
+                {fmtFullInTz(selectedSlot, lang, localTz)}
+              </span>
             </div>
           )}
         </div>
@@ -1339,9 +1547,7 @@ const NativeScheduler = ({
   return (
     <div className="rounded-lg border border-border bg-card p-5 space-y-4">
       <div className="flex items-center justify-between">
-        <h3 className="font-semibold text-sm">
-          {t.schedulerPickDay}
-        </h3>
+        <h3 className="font-semibold text-sm">{t.schedulerPickDay}</h3>
         <span className="text-xs text-muted-foreground">{TZ}</span>
       </div>
       {policyNotice}
@@ -1351,11 +1557,15 @@ const NativeScheduler = ({
         <div className="flex justify-center md:justify-start">
           <CalendarPicker
             mode="single"
-            {...(selectedDateObj !== undefined ? { selected: selectedDateObj } : {})}
+            {...(selectedDateObj !== undefined
+              ? { selected: selectedDateObj }
+              : {})}
             onSelect={(d) => {
               if (d) setSelectedDate(localDateKey(d));
             }}
-            {...((selectedDateObj ?? minDate) !== undefined ? { defaultMonth: (selectedDateObj ?? minDate) as Date } : {})}
+            {...((selectedDateObj ?? minDate) !== undefined
+              ? { defaultMonth: (selectedDateObj ?? minDate) as Date }
+              : {})}
             {...(minDate !== undefined ? { fromDate: minDate } : {})}
             {...(maxDate !== undefined ? { toDate: maxDate } : {})}
             disabled={(date) => !availableDateSet.has(localDateKey(date))}
@@ -1366,7 +1576,9 @@ const NativeScheduler = ({
             }}
             locale={lang === "ro" ? roLocale : enLocale}
             weekStartsOn={1}
-            className={cn("p-3 pointer-events-auto rounded-md border border-border")}
+            className={cn(
+              "p-3 pointer-events-auto rounded-md border border-border",
+            )}
           />
         </div>
         <div className="space-y-3">
@@ -1387,7 +1599,8 @@ const NativeScheduler = ({
               .filter((k) => k !== selectedDate)
               .map((k) => ({ k, n: slotsByDate[k]?.length ?? 0 }))
               .sort((a, b) => b.n - a.n)[0];
-            if (!best || best.n < 6 || best.n < slotsForDate.length * 2) return null;
+            if (!best || best.n < 6 || best.n < slotsForDate.length * 2)
+              return null;
             return (
               <button
                 type="button"
@@ -1396,13 +1609,17 @@ const NativeScheduler = ({
               >
                 {lang === "en" ? (
                   <>
-                    Not many times here. <strong>{fmtDayHeader(best.k, lang)}</strong> has{" "}
-                    <strong>{best.n} slots</strong> across the day — tap to see them.
+                    Not many times here.{" "}
+                    <strong>{fmtDayHeader(best.k, lang)}</strong> has{" "}
+                    <strong>{best.n} slots</strong> across the day — tap to see
+                    them.
                   </>
                 ) : (
                   <>
-                    Puține intervale aici. <strong>{fmtDayHeader(best.k, lang)}</strong> are{" "}
-                    <strong>{best.n} intervale</strong> pe parcursul zilei — apasă ca să le vezi.
+                    Puține intervale aici.{" "}
+                    <strong>{fmtDayHeader(best.k, lang)}</strong> are{" "}
+                    <strong>{best.n} intervale</strong> pe parcursul zilei —
+                    apasă ca să le vezi.
                   </>
                 )}
               </button>

@@ -21,7 +21,10 @@ export function normTitle(s: string): string {
 }
 
 /** The lesson number when `summary` is a lesson of the course `prefix`, else null. */
-export function lessonNumber(summary: string | null | undefined, prefix: string): number | null {
+export function lessonNumber(
+  summary: string | null | undefined,
+  prefix: string,
+): number | null {
   if (!summary || !prefix.trim()) return null;
   const s = normTitle(summary);
   const p = normTitle(prefix);
@@ -39,9 +42,15 @@ export function lessonNumber(summary: string | null | undefined, prefix: string)
  * gives "Adulti-A1- Grupa 2-  Libaneza-L12" and the owner's calendar stays
  * consistent with what he types himself.
  */
-export function titleForLesson(lastSummary: string, lastNumber: number, n: number): string {
+export function titleForLesson(
+  lastSummary: string,
+  lastNumber: number,
+  n: number,
+): string {
   const re = new RegExp(`(\\D|^)${lastNumber}(?!.*\\d)`);
-  return re.test(lastSummary) ? lastSummary.replace(re, `$1${n}`) : `${lastSummary} L${n}`;
+  return re.test(lastSummary)
+    ? lastSummary.replace(re, `$1${n}`)
+    : `${lastSummary} L${n}`;
 }
 
 export interface Meeting {
@@ -77,7 +86,9 @@ export function planRemaining(input: {
 }): PlannedLesson[] {
   const { lastNumber, lastDate, meetings, total } = input;
   if (lastNumber >= total || meetings.length === 0) return [];
-  const byDay = [...meetings].sort((a, b) => a.start_time.localeCompare(b.start_time));
+  const byDay = [...meetings].sort((a, b) =>
+    a.start_time.localeCompare(b.start_time),
+  );
   const out: PlannedLesson[] = [];
   const [y, m, d] = lastDate.split("-").map(Number);
   // Noon UTC on the local date: stepping by whole days never slips a day.
@@ -140,7 +151,9 @@ export function planMissing(input: {
   const have = new Set(lessons.map((l) => l.n));
   let anchor: { n: number; date: string } | null = null;
   if (lessons.length) {
-    const sorted = [...lessons].sort((a, b) => a.n - b.n || a.date.localeCompare(b.date));
+    const sorted = [...lessons].sort(
+      (a, b) => a.n - b.n || a.date.localeCompare(b.date),
+    );
     for (const l of sorted) {
       if (l.n >= pastMax && !have.has(l.n + 1)) {
         anchor = l;
@@ -149,7 +162,9 @@ export function planMissing(input: {
     }
     anchor ??= sorted[sorted.length - 1]!;
   }
-  const dayBefore = new Date(Date.parse(`${startDate}T12:00:00Z`) - 86_400_000).toISOString().slice(0, 10);
+  const dayBefore = new Date(Date.parse(`${startDate}T12:00:00Z`) - 86_400_000)
+    .toISOString()
+    .slice(0, 10);
   return planRemaining({
     lastNumber: anchor ? anchor.n : 0,
     lastDate: anchor ? anchor.date : dayBefore,
@@ -163,9 +178,21 @@ export function planMissing(input: {
  * "Curs - Arabă Libaneză - Adulți - Online - A1 - Grupa 1". Lessons add
  * " - L<N>".
  */
-export function commonCalendarName(input: { kids: boolean; format: string | null; level: string | null; grupa: string }): string {
+export function commonCalendarName(input: {
+  kids: boolean;
+  format: string | null;
+  level: string | null;
+  grupa: string;
+}): string {
   const where = input.format === "online" ? "Online" : "Fizic";
-  return ["Curs", "Arabă Libaneză", input.kids ? "Copii" : "Adulți", where, input.level ?? "", `Grupa ${input.grupa}`]
+  return [
+    "Curs",
+    "Arabă Libaneză",
+    input.kids ? "Copii" : "Adulți",
+    where,
+    input.level ?? "",
+    `Grupa ${input.grupa}`,
+  ]
     .filter((p) => p.trim())
     .join(" - ");
 }

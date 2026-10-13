@@ -36,13 +36,14 @@ const CelMaiBunCursAraba = () => (
     faq={FAQ}
   >
     <p>
-      Cel mai frecvent regret al celor care încep araba în România: au făcut un an de{" "}
-      <strong>arabă standard</strong> (MSA / Fusha) și nu pot purta o conversație simplă cu un
-      vorbitor nativ. Motivul e simplu — araba standard este limba scrisă a știrilor și a
-      documentelor oficiale, nu limba pe care o vorbește cineva acasă. Dacă obiectivul tău e să
-      vorbești, cel mai bun curs de arabă este un curs de <strong>dialect</strong>, iar pentru
-      România cel mai util dialect este <strong>araba libaneză (levantină)</strong> — vorbită în
-      Liban, Siria, Iordania și Palestina.
+      Cel mai frecvent regret al celor care încep araba în România: au făcut un
+      an de <strong>arabă standard</strong> (MSA / Fusha) și nu pot purta o
+      conversație simplă cu un vorbitor nativ. Motivul e simplu — araba standard
+      este limba scrisă a știrilor și a documentelor oficiale, nu limba pe care
+      o vorbește cineva acasă. Dacă obiectivul tău e să vorbești, cel mai bun
+      curs de arabă este un curs de <strong>dialect</strong>, iar pentru România
+      cel mai util dialect este <strong>araba libaneză (levantină)</strong> —
+      vorbită în Liban, Siria, Iordania și Palestina.
     </p>
 
     <h2>Prima decizie: dialect libanez (levantin) sau arabă standard?</h2>
@@ -51,38 +52,58 @@ const CelMaiBunCursAraba = () => (
         <thead>
           <tr className="border-b border-border text-left text-muted-foreground">
             <th className="py-2 pr-3 font-semibold">Criteriu</th>
-            <th className="py-2 px-3 font-semibold">Arabă libaneză (levantină)</th>
+            <th className="py-2 px-3 font-semibold">
+              Arabă libaneză (levantină)
+            </th>
             <th className="py-2 pl-3 font-semibold">Arabă standard (MSA)</th>
           </tr>
         </thead>
         <tbody>
           <tr className="border-b border-border/60 align-top">
             <td className="py-2 pr-3 font-semibold">Unde o folosești</td>
-            <td className="py-2 px-3">Conversație reală, familie, vacanță, muzică, seriale, social media</td>
-            <td className="py-2 pl-3">Presă, documente, texte religioase, examene</td>
+            <td className="py-2 px-3">
+              Conversație reală, familie, vacanță, muzică, seriale, social media
+            </td>
+            <td className="py-2 pl-3">
+              Presă, documente, texte religioase, examene
+            </td>
           </tr>
           <tr className="border-b border-border/60 align-top">
-            <td className="py-2 pr-3 font-semibold">Timp până la prima conversație</td>
+            <td className="py-2 pr-3 font-semibold">
+              Timp până la prima conversație
+            </td>
             <td className="py-2 px-3">2–4 săptămâni</td>
             <td className="py-2 pl-3">6–12 luni</td>
           </tr>
           <tr className="border-b border-border/60 align-top">
-            <td className="py-2 pr-3 font-semibold">Alfabet obligatoriu la start</td>
-            <td className="py-2 px-3">Nu (poți începe cu <Link to="/arabizi">arabizi</Link>)</td>
+            <td className="py-2 pr-3 font-semibold">
+              Alfabet obligatoriu la start
+            </td>
+            <td className="py-2 px-3">
+              Nu (poți începe cu <Link to="/arabizi">arabizi</Link>)
+            </td>
             <td className="py-2 pl-3">Da</td>
           </tr>
           <tr className="border-b border-border/60 align-top">
-            <td className="py-2 pr-3 font-semibold">Înțeles de vorbitori nativi</td>
-            <td className="py-2 px-3">Da, în tot Levantul; larg înțeles în lumea arabă</td>
-            <td className="py-2 pl-3">Înțeles, dar sună formal/livresc în conversație</td>
+            <td className="py-2 pr-3 font-semibold">
+              Înțeles de vorbitori nativi
+            </td>
+            <td className="py-2 px-3">
+              Da, în tot Levantul; larg înțeles în lumea arabă
+            </td>
+            <td className="py-2 pl-3">
+              Înțeles, dar sună formal/livresc în conversație
+            </td>
           </tr>
         </tbody>
       </table>
     </div>
     <p>
       Comparația completă, cu exemple concrete de propoziții, e în{" "}
-      <Link to="/blog/araba-libaneza-vs-araba-standard">araba libaneză vs araba standard</Link> și în{" "}
-      <Link to="/ce-araba-sa-inveti">ce arabă să înveți</Link>.
+      <Link to="/blog/araba-libaneza-vs-araba-standard">
+        araba libaneză vs araba standard
+      </Link>{" "}
+      și în <Link to="/ce-araba-sa-inveti">ce arabă să înveți</Link>.
     </p>
 
     <h2>A doua decizie: grup, privat, online sau aplicație</h2>
@@ -98,28 +119,48 @@ const CelMaiBunCursAraba = () => (
         </thead>
         <tbody>
           <tr className="border-b border-border/60 align-top">
-            <td className="py-2 pr-3 font-semibold"><Link to="/cursuri/grup">Curs de grup A1–C2</Link></td>
-            <td className="py-2 px-3">Motivație, conversație cu colegi, raport calitate-preț</td>
+            <td className="py-2 pr-3 font-semibold">
+              <Link to="/cursuri/grup">Curs de grup A1–C2</Link>
+            </td>
+            <td className="py-2 px-3">
+              Motivație, conversație cu colegi, raport calitate-preț
+            </td>
             <td className="py-2 px-3">de la 500 lei/lună</td>
             <td className="py-2 pl-3">Orar fix, ritm comun</td>
           </tr>
           <tr className="border-b border-border/60 align-top">
-            <td className="py-2 pr-3 font-semibold"><Link to="/meditatii-araba">Meditații 1:1</Link></td>
-            <td className="py-2 px-3">Obiective precise, progres rapid, program flexibil</td>
-            <td className="py-2 px-3">150 lei online / 210 lei fizic, 60 min (−15% la 20 de lecții)</td>
+            <td className="py-2 pr-3 font-semibold">
+              <Link to="/meditatii-araba">Meditații 1:1</Link>
+            </td>
+            <td className="py-2 px-3">
+              Obiective precise, progres rapid, program flexibil
+            </td>
+            <td className="py-2 px-3">
+              150 lei online / 210 lei fizic, 60 min (−15% la 20 de lecții)
+            </td>
             <td className="py-2 pl-3">Cost mai mare pe oră</td>
           </tr>
           <tr className="border-b border-border/60 align-top">
-            <td className="py-2 pr-3 font-semibold"><Link to="/cursuri-limba-araba">Online (Zoom)</Link></td>
-            <td className="py-2 px-3">Cursanți din alte orașe sau din diasporă</td>
-            <td className="py-2 px-3">Mai ieftin decât fizic (500 față de 700 lei / lună la A1)</td>
+            <td className="py-2 pr-3 font-semibold">
+              <Link to="/cursuri-limba-araba">Online (Zoom)</Link>
+            </td>
+            <td className="py-2 px-3">
+              Cursanți din alte orașe sau din diasporă
+            </td>
+            <td className="py-2 px-3">
+              Mai ieftin decât fizic (500 față de 700 lei / lună la A1)
+            </td>
             <td className="py-2 pl-3">Necesită autodisciplină</td>
           </tr>
           <tr className="border-b border-border/60 align-top">
-            <td className="py-2 pr-3 font-semibold">Aplicații (Duolingo etc.)</td>
+            <td className="py-2 pr-3 font-semibold">
+              Aplicații (Duolingo etc.)
+            </td>
             <td className="py-2 px-3">Vocabular de întreținere între lecții</td>
             <td className="py-2 px-3">Gratuit / abonament</td>
-            <td className="py-2 pl-3">Doar MSA, fără corectare de pronunție, fără conversație</td>
+            <td className="py-2 pl-3">
+              Doar MSA, fără corectare de pronunție, fără conversație
+            </td>
           </tr>
         </tbody>
       </table>
@@ -127,37 +168,69 @@ const CelMaiBunCursAraba = () => (
 
     <h2>Cele 5 criterii după care compari orice curs de arabă</h2>
     <ul>
-      <li><strong>Profesor nativ al dialectului predat.</strong> Pentru libaneză, un vorbitor nativ libanez — pronunția și expresiile vii nu se învață din manual.</li>
-      <li><strong>Vorbești din prima lecție.</strong> Dacă primele luni sunt doar alfabet și tabele de gramatică, vei renunța înainte să vorbești.</li>
-      <li><strong>Grupe mici (max. 6 cursanți online, 8 fizic).</strong> Peste atât, timpul tău de vorbire pe lecție scade sub 5 minute.</li>
-      <li><strong>Structură CEFR (A1–C2)</strong> cu evaluări la 8–10 lecții, ca să știi obiectiv unde ești.</li>
-      <li><strong>Preț public și lecție de probă.</strong> Un curs bun nu are nevoie să ascundă prețul și îți dă ocazia să testezi înainte.</li>
+      <li>
+        <strong>Profesor nativ al dialectului predat.</strong> Pentru libaneză,
+        un vorbitor nativ libanez — pronunția și expresiile vii nu se învață din
+        manual.
+      </li>
+      <li>
+        <strong>Vorbești din prima lecție.</strong> Dacă primele luni sunt doar
+        alfabet și tabele de gramatică, vei renunța înainte să vorbești.
+      </li>
+      <li>
+        <strong>Grupe mici (max. 6 cursanți online, 8 fizic).</strong> Peste
+        atât, timpul tău de vorbire pe lecție scade sub 5 minute.
+      </li>
+      <li>
+        <strong>Structură CEFR (A1–C2)</strong> cu evaluări la 8–10 lecții, ca
+        să știi obiectiv unde ești.
+      </li>
+      <li>
+        <strong>Preț public și lecție de probă.</strong> Un curs bun nu are
+        nevoie să ascundă prețul și îți dă ocazia să testezi înainte.
+      </li>
     </ul>
 
     <h2>Greșeli frecvente când alegi un curs de arabă</h2>
     <ul>
-      <li>Alegi MSA „ca să fie universal”, deși scopul tău e conversația cu familia sau în vacanță.</li>
-      <li>Alegi grupa cu cei mai mulți cursanți, crezând că e semn de calitate — de fapt e semn de mai puțin timp de vorbire.</li>
-      <li>Amâni startul până „înveți alfabetul singur”. Nu e necesar: vezi{" "}
-        <Link to="/fara-alfabet-arab">cum înveți arabă fără alfabet</Link>.</li>
-      <li>Compari doar prețul pe lună, nu prețul pe oră efectivă de predare.</li>
+      <li>
+        Alegi MSA „ca să fie universal”, deși scopul tău e conversația cu
+        familia sau în vacanță.
+      </li>
+      <li>
+        Alegi grupa cu cei mai mulți cursanți, crezând că e semn de calitate —
+        de fapt e semn de mai puțin timp de vorbire.
+      </li>
+      <li>
+        Amâni startul până „înveți alfabetul singur”. Nu e necesar: vezi{" "}
+        <Link to="/fara-alfabet-arab">cum înveți arabă fără alfabet</Link>.
+      </li>
+      <li>
+        Compari doar prețul pe lună, nu prețul pe oră efectivă de predare.
+      </li>
     </ul>
 
     <h2>Ce oferim noi și pentru cine e potrivit</h2>
     <p>
-      La <Link to="/">Centrul de Arabă Libaneză cu Ibra</Link> predăm <strong>exclusiv arabă
-      libaneză (levantină)</strong>, cu profesor nativ libanez, fizic în București (Strada Icoanei
-      80) și online. Formate: <Link to="/cursuri/grup">grupe A1–C2</Link>,{" "}
+      La <Link to="/">Centrul de Arabă Libaneză cu Ibra</Link> predăm{" "}
+      <strong>exclusiv arabă libaneză (levantină)</strong>, cu profesor nativ
+      libanez, fizic în București (Strada Icoanei 80) și online. Formate:{" "}
+      <Link to="/cursuri/grup">grupe A1–C2</Link>,{" "}
       <Link to="/cursuri/private">lecții private 1:1</Link>,{" "}
-      <Link to="/curs-araba-copii">curs pentru copii 6–11 ani</Link> (momentan fără grupe) și{" "}
-      <Link to="/cursuri-araba-adolescenti">grupe pentru adolescenți 12–17 ani</Link>. Nu suntem cea
-      mai bună alegere dacă ai nevoie strict de arabă standard pentru un examen academic — în acest
-      caz îți spunem direct la proba gratuită.
+      <Link to="/curs-araba-copii">curs pentru copii 6–11 ani</Link> (momentan
+      fără grupe) și{" "}
+      <Link to="/cursuri-araba-adolescenti">
+        grupe pentru adolescenți 12–17 ani
+      </Link>
+      . Nu suntem cea mai bună alegere dacă ai nevoie strict de arabă standard
+      pentru un examen academic — în acest caz îți spunem direct la proba
+      gratuită.
     </p>
     <p>
       Cel mai simplu mod de a afla dacă e cursul potrivit pentru tine:{" "}
-      <Link to="/trial">lecția de probă gratuită de 30 de minute</Link>. Sau răspunde la{" "}
-      <Link to="/quiz">quizul de 30 de secunde</Link> și îți recomandăm formatul.
+      <Link to="/trial">lecția de probă gratuită de 30 de minute</Link>. Sau
+      răspunde la <Link to="/quiz">quizul de 30 de secunde</Link> și îți
+      recomandăm formatul.
     </p>
   </LandingLayout>
 );

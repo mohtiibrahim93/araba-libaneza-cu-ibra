@@ -7,7 +7,11 @@
  * pure: logica e testată fără browser, iar componenta doar le hrănește cu
  * localStorage după montare.
  */
-import { CARD_GROUP, GROUP_TOTALS, type YallaGroup } from "@/data/yallaLevelMap";
+import {
+  CARD_GROUP,
+  GROUP_TOTALS,
+  type YallaGroup,
+} from "@/data/yallaLevelMap";
 
 export const YALLA_STORAGE_KEY = "yalla-liban-progress-v1";
 
@@ -17,7 +21,12 @@ export interface YallaSavedState {
   rounds: number;
   /** cardId → { streak, seen, ... } — „consolidat" înseamnă streak >= 3. */
   progress: Record<string, { streak?: number; seen?: boolean }>;
-  placementResult?: { level?: string; title?: string; scores?: number[]; date?: string };
+  placementResult?: {
+    level?: string;
+    title?: string;
+    scores?: number[];
+    date?: string;
+  };
 }
 
 export interface YallaSummary {
@@ -46,21 +55,33 @@ export function parseYallaState(raw: string | null): YallaSavedState | null {
   if (!raw) return null;
   try {
     const s = JSON.parse(raw);
-    if (s && typeof s.xp === "number" && s.progress && typeof s.progress === "object") return s;
+    if (
+      s &&
+      typeof s.xp === "number" &&
+      s.progress &&
+      typeof s.progress === "object"
+    )
+      return s;
   } catch {
     /* corupt */
   }
   return null;
 }
 
-export function readYallaProgress(storage: Pick<Storage, "getItem">): YallaSavedState | null {
+export function readYallaProgress(
+  storage: Pick<Storage, "getItem">,
+): YallaSavedState | null {
   return parseYallaState(storage.getItem(YALLA_STORAGE_KEY));
 }
 
 /** Aceleași cifre ca în „Pașaportul meu" al jocului, plus distribuția pe niveluri. */
 export function summarizeYalla(state: YallaSavedState): YallaSummary {
   const entries = Object.values(state.progress);
-  const masteredByGroup: Record<YallaGroup, number> = { A1: 0, A2: 0, Vocabular: 0 };
+  const masteredByGroup: Record<YallaGroup, number> = {
+    A1: 0,
+    A2: 0,
+    Vocabular: 0,
+  };
   for (const [cardId, p] of Object.entries(state.progress)) {
     if ((p.streak ?? 0) >= 3) {
       const g = CARD_GROUP[cardId];
@@ -76,7 +97,10 @@ export function summarizeYalla(state: YallaSavedState): YallaSummary {
     mastered: entries.filter((p) => (p.streak ?? 0) >= 3).length,
     masteredByGroup,
     placementLevel: pl === "A1" || pl === "A2" || pl === "B1" ? pl : null,
-    placementTitle: typeof state.placementResult?.title === "string" ? state.placementResult.title : null,
+    placementTitle:
+      typeof state.placementResult?.title === "string"
+        ? state.placementResult.title
+        : null,
   };
 }
 

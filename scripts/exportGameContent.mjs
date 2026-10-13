@@ -24,8 +24,28 @@ const cell = (v) => {
   return /[",\n]/.test(s) ? `"${s.replace(/"/g, '""')}"` : s;
 };
 
-const rows = [["nivel", "tema_curriculum", "arabizi", "sens_ro", "gloss_en", "are_engleza", "id"]];
+const rows = [
+  [
+    "nivel",
+    "tema_curriculum",
+    "arabizi",
+    "sens_ro",
+    "gloss_en",
+    "are_engleza",
+    "id",
+  ],
+];
 for (const c of cards) {
-  rows.push([c.level ?? "", titleOf.get(c.topic) ?? c.topic ?? "", c.ar, c.ro, c.en ?? "", c.en ? "da" : "NU", c.id]);
+  rows.push([
+    c.level ?? "",
+    titleOf.get(c.topic) ?? c.topic ?? "",
+    c.ar,
+    c.ro,
+    c.en ?? "",
+    c.en ? "da" : "NU",
+    c.id,
+  ]);
 }
-process.stdout.write("﻿" + rows.map((r) => r.map(cell).join(",")).join("\n") + "\n");
+process.stdout.write(
+  "﻿" + rows.map((r) => r.map(cell).join(",")).join("\n") + "\n",
+);

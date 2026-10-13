@@ -22,11 +22,25 @@ const GroupStartRule = ({ className }: { className?: string }) => {
       ? `The announced start date stays fixed. A group is confirmed as soon as half its places are taken (${minGroupSize(on)} of ${on} online, ${minGroupSize(fz)} of ${fz} in person) — it starts earlier only if it is full and everyone agrees. The decision is made 7 days before the start: if the minimum is not reached, the start moves once, by about two weeks, or you get a full refund.`
       : `Data de start anunțată rămâne fixă. Grupa e confirmată imediat ce se ocupă jumătate din locuri (${minGroupSize(on)} din ${on} online, ${minGroupSize(fz)} din ${fz} fizic) — pornește mai devreme doar dacă e completă și toți sunt de acord. Decizia se ia cu 7 zile înainte de start: dacă minimul nu e atins, startul se mută o singură dată, cu aproximativ două săptămâni, sau primești banii înapoi integral.`;
   return (
-    <div className={cn("flex items-start gap-3 rounded-2xl bg-cream px-5 py-4", className)}>
-      <CalendarCheck className="mt-0.5 h-5 w-5 shrink-0 text-brand-green" aria-hidden="true" />
+    <div
+      className={cn(
+        "flex items-start gap-3 rounded-2xl bg-cream px-5 py-4",
+        className,
+      )}
+    >
+      <CalendarCheck
+        className="mt-0.5 h-5 w-5 shrink-0 text-brand-green"
+        aria-hidden="true"
+      />
       <div>
-        <p className="text-sm font-bold text-foreground">{lang === "en" ? "When does the group start?" : "Când pornește grupa?"}</p>
-        <p className="mt-1 text-sm leading-relaxed text-foreground/80">{text}</p>
+        <p className="text-sm font-bold text-foreground">
+          {lang === "en"
+            ? "When does the group start?"
+            : "Când pornește grupa?"}
+        </p>
+        <p className="mt-1 text-sm leading-relaxed text-foreground/80">
+          {text}
+        </p>
       </div>
     </div>
   );

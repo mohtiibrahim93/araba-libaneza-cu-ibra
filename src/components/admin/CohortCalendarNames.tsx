@@ -25,7 +25,11 @@ interface Group {
   status: string;
   title_ro: string | null;
   schedule_label_ro: string | null;
-  link: { calendar_title: string; total_lessons: number; members?: string[] } | null;
+  link: {
+    calendar_title: string;
+    total_lessons: number;
+    members?: string[];
+  } | null;
 }
 
 const STATUS: Record<string, string> = {
@@ -38,29 +42,52 @@ const STATUS: Record<string, string> = {
 };
 
 const lessonsFor = (level: string | null) =>
-  getCurriculum("ro").find((l) => l.id === (level ?? "").toLowerCase())?.lessons ?? 32;
+  getCurriculum("ro").find((l) => l.id === (level ?? "").toLowerCase())
+    ?.lessons ?? 32;
 
 /** Emails typed one per line (or separated by commas/spaces), "mailto:" tolerated. */
 const emailsOf = (text: string) =>
   text
     .split(/[\s,;]+/)
-    .map((e) => e.replace(/^mailto:/i, "").trim().toLowerCase())
+    .map((e) =>
+      e
+        .replace(/^mailto:/i, "")
+        .trim()
+        .toLowerCase(),
+    )
     .filter(Boolean);
 
 const fmtDate = (d: string) =>
-  new Date(`${d}T12:00:00Z`).toLocaleDateString("ro-RO", { day: "numeric", month: "short", year: "numeric", timeZone: "UTC" });
+  new Date(`${d}T12:00:00Z`).toLocaleDateString("ro-RO", {
+    day: "numeric",
+    month: "short",
+    year: "numeric",
+    timeZone: "UTC",
+  });
 
 const CohortCalendarNames = ({ onChanged }: { onChanged?: () => void }) => {
   const [groups, setGroups] = useState<Group[] | null>(null);
   const [draft, setDraft] = useState<
-    Record<string, { title: string; total: string; grupa: string; rename: boolean; members: string }>
+    Record<
+      string,
+      {
+        title: string;
+        total: string;
+        grupa: string;
+        rename: boolean;
+        members: string;
+      }
+    >
   >({});
   const [note, setNote] = useState("");
   const [busy, setBusy] = useState<string | null>(null);
   const [error, setError] = useState("");
 
   const load = useCallback(async () => {
-    const { data, error: err } = await invokeAdmin<{ data?: Group[]; error?: string }>({ action: "list_cohort_calendar" });
+    const { data, error: err } = await invokeAdmin<{
+      data?: Group[];
+      error?: string;
+    }>({ action: "list_cohort_calendar" });
     if (err || data?.error) {
       setError(data?.error ?? "Nu am putut încărca grupele.");
       setGroups([]);
@@ -100,18 +127,26 @@ const CohortCalendarNames = ({ onChanged }: { onChanged?: () => void }) => {
     if (g.link && newTitle !== g.link.calendar_title && d.rename) {
       // Read the calendar under the old name, so every lesson is known.
       await invokeAdmin({ action: "sync_cohort_sessions", cohort_id: g.id });
-      const { data: rn, error: rnErr } = await invokeAdmin<{ error?: string; renamed?: number; failed?: number[] }>({
+      const { data: rn, error: rnErr } = await invokeAdmin<{
+        error?: string;
+        renamed?: number;
+        failed?: number[];
+      }>({
         action: "rename_cohort_events",
         cohort_id: g.id,
         calendar_title: newTitle,
       });
       if (rnErr || rn?.error) {
         setBusy(null);
-        return setError(rn?.error ?? "Nu am putut redenumi lecțiile din calendar.");
+        return setError(
+          rn?.error ?? "Nu am putut redenumi lecțiile din calendar.",
+        );
       }
       setNote(
         `${rn?.renamed ?? 0} lecții redenumite în Google Calendar, fără invitații trimise` +
-          (rn?.failed?.length ? `; nu s-au putut redenumi: L${rn.failed.join(", L")}.` : "."),
+          (rn?.failed?.length
+            ? `; nu s-au putut redenumi: L${rn.failed.join(", L")}.`
+            : "."),
       );
     }
     const { data, error: err } = await invokeAdmin<{ error?: string }>({
@@ -122,7 +157,8 @@ const CohortCalendarNames = ({ onChanged }: { onChanged?: () => void }) => {
       members: emailsOf(d.members),
     });
     setBusy(null);
-    if (err || data?.error) return setError(data?.error ?? "Nu am putut salva.");
+    if (err || data?.error)
+      return setError(data?.error ?? "Nu am putut salva.");
     await load();
     onChanged?.();
   };
@@ -130,9 +166,13 @@ const CohortCalendarNames = ({ onChanged }: { onChanged?: () => void }) => {
   const remove = async (g: Group) => {
     setBusy(g.id);
     setError("");
-    const { data, error: err } = await invokeAdmin<{ error?: string }>({ action: "delete_cohort_calendar", cohort_id: g.id });
+    const { data, error: err } = await invokeAdmin<{ error?: string }>({
+      action: "delete_cohort_calendar",
+      cohort_id: g.id,
+    });
     setBusy(null);
-    if (err || data?.error) return setError(data?.error ?? "Nu am putut șterge legătura.");
+    if (err || data?.error)
+      return setError(data?.error ?? "Nu am putut șterge legătura.");
     await load();
     onChanged?.();
   };
@@ -140,11 +180,15 @@ const CohortCalendarNames = ({ onChanged }: { onChanged?: () => void }) => {
   return (
     <section className="space-y-4 rounded-[20px] border border-border bg-card p-5 sm:p-6">
       <div>
-        <h2 className="font-display text-2xl font-semibold">Numele grupelor în calendar</h2>
+        <h2 className="font-display text-2xl font-semibold">
+          Numele grupelor în calendar
+        </h2>
         <p className="text-sm text-muted-foreground">
-          Numele cu care grupa apare în Google Calendar. Structura comună: „Curs - Arabă Libaneză - Adulți - Online - A1 - Grupa 1”,
-          iar lecțiile devin „… - Grupa 1 - L13”. Scrie numărul grupei și apasă „Structura comună”, sau scrie numele tău. Se
-          sincronizează doar lecțiile cu acest nume urmat de numărul lecției; nu contează cum se numește grupa pe site.
+          Numele cu care grupa apare în Google Calendar. Structura comună: „Curs
+          - Arabă Libaneză - Adulți - Online - A1 - Grupa 1”, iar lecțiile devin
+          „… - Grupa 1 - L13”. Scrie numărul grupei și apasă „Structura comună”,
+          sau scrie numele tău. Se sincronizează doar lecțiile cu acest nume
+          urmat de numărul lecției; nu contează cum se numește grupa pe site.
         </p>
       </div>
       {error && <ErrorNote>{error}</ErrorNote>}
@@ -156,16 +200,30 @@ const CohortCalendarNames = ({ onChanged }: { onChanged?: () => void }) => {
       )}
       <ul className="divide-y divide-border/70">
         {groups?.map((g) => {
-          const d = draft[g.id] ?? { title: "", total: "32", grupa: "", rename: true, members: "" };
+          const d = draft[g.id] ?? {
+            title: "",
+            total: "32",
+            grupa: "",
+            rename: true,
+            members: "",
+          };
           const changed =
             d.title.trim() !== (g.link?.calendar_title ?? "") ||
             Number(d.total) !== (g.link?.total_lessons ?? NaN) ||
             emailsOf(d.members).join(",") !== (g.link?.members ?? []).join(",");
           return (
-            <li key={g.id} className="flex flex-col gap-3 py-4 lg:flex-row lg:flex-wrap lg:items-end">
+            <li
+              key={g.id}
+              className="flex flex-col gap-3 py-4 lg:flex-row lg:flex-wrap lg:items-end"
+            >
               <div className="min-w-0 lg:w-64">
                 <p className="font-semibold">
-                  {g.level ?? "Grupă"} · {g.format === "online" ? "online" : g.format === "fizic" ? "la centru" : g.format ?? ""}
+                  {g.level ?? "Grupă"} ·{" "}
+                  {g.format === "online"
+                    ? "online"
+                    : g.format === "fizic"
+                      ? "la centru"
+                      : (g.format ?? "")}
                 </p>
                 <p className="text-sm text-muted-foreground">
                   de pe {fmtDate(g.start_date)} · {STATUS[g.status] ?? g.status}
@@ -178,7 +236,15 @@ const CohortCalendarNames = ({ onChanged }: { onChanged?: () => void }) => {
                   <input
                     inputMode="numeric"
                     value={d.grupa}
-                    onChange={(e) => setDraft((x) => ({ ...x, [g.id]: { ...d, grupa: e.target.value.replace(/[^\d]/g, "") } }))}
+                    onChange={(e) =>
+                      setDraft((x) => ({
+                        ...x,
+                        [g.id]: {
+                          ...d,
+                          grupa: e.target.value.replace(/[^\d]/g, ""),
+                        },
+                      }))
+                    }
                     placeholder="1"
                     className="h-11 w-full rounded-xl border border-input bg-background px-3 text-base text-foreground"
                   />
@@ -193,7 +259,9 @@ const CohortCalendarNames = ({ onChanged }: { onChanged?: () => void }) => {
                     [g.id]: {
                       ...d,
                       title: commonCalendarName({
-                        kids: g.form_type === "kids" || /copii|kids|child/i.test(g.age_category ?? ""),
+                        kids:
+                          g.form_type === "kids" ||
+                          /copii|kids|child/i.test(g.age_category ?? ""),
                         format: g.format,
                         level: g.level,
                         grupa: d.grupa,
@@ -209,7 +277,12 @@ const CohortCalendarNames = ({ onChanged }: { onChanged?: () => void }) => {
                 Numele din calendar
                 <input
                   value={d.title}
-                  onChange={(e) => setDraft((x) => ({ ...x, [g.id]: { ...d, title: e.target.value } }))}
+                  onChange={(e) =>
+                    setDraft((x) => ({
+                      ...x,
+                      [g.id]: { ...d, title: e.target.value },
+                    }))
+                  }
                   placeholder="ex. Curs - Arabă Libaneză - Adulți - Online - A1 - Grupa 1"
                   className="h-11 rounded-xl border border-input bg-background px-3 text-base text-foreground"
                 />
@@ -221,51 +294,75 @@ const CohortCalendarNames = ({ onChanged }: { onChanged?: () => void }) => {
                   min={1}
                   max={300}
                   value={d.total}
-                  onChange={(e) => setDraft((x) => ({ ...x, [g.id]: { ...d, total: e.target.value } }))}
+                  onChange={(e) =>
+                    setDraft((x) => ({
+                      ...x,
+                      [g.id]: { ...d, total: e.target.value },
+                    }))
+                  }
                   className="h-11 rounded-xl border border-input bg-background px-3 text-base text-foreground"
                 />
               </label>
               <div className="flex flex-col gap-2">
-                {g.link && d.title.trim() && d.title.trim() !== g.link.calendar_title && (
-                  <label className="flex items-center gap-2 text-xs text-muted-foreground lg:max-w-48">
-                    <input
-                      type="checkbox"
-                      checked={d.rename}
-                      onChange={(e) => setDraft((x) => ({ ...x, [g.id]: { ...d, rename: e.target.checked } }))}
-                      className="h-4 w-4"
-                    />
-                    Redenumește și lecțiile existente în Google Calendar (fără invitații)
-                  </label>
-                )}
+                {g.link &&
+                  d.title.trim() &&
+                  d.title.trim() !== g.link.calendar_title && (
+                    <label className="flex items-center gap-2 text-xs text-muted-foreground lg:max-w-48">
+                      <input
+                        type="checkbox"
+                        checked={d.rename}
+                        onChange={(e) =>
+                          setDraft((x) => ({
+                            ...x,
+                            [g.id]: { ...d, rename: e.target.checked },
+                          }))
+                        }
+                        className="h-4 w-4"
+                      />
+                      Redenumește și lecțiile existente în Google Calendar (fără
+                      invitații)
+                    </label>
+                  )}
                 <div className="flex gap-2">
-                <button
-                  type="button"
-                  disabled={busy === g.id || !changed}
-                  onClick={() => void save(g)}
-                  className="inline-flex min-h-11 items-center gap-2 rounded-xl bg-brand-green px-4 font-semibold text-white hover:opacity-90 disabled:opacity-50"
-                >
-                  {busy === g.id ? <Loader2 className="h-4 w-4 animate-spin" /> : <Save className="h-4 w-4" />} Salvează
-                </button>
-                {g.link && (
                   <button
                     type="button"
-                    disabled={busy === g.id}
-                    onClick={() => void remove(g)}
-                    aria-label="Scoate legătura cu calendarul"
-                    title="Scoate legătura cu calendarul (calendarul nu se schimbă)"
-                    className="inline-flex h-11 w-11 items-center justify-center rounded-xl border border-border hover:bg-muted"
+                    disabled={busy === g.id || !changed}
+                    onClick={() => void save(g)}
+                    className="inline-flex min-h-11 items-center gap-2 rounded-xl bg-brand-green px-4 font-semibold text-white hover:opacity-90 disabled:opacity-50"
                   >
-                    <Trash2 className="h-4 w-4" />
+                    {busy === g.id ? (
+                      <Loader2 className="h-4 w-4 animate-spin" />
+                    ) : (
+                      <Save className="h-4 w-4" />
+                    )}{" "}
+                    Salvează
                   </button>
-                )}
+                  {g.link && (
+                    <button
+                      type="button"
+                      disabled={busy === g.id}
+                      onClick={() => void remove(g)}
+                      aria-label="Scoate legătura cu calendarul"
+                      title="Scoate legătura cu calendarul (calendarul nu se schimbă)"
+                      className="inline-flex h-11 w-11 items-center justify-center rounded-xl border border-border hover:bg-muted"
+                    >
+                      <Trash2 className="h-4 w-4" />
+                    </button>
+                  )}
                 </div>
               </div>
               <label className="flex w-full flex-col gap-1 text-sm text-muted-foreground lg:basis-full">
-                Cursanții grupei (primesc automat toate lecțiile noi), câte un email pe rând
+                Cursanții grupei (primesc automat toate lecțiile noi), câte un
+                email pe rând
                 <textarea
                   rows={2}
                   value={d.members}
-                  onChange={(e) => setDraft((x) => ({ ...x, [g.id]: { ...d, members: e.target.value } }))}
+                  onChange={(e) =>
+                    setDraft((x) => ({
+                      ...x,
+                      [g.id]: { ...d, members: e.target.value },
+                    }))
+                  }
                   placeholder="cursant@exemplu.ro"
                   className="rounded-xl border border-input bg-background px-3 py-2 text-base text-foreground"
                 />

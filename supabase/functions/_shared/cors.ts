@@ -18,14 +18,18 @@ const ALLOWED_ORIGIN_PATTERNS = [
 const BASE_HEADERS = {
   "Access-Control-Allow-Headers":
     "authorization, x-client-info, apikey, content-type, x-supabase-client-platform, x-supabase-client-platform-version, x-supabase-client-runtime, x-supabase-client-runtime-version",
-  "Vary": "Origin",
+  Vary: "Origin",
 };
 
 /** Build per-request CORS headers, reflecting the origin only if it's allowed. */
-export function buildCorsHeaders(req: Request, extraHeaders?: Record<string, string>): Record<string, string> {
+export function buildCorsHeaders(
+  req: Request,
+  extraHeaders?: Record<string, string>,
+): Record<string, string> {
   const origin = req.headers.get("origin") || "";
   const allowed =
-    ALLOWED_ORIGINS.includes(origin) || ALLOWED_ORIGIN_PATTERNS.some((re) => re.test(origin));
+    ALLOWED_ORIGINS.includes(origin) ||
+    ALLOWED_ORIGIN_PATTERNS.some((re) => re.test(origin));
   return {
     ...BASE_HEADERS,
     ...extraHeaders,
@@ -41,6 +45,7 @@ export function buildCorsHeaders(req: Request, extraHeaders?: Record<string, str
 export function resolveReturnOrigin(req: Request): string {
   const origin = req.headers.get("origin") || "";
   const allowed =
-    ALLOWED_ORIGINS.includes(origin) || ALLOWED_ORIGIN_PATTERNS.some((re) => re.test(origin));
+    ALLOWED_ORIGINS.includes(origin) ||
+    ALLOWED_ORIGIN_PATTERNS.some((re) => re.test(origin));
   return allowed ? origin : ALLOWED_ORIGINS[0];
 }

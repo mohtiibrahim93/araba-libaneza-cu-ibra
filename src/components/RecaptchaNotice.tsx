@@ -23,16 +23,32 @@ import { cn } from "@/lib/utils";
  */
 const RecaptchaNotice = ({ className }: { className?: string }) => {
   const { t } = useI18n();
-  const link = "underline underline-offset-2 hover:text-foreground transition-colors";
+  const link =
+    "underline underline-offset-2 hover:text-foreground transition-colors";
 
   return (
-    <p className={cn("text-[11px] leading-relaxed text-muted-foreground", className)}>
+    <p
+      className={cn(
+        "text-[11px] leading-relaxed text-muted-foreground",
+        className,
+      )}
+    >
       {t.recaptchaNotice}{" "}
-      <a href="https://policies.google.com/privacy" target="_blank" rel="noopener noreferrer" className={link}>
+      <a
+        href="https://policies.google.com/privacy"
+        target="_blank"
+        rel="noopener noreferrer"
+        className={link}
+      >
         {t.recaptchaPrivacyShort}
       </a>
       {" · "}
-      <a href="https://policies.google.com/terms" target="_blank" rel="noopener noreferrer" className={link}>
+      <a
+        href="https://policies.google.com/terms"
+        target="_blank"
+        rel="noopener noreferrer"
+        className={link}
+      >
         {t.recaptchaTermsShort}
       </a>
     </p>

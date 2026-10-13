@@ -23,20 +23,25 @@ const Faq = () => (
     faqVisible={false}
   >
     <p>
-      These are the questions we get most often, grouped by topic. For the short version —
-      price, schedule and the trial lesson — see the{" "}
-      <Link to="/en/learn-lebanese-arabic">course overview</Link>. For a specific format,
-      read about <Link to="/en/arabic-tutor">private 1-on-1 lessons</Link> or{" "}
-      <Link to="/en/arabic-classes-near-me">classes in Bucharest and online</Link>.
+      These are the questions we get most often, grouped by topic. For the short
+      version — price, schedule and the trial lesson — see the{" "}
+      <Link to="/en/learn-lebanese-arabic">course overview</Link>. For a
+      specific format, read about{" "}
+      <Link to="/en/arabic-tutor">private 1-on-1 lessons</Link> or{" "}
+      <Link to="/en/arabic-classes-near-me">
+        classes in Bucharest and online
+      </Link>
+      .
     </p>
 
     <FaqGroups lang="en" />
 
     <h2>Still not answered?</h2>
     <p>
-      Write to us and you'll hear back the same day. The quickest way to find out whether a
-      course suits you is still the{" "}
-      <Link to="/trial">free 30-minute trial lesson</Link> — 0 LEI and no obligation; secure card confirmation holds the spot.
+      Write to us and you'll hear back the same day. The quickest way to find
+      out whether a course suits you is still the{" "}
+      <Link to="/trial">free 30-minute trial lesson</Link> — 0 LEI and no
+      obligation; secure card confirmation holds the spot.
     </p>
   </EnLandingLayout>
 );

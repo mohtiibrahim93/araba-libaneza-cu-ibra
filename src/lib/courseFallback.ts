@@ -20,18 +20,31 @@ function buildCurriculumText(lvl: CurriculumLevel): string {
     parts.push(lvl.items.map((it, i) => `${i + 1}. ${it}`).join("\n"));
   }
   if (lvl.spokenCore) {
-    parts.push(`${lvl.spokenCore.intro}\n` + lvl.spokenCore.items.map((it) => `• ${it}`).join("\n"));
+    parts.push(
+      `${lvl.spokenCore.intro}\n` +
+        lvl.spokenCore.items.map((it) => `• ${it}`).join("\n"),
+    );
   }
   if (lvl.writingStrand) {
-    parts.push(`${lvl.writingStrand.intro}\n` + lvl.writingStrand.items.map((it) => `• ${it}`).join("\n"));
+    parts.push(
+      `${lvl.writingStrand.intro}\n` +
+        lvl.writingStrand.items.map((it) => `• ${it}`).join("\n"),
+    );
   }
   if (lvl.blocks?.length) {
-    parts.push(lvl.blocks.map((b) => `${b.title}\n` + b.items.map((it) => `• ${it}`).join("\n")).join("\n\n"));
+    parts.push(
+      lvl.blocks
+        .map((b) => `${b.title}\n` + b.items.map((it) => `• ${it}`).join("\n"))
+        .join("\n\n"),
+    );
   }
   return parts.join("\n\n");
 }
 
-export function courseFallback(level: string | null | undefined, lang: "ro" | "en"): CourseFallback {
+export function courseFallback(
+  level: string | null | undefined,
+  lang: "ro" | "en",
+): CourseFallback {
   if (!level) return {};
   const id = level.toLowerCase();
   const lvl = getCurriculum(lang).find((l) => l.id === id);

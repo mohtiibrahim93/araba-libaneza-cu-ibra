@@ -42,7 +42,13 @@ interface Props {
 const ext = "noopener noreferrer nofollow";
 
 /** An image with a caption and a complete, linked source credit. */
-const CreditedFigure = ({ src, alt, caption, credit, className = "w-full" }: Props) => (
+const CreditedFigure = ({
+  src,
+  alt,
+  caption,
+  credit,
+  className = "w-full",
+}: Props) => (
   <figure className="not-prose my-6">
     <img
       src={src}
@@ -53,13 +59,23 @@ const CreditedFigure = ({ src, alt, caption, credit, className = "w-full" }: Pro
     <figcaption className="mt-2 space-y-1 text-sm text-muted-foreground">
       <span className="block">{caption}</span>
       <span className="block text-xs">
-        <a href={credit.sourceHref} target="_blank" rel={ext} className="underline hover:text-foreground">
+        <a
+          href={credit.sourceHref}
+          target="_blank"
+          rel={ext}
+          className="underline hover:text-foreground"
+        >
           {credit.title}
         </a>
         {" by "}
         {credit.author}
         {", licensed under "}
-        <a href={credit.licenceHref} target="_blank" rel={ext} className="underline hover:text-foreground">
+        <a
+          href={credit.licenceHref}
+          target="_blank"
+          rel={ext}
+          className="underline hover:text-foreground"
+        >
           {credit.licence}
         </a>
         {credit.changes ? `. ${credit.changes}` : ""}

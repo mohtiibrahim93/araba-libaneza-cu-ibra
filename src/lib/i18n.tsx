@@ -1,4 +1,12 @@
-import { createContext, useCallback, useContext, useEffect, useMemo, useState, ReactNode } from "react";
+import {
+  createContext,
+  useCallback,
+  useContext,
+  useEffect,
+  useMemo,
+  useState,
+  ReactNode,
+} from "react";
 import { useSiteTexts } from "@/hooks/useSiteTexts";
 import { HOME_META } from "@/lib/pageMeta";
 
@@ -27,7 +35,8 @@ export const translations = {
     heroBadge: "Cursuri de arabă libaneză · Toate nivelurile",
     heroTitle1: "Vorbește araba libaneză cu încredere.",
     heroTitle2: "Trăiește cultura.",
-    heroDesc: "În București și online, cu Ibra, profesor nativ din Liban. Scrii cum auzi, în Arabizi, și vorbești din prima lecție.",
+    heroDesc:
+      "În București și online, cu Ibra, profesor nativ din Liban. Scrii cum auzi, în Arabizi, și vorbești din prima lecție.",
     heroCta: "Rezervă lecția gratuită de probă",
     heroExplore: "Programează o discuție",
     heroTrialCta: "Vezi cursurile",
@@ -36,11 +45,14 @@ export const translations = {
     heroCheck3: "Grupe mici",
     heroCheck4: "Online și fizic",
     stepsTitle: "3 pași simpli pentru a începe",
-    stepsDesc: "De la primul click până la prima conversație în arabă libaneză.",
+    stepsDesc:
+      "De la primul click până la prima conversație în arabă libaneză.",
     step1Title: "Alege cursul potrivit",
-    step1Desc: "Explorează programele noastre — pentru adulți, tineri sau copii, în grup sau individual, online sau fizic în București.",
+    step1Desc:
+      "Explorează programele noastre — pentru adulți, tineri sau copii, în grup sau individual, online sau fizic în București.",
     step2Title: "Înscrie-te rapid",
-    step2Desc: "Completează formularul, rezervă-ți locul și plătește în siguranță online.",
+    step2Desc:
+      "Completează formularul, rezervă-ți locul și plătește în siguranță online.",
     step3Title: "Începe să vorbești",
     step3Desc: "Din primele lecții comunici în arabă libaneză, cu încredere.",
     stepsCta: "Vezi toate cursurile",
@@ -54,25 +66,33 @@ export const translations = {
     // Why choose us
     whyBadge: "De ce noi",
     whyTitle: "De ce să înveți cu Ibra?",
-    whyDesc: "Credem că limba este mai mult decât cuvinte — este cultură, conexiune și comunitate. Cursurile noastre sunt concepute să te facă să vorbești cu încredere din prima zi.",
+    whyDesc:
+      "Credem că limba este mai mult decât cuvinte — este cultură, conexiune și comunitate. Cursurile noastre sunt concepute să te facă să vorbești cu încredere din prima zi.",
     benefit1Title: "Metoda Oral First",
-    benefit1Desc: "Vorbești din primele lecții — conversația vine înaintea gramaticii, exact cum înveți natural o limbă.",
+    benefit1Desc:
+      "Vorbești din primele lecții — conversația vine înaintea gramaticii, exact cum înveți natural o limbă.",
     benefit2Title: "Arabizi, progresiv",
-    benefit2Desc: "Scrii în arabizi (araba cu litere latine), fără blocaje: la A1 și A2 doar oral, iar de la B1 sau B2 grupa poate adăuga alfabetul arab, dacă toți cursanții vor.",
+    benefit2Desc:
+      "Scrii în arabizi (araba cu litere latine), fără blocaje: la A1 și A2 doar oral, iar de la B1 sau B2 grupa poate adăuga alfabetul arab, dacă toți cursanții vor.",
     benefit3Title: "Dialectul real al Beirutului",
-    benefit3Desc: "Înveți araba vorbită pe străzile Libanului, nu doar araba clasică din manuale.",
+    benefit3Desc:
+      "Înveți araba vorbită pe străzile Libanului, nu doar araba clasică din manuale.",
     benefit4Title: "Cultură și context",
-    benefit4Desc: "Înveți limba împreună cu obiceiurile, umorul și tradițiile Levantului — fără clișee.",
+    benefit4Desc:
+      "Înveți limba împreună cu obiceiurile, umorul și tradițiile Levantului — fără clișee.",
     benefit5Title: "Progresie structurată",
-    benefit5Desc: "Curriculum clar pe niveluri A1–C2, cu obiective concrete la fiecare pas.",
+    benefit5Desc:
+      "Curriculum clar pe niveluri A1–C2, cu obiective concrete la fiecare pas.",
     benefit6Title: "Atenție personală",
-    benefit6Desc: "Grupe mici și feedback constant de la un profesor nativ care te știe pe nume.",
+    benefit6Desc:
+      "Grupe mici și feedback constant de la un profesor nativ care te știe pe nume.",
     whyStat2Val: "5+ ani",
 
     // Programs
     programsBadge: "Programele noastre",
     programsTitle: "Alege-ți calea de învățare",
-    programsDesc: "Fie că preferi să înveți în grup sau individual, avem opțiunea perfectă pentru tine.",
+    programsDesc:
+      "Fie că preferi să înveți în grup sau individual, avem opțiunea perfectă pentru tine.",
     tabAdults: "Cursuri Adulți",
     tabKids: "Cursuri Copii",
     programFormatLabel: "Format",
@@ -80,7 +100,8 @@ export const translations = {
     programConditionsLabel: "Condiții",
     groupBadge: "Învățare în grup",
     groupCardTitle: "Cursuri de Grup",
-    groupCardDesc: "Învață alături de alții într-un mediu distractiv și interactiv. Perfect pentru a-ți face prieteni noi în timp ce înveți araba libaneză.",
+    groupCardDesc:
+      "Învață alături de alții într-un mediu distractiv și interactiv. Perfect pentru a-ți face prieteni noi în timp ce înveți araba libaneză.",
     groupFeat1: "Grupuri mici (max. 6 cursanți online, 8 fizic)",
     groupFeat2: "32–72 de lecții pe nivel (90 min, de 2 ori pe săptămână)",
     groupFeat3: "Activități interactive de grup",
@@ -88,7 +109,8 @@ export const translations = {
     privateBadge: "Lecții individuale",
     privateCardTitle: "Lecții Private",
     privateFormat: "Online sau fizic",
-    privateCardSubtitle: "Sesiuni individuale 1-la-1 cu profesor nativ. Orar complet flexibil.",
+    privateCardSubtitle:
+      "Sesiuni individuale 1-la-1 cu profesor nativ. Orar complet flexibil.",
     programScheduleLabel: "Program",
     privateDurationV2: "60 minute / lecție",
     privateSchedule: "Orar flexibil, stabilit cu profesorul",
@@ -103,22 +125,26 @@ export const translations = {
     privateFeat5v2: "Progres în ritmul tău",
     privateRegisterV2: "Înscriere lecții private",
     kidsGroupCardTitle: "Cursuri de Grup pentru Copii",
-    kidsGroupCardSubtitle: "Cursuri adaptate pe grupe de vârstă, într-un mediu prietenos.",
+    kidsGroupCardSubtitle:
+      "Cursuri adaptate pe grupe de vârstă, într-un mediu prietenos.",
     kidsGroupFormat: "Fizic, la centru",
     kidsGroupFormatNote: "Varianta online o vom adăuga mai târziu, ca opțiune",
     kidsGroupDuration: "90 minute / lecție",
     kidsGroupConditions: "Minim 4 copii per grupă",
     kidsGroupAgeGroupsLabel: "Grupe pe vârstă",
-    kidsGroupAgeGroupsValue: "Adaptate pe categorii de vârstă, nu pe nivel CEFR",
+    kidsGroupAgeGroupsValue:
+      "Adaptate pe categorii de vârstă, nu pe nivel CEFR",
     kidsGroupFeat1: "Grupe mici (minim 4 copii)",
     kidsGroupFeat2: "Cursuri adaptate pe vârstă",
     kidsGroupFeat3: "Activități ludice și interactive",
     kidsGroupFeat4: "Profesori cu experiență cu copii",
     kidsPrivateBadge: "Lecții individuale pentru copii",
     kidsPrivateCardTitle: "Lecții Individuale pentru Copii",
-    kidsPrivateCardSubtitle: "Atenție dedicată, conținut adaptat vârstei și nivelului copilului.",
+    kidsPrivateCardSubtitle:
+      "Atenție dedicată, conținut adaptat vârstei și nivelului copilului.",
     kidsPrivateFormat: "Fizic, la centru",
-    kidsPrivateFormatNote: "Varianta online o vom adăuga mai târziu, ca opțiune",
+    kidsPrivateFormatNote:
+      "Varianta online o vom adăuga mai târziu, ca opțiune",
     kidsPrivateDuration: "60 minute / lecție",
     kidsPrivateConditions: "1-la-1 cu profesorul",
     kidsPrivatePricePerLesson: "LEI / lecție (60 minute)",
@@ -141,7 +167,8 @@ export const translations = {
 
     // Pricing
     privateQuantityLabel: "Câte lecții private vrei să rezervi?",
-    privateQuantityHelp: "Reducere automată la pachet: −15% de la 20 de lecții.",
+    privateQuantityHelp:
+      "Reducere automată la pachet: −15% de la 20 de lecții.",
     privateQuantityDiscountApplied: "✓ Reducere {p}% aplicată",
     privateQuantityDiscountHint: "Mai {n} lecți(i) până la −{p}%",
     privateQuantityQuickPick: "Pachete populare:",
@@ -150,24 +177,31 @@ export const translations = {
     groupMonthsLabel: "Plan de plată",
     groupPlanMonthly: "Abonament lunar",
     groupPlanFull: "Plată integrală",
-    groupMonthsHelp: "Abonamentul se facturează lunar pe durata cursului și se oprește automat. La plata integrală în avans primești 15% reducere.",
+    groupMonthsHelp:
+      "Abonamentul se facturează lunar pe durata cursului și se oprește automat. La plata integrală în avans primești 15% reducere.",
 
     // Testimonials
     testimonialsTitle: "Ce spun cursanții noștri",
     testimonialsBadge: "Recenzii Preply · 5.0★ din 21 recenzii",
     testimonialsDesc: "Recenzii reale de la cursanții lui Ibra pe Preply.com.",
     testimonialsAllReviews: "Toate cele 21 recenzii pe Preply.com",
-    testimonial1: "Unul dintre cei mai buni profesori cu care am lucrat. Foarte cald, blând și talentat, te încurajează și te sprijină constant.",
+    testimonial1:
+      "Unul dintre cei mai buni profesori cu care am lucrat. Foarte cald, blând și talentat, te încurajează și te sprijină constant.",
     testimonial1Author: "Anamaria-Bianca",
-    testimonial2: "Apreciez abordarea lui și modul în care face lucrurile să pară atât de ușor de înțeles. Lecțiile sunt foarte bine pregătite.",
+    testimonial2:
+      "Apreciez abordarea lui și modul în care face lucrurile să pară atât de ușor de înțeles. Lecțiile sunt foarte bine pregătite.",
     testimonial2Author: "Andreea Cristina",
-    testimonial3: "Ibra este foarte atent și un profesor excelent. Are un mod deosebit de a explica lucrurile clar, iar simțul umorului face învățarea plăcută.",
+    testimonial3:
+      "Ibra este foarte atent și un profesor excelent. Are un mod deosebit de a explica lucrurile clar, iar simțul umorului face învățarea plăcută.",
     testimonial3Author: "Laura",
-    testimonial4: "Ibra este un profesor remarcabil. Cunoștințele sale de arabă sunt impresionante, dar ceea ce îl diferențiază este abordarea relaxată și prietenoasă.",
+    testimonial4:
+      "Ibra este un profesor remarcabil. Cunoștințele sale de arabă sunt impresionante, dar ceea ce îl diferențiază este abordarea relaxată și prietenoasă.",
     testimonial4Author: "Harry",
-    testimonial5: "Prima lecție de descoperire pentru un începător absolut a fost foarte revelatoare. A făcut o treabă excelentă explicând diferitele aspecte ale limbii.",
+    testimonial5:
+      "Prima lecție de descoperire pentru un începător absolut a fost foarte revelatoare. A făcut o treabă excelentă explicând diferitele aspecte ale limbii.",
     testimonial5Author: "Razvan",
-    testimonial6: "Am fost foarte mulțumit de explicațiile și atenția pe care profesorul Ibra a arătat-o. Voi relua sesiunile cu el cu siguranță.",
+    testimonial6:
+      "Am fost foarte mulțumit de explicațiile și atenția pe care profesorul Ibra a arătat-o. Voi relua sesiunile cu el cu siguranță.",
     testimonial6Author: "Cimpan",
 
     // FAQ
@@ -175,11 +209,15 @@ export const translations = {
     faqTitle: "Întrebări frecvente",
     faqDesc: "Ai întrebări? Avem răspunsuri.",
     faqSeeAll: "Vezi toate cele {n} de întrebări",
-    faqSeeAllHint: "Preț, orar, nivel, dialect, gramatică — răspunsuri complete, grupate pe teme.",
-    faqPageMetaTitle: "Întrebări frecvente despre cursurile de arabă libaneză | Centrul de Arabă Libaneză",
-    faqPageMetaDesc: "Răspunsuri la întrebările despre araba libaneză: preț, orar, format online sau fizic, cât durează până vorbești, ce dialect să înveți și cum arată gramatica.",
+    faqSeeAllHint:
+      "Preț, orar, nivel, dialect, gramatică — răspunsuri complete, grupate pe teme.",
+    faqPageMetaTitle:
+      "Întrebări frecvente despre cursurile de arabă libaneză | Centrul de Arabă Libaneză",
+    faqPageMetaDesc:
+      "Răspunsuri la întrebările despre araba libaneză: preț, orar, format online sau fizic, cât durează până vorbești, ce dialect să înveți și cum arată gramatica.",
     faqPageH1: "Întrebări frecvente",
-    faqPageIntro: "Tot ce ne întreabă cursanții înainte să se înscrie — despre preț și orar, despre cât durează până vorbești, despre diferența dintre libaneză și araba standard, și despre gramatică. Dacă nu găsești răspunsul aici, scrie-ne.",
+    faqPageIntro:
+      "Tot ce ne întreabă cursanții înainte să se înscrie — despre preț și orar, despre cât durează până vorbești, despre diferența dintre libaneză și araba standard, și despre gramatică. Dacă nu găsești răspunsul aici, scrie-ne.",
     faqPageBackHome: "Înapoi la pagina principală",
     faqStillQuestions: "Nu ai găsit ce căutai?",
     faqStillQuestionsCta: "Rezervă o lecție de probă gratuită",
@@ -187,7 +225,8 @@ export const translations = {
     // Contact/CTA
     ctaBadge: "Contactează-ne",
     ctaTitle: "Pregătit să-ți începi călătoria?",
-    ctaDesc: "Înregistrează-ți interesul și te vom contacta pe WhatsApp pentru a discuta cea mai bună opțiune de învățare pentru tine.",
+    ctaDesc:
+      "Înregistrează-ți interesul și te vom contacta pe WhatsApp pentru a discuta cea mai bună opțiune de învățare pentru tine.",
     ctaWhatsapp: "WhatsApp",
     ctaWhatsappDesc: "Contactează-ne oricând",
     ctaPhone: "Telefon",
@@ -198,22 +237,27 @@ export const translations = {
     ctaLocationVal: "Raduga Creative Center, Strada Icoanei 80, București",
     ctaButton: "Scrie-ne pe WhatsApp",
     ctaScheduleTitle: "Programul cursurilor",
-    ctaScheduleDesc: "Alege varianta potrivită și contactează-ne pentru disponibilitate rapidă.",
+    ctaScheduleDesc:
+      "Alege varianta potrivită și contactează-ne pentru disponibilitate rapidă.",
     ctaScheduleGroupLabel: "Curs de grup",
     ctaSchedulePrivateLabel: "Private individuale",
-    ctaSchedulePrivateValue: "Program flexibil · sesiuni de 60 minute · online sau fizic",
+    ctaSchedulePrivateValue:
+      "Program flexibil · sesiuni de 60 minute · online sau fizic",
     ctaScheduleKidsLabel: "Curs copii",
-    ctaScheduleKidsValue: "Momentan nu avem cursuri pentru copii. Când pornesc, vor fi fizic, la centru.",
+    ctaScheduleKidsValue:
+      "Momentan nu avem cursuri pentru copii. Când pornesc, vor fi fizic, la centru.",
 
     // Group Form
     groupSubmitting: "Se trimite...",
     mainLeadTitle: "Alege cursul și înscrie-te",
-    mainLeadDesc: "Alege tipul de curs și formatul, apoi lasă-ne datele tale. Pașii următori apar imediat după trimitere.",
+    mainLeadDesc:
+      "Alege tipul de curs și formatul, apoi lasă-ne datele tale. Pașii următori apar imediat după trimitere.",
     mainLeadCourseTypeLabel: "Tip curs",
     mainLeadCourseTypePlaceholder: "Alege tipul de curs",
     mainLeadLevelLabel: "Nivel CEFR",
     mainLeadLevelPlaceholder: "Alege nivelul tău",
-    mainLeadLevelHelp: "Nu ești sigur? Alege A1 (începător) sau scrie-ne în mesaj.",
+    mainLeadLevelHelp:
+      "Nu ești sigur? Alege A1 (începător) sau scrie-ne în mesaj.",
     mainLeadCourseGroup: "Curs de grup",
     mainLeadCoursePrivate: "Lecții private individuale",
     mainLeadCourseKids: "Curs pentru copii",
@@ -224,23 +268,29 @@ export const translations = {
     mainLeadSuccessDesc: "Mulțumim! Mai jos vezi pașii următori.",
     mainLeadSuccess: "Înscrierea a fost trimisă!",
     mainLeadError: "A apărut o eroare. Încearcă din nou.",
-    mainLeadErrorCourseType: "Alege un tip de curs valid (Grup, Privat sau Copii).",
+    mainLeadErrorCourseType:
+      "Alege un tip de curs valid (Grup, Privat sau Copii).",
     mainLeadErrorFormat: "Alege un format: față în față sau online.",
-    mainLeadErrorKidsFormat: "Alege un format. Cursul pentru copii pornește fizic, la centru; varianta online o vom adăuga mai târziu.",
+    mainLeadErrorKidsFormat:
+      "Alege un format. Cursul pentru copii pornește fizic, la centru; varianta online o vom adăuga mai târziu.",
     mainLeadErrorLevel: "Selectează nivelul tău (A1–B2) pentru cursul de grup.",
-    mainLeadCallbackNote: "Acesta este un formular de contact: după trimitere, te apelăm pentru confirmarea detaliilor.",
+    mainLeadCallbackNote:
+      "Acesta este un formular de contact: după trimitere, te apelăm pentru confirmarea detaliilor.",
     mainLeadLocationLabel: "Locație",
     mainLeadLocationPlaceholder: "Alege orașul / zona",
-    mainLeadLocationHelp: "Locațiile fizice depind de profesori și centrele disponibile.",
+    mainLeadLocationHelp:
+      "Locațiile fizice depind de profesori și centrele disponibile.",
     mainLeadLocationBucharestCentru: "București — Centru (Raduga)",
     mainLeadOnlineInfoTitle: "Cursuri online",
-    mainLeadOnlineInfoDesc: "Toate sesiunile online se țin pe Zoom. După confirmarea înscrierii, primești pe email linkul, ora exactă și materialele.",
+    mainLeadOnlineInfoDesc:
+      "Toate sesiunile online se țin pe Zoom. După confirmarea înscrierii, primești pe email linkul, ora exactă și materialele.",
     mainLeadErrorLocation: "Alege o locație fizică pentru curs.",
 
     // Level assessment quiz
     levelQuizDontKnow: "Nu știu ce nivel am",
     levelQuizTitle: "Descoperă nivelul tău",
-    levelQuizDesc: "Răspunde la câteva întrebări scurte pentru a afla ce nivel CEFR ți se potrivește.",
+    levelQuizDesc:
+      "Răspunde la câteva întrebări scurte pentru a afla ce nivel CEFR ți se potrivește.",
     levelQuizQ1: "Poți citi literele arabe?",
     levelQuizQ2: "Poți să te prezinți în arabă?",
     levelQuizQ3: "Poți comanda mâncare la restaurant în arabă?",
@@ -261,7 +311,8 @@ export const translations = {
     kidsChildNamePlaceholder: "ex: Maria",
     kidsChildAge: "Vârsta copilului",
     kidsChildAgePlaceholder: "ex: 8 ani",
-    kidsFormatNote: "Fizic, la centru (varianta online o vom adăuga mai târziu, ca opțiune). Orarul îl stabilim când pornește grupa.",
+    kidsFormatNote:
+      "Fizic, la centru (varianta online o vom adăuga mai târziu, ca opțiune). Orarul îl stabilim când pornește grupa.",
 
     // Center select
 
@@ -269,16 +320,19 @@ export const translations = {
     gdprConsent: "Sunt de acord cu prelucrarea datelor personale conform",
     gdprPrivacy: "Politicii de Confidențialitate",
     gdprRequired: "Trebuie să accepți politica de confidențialitate.",
-    recaptchaNotice: "Acest site este protejat de reCAPTCHA și se aplică Politica de Confidențialitate și Termenii Google.",
+    recaptchaNotice:
+      "Acest site este protejat de reCAPTCHA și se aplică Politica de Confidențialitate și Termenii Google.",
     // The two links that have to accompany the sentence above. Short labels:
     // the sentence already names them, these are the places to click.
     recaptchaPrivacyShort: "Politica de confidențialitate",
     recaptchaTermsShort: "Termeni",
-    recaptchaFailed: "Verificarea de securitate a eșuat. Te rugăm să încerci din nou.",
+    recaptchaFailed:
+      "Verificarea de securitate a eșuat. Te rugăm să încerci din nou.",
 
     // Cookie consent banner
     cookieTitle: "Cookie-uri",
-    cookieMessage: "Folosim cookie-uri esențiale ca site-ul să funcționeze. Cu acordul tău, folosim și cookie-uri de analiză și publicitate (Google Analytics, Google Ads), ca să vedem ce funcționează pe site.",
+    cookieMessage:
+      "Folosim cookie-uri esențiale ca site-ul să funcționeze. Cu acordul tău, folosim și cookie-uri de analiză și publicitate (Google Analytics, Google Ads), ca să vedem ce funcționează pe site.",
     cookieAcceptAll: "Acceptă toate",
     cookieEssentialOnly: "Doar esențiale",
     cookiePrivacyLink: "Politica de confidențialitate",
@@ -290,7 +344,8 @@ export const translations = {
     paymentTransfer: "Transfer bancar",
     paymentIban: "IBAN: contactează-ne pe WhatsApp pentru detalii",
     paymentPaypal: "PayPal (contactează-ne pentru detalii)",
-    paymentNote: "După înscriere, te vom contacta pe WhatsApp pentru a finaliza plata.",
+    paymentNote:
+      "După înscriere, te vom contacta pe WhatsApp pentru a finaliza plata.",
     paymentWhatsapp: "Contactează-ne pe WhatsApp",
     paymentPrimaryCta: "Plătește acum cu cardul",
     paymentAlternativesToggle: "Vezi alte metode de plată",
@@ -303,10 +358,13 @@ export const translations = {
       "Grupele au locuri limitate, așa că până atunci locul poate fi luat de altcineva.",
     paymentSecure: "Plată securizată · 3D Secure · SSL",
     successNextStepsTitle: "Ce urmează?",
-    successStepConfirm: "Îți scriem pe WhatsApp în câteva ore (cel mult într-o zi lucrătoare) ca să ne cunoaștem.",
+    successStepConfirm:
+      "Îți scriem pe WhatsApp în câteva ore (cel mult într-o zi lucrătoare) ca să ne cunoaștem.",
     successStepPay: "Plata este cea care îți confirmă locul.",
-    successStepWelcome: "În cel mult 24 de ore de la plată primești mesajul de bun venit, cu tot ce îți trebuie înainte de prima lecție.",
-    successStepChanges: "Orice modificare o anunțăm din timp. Dacă nu primești niciun anunț, totul decurge exact cum a fost stabilit și plătit.",
+    successStepWelcome:
+      "În cel mult 24 de ore de la plată primești mesajul de bun venit, cu tot ce îți trebuie înainte de prima lecție.",
+    successStepChanges:
+      "Orice modificare o anunțăm din timp. Dacă nu primești niciun anunț, totul decurge exact cum a fost stabilit și plătit.",
     successAgain: "Trimite o cerere nouă",
 
     // Cookie consent
@@ -327,7 +385,8 @@ export const translations = {
     placeholderEmail: "ion@email.com",
 
     footer: "© 2026 Arabă Libaneză cu Ibra. Toate drepturile rezervate.",
-    footerTagline: "Învață arabă libaneză autentică cu un profesor nativ, în București sau online.",
+    footerTagline:
+      "Învață arabă libaneză autentică cu un profesor nativ, în București sau online.",
     footerQuickLinks: "Navigare",
     footerContact: "Contact",
     footerLegal: "Legal",
@@ -338,8 +397,10 @@ export const translations = {
     instructorPreplyBadge: "Profil Preply 5.0★",
     socialProofPreplyMeta: "5.0★ · 21 recenzii verificate",
     instructorTitle: "Mar7aba! Sunt Ibra.",
-    instructorBio1: "Sunt vorbitor nativ de arabă libaneză, stabilit în București de peste 10 ani. Cu 5+ ani de experiență în predare pe platforme precum Preply.com și altele, am ajutat zeci de cursanți să descopere frumusețea limbii și culturii libaneze.",
-    instructorBio2: "Cursurile mele combină conversația practică cu perspective culturale autentice — de la expresii de zi cu zi până la tradițiile culinare libaneze. Abordarea mea se bazează pe comunicare reală, nu doar gramatică.",
+    instructorBio1:
+      "Sunt vorbitor nativ de arabă libaneză, stabilit în București de peste 10 ani. Cu 5+ ani de experiență în predare pe platforme precum Preply.com și altele, am ajutat zeci de cursanți să descopere frumusețea limbii și culturii libaneze.",
+    instructorBio2:
+      "Cursurile mele combină conversația practică cu perspective culturale autentice — de la expresii de zi cu zi până la tradițiile culinare libaneze. Abordarea mea se bazează pe comunicare reală, nu doar gramatică.",
     instructorStat1: "10+ ani",
     instructorStat1Label: "În București",
     instructorStat2: "5+ ani",
@@ -357,17 +418,22 @@ export const translations = {
     // Cultural value section
     cultureBadge: "O Perspectivă Mai Largă",
     cultureTitle: "Mai mult decât o limbă — o cultură",
-    cultureDesc: "Învățarea arabei libaneze deschide uși spre moștenire, carieră și conexiuni umane reale.",
+    cultureDesc:
+      "Învățarea arabei libaneze deschide uși spre moștenire, carieră și conexiuni umane reale.",
     culture1Title: "Conexiunea cu Moștenirea",
-    culture1Desc: "Reconectează-te cu rădăcinile, familia și tradițiile Levantului prin limba lor vie.",
+    culture1Desc:
+      "Reconectează-te cu rădăcinile, familia și tradițiile Levantului prin limba lor vie.",
     culture2Title: "Oportunități Profesionale",
-    culture2Desc: "Diplomație, business, jurnalism și ONG-uri din Orientul Mijlociu — araba deschide piețe.",
+    culture2Desc:
+      "Diplomație, business, jurnalism și ONG-uri din Orientul Mijlociu — araba deschide piețe.",
     culture3Title: "Fluență Autentică",
-    culture3Desc: "Vorbește dialectul real al străzilor din Beirut, nu doar araba clasică din manuale.",
+    culture3Desc:
+      "Vorbește dialectul real al străzilor din Beirut, nu doar araba clasică din manuale.",
     cultureCta: "Începe Călătoria",
 
     // Curriculum section
-    bookingPlaceholder: "Calendarul de programări va fi disponibil în curând. Pentru a rezerva o sesiune, contactează-ne pe WhatsApp.",
+    bookingPlaceholder:
+      "Calendarul de programări va fi disponibil în curând. Pentru a rezerva o sesiune, contactează-ne pe WhatsApp.",
     // Capacity / waitlist / calendly
     capSeatsLabel: "locuri ocupate",
     capNeedToStart: "Mai e nevoie de {n} pentru a începe grupa",
@@ -375,71 +441,100 @@ export const translations = {
     capSpotsLeft: "{n} locuri rămase",
     capForming: "Grup în formare — primii {n} cursanți confirmă startul",
     kidsWaitlistTitle: "Lista de așteptare — Curs Copii",
-    kidsWaitlistDesc: "Grupa începe doar la minimum 4 copii. Plătește un avans rambursabil de 175 LEI (25%) ca să-ți păstrăm locul. Restul de 525 LEI se achită la startul cursului.",
-    kidsWaitlistCheckbox: "Vreau să plătesc avansul de 175 LEI acum (rambursabil dacă grupa nu pornește)",
+    kidsWaitlistDesc:
+      "Grupa începe doar la minimum 4 copii. Plătește un avans rambursabil de 175 LEI (25%) ca să-ți păstrăm locul. Restul de 525 LEI se achită la startul cursului.",
+    kidsWaitlistCheckbox:
+      "Vreau să plătesc avansul de 175 LEI acum (rambursabil dacă grupa nu pornește)",
     kidsWaitlistRedirect: "Te redirecționez către plata securizată Stripe…",
-    kidsDepositFailedDesc: "Înscrierea ta a fost înregistrată, dar plata avansului nu a putut fi inițiată. Poți încerca din nou sau ne poți contacta pe WhatsApp.",
+    kidsDepositFailedDesc:
+      "Înscrierea ta a fost înregistrată, dar plata avansului nu a putut fi inițiată. Poți încerca din nou sau ne poți contacta pe WhatsApp.",
     kidsDepositRetryCta: "Încearcă din nou plata avansului",
     bookingIntroTitle: "Ultimul pas: rezervă-ți sesiunea gratuită de probă",
-    bookingIntroDesc: "30 de minute cu Ibra — vorbim despre obiectivele tale și îți răspund la întrebări. Prima sesiune este gratuită.",
+    bookingIntroDesc:
+      "30 de minute cu Ibra — vorbim despre obiectivele tale și îți răspund la întrebări. Prima sesiune este gratuită.",
     trialPageTitle: "Lecție gratuită de probă",
     // "Fără obligații" stopped being the whole truth when the scheduler grew a
     // Stripe card confirmation: the visitor met the card only after clicking
     // through, which is the worst place to learn about it. Say it up front.
-    trialPageSubtitle: "30 de minute, 0 lei. Îți confirmi locul cu cardul, fără nicio plată. Online oricând, sau fizic în București sâmbăta și duminica.",
+    trialPageSubtitle:
+      "30 de minute, 0 lei. Îți confirmi locul cu cardul, fără nicio plată. Online oricând, sau fizic în București sâmbăta și duminica.",
     trialPageSeoTitle: "Lecție gratuită de arabă libaneză | Ibra",
-    trialPageSeoDesc: "Rezervă o lecție gratuită de 30 de minute cu Ibra. Proba costă 0 lei; locul se confirmă cu cardul, fără plată.",
+    trialPageSeoDesc:
+      "Rezervă o lecție gratuită de 30 de minute cu Ibra. Proba costă 0 lei; locul se confirmă cu cardul, fără plată.",
     // Explanatory copy below the form. /trial was 67 words of visible text —
     // thin enough that Google can decline to index it — while being one of the
     // pages we most want indexed. Every claim here is already stated elsewhere
     // on the site or comes from booking_event_types in the database.
-    schedulerPhysicalTrialWeekend: "La centrul din București se poate programa deocamdată doar sâmbăta și duminica. Pentru celelalte zile, alege online.",
+    schedulerPhysicalTrialWeekend:
+      "La centrul din București se poate programa deocamdată doar sâmbăta și duminica. Pentru celelalte zile, alege online.",
     quizWhatH2: "Ce face chestionarul",
-    quizWhatP: "Îți pune câteva întrebări scurte despre motivul pentru care vrei să înveți, timpul pe care îl ai și felul în care preferi să studiezi, apoi îți arată ce format ți se potrivește: grupă pe nivel, lecții private 1:1 sau curs pentru copii. Durează sub două minute și nu cere înregistrare.",
+    quizWhatP:
+      "Îți pune câteva întrebări scurte despre motivul pentru care vrei să înveți, timpul pe care îl ai și felul în care preferi să studiezi, apoi îți arată ce format ți se potrivește: grupă pe nivel, lecții private 1:1 sau curs pentru copii. Durează sub două minute și nu cere înregistrare.",
     quizNotH2: "Ce nu este",
-    quizNotP: "Nu e un test de gramatică și nu îți dă o notă — pentru asta există testul de nivel, cu 24 de întrebări. Chestionarul de aici alege doar formatul de curs; nivelul final se confirmă oricum în lecția de probă, în conversație cu Ibra.",
+    quizNotP:
+      "Nu e un test de gramatică și nu îți dă o notă — pentru asta există testul de nivel, cu 24 de întrebări. Chestionarul de aici alege doar formatul de curs; nivelul final se confirmă oricum în lecția de probă, în conversație cu Ibra.",
     quizAfterH2: "După ce termini",
-    quizAfterP: "Primești o recomandare cu pagina cursului potrivit și poți merge direct la lecția de probă gratuită. Nimic nu se trimite automat și nu ești înscris la nimic: recomandarea e doar un punct de plecare.",
+    quizAfterP:
+      "Primești o recomandare cu pagina cursului potrivit și poți merge direct la lecția de probă gratuită. Nimic nu se trimite automat și nu ești înscris la nimic: recomandarea e doar un punct de plecare.",
     bookingLandingWhichH2: "Care variantă ți se potrivește",
     bookingLandingTrialH3: "Începe cu proba gratuită dacă…",
-    bookingLandingTrialLi1: "nu ai mai studiat cu noi și vrei să vezi cum arată o lecție;",
-    bookingLandingTrialLi2: "nu știi de la ce nivel pornești — îl stabilim împreună în conversație (sau îl afli dinainte cu testul de nivel, ~15 minute);",
-    bookingLandingTrialLi3: "vrei să întrebi ceva înainte să te decizi: orar, ritm, cât durează până vorbești.",
+    bookingLandingTrialLi1:
+      "nu ai mai studiat cu noi și vrei să vezi cum arată o lecție;",
+    bookingLandingTrialLi2:
+      "nu știi de la ce nivel pornești — îl stabilim împreună în conversație (sau îl afli dinainte cu testul de nivel, ~15 minute);",
+    bookingLandingTrialLi3:
+      "vrei să întrebi ceva înainte să te decizi: orar, ritm, cât durează până vorbești.",
     bookingLandingEnrollH3: "Mergi direct la înscriere dacă…",
-    bookingLandingEnrollLi1: "știi deja ce format vrei — grupă, lecții 1:1 sau curs pentru copii;",
+    bookingLandingEnrollLi1:
+      "știi deja ce format vrei — grupă, lecții 1:1 sau curs pentru copii;",
     bookingLandingEnrollLi2: "ai făcut deja proba și vrei să continui;",
-    bookingLandingEnrollLi3: "te înscrii pentru altcineva (copil, partener) și ai datele necesare.",
+    bookingLandingEnrollLi3:
+      "te înscrii pentru altcineva (copil, partener) și ai datele necesare.",
     bookingLandingFormatsH2: "Formatele disponibile",
-    bookingLandingFormatsP: "Trei trasee, toate cu același profesor nativ. Grupele merg pe niveluri CEFR (A1–C2), cu maximum 6 cursanți online și 8 fizic și două ședințe de 90 de minute pe săptămână. Lecțiile private 1:1 se programează flexibil, în sesiuni de 60 de minute, cu programa adaptată obiectivului tău. Cursul pentru copii (6–11 ani) merge prin joc, poveste și activitate, nu prin gramatică.",
+    bookingLandingFormatsP:
+      "Trei trasee, toate cu același profesor nativ. Grupele merg pe niveluri CEFR (A1–C2), cu maximum 6 cursanți online și 8 fizic și două ședințe de 90 de minute pe săptămână. Lecțiile private 1:1 se programează flexibil, în sesiuni de 60 de minute, cu programa adaptată obiectivului tău. Cursul pentru copii (6–11 ani) merge prin joc, poveste și activitate, nu prin gramatică.",
     bookingLandingPricesH2: "Cât costă",
-    bookingLandingPricesP: "Grupa pornește de la {groupOnline} lei/lună online, respectiv {groupFizic} lei/lună fizic — prețul crește pe măsură ce urci în nivel. Lecțiile private sunt {priv} lei ședința de 60 de minute online ({privFizic} lei fizic), cu −15% la pachetul de 20 de lecții. Plata se face lunar sau integral; plata integrală a cursului are −15%. Proba rămâne 0 lei; cardul se salvează în siguranță doar pentru confirmarea locului.",
-    bookingLandingWhichP: "Dacă nu ai mai studiat cu noi, începe cu proba gratuită: 30 de minute în care ne cunoaștem, îți răspund la întrebări și stabilim de unde pornești. Dacă știi deja ce vrei — grupă, lecții 1:1 sau curs pentru copii — mergi direct la înscriere.",
+    bookingLandingPricesP:
+      "Grupa pornește de la {groupOnline} lei/lună online, respectiv {groupFizic} lei/lună fizic — prețul crește pe măsură ce urci în nivel. Lecțiile private sunt {priv} lei ședința de 60 de minute online ({privFizic} lei fizic), cu −15% la pachetul de 20 de lecții. Plata se face lunar sau integral; plata integrală a cursului are −15%. Proba rămâne 0 lei; cardul se salvează în siguranță doar pentru confirmarea locului.",
+    bookingLandingWhichP:
+      "Dacă nu ai mai studiat cu noi, începe cu proba gratuită: 30 de minute în care ne cunoaștem, îți răspund la întrebări și stabilim de unde pornești. Dacă știi deja ce vrei — grupă, lecții 1:1 sau curs pentru copii — mergi direct la înscriere.",
     bookingLandingWhereH2: "Unde au loc lecțiile",
-    bookingLandingWhereP: "Online pe Zoom, de oriunde, sau fizic la Raduga Creative Center, Strada Icoanei 80, București. Proba fizică se programează deocamdată doar sâmbăta și duminica; online, în orice zi cu locuri libere.",
+    bookingLandingWhereP:
+      "Online pe Zoom, de oriunde, sau fizic la Raduga Creative Center, Strada Icoanei 80, București. Proba fizică se programează deocamdată doar sâmbăta și duminica; online, în orice zi cu locuri libere.",
     bookingLandingWhenH2: "Când poți rezerva",
-    bookingLandingWhenP: "Sloturile se rezervă cu cel puțin 12 ore înainte și cu cel mult 30 de zile în avans. Primești confirmarea pe email, cu un link din care poți anula sau reprograma.",
+    bookingLandingWhenP:
+      "Sloturile se rezervă cu cel puțin 12 ore înainte și cu cel mult 30 de zile în avans. Primești confirmarea pe email, cu un link din care poți anula sau reprograma.",
     trialWhatH2: "Ce se întâmplă în lecția de probă",
-    trialWhatP: "Sunt 30 de minute cu Ibra, profesor nativ din Liban. Vorbim despre motivul pentru care vrei să înveți arabă libaneză — familie, călătorie, muncă sau curiozitate — și îți răspund la întrebări despre cursuri, ritm și program. Nu e un test: nu ai nevoie de nicio pregătire și nu trebuie să știi niciun cuvânt în arabă.",
+    trialWhatP:
+      "Sunt 30 de minute cu Ibra, profesor nativ din Liban. Vorbim despre motivul pentru care vrei să înveți arabă libaneză — familie, călătorie, muncă sau curiozitate — și îți răspund la întrebări despre cursuri, ritm și program. Nu e un test: nu ai nevoie de nicio pregătire și nu trebuie să știi niciun cuvânt în arabă.",
     trialWhyH2: "De ce merită înainte să te înscrii",
-    trialWhyP: "Proba există ca să cunoști instructorul, să testezi metoda și să vezi dacă formatul ți se potrivește înainte de a plăti ceva. Dacă după cele 30 de minute simți că nu e pentru tine, nu se întâmplă nimic — nu ceri anulare, nu explici nimic.",
+    trialWhyP:
+      "Proba există ca să cunoști instructorul, să testezi metoda și să vezi dacă formatul ți se potrivește înainte de a plăti ceva. Dacă după cele 30 de minute simți că nu e pentru tine, nu se întâmplă nimic — nu ceri anulare, nu explici nimic.",
     trialHowH2: "Cum funcționează programarea",
     // These four describe the order of the page, so they moved when the page
     // did: the times come first now, and the details are asked for last.
-    trialHowLi1: "Alegi formatul — online în orice zi disponibilă, sau fizic la centrul din București, sâmbăta și duminica.",
+    trialHowLi1:
+      "Alegi formatul — online în orice zi disponibilă, sau fizic la centrul din București, sâmbăta și duminica.",
     trialHowLi2: "Alegi singur intervalul, din sloturile libere din calendar.",
     trialHowLi3: "Completezi numele, emailul și telefonul.",
-    trialHowLi4: "Îți confirmi locul cu cardul prin Stripe — 0 lei acum — și primești confirmarea pe email, cu detaliile întâlnirii.",
+    trialHowLi4:
+      "Îți confirmi locul cu cardul prin Stripe — 0 lei acum — și primești confirmarea pe email, cu detaliile întâlnirii.",
     trialRulesH2: "Bun de știut",
-    trialRulesLi1: "Lecția de probă este gratuită și se oferă o singură dată de persoană.",
-    trialRulesLi2: "Se rezervă cu cel puțin 12 ore înainte și cu cel mult 30 de zile în avans.",
-    trialRulesLi3: "Poți anula sau reprograma gratuit cu cel puțin 24 de ore înainte, din linkul primit pe email.",
-    trialRulesLi4: "Proba costă 0 lei; cardul se salvează în siguranță la confirmarea locului. Dacă nu te prezinți sau anulezi mai târziu de 24 de ore, se reține 150 lei, cât o lecție privată.",
+    trialRulesLi1:
+      "Lecția de probă este gratuită și se oferă o singură dată de persoană.",
+    trialRulesLi2:
+      "Se rezervă cu cel puțin 12 ore înainte și cu cel mult 30 de zile în avans.",
+    trialRulesLi3:
+      "Poți anula sau reprograma gratuit cu cel puțin 24 de ore înainte, din linkul primit pe email.",
+    trialRulesLi4:
+      "Proba costă 0 lei; cardul se salvează în siguranță la confirmarea locului. Dacă nu te prezinți sau anulezi mai târziu de 24 de ore, se reține 150 lei, cât o lecție privată.",
 
     trialFormSubmitting: "Se salvează…",
     trialFormCta: "Continuă spre programare",
     trialQuizCta: "Vrei o lecție gratuită de probă mai întâi?",
     trialFunnelTitle: "Pâlnie de conversie probă",
-    trialFunnelSubtitle: "Vezi cum trec leadii de la proba gratuită la înscrierea plătită.",
+    trialFunnelSubtitle:
+      "Vezi cum trec leadii de la proba gratuită la înscrierea plătită.",
     trialFunnelStepRegistered: "Înscrieri probă",
     trialFunnelStepBooked: "Slot programat",
     trialFunnelStepAttended: "Probă susținută",
@@ -448,27 +543,35 @@ export const translations = {
     navBooking: "Programare",
     bookingAddToCalendar: "Adaugă în calendar (.ics)",
     bookingManageButton: "Gestionează programarea",
-    bookingRescheduleHelp: "Selectează ziua și ora dorită. Programarea va fi mutată automat.",
-    bookingGdprRequired: "Trebuie să accepți politica de confidențialitate pentru a putea rezerva.",
+    bookingRescheduleHelp:
+      "Selectează ziua și ora dorită. Programarea va fi mutată automat.",
+    bookingGdprRequired:
+      "Trebuie să accepți politica de confidențialitate pentru a putea rezerva.",
     bookingFormatOnline: "Online (Zoom)",
     bookingFormatPhysical: "Fizic (București)",
     bookingZoomLinkLabel: "Link-ul Zoom pentru lecție",
-    bookingZoomNotice: "Te vei conecta prin Zoom. Link-ul va fi trimis pe email.",
-    bookingPaidDesc: "Alege un slot disponibil pentru lecția ta privată de arabă libaneză. Confirmare pe email. Te vei conecta prin Zoom — link-ul va fi trimis pe email.",
+    bookingZoomNotice:
+      "Te vei conecta prin Zoom. Link-ul va fi trimis pe email.",
+    bookingPaidDesc:
+      "Alege un slot disponibil pentru lecția ta privată de arabă libaneză. Confirmare pe email. Te vei conecta prin Zoom — link-ul va fi trimis pe email.",
     // Common shared
     // Index page payment toasts & SEO
     paymentSuccessPrivate: "Plata reușită! 🎉 Programează-ți lecția acum.",
     paymentSuccessPrivateCta: "Programează",
-    paymentSuccessGeneric: "Plata a fost procesată cu succes! 🎉 Te vom contacta în curând.",
+    paymentSuccessGeneric:
+      "Plata a fost procesată cu succes! 🎉 Te vom contacta în curând.",
     paymentCanceled: "Plata a fost anulată. Poți încerca din nou oricând.",
     referralCodeLabel: "Cod de referință (opțional)",
     referralCodePlaceholder: "Ai un cod de la un prieten?",
     // Thank you page
     thankYouTitle: "Mulțumim pentru înregistrare!",
-    thankYouSubtitle: "Plata ta a fost confirmată. Abia așteptăm să te avem alături!",
-    thankYouSubtitleUnconfirmed: "Confirmarea plății și pașii următori îți vin pe email.",
+    thankYouSubtitle:
+      "Plata ta a fost confirmată. Abia așteptăm să te avem alături!",
+    thankYouSubtitleUnconfirmed:
+      "Confirmarea plății și pașii următori îți vin pe email.",
     thankYouSeoTitle: "Mulțumim! — Înregistrare confirmată",
-    thankYouSeoDescription: "Înregistrarea ta a fost confirmată. Verifică-ți emailul pentru detalii despre cursul de arabă libaneză.",
+    thankYouSeoDescription:
+      "Înregistrarea ta a fost confirmată. Verifică-ți emailul pentru detalii despre cursul de arabă libaneză.",
     thankYouOrderSummary: "Sumar comandă",
     thankYouCourseType: "Tip curs",
     thankYouSchedule: "Program",
@@ -482,20 +585,25 @@ export const translations = {
     thankYouScheduleKids: "Te contactăm pentru programare",
     thankYouNextStepsTitle: "Ce urmează:",
     thankYouStep1Title: "Verifică-ți emailul",
-    thankYouStep1Desc: "Vei primi un email de confirmare cu toate detaliile în câteva minute.",
+    thankYouStep1Desc:
+      "Vei primi un email de confirmare cu toate detaliile în câteva minute.",
     thankYouStep2Title: "Îți scriem cu detaliile",
-    thankYouStep2Desc: "În 24 de ore de la plată îți scriem cu link-ul Zoom (online) sau adresa centrului (fizic) și materialele.",
+    thankYouStep2Desc:
+      "În 24 de ore de la plată îți scriem cu link-ul Zoom (online) sau adresa centrului (fizic) și materialele.",
     thankYouStep3Title: "Prima ta lecție",
-    thankYouStep3Desc: "Ne vedem la prima lecție! Vino cu întrebări și entuziasm.",
+    thankYouStep3Desc:
+      "Ne vedem la prima lecție! Vino cu întrebări și entuziasm.",
     thankYouInviteTitle: "Învață cu un prieten",
-    thankYouInviteDesc: "Trimite link-ul unui prieten care vrea să învețe arabă libaneză.",
+    thankYouInviteDesc:
+      "Trimite link-ul unui prieten care vrea să învețe arabă libaneză.",
     thankYouInviteCta: "Invită un prieten",
     thankYouInviteCopied: "Link copiat în clipboard!",
     thankYouShareMessage: "Învăț arabă libaneză cu Ibra. Înscrie-te și tu!",
     thankYouSchedulePrivateCta: "Programează celelalte lecții",
     thankYouBackHome: "Înapoi la pagina principală",
     thankYouLoading: "Se încarcă detaliile...",
-    thankYouError: "Nu am putut încărca detaliile plății, dar înregistrarea ta a fost primită.",
+    thankYouError:
+      "Nu am putut încărca detaliile plății, dar înregistrarea ta a fost primită.",
     // 60 characters is where Google truncates; the old wording was 64 and
     // also disagreed with the title the prerender writes into the static head.
     homeSeoTitle: HOME_META.ro.title,
@@ -505,15 +613,19 @@ export const translations = {
     bookingPageTitleTrial: "Lecție gratuită de probă",
     bookingPageSeoTitlePaid: "Programează-ți lecția",
     bookingPageSeoTitleTrial: "Lecție gratuită de probă",
-    bookingPageSubtitlePaid: "Alege un slot disponibil. Vei primi confirmarea pe email.",
-    bookingPageSubtitleTrial: "30 de minute, gratuit. Vei primi confirmarea pe email.",
-    bookingTrialSeoDesc: "Programează o lecție gratuită de 30 de minute de arabă libaneză. 0 lei; locul se confirmă cu cardul, confirmare pe email.",
+    bookingPageSubtitlePaid:
+      "Alege un slot disponibil. Vei primi confirmarea pe email.",
+    bookingPageSubtitleTrial:
+      "30 de minute, gratuit. Vei primi confirmarea pe email.",
+    bookingTrialSeoDesc:
+      "Programează o lecție gratuită de 30 de minute de arabă libaneză. 0 lei; locul se confirmă cu cardul, confirmare pe email.",
     // NativeScheduler
     schedulerNameRequired: "Completează numele și emailul",
     schedulerSlotTaken: "Slotul tocmai a fost rezervat. Alege altul.",
     schedulerBookingFailed: "Rezervarea a eșuat. Încearcă din nou.",
     schedulerLoadingSlots: "Se încarcă sloturile…",
-    schedulerNoSlots30d: "Nu sunt sloturi disponibile în următoarele 30 de zile. Scrie-ne pe WhatsApp.",
+    schedulerNoSlots30d:
+      "Nu sunt sloturi disponibile în următoarele 30 de zile. Scrie-ne pe WhatsApp.",
     schedulerNoTimesToday: "Nicio oră disponibilă în această zi.",
     tzToggleLabel: "Afișează în fusul meu orar",
     tzYourTime: "Ora ta",
@@ -557,23 +669,32 @@ export const translations = {
     manageCurrentSlotBadge: "Programarea ta actuală",
     manageConfirmCta: "Confirmă",
     manageTooLateTitle: "Prea târziu pentru modificări online",
-    manageTooLateBody: "Lecția ta începe în mai puțin de 24 de ore, așa că nu mai poate fi anulată sau reprogramată de aici. Ora rămâne rezervată pentru tine.",
-    manageTooLateEmergency: "Dacă a apărut o urgență reală, scrie-ne pe WhatsApp și explică pe scurt ce s-a întâmplat. Fiecare situație este analizată individual.",
+    manageTooLateBody:
+      "Lecția ta începe în mai puțin de 24 de ore, așa că nu mai poate fi anulată sau reprogramată de aici. Ora rămâne rezervată pentru tine.",
+    manageTooLateEmergency:
+      "Dacă a apărut o urgență reală, scrie-ne pe WhatsApp și explică pe scurt ce s-a întâmplat. Fiecare situație este analizată individual.",
     manageWhatsAppCta: "Scrie-ne pe WhatsApp",
-    manageTooLateToast: "Lecția începe în mai puțin de 24 de ore. Scrie-ne pe WhatsApp.",
-    manageSlotNotBookable: "Intervalul ales nu mai poate fi rezervat. Alege altul din listă.",
+    manageTooLateToast:
+      "Lecția începe în mai puțin de 24 de ore. Scrie-ne pe WhatsApp.",
+    manageSlotNotBookable:
+      "Intervalul ales nu mai poate fi rezervat. Alege altul din listă.",
     // Legal pages SEO
     termsSeoTitle: "Termeni și Condiții — Centrul de Arabă Libaneză",
-    termsSeoDescription: "Termenii și condițiile de utilizare a serviciilor educaționale oferite de Centrul de Arabă Libaneză.",
-    privacySeoTitle: "Politica de Confidențialitate — Centrul de Arabă Libaneză",
-    privacySeoDescription: "Cum colectăm, folosim și protejăm datele tale personale conform GDPR la Centrul de Arabă Libaneză.",
+    termsSeoDescription:
+      "Termenii și condițiile de utilizare a serviciilor educaționale oferite de Centrul de Arabă Libaneză.",
+    privacySeoTitle:
+      "Politica de Confidențialitate — Centrul de Arabă Libaneză",
+    privacySeoDescription:
+      "Cum colectăm, folosim și protejăm datele tale personale conform GDPR la Centrul de Arabă Libaneză.",
     // Find your track quiz
     quizBadge: "Găsește cursul potrivit",
     programsQuizLink: "Nu ești sigur? Fă quiz-ul →",
-    programsLevelTestLink: "Știi deja ceva arabă libaneză? Fă testul de nivel (15 min) →",
+    programsLevelTestLink:
+      "Știi deja ceva arabă libaneză? Fă testul de nivel (15 min) →",
     quizBackToCourses: "Înapoi la cursuri",
     quizTitle: "În 30 de secunde îți recomandăm cursul potrivit pentru tine",
-    quizDesc: "Răspunde la câteva întrebări scurte și îți arătăm exact ce ți se potrivește.",
+    quizDesc:
+      "Răspunde la câteva întrebări scurte și îți arătăm exact ce ți se potrivește.",
     quizStepLabel: "Pasul {n} din {total}",
     quizBack: "← Înapoi",
     quizRestart: "Începe din nou",
@@ -584,7 +705,8 @@ export const translations = {
     quizQ1OptKidsDesc: "Caut un curs pentru copilul meu.",
     quizQ2: "Cum preferi să înveți?",
     quizQ2OptGroup: "Într-un grup mic, la preț mai bun",
-    quizQ2OptGroupDesc: "Înveți alături de alți cursanți, cu un preț mai accesibil.",
+    quizQ2OptGroupDesc:
+      "Înveți alături de alți cursanți, cu un preț mai accesibil.",
     quizQ2OptPrivate: "Doar eu și profesorul",
     quizQ2OptPrivateDesc: "Atenție 100% pe ritmul și obiectivele tale.",
     quizQ3: "Ce nivel ai?",
@@ -600,7 +722,8 @@ export const translations = {
     quizResultGroupTitle: "Curs de Grup — nivel {level}",
     quizResultGroupDesc: "Grupuri mici, profesori nativi și un preț prietenos.",
     quizResultPrivateTitle: "Lecții Private 1-la-1",
-    quizResultPrivateDesc: "Program flexibil și atenție 100% pe obiectivele tale.",
+    quizResultPrivateDesc:
+      "Program flexibil și atenție 100% pe obiectivele tale.",
     quizResultKidsTitle: "Arabă pentru Copii",
     quizResultKidsDesc: "Activități interactive, potrivite pentru cei mici.",
     quizResultPriceFromGroup: "de la {price} LEI / lună",
@@ -610,7 +733,8 @@ export const translations = {
     quizCompareAll: "Sau compară toate opțiunile →",
     // Comparison panel
     compareTitle: "Compară toate opțiunile",
-    compareSubtitle: "Vezi diferențele între cursul de grup, lecțiile private și cursul pentru copii.",
+    compareSubtitle:
+      "Vezi diferențele între cursul de grup, lecțiile private și cursul pentru copii.",
     compareRowPrice: "Preț / lună (de la)",
     compareRowStudents: "Cursanți per clasă",
     compareRowFlexibility: "Flexibilitate program",
@@ -626,7 +750,8 @@ export const translations = {
     compareGroupStudents: "online max. 6 (min. 3) · fizic max. 8 (min. 4)",
     comparePrivateStudents: "1",
     compareKidsStudents: "max. 8 (min. 4)",
-    compareGroupFlexibility: "Fix: 2 lecții de 90 min pe săptămână — orele fiecărei grupe le vezi la înscriere",
+    compareGroupFlexibility:
+      "Fix: 2 lecții de 90 min pe săptămână — orele fiecărei grupe le vezi la înscriere",
     comparePrivateFlexibility: "Flexibil (tu alegi)",
     compareKidsFlexibility: "Fix (în funcție de grupă)",
     compareGroupFormat: "Online & Fizic",
@@ -658,8 +783,10 @@ export const translations = {
     cohortPickerLabel: "Alege cohorta",
     cohortPickerHelp: "Selectează data de start care ți se potrivește.",
     cohortPickerLoading: "Se încarcă cohortele…",
-    cohortPickerEmpty: "Momentan nu sunt cohorte deschise pentru acest nivel. Te punem pe lista de așteptare.",
-    cohortPickerEmptyEn: "Momentan nu sunt grupe predate în engleză pentru acest nivel. Te punem pe lista de așteptare și te anunțăm când deschidem una.",
+    cohortPickerEmpty:
+      "Momentan nu sunt cohorte deschise pentru acest nivel. Te punem pe lista de așteptare.",
+    cohortPickerEmptyEn:
+      "Momentan nu sunt grupe predate în engleză pentru acest nivel. Te punem pe lista de așteptare și te anunțăm când deschidem una.",
     cohortLangRo: "Predat în română",
     cohortLangEn: "Predat în engleză",
     cohortStartsOn: "Start",
@@ -675,9 +802,11 @@ export const translations = {
     cohortStatusInProgress: "În desfășurare",
     // Kids weekly slots
     kidsSlotPickerLabel: "Alege ora săptămânală",
-    kidsSlotPickerHelp: "Cursurile sunt recurente săptămânal. Alege ziua și formatul preferat.",
+    kidsSlotPickerHelp:
+      "Cursurile sunt recurente săptămânal. Alege ziua și formatul preferat.",
     kidsSlotPickerLoading: "Se încarcă orele…",
-    kidsSlotPickerEmpty: "Momentan nu sunt ore deschise. Lasă-ne datele și te anunțăm.",
+    kidsSlotPickerEmpty:
+      "Momentan nu sunt ore deschise. Lasă-ne datele și te anunțăm.",
     kidsSlotFormatOnline: "Online",
     kidsSlotFormatPhysical: "Fizic — București",
     kidsSlotAllFormats: "Toate",
@@ -712,14 +841,18 @@ export const translations = {
     cohortNoteTaughtRo: "în română",
     cohortNoteTaughtEn: "în engleză",
     cohortNoteSeatsOf: "{left} din {max} locuri libere",
-    cohortNoteFallback: "Grupele A1–C2 pornesc periodic. Scrie-ne și îți spunem exact când începe următoarea.",
+    cohortNoteFallback:
+      "Grupele A1–C2 pornesc periodic. Scrie-ne și îți spunem exact când începe următoarea.",
     activeNowCta: "Vezi cursul și înscrie-te",
 
     // /cursuri/grup
-    courseGrupMetaTitle: "Curs de Grup de Arabă Libaneză (A1–C2) — București & online",
-    courseGrupMetaDesc: "Curs de grup de arabă libaneză cu profesor nativ. Niveluri A1–C2, grupe mici (max. 6 online, 8 fizic), fizic în București sau online. De la 500 LEI / lună.",
+    courseGrupMetaTitle:
+      "Curs de Grup de Arabă Libaneză (A1–C2) — București & online",
+    courseGrupMetaDesc:
+      "Curs de grup de arabă libaneză cu profesor nativ. Niveluri A1–C2, grupe mici (max. 6 online, 8 fizic), fizic în București sau online. De la 500 LEI / lună.",
     courseGrupH1: "Curs de Grup de Arabă Libaneză",
-    courseGrupIntro: "Învață araba libaneză într-un grup mic (maximum 6 cursanți online și 8 fizic), cu profesor nativ și un curriculum CEFR clar de la A1 la C2. Cursurile au loc fizic în București sau online, cu lecții de două ori pe săptămână.",
+    courseGrupIntro:
+      "Învață araba libaneză într-un grup mic (maximum 6 cursanți online și 8 fizic), cu profesor nativ și un curriculum CEFR clar de la A1 la C2. Cursurile au loc fizic în București sau online, cu lecții de două ori pe săptămână.",
     courseGrupPriceLine: "De la 500 LEI / lună · 6 niveluri (A1 → C2)",
     courseGrupFeat1: "Grupuri mici — max. 6 cursanți online, 8 fizic",
     courseGrupFeat2: "Curriculum CEFR (A1–C2)",
@@ -727,10 +860,13 @@ export const translations = {
     courseGrupFeat4: "Fizic în București sau online via Zoom",
 
     // /cursuri/private
-    coursePrivateMetaTitle: "Lecții Private de Arabă Libaneză 1:1 — București & online",
-    coursePrivateMetaDesc: "Lecții 1:1 de arabă libaneză cu profesor nativ. Program flexibil, curriculum adaptat ție, fizic în București sau online. 150 LEI / lecție online, 210 LEI fizic.",
+    coursePrivateMetaTitle:
+      "Lecții Private de Arabă Libaneză 1:1 — București & online",
+    coursePrivateMetaDesc:
+      "Lecții 1:1 de arabă libaneză cu profesor nativ. Program flexibil, curriculum adaptat ție, fizic în București sau online. 150 LEI / lecție online, 210 LEI fizic.",
     coursePrivateH1: "Lecții Private de Arabă Libaneză",
-    coursePrivateIntro: "Lecții 1:1 cu profesor nativ, adaptate ritmului și obiectivelor tale. Alege orarul care ți se potrivește, fizic în București sau online prin Zoom. Pachetele cu mai multe lecții vin cu reducere.",
+    coursePrivateIntro:
+      "Lecții 1:1 cu profesor nativ, adaptate ritmului și obiectivelor tale. Alege orarul care ți se potrivește, fizic în București sau online prin Zoom. Pachetele cu mai multe lecții vin cu reducere.",
     coursePrivateFeat1: "Curriculum 100% personalizat",
     coursePrivateFeat2: "Program flexibil, tu alegi orele",
     coursePrivateFeat3: "Fizic în București sau online",
@@ -738,9 +874,11 @@ export const translations = {
 
     // /cursuri/copii
     courseCopiiMetaTitle: "Cursuri de Arabă Libaneză pentru Copii — București",
-    courseCopiiMetaDesc: "Cursuri de arabă libaneză pentru copii 6–11 ani, fizic în București. Învățare prin jocuri, activități și povești, cu profesor nativ libanez.",
+    courseCopiiMetaDesc:
+      "Cursuri de arabă libaneză pentru copii 6–11 ani, fizic în București. Învățare prin jocuri, activități și povești, cu profesor nativ libanez.",
     courseCopiiH1: "Cursuri de Arabă Libaneză pentru Copii",
-    courseCopiiIntro: "Cursuri concepute special pentru copii (6–11 ani), cu activități, jocuri și povești în arabă libaneză. Fizic, la centru; varianta online o vom adăuga mai târziu.",
+    courseCopiiIntro:
+      "Cursuri concepute special pentru copii (6–11 ani), cu activități, jocuri și povești în arabă libaneză. Fizic, la centru; varianta online o vom adăuga mai târziu.",
     courseCopiiFeat1: "Vârste 6–11 ani, grupe pe categorii de vârstă",
     courseCopiiFeat2: "Lecții bazate pe joc și interacțiune",
     courseCopiiFeat3: "Fizic, în București (online mai târziu)",
@@ -748,21 +886,24 @@ export const translations = {
 
     // Course pages — section labels
     coursePageRegisterTitle: "Înscrie-te acum",
-    coursePageRegisterDesc: "Trei pași: datele tale, ziua și ora, apoi plata. Lecția e confirmată după plată.",
+    coursePageRegisterDesc:
+      "Trei pași: datele tale, ziua și ora, apoi plata. Lecția e confirmată după plată.",
 
     // Navbar — courses dropdown
 
     // Course landing — shared
     priceOnlineShort: "Online",
     priceFizicShort: "Fizic",
-    priceSurchargeNote: "Cursurile fizice sunt cu 40% mai scumpe decât online (acoperă chiria sălii și deplasarea).",
+    priceSurchargeNote:
+      "Cursurile fizice sunt cu 40% mai scumpe decât online (acoperă chiria sălii și deplasarea).",
     priceLeiPerMonth: "LEI / lună",
-   priceFromLabel: "De la",
+    priceFromLabel: "De la",
     priceLeiPerLesson: "LEI / lecție",
 
     // /cursuri/grup — level grid
     grupChooseLevelTitle: "Alege-ți nivelul",
-    grupChooseLevelDesc: "Curriculum complet pe lecții, ore și obiective pentru fiecare nivel CEFR. Apasă pe nivel pentru detalii și înscriere.",
+    grupChooseLevelDesc:
+      "Curriculum complet pe lecții, ore și obiective pentru fiecare nivel CEFR. Apasă pe nivel pentru detalii și înscriere.",
     grupLevelCardLessons: "lecții",
     grupLevelCardHours: "ore",
     grupLevelCardViewFull: "Vezi curriculum + înscriere →",
@@ -771,11 +912,14 @@ export const translations = {
 
     // Don't know your level block (shared on /cursuri/grup)
     dontKnowLevelTitle: "Nu știi ce nivel ți se potrivește?",
-    dontKnowLevelDesc: "Sunt 3 moduri rapide de a afla — alege ce ți se potrivește:",
+    dontKnowLevelDesc:
+      "Sunt 3 moduri rapide de a afla — alege ce ți se potrivește:",
     dontKnowOptQuizTitle: "Fă quiz-ul (30 sec)",
-    dontKnowOptQuizDesc: "Răspunde la câteva întrebări și îți recomandăm cursul potrivit.",
+    dontKnowOptQuizDesc:
+      "Răspunde la câteva întrebări și îți recomandăm cursul potrivit.",
     dontKnowOptTestTitle: "Test la centru (gratuit)",
-    dontKnowOptTestDesc: "Programează un test rapid 1:1 cu profesorul, fizic sau online.",
+    dontKnowOptTestDesc:
+      "Programează un test rapid 1:1 cu profesorul, fizic sau online.",
     dontKnowOptWhatsAppTitle: "Vorbim pe WhatsApp",
     dontKnowOptWhatsAppDesc: "Îți răspundem direct și te ajutăm să alegi.",
 
@@ -786,55 +930,72 @@ export const translations = {
     levelPageCurriculumTitle: "Curriculum complet",
     levelPageOutcomesTitle: "La finalul nivelului poți",
     levelPageRegisterTitle: "Înscrie-te la acest nivel",
-    levelPageRegisterDesc: "Completează formularul și plătește online — locul în grupă e confirmat după plată.",
+    levelPageRegisterDesc:
+      "Completează formularul și plătește online — locul în grupă e confirmat după plată.",
     levelPageInPrepTitle: "În curând — înscrieri viitoare",
-    levelPageInPrepDesc: "Acest nivel se deschide după finalizarea nivelului anterior. Înscrie-te acum și te anunțăm imediat ce se stabilește data de start.",
+    levelPageInPrepDesc:
+      "Acest nivel se deschide după finalizarea nivelului anterior. Înscrie-te acum și te anunțăm imediat ce se stabilește data de start.",
 
     // /cursuri/private — MSA partners note
     privatePersonalizedTitle: "Personalizat pentru tine",
-    privatePersonalizedDesc: "În prima lecție îți testăm nivelul și construim un parcurs adaptat scopului tău: călătorii, familie, muncă, media. Dacă ai nevoie de arabă standard (fuṣḥā / MSA) în loc de libaneză, îți recomandăm parteneri de încredere — la același tarif.",
+    privatePersonalizedDesc:
+      "În prima lecție îți testăm nivelul și construim un parcurs adaptat scopului tău: călătorii, familie, muncă, media. Dacă ai nevoie de arabă standard (fuṣḥā / MSA) în loc de libaneză, îți recomandăm parteneri de încredere — la același tarif.",
     privateVsGroupTitle: "Privat sau grup?",
-    privateVsGroupDesc: "La grup înveți într-o grupă mică — maximum 6 cursanți online și 8 fizic — la un preț mai mic și pe un calendar fix. Privat înseamnă atenție 100%, ritm propriu și program flexibil, la un preț per lecție.",
+    privateVsGroupDesc:
+      "La grup înveți într-o grupă mică — maximum 6 cursanți online și 8 fizic — la un preț mai mic și pe un calendar fix. Privat înseamnă atenție 100%, ritm propriu și program flexibil, la un preț per lecție.",
     privateProcessTitle: "Cum se întâmplă, pas cu pas",
-    privateProcessStep1: "Completezi datele tale: formatul, câte lecții vrei și cum te contactăm.",
-    privateProcessStep2: "Alegi ziua și ora — doar pentru prima lecție sau aceeași oră în fiecare săptămână.",
-    privateProcessStep3: "Plătești și lecția e confirmată. Primești confirmarea pe email, iar Ibra îți scrie ca să se prezinte.",
+    privateProcessStep1:
+      "Completezi datele tale: formatul, câte lecții vrei și cum te contactăm.",
+    privateProcessStep2:
+      "Alegi ziua și ora — doar pentru prima lecție sau aceeași oră în fiecare săptămână.",
+    privateProcessStep3:
+      "Plătești și lecția e confirmată. Primești confirmarea pe email, iar Ibra îți scrie ca să se prezinte.",
 
     // /cursuri/copii — format cards
     copiiFormatChoiceTitle: "Două formate, în funcție de vârstă",
     copiiFormatPrivateTitle: "Privat 1:1 (orice vârstă)",
-    copiiFormatPrivateDesc: "Lecții individuale cu profesor nativ, ritm adaptat copilului. Fizic, la centru.",
+    copiiFormatPrivateDesc:
+      "Lecții individuale cu profesor nativ, ritm adaptat copilului. Fizic, la centru.",
     copiiFormatGroupTitle: "Grup (4–8 copii)",
-    copiiFormatGroupDesc: "Activități prin joc într-o grupă mică, fizic, la centru.",
+    copiiFormatGroupDesc:
+      "Activități prin joc într-o grupă mică, fizic, la centru.",
 
     // /cursuri/copii — curriculum
     copiiCurriculumTitle: "Ce învață copilul tău",
     copiiCurriculumGroupTitle: "În grup — învățare prin joc și interacțiune",
-    copiiCurriculumGroupDesc: "Copiii învață arabă libaneză într-o atmosferă relaxată, alături de alți copii de aceeași vârstă. Fiecare ședință combină jocuri, cântece și activități creative care îi ajută să acumuleze vocabular natural, fără presiune.",
+    copiiCurriculumGroupDesc:
+      "Copiii învață arabă libaneză într-o atmosferă relaxată, alături de alți copii de aceeași vârstă. Fiecare ședință combină jocuri, cântece și activități creative care îi ajută să acumuleze vocabular natural, fără presiune.",
     copiiCurriculumPrivateTitle: "Privat 1:1 — ritm personalizat",
-    copiiCurriculumPrivateDesc: "Lecțiile individuale sunt construite în jurul intereselor și ritmului copilului tău. Profesorul adaptează fiecare activitate — mai mult joc, mai multă muzică sau mai mult vocabular — în funcție de ce îl motivează.",
+    copiiCurriculumPrivateDesc:
+      "Lecțiile individuale sunt construite în jurul intereselor și ritmului copilului tău. Profesorul adaptează fiecare activitate — mai mult joc, mai multă muzică sau mai mult vocabular — în funcție de ce îl motivează.",
     copiiCurriculumItemGames: "Jocuri interactive și competiții vesele",
     copiiCurriculumItemMusic: "Cântece și ritmuri în arabă libaneză",
-    copiiCurriculumItemVocab: "Vocabular tematic (animale, culori, familie, zi de zi)",
+    copiiCurriculumItemVocab:
+      "Vocabular tematic (animale, culori, familie, zi de zi)",
     copiiCurriculumItemStories: "Povești și scenete simple",
-    copiiCurriculumItemWriting: "Scris în alfabet arab sau în arabizi, la alegerea părinților",
+    copiiCurriculumItemWriting:
+      "Scris în alfabet arab sau în arabizi, la alegerea părinților",
     copiiCurriculumItemCulture: "Elemente de cultură libaneză adaptate vârstei",
 
     // /cursuri overview
     cursuriMetaTitle: "Cursuri Arabă Libaneză — Adulți, Tineri, Copii",
-    cursuriMetaDesc: "Cursuri de arabă libaneză pentru adulți (18+), tineri (12–17) și copii (6–11). Grup sau 1:1, online sau fizic în București. Profesor nativ.",
+    cursuriMetaDesc:
+      "Cursuri de arabă libaneză pentru adulți (18+), tineri (12–17) și copii (6–11). Grup sau 1:1, online sau fizic în București. Profesor nativ.",
     cursuriH1: "Cursurile noastre de Arabă Libaneză",
     trackAdultiTitle: "Adulți (18+)",
     trackTineriTitle: "Adolescenți (12–17)",
     trackCopiiTitle: "Copii (6–11)",
     // /cursuri/adulti
     cursAdultiMetaTitle: "Cursuri Arabă Libaneză — Adulți (18+)",
-    cursAdultiMetaDesc: "Cursuri de arabă libaneză pentru adulți: grup A1–C2 sau lecții 1:1, online sau fizic în București.",
+    cursAdultiMetaDesc:
+      "Cursuri de arabă libaneză pentru adulți: grup A1–C2 sau lecții 1:1, online sau fizic în București.",
     cursAdultiH1: "Cursuri pentru Adulți (18+)",
-    cursAdultiIntro: "Două căi pentru adulți: curs de grup cu start pe nivel CEFR, sau lecții 1:1 cu program flexibil.",
+    cursAdultiIntro:
+      "Două căi pentru adulți: curs de grup cu start pe nivel CEFR, sau lecții 1:1 cu program flexibil.",
     // /cursuri-araba-adolescenti (the teen page; /cursuri/tineri redirects there)
     // Validation
-    validPhoneError: "Număr invalid. Folosește format +40 7XX XXX XXX, 07XX XXX XXX sau internațional (+...).",
+    validPhoneError:
+      "Număr invalid. Folosește format +40 7XX XXX XXX, 07XX XXX XXX sau internațional (+...).",
     validEmailError: "Adresă de email invalidă.",
     priceLeiPer90Min: "LEI / lecție 60 min",
   },
@@ -858,7 +1019,8 @@ export const translations = {
     heroBadge: "Lebanese Arabic Courses · All Levels",
     heroTitle1: "Speak Lebanese Arabic with confidence.",
     heroTitle2: "Live the culture.",
-    heroDesc: "In Bucharest and online, with Ibra, a native teacher from Lebanon. You write what you hear, in Arabizi, and speak from the first lesson.",
+    heroDesc:
+      "In Bucharest and online, with Ibra, a native teacher from Lebanon. You write what you hear, in Arabizi, and speak from the first lesson.",
     heroCta: "Book the free trial lesson",
     heroExplore: "Schedule a chat",
     heroTrialCta: "See the courses",
@@ -867,13 +1029,16 @@ export const translations = {
     heroCheck3: "Small groups",
     heroCheck4: "Online & in-person",
     stepsTitle: "3 simple steps to get started",
-    stepsDesc: "From the first click to your first conversation in Lebanese Arabic.",
+    stepsDesc:
+      "From the first click to your first conversation in Lebanese Arabic.",
     step1Title: "Choose the right course",
-    step1Desc: "Explore our programs — for adults, teens or kids, in a group or one-on-one, online or in-person in Bucharest.",
+    step1Desc:
+      "Explore our programs — for adults, teens or kids, in a group or one-on-one, online or in-person in Bucharest.",
     step2Title: "Register quickly",
     step2Desc: "Fill in the form, reserve your spot and pay securely online.",
     step3Title: "Start speaking",
-    step3Desc: "From the very first lessons you communicate in Lebanese Arabic, with confidence.",
+    step3Desc:
+      "From the very first lessons you communicate in Lebanese Arabic, with confidence.",
     stepsCta: "See all courses",
     heroStat1: "21 Preply reviews",
     heroStat2: "Native Teacher",
@@ -884,24 +1049,31 @@ export const translations = {
 
     whyBadge: "Why Choose Us",
     whyTitle: "Why Learn With Ibra?",
-    whyDesc: "We believe language is more than words—it's culture, connection, and community. Our courses are designed to get you speaking confidently from day one.",
+    whyDesc:
+      "We believe language is more than words—it's culture, connection, and community. Our courses are designed to get you speaking confidently from day one.",
     benefit1Title: "Oral First method",
-    benefit1Desc: "You speak from the very first lessons — conversation comes before grammar, the way languages are learned naturally.",
+    benefit1Desc:
+      "You speak from the very first lessons — conversation comes before grammar, the way languages are learned naturally.",
     benefit2Title: "Arabizi, step by step",
-    benefit2Desc: "You write in Arabizi (Arabic in Latin letters), without roadblocks: A1 and A2 are spoken only, and from B1 or B2 a group can add the Arabic alphabet if all its students want it.",
+    benefit2Desc:
+      "You write in Arabizi (Arabic in Latin letters), without roadblocks: A1 and A2 are spoken only, and from B1 or B2 a group can add the Arabic alphabet if all its students want it.",
     benefit3Title: "The real Beirut dialect",
-    benefit3Desc: "You learn the Arabic spoken on the streets of Lebanon, not just textbook Classical Arabic.",
+    benefit3Desc:
+      "You learn the Arabic spoken on the streets of Lebanon, not just textbook Classical Arabic.",
     benefit4Title: "Culture & context",
-    benefit4Desc: "You learn the language together with the customs, humour and traditions of the Levant — no clichés.",
+    benefit4Desc:
+      "You learn the language together with the customs, humour and traditions of the Levant — no clichés.",
     benefit5Title: "Structured progression",
     benefit5Desc: "A clear A1–C2 curriculum with concrete goals at every step.",
     benefit6Title: "Personal attention",
-    benefit6Desc: "Small groups and constant feedback from a native teacher who knows you by name.",
+    benefit6Desc:
+      "Small groups and constant feedback from a native teacher who knows you by name.",
     whyStat2Val: "5+ yrs",
 
     programsBadge: "Our Programs",
     programsTitle: "Choose Your Learning Path",
-    programsDesc: "Whether you prefer learning in a group or one-on-one, we have the perfect option for you.",
+    programsDesc:
+      "Whether you prefer learning in a group or one-on-one, we have the perfect option for you.",
     tabAdults: "Adult Courses",
     tabKids: "Kids Courses",
     programFormatLabel: "Format",
@@ -909,7 +1081,8 @@ export const translations = {
     programConditionsLabel: "Conditions",
     groupBadge: "Group Learning",
     groupCardTitle: "Group Classes",
-    groupCardDesc: "Learn with others in a fun, interactive environment. Perfect for making new friends while learning Lebanese Arabic together.",
+    groupCardDesc:
+      "Learn with others in a fun, interactive environment. Perfect for making new friends while learning Lebanese Arabic together.",
     groupFeat1: "Small groups (max 6 students online, 8 in person)",
     groupFeat2: "32–72 lessons per level (90 min, twice a week)",
     groupFeat3: "Interactive group activities",
@@ -917,7 +1090,8 @@ export const translations = {
     privateBadge: "One-on-One",
     privateCardTitle: "Private Lessons",
     privateFormat: "Online or in person",
-    privateCardSubtitle: "Individual 1-on-1 sessions with a native teacher. Fully flexible schedule.",
+    privateCardSubtitle:
+      "Individual 1-on-1 sessions with a native teacher. Fully flexible schedule.",
     programScheduleLabel: "Schedule",
     privateDurationV2: "60 minutes / lesson",
     privateSchedule: "Flexible schedule, set with the teacher",
@@ -945,7 +1119,8 @@ export const translations = {
     kidsGroupFeat4: "Teachers experienced with children",
     kidsPrivateBadge: "Private lessons for kids",
     kidsPrivateCardTitle: "Private Lessons for Kids",
-    kidsPrivateCardSubtitle: "Dedicated attention, content adapted to the child's age and level.",
+    kidsPrivateCardSubtitle:
+      "Dedicated attention, content adapted to the child's age and level.",
     kidsPrivateFormat: "In person, at the centre",
     kidsPrivateFormatNote: "An online option will be added later",
     kidsPrivateDuration: "60 minutes / lesson",
@@ -978,41 +1153,52 @@ export const translations = {
     groupMonthsLabel: "Payment plan",
     groupPlanMonthly: "Monthly plan",
     groupPlanFull: "Pay in full",
-    groupMonthsHelp: "The subscription is billed monthly for the length of the course and stops automatically. Pay the whole course upfront and get 15% off.",
+    groupMonthsHelp:
+      "The subscription is billed monthly for the length of the course and stops automatically. Pay the whole course upfront and get 15% off.",
 
     testimonialsBadge: "Preply Reviews · 5.0★ from 21 reviews",
     testimonialsTitle: "What Our Students Say",
     testimonialsDesc: "Real reviews from Ibra's students on Preply.com.",
     testimonialsAllReviews: "All 21 reviews on Preply.com",
-    testimonial1: "One of the best teachers I have worked with. Very warm, gentle, and talented, constantly encouraging and supporting.",
+    testimonial1:
+      "One of the best teachers I have worked with. Very warm, gentle, and talented, constantly encouraging and supporting.",
     testimonial1Author: "Anamaria-Bianca",
-    testimonial2: "I appreciate his approach and the way he makes things seem so easy to understand. The lessons are very well prepared.",
+    testimonial2:
+      "I appreciate his approach and the way he makes things seem so easy to understand. The lessons are very well prepared.",
     testimonial2Author: "Andreea Cristina",
-    testimonial3: "Ibra is very attentive and an excellent teacher. He has a great way of explaining things clearly, and his sense of humor makes learning enjoyable.",
+    testimonial3:
+      "Ibra is very attentive and an excellent teacher. He has a great way of explaining things clearly, and his sense of humor makes learning enjoyable.",
     testimonial3Author: "Laura",
-    testimonial4: "Ibra is an outstanding teacher. His knowledge of Arabic is impressive, but what really sets him apart is his easy-going and friendly approach.",
+    testimonial4:
+      "Ibra is an outstanding teacher. His knowledge of Arabic is impressive, but what really sets him apart is his easy-going and friendly approach.",
     testimonial4Author: "Harry",
-    testimonial5: "First discovery lesson for an absolute beginner was very eye opening. He did a great job explaining the different aspects of the language.",
+    testimonial5:
+      "First discovery lesson for an absolute beginner was very eye opening. He did a great job explaining the different aspects of the language.",
     testimonial5Author: "Razvan",
-    testimonial6: "I was very pleased with Professor Ibra's explanations and the attention and interest he showed. I will resume sessions with him for sure.",
+    testimonial6:
+      "I was very pleased with Professor Ibra's explanations and the attention and interest he showed. I will resume sessions with him for sure.",
     testimonial6Author: "Cimpan",
 
     faqBadge: "FAQ",
     faqTitle: "Frequently Asked Questions",
     faqDesc: "Got questions? We've got answers.",
     faqSeeAll: "See all {n} questions",
-    faqSeeAllHint: "Price, schedule, level, dialect, grammar — full answers, grouped by topic.",
+    faqSeeAllHint:
+      "Price, schedule, level, dialect, grammar — full answers, grouped by topic.",
     faqPageMetaTitle: "Lebanese Arabic course FAQ | Centrul de Arabă Libaneză",
-    faqPageMetaDesc: "Answers about learning Lebanese Arabic: price, schedule, online or in-person, how long until you can hold a conversation, which dialect to learn, and how the grammar works.",
+    faqPageMetaDesc:
+      "Answers about learning Lebanese Arabic: price, schedule, online or in-person, how long until you can hold a conversation, which dialect to learn, and how the grammar works.",
     faqPageH1: "Frequently Asked Questions",
-    faqPageIntro: "Everything students ask before they enrol — price and schedule, how long it takes before you can hold a conversation, how Lebanese differs from Modern Standard Arabic, and how the grammar works. If your question isn't here, write to us.",
+    faqPageIntro:
+      "Everything students ask before they enrol — price and schedule, how long it takes before you can hold a conversation, how Lebanese differs from Modern Standard Arabic, and how the grammar works. If your question isn't here, write to us.",
     faqPageBackHome: "Back to the homepage",
     faqStillQuestions: "Didn't find what you were looking for?",
     faqStillQuestionsCta: "Book a free trial lesson",
 
     ctaBadge: "Get In Touch",
     ctaTitle: "Ready to Start Your Journey?",
-    ctaDesc: "Register your interest and we'll contact you via WhatsApp to discuss the best learning option for you.",
+    ctaDesc:
+      "Register your interest and we'll contact you via WhatsApp to discuss the best learning option for you.",
     ctaWhatsapp: "WhatsApp",
     ctaWhatsappDesc: "Contact us anytime",
     ctaPhone: "Phone",
@@ -1023,21 +1209,26 @@ export const translations = {
     ctaLocationVal: "Raduga Creative Center, Strada Icoanei 80, Bucharest",
     ctaButton: "Chat on WhatsApp",
     ctaScheduleTitle: "Course schedule",
-    ctaScheduleDesc: "Choose the right option and contact us for quick availability details.",
+    ctaScheduleDesc:
+      "Choose the right option and contact us for quick availability details.",
     ctaScheduleGroupLabel: "Group course",
     ctaSchedulePrivateLabel: "Individual private lessons",
-    ctaSchedulePrivateValue: "Flexible schedule · 60-minute sessions · online or in person",
+    ctaSchedulePrivateValue:
+      "Flexible schedule · 60-minute sessions · online or in person",
     ctaScheduleKidsLabel: "Kids course",
-    ctaScheduleKidsValue: "We don't have kids' courses at the moment. When they start, they will be in person, at the centre.",
+    ctaScheduleKidsValue:
+      "We don't have kids' courses at the moment. When they start, they will be in person, at the centre.",
 
     groupSubmitting: "Submitting...",
     mainLeadTitle: "Choose your course and sign up",
-    mainLeadDesc: "Choose the course type and format, then leave your details. The next steps appear right after you send them.",
+    mainLeadDesc:
+      "Choose the course type and format, then leave your details. The next steps appear right after you send them.",
     mainLeadCourseTypeLabel: "Course type",
     mainLeadCourseTypePlaceholder: "Choose course type",
     mainLeadLevelLabel: "CEFR Level",
     mainLeadLevelPlaceholder: "Choose your level",
-    mainLeadLevelHelp: "Not sure? Pick A1 (beginner) or mention it in your message.",
+    mainLeadLevelHelp:
+      "Not sure? Pick A1 (beginner) or mention it in your message.",
     mainLeadCourseGroup: "Group course",
     mainLeadCoursePrivate: "Individual private lessons",
     mainLeadCourseKids: "Kids course",
@@ -1048,23 +1239,29 @@ export const translations = {
     mainLeadSuccessDesc: "Thank you! The next steps are below.",
     mainLeadSuccess: "Registration sent!",
     mainLeadError: "Something went wrong. Please try again.",
-    mainLeadErrorCourseType: "Choose a valid course type (Group, Private or Kids).",
+    mainLeadErrorCourseType:
+      "Choose a valid course type (Group, Private or Kids).",
     mainLeadErrorFormat: "Choose a format: in person or online.",
-    mainLeadErrorKidsFormat: "Choose a format. The kids course starts in person, at the centre; an online option will be added later.",
+    mainLeadErrorKidsFormat:
+      "Choose a format. The kids course starts in person, at the centre; an online option will be added later.",
     mainLeadErrorLevel: "Select your level (A1–B2) for the group course.",
-    mainLeadCallbackNote: "This is a contact form: after submitting, we’ll call you to confirm the details.",
+    mainLeadCallbackNote:
+      "This is a contact form: after submitting, we’ll call you to confirm the details.",
     mainLeadLocationLabel: "Location",
     mainLeadLocationPlaceholder: "Choose city / area",
-    mainLeadLocationHelp: "Physical locations depend on available teachers and centers.",
+    mainLeadLocationHelp:
+      "Physical locations depend on available teachers and centers.",
     mainLeadLocationBucharestCentru: "Bucharest — Center (Raduga)",
     mainLeadOnlineInfoTitle: "Online lessons",
-    mainLeadOnlineInfoDesc: "All online sessions take place on Zoom. Once your enrollment is confirmed, you’ll receive the link, exact time and materials by email.",
+    mainLeadOnlineInfoDesc:
+      "All online sessions take place on Zoom. Once your enrollment is confirmed, you’ll receive the link, exact time and materials by email.",
     mainLeadErrorLocation: "Choose a physical location for the course.",
 
     // Level assessment quiz
     levelQuizDontKnow: "I don't know my level",
     levelQuizTitle: "Discover your level",
-    levelQuizDesc: "Answer a few short questions to find out which CEFR level fits you.",
+    levelQuizDesc:
+      "Answer a few short questions to find out which CEFR level fits you.",
     levelQuizQ1: "Can you read Arabic letters?",
     levelQuizQ2: "Can you introduce yourself in Arabic?",
     levelQuizQ3: "Can you order food at a restaurant in Arabic?",
@@ -1083,21 +1280,24 @@ export const translations = {
     kidsChildNamePlaceholder: "e.g.: Maya",
     kidsChildAge: "Child's Age",
     kidsChildAgePlaceholder: "e.g.: 8 years",
-    kidsFormatNote: "In person, at the centre (an online option will be added later). The schedule is set when the group starts.",
-
+    kidsFormatNote:
+      "In person, at the centre (an online option will be added later). The schedule is set when the group starts.",
 
     // GDPR
-    gdprConsent: "I agree to the processing of my personal data according to the",
+    gdprConsent:
+      "I agree to the processing of my personal data according to the",
     gdprPrivacy: "Privacy Policy",
     gdprRequired: "You must accept the privacy policy.",
-    recaptchaNotice: "This site is protected by reCAPTCHA and the Google Privacy Policy and Terms of Service apply.",
+    recaptchaNotice:
+      "This site is protected by reCAPTCHA and the Google Privacy Policy and Terms of Service apply.",
     recaptchaPrivacyShort: "Privacy Policy",
     recaptchaTermsShort: "Terms of Service",
     recaptchaFailed: "Security check failed. Please try again.",
 
     // Cookie consent banner
     cookieTitle: "Cookies",
-    cookieMessage: "We use essential cookies to make the site work. With your consent, we also use analytics and advertising cookies (Google Analytics, Google Ads) to see what works on the site.",
+    cookieMessage:
+      "We use essential cookies to make the site work. With your consent, we also use analytics and advertising cookies (Google Analytics, Google Ads) to see what works on the site.",
     cookieAcceptAll: "Accept all",
     cookieEssentialOnly: "Essential only",
     cookiePrivacyLink: "Privacy policy",
@@ -1109,7 +1309,8 @@ export const translations = {
     paymentTransfer: "Bank transfer",
     paymentIban: "IBAN: contact us on WhatsApp for details",
     paymentPaypal: "PayPal (contact us for details)",
-    paymentNote: "After registration, we'll contact you on WhatsApp to finalize payment.",
+    paymentNote:
+      "After registration, we'll contact you on WhatsApp to finalize payment.",
     paymentWhatsapp: "Contact us on WhatsApp",
     paymentPrimaryCta: "Pay now with card",
     paymentAlternativesToggle: "See other payment methods",
@@ -1120,10 +1321,13 @@ export const translations = {
       "Groups have a limited number of places, so until then someone else can take it.",
     paymentSecure: "Secure payment · 3D Secure · SSL",
     successNextStepsTitle: "What's next?",
-    successStepConfirm: "We message you on WhatsApp within a few hours (one business day at most) to say hello.",
+    successStepConfirm:
+      "We message you on WhatsApp within a few hours (one business day at most) to say hello.",
     successStepPay: "Paying is what confirms your place.",
-    successStepWelcome: "Within 24 hours of your payment you get the welcome message, with everything you need before the first lesson.",
-    successStepChanges: "Any change is announced in advance. If no announcement arrives, everything runs exactly as booked and paid for.",
+    successStepWelcome:
+      "Within 24 hours of your payment you get the welcome message, with everything you need before the first lesson.",
+    successStepChanges:
+      "Any change is announced in advance. If no announcement arrives, everything runs exactly as booked and paid for.",
     successAgain: "Submit another request",
 
     // Cookie consent
@@ -1143,7 +1347,8 @@ export const translations = {
     placeholderEmail: "john@email.com",
 
     footer: "© 2026 Lebanese Arabic with Ibra. All rights reserved.",
-    footerTagline: "Learn authentic Lebanese Arabic with a native instructor in Bucharest or online.",
+    footerTagline:
+      "Learn authentic Lebanese Arabic with a native instructor in Bucharest or online.",
     footerQuickLinks: "Navigation",
     footerContact: "Contact",
     footerLegal: "Legal",
@@ -1154,8 +1359,10 @@ export const translations = {
     instructorPreplyBadge: "Preply Profile 5.0★",
     socialProofPreplyMeta: "5.0★ · 21 verified reviews",
     instructorTitle: "Mar7aba! I'm Ibra.",
-    instructorBio1: "I'm a native Lebanese Arabic speaker living in Bucharest for over 10 years. With 5+ years of teaching experience on platforms like Preply.com and others, I've helped dozens of students discover the beauty of the Lebanese language and culture.",
-    instructorBio2: "My courses combine practical conversation with authentic cultural insights — from everyday expressions to Lebanese culinary traditions. My approach is based on real communication, not just grammar.",
+    instructorBio1:
+      "I'm a native Lebanese Arabic speaker living in Bucharest for over 10 years. With 5+ years of teaching experience on platforms like Preply.com and others, I've helped dozens of students discover the beauty of the Lebanese language and culture.",
+    instructorBio2:
+      "My courses combine practical conversation with authentic cultural insights — from everyday expressions to Lebanese culinary traditions. My approach is based on real communication, not just grammar.",
     instructorStat1: "10+ years",
     instructorStat1Label: "In Bucharest",
     instructorStat2: "5+ years",
@@ -1170,16 +1377,21 @@ export const translations = {
 
     cultureBadge: "A Wider Perspective",
     cultureTitle: "More than a language — a culture",
-    cultureDesc: "Learning Lebanese Arabic opens doors to heritage, career and real human connections.",
+    cultureDesc:
+      "Learning Lebanese Arabic opens doors to heritage, career and real human connections.",
     culture1Title: "Connection to Heritage",
-    culture1Desc: "Reconnect with your roots, family and the living traditions of the Levant.",
+    culture1Desc:
+      "Reconnect with your roots, family and the living traditions of the Levant.",
     culture2Title: "Professional Opportunities",
-    culture2Desc: "Diplomacy, business, journalism and NGOs — Arabic opens Middle East markets.",
+    culture2Desc:
+      "Diplomacy, business, journalism and NGOs — Arabic opens Middle East markets.",
     culture3Title: "Authentic Fluency",
-    culture3Desc: "Speak the real dialect of Beirut's streets, not just textbook Modern Standard Arabic.",
+    culture3Desc:
+      "Speak the real dialect of Beirut's streets, not just textbook Modern Standard Arabic.",
     cultureCta: "Start the Journey",
 
-    bookingPlaceholder: "Booking calendar coming soon. To schedule a session, message us on WhatsApp.",
+    bookingPlaceholder:
+      "Booking calendar coming soon. To schedule a session, message us on WhatsApp.",
     // Capacity / waitlist / calendly
     capSeatsLabel: "seats taken",
     capNeedToStart: "{n} more needed to start this group",
@@ -1187,62 +1399,91 @@ export const translations = {
     capSpotsLeft: "{n} spots left",
     capForming: "Group forming — the first {n} students confirm the start",
     kidsWaitlistTitle: "Waitlist — Kids Course",
-    kidsWaitlistDesc: "The group starts only with a minimum of 4 children. Pay a refundable 175 LEI (25%) deposit to reserve your spot. The remaining 525 LEI is paid when the course starts.",
-    kidsWaitlistCheckbox: "I want to pay the 175 LEI deposit now (refundable if the group doesn't start)",
+    kidsWaitlistDesc:
+      "The group starts only with a minimum of 4 children. Pay a refundable 175 LEI (25%) deposit to reserve your spot. The remaining 525 LEI is paid when the course starts.",
+    kidsWaitlistCheckbox:
+      "I want to pay the 175 LEI deposit now (refundable if the group doesn't start)",
     kidsWaitlistRedirect: "Redirecting to secure Stripe checkout…",
-    kidsDepositFailedDesc: "Your registration was recorded, but the deposit payment could not be started. You can retry or reach us on WhatsApp.",
+    kidsDepositFailedDesc:
+      "Your registration was recorded, but the deposit payment could not be started. You can retry or reach us on WhatsApp.",
     kidsDepositRetryCta: "Retry deposit payment",
     bookingIntroTitle: "Last step: book your free trial session",
-    bookingIntroDesc: "30 minutes with Ibra — we'll discuss your goals and answer your questions. The first session is free.",
+    bookingIntroDesc:
+      "30 minutes with Ibra — we'll discuss your goals and answer your questions. The first session is free.",
     trialPageTitle: "Free trial lesson",
-    trialPageSubtitle: "30 minutes, 0 lei. You confirm the spot with your card, with nothing charged. Online any day, or in person in Bucharest at weekends.",
+    trialPageSubtitle:
+      "30 minutes, 0 lei. You confirm the spot with your card, with nothing charged. Online any day, or in person in Bucharest at weekends.",
     trialPageSeoTitle: "Free trial lesson — Lebanese Arabic",
-    trialPageSeoDesc: "Book a free 30-minute lesson with Ibra. The trial is 0 lei; your card confirms the spot, with no payment.",
-    schedulerPhysicalTrialWeekend: "At the Bucharest centre, bookings are for now only on Saturdays and Sundays. For any other day, choose online.",
+    trialPageSeoDesc:
+      "Book a free 30-minute lesson with Ibra. The trial is 0 lei; your card confirms the spot, with no payment.",
+    schedulerPhysicalTrialWeekend:
+      "At the Bucharest centre, bookings are for now only on Saturdays and Sundays. For any other day, choose online.",
     quizWhatH2: "What the quiz does",
-    quizWhatP: "It asks a few short questions about why you want to learn, how much time you have and how you prefer to study, then shows which format fits: a group at your level, 1:1 private lessons, or a course for children. It takes under two minutes and needs no sign-up.",
+    quizWhatP:
+      "It asks a few short questions about why you want to learn, how much time you have and how you prefer to study, then shows which format fits: a group at your level, 1:1 private lessons, or a course for children. It takes under two minutes and needs no sign-up.",
     quizNotH2: "What it is not",
-    quizNotP: "It is not a grammar test and it does not grade you — the 24-question level test does that. This questionnaire only picks the course format; your final level is confirmed in the trial lesson, in conversation with Ibra.",
+    quizNotP:
+      "It is not a grammar test and it does not grade you — the 24-question level test does that. This questionnaire only picks the course format; your final level is confirmed in the trial lesson, in conversation with Ibra.",
     quizAfterH2: "After you finish",
-    quizAfterP: "You get a recommendation pointing at the right course page, and you can go straight to the free trial lesson. Nothing is submitted automatically and you are not enrolled in anything: the recommendation is a starting point.",
+    quizAfterP:
+      "You get a recommendation pointing at the right course page, and you can go straight to the free trial lesson. Nothing is submitted automatically and you are not enrolled in anything: the recommendation is a starting point.",
     bookingLandingWhichH2: "Which one suits you",
     bookingLandingTrialH3: "Start with the free trial if…",
-    bookingLandingTrialLi1: "you have not studied with us and want to see what a lesson is like;",
-    bookingLandingTrialLi2: "you do not know your starting level — we settle it together in conversation (or you can find out beforehand with the level test, ~15 minutes);",
-    bookingLandingTrialLi3: "you want to ask something first: schedule, pace, how long until you can speak.",
+    bookingLandingTrialLi1:
+      "you have not studied with us and want to see what a lesson is like;",
+    bookingLandingTrialLi2:
+      "you do not know your starting level — we settle it together in conversation (or you can find out beforehand with the level test, ~15 minutes);",
+    bookingLandingTrialLi3:
+      "you want to ask something first: schedule, pace, how long until you can speak.",
     bookingLandingEnrollH3: "Go straight to enrolment if…",
-    bookingLandingEnrollLi1: "you already know the format you want — a group, 1:1 lessons, or the children's course;",
+    bookingLandingEnrollLi1:
+      "you already know the format you want — a group, 1:1 lessons, or the children's course;",
     bookingLandingEnrollLi2: "you have done the trial and want to carry on;",
-    bookingLandingEnrollLi3: "you are enrolling someone else (a child, a partner) and have their details.",
+    bookingLandingEnrollLi3:
+      "you are enrolling someone else (a child, a partner) and have their details.",
     bookingLandingFormatsH2: "The formats available",
-    bookingLandingFormatsP: "Three tracks, all with the same native teacher. Groups follow the CEFR levels (A1–C2), with at most 6 students online and 8 in person, and two 90-minute sessions a week. Private 1:1 lessons are arranged flexibly, in 60-minute sessions, with the syllabus adapted to your goal. The children's course (ages 6–11) works through play, story and activity rather than grammar.",
+    bookingLandingFormatsP:
+      "Three tracks, all with the same native teacher. Groups follow the CEFR levels (A1–C2), with at most 6 students online and 8 in person, and two 90-minute sessions a week. Private 1:1 lessons are arranged flexibly, in 60-minute sessions, with the syllabus adapted to your goal. The children's course (ages 6–11) works through play, story and activity rather than grammar.",
     bookingLandingPricesH2: "What it costs",
-    bookingLandingPricesP: "Groups start at {groupOnline} lei/month online, or {groupFizic} lei/month in person — the price rises with the level. Private lessons are {priv} lei per 60-minute session online ({privFizic} lei in person), with −15% on a package of 20. You pay monthly or in full; paying for the whole course upfront takes −15% off. The trial remains 0 lei; your card is stored securely only to confirm the spot.",
-    bookingLandingWhichP: "If you have not studied with us before, start with the free trial: 30 minutes to meet, answer your questions and work out where you begin. If you already know what you want — a group, 1:1 lessons, or a course for children — go straight to enrolment.",
+    bookingLandingPricesP:
+      "Groups start at {groupOnline} lei/month online, or {groupFizic} lei/month in person — the price rises with the level. Private lessons are {priv} lei per 60-minute session online ({privFizic} lei in person), with −15% on a package of 20. You pay monthly or in full; paying for the whole course upfront takes −15% off. The trial remains 0 lei; your card is stored securely only to confirm the spot.",
+    bookingLandingWhichP:
+      "If you have not studied with us before, start with the free trial: 30 minutes to meet, answer your questions and work out where you begin. If you already know what you want — a group, 1:1 lessons, or a course for children — go straight to enrolment.",
     bookingLandingWhereH2: "Where lessons happen",
-    bookingLandingWhereP: "Online over Zoom from anywhere, or in person at Raduga Creative Center, Strada Icoanei 80, Bucharest. In-person trials are for now only on Saturdays and Sundays; online, any day with a free slot.",
+    bookingLandingWhereP:
+      "Online over Zoom from anywhere, or in person at Raduga Creative Center, Strada Icoanei 80, Bucharest. In-person trials are for now only on Saturdays and Sundays; online, any day with a free slot.",
     bookingLandingWhenH2: "When you can book",
-    bookingLandingWhenP: "Slots are booked at least 12 hours ahead and at most 30 days in advance. You get a confirmation email with a link to cancel or reschedule.",
+    bookingLandingWhenP:
+      "Slots are booked at least 12 hours ahead and at most 30 days in advance. You get a confirmation email with a link to cancel or reschedule.",
     trialWhatH2: "What happens in the trial lesson",
-    trialWhatP: "Thirty minutes with Ibra, a native teacher from Lebanon. We talk about why you want to learn Lebanese Arabic — family, travel, work or curiosity — and he answers your questions about the courses, the pace and the schedule. It is not a test: nothing to prepare, and you do not need to know a single word of Arabic.",
+    trialWhatP:
+      "Thirty minutes with Ibra, a native teacher from Lebanon. We talk about why you want to learn Lebanese Arabic — family, travel, work or curiosity — and he answers your questions about the courses, the pace and the schedule. It is not a test: nothing to prepare, and you do not need to know a single word of Arabic.",
     trialWhyH2: "Why it is worth doing before you enrol",
-    trialWhyP: "The trial exists so you can meet the teacher, try the method and see whether the format suits you before paying for anything. If after those 30 minutes it is not for you, nothing happens — no cancellation to request, nothing to explain.",
+    trialWhyP:
+      "The trial exists so you can meet the teacher, try the method and see whether the format suits you before paying for anything. If after those 30 minutes it is not for you, nothing happens — no cancellation to request, nothing to explain.",
     trialHowH2: "How booking works",
-    trialHowLi1: "Choose the format — online on any open day, or in person at the Bucharest centre on Saturdays and Sundays.",
-    trialHowLi2: "Pick the time slot yourself, from what is free in the calendar.",
+    trialHowLi1:
+      "Choose the format — online on any open day, or in person at the Bucharest centre on Saturdays and Sundays.",
+    trialHowLi2:
+      "Pick the time slot yourself, from what is free in the calendar.",
     trialHowLi3: "Fill in your name, email and phone.",
-    trialHowLi4: "Confirm your spot with your card through Stripe — 0 lei now — and get a confirmation email with the meeting details.",
+    trialHowLi4:
+      "Confirm your spot with your card through Stripe — 0 lei now — and get a confirmation email with the meeting details.",
     trialRulesH2: "Worth knowing",
     trialRulesLi1: "The trial lesson is free and is offered once per person.",
-    trialRulesLi2: "Book it at least 12 hours ahead and at most 30 days in advance.",
-    trialRulesLi3: "You can cancel or reschedule free of charge at least 24 hours ahead, from the link in your email.",
-    trialRulesLi4: "The trial costs 0 lei; your card is stored securely when confirming the spot. If you do not show up, or cancel later than 24 hours, 150 lei is charged — the price of a private lesson.",
+    trialRulesLi2:
+      "Book it at least 12 hours ahead and at most 30 days in advance.",
+    trialRulesLi3:
+      "You can cancel or reschedule free of charge at least 24 hours ahead, from the link in your email.",
+    trialRulesLi4:
+      "The trial costs 0 lei; your card is stored securely when confirming the spot. If you do not show up, or cancel later than 24 hours, 150 lei is charged — the price of a private lesson.",
 
     trialFormSubmitting: "Saving…",
     trialFormCta: "Continue to scheduling",
     trialQuizCta: "Want a free trial lesson first?",
     trialFunnelTitle: "Trial conversion funnel",
-    trialFunnelSubtitle: "Track how leads move from free trial to paid enrollment.",
+    trialFunnelSubtitle:
+      "Track how leads move from free trial to paid enrollment.",
     trialFunnelStepRegistered: "Trial signups",
     trialFunnelStepBooked: "Slot booked",
     trialFunnelStepAttended: "Trial attended",
@@ -1251,27 +1492,34 @@ export const translations = {
     navBooking: "Booking",
     bookingAddToCalendar: "Add to calendar (.ics)",
     bookingManageButton: "Manage booking",
-    bookingRescheduleHelp: "Choose a day and time. Your booking will be moved automatically.",
+    bookingRescheduleHelp:
+      "Choose a day and time. Your booking will be moved automatically.",
     bookingGdprRequired: "You must accept the privacy policy to book.",
     bookingFormatOnline: "Online (Zoom)",
     bookingFormatPhysical: "In person (Bucharest)",
     bookingZoomLinkLabel: "Zoom link for your lesson",
-    bookingZoomNotice: "You'll connect via Zoom. The link will be sent to your email.",
-    bookingPaidDesc: "Pick an available slot for your private Lebanese Arabic lesson. Email confirmation. You'll connect via Zoom — the link will be sent to your email.",
+    bookingZoomNotice:
+      "You'll connect via Zoom. The link will be sent to your email.",
+    bookingPaidDesc:
+      "Pick an available slot for your private Lebanese Arabic lesson. Email confirmation. You'll connect via Zoom — the link will be sent to your email.",
     // Common shared
     // Index page payment toasts & SEO
     paymentSuccessPrivate: "Payment successful! 🎉 Schedule your lesson now.",
     paymentSuccessPrivateCta: "Schedule",
-    paymentSuccessGeneric: "Payment processed successfully! 🎉 We'll be in touch shortly.",
+    paymentSuccessGeneric:
+      "Payment processed successfully! 🎉 We'll be in touch shortly.",
     paymentCanceled: "Payment was canceled. You can try again anytime.",
     referralCodeLabel: "Referral code (optional)",
     referralCodePlaceholder: "Got a code from a friend?",
     // Thank you page
     thankYouTitle: "Thank you for registering!",
-    thankYouSubtitle: "Your payment is confirmed. We can't wait to have you with us!",
-    thankYouSubtitleUnconfirmed: "Your payment confirmation and next steps will arrive by email.",
+    thankYouSubtitle:
+      "Your payment is confirmed. We can't wait to have you with us!",
+    thankYouSubtitleUnconfirmed:
+      "Your payment confirmation and next steps will arrive by email.",
     thankYouSeoTitle: "Thank you! — Registration confirmed",
-    thankYouSeoDescription: "Your registration is confirmed. Check your email for details about your Lebanese Arabic course.",
+    thankYouSeoDescription:
+      "Your registration is confirmed. Check your email for details about your Lebanese Arabic course.",
     thankYouOrderSummary: "Order summary",
     thankYouCourseType: "Course type",
     thankYouSchedule: "Schedule",
@@ -1285,20 +1533,25 @@ export const translations = {
     thankYouScheduleKids: "We'll contact you to schedule",
     thankYouNextStepsTitle: "What's next:",
     thankYouStep1Title: "Check your email",
-    thankYouStep1Desc: "You'll receive a confirmation email with all the details within a few minutes.",
+    thankYouStep1Desc:
+      "You'll receive a confirmation email with all the details within a few minutes.",
     thankYouStep2Title: "We send you the details",
-    thankYouStep2Desc: "Within 24 hours of payment we write to you with the Zoom link (online) or the center's address (in person) and the materials.",
+    thankYouStep2Desc:
+      "Within 24 hours of payment we write to you with the Zoom link (online) or the center's address (in person) and the materials.",
     thankYouStep3Title: "Your first lesson",
-    thankYouStep3Desc: "See you at your first lesson! Come with questions and enthusiasm.",
+    thankYouStep3Desc:
+      "See you at your first lesson! Come with questions and enthusiasm.",
     thankYouInviteTitle: "Learn with a friend",
-    thankYouInviteDesc: "Share this link with a friend who wants to learn Lebanese Arabic.",
+    thankYouInviteDesc:
+      "Share this link with a friend who wants to learn Lebanese Arabic.",
     thankYouInviteCta: "Invite a friend",
     thankYouInviteCopied: "Link copied to clipboard!",
     thankYouShareMessage: "I'm learning Lebanese Arabic with Ibra. Join me!",
     thankYouSchedulePrivateCta: "Book your other lessons",
     thankYouBackHome: "Back to homepage",
     thankYouLoading: "Loading details...",
-    thankYouError: "We couldn't load payment details, but your registration was received.",
+    thankYouError:
+      "We couldn't load payment details, but your registration was received.",
     homeSeoTitle: HOME_META.en.title,
     homeSeoDescription: HOME_META.en.description,
     // Booking page (per-type)
@@ -1306,15 +1559,19 @@ export const translations = {
     bookingPageTitleTrial: "Free trial lesson",
     bookingPageSeoTitlePaid: "Book Your Lesson",
     bookingPageSeoTitleTrial: "Free Trial Lesson",
-    bookingPageSubtitlePaid: "Pick an available slot. You'll receive a confirmation email.",
-    bookingPageSubtitleTrial: "30 minutes, free. You'll receive a confirmation email.",
-    bookingTrialSeoDesc: "Schedule a free 30-minute Lebanese Arabic lesson. 0 lei; your card confirms the spot, email confirmation provided.",
+    bookingPageSubtitlePaid:
+      "Pick an available slot. You'll receive a confirmation email.",
+    bookingPageSubtitleTrial:
+      "30 minutes, free. You'll receive a confirmation email.",
+    bookingTrialSeoDesc:
+      "Schedule a free 30-minute Lebanese Arabic lesson. 0 lei; your card confirms the spot, email confirmation provided.",
     // NativeScheduler
     schedulerNameRequired: "Fill in name and email",
     schedulerSlotTaken: "Slot just got taken. Pick another.",
     schedulerBookingFailed: "Booking failed. Please try again.",
     schedulerLoadingSlots: "Loading slots…",
-    schedulerNoSlots30d: "No available slots in the next 30 days. Message us on WhatsApp.",
+    schedulerNoSlots30d:
+      "No available slots in the next 30 days. Message us on WhatsApp.",
     schedulerNoTimesToday: "No times available this day.",
     tzToggleLabel: "Show in my local time zone",
     tzYourTime: "Your time",
@@ -1358,23 +1615,31 @@ export const translations = {
     manageCurrentSlotBadge: "Your current booking",
     manageConfirmCta: "Confirm",
     manageTooLateTitle: "Too late to change it online",
-    manageTooLateBody: "Your lesson starts in less than 24 hours, so it can no longer be cancelled or rescheduled from here. The time stays reserved for you.",
-    manageTooLateEmergency: "If something genuinely urgent has come up, message us on WhatsApp and explain briefly what happened. Every situation is looked at on its own.",
+    manageTooLateBody:
+      "Your lesson starts in less than 24 hours, so it can no longer be cancelled or rescheduled from here. The time stays reserved for you.",
+    manageTooLateEmergency:
+      "If something genuinely urgent has come up, message us on WhatsApp and explain briefly what happened. Every situation is looked at on its own.",
     manageWhatsAppCta: "Message us on WhatsApp",
-    manageTooLateToast: "The lesson starts in less than 24 hours. Message us on WhatsApp.",
-    manageSlotNotBookable: "That time can no longer be booked. Please pick another one from the list.",
+    manageTooLateToast:
+      "The lesson starts in less than 24 hours. Message us on WhatsApp.",
+    manageSlotNotBookable:
+      "That time can no longer be booked. Please pick another one from the list.",
     // Legal pages SEO
     termsSeoTitle: "Terms & Conditions — Lebanese Arabic with Ibra",
-    termsSeoDescription: "Terms and conditions for using the educational services provided by Lebanese Arabic with Ibra.",
+    termsSeoDescription:
+      "Terms and conditions for using the educational services provided by Lebanese Arabic with Ibra.",
     privacySeoTitle: "Privacy Policy — Lebanese Arabic with Ibra",
-    privacySeoDescription: "How we collect, use, and protect your personal data under GDPR at Lebanese Arabic with Ibra.",
+    privacySeoDescription:
+      "How we collect, use, and protect your personal data under GDPR at Lebanese Arabic with Ibra.",
     // Find your track quiz
     quizBadge: "Find your track",
     programsQuizLink: "Not sure? Take the quiz →",
-    programsLevelTestLink: "Already know some Lebanese Arabic? Take the level test (15 min) →",
+    programsLevelTestLink:
+      "Already know some Lebanese Arabic? Take the level test (15 min) →",
     quizBackToCourses: "Back to the courses",
     quizTitle: "We'll recommend the right course for you in 30 seconds",
-    quizDesc: "Answer a few short questions and we'll show you exactly what fits.",
+    quizDesc:
+      "Answer a few short questions and we'll show you exactly what fits.",
     quizStepLabel: "Step {n} of {total}",
     quizBack: "← Back",
     quizRestart: "Start over",
@@ -1395,8 +1660,10 @@ export const translations = {
     quizQ3OptB2: "Fluent conversation",
     quizQ3NotSure: "Not sure which level you're at?",
     quizQ3Placement: "Take the level test (~15 min, in Romanian)",
-    quizLevelTestPrompt: "Looking for the level test rather than a course recommendation?",
-    quizLevelTestCta: "Take the level test — 24 questions, ~15 minutes (in Romanian)",
+    quizLevelTestPrompt:
+      "Looking for the level test rather than a course recommendation?",
+    quizLevelTestCta:
+      "Take the level test — 24 questions, ~15 minutes (in Romanian)",
     quizResultTitle: "Your recommended course",
     quizResultGroupTitle: "Group Course — level {level}",
     quizResultGroupDesc: "Small groups, native teachers and a friendly price.",
@@ -1411,7 +1678,8 @@ export const translations = {
     quizCompareAll: "Or compare all options →",
     // Comparison panel
     compareTitle: "Compare all options",
-    compareSubtitle: "See the differences between group courses, private lessons, and kids courses.",
+    compareSubtitle:
+      "See the differences between group courses, private lessons, and kids courses.",
     compareRowPrice: "Price / month (from)",
     compareRowStudents: "Students per class",
     compareRowFlexibility: "Schedule flexibility",
@@ -1427,7 +1695,8 @@ export const translations = {
     compareGroupStudents: "online max. 6 (min. 3) · fizic max. 8 (min. 4)",
     comparePrivateStudents: "1",
     compareKidsStudents: "max. 8 (min. 4)",
-    compareGroupFlexibility: "Fixed: two 90-minute lessons a week — each group's times are shown when you sign up",
+    compareGroupFlexibility:
+      "Fixed: two 90-minute lessons a week — each group's times are shown when you sign up",
     comparePrivateFlexibility: "Flexible (you choose)",
     compareKidsFlexibility: "Fixed (depends on group)",
     compareGroupFormat: "Online & In-person",
@@ -1458,8 +1727,10 @@ export const translations = {
     cohortPickerLabel: "Choose a cohort",
     cohortPickerHelp: "Pick the start date that works for you.",
     cohortPickerLoading: "Loading cohorts…",
-    cohortPickerEmpty: "No cohorts open for this level right now. We'll add you to the waitlist.",
-    cohortPickerEmptyEn: "No English-taught groups are open at this level yet. We'll add you to the waitlist and let you know as soon as one opens.",
+    cohortPickerEmpty:
+      "No cohorts open for this level right now. We'll add you to the waitlist.",
+    cohortPickerEmptyEn:
+      "No English-taught groups are open at this level yet. We'll add you to the waitlist and let you know as soon as one opens.",
     cohortLangRo: "Taught in Romanian",
     cohortLangEn: "Taught in English",
     cohortStartsOn: "Starts",
@@ -1473,9 +1744,11 @@ export const translations = {
     cohortStatusConfirmed: "Confirmed",
     cohortStatusInProgress: "In progress",
     kidsSlotPickerLabel: "Pick a weekly time",
-    kidsSlotPickerHelp: "Classes recur every week. Pick the day and format that fits.",
+    kidsSlotPickerHelp:
+      "Classes recur every week. Pick the day and format that fits.",
     kidsSlotPickerLoading: "Loading times…",
-    kidsSlotPickerEmpty: "No open times right now. Leave your details and we'll get in touch.",
+    kidsSlotPickerEmpty:
+      "No open times right now. Leave your details and we'll get in touch.",
     kidsSlotFormatOnline: "Online",
     kidsSlotFormatPhysical: "In-person — Bucharest",
     kidsSlotAllFormats: "All",
@@ -1506,14 +1779,18 @@ export const translations = {
     cohortNoteTaughtRo: "taught in Romanian",
     cohortNoteTaughtEn: "taught in English",
     cohortNoteSeatsOf: "{left} of {max} places free",
-    cohortNoteFallback: "A1–C2 groups start regularly. Get in touch and we'll tell you exactly when the next one begins.",
+    cohortNoteFallback:
+      "A1–C2 groups start regularly. Get in touch and we'll tell you exactly when the next one begins.",
     activeNowCta: "See the course and enroll",
 
     // /cursuri/grup
-    courseGrupMetaTitle: "Lebanese Arabic Group Course (A1–C2) — Bucharest & online",
-    courseGrupMetaDesc: "Lebanese Arabic group course with a native instructor. CEFR levels A1–C2, small groups (max 6 students online, 8 in person), in Bucharest or online. From 500 LEI / month.",
+    courseGrupMetaTitle:
+      "Lebanese Arabic Group Course (A1–C2) — Bucharest & online",
+    courseGrupMetaDesc:
+      "Lebanese Arabic group course with a native instructor. CEFR levels A1–C2, small groups (max 6 students online, 8 in person), in Bucharest or online. From 500 LEI / month.",
     courseGrupH1: "Lebanese Arabic Group Course",
-    courseGrupIntro: "Learn Lebanese Arabic in a small group (at most 6 students online and 8 in person), with a native instructor and a clear CEFR curriculum from A1 to C2. Classes run in person in Bucharest or online, twice a week.",
+    courseGrupIntro:
+      "Learn Lebanese Arabic in a small group (at most 6 students online and 8 in person), with a native instructor and a clear CEFR curriculum from A1 to C2. Classes run in person in Bucharest or online, twice a week.",
     courseGrupPriceLine: "From 500 LEI / month · 6 levels (A1 → C2)",
     courseGrupFeat1: "Small groups — max 6 students online, 8 in person",
     courseGrupFeat2: "CEFR curriculum (A1–C2)",
@@ -1521,10 +1798,13 @@ export const translations = {
     courseGrupFeat4: "In person in Bucharest or online via Zoom",
 
     // /cursuri/private
-    coursePrivateMetaTitle: "Private 1-on-1 Lebanese Arabic Lessons — Bucharest & online",
-    coursePrivateMetaDesc: "One-on-one Lebanese Arabic lessons with a native instructor. Flexible schedule, curriculum tailored to you, in person in Bucharest or online. 150 LEI / lesson online, 210 LEI in person.",
+    coursePrivateMetaTitle:
+      "Private 1-on-1 Lebanese Arabic Lessons — Bucharest & online",
+    coursePrivateMetaDesc:
+      "One-on-one Lebanese Arabic lessons with a native instructor. Flexible schedule, curriculum tailored to you, in person in Bucharest or online. 150 LEI / lesson online, 210 LEI in person.",
     coursePrivateH1: "Private Lebanese Arabic Lessons",
-    coursePrivateIntro: "One-on-one lessons with a native instructor, paced to your goals. Pick a schedule that works for you, in person in Bucharest or online via Zoom. Multi-lesson packs come with a discount.",
+    coursePrivateIntro:
+      "One-on-one lessons with a native instructor, paced to your goals. Pick a schedule that works for you, in person in Bucharest or online via Zoom. Multi-lesson packs come with a discount.",
     coursePrivateFeat1: "Curriculum 100% tailored to you",
     coursePrivateFeat2: "Flexible schedule, you pick the times",
     coursePrivateFeat3: "In person in Bucharest or online",
@@ -1532,9 +1812,11 @@ export const translations = {
 
     // /cursuri/copii
     courseCopiiMetaTitle: "Lebanese Arabic Courses for Kids — Bucharest",
-    courseCopiiMetaDesc: "Interactive Lebanese Arabic courses for kids (ages 6–11), in person in Bucharest. Activities, games and stories in Lebanese Arabic.",
+    courseCopiiMetaDesc:
+      "Interactive Lebanese Arabic courses for kids (ages 6–11), in person in Bucharest. Activities, games and stories in Lebanese Arabic.",
     courseCopiiH1: "Lebanese Arabic Courses for Kids",
-    courseCopiiIntro: "Courses designed specifically for kids (ages 6–11), with activities, games and stories in Lebanese Arabic. In person, at the centre; an online option will be added later.",
+    courseCopiiIntro:
+      "Courses designed specifically for kids (ages 6–11), with activities, games and stories in Lebanese Arabic. In person, at the centre; an online option will be added later.",
     courseCopiiFeat1: "Ages 6–11, grouped by age",
     courseCopiiFeat2: "Play-based, interactive lessons",
     courseCopiiFeat3: "In person, in Bucharest (online later)",
@@ -1542,20 +1824,23 @@ export const translations = {
 
     // Course pages — section labels
     coursePageRegisterTitle: "Register now",
-    coursePageRegisterDesc: "Three steps: your details, the day and time, then payment. The lesson is confirmed once paid.",
+    coursePageRegisterDesc:
+      "Three steps: your details, the day and time, then payment. The lesson is confirmed once paid.",
 
     // Navbar — courses dropdown
 
     // Course landing — shared
     priceOnlineShort: "Online",
     priceFizicShort: "In person",
-    priceSurchargeNote: "In-person classes are 40% more expensive than online (covers room rent and travel).",
+    priceSurchargeNote:
+      "In-person classes are 40% more expensive than online (covers room rent and travel).",
     priceLeiPerMonth: "LEI / month",
-   priceFromLabel: "From",
+    priceFromLabel: "From",
     priceLeiPerLesson: "LEI / lesson",
 
     grupChooseLevelTitle: "Pick your level",
-    grupChooseLevelDesc: "Full curriculum, lessons, hours and objectives for each CEFR level. Click a level for details and registration.",
+    grupChooseLevelDesc:
+      "Full curriculum, lessons, hours and objectives for each CEFR level. Click a level for details and registration.",
     grupLevelCardLessons: "lessons",
     grupLevelCardHours: "hours",
     grupLevelCardViewFull: "View curriculum + register →",
@@ -1563,11 +1848,14 @@ export const translations = {
     levelPageScheduleLabel: "Schedule & dates",
 
     dontKnowLevelTitle: "Not sure which level fits you?",
-    dontKnowLevelDesc: "Three quick ways to find out — pick whichever works for you:",
+    dontKnowLevelDesc:
+      "Three quick ways to find out — pick whichever works for you:",
     dontKnowOptQuizTitle: "Take the quiz (30 sec)",
-    dontKnowOptQuizDesc: "Answer a few questions and we'll recommend the right course.",
+    dontKnowOptQuizDesc:
+      "Answer a few questions and we'll recommend the right course.",
     dontKnowOptTestTitle: "Test at the center (free)",
-    dontKnowOptTestDesc: "Book a quick 1:1 test with the instructor, in person or online.",
+    dontKnowOptTestDesc:
+      "Book a quick 1:1 test with the instructor, in person or online.",
     dontKnowOptWhatsAppTitle: "Chat on WhatsApp",
     dontKnowOptWhatsAppDesc: "We'll reply directly and help you choose.",
 
@@ -1577,49 +1865,67 @@ export const translations = {
     levelPageCurriculumTitle: "Full curriculum",
     levelPageOutcomesTitle: "By the end of this level you can",
     levelPageRegisterTitle: "Register for this level",
-    levelPageRegisterDesc: "Fill in the form and pay online — your place in the group is confirmed once paid.",
+    levelPageRegisterDesc:
+      "Fill in the form and pay online — your place in the group is confirmed once paid.",
     levelPageInPrepTitle: "Coming soon — future enrollment",
-    levelPageInPrepDesc: "This level opens once the previous level finishes. Register now and we'll notify you as soon as the start date is set.",
+    levelPageInPrepDesc:
+      "This level opens once the previous level finishes. Register now and we'll notify you as soon as the start date is set.",
 
     privatePersonalizedTitle: "Personalized for you",
-    privatePersonalizedDesc: "In the first lesson we assess your level and build a path around your goals: travel, family, work, media. If you need Modern Standard Arabic (fuṣḥā / MSA) instead of Lebanese, we'll recommend trusted partners — at the same rate.",
+    privatePersonalizedDesc:
+      "In the first lesson we assess your level and build a path around your goals: travel, family, work, media. If you need Modern Standard Arabic (fuṣḥā / MSA) instead of Lebanese, we'll recommend trusted partners — at the same rate.",
     privateVsGroupTitle: "Private or group?",
-    privateVsGroupDesc: "In a group you learn in a small class — at most 6 students online and 8 in person — at a lower price and on a fixed calendar. Private means 100% attention, your own pace and a flexible schedule, at a per-lesson price.",
+    privateVsGroupDesc:
+      "In a group you learn in a small class — at most 6 students online and 8 in person — at a lower price and on a fixed calendar. Private means 100% attention, your own pace and a flexible schedule, at a per-lesson price.",
     privateProcessTitle: "How it works, step by step",
-    privateProcessStep1: "Fill in your details: the format, how many lessons, and how to reach you.",
-    privateProcessStep2: "Choose the day and time — for the first lesson only, or the same time every week.",
-    privateProcessStep3: "Pay, and the lesson is confirmed. You get a confirmation email, and Ibra writes to introduce himself.",
+    privateProcessStep1:
+      "Fill in your details: the format, how many lessons, and how to reach you.",
+    privateProcessStep2:
+      "Choose the day and time — for the first lesson only, or the same time every week.",
+    privateProcessStep3:
+      "Pay, and the lesson is confirmed. You get a confirmation email, and Ibra writes to introduce himself.",
 
     copiiFormatChoiceTitle: "Two formats, depending on age",
     copiiFormatPrivateTitle: "Private 1:1 (any age)",
-    copiiFormatPrivateDesc: "Individual lessons with a native instructor, paced to your child. In person, at the centre.",
+    copiiFormatPrivateDesc:
+      "Individual lessons with a native instructor, paced to your child. In person, at the centre.",
     copiiFormatGroupTitle: "Group (4–8 kids)",
-    copiiFormatGroupDesc: "Play-based activities in a small group, in person at the centre.",
+    copiiFormatGroupDesc:
+      "Play-based activities in a small group, in person at the centre.",
 
     // /cursuri/copii — curriculum
     copiiCurriculumTitle: "What your child will learn",
-    copiiCurriculumGroupTitle: "In a group — learning through play and interaction",
-    copiiCurriculumGroupDesc: "Children learn Lebanese Arabic in a relaxed atmosphere with other kids their age. Each session combines games, songs, and creative activities that help them build vocabulary naturally, without pressure.",
+    copiiCurriculumGroupTitle:
+      "In a group — learning through play and interaction",
+    copiiCurriculumGroupDesc:
+      "Children learn Lebanese Arabic in a relaxed atmosphere with other kids their age. Each session combines games, songs, and creative activities that help them build vocabulary naturally, without pressure.",
     copiiCurriculumPrivateTitle: "Private 1:1 — personalized pace",
-    copiiCurriculumPrivateDesc: "Individual lessons are built around your child's interests and pace. The instructor adapts every activity — more games, more music, or more vocabulary — depending on what motivates them.",
+    copiiCurriculumPrivateDesc:
+      "Individual lessons are built around your child's interests and pace. The instructor adapts every activity — more games, more music, or more vocabulary — depending on what motivates them.",
     copiiCurriculumItemGames: "Interactive games and fun competitions",
     copiiCurriculumItemMusic: "Songs and rhythms in Lebanese Arabic",
-    copiiCurriculumItemVocab: "Thematic vocabulary (animals, colors, family, daily life)",
+    copiiCurriculumItemVocab:
+      "Thematic vocabulary (animals, colors, family, daily life)",
     copiiCurriculumItemStories: "Simple stories and role-play skits",
-    copiiCurriculumItemWriting: "Writing in the Arabic alphabet or in Arabizi, as the parents choose",
+    copiiCurriculumItemWriting:
+      "Writing in the Arabic alphabet or in Arabizi, as the parents choose",
     copiiCurriculumItemCulture: "Age-appropriate Lebanese culture elements",
 
     cursuriMetaTitle: "Lebanese Arabic Courses — Adults, Teens, Kids",
-    cursuriMetaDesc: "Learn Lebanese Arabic online or in Bucharest. Courses for adults (18+), teens (12–17) and kids (6–11). Group or 1-on-1 with a native teacher.",
+    cursuriMetaDesc:
+      "Learn Lebanese Arabic online or in Bucharest. Courses for adults (18+), teens (12–17) and kids (6–11). Group or 1-on-1 with a native teacher.",
     cursuriH1: "Our Lebanese Arabic Courses",
     trackAdultiTitle: "Adults (18+)",
     trackTineriTitle: "Teens (12–17)",
     trackCopiiTitle: "Kids (6–11)",
     cursAdultiMetaTitle: "Lebanese Arabic Courses — Adults (18+)",
-    cursAdultiMetaDesc: "Lebanese Arabic courses for adults: A1–C2 group or 1:1 lessons, online or in person in Bucharest.",
+    cursAdultiMetaDesc:
+      "Lebanese Arabic courses for adults: A1–C2 group or 1:1 lessons, online or in person in Bucharest.",
     cursAdultiH1: "Courses for Adults (18+)",
-    cursAdultiIntro: "Two paths for adults: a group course that starts at a CEFR level, or 1:1 lessons with a flexible schedule.",
-    validPhoneError: "Invalid number. Use +40 7XX XXX XXX, 07XX XXX XXX or international format (+...).",
+    cursAdultiIntro:
+      "Two paths for adults: a group course that starts at a CEFR level, or 1:1 lessons with a flexible schedule.",
+    validPhoneError:
+      "Invalid number. Use +40 7XX XXX XXX, 07XX XXX XXX or international format (+...).",
     validEmailError: "Invalid email address.",
     priceLeiPer90Min: "LEI / 60-min lesson",
   },
@@ -1658,7 +1964,11 @@ export const I18nProvider = ({
     // component, would have got a Romanian *body* at an English URL. The path
     // wins here; the toggle still works, because leaving English navigates to
     // the Romanian counterpart (see languageRoutes.ts).
-    if (window.location.pathname === "/en" || window.location.pathname.startsWith("/en/")) return "en";
+    if (
+      window.location.pathname === "/en" ||
+      window.location.pathname.startsWith("/en/")
+    )
+      return "en";
     // Match the server-rendered language here; localStorage is adopted in the
     // effect below. Reading it during the first render made the client's
     // initial tree differ from the SSR HTML and failed hydration.
@@ -1672,9 +1982,14 @@ export const I18nProvider = ({
     // (In a browser the path check below already covers this; initialLang is
     // the same signal when the router's location and window.location differ.)
     if (initialLang === "en") return;
-    if (window.location.pathname === "/en" || window.location.pathname.startsWith("/en/")) return;
+    if (
+      window.location.pathname === "/en" ||
+      window.location.pathname.startsWith("/en/")
+    )
+      return;
     const savedLang = window.localStorage.getItem("site-language");
-    if ((savedLang === "en" || savedLang === "ro") && savedLang !== lang) setLangState(savedLang);
+    if ((savedLang === "en" || savedLang === "ro") && savedLang !== lang)
+      setLangState(savedLang);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 

@@ -189,9 +189,7 @@ const RO: CurriculumLevel[] = [
     blocks: [
       {
         title: "Bloc 1 — Punctul de plecare (Lecțiile 1–6)",
-        items: [
-          "Recapitulare A2 & diagnostic",
-        ],
+        items: ["Recapitulare A2 & diagnostic"],
       },
       {
         title: "Bloc 2 — Sistemul verbal, complet (Lecțiile 7–24)",
@@ -227,10 +225,7 @@ const RO: CurriculumLevel[] = [
       },
       {
         title: "Bloc 6 — Discurs & evaluare (Lecțiile 65–70)",
-        items: [
-          "Discurs extins & dezbatere",
-          "Recapitulare & evaluare",
-        ],
+        items: ["Discurs extins & dezbatere", "Recapitulare & evaluare"],
       },
     ],
     lessons: 72,
@@ -259,9 +254,7 @@ const RO: CurriculumLevel[] = [
     blocks: [
       {
         title: "Bloc 1 — Punctul de plecare (Lecțiile 1–6)",
-        items: [
-          "Recapitulare B1 & diagnostic",
-        ],
+        items: ["Recapitulare B1 & diagnostic"],
       },
       {
         title: "Bloc 2 — Registru & nuanță (Lecțiile 7–22)",
@@ -292,10 +285,7 @@ const RO: CurriculumLevel[] = [
       },
       {
         title: "Bloc 6 — Spontaneitate & evaluare (Lecțiile 65–70)",
-        items: [
-          "Discurs extins spontan",
-          "Evaluare",
-        ],
+        items: ["Discurs extins spontan", "Evaluare"],
       },
     ],
     lessons: 72,
@@ -470,7 +460,8 @@ const RO: CurriculumLevel[] = [
         ],
       },
       {
-        title: "Bloc 7 — Arte, literatură & viață intelectuală (Lecțiile 63–72)",
+        title:
+          "Bloc 7 — Arte, literatură & viață intelectuală (Lecțiile 63–72)",
         items: [
           "Libaneza literară; analiză de poezie",
           "Critică & recenzie; filozofie & idei în conversație",
@@ -639,9 +630,7 @@ const EN: CurriculumLevel[] = [
     blocks: [
       {
         title: "Block 1 — Where you start (Lessons 1–6)",
-        items: [
-          "A2 review & diagnostic",
-        ],
+        items: ["A2 review & diagnostic"],
       },
       {
         title: "Block 2 — The verb system, in full (Lessons 7–24)",
@@ -677,10 +666,7 @@ const EN: CurriculumLevel[] = [
       },
       {
         title: "Block 6 — Discourse & assessment (Lessons 65–70)",
-        items: [
-          "Extended discourse & debate",
-          "Review & assessment",
-        ],
+        items: ["Extended discourse & debate", "Review & assessment"],
       },
     ],
     lessons: 72,
@@ -709,9 +695,7 @@ const EN: CurriculumLevel[] = [
     blocks: [
       {
         title: "Block 1 — Where you start (Lessons 1–6)",
-        items: [
-          "B1 review & diagnostic",
-        ],
+        items: ["B1 review & diagnostic"],
       },
       {
         title: "Block 2 — Register & nuance (Lessons 7–22)",
@@ -742,10 +726,7 @@ const EN: CurriculumLevel[] = [
       },
       {
         title: "Block 6 — Spontaneity & assessment (Lessons 65–70)",
-        items: [
-          "Spontaneous extended discourse",
-          "Assessment",
-        ],
+        items: ["Spontaneous extended discourse", "Assessment"],
       },
     ],
     lessons: 72,

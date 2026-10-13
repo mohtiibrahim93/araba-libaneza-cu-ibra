@@ -97,11 +97,16 @@ const KidsSlotPicker = ({ selectedSlotId, onSelect }: Props) => {
       <div className="grid gap-2 sm:grid-cols-2">
         {filtered.map((s) => {
           const active = s.id === selectedSlotId;
-          const weekdayLabel = t[WEEKDAY_KEYS[Math.min(Math.max(s.weekday - 1, 0), 6)]!];
+          const weekdayLabel =
+            t[WEEKDAY_KEYS[Math.min(Math.max(s.weekday - 1, 0), 6)]!];
           const lowSeats = s.seatsLeft > 0 && s.seatsLeft < 3;
           const local =
             showLocalTz && localTz !== BUCHAREST_TZ
-              ? weeklyBucharestInTz(s.weekday, s.start_time.slice(0, 5), localTz)
+              ? weeklyBucharestInTz(
+                  s.weekday,
+                  s.start_time.slice(0, 5),
+                  localTz,
+                )
               : null;
           const localWeekdayLabel = local
             ? t[WEEKDAY_KEYS[Math.min(Math.max(local.weekday - 1, 0), 6)]!]
@@ -119,11 +124,13 @@ const KidsSlotPicker = ({ selectedSlotId, onSelect }: Props) => {
               )}
             >
               <p className="text-sm font-semibold text-foreground">
-                {t.kidsSlotEvery} {weekdayLabel.toLowerCase()} · {formatTime(s.start_time)}
+                {t.kidsSlotEvery} {weekdayLabel.toLowerCase()} ·{" "}
+                {formatTime(s.start_time)}
               </p>
               {local && localWeekdayLabel && !local.sameAsSource && (
                 <p className="text-xs text-muted-foreground mt-0.5">
-                  {t.tzYourTime} ({localTzLabel}): {localWeekdayLabel.toLowerCase()} · {local.time}
+                  {t.tzYourTime} ({localTzLabel}):{" "}
+                  {localWeekdayLabel.toLowerCase()} · {local.time}
                 </p>
               )}
               <div className="mt-1 flex items-center gap-1.5 text-xs text-muted-foreground">
@@ -142,12 +149,16 @@ const KidsSlotPicker = ({ selectedSlotId, onSelect }: Props) => {
               <div className="mt-2 flex items-center gap-1.5 text-xs">
                 <Users className="w-3.5 h-3.5 text-muted-foreground" />
                 {s.full ? (
-                  <span className="font-semibold text-primary">{t.cohortFull}</span>
+                  <span className="font-semibold text-primary">
+                    {t.cohortFull}
+                  </span>
                 ) : (
                   <span
                     className={cn(
                       "font-medium",
-                      lowSeats ? "text-primary animate-pulse" : "text-muted-foreground",
+                      lowSeats
+                        ? "text-primary animate-pulse"
+                        : "text-muted-foreground",
                     )}
                   >
                     {s.seatsLeft} {t.cohortSeatsLeft}

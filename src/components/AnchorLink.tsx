@@ -39,7 +39,7 @@ const AnchorLink = forwardRef<HTMLAnchorElement, Props>(
         {children}
       </a>
     );
-  }
+  },
 );
 AnchorLink.displayName = "AnchorLink";
 

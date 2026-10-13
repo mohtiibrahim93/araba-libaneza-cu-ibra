@@ -8,7 +8,14 @@ import { defineMcp } from "npm:@lovable.dev/mcp-js@0.26.2";
 // src/lib/mcp/tools/get-pricing.ts
 import { defineTool } from "npm:@lovable.dev/mcp-js@0.26.2";
 var ONLINE_PRICES = {
-  groupMonthly: { A1: 500, A2: 600, B1: 700, B2: 800, C1: 900, C2: 1e3 },
+  groupMonthly: {
+    A1: 500,
+    A2: 600,
+    B1: 700,
+    B2: 800,
+    C1: 900,
+    C2: 1e3
+  },
   privateLesson: 150,
   kidsPrivateLesson: 150,
   kidsGroupMonthly: 500
@@ -20,7 +27,11 @@ var get_pricing_default = defineTool({
   title: "Get course pricing",
   description: "Return current pricing (LEI) for all course formats offered by Arab\u0103 Libanez\u0103 cu Ibra: group monthly per CEFR level, private 1:1, and kids programs. Includes both online and physical (in-center) prices.",
   inputSchema: {},
-  annotations: { readOnlyHint: true, idempotentHint: true, openWorldHint: false },
+  annotations: {
+    readOnlyHint: true,
+    idempotentHint: true,
+    openWorldHint: false
+  },
   handler: () => {
     const groupMonthly = Object.fromEntries(
       Object.entries(ONLINE_PRICES.groupMonthly).map(([lvl, online]) => [
@@ -57,19 +68,65 @@ var get_pricing_default = defineTool({
 // src/lib/mcp/tools/list-curriculum-levels.ts
 import { defineTool as defineTool2 } from "npm:@lovable.dev/mcp-js@0.26.2";
 var LEVELS = [
-  { id: "a1", title: "A1 \u2014 Beginner (Survival)", lessons: 32, hours: 48, track: "Spoken", schedule: "In person: Mon & Wed 19:00\u201320:30 group, 2 Sep \u2013 21 Dec 2026 (32 lessons), Strada Icoanei 80 \xB7 in progress \xB7 Online: the Sat 12:00\u201313:30 / Sun 17:30\u201319:00 group is in progress and full; new online groups taught in Romanian and in English, max 6 each, are open for registration \u2014 dates on /cursuri/grup/a1" },
-  { id: "a2", title: "A2 \u2014 Elementary", lessons: 56, hours: 84, track: "Spoken", schedule: "In person: Tue & Thu 19:00\u201320:30, 1 Sep 2026 \u2013 11 Mar 2027 (56 lessons), Strada Icoanei 80 \xB7 runs in parallel with A1 \xB7 in progress" },
-  { id: "b1", title: "B1 \u2014 Intermediate", lessons: 72, hours: 108, track: "Spoken \xB7 optional Arabic-script writing if the whole group wants it", schedule: "~9 months \xB7 opens after A2 \u2014 future enrollment" },
-  { id: "b2", title: "B2 \u2014 Upper-Intermediate", lessons: 72, hours: 108, track: "Spoken \xB7 optional Arabic-script writing if the whole group wants it", schedule: "~9 months \xB7 opens after B1 \u2014 future enrollment" },
-  { id: "c1", title: "C1 \u2014 Advanced", lessons: 72, hours: 108, track: "Spoken + Written", schedule: "~9 months \xB7 opens after B2 \u2014 future enrollment" },
-  { id: "c2", title: "C2 \u2014 Mastery", lessons: 72, hours: 108, track: "Thematic modules", schedule: "~9 months \xB7 opens after C1 \u2014 future enrollment" }
+  {
+    id: "a1",
+    title: "A1 \u2014 Beginner (Survival)",
+    lessons: 32,
+    hours: 48,
+    track: "Spoken",
+    schedule: "In person: Mon & Wed 19:00\u201320:30 group, 2 Sep \u2013 21 Dec 2026 (32 lessons), Strada Icoanei 80 \xB7 in progress \xB7 Online: the Sat 12:00\u201313:30 / Sun 17:30\u201319:00 group is in progress and full; new online groups taught in Romanian and in English, max 6 each, are open for registration \u2014 dates on /cursuri/grup/a1"
+  },
+  {
+    id: "a2",
+    title: "A2 \u2014 Elementary",
+    lessons: 56,
+    hours: 84,
+    track: "Spoken",
+    schedule: "In person: Tue & Thu 19:00\u201320:30, 1 Sep 2026 \u2013 11 Mar 2027 (56 lessons), Strada Icoanei 80 \xB7 runs in parallel with A1 \xB7 in progress"
+  },
+  {
+    id: "b1",
+    title: "B1 \u2014 Intermediate",
+    lessons: 72,
+    hours: 108,
+    track: "Spoken \xB7 optional Arabic-script writing if the whole group wants it",
+    schedule: "~9 months \xB7 opens after A2 \u2014 future enrollment"
+  },
+  {
+    id: "b2",
+    title: "B2 \u2014 Upper-Intermediate",
+    lessons: 72,
+    hours: 108,
+    track: "Spoken \xB7 optional Arabic-script writing if the whole group wants it",
+    schedule: "~9 months \xB7 opens after B1 \u2014 future enrollment"
+  },
+  {
+    id: "c1",
+    title: "C1 \u2014 Advanced",
+    lessons: 72,
+    hours: 108,
+    track: "Spoken + Written",
+    schedule: "~9 months \xB7 opens after B2 \u2014 future enrollment"
+  },
+  {
+    id: "c2",
+    title: "C2 \u2014 Mastery",
+    lessons: 72,
+    hours: 108,
+    track: "Thematic modules",
+    schedule: "~9 months \xB7 opens after C1 \u2014 future enrollment"
+  }
 ];
 var list_curriculum_levels_default = defineTool2({
   name: "list_curriculum_levels",
   title: "List CEFR curriculum levels",
   description: "List the six CEFR levels (A1\u2013C2) offered for Lebanese Arabic, with lesson counts, hours, and track focus.",
   inputSchema: {},
-  annotations: { readOnlyHint: true, idempotentHint: true, openWorldHint: false },
+  annotations: {
+    readOnlyHint: true,
+    idempotentHint: true,
+    openWorldHint: false
+  },
   handler: () => ({
     content: [{ type: "text", text: JSON.stringify(LEVELS, null, 2) }],
     structuredContent: { levels: LEVELS }
@@ -83,7 +140,11 @@ var get_contact_info_default = defineTool3({
   title: "Get contact info",
   description: "Return public contact details (email, website) for Arab\u0103 Libanez\u0103 cu Ibra.",
   inputSchema: {},
-  annotations: { readOnlyHint: true, idempotentHint: true, openWorldHint: false },
+  annotations: {
+    readOnlyHint: true,
+    idempotentHint: true,
+    openWorldHint: false
+  },
   handler: () => {
     const info = {
       name: "Arab\u0103 Libanez\u0103 cu Ibra",
@@ -107,7 +168,11 @@ var mcp_default = defineMcp({
   instructions: "Public tools for the Arab\u0103 Libanez\u0103 cu Ibra Lebanese-Arabic language school. Use `get_pricing` for course fees (LEI), `list_curriculum_levels` for the CEFR A1\u2013C2 structure, and `get_contact_info` for how to reach the school.",
   // Upstream @lovable.dev/mcp-js types declare outputSchema as required ZodRawShape,
   // which conflicts with exactOptionalPropertyTypes for tools without one.
-  tools: [get_pricing_default, list_curriculum_levels_default, get_contact_info_default]
+  tools: [
+    get_pricing_default,
+    list_curriculum_levels_default,
+    get_contact_info_default
+  ]
 });
 
 // lovable-mcp-supabase-entry.ts

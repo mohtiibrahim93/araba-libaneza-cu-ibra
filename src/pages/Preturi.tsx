@@ -1,5 +1,12 @@
 import GroupStartRule from "@/components/GroupStartRule";
-import { Gift, Users, UserRound, Baby, CreditCard, ShieldCheck } from "lucide-react";
+import {
+  Gift,
+  Users,
+  UserRound,
+  Baby,
+  CreditCard,
+  ShieldCheck,
+} from "lucide-react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { Link } from "@/components/LocalizedLink";
@@ -38,21 +45,27 @@ const PreturiPage = () => {
     Math.round(monthly * months * (1 - GROUP_FULL_COURSE_DISCOUNT));
 
   const priv = ONLINE_PRICES.privateLesson;
-  const privPack = (unit: number) => Math.round(unit * PRIVATE_PACKAGE_SIZE * (1 - PRIVATE_PACKAGE_DISCOUNT));
+  const privPack = (unit: number) =>
+    Math.round(unit * PRIVATE_PACKAGE_SIZE * (1 - PRIVATE_PACKAGE_DISCOUNT));
   const kidsFizic = physicalPrice(ONLINE_PRICES.kidsGroupMonthly);
   const kidsDeposit = Math.round(kidsFizic * 0.25);
 
   const card = "rounded-3xl border border-[#E7E1D6] bg-card dark:border-border";
-  const label = "mb-2 block text-sm font-bold uppercase tracking-[0.1em] text-foreground";
+  const label =
+    "mb-2 block text-sm font-bold uppercase tracking-[0.1em] text-foreground";
   const h2 = "font-display text-display-md font-bold text-foreground";
-  const icon = "inline-flex h-11 w-11 items-center justify-center rounded-2xl bg-brand-green/10 text-brand-green";
+  const icon =
+    "inline-flex h-11 w-11 items-center justify-center rounded-2xl bg-brand-green/10 text-brand-green";
   const btn =
     "inline-flex h-12 items-center justify-center rounded-xl bg-primary px-6 font-semibold text-primary-foreground transition-colors hover:bg-primary/90";
 
   return (
     <>
       <Navbar />
-      <main id="main-content" className="min-h-screen bg-background px-gutter pb-section pt-28">
+      <main
+        id="main-content"
+        className="min-h-screen bg-background px-gutter pb-section pt-28"
+      >
         <div className="mx-auto w-full max-w-content">
           <span className={label}>{en ? "Prices" : "Prețuri"}</span>
           <h1 className="font-display text-display-xl font-bold tracking-tight text-foreground">
@@ -68,7 +81,13 @@ const PreturiPage = () => {
           {/* Quick overview */}
           <div className="mt-8 grid grid-cols-2 gap-3 sm:gap-4 lg:grid-cols-4">
             {[
-              { Icon: Gift, title: en ? "Free trial" : "Lecție de probă", price: "0 lei", sub: "30 min", href: "/trial" },
+              {
+                Icon: Gift,
+                title: en ? "Free trial" : "Lecție de probă",
+                price: "0 lei",
+                sub: "30 min",
+                href: "/trial",
+              },
               {
                 Icon: Users,
                 title: en ? "Group course" : "Curs de grup",
@@ -80,23 +99,35 @@ const PreturiPage = () => {
                 Icon: UserRound,
                 title: en ? "Private lessons" : "Lecții private",
                 price: `${formatLei(priv)} lei`,
-                sub: en ? "per 60-minute lesson, online" : "lecția de 60 de minute, online",
+                sub: en
+                  ? "per 60-minute lesson, online"
+                  : "lecția de 60 de minute, online",
                 href: "#privat",
               },
               {
                 Icon: Baby,
                 title: en ? "Kids (6–11)" : "Copii (6–11)",
                 price: `${formatLei(kidsFizic)} lei`,
-                sub: en ? "per month, in person · coming soon" : "pe lună, fizic · în curând",
+                sub: en
+                  ? "per month, in person · coming soon"
+                  : "pe lună, fizic · în curând",
                 href: "#copii",
               },
             ].map(({ Icon, title, price, sub, href }) => (
-              <a key={title} href={href} className={`${card} flex flex-col gap-1.5 p-4 transition-colors hover:border-brand-green/50 sm:gap-2 sm:p-5`}>
+              <a
+                key={title}
+                href={href}
+                className={`${card} flex flex-col gap-1.5 p-4 transition-colors hover:border-brand-green/50 sm:gap-2 sm:p-5`}
+              >
                 <span className={icon}>
                   <Icon className="h-5 w-5" aria-hidden="true" />
                 </span>
-                <span className="mt-1 font-semibold text-foreground">{title}</span>
-                <span className="font-display text-2xl font-bold text-foreground sm:text-3xl">{price}</span>
+                <span className="mt-1 font-semibold text-foreground">
+                  {title}
+                </span>
+                <span className="font-display text-2xl font-bold text-foreground sm:text-3xl">
+                  {price}
+                </span>
                 <span className="text-sm text-muted-foreground">{sub}</span>
               </a>
             ))}
@@ -104,8 +135,14 @@ const PreturiPage = () => {
 
           {/* Group */}
           <section id="grup" className="mt-section scroll-mt-28">
-            <span className={label}>{en ? "Group course · A1–C2" : "Curs de grup · A1–C2"}</span>
-            <h2 className={h2}>{en ? "Small groups: up to 6 online, 8 in person" : "Grupe mici: maximum 6 online, 8 fizic"}</h2>
+            <span className={label}>
+              {en ? "Group course · A1–C2" : "Curs de grup · A1–C2"}
+            </span>
+            <h2 className={h2}>
+              {en
+                ? "Small groups: up to 6 online, 8 in person"
+                : "Grupe mici: maximum 6 online, 8 fizic"}
+            </h2>
             <p className="mt-2 max-w-3xl text-muted-foreground">
               {en
                 ? `Two 90-minute lessons a week. Pay monthly — it stops automatically at the end of the level — or pay the whole level upfront and get ${discountLabel(GROUP_FULL_COURSE_DISCOUNT)}.`
@@ -115,12 +152,21 @@ const PreturiPage = () => {
               <table className="w-full min-w-[44rem] text-left text-[15px]">
                 <thead>
                   <tr className="border-b border-[#E7E1D6] text-sm text-muted-foreground dark:border-border">
-                    <th className="px-5 py-4 font-semibold">{en ? "Level" : "Nivel"}</th>
-                    <th className="px-5 py-4 font-semibold">{en ? "Lessons" : "Lecții"}</th>
-                    <th className="px-5 py-4 font-semibold">{en ? "Length" : "Durată"}</th>
-                    <th className="px-5 py-4 font-semibold">{en ? "Per month" : "Pe lună"}</th>
                     <th className="px-5 py-4 font-semibold">
-                      {en ? "Whole level upfront" : "Tot nivelul, în avans"} ({discountLabel(GROUP_FULL_COURSE_DISCOUNT)})
+                      {en ? "Level" : "Nivel"}
+                    </th>
+                    <th className="px-5 py-4 font-semibold">
+                      {en ? "Lessons" : "Lecții"}
+                    </th>
+                    <th className="px-5 py-4 font-semibold">
+                      {en ? "Length" : "Durată"}
+                    </th>
+                    <th className="px-5 py-4 font-semibold">
+                      {en ? "Per month" : "Pe lună"}
+                    </th>
+                    <th className="px-5 py-4 font-semibold">
+                      {en ? "Whole level upfront" : "Tot nivelul, în avans"} (
+                      {discountLabel(GROUP_FULL_COURSE_DISCOUNT)})
                     </th>
                     <th className="px-5 py-4 font-semibold" />
                   </tr>
@@ -130,11 +176,18 @@ const PreturiPage = () => {
                     const online = ONLINE_PRICES.groupMonthly[lvl];
                     const fizic = physicalPrice(online);
                     const months = GROUP_COURSE_MONTHS[lvl];
-                    const lessons = curriculum.find((c) => c.id === lvl.toLowerCase())?.lessons;
+                    const lessons = curriculum.find(
+                      (c) => c.id === lvl.toLowerCase(),
+                    )?.lessons;
                     return (
-                      <tr key={lvl} className="border-b border-[#E7E1D6] last:border-0 dark:border-border">
+                      <tr
+                        key={lvl}
+                        className="border-b border-[#E7E1D6] last:border-0 dark:border-border"
+                      >
                         <td className="px-5 py-4">
-                          <span className="font-display text-xl font-bold text-foreground">{lvl}</span>
+                          <span className="font-display text-xl font-bold text-foreground">
+                            {lvl}
+                          </span>
                           {OPEN.has(lvl) && (
                             <span className="ml-2 rounded-full bg-brand-green/10 px-2 py-0.5 text-[11px] font-bold text-brand-green">
                               {en ? "Open" : "Înscrieri deschise"}
@@ -143,13 +196,22 @@ const PreturiPage = () => {
                         </td>
                         <td className="px-5 py-4">{lessons ?? "—"}</td>
                         <td className="px-5 py-4">
-                          {months} {en ? (months === 1 ? "month" : "months") : months === 1 ? "lună" : "luni"}
+                          {months}{" "}
+                          {en
+                            ? months === 1
+                              ? "month"
+                              : "months"
+                            : months === 1
+                              ? "lună"
+                              : "luni"}
                         </td>
                         <td className="px-5 py-4">
-                          <b>{formatLei(online)}</b> online · <b>{formatLei(fizic)}</b> {en ? "in person" : "fizic"}
+                          <b>{formatLei(online)}</b> online ·{" "}
+                          <b>{formatLei(fizic)}</b> {en ? "in person" : "fizic"}
                         </td>
                         <td className="px-5 py-4">
-                          <b>{formatLei(full(online, months))}</b> online · <b>{formatLei(full(fizic, months))}</b>{" "}
+                          <b>{formatLei(full(online, months))}</b> online ·{" "}
+                          <b>{formatLei(full(fizic, months))}</b>{" "}
                           {en ? "in person" : "fizic"}
                         </td>
                         <td className="px-5 py-4 text-right">
@@ -172,12 +234,19 @@ const PreturiPage = () => {
                 const online = ONLINE_PRICES.groupMonthly[lvl];
                 const fizic = physicalPrice(online);
                 const months = GROUP_COURSE_MONTHS[lvl];
-                const lessons = curriculum.find((c) => c.id === lvl.toLowerCase())?.lessons;
+                const lessons = curriculum.find(
+                  (c) => c.id === lvl.toLowerCase(),
+                )?.lessons;
                 return (
                   <li key={lvl}>
-                    <Link to={`/cursuri/grup/${lvl.toLowerCase()}`} className={`${card} block p-5`}>
+                    <Link
+                      to={`/cursuri/grup/${lvl.toLowerCase()}`}
+                      className={`${card} block p-5`}
+                    >
                       <div className="flex items-center justify-between">
-                        <span className="font-display text-2xl font-bold text-foreground">{lvl}</span>
+                        <span className="font-display text-2xl font-bold text-foreground">
+                          {lvl}
+                        </span>
                         {OPEN.has(lvl) && (
                           <span className="rounded-full bg-brand-green/10 px-2 py-0.5 text-[11px] font-bold text-brand-green">
                             {en ? "Open" : "Înscrieri deschise"}
@@ -185,16 +254,27 @@ const PreturiPage = () => {
                         )}
                       </div>
                       <p className="mt-1 text-sm text-muted-foreground">
-                        {lessons ?? "—"} {en ? "lessons" : "lecții"} · {months} {en ? "months" : "luni"}
+                        {lessons ?? "—"} {en ? "lessons" : "lecții"} · {months}{" "}
+                        {en ? "months" : "luni"}
                       </p>
                       <p className="mt-3 text-[15px] text-foreground">
-                        <b>{formatLei(online)}</b> online · <b>{formatLei(fizic)}</b> {en ? "in person" : "fizic"}{" "}
-                        <span className="text-muted-foreground">{en ? "/ month" : "/ lună"}</span>
+                        <b>{formatLei(online)}</b> online ·{" "}
+                        <b>{formatLei(fizic)}</b> {en ? "in person" : "fizic"}{" "}
+                        <span className="text-muted-foreground">
+                          {en ? "/ month" : "/ lună"}
+                        </span>
                       </p>
                       <p className="mt-1 text-sm text-muted-foreground">
-                        {en ? "Whole level upfront" : "Tot nivelul, în avans"} ({discountLabel(GROUP_FULL_COURSE_DISCOUNT)}):{" "}
-                        <b className="text-foreground">{formatLei(full(online, months))}</b> online ·{" "}
-                        <b className="text-foreground">{formatLei(full(fizic, months))}</b> {en ? "in person" : "fizic"}
+                        {en ? "Whole level upfront" : "Tot nivelul, în avans"} (
+                        {discountLabel(GROUP_FULL_COURSE_DISCOUNT)}):{" "}
+                        <b className="text-foreground">
+                          {formatLei(full(online, months))}
+                        </b>{" "}
+                        online ·{" "}
+                        <b className="text-foreground">
+                          {formatLei(full(fizic, months))}
+                        </b>{" "}
+                        {en ? "in person" : "fizic"}
                       </p>
                     </Link>
                   </li>
@@ -205,10 +285,19 @@ const PreturiPage = () => {
           </section>
 
           {/* Private */}
-          <section id="privat" className="mt-section scroll-mt-28 grid gap-6 lg:grid-cols-[minmax(0,1fr)_minmax(0,1fr)]">
+          <section
+            id="privat"
+            className="mt-section scroll-mt-28 grid gap-6 lg:grid-cols-[minmax(0,1fr)_minmax(0,1fr)]"
+          >
             <div>
-              <span className={label}>{en ? "Private lessons 1:1" : "Lecții private 1:1"}</span>
-              <h2 className={h2}>{en ? "At your pace, on your goal" : "În ritmul tău, pe obiectivul tău"}</h2>
+              <span className={label}>
+                {en ? "Private lessons 1:1" : "Lecții private 1:1"}
+              </span>
+              <h2 className={h2}>
+                {en
+                  ? "At your pace, on your goal"
+                  : "În ritmul tău, pe obiectivul tău"}
+              </h2>
               <p className="mt-2 text-muted-foreground">
                 {en
                   ? `60-minute lessons, online or in person. ${discountLabel(PRIVATE_PACKAGE_DISCOUNT)} on a package of ${PRIVATE_PACKAGE_SIZE} lessons — no other discount on private lessons. You pay when you book, and the lesson is confirmed once paid.`
@@ -220,18 +309,33 @@ const PreturiPage = () => {
             </div>
             <div className="grid gap-4 sm:grid-cols-2">
               <div className={`${card} p-6`}>
-                <p className="text-sm text-muted-foreground">{en ? "One lesson" : "O lecție"}</p>
-                <p className="mt-1 font-display text-3xl font-bold text-foreground">{formatLei(priv)} lei</p>
+                <p className="text-sm text-muted-foreground">
+                  {en ? "One lesson" : "O lecție"}
+                </p>
+                <p className="mt-1 font-display text-3xl font-bold text-foreground">
+                  {formatLei(priv)} lei
+                </p>
                 <p className="text-sm text-muted-foreground">online</p>
-                <p className="mt-3 font-display text-2xl font-bold text-foreground">{formatLei(physicalPrice(priv))} lei</p>
-                <p className="text-sm text-muted-foreground">{en ? "in person" : "fizic"}</p>
+                <p className="mt-3 font-display text-2xl font-bold text-foreground">
+                  {formatLei(physicalPrice(priv))} lei
+                </p>
+                <p className="text-sm text-muted-foreground">
+                  {en ? "in person" : "fizic"}
+                </p>
               </div>
               <div className={`${card} border-brand-green/40 p-6`}>
                 <p className="text-sm text-muted-foreground">
-                  {en ? `Package of ${PRIVATE_PACKAGE_SIZE}` : `Pachet de ${PRIVATE_PACKAGE_SIZE}`} ·{" "}
-                  <span className="font-semibold text-brand-green">{discountLabel(PRIVATE_PACKAGE_DISCOUNT)}</span>
+                  {en
+                    ? `Package of ${PRIVATE_PACKAGE_SIZE}`
+                    : `Pachet de ${PRIVATE_PACKAGE_SIZE}`}{" "}
+                  ·{" "}
+                  <span className="font-semibold text-brand-green">
+                    {discountLabel(PRIVATE_PACKAGE_DISCOUNT)}
+                  </span>
                 </p>
-                <p className="mt-1 font-display text-3xl font-bold text-foreground">{formatLei(privPack(priv))} lei</p>
+                <p className="mt-1 font-display text-3xl font-bold text-foreground">
+                  {formatLei(privPack(priv))} lei
+                </p>
                 <p className="text-sm text-muted-foreground">
                   online · <s>{formatLei(priv * PRIVATE_PACKAGE_SIZE)}</s>
                 </p>
@@ -239,7 +343,8 @@ const PreturiPage = () => {
                   {formatLei(privPack(physicalPrice(priv)))} lei
                 </p>
                 <p className="text-sm text-muted-foreground">
-                  {en ? "in person" : "fizic"} · <s>{formatLei(physicalPrice(priv) * PRIVATE_PACKAGE_SIZE)}</s>
+                  {en ? "in person" : "fizic"} ·{" "}
+                  <s>{formatLei(physicalPrice(priv) * PRIVATE_PACKAGE_SIZE)}</s>
                 </p>
               </div>
             </div>
@@ -259,11 +364,17 @@ const PreturiPage = () => {
                   ? "30 minutes with Ibra: we meet, you ask anything, and we find your level. Once per person."
                   : "30 de minute cu Ibra: ne cunoaștem, întrebi orice și îți aflăm nivelul. O singură dată de persoană."}
               </p>
-              <Link to="/trial" className="mt-auto text-sm font-semibold text-brand-green hover:underline">
+              <Link
+                to="/trial"
+                className="mt-auto text-sm font-semibold text-brand-green hover:underline"
+              >
                 {en ? "Book the free trial →" : "Rezervă lecția gratuită →"}
               </Link>
             </div>
-            <div id="copii" className={`${card} flex scroll-mt-28 flex-col gap-3 p-6 sm:p-7`}>
+            <div
+              id="copii"
+              className={`${card} flex scroll-mt-28 flex-col gap-3 p-6 sm:p-7`}
+            >
               <span className={icon}>
                 <Baby className="h-5 w-5" aria-hidden="true" />
               </span>
@@ -275,8 +386,13 @@ const PreturiPage = () => {
                   ? `In person in Bucharest, ${formatLei(kidsFizic)} lei a month. When a group opens, a refundable ${formatLei(kidsDeposit)} lei deposit (25%) keeps the place.`
                   : `Fizic, în București, ${formatLei(kidsFizic)} lei pe lună. Când se deschide o grupă, un avans rambursabil de ${formatLei(kidsDeposit)} lei (25%) păstrează locul.`}
               </p>
-              <Link to="/cursuri/copii" className="mt-auto text-sm font-semibold text-brand-green hover:underline">
-                {en ? "Get notified when it starts →" : "Anunță-mă când pornește →"}
+              <Link
+                to="/cursuri/copii"
+                className="mt-auto text-sm font-semibold text-brand-green hover:underline"
+              >
+                {en
+                  ? "Get notified when it starts →"
+                  : "Anunță-mă când pornește →"}
               </Link>
             </div>
           </section>
@@ -285,8 +401,13 @@ const PreturiPage = () => {
           <section className="mt-section grid gap-5 md:grid-cols-2">
             <div className="rounded-3xl bg-cream p-6 sm:p-8">
               <div className="mb-3 flex items-center gap-3">
-                <CreditCard className="h-5 w-5 text-brand-green" aria-hidden="true" />
-                <h2 className="font-display text-xl font-bold text-foreground">{en ? "How you pay" : "Cum plătești"}</h2>
+                <CreditCard
+                  className="h-5 w-5 text-brand-green"
+                  aria-hidden="true"
+                />
+                <h2 className="font-display text-xl font-bold text-foreground">
+                  {en ? "How you pay" : "Cum plătești"}
+                </h2>
               </div>
               <ul className="list-disc space-y-2 pl-5 text-foreground/80">
                 <li>
@@ -296,17 +417,26 @@ const PreturiPage = () => {
                 </li>
                 <li>
                   {en ? "Or: " : "Sau: "}
-                  {t.paymentCash}; {t.paymentTransfer.toLowerCase()}; {t.paymentPaypal}. {t.paymentNote}
+                  {t.paymentCash}; {t.paymentTransfer.toLowerCase()};{" "}
+                  {t.paymentPaypal}. {t.paymentNote}
                 </li>
               </ul>
             </div>
             <div className="rounded-3xl bg-cream p-6 sm:p-8">
               <div className="mb-3 flex items-center gap-3">
-                <ShieldCheck className="h-5 w-5 text-brand-green" aria-hidden="true" />
-                <h2 className="font-display text-xl font-bold text-foreground">{en ? "Refunds" : "Rambursare"}</h2>
+                <ShieldCheck
+                  className="h-5 w-5 text-brand-green"
+                  aria-hidden="true"
+                />
+                <h2 className="font-display text-xl font-bold text-foreground">
+                  {en ? "Refunds" : "Rambursare"}
+                </h2>
               </div>
               <p className="text-foreground/80">{t.trustRefund}.</p>
-              <Link to="/terms" className="mt-3 inline-block text-sm font-semibold text-brand-green hover:underline">
+              <Link
+                to="/terms"
+                className="mt-3 inline-block text-sm font-semibold text-brand-green hover:underline"
+              >
                 {en ? "Terms and conditions →" : "Termeni și condiții →"}
               </Link>
             </div>
@@ -315,10 +445,14 @@ const PreturiPage = () => {
           <section className="mt-section flex flex-col gap-5 rounded-3xl bg-brand-green px-6 py-8 text-white sm:px-10 md:flex-row md:items-center md:justify-between">
             <div>
               <h2 className="font-display text-2xl font-bold">
-                {en ? "Not sure which one? Start free." : "Nu știi ce să alegi? Începe gratuit."}
+                {en
+                  ? "Not sure which one? Start free."
+                  : "Nu știi ce să alegi? Începe gratuit."}
               </h2>
               <p className="mt-1 text-white/85">
-                {en ? "30 minutes, 0 lei — we find the right course together." : "30 de minute, 0 lei — găsim împreună cursul potrivit."}
+                {en
+                  ? "30 minutes, 0 lei — we find the right course together."
+                  : "30 de minute, 0 lei — găsim împreună cursul potrivit."}
               </p>
             </div>
             <Link

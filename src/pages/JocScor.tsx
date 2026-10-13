@@ -56,8 +56,7 @@ const COPY = {
     ctaCourse: "Vezi cursul potrivit",
     ctaTrial: "Lecție de probă gratuită",
     altH2: "Vrei un răspuns mai precis?",
-    altP:
-      "Testul de nivel clasic are 24 de întrebări scrise și verifică mai atent gramatica, nu doar vocabularul. Durează circa 15 minute.",
+    altP: "Testul de nivel clasic are 24 de întrebări scrise și verifică mai atent gramatica, nu doar vocabularul. Durează circa 15 minute.",
     altCta: "Fă testul de nivel",
   },
   en: {
@@ -89,8 +88,7 @@ const COPY = {
     ctaCourse: "See the right course",
     ctaTrial: "Free trial lesson",
     altH2: "Want a sharper answer?",
-    altP:
-      "The classic level test has 24 written questions and checks grammar more carefully, not just vocabulary. It takes about 15 minutes.",
+    altP: "The classic level test has 24 written questions and checks grammar more carefully, not just vocabulary. It takes about 15 minutes.",
     altCta: "Take the level test",
   },
 } as const;
@@ -122,26 +120,43 @@ const JocScor = () => {
 
   return (
     <div className="min-h-screen bg-background flex flex-col">
-
       <Navbar />
 
       <main id="main-content" className="flex-1 pt-16">
-        <nav aria-label="Breadcrumb" className="mx-auto w-full max-w-content px-gutter pb-2 pt-6 text-xs text-muted-foreground">
+        <nav
+          aria-label="Breadcrumb"
+          className="mx-auto w-full max-w-content px-gutter pb-2 pt-6 text-xs text-muted-foreground"
+        >
           <ol className="flex flex-wrap items-center gap-1">
             <li>
-              <Link to="/" className="transition-colors hover:text-foreground">{c.home}</Link>
+              <Link to="/" className="transition-colors hover:text-foreground">
+                {c.home}
+              </Link>
             </li>
-            <li aria-hidden="true"><ChevronRight className="inline h-3.5 w-3.5 -mt-0.5" /></li>
+            <li aria-hidden="true">
+              <ChevronRight className="inline h-3.5 w-3.5 -mt-0.5" />
+            </li>
             <li>
-              <Link to="/joc" className="transition-colors hover:text-foreground">{c.crumbGame}</Link>
+              <Link
+                to="/joc"
+                className="transition-colors hover:text-foreground"
+              >
+                {c.crumbGame}
+              </Link>
             </li>
-            <li aria-hidden="true"><ChevronRight className="inline h-3.5 w-3.5 -mt-0.5" /></li>
-            <li className="font-medium text-foreground" aria-current="page">{c.crumb}</li>
+            <li aria-hidden="true">
+              <ChevronRight className="inline h-3.5 w-3.5 -mt-0.5" />
+            </li>
+            <li className="font-medium text-foreground" aria-current="page">
+              {c.crumb}
+            </li>
           </ol>
         </nav>
 
         <header className="mx-auto w-full max-w-content px-gutter pb-8 pt-4 text-center">
-          <span className="mb-3 block text-xs font-semibold uppercase tracking-widest text-brand-green">{c.eyebrow}</span>
+          <span className="mb-3 block text-xs font-semibold uppercase tracking-widest text-brand-green">
+            {c.eyebrow}
+          </span>
           <h1 className="font-display text-display-xl font-bold tracking-tight text-foreground mb-3">
             {c.h1}
           </h1>
@@ -156,8 +171,12 @@ const JocScor = () => {
           </div>
           {loaded && !summary && (
             <div className="rounded-2xl border border-[#E7E1D6] bg-card dark:border-border p-6 text-center sm:p-10">
-              <h2 className="font-display text-2xl font-bold text-foreground">{c.emptyH2}</h2>
-              <p className="mx-auto mt-3 max-w-xl leading-relaxed text-muted-foreground">{c.emptyP}</p>
+              <h2 className="font-display text-2xl font-bold text-foreground">
+                {c.emptyH2}
+              </h2>
+              <p className="mx-auto mt-3 max-w-xl leading-relaxed text-muted-foreground">
+                {c.emptyP}
+              </p>
               <div className="mt-6 flex flex-col justify-center gap-3 sm:flex-row">
                 <Button asChild size="lg">
                   <Link to="/joc">{c.emptyCtaGame}</Link>
@@ -172,7 +191,10 @@ const JocScor = () => {
           {loaded && summary && suggestion && (
             <div className="space-y-8">
               <section aria-labelledby="scor-stats">
-                <h2 id="scor-stats" className="font-display text-2xl font-bold text-foreground">
+                <h2
+                  id="scor-stats"
+                  className="font-display text-2xl font-bold text-foreground"
+                >
                   {c.scoreH2}
                 </h2>
                 <div className="mt-4 grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-5">
@@ -183,13 +205,22 @@ const JocScor = () => {
                     [summary.practiced, c.statPracticed],
                     [summary.mastered, c.statMastered],
                   ].map(([value, label]) => (
-                    <div key={label as string} className="rounded-2xl border border-[#E7E1D6] bg-card dark:border-border p-4 text-center">
-                      <div className="font-display text-3xl font-bold text-foreground">{value}</div>
-                      <div className="mt-1 text-sm text-muted-foreground">{label}</div>
+                    <div
+                      key={label as string}
+                      className="rounded-2xl border border-[#E7E1D6] bg-card dark:border-border p-4 text-center"
+                    >
+                      <div className="font-display text-3xl font-bold text-foreground">
+                        {value}
+                      </div>
+                      <div className="mt-1 text-sm text-muted-foreground">
+                        {label}
+                      </div>
                     </div>
                   ))}
                 </div>
-                <p className="mt-3 text-sm leading-relaxed text-muted-foreground">{c.masteredNote}</p>
+                <p className="mt-3 text-sm leading-relaxed text-muted-foreground">
+                  {c.masteredNote}
+                </p>
               </section>
 
               <section
@@ -197,18 +228,27 @@ const JocScor = () => {
                 className="rounded-2xl border border-[#E7E1D6] bg-card dark:border-border p-6 sm:p-8"
               >
                 <span className="text-sm font-medium text-primary">
-                  {suggestion.source === "placement" ? c.levelFromTest : c.levelFromPractice}
+                  {suggestion.source === "placement"
+                    ? c.levelFromTest
+                    : c.levelFromPractice}
                 </span>
-                <h2 id="scor-nivel" className="mt-1 font-display text-2xl font-bold text-foreground">
+                <h2
+                  id="scor-nivel"
+                  className="mt-1 font-display text-2xl font-bold text-foreground"
+                >
                   {c.levelH2}: {suggestion.level}
                 </h2>
-                <p className="mt-3 leading-relaxed text-muted-foreground">{suggestion.detail}</p>
+                <p className="mt-3 leading-relaxed text-muted-foreground">
+                  {suggestion.detail}
+                </p>
                 <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
                   {c.levelDisclaimer}
                 </p>
                 <div className="mt-6 flex flex-col gap-3 sm:flex-row">
                   <Button asChild size="lg">
-                    <Link to={`/quiz?level=${suggestion.level}`}>{c.ctaCourse}</Link>
+                    <Link to={`/quiz?level=${suggestion.level}`}>
+                      {c.ctaCourse}
+                    </Link>
                   </Button>
                   <Button asChild size="lg" variant="outline">
                     <Link to="/trial">{c.ctaTrial}</Link>
@@ -222,8 +262,12 @@ const JocScor = () => {
         <section className="w-full bg-cream">
           <div className="mx-auto w-full max-w-content px-gutter py-section">
             <div className="max-w-2xl">
-              <h2 className="font-display text-2xl font-bold text-foreground">{c.altH2}</h2>
-              <p className="mt-3 leading-relaxed text-muted-foreground">{c.altP}</p>
+              <h2 className="font-display text-2xl font-bold text-foreground">
+                {c.altH2}
+              </h2>
+              <p className="mt-3 leading-relaxed text-muted-foreground">
+                {c.altP}
+              </p>
               <Link
                 to="/test-de-nivel"
                 className="mt-4 inline-flex items-center gap-1 font-medium text-primary underline underline-offset-4 hover:text-primary/80"

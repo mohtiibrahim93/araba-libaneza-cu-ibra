@@ -8,7 +8,15 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Switch } from "@/components/ui/switch";
 import { toast } from "@/hooks/use-toast";
-import { Loader2, Image as ImageIcon, Music, ExternalLink, Trash2, Pencil, FileText } from "lucide-react";
+import {
+  Loader2,
+  Image as ImageIcon,
+  Music,
+  ExternalLink,
+  Trash2,
+  Pencil,
+  FileText,
+} from "lucide-react";
 
 interface OverrideRow {
   slug: string;
@@ -83,7 +91,11 @@ const BlogAdmin = () => {
       const data = await call({ action: "list_blog_articles" });
       setRows(data.data || []);
     } catch {
-      toast({ title: "Nu am putut încărca articolele (funcția admin trebuie redeployată?)", variant: "destructive" });
+      toast({
+        title:
+          "Nu am putut încărca articolele (funcția admin trebuie redeployată?)",
+        variant: "destructive",
+      });
     } finally {
       setLoading(false);
     }
@@ -126,21 +138,34 @@ const BlogAdmin = () => {
     try {
       await call({ action: "upsert_blog_article", ...draft });
       toast({
-        title: draft.is_published ? "Salvat și publicat — site-ul afișează versiunea ta" : "Salvat ca draft (site-ul afișează încă versiunea din cod)",
+        title: draft.is_published
+          ? "Salvat și publicat — site-ul afișează versiunea ta"
+          : "Salvat ca draft (site-ul afișează încă versiunea din cod)",
       });
       await load();
     } catch (err) {
-      toast({ title: err instanceof Error ? err.message : "Salvare eșuată", variant: "destructive" });
+      toast({
+        title: err instanceof Error ? err.message : "Salvare eșuată",
+        variant: "destructive",
+      });
     } finally {
       setSaving(false);
     }
   };
 
   const removeOverride = async (slug: string) => {
-    if (!confirm("Ștergi versiunea editată? Articolul revine la versiunea originală din site.")) return;
+    if (
+      !confirm(
+        "Ștergi versiunea editată? Articolul revine la versiunea originală din site.",
+      )
+    )
+      return;
     try {
       await call({ action: "delete_blog_article", slug });
-      toast({ title: "Versiunea editată a fost ștearsă — articolul folosește iar originalul" });
+      toast({
+        title:
+          "Versiunea editată a fost ștearsă — articolul folosește iar originalul",
+      });
       if (draft?.slug === slug) setDraft(null);
       await load();
     } catch {
@@ -174,16 +199,26 @@ const BlogAdmin = () => {
         data_base64: btoa(binary),
       });
       const isAudio = file.type.startsWith("audio/");
-      const snippet = isAudio ? `\n[Ascultă audio](${data.url})\n` : `\n![${file.name}](${data.url})\n`;
+      const snippet = isAudio
+        ? `\n[Ascultă audio](${data.url})\n`
+        : `\n![${file.name}](${data.url})\n`;
       const ref = target === "ro" ? bodyRoRef : bodyEnRef;
       const field = target === "ro" ? "body_ro" : "body_en";
       const ta = ref.current;
       const pos = ta ? ta.selectionStart : draft[field].length;
-      const next = draft[field].slice(0, pos) + snippet + draft[field].slice(pos);
+      const next =
+        draft[field].slice(0, pos) + snippet + draft[field].slice(pos);
       setDraft({ ...draft, [field]: next });
-      toast({ title: isAudio ? "Audio urcat și inserat (devine player pe site)" : "Imagine urcată și inserată" });
+      toast({
+        title: isAudio
+          ? "Audio urcat și inserat (devine player pe site)"
+          : "Imagine urcată și inserată",
+      });
     } catch (err) {
-      toast({ title: err instanceof Error ? err.message : "Upload eșuat", variant: "destructive" });
+      toast({
+        title: err instanceof Error ? err.message : "Upload eșuat",
+        variant: "destructive",
+      });
     } finally {
       setUploading(null);
     }
@@ -193,7 +228,9 @@ const BlogAdmin = () => {
   const allSlugs = [
     ...BLOG_POSTS.map((p) => ({ slug: p.slug, title: p.title.ro })),
     // Overrides for slugs no longer in the registry (safety)
-    ...rows.filter((r) => !BLOG_POSTS.some((p) => p.slug === r.slug)).map((r) => ({ slug: r.slug, title: r.title_ro || r.slug })),
+    ...rows
+      .filter((r) => !BLOG_POSTS.some((p) => p.slug === r.slug))
+      .map((r) => ({ slug: r.slug, title: r.title_ro || r.slug })),
   ];
 
   const bodyEditor = (langKey: "ro" | "en") => {
@@ -203,10 +240,22 @@ const BlogAdmin = () => {
     return (
       <div className="space-y-1.5">
         <div className="flex items-center justify-between">
-          <Label className="text-xs uppercase tracking-wide">Conținut {langKey.toUpperCase()} (Markdown)</Label>
+          <Label className="text-xs uppercase tracking-wide">
+            Conținut {langKey.toUpperCase()} (Markdown)
+          </Label>
           <div className="flex gap-1.5">
-            <Button type="button" size="sm" variant="outline" onClick={() => startUpload(langKey)} disabled={uploading !== null}>
-              {uploading === langKey ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <ImageIcon className="w-3.5 h-3.5" />}
+            <Button
+              type="button"
+              size="sm"
+              variant="outline"
+              onClick={() => startUpload(langKey)}
+              disabled={uploading !== null}
+            >
+              {uploading === langKey ? (
+                <Loader2 className="w-3.5 h-3.5 animate-spin" />
+              ) : (
+                <ImageIcon className="w-3.5 h-3.5" />
+              )}
               <Music className="w-3.5 h-3.5 -ml-1" />
               Imagine/Audio
             </Button>
@@ -216,9 +265,11 @@ const BlogAdmin = () => {
           ref={ref}
           rows={16}
           className="font-mono text-xs"
-          placeholder={langKey === "en"
-            ? "Empty = the English body falls back to the Romanian one."
-            : "## Titlu de secțiune\n\nText… **bold**, [link](/trial), tabele GFM.\nGol + publicat = doar titlul/descrierea sunt suprascrise."}
+          placeholder={
+            langKey === "en"
+              ? "Empty = the English body falls back to the Romanian one."
+              : "## Titlu de secțiune\n\nText… **bold**, [link](/trial), tabele GFM.\nGol + publicat = doar titlul/descrierea sunt suprascrise."
+          }
           value={draft[field]}
           onChange={(e) => setDraft({ ...draft, [field]: e.target.value })}
         />
@@ -229,15 +280,24 @@ const BlogAdmin = () => {
   return (
     <section className="mb-6 rounded-lg border border-border bg-card p-4">
       <div className="mb-4">
-        <h2 className="text-base font-semibold text-foreground">Articole blog — editare</h2>
+        <h2 className="text-base font-semibold text-foreground">
+          Articole blog — editare
+        </h2>
         <p className="text-sm text-muted-foreground">
-          Versiunea salvată și <strong>publicată</strong> aici înlocuiește articolul de pe site.
-          Ștergerea versiunii editate readuce originalul. Corpul e Markdown: „## " pentru titluri,
-          imagini/audio cu butonul de upload, linkuri interne ca „/trial".
+          Versiunea salvată și <strong>publicată</strong> aici înlocuiește
+          articolul de pe site. Ștergerea versiunii editate readuce originalul.
+          Corpul e Markdown: „## " pentru titluri, imagini/audio cu butonul de
+          upload, linkuri interne ca „/trial".
         </p>
       </div>
 
-      <input ref={fileInputRef} type="file" accept="image/*,audio/*" className="hidden" onChange={onFilePicked} />
+      <input
+        ref={fileInputRef}
+        type="file"
+        accept="image/*,audio/*"
+        className="hidden"
+        onChange={onFilePicked}
+      />
 
       {loading ? (
         <div className="flex items-center gap-2 text-sm text-muted-foreground">
@@ -248,28 +308,53 @@ const BlogAdmin = () => {
           {allSlugs.map(({ slug, title }) => {
             const o = overrideBySlug.get(slug);
             return (
-              <div key={slug} className="flex items-center justify-between gap-2 rounded-md border border-border bg-background px-3 py-2 text-sm">
+              <div
+                key={slug}
+                className="flex items-center justify-between gap-2 rounded-md border border-border bg-background px-3 py-2 text-sm"
+              >
                 <div className="min-w-0 flex items-center gap-2">
                   <FileText className="w-3.5 h-3.5 shrink-0 text-muted-foreground" />
-                  <span className="line-clamp-2 font-medium text-foreground sm:truncate">{title}</span>
+                  <span className="line-clamp-2 font-medium text-foreground sm:truncate">
+                    {title}
+                  </span>
                   {o ? (
-                    <span className={`shrink-0 rounded-full px-1.5 py-0.5 text-[10px] font-medium ${o.is_published ? "bg-emerald-500/10 text-emerald-700 dark:text-emerald-400" : "bg-amber-500/10 text-amber-700 dark:text-amber-400"}`}>
+                    <span
+                      className={`shrink-0 rounded-full px-1.5 py-0.5 text-[10px] font-medium ${o.is_published ? "bg-emerald-500/10 text-emerald-700 dark:text-emerald-400" : "bg-amber-500/10 text-amber-700 dark:text-amber-400"}`}
+                    >
                       {o.is_published ? "editat · publicat" : "draft"}
                     </span>
                   ) : (
-                    <span className="shrink-0 rounded-full bg-muted px-1.5 py-0.5 text-[10px] text-muted-foreground">original</span>
+                    <span className="shrink-0 rounded-full bg-muted px-1.5 py-0.5 text-[10px] text-muted-foreground">
+                      original
+                    </span>
                   )}
                 </div>
                 <div className="flex shrink-0 items-center gap-1">
-                  <a href={`/blog/${slug}`} target="_blank" rel="noopener noreferrer" className="p-1.5 text-muted-foreground hover:text-foreground" title="Vezi pe site">
+                  <a
+                    href={`/blog/${slug}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="p-1.5 text-muted-foreground hover:text-foreground"
+                    title="Vezi pe site"
+                  >
                     <ExternalLink className="w-3.5 h-3.5" />
                   </a>
                   {o && (
-                    <button type="button" onClick={() => removeOverride(slug)} className="p-1.5 text-muted-foreground hover:text-destructive" title="Șterge versiunea editată">
+                    <button
+                      type="button"
+                      onClick={() => removeOverride(slug)}
+                      className="p-1.5 text-muted-foreground hover:text-destructive"
+                      title="Șterge versiunea editată"
+                    >
                       <Trash2 className="w-3.5 h-3.5" />
                     </button>
                   )}
-                  <Button type="button" size="sm" variant="outline" onClick={() => openEditor(slug)}>
+                  <Button
+                    type="button"
+                    size="sm"
+                    variant="outline"
+                    onClick={() => openEditor(slug)}
+                  >
                     <Pencil className="w-3.5 h-3.5" /> Editează
                   </Button>
                 </div>
@@ -288,7 +373,9 @@ const BlogAdmin = () => {
       {draft && !loadingDraft && (
         <div className="rounded-md border border-primary/30 bg-background p-4 space-y-4">
           <div className="flex items-center justify-between">
-            <p className="text-sm font-semibold text-foreground">Editezi: /blog/{draft.slug}</p>
+            <p className="text-sm font-semibold text-foreground">
+              Editezi: /blog/{draft.slug}
+            </p>
             <div className="flex items-center gap-2">
               {BLOG_SEED[draft.slug] && (
                 <Button
@@ -296,43 +383,97 @@ const BlogAdmin = () => {
                   size="sm"
                   variant="outline"
                   onClick={() => {
-                    if (!confirm("Înlocuiești textul din editor cu textul original al articolului?")) return;
+                    if (
+                      !confirm(
+                        "Înlocuiești textul din editor cu textul original al articolului?",
+                      )
+                    )
+                      return;
                     const seed = BLOG_SEED[draft.slug];
                     if (!seed) return;
-                    setDraft({ ...draft, body_ro: seed.ro, body_en: seed.en, lead_ro: seed.lead_ro, lead_en: seed.lead_en });
+                    setDraft({
+                      ...draft,
+                      body_ro: seed.ro,
+                      body_en: seed.en,
+                      lead_ro: seed.lead_ro,
+                      lead_en: seed.lead_en,
+                    });
                   }}
                 >
                   Reîncarcă textul original
                 </Button>
               )}
-              <Button type="button" size="sm" variant="ghost" onClick={() => setDraft(null)}>Închide</Button>
+              <Button
+                type="button"
+                size="sm"
+                variant="ghost"
+                onClick={() => setDraft(null)}
+              >
+                Închide
+              </Button>
             </div>
           </div>
 
           <div className="grid gap-3 md:grid-cols-2">
             <div className="space-y-1.5">
               <Label className="text-xs">Titlu RO</Label>
-              <Input value={draft.title_ro} onChange={(e) => setDraft({ ...draft, title_ro: e.target.value })} />
+              <Input
+                value={draft.title_ro}
+                onChange={(e) =>
+                  setDraft({ ...draft, title_ro: e.target.value })
+                }
+              />
             </div>
             <div className="space-y-1.5">
               <Label className="text-xs">Titlu EN</Label>
-              <Input value={draft.title_en} onChange={(e) => setDraft({ ...draft, title_en: e.target.value })} />
+              <Input
+                value={draft.title_en}
+                onChange={(e) =>
+                  setDraft({ ...draft, title_en: e.target.value })
+                }
+              />
             </div>
             <div className="space-y-1.5">
               <Label className="text-xs">Descriere SEO RO (max 300)</Label>
-              <Textarea rows={2} value={draft.description_ro} onChange={(e) => setDraft({ ...draft, description_ro: e.target.value })} />
+              <Textarea
+                rows={2}
+                value={draft.description_ro}
+                onChange={(e) =>
+                  setDraft({ ...draft, description_ro: e.target.value })
+                }
+              />
             </div>
             <div className="space-y-1.5">
               <Label className="text-xs">Descriere SEO EN</Label>
-              <Textarea rows={2} value={draft.description_en} onChange={(e) => setDraft({ ...draft, description_en: e.target.value })} />
+              <Textarea
+                rows={2}
+                value={draft.description_en}
+                onChange={(e) =>
+                  setDraft({ ...draft, description_en: e.target.value })
+                }
+              />
             </div>
             <div className="space-y-1.5">
-              <Label className="text-xs">Intro (lead) RO — gol = rămâne cel din cod</Label>
-              <Textarea rows={2} value={draft.lead_ro} onChange={(e) => setDraft({ ...draft, lead_ro: e.target.value })} />
+              <Label className="text-xs">
+                Intro (lead) RO — gol = rămâne cel din cod
+              </Label>
+              <Textarea
+                rows={2}
+                value={draft.lead_ro}
+                onChange={(e) =>
+                  setDraft({ ...draft, lead_ro: e.target.value })
+                }
+              />
             </div>
             <div className="space-y-1.5">
               <Label className="text-xs">Intro (lead) EN</Label>
-              <Textarea rows={2} value={draft.lead_en} onChange={(e) => setDraft({ ...draft, lead_en: e.target.value })} />
+              <Textarea
+                rows={2}
+                value={draft.lead_en}
+                onChange={(e) =>
+                  setDraft({ ...draft, lead_en: e.target.value })
+                }
+              />
             </div>
           </div>
 
@@ -342,15 +483,34 @@ const BlogAdmin = () => {
           <div className="flex flex-wrap items-center justify-between gap-3 pt-1">
             <div className="flex items-center gap-4">
               <div className="flex items-center gap-2">
-                <Switch checked={draft.is_published} onCheckedChange={(v) => setDraft({ ...draft, is_published: v })} id="blog-pub" />
+                <Switch
+                  checked={draft.is_published}
+                  onCheckedChange={(v) =>
+                    setDraft({ ...draft, is_published: v })
+                  }
+                  id="blog-pub"
+                />
                 <Label htmlFor="blog-pub" className="text-sm">
-                  {draft.is_published ? "Publicat (înlocuiește articolul de pe site)" : "Draft (site-ul arată originalul)"}
+                  {draft.is_published
+                    ? "Publicat (înlocuiește articolul de pe site)"
+                    : "Draft (site-ul arată originalul)"}
                 </Label>
               </div>
               <div className="flex items-center gap-2">
                 <Label className="text-xs">Min. citire</Label>
-                <Input type="number" min={1} max={60} className="w-16 h-8" value={draft.reading_minutes}
-                  onChange={(e) => setDraft({ ...draft, reading_minutes: Number(e.target.value) || 5 })} />
+                <Input
+                  type="number"
+                  min={1}
+                  max={60}
+                  className="w-16 h-8"
+                  value={draft.reading_minutes}
+                  onChange={(e) =>
+                    setDraft({
+                      ...draft,
+                      reading_minutes: Number(e.target.value) || 5,
+                    })
+                  }
+                />
               </div>
             </div>
             <Button type="button" onClick={save} disabled={saving}>

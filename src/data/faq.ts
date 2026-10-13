@@ -261,7 +261,7 @@ export const FAQ_CONTENT: Record<"ro" | "en", { groups: FAQGroup[] }> = {
             q: "Are Lebanese people Arabs?",
             // The owner's own answer (October 2026). The longer story — the
             // genetics, Syriac, Garshuni, the Maronite Church — is for articles.
-            a: "Politically, yes: Lebanon is a member of the Arab League, and Arabic is the official language. By origin, the Lebanese are an Arabised nation descending primarily from the native people of the Levant — the Canaanites, a family of related peoples. Those on the land of today's Lebanon, above all on the coast (Byblos, Beirut, Sidon, Tyre, Tripoli), are the Phoenicians: the Greeks named them so, most probably from phoinos (dark red, purple), the colour of the Tyrian purple dye they were famous for. A 2017 study in The American Journal of Human Genetics, on 3,700-year-old DNA from Sidon, found that about 93% of present-day Lebanese ancestry comes from the Bronze Age Canaanites. In Greek and Roman times they became Christian and spoke Aramaic, then Syriac, as a liturgical and everyday language — the Maronite Church still uses it in its liturgy, and Lebanese Arabic keeps traces of it (ēmta, \"when\"; jawwa / barra, \"inside / outside\"). After the 7th century they were Arabised and some Islamised — but they are the same people as their ancestors.",
+            a: 'Politically, yes: Lebanon is a member of the Arab League, and Arabic is the official language. By origin, the Lebanese are an Arabised nation descending primarily from the native people of the Levant — the Canaanites, a family of related peoples. Those on the land of today\'s Lebanon, above all on the coast (Byblos, Beirut, Sidon, Tyre, Tripoli), are the Phoenicians: the Greeks named them so, most probably from phoinos (dark red, purple), the colour of the Tyrian purple dye they were famous for. A 2017 study in The American Journal of Human Genetics, on 3,700-year-old DNA from Sidon, found that about 93% of present-day Lebanese ancestry comes from the Bronze Age Canaanites. In Greek and Roman times they became Christian and spoke Aramaic, then Syriac, as a liturgical and everyday language — the Maronite Church still uses it in its liturgy, and Lebanese Arabic keeps traces of it (ēmta, "when"; jawwa / barra, "inside / outside"). After the 7th century they were Arabised and some Islamised — but they are the same people as their ancestors.',
           },
           {
             q: "What's the difference between Lebanese Arabic and Modern Standard Arabic?",
@@ -455,11 +455,11 @@ export const FAQ_CONTENT: Record<"ro" | "en", { groups: FAQGroup[] }> = {
         items: [
           {
             q: "What does the بـ (b-) prefix do on Lebanese Arabic verbs?",
-            a: "The بـ (b-) prefix marks the habitual or ongoing present tense — the equivalent of English \"I do / I eat / I go.\" Example: bektob = I write (in general), bshoof = I see. Without بـ, the verb becomes subjunctive or dependent on another verb: baddi ektob = I want to write (no b-). Quick rule: real, habitual, or ongoing action → use بـ; after modal verbs (want, can, must) → drop the بـ.",
+            a: 'The بـ (b-) prefix marks the habitual or ongoing present tense — the equivalent of English "I do / I eat / I go." Example: bektob = I write (in general), bshoof = I see. Without بـ, the verb becomes subjunctive or dependent on another verb: baddi ektob = I want to write (no b-). Quick rule: real, habitual, or ongoing action → use بـ; after modal verbs (want, can, must) → drop the بـ.',
           },
           {
             q: "How are past-tense verbs conjugated with attached pronouns (katabt-ha, katab-lak)?",
-            a: "In Lebanese you conjugate the verb in the past, then stick object pronouns onto the end. Example from katab (he wrote): katabt = I wrote, katabt-a = I wrote it (fem.), katabt-o = I wrote it / him (masc.), katab-lak = he wrote to you (m.), katab-lek = he wrote to you (f.), katabne-hon = we wrote them. The suffixes -lak, -lek, -lo, -la, -lna, -lkon, -lhon mark the beneficiary (\"for/to someone\"), while -a, -o, -hon mark the direct object.",
+            a: 'In Lebanese you conjugate the verb in the past, then stick object pronouns onto the end. Example from katab (he wrote): katabt = I wrote, katabt-a = I wrote it (fem.), katabt-o = I wrote it / him (masc.), katab-lak = he wrote to you (m.), katab-lek = he wrote to you (f.), katabne-hon = we wrote them. The suffixes -lak, -lek, -lo, -la, -lna, -lkon, -lhon mark the beneficiary ("for/to someone"), while -a, -o, -hon mark the direct object.',
           },
           {
             q: "What are the personal and possessive pronouns in Lebanese Arabic?",
@@ -467,7 +467,7 @@ export const FAQ_CONTENT: Record<"ro" | "en", { groups: FAQGroup[] }> = {
           },
           {
             q: "Is Lebanese Arabic word order VSO or SVO?",
-            a: "In speech, Lebanese Arabic normally uses SVO (subject-verb-object) — just like English: \"Ahmad byekol tuffaha\" (Ahmad eats an apple). MSA / Classical Arabic prefers VSO (\"Eats Ahmad an apple\"), but in everyday conversation Lebanese speakers almost always pick SVO. That makes Lebanese feel much more natural to English speakers.",
+            a: 'In speech, Lebanese Arabic normally uses SVO (subject-verb-object) — just like English: "Ahmad byekol tuffaha" (Ahmad eats an apple). MSA / Classical Arabic prefers VSO ("Eats Ahmad an apple"), but in everyday conversation Lebanese speakers almost always pick SVO. That makes Lebanese feel much more natural to English speakers.',
           },
           {
             q: "How is Lebanese Arabic grammar different from Modern Standard Arabic (MSA)?",

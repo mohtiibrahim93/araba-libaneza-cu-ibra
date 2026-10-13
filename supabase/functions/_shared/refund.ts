@@ -88,10 +88,12 @@ const clamp = (n: number, lo: number, hi: number): number =>
  */
 export function computeRefund(input: RefundInput): RefundBreakdown {
   const paid = Math.max(0, Math.round(input.paidBani));
-  const total = Number.isFinite(input.totalLessons) && input.totalLessons > 0
-    ? Math.floor(input.totalLessons)
-    : 0;
-  const taken = total > 0 ? clamp(Math.floor(input.lessonsTaken ?? 0), 0, total) : 0;
+  const total =
+    Number.isFinite(input.totalLessons) && input.totalLessons > 0
+      ? Math.floor(input.totalLessons)
+      : 0;
+  const taken =
+    total > 0 ? clamp(Math.floor(input.lessonsTaken ?? 0), 0, total) : 0;
   const remainingLessons = total > 0 ? total - taken : 0;
 
   const pricePerLessonBani = total > 0 ? paid / total : 0;

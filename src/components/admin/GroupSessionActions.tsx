@@ -5,7 +5,15 @@ import { bucharestCivilToUtc, BUCHAREST_TZ } from "@/lib/timezone";
 /** "YYYY-MM-DDTHH:mm" in Bucharest time, for a datetime-local input. */
 const bucharestInput = (iso: string) => {
   const p = Object.fromEntries(
-    new Intl.DateTimeFormat("en-GB", { timeZone: BUCHAREST_TZ, year: "numeric", month: "2-digit", day: "2-digit", hour: "2-digit", minute: "2-digit", hour12: false })
+    new Intl.DateTimeFormat("en-GB", {
+      timeZone: BUCHAREST_TZ,
+      year: "numeric",
+      month: "2-digit",
+      day: "2-digit",
+      hour: "2-digit",
+      minute: "2-digit",
+      hour12: false,
+    })
       .formatToParts(new Date(iso))
       .map((x) => [x.type, x.value]),
   );
@@ -21,7 +29,12 @@ export default function GroupSessionActions({
   session,
   onChanged,
 }: {
-  session: { id: string; lesson_number: number; starts_at: string; ends_at: string };
+  session: {
+    id: string;
+    lesson_number: number;
+    starts_at: string;
+    ends_at: string;
+  };
   onChanged: () => void;
 }) {
   const [editing, setEditing] = useState(false);
@@ -33,8 +46,12 @@ export default function GroupSessionActions({
     setBusy(true);
     setError("");
     try {
-      const { data, error: failure } = await invokeAdmin<{ success?: boolean; error?: string }>({ ...body, id: session.id });
-      if (failure || data?.error || data?.success !== true) throw new Error(data?.error || failure?.message || "Nu s-a salvat.");
+      const { data, error: failure } = await invokeAdmin<{
+        success?: boolean;
+        error?: string;
+      }>({ ...body, id: session.id });
+      if (failure || data?.error || data?.success !== true)
+        throw new Error(data?.error || failure?.message || "Nu s-a salvat.");
       setEditing(false);
       onChanged();
     } catch (e) {
@@ -49,11 +66,19 @@ export default function GroupSessionActions({
     if (!m) return setError("Alege data și ora.");
     const start = bucharestCivilToUtc(+m[1]!, +m[2]!, +m[3]!, +m[4]!, +m[5]!);
     const length = Date.parse(session.ends_at) - Date.parse(session.starts_at);
-    void call({ action: "move_cohort_session", starts_at: start.toISOString(), ends_at: new Date(start.getTime() + length).toISOString() });
+    void call({
+      action: "move_cohort_session",
+      starts_at: start.toISOString(),
+      ends_at: new Date(start.getTime() + length).toISOString(),
+    });
   };
 
   const remove = () => {
-    if (window.confirm(`Ștergi lecția ${session.lesson_number} din site și din Google Calendar? Cursanții grupei primesc anunțul de la Google.`)) {
+    if (
+      window.confirm(
+        `Ștergi lecția ${session.lesson_number} din site și din Google Calendar? Cursanții grupei primesc anunțul de la Google.`,
+      )
+    ) {
       void call({ action: "delete_cohort_session" });
     }
   };
@@ -69,24 +94,48 @@ export default function GroupSessionActions({
             onChange={(e) => setValue(e.target.value)}
             className="rounded border border-input bg-background px-2 py-1 text-xs text-foreground"
           />
-          <button type="button" disabled={busy} onClick={move} className="rounded border px-2 py-1 text-xs font-semibold disabled:opacity-50">
+          <button
+            type="button"
+            disabled={busy}
+            onClick={move}
+            className="rounded border px-2 py-1 text-xs font-semibold disabled:opacity-50"
+          >
             Salvează
           </button>
-          <button type="button" disabled={busy} onClick={() => setEditing(false)} className="rounded px-2 py-1 text-xs">
+          <button
+            type="button"
+            disabled={busy}
+            onClick={() => setEditing(false)}
+            className="rounded px-2 py-1 text-xs"
+          >
             Renunță
           </button>
         </div>
       ) : (
         <div className="flex gap-1.5">
-          <button type="button" disabled={busy} onClick={() => setEditing(true)} className="rounded border border-current/30 px-2 py-1 text-xs font-semibold disabled:opacity-50">
+          <button
+            type="button"
+            disabled={busy}
+            onClick={() => setEditing(true)}
+            className="rounded border border-current/30 px-2 py-1 text-xs font-semibold disabled:opacity-50"
+          >
             Mută
           </button>
-          <button type="button" disabled={busy} onClick={remove} className="rounded border border-current/30 px-2 py-1 text-xs font-semibold disabled:opacity-50">
+          <button
+            type="button"
+            disabled={busy}
+            onClick={remove}
+            className="rounded border border-current/30 px-2 py-1 text-xs font-semibold disabled:opacity-50"
+          >
             Șterge
           </button>
         </div>
       )}
-      {error && <p role="alert" className="text-xs text-destructive">{error}</p>}
+      {error && (
+        <p role="alert" className="text-xs text-destructive">
+          {error}
+        </p>
+      )}
     </div>
   );
 }

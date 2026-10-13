@@ -41,12 +41,13 @@ const LevantinaVsIrakiana = () => (
   >
     <h2>Pe scurt</h2>
     <p>
-      <strong>Araba irakiană</strong>, numită și mesopotamiană, e vecina de est a levantinei. Cele
-      două împart scheletul gramatical al dialectelor arabe moderne, dar se despart la pronunție
-      și la vocabularul de zi cu zi. Semnul cel mai rapid: irakiana spune <em>gāl</em> („a spus”)
-      unde Beirutul spune <em>ʾāl</em>, și marchează acțiunea în desfășurare cu <em>da-</em> acolo
-      unde levantina folosește <em>ʿam</em>. În plus, irakiana poartă un strat de cuvinte turcești
-      și persane pe care levantina nu îl are.
+      <strong>Araba irakiană</strong>, numită și mesopotamiană, e vecina de est
+      a levantinei. Cele două împart scheletul gramatical al dialectelor arabe
+      moderne, dar se despart la pronunție și la vocabularul de zi cu zi. Semnul
+      cel mai rapid: irakiana spune <em>gāl</em> („a spus”) unde Beirutul spune{" "}
+      <em>ʾāl</em>, și marchează acțiunea în desfășurare cu <em>da-</em> acolo
+      unde levantina folosește <em>ʿam</em>. În plus, irakiana poartă un strat
+      de cuvinte turcești și persane pe care levantina nu îl are.
     </p>
 
     <h2>Comparație pe puncte</h2>
@@ -54,56 +55,104 @@ const LevantinaVsIrakiana = () => (
       caption="Araba levantină comparată cu araba irakiană"
       columns={["Criteriu", "Levantină (shami)", "Irakiană (mesopotamiană)"]}
       rows={[
-        ["Unde se vorbește", "Liban, Siria, Iordania, Palestina.", "Irak, plus zone de graniță din Siria de est și sud-vestul Iranului."],
-        ["Litera ق", "Oprire glotală în vorbirea urbană: ʾāl.", "„g” dur: gāl. De aici și numele grupului, gelet."],
+        [
+          "Unde se vorbește",
+          "Liban, Siria, Iordania, Palestina.",
+          "Irak, plus zone de graniță din Siria de est și sud-vestul Iranului.",
+        ],
+        [
+          "Litera ق",
+          "Oprire glotală în vorbirea urbană: ʾāl.",
+          "„g” dur: gāl. De aici și numele grupului, gelet.",
+        ],
         ["Litera ك", "Rămâne „k”.", "Devine des „ch” lângă vocale anterioare."],
-        ["Acțiunea în desfășurare", "ʿam + verb: ʿam aktub.", "Prefixul da-: da-aktib."],
+        [
+          "Acțiunea în desfășurare",
+          "ʿam + verb: ʿam aktub.",
+          "Prefixul da-: da-aktib.",
+        ],
         ["Viitorul", "raḥ / ḥa- înaintea verbului.", "raḥ, la fel."],
         ["„Ce faci?”", "kīfak", "shlōnak"],
         ["„Vreau”", "baddi", "arīd"],
-        ["Posesia", "Sufixe, plus tabaʿ: l-bēt tabaʿi.", "Sufixe, plus māl: l-bēt māli."],
-        ["Împrumuturi", "Franceză, engleză, ceva turcă.", "Turcă și persană, într-un strat mult mai gros."],
-        ["Materiale de învățat", "Multe: cursuri, seriale, muzică, aplicații.", "Puține în afara Irakului."],
+        [
+          "Posesia",
+          "Sufixe, plus tabaʿ: l-bēt tabaʿi.",
+          "Sufixe, plus māl: l-bēt māli.",
+        ],
+        [
+          "Împrumuturi",
+          "Franceză, engleză, ceva turcă.",
+          "Turcă și persană, într-un strat mult mai gros.",
+        ],
+        [
+          "Materiale de învățat",
+          "Multe: cursuri, seriale, muzică, aplicații.",
+          "Puține în afara Irakului.",
+        ],
       ]}
     />
 
     <h2>Aceeași propoziție, în ambele</h2>
-    <p><em>„Vreau să beau o cafea.”</em></p>
+    <p>
+      <em>„Vreau să beau o cafea.”</em>
+    </p>
     <ul>
-      <li><strong>Levantină (libaneză):</strong> <em>baddi ishrab ʾahwe</em></li>
-      <li><strong>Irakiană:</strong> <em>arīd ashrab gahwa</em></li>
+      <li>
+        <strong>Levantină (libaneză):</strong> <em>baddi ishrab ʾahwe</em>
+      </li>
+      <li>
+        <strong>Irakiană:</strong> <em>arīd ashrab gahwa</em>
+      </li>
     </ul>
     <p>
-      Verbul „a bea” e identic, cafeaua e același cuvânt cu alt ق, iar „a vrea” e din nou altul.
-      Tiparul se repetă în toată lumea arabă: rădăcinile sunt comune, cuvintele de mare
-      frecvență nu.
+      Verbul „a bea” e identic, cafeaua e același cuvânt cu alt ق, iar „a vrea”
+      e din nou altul. Tiparul se repetă în toată lumea arabă: rădăcinile sunt
+      comune, cuvintele de mare frecvență nu.
     </p>
 
     <h2>Cine pe cine înțelege</h2>
     <p>
-      Irakienii urmăresc de obicei levantina fără probleme — serialele libaneze și siriene se văd
-      peste tot. În sens invers, un vorbitor de levantină are nevoie de câteva zile de expunere
-      ca să se obișnuiască cu <em>g</em>-ul irakian, cu prefixul <em>da-</em> și cu vocabularul
-      local. Nu e o barieră de limbă, e o barieră de obișnuință.
+      Irakienii urmăresc de obicei levantina fără probleme — serialele libaneze
+      și siriene se văd peste tot. În sens invers, un vorbitor de levantină are
+      nevoie de câteva zile de expunere ca să se obișnuiască cu <em>g</em>-ul
+      irakian, cu prefixul <em>da-</em> și cu vocabularul local. Nu e o barieră
+      de limbă, e o barieră de obișnuință.
     </p>
 
     <h2>Contează pentru România</h2>
     <p>
-      Comunitatea arabă din București vine în bună parte din Liban, Siria, Palestina și Irak. O
-      bază levantină acoperă direct primele trei și îți dă un start bun pentru a patra: vei
-      înțelege, vei fi înțeles și vei ajusta din mers. Detaliile despre cursurile fizice sunt la{" "}
+      Comunitatea arabă din București vine în bună parte din Liban, Siria,
+      Palestina și Irak. O bază levantină acoperă direct primele trei și îți dă
+      un start bun pentru a patra: vei înțelege, vei fi înțeles și vei ajusta
+      din mers. Detaliile despre cursurile fizice sunt la{" "}
       <Link to="/cursuri-araba-bucuresti">cursuri de arabă în București</Link>.
     </p>
 
     <h2>Ce faci mai departe</h2>
     <ul>
-      <li><strong>Prieteni sau colegi irakieni</strong> → începe cu levantina și ajustează accentul la <Link to="/meditatii-araba">meditațiile 1:1</Link>.</li>
-      <li><strong>Vrei harta completă</strong> → <Link to="/dialecte-arabe">ghidul dialectelor arabe</Link>.</li>
-      <li><strong>Vrei comparația cu vecinii de sud</strong> → <Link to="/dialecte-arabe/levantina-vs-golf">levantina vs. araba din Golf</Link>.</li>
-      <li><strong>Nu știi de unde începi</strong> → <Link to="/trial">lecția de probă gratuită</Link> clarifică în 30 de minute.</li>
+      <li>
+        <strong>Prieteni sau colegi irakieni</strong> → începe cu levantina și
+        ajustează accentul la <Link to="/meditatii-araba">meditațiile 1:1</Link>
+        .
+      </li>
+      <li>
+        <strong>Vrei harta completă</strong> →{" "}
+        <Link to="/dialecte-arabe">ghidul dialectelor arabe</Link>.
+      </li>
+      <li>
+        <strong>Vrei comparația cu vecinii de sud</strong> →{" "}
+        <Link to="/dialecte-arabe/levantina-vs-golf">
+          levantina vs. araba din Golf
+        </Link>
+        .
+      </li>
+      <li>
+        <strong>Nu știi de unde începi</strong> →{" "}
+        <Link to="/trial">lecția de probă gratuită</Link> clarifică în 30 de
+        minute.
+      </li>
     </ul>
     <DialectSiblings current="/dialecte-arabe/levantina-vs-irakiana" />
-
   </LandingLayout>
 );
 

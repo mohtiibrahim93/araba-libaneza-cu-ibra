@@ -8,8 +8,13 @@ export const Route = createFileRoute("/en/blog/")({
   // clamping the component uses, so the head and the body never disagree about
   // which page this is.
   head: ({ match }) => {
-    const page = blogPageFrom((match.search as { page?: unknown } | undefined)?.page);
-    return seoHead("/en/blog", page > 1 ? { canonicalSearch: `?page=${page}` } : undefined);
+    const page = blogPageFrom(
+      (match.search as { page?: unknown } | undefined)?.page,
+    );
+    return seoHead(
+      "/en/blog",
+      page > 1 ? { canonicalSearch: `?page=${page}` } : undefined,
+    );
   },
   component: BlogIndex,
 });

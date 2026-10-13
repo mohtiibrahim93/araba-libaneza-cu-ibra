@@ -33,16 +33,34 @@ const TENS: [string, string, string][] = [
 // site stays there, so the same answer never lives on two URLs.
 const FAQ = [
   {
-    q: { ro: "Numerele libaneze sunt la fel ca în araba standard?", en: "Are Lebanese numbers the same as in Modern Standard Arabic?" },
-    a: { ro: "Foarte apropiate, dar pronunția e simplificată în vorbire și unele terminații cad. Cifrele de bază se recunosc ușor între dialecte — e una dintre zonele cu cea mai mică diferență.", en: "Very close, but the pronunciation is simplified in speech and some endings drop. The basic numbers are easily recognised across dialects — it is one of the areas that differs least." },
+    q: {
+      ro: "Numerele libaneze sunt la fel ca în araba standard?",
+      en: "Are Lebanese numbers the same as in Modern Standard Arabic?",
+    },
+    a: {
+      ro: "Foarte apropiate, dar pronunția e simplificată în vorbire și unele terminații cad. Cifrele de bază se recunosc ușor între dialecte — e una dintre zonele cu cea mai mică diferență.",
+      en: "Very close, but the pronunciation is simplified in speech and some endings drop. The basic numbers are easily recognised across dialects — it is one of the areas that differs least.",
+    },
   },
   {
-    q: { ro: "Ce cifre folosesc libanezii când scriu?", en: "Which digits do Lebanese people use when writing?" },
-    a: { ro: "În Liban se folosesc cifrele occidentale (1, 2, 3), aceleași ca la noi. Cifrele arabe orientale (١، ٢، ٣) apar mai ales în Golf și în texte formale.", en: "In Lebanon the Western digits (1, 2, 3) are used, the same as in Europe. The Eastern Arabic numerals (١، ٢، ٣) appear mainly in the Gulf and in formal texts." },
+    q: {
+      ro: "Ce cifre folosesc libanezii când scriu?",
+      en: "Which digits do Lebanese people use when writing?",
+    },
+    a: {
+      ro: "În Liban se folosesc cifrele occidentale (1, 2, 3), aceleași ca la noi. Cifrele arabe orientale (١، ٢، ٣) apar mai ales în Golf și în texte formale.",
+      en: "In Lebanon the Western digits (1, 2, 3) are used, the same as in Europe. The Eastern Arabic numerals (١، ٢، ٣) appear mainly in the Gulf and in formal texts.",
+    },
   },
   {
-    q: { ro: "De ce am nevoie de numere atât de devreme?", en: "Why do I need numbers so early on?" },
-    a: { ro: "Pentru că apar în fiecare tranzacție reală: preț, oră, adresă, număr de telefon. Sunt printre puținele cuvinte de care ai nevoie literal din prima zi în Liban.", en: "Because they appear in every real transaction: price, time, address, phone number. They are among the few words you need literally on day one in Lebanon." },
+    q: {
+      ro: "De ce am nevoie de numere atât de devreme?",
+      en: "Why do I need numbers so early on?",
+    },
+    a: {
+      ro: "Pentru că apar în fiecare tranzacție reală: preț, oră, adresă, număr de telefon. Sunt printre puținele cuvinte de care ai nevoie literal din prima zi în Liban.",
+      en: "Because they appear in every real transaction: price, time, address, phone number. They are among the few words you need literally on day one in Lebanon.",
+    },
   },
 ];
 
@@ -52,7 +70,10 @@ const NumereInLibaneza = () => {
   return (
     <BlogArticleLayout
       slug="numere-in-araba-libaneza"
-      title={{ ro: "Numerele în araba libaneză: de la 0 la 1000 (cu tabel)", en: "Numbers in Lebanese Arabic: from 0 to 1000 (with a table)" }}
+      title={{
+        ro: "Numerele în araba libaneză: de la 0 la 1000 (cu tabel)",
+        en: "Numbers in Lebanese Arabic: from 0 to 1000 (with a table)",
+      }}
       description={{
         ro: "Cum numeri în araba libaneză: cifrele 0–10, zecile, sutele și miile, în arabizi și scriere arabă — plus cum ceri prețul și dai un număr de telefon.",
         en: "How to count in Lebanese Arabic: digits 0–10, tens, hundreds and thousands, in Arabizi and Arabic script — plus how to ask a price and give a phone number.",
@@ -68,10 +89,22 @@ const NumereInLibaneza = () => {
     >
       <Tldr
         points={[
-          { ro: "Numerele apar în fiecare tranzacție reală: preț, oră, adresă, telefon.", en: "Numbers appear in every real transaction: price, time, address, phone." },
-          { ro: "În Liban se scriu cu cifre occidentale (1, 2, 3), nu cu cele orientale.", en: "In Lebanon they are written with Western digits (1, 2, 3), not the Eastern ones." },
-          { ro: "Pronunția e simplificată față de araba standard, dar rămâne recunoscută peste tot.", en: "Pronunciation is simplified compared with MSA, but stays recognisable everywhere." },
-          { ro: "Sunt printre primele cuvinte utile — merită învățate în prima săptămână.", en: "They are among the first genuinely useful words — worth learning in week one." },
+          {
+            ro: "Numerele apar în fiecare tranzacție reală: preț, oră, adresă, telefon.",
+            en: "Numbers appear in every real transaction: price, time, address, phone.",
+          },
+          {
+            ro: "În Liban se scriu cu cifre occidentale (1, 2, 3), nu cu cele orientale.",
+            en: "In Lebanon they are written with Western digits (1, 2, 3), not the Eastern ones.",
+          },
+          {
+            ro: "Pronunția e simplificată față de araba standard, dar rămâne recunoscută peste tot.",
+            en: "Pronunciation is simplified compared with MSA, but stays recognisable everywhere.",
+          },
+          {
+            ro: "Sunt printre primele cuvinte utile — merită învățate în prima săptămână.",
+            en: "They are among the first genuinely useful words — worth learning in week one.",
+          },
         ]}
       />
       <p>
@@ -87,17 +120,31 @@ const NumereInLibaneza = () => {
         <table className="w-full text-sm border-collapse">
           <thead>
             <tr className="border-b border-border text-left text-muted-foreground">
-              <th className="py-2 pr-3 font-semibold">{en ? "Number" : "Număr"}</th>
+              <th className="py-2 pr-3 font-semibold">
+                {en ? "Number" : "Număr"}
+              </th>
               <th className="py-2 px-3 font-semibold">Arabizi</th>
-              <th className="py-2 pl-3 font-semibold">{en ? "Arabic" : "Arabă"}</th>
+              <th className="py-2 pl-3 font-semibold">
+                {en ? "Arabic" : "Arabă"}
+              </th>
             </tr>
           </thead>
           <tbody>
             {DIGITS.map(([n, arabizi, arabic]) => (
               <tr key={n} className="border-b border-border/60 align-top">
-                <td className="py-2.5 pr-3 font-bold text-primary whitespace-nowrap">{n}</td>
-                <td className="py-2.5 px-3 font-semibold text-foreground whitespace-nowrap">{arabizi}</td>
-                <td className="py-2.5 pl-3 font-arabic text-lg text-brand-green" dir="rtl" lang="ar">{arabic}</td>
+                <td className="py-2.5 pr-3 font-bold text-primary whitespace-nowrap">
+                  {n}
+                </td>
+                <td className="py-2.5 px-3 font-semibold text-foreground whitespace-nowrap">
+                  {arabizi}
+                </td>
+                <td
+                  className="py-2.5 pl-3 font-arabic text-lg text-brand-green"
+                  dir="rtl"
+                  lang="ar"
+                >
+                  {arabic}
+                </td>
               </tr>
             ))}
           </tbody>
@@ -109,17 +156,31 @@ const NumereInLibaneza = () => {
         <table className="w-full text-sm border-collapse">
           <thead>
             <tr className="border-b border-border text-left text-muted-foreground">
-              <th className="py-2 pr-3 font-semibold">{en ? "Number" : "Număr"}</th>
+              <th className="py-2 pr-3 font-semibold">
+                {en ? "Number" : "Număr"}
+              </th>
               <th className="py-2 px-3 font-semibold">Arabizi</th>
-              <th className="py-2 pl-3 font-semibold">{en ? "Arabic" : "Arabă"}</th>
+              <th className="py-2 pl-3 font-semibold">
+                {en ? "Arabic" : "Arabă"}
+              </th>
             </tr>
           </thead>
           <tbody>
             {TENS.map(([n, arabizi, arabic]) => (
               <tr key={n} className="border-b border-border/60 align-top">
-                <td className="py-2.5 pr-3 font-bold text-primary whitespace-nowrap">{n}</td>
-                <td className="py-2.5 px-3 font-semibold text-foreground whitespace-nowrap">{arabizi}</td>
-                <td className="py-2.5 pl-3 font-arabic text-lg text-brand-green" dir="rtl" lang="ar">{arabic}</td>
+                <td className="py-2.5 pr-3 font-bold text-primary whitespace-nowrap">
+                  {n}
+                </td>
+                <td className="py-2.5 px-3 font-semibold text-foreground whitespace-nowrap">
+                  {arabizi}
+                </td>
+                <td
+                  className="py-2.5 pl-3 font-arabic text-lg text-brand-green"
+                  dir="rtl"
+                  lang="ar"
+                >
+                  {arabic}
+                </td>
               </tr>
             ))}
           </tbody>
@@ -131,15 +192,36 @@ const NumereInLibaneza = () => {
           : "Între 21 și 99, în libaneză spui întâi unitatea, apoi zecea: 21 e „wa7ad w 3eshrin” (unu-și-douăzeci), 35 e „khamse w tletin” (cinci-și-treizeci). Micul „w” înseamnă „și”."}
       </p>
 
-      <h2>{en ? "Where you'll use them right away" : "Unde le folosești imediat"}</h2>
+      <h2>
+        {en ? "Where you'll use them right away" : "Unde le folosești imediat"}
+      </h2>
       <ul>
-        <li><strong>Addesh?</strong> {en ? "— 'how much?' The answer comes back in these numbers, usually in " : "— „cât costă?” Răspunsul vine în aceste numere, de obicei în "}<em>lira</em> {en ? "or dollars." : "sau dolari."}</li>
-        <li>{en ? "Phone numbers are read digit by digit — just string the 0–10 list together." : "Numerele de telefon se citesc cifră cu cifră — înșiri pur și simplu lista de la 0 la 10."}</li>
-        <li>{en ? "Your age: 'age' is " : "Vârsta ta: „vârsta” e "}<em>3omr</em>{en ? " — 'omri tletin' means 'I'm thirty'." : " — „3omri tletin” înseamnă „am treizeci de ani”."}</li>
+        <li>
+          <strong>Addesh?</strong>{" "}
+          {en
+            ? "— 'how much?' The answer comes back in these numbers, usually in "
+            : "— „cât costă?” Răspunsul vine în aceste numere, de obicei în "}
+          <em>lira</em> {en ? "or dollars." : "sau dolari."}
+        </li>
+        <li>
+          {en
+            ? "Phone numbers are read digit by digit — just string the 0–10 list together."
+            : "Numerele de telefon se citesc cifră cu cifră — înșiri pur și simplu lista de la 0 la 10."}
+        </li>
+        <li>
+          {en ? "Your age: 'age' is " : "Vârsta ta: „vârsta” e "}
+          <em>3omr</em>
+          {en
+            ? " — 'omri tletin' means 'I'm thirty'."
+            : " — „3omri tletin” înseamnă „am treizeci de ani”."}
+        </li>
       </ul>
 
       <InlineCta
-        title={{ ro: "Vrei să auzi cum sună?", en: "Want to hear how it sounds?" }}
+        title={{
+          ro: "Vrei să auzi cum sună?",
+          en: "Want to hear how it sounds?",
+        }}
         text={{
           ro: "30 de minute cu profesor nativ, gratuit — online sau fizic în București.",
           en: "30 minutes with a native teacher, free — online or in person in Bucharest.",
@@ -148,19 +230,28 @@ const NumereInLibaneza = () => {
         label={{ ro: "Rezervă lecția de probă", en: "Book the trial lesson" }}
       />
 
-
       <h2>{en ? "Practise them out loud" : "Exersează-le cu voce tare"}</h2>
       <p>
         {en
           ? "Numbers stick fastest when you say them for real — counting change, telling the time, giving your phone number. In a "
           : "Numerele se prind cel mai repede când le spui pe bune — numeri restul, spui ora, dai numărul de telefon. La o "}
-        <Link to="/trial">{en ? "free trial lesson" : "lecție de probă gratuită"}</Link>
-        {en ? " you practise them with a native teacher, and you can continue with the " : " le exersezi cu un profesor nativ, iar apoi poți continua cu "}
-        <Link to="/blog/primele-20-de-expresii-libaneze">{en ? "first 20 Lebanese phrases" : "primele 20 de expresii libaneze"}</Link>.
+        <Link to="/trial">
+          {en ? "free trial lesson" : "lecție de probă gratuită"}
+        </Link>
+        {en
+          ? " you practise them with a native teacher, and you can continue with the "
+          : " le exersezi cu un profesor nativ, iar apoi poți continua cu "}
+        <Link to="/blog/primele-20-de-expresii-libaneze">
+          {en ? "first 20 Lebanese phrases" : "primele 20 de expresii libaneze"}
+        </Link>
+        .
       </p>
       <p>
-        {en ? "All our free PDFs — phrasebook, arabizi cheat-sheet and a 30-day plan — are on the " : "Toate PDF-urile noastre gratuite — expresii, cheat-sheet arabizi și planul de 30 de zile — sunt pe "}
-        <Link to="/resurse">{en ? "resources page" : "pagina de resurse"}</Link>.
+        {en
+          ? "All our free PDFs — phrasebook, arabizi cheat-sheet and a 30-day plan — are on the "
+          : "Toate PDF-urile noastre gratuite — expresii, cheat-sheet arabizi și planul de 30 de zile — sunt pe "}
+        <Link to="/resurse">{en ? "resources page" : "pagina de resurse"}</Link>
+        .
       </p>
     </BlogArticleLayout>
   );

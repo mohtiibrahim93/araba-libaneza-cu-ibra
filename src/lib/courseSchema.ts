@@ -144,7 +144,8 @@ export function courseInstances({
     ? {
         courseSchedule: {
           "@type": "Schedule",
-          repeatFrequency: REPEAT_AS_DURATION[repeatFrequency] ?? repeatFrequency,
+          repeatFrequency:
+            REPEAT_AS_DURATION[repeatFrequency] ?? repeatFrequency,
         },
       }
     : {};
@@ -166,7 +167,10 @@ export function courseInstances({
  * fee. It is a fee per month, not a total, and UnitPriceSpecification is what
  * says so: a bare `price` would read as the whole course.
  */
-export function groupMonthlyOffers(level: LevelType, url: string): Record<string, unknown>[] {
+export function groupMonthlyOffers(
+  level: LevelType,
+  url: string,
+): Record<string, unknown>[] {
   const online = ONLINE_PRICES.groupMonthly[level];
   return (
     [
@@ -184,7 +188,11 @@ export function groupMonthlyOffers(level: LevelType, url: string): Record<string
       price,
       priceCurrency: "RON",
       billingDuration: "P1M",
-      referenceQuantity: { "@type": "QuantitativeValue", value: 1, unitCode: "MON" },
+      referenceQuantity: {
+        "@type": "QuantitativeValue",
+        value: 1,
+        unitCode: "MON",
+      },
     },
   }));
 }

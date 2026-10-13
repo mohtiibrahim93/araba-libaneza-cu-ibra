@@ -12,27 +12,37 @@
    English text at all, so the deck stays Romanian until the drafted English
    glosses have been through teacher review. This file is the interface only. */
 (function (root) {
-  'use strict';
-  var lang = 'ro';
+  "use strict";
+  var lang = "ro";
   try {
-    var q = new URLSearchParams(root.location.search).get('lang');
-    if (q === 'en') lang = 'en';
-  } catch (e) { /* no URL access: stay Romanian */ }
+    var q = new URLSearchParams(root.location.search).get("lang");
+    if (q === "en") lang = "en";
+  } catch (e) {
+    /* no URL access: stay Romanian */
+  }
 
   root.YallaI18n = {
     lang: lang,
     /** t('Pașaportul meu', 'My passport') */
-    t: function (ro, en) { return lang === 'en' && en ? en : ro; },
+    t: function (ro, en) {
+      return lang === "en" && en ? en : ro;
+    },
   };
 
-  try { document.documentElement.lang = lang; } catch (e) { /* not in a document */ }
+  try {
+    document.documentElement.lang = lang;
+  } catch (e) {
+    /* not in a document */
+  }
 
   /* ?focus=1 — the level test page's "test only" choice: the frame shows the
      test alone, without the game's menu, XP or teacher link. styles.css hides
      them under html.focus; the game itself runs unchanged. */
   try {
-    if (new URLSearchParams(root.location.search).get('focus') === '1') {
-      document.documentElement.classList.add('focus');
+    if (new URLSearchParams(root.location.search).get("focus") === "1") {
+      document.documentElement.classList.add("focus");
     }
-  } catch (e) { /* no URL access: full game */ }
+  } catch (e) {
+    /* no URL access: full game */
+  }
 })(window);

@@ -50,12 +50,18 @@ export function TimeField({
 }) {
   const [hh, mm] = splitHhmm(value);
   const id = useId();
-  const minutes = MINUTE_STEPS.includes(mm) ? MINUTE_STEPS : [...MINUTE_STEPS, mm].sort();
+  const minutes = MINUTE_STEPS.includes(mm)
+    ? MINUTE_STEPS
+    : [...MINUTE_STEPS, mm].sort();
   const select =
     "h-9 rounded-md border border-input bg-background px-2 text-sm tabular-nums disabled:opacity-60";
 
   return (
-    <div className={cn("flex items-center gap-1", className)} role="group" aria-labelledby={id}>
+    <div
+      className={cn("flex items-center gap-1", className)}
+      role="group"
+      aria-labelledby={id}
+    >
       <span id={id} className="sr-only">
         {label}
       </span>

@@ -9,7 +9,11 @@ import {
   ConversationEmptyState,
   ConversationScrollButton,
 } from "@/components/ai-elements/conversation";
-import { Message, MessageContent, MessageResponse } from "@/components/ai-elements/message";
+import {
+  Message,
+  MessageContent,
+  MessageResponse,
+} from "@/components/ai-elements/message";
 import {
   PromptInput,
   PromptInputFooter,
@@ -27,10 +31,18 @@ import { COPY, MAX_STORED, STORAGE_KEY, textOf } from "@/components/ask/copy";
  * mermaid — reaches a page until someone opens the panel. The root route
  * imported it, so every server render began by parsing all of it.
  */
-export default function AskChat({ initialMessages, lang }: { initialMessages: UIMessage[]; lang: "ro" | "en" }) {
+export default function AskChat({
+  initialMessages,
+  lang,
+}: {
+  initialMessages: UIMessage[];
+  lang: "ro" | "en";
+}) {
   const copy = COPY[lang];
   const textareaRef = useRef<HTMLTextAreaElement | null>(null);
-  const [transport] = useState(() => new DefaultChatTransport({ api: "/api/chat" }));
+  const [transport] = useState(
+    () => new DefaultChatTransport({ api: "/api/chat" }),
+  );
   const { messages, sendMessage, status, error, setMessages } = useChat({
     id: "ask-ibra",
     messages: initialMessages,
@@ -42,7 +54,10 @@ export default function AskChat({ initialMessages, lang }: { initialMessages: UI
   // The transcript lives in this browser only.
   useEffect(() => {
     try {
-      window.localStorage.setItem(STORAGE_KEY, JSON.stringify(messages.slice(-MAX_STORED)));
+      window.localStorage.setItem(
+        STORAGE_KEY,
+        JSON.stringify(messages.slice(-MAX_STORED)),
+      );
     } catch {
       /* private mode or a full quota — the chat still works for this visit */
     }
@@ -84,7 +99,9 @@ export default function AskChat({ initialMessages, lang }: { initialMessages: UI
             >
               <div className="space-y-1 text-center">
                 <h3 className="font-semibold text-sm">{copy.emptyTitle}</h3>
-                <p className="text-muted-foreground text-sm">{copy.emptyDesc}</p>
+                <p className="text-muted-foreground text-sm">
+                  {copy.emptyDesc}
+                </p>
               </div>
               <div className="flex flex-wrap justify-center gap-2">
                 {copy.suggestions.map((s) => (
@@ -136,7 +153,10 @@ export default function AskChat({ initialMessages, lang }: { initialMessages: UI
             ask(message.text);
           }}
         >
-          <PromptInputTextarea ref={textareaRef} placeholder={copy.placeholder} />
+          <PromptInputTextarea
+            ref={textareaRef}
+            placeholder={copy.placeholder}
+          />
           <PromptInputFooter className="justify-between">
             <button
               type="button"
@@ -150,7 +170,9 @@ export default function AskChat({ initialMessages, lang }: { initialMessages: UI
             <PromptInputSubmit status={status} disabled={busy} />
           </PromptInputFooter>
         </PromptInput>
-        <p className="mt-2 text-center text-[11px] text-muted-foreground">{copy.disclaimer}</p>
+        <p className="mt-2 text-center text-[11px] text-muted-foreground">
+          {copy.disclaimer}
+        </p>
       </div>
     </>
   );

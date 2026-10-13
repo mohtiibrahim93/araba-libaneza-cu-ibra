@@ -1,7 +1,14 @@
 import CalendarSyncPanel from "./CalendarSyncPanel";
 import GroupSessionActions from "./GroupSessionActions";
 import { useCallback, useEffect, useMemo, useState } from "react";
-import { ChevronLeft, ChevronRight, Loader2, MapPin, RefreshCw, Video } from "lucide-react";
+import {
+  ChevronLeft,
+  ChevronRight,
+  Loader2,
+  MapPin,
+  RefreshCw,
+  Video,
+} from "lucide-react";
 import { invokeAdmin } from "@/lib/adminAuth";
 import { supabase } from "@/integrations/supabase/client";
 import { cn } from "@/lib/utils";
@@ -39,18 +46,33 @@ interface GroupLesson {
 
 // cohort_sessions is newer than the generated Supabase types; public read (RLS).
 const sessionsTable = () =>
-  (supabase as unknown as {
-    from: (t: string) => {
-      select: (c: string) => {
-        gte: (k: string, v: string) => {
-          lt: (k: string, v: string) => Promise<{ data: GroupLesson[] | null; error: unknown }>;
+  (
+    supabase as unknown as {
+      from: (t: string) => {
+        select: (c: string) => {
+          gte: (
+            k: string,
+            v: string,
+          ) => {
+            lt: (
+              k: string,
+              v: string,
+            ) => Promise<{ data: GroupLesson[] | null; error: unknown }>;
+          };
         };
       };
-    };
-  }).from("cohort_sessions");
+    }
+  ).from("cohort_sessions");
 
 const groupName = (g: GroupLesson) =>
-  [g.group_cohorts?.level, g.group_cohorts?.format === "online" ? "online" : g.group_cohorts?.format ? "la centru" : null]
+  [
+    g.group_cohorts?.level,
+    g.group_cohorts?.format === "online"
+      ? "online"
+      : g.group_cohorts?.format
+        ? "la centru"
+        : null,
+  ]
     .filter(Boolean)
     .join(" · ") || "Grupă";
 
@@ -74,7 +96,9 @@ const parts = (d: Date) => {
       .formatToParts(d)
       .map((x) => [x.type, x.value]),
   );
-  const weekday = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"].indexOf(p["weekday"] ?? "");
+  const weekday = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"].indexOf(
+    p["weekday"] ?? "",
+  );
   return {
     key: `${p["year"]}-${p["month"]}-${p["day"]}`,
     hour: Number(p["hour"]),
@@ -92,20 +116,30 @@ const weekKeys = (offset: number) => {
   const [y = 1970, m = 1, d = 1] = key.split("-").map(Number);
   const localNoon = Date.UTC(y, m - 1, d, 12);
   return Array.from({ length: 7 }, (_, i) =>
-    new Date(localNoon + ((i - weekday) + offset * 7) * 86_400_000).toISOString().slice(0, 10),
+    new Date(localNoon + (i - weekday + offset * 7) * 86_400_000)
+      .toISOString()
+      .slice(0, 10),
   );
 };
 
 const label = (slug: string) =>
-  slug === "trial" ? "probă" : slug === "verificare-nivel" ? "verificare nivel" : slug === "paid" ? "privat" : slug;
-const isFree = (slug: string) => slug === "trial" || slug === "verificare-nivel";
+  slug === "trial"
+    ? "probă"
+    : slug === "verificare-nivel"
+      ? "verificare nivel"
+      : slug === "paid"
+        ? "privat"
+        : slug;
+const isFree = (slug: string) =>
+  slug === "trial" || slug === "verificare-nivel";
 const time = (iso: string) => {
   const p = parts(new Date(iso));
   return `${String(p.hour).padStart(2, "0")}:${String(p.minute).padStart(2, "0")}`;
 };
 // Same test as Acasă and Sănătate calendar: no event means not in the calendar,
 // whether or not an error was recorded.
-const notInCalendar = (b: Booking) => b.status === "confirmed" && (!b.google_event_id || !!b.google_sync_error);
+const notInCalendar = (b: Booking) =>
+  b.status === "confirmed" && (!b.google_event_id || !!b.google_sync_error);
 
 const WeekLessons = () => {
   const [rows, setRows] = useState<Booking[] | null>(null);
@@ -119,7 +153,10 @@ const WeekLessons = () => {
     setLoading(true);
     setError("");
     try {
-      const { data, error: err } = await invokeAdmin({ action: "list_bookings", status_filter: "all" });
+      const { data, error: err } = await invokeAdmin({
+        action: "list_bookings",
+        status_filter: "all",
+      });
       if (err) throw err;
       if (data?.error) throw new Error(data.error);
       setRows((data.data ?? []) as Booking[]);
@@ -140,12 +177,18 @@ const WeekLessons = () => {
   useEffect(() => {
     let cancelled = false;
     // A day either side of the week, so time zones never cut a lesson off.
-    const from = new Date(Date.parse(`${days[0]}T00:00:00Z`) - 86_400_000).toISOString();
-    const to = new Date(Date.parse(`${days[6]}T00:00:00Z`) + 2 * 86_400_000).toISOString();
+    const from = new Date(
+      Date.parse(`${days[0]}T00:00:00Z`) - 86_400_000,
+    ).toISOString();
+    const to = new Date(
+      Date.parse(`${days[6]}T00:00:00Z`) + 2 * 86_400_000,
+    ).toISOString();
     void sessionsTable()
       // Only columns that exist on group_cohorts: asking for one that does not
       // fails the whole request, and the week then shows no group lessons.
-      .select("id, lesson_number, starts_at, ends_at, group_cohorts(level, format)")
+      .select(
+        "id, lesson_number, starts_at, ends_at, group_cohorts(level, format)",
+      )
       .gte("starts_at", from)
       .lt("starts_at", to)
       .then(({ data }) => !cancelled && setGroupLessons(data ?? []));
@@ -156,7 +199,8 @@ const WeekLessons = () => {
 
   const groupsByDay = useMemo(() => {
     const map = new Map<string, GroupLesson[]>(days.map((d) => [d, []]));
-    for (const g of groupLessons) map.get(parts(new Date(g.starts_at)).key)?.push(g);
+    for (const g of groupLessons)
+      map.get(parts(new Date(g.starts_at)).key)?.push(g);
     return map;
   }, [groupLessons, days]);
   const today = parts(new Date()).key;
@@ -168,7 +212,8 @@ const WeekLessons = () => {
       const k = parts(new Date(b.start_at)).key;
       map.get(k)?.push(b);
     }
-    for (const list of map.values()) list.sort((a, b) => a.start_at.localeCompare(b.start_at));
+    for (const list of map.values())
+      list.sort((a, b) => a.start_at.localeCompare(b.start_at));
     return map;
   }, [rows, days]);
 
@@ -184,11 +229,17 @@ const WeekLessons = () => {
     ...all.map((b) => parts(new Date(b.end_at)).hour + 1),
     ...allGroups.map((g) => parts(new Date(g.ends_at)).hour + 1),
   );
-  const hours = Array.from({ length: endHour - startHour }, (_, i) => startHour + i);
+  const hours = Array.from(
+    { length: endHour - startHour },
+    (_, i) => startHour + i,
+  );
 
   const dayNum = (k: string) => Number(k.slice(8));
   const monthName = (k: string) =>
-    new Date(`${k}T12:00:00Z`).toLocaleDateString("ro-RO", { month: "long", timeZone: "UTC" });
+    new Date(`${k}T12:00:00Z`).toLocaleDateString("ro-RO", {
+      month: "long",
+      timeZone: "UTC",
+    });
   const first = days[0] ?? "";
   const last = days[6] ?? "";
   const range = `${dayNum(first)} ${monthName(first) !== monthName(last) ? monthName(first) + " " : ""}– ${dayNum(last)} ${monthName(last)}`;
@@ -222,7 +273,8 @@ const WeekLessons = () => {
         </button>
         <span className="ml-1 font-bold">{range}</span>
         <span className="text-sm text-muted-foreground">
-          · {all.length} {all.length === 1 ? "lecție rezervată" : "lecții rezervate"}
+          · {all.length}{" "}
+          {all.length === 1 ? "lecție rezervată" : "lecții rezervate"}
           {free ? `, ${free} gratuite` : ""}
           {allGroups.length ? ` · ${allGroups.length} de grupă` : ""}
         </span>
@@ -233,11 +285,26 @@ const WeekLessons = () => {
           disabled={loading}
           className="ml-auto flex h-11 w-11 items-center justify-center rounded-xl border border-border bg-card hover:bg-muted"
         >
-          {loading ? <Loader2 className="h-4 w-4 animate-spin" /> : <RefreshCw className="h-4 w-4" />}
+          {loading ? (
+            <Loader2 className="h-4 w-4 animate-spin" />
+          ) : (
+            <RefreshCw className="h-4 w-4" />
+          )}
         </button>
       </div>
 
-      <CalendarSyncPanel from={new Date(Date.parse(`${days[0]}T00:00:00Z`) - 86400000).toISOString()} to={new Date(Date.parse(`${days[6]}T00:00:00Z`) + 2 * 86400000).toISOString()} onChanged={() => { void load(); setSessionRefresh((value) => value + 1); }} />
+      <CalendarSyncPanel
+        from={new Date(
+          Date.parse(`${days[0]}T00:00:00Z`) - 86400000,
+        ).toISOString()}
+        to={new Date(
+          Date.parse(`${days[6]}T00:00:00Z`) + 2 * 86400000,
+        ).toISOString()}
+        onChanged={() => {
+          void load();
+          setSessionRefresh((value) => value + 1);
+        }}
+      />
       {error && <ErrorNote>{error}</ErrorNote>}
       {!rows && (
         <p className="flex items-center gap-2 text-sm text-muted-foreground">
@@ -257,23 +324,36 @@ const WeekLessons = () => {
                   <h3
                     className={cn(
                       "text-xs font-bold uppercase tracking-[0.12em]",
-                      k === today ? "text-brand-green dark:text-primary" : "text-muted-foreground",
+                      k === today
+                        ? "text-brand-green dark:text-primary"
+                        : "text-muted-foreground",
                     )}
                   >
                     {DAY_NAMES[i]} {dayNum(k)}
                     {k === today ? " · azi" : ""}
                   </h3>
                   {list.length === 0 && groups.length === 0 ? (
-                    <p className="text-sm text-muted-foreground">Nicio lecție.</p>
+                    <p className="text-sm text-muted-foreground">
+                      Nicio lecție.
+                    </p>
                   ) : (
                     <>
                       {groups.map((g) => (
                         <div key={g.id} className="flex gap-3">
-                          <span className="w-12 shrink-0 pt-3.5 font-bold tabular-nums">{time(g.starts_at)}</span>
+                          <span className="w-12 shrink-0 pt-3.5 font-bold tabular-nums">
+                            {time(g.starts_at)}
+                          </span>
                           <div className="flex-1 rounded-2xl bg-admin-info-bg p-3.5 text-admin-info-fg">
                             <p className="font-bold">Grupa {groupName(g)}</p>
-                            <p className="text-[0.8125rem]">Lecția {g.lesson_number}</p>
-                            <GroupSessionActions session={g} onChanged={() => setSessionRefresh((value) => value + 1)} />
+                            <p className="text-[0.8125rem]">
+                              Lecția {g.lesson_number}
+                            </p>
+                            <GroupSessionActions
+                              session={g}
+                              onChanged={() =>
+                                setSessionRefresh((value) => value + 1)
+                              }
+                            />
                           </div>
                         </div>
                       ))}
@@ -296,17 +376,33 @@ const WeekLessons = () => {
                   key={k}
                   className={cn(
                     "mb-2 flex flex-col items-center justify-center rounded-xl py-1.5 text-[0.8125rem]",
-                    k === today ? "bg-accent font-bold text-brand-green dark:text-primary" : "text-muted-foreground",
+                    k === today
+                      ? "bg-accent font-bold text-brand-green dark:text-primary"
+                      : "text-muted-foreground",
                   )}
                 >
                   {DAY_NAMES[i]}
-                  <b className={cn("text-base", k !== today && "text-foreground")}>{dayNum(k)}</b>
+                  <b
+                    className={cn(
+                      "text-base",
+                      k !== today && "text-foreground",
+                    )}
+                  >
+                    {dayNum(k)}
+                  </b>
                 </span>
               ))}
 
-              <div className="relative" style={{ height: hours.length * HOUR_PX }}>
+              <div
+                className="relative"
+                style={{ height: hours.length * HOUR_PX }}
+              >
                 {hours.map((h, i) => (
-                  <span key={h} className="absolute text-xs text-muted-foreground" style={{ top: i * HOUR_PX }}>
+                  <span
+                    key={h}
+                    className="absolute text-xs text-muted-foreground"
+                    style={{ top: i * HOUR_PX }}
+                  >
                     {String(h).padStart(2, "0")}:00
                   </span>
                 ))}
@@ -325,25 +421,36 @@ const WeekLessons = () => {
                     <div
                       aria-hidden
                       className="absolute inset-x-0 rounded-lg border border-dashed border-border bg-muted/60"
-                      style={{ top: (12 - startHour) * HOUR_PX + 2, height: HOUR_PX - 4 }}
+                      style={{
+                        top: (12 - startHour) * HOUR_PX + 2,
+                        height: HOUR_PX - 4,
+                      }}
                     />
                   )}
                   {(groupsByDay.get(k) ?? []).map((g) => {
                     const s = parts(new Date(g.starts_at));
                     const e = parts(new Date(g.ends_at));
                     const top = (s.hour - startHour + s.minute / 60) * HOUR_PX;
-                    const mins = Math.max(50, (e.hour - s.hour) * 60 + (e.minute - s.minute));
+                    const mins = Math.max(
+                      50,
+                      (e.hour - s.hour) * 60 + (e.minute - s.minute),
+                    );
                     return (
                       <div
                         key={g.id}
                         title={`${time(g.starts_at)} Grupa ${groupName(g)} · Lecția ${g.lesson_number}`}
                         className="absolute inset-x-0 flex flex-col overflow-hidden rounded-[10px] bg-admin-info-fg px-2 py-1 text-[0.8125rem] leading-tight text-white dark:bg-admin-info-bg dark:text-admin-info-fg"
-                        style={{ top: top + 2, height: (mins / 60) * HOUR_PX - 4 }}
+                        style={{
+                          top: top + 2,
+                          height: (mins / 60) * HOUR_PX - 4,
+                        }}
                       >
                         <b className="truncate">
                           {time(g.starts_at)} {groupName(g)}
                         </b>
-                        <span className="truncate opacity-90">Lecția {g.lesson_number}</span>
+                        <span className="truncate opacity-90">
+                          Lecția {g.lesson_number}
+                        </span>
                       </div>
                     );
                   })}
@@ -352,7 +459,10 @@ const WeekLessons = () => {
                     const e = parts(new Date(b.end_at));
                     const top = (s.hour - startHour + s.minute / 60) * HOUR_PX;
                     // At least 50 minutes tall, so a 30-minute trial is still readable.
-                    const mins = Math.max(50, (e.hour - s.hour) * 60 + (e.minute - s.minute));
+                    const mins = Math.max(
+                      50,
+                      (e.hour - s.hour) * 60 + (e.minute - s.minute),
+                    );
                     const warn = notInCalendar(b);
                     return (
                       <a
@@ -369,12 +479,19 @@ const WeekLessons = () => {
                               ? "border border-brand-green bg-accent text-brand-green dark:border-primary dark:text-primary"
                               : "bg-brand-green text-white",
                         )}
-                        style={{ top: top + 2, height: (mins / 60) * HOUR_PX - 4 }}
+                        style={{
+                          top: top + 2,
+                          height: (mins / 60) * HOUR_PX - 4,
+                        }}
                       >
                         <b className="truncate">
                           {time(b.start_at)} {b.student_name.split(" ")[0]}
                         </b>
-                        <span className="truncate opacity-90">{warn ? "lipsă din calendar" : label(b.event_type_slug)}</span>
+                        <span className="truncate opacity-90">
+                          {warn
+                            ? "lipsă din calendar"
+                            : label(b.event_type_slug)}
+                        </span>
                       </a>
                     );
                   })}
@@ -383,19 +500,23 @@ const WeekLessons = () => {
             </div>
             <div className="flex flex-wrap gap-4 px-1 pt-3 text-[0.8125rem] text-muted-foreground">
               <span className="flex items-center gap-1.5">
-                <span className="h-3 w-3 rounded bg-brand-green" /> Lecție plătită
+                <span className="h-3 w-3 rounded bg-brand-green" /> Lecție
+                plătită
               </span>
               <span className="flex items-center gap-1.5">
                 <span className="h-3 w-3 rounded bg-admin-info-fg" /> Grupă
               </span>
               <span className="flex items-center gap-1.5">
-                <span className="h-3 w-3 rounded border border-brand-green bg-accent" /> Probă / verificare nivel (gratuit)
+                <span className="h-3 w-3 rounded border border-brand-green bg-accent" />{" "}
+                Probă / verificare nivel (gratuit)
               </span>
               <span className="flex items-center gap-1.5">
-                <span className="h-3 w-3 rounded border border-dashed border-amber-600 bg-admin-warn-bg" /> Nu e în Google Calendar
+                <span className="h-3 w-3 rounded border border-dashed border-amber-600 bg-admin-warn-bg" />{" "}
+                Nu e în Google Calendar
               </span>
               <span className="flex items-center gap-1.5">
-                <span className="h-3 w-3 rounded border border-dashed border-border bg-muted" /> 12–13: ora pentru verificări de nivel
+                <span className="h-3 w-3 rounded border border-dashed border-border bg-muted" />{" "}
+                12–13: ora pentru verificări de nivel
               </span>
             </div>
           </section>
@@ -409,7 +530,9 @@ const AgendaRow = ({ b }: { b: Booking }) => {
   const warn = notInCalendar(b);
   return (
     <div className="flex gap-3">
-      <span className="w-12 shrink-0 pt-3.5 font-bold tabular-nums">{time(b.start_at)}</span>
+      <span className="w-12 shrink-0 pt-3.5 font-bold tabular-nums">
+        {time(b.start_at)}
+      </span>
       <div
         className={cn(
           "flex flex-1 items-center gap-3 rounded-2xl border p-3.5",
@@ -422,9 +545,19 @@ const AgendaRow = ({ b }: { b: Booking }) => {
       >
         <div className="min-w-0 flex-1">
           <p className="truncate font-bold">{b.student_name}</p>
-          <p className={cn("flex items-center gap-1 text-[0.8125rem]", warn ? "text-admin-warn-fg" : "text-muted-foreground")}>
-            {b.format === "online" ? <Video className="h-3.5 w-3.5" /> : <MapPin className="h-3.5 w-3.5" />}
-            {label(b.event_type_slug)} · {b.format === "online" ? "online" : "la centru"}
+          <p
+            className={cn(
+              "flex items-center gap-1 text-[0.8125rem]",
+              warn ? "text-admin-warn-fg" : "text-muted-foreground",
+            )}
+          >
+            {b.format === "online" ? (
+              <Video className="h-3.5 w-3.5" />
+            ) : (
+              <MapPin className="h-3.5 w-3.5" />
+            )}
+            {label(b.event_type_slug)} ·{" "}
+            {b.format === "online" ? "online" : "la centru"}
             {warn ? " · lipsă din calendar" : ""}
           </p>
         </div>

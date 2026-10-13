@@ -20,11 +20,14 @@ import { fileURLToPath } from "node:url";
 import { ARABIZI_DIGITS } from "../src/data/arabizi";
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), "..");
-const font = (p) => readFileSync(resolve(root, "node_modules/@fontsource", p)).toString("base64");
+const font = (p) =>
+  readFileSync(resolve(root, "node_modules/@fontsource", p)).toString("base64");
 
 const LORA_400 = font("lora/files/lora-latin-400-normal.woff2");
 const LORA_700 = font("lora/files/lora-latin-700-normal.woff2");
-const NASKH_600 = font("noto-naskh-arabic/files/noto-naskh-arabic-arabic-600-normal.woff2");
+const NASKH_600 = font(
+  "noto-naskh-arabic/files/noto-naskh-arabic-arabic-600-normal.woff2",
+);
 
 const PHRASES = [
   ["Mar7aba", "Salut"],
@@ -49,7 +52,8 @@ const PHRASES = [
   ["Yalla bye", "Hai, pa (foarte libanez)"],
 ];
 
-const esc = (s) => s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+const esc = (s) =>
+  s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
 
 const html = `<!doctype html>
 <meta charset="utf-8">
@@ -119,9 +123,11 @@ const html = `<!doctype html>
 <h2>1. Cifrele = litere arabe</h2>
 <table>
   <tr><th>Cifră</th><th>Literă</th><th>Sunet</th><th>Exemplu</th></tr>
-  ${ARABIZI_DIGITS.map((d) => `<tr>
+  ${ARABIZI_DIGITS.map(
+    (d) => `<tr>
     <td class="digit">${d.digit}</td><td class="letter">${d.letter}</td>
-    <td>${esc(d.sound.ro)}</td><td class="ex">${esc(d.examples.ro)}</td></tr>`).join("")}
+    <td>${esc(d.sound.ro)}</td><td class="ex">${esc(d.examples.ro)}</td></tr>`,
+  ).join("")}
 </table>
 <div class="gold"><b>Regula de aur:</b> cifra seamănă la formă cu litera arabă. Restul se citește exact ca în română.</div>
 
@@ -147,7 +153,6 @@ const html = `<!doctype html>
   <p class="links">Ghidul complet Arabizi: <b>centruldearabalibaneza.com/arabizi</b></p>
   <div class="foot">Centrul de Arabă Libaneză cu Ibra — București (Str. Icoanei 80) și online.</div>
 </div>`;
-
 
 /**
  * Finds a usable Chromium, or nothing.
@@ -179,11 +184,16 @@ function findChromium(): string | null {
   } catch {
     // Playwright can throw when no browser is registered at all.
   }
-  const browsersRoot = process.env.PLAYWRIGHT_BROWSERS_PATH || "/opt/pw-browsers";
+  const browsersRoot =
+    process.env.PLAYWRIGHT_BROWSERS_PATH || "/opt/pw-browsers";
   try {
     for (const dir of readdirSync(browsersRoot)) {
       if (!dir.startsWith("chromium")) continue;
-      for (const sub of ["chrome-linux/chrome", "chrome-linux64/chrome", "chrome-mac/Chromium.app/Contents/MacOS/Chromium"]) {
+      for (const sub of [
+        "chrome-linux/chrome",
+        "chrome-linux64/chrome",
+        "chrome-mac/Chromium.app/Contents/MacOS/Chromium",
+      ]) {
         candidates.push(resolve(browsersRoot, dir, sub));
       }
     }
@@ -219,7 +229,9 @@ if (
   existsSync(hashFile) &&
   readFileSync(hashFile, "utf8").trim() === contentHash
 ) {
-  console.log("[cheat-sheet] arabizi data unchanged — keeping the committed PDF");
+  console.log(
+    "[cheat-sheet] arabizi data unchanged — keeping the committed PDF",
+  );
   process.exit(0);
 }
 
@@ -266,4 +278,6 @@ writeFileSync(out, normalised);
 const bytes = normalised.length;
 writeFileSync(resolve(root, "scripts/.cheat-sheet-preview.html"), html);
 writeFileSync(hashFile, contentHash + "\n");
-console.log(`[cheat-sheet] wrote ${out} (${(bytes / 1024).toFixed(0)} KB), ${ARABIZI_DIGITS.length} digits, ${PHRASES.length} phrases`);
+console.log(
+  `[cheat-sheet] wrote ${out} (${(bytes / 1024).toFixed(0)} KB), ${ARABIZI_DIGITS.length} digits, ${PHRASES.length} phrases`,
+);

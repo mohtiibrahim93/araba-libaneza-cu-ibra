@@ -66,8 +66,12 @@ const KidsFields = ({
           <div className="flex items-start gap-2">
             <AlertTriangle className="w-4 h-4 text-primary flex-shrink-0 mt-0.5" />
             <div>
-              <p className="text-sm font-semibold text-foreground">{t.kidsWaitlistTitle}</p>
-              <p className="text-xs text-muted-foreground mt-1">{t.kidsWaitlistDesc}</p>
+              <p className="text-sm font-semibold text-foreground">
+                {t.kidsWaitlistTitle}
+              </p>
+              <p className="text-xs text-muted-foreground mt-1">
+                {t.kidsWaitlistDesc}
+              </p>
             </div>
           </div>
           <label className="flex items-start gap-2 cursor-pointer">
@@ -76,7 +80,9 @@ const KidsFields = ({
               onCheckedChange={(v) => onPayDepositChange(v === true)}
               className="mt-0.5"
             />
-            <span className="text-sm text-foreground">{t.kidsWaitlistCheckbox}</span>
+            <span className="text-sm text-foreground">
+              {t.kidsWaitlistCheckbox}
+            </span>
           </label>
         </div>
       )}

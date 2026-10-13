@@ -4,11 +4,31 @@ import { sendTemplateEmail } from "../_shared/managed-email.ts";
 import { signRegistrationId } from "../_shared/registration-access.ts";
 import { verifiedRegistrationOwner } from "../_shared/verified-registration-owner.ts";
 
-
 const ADMIN_RECIPIENT = "marhaba@centruldearabalibaneza.com";
 const SITE_URL = "https://centruldearabalibaneza.com";
-const WEEKDAY_RO = ["luni", "marți", "miercuri", "joi", "vineri", "sâmbătă", "duminică"];
-const MONTHS_RO = ["ian.", "feb.", "mar.", "apr.", "mai", "iun.", "iul.", "aug.", "sep.", "oct.", "noi.", "dec."];
+const WEEKDAY_RO = [
+  "luni",
+  "marți",
+  "miercuri",
+  "joi",
+  "vineri",
+  "sâmbătă",
+  "duminică",
+];
+const MONTHS_RO = [
+  "ian.",
+  "feb.",
+  "mar.",
+  "apr.",
+  "mai",
+  "iun.",
+  "iul.",
+  "aug.",
+  "sep.",
+  "oct.",
+  "noi.",
+  "dec.",
+];
 const TEMPLATE_BY_FORM_TYPE: Record<string, string> = {
   group: "group-registration-confirmation",
   private: "private-registration-confirmation",
@@ -30,10 +50,13 @@ Deno.serve(async (req) => {
   try {
     const { registrationId } = await req.json();
     if (!registrationId || typeof registrationId !== "string") {
-      return new Response(JSON.stringify({ error: "registrationId is required" }), {
-        status: 400,
-        headers: { ...corsHeaders, "Content-Type": "application/json" },
-      });
+      return new Response(
+        JSON.stringify({ error: "registrationId is required" }),
+        {
+          status: 400,
+          headers: { ...corsHeaders, "Content-Type": "application/json" },
+        },
+      );
     }
 
     const supabaseUrl = Deno.env.get("SUPABASE_URL")!;
@@ -44,7 +67,9 @@ Deno.serve(async (req) => {
     // spoofing arbitrary recipient emails — we only send to what is in DB.
     const { data: reg, error: regErr } = await supabase
       .from("registrations")
-      .select("id, created_at, form_type, name, phone, email, center, format, notes, level, cohort_id, kids_slot_id, child_age, language, payment_status")
+      .select(
+        "id, created_at, form_type, name, phone, email, center, format, notes, level, cohort_id, kids_slot_id, child_age, language, payment_status",
+      )
       .eq("id", registrationId)
       .maybeSingle();
 
@@ -65,10 +90,15 @@ Deno.serve(async (req) => {
     // silently stopped both emails for every anonymous group, kids and
     // level-check sign-up — including the admin alert.
     const createdMs = reg?.created_at ? Date.parse(reg.created_at) : NaN;
-    const ageMs = Number.isFinite(createdMs) ? Date.now() - createdMs : Infinity;
+    const ageMs = Number.isFinite(createdMs)
+      ? Date.now() - createdMs
+      : Infinity;
     const fresh = ageMs < 30 * 60 * 1000;
     const verifiedOwner =
-      !regErr && !!reg && ageMs < 24 * 60 * 60 * 1000 && (await verifiedRegistrationOwner(req, reg, supabase.auth));
+      !regErr &&
+      !!reg &&
+      ageMs < 24 * 60 * 60 * 1000 &&
+      (await verifiedRegistrationOwner(req, reg, supabase.auth));
     if (regErr || !reg || (!fresh && !verifiedOwner)) {
       return new Response(JSON.stringify({ error: "Registration not found" }), {
         status: 404,
@@ -83,7 +113,9 @@ Deno.serve(async (req) => {
       .from("email_send_log")
       .select("idempotency_key")
       .in("idempotency_key", [`reg-${reg.id}`, `admin-reg-${reg.id}`]);
-    const alreadyTried = new Set((prior ?? []).map((r: { idempotency_key: string }) => r.idempotency_key));
+    const alreadyTried = new Set(
+      (prior ?? []).map((r: { idempotency_key: string }) => r.idempotency_key),
+    );
     const sendStudent = verifiedOwner && !alreadyTried.has(`reg-${reg.id}`);
     const sendAdmin = fresh && !alreadyTried.has(`admin-reg-${reg.id}`);
     if (!sendStudent && !sendAdmin) {
@@ -102,8 +134,11 @@ Deno.serve(async (req) => {
     let startDateLabel = "";
     let hasSchedule = false;
     if (reg.form_type === "group" && reg.cohort_id) {
-      const { data: c } = await supabase.from("group_cohorts")
-        .select("start_date, schedule_label_ro").eq("id", reg.cohort_id).maybeSingle();
+      const { data: c } = await supabase
+        .from("group_cohorts")
+        .select("start_date, schedule_label_ro")
+        .eq("id", reg.cohort_id)
+        .maybeSingle();
       if (c) {
         scheduleLabel = c.schedule_label_ro || "";
         if (c.start_date) {
@@ -113,8 +148,11 @@ Deno.serve(async (req) => {
         }
       }
     } else if (reg.form_type === "kids" && reg.kids_slot_id) {
-      const { data: s } = await supabase.from("kids_class_slots")
-        .select("weekday, start_time, duration_min").eq("id", reg.kids_slot_id).maybeSingle();
+      const { data: s } = await supabase
+        .from("kids_class_slots")
+        .select("weekday, start_time, duration_min")
+        .eq("id", reg.kids_slot_id)
+        .maybeSingle();
       if (s) {
         const [hh, mm] = String(s.start_time).split(":");
         const day = WEEKDAY_RO[Math.max(0, Math.min(6, (s.weekday ?? 1) - 1))];
@@ -143,7 +181,6 @@ Deno.serve(async (req) => {
         console.error("managed email send failed", templateName, e);
       }
     };
-
 
     /**
      * Whether this registration has actually been paid for.
@@ -197,7 +234,10 @@ Deno.serve(async (req) => {
           });
         } else if (reg.form_type === "private") {
           Object.assign(baseData, {
-            zoomLink: paid && reg.format === "online" ? (zoomLink || undefined) : undefined,
+            zoomLink:
+              paid && reg.format === "online"
+                ? zoomLink || undefined
+                : undefined,
             message: reg.notes || undefined,
           });
         }
@@ -211,20 +251,21 @@ Deno.serve(async (req) => {
     }
 
     // 2) Admin notification with the full lead details
-    if (sendAdmin) await invokeEmail({
-      templateName: "admin-new-registration",
-      recipientEmail: ADMIN_RECIPIENT,
-      idempotencyKey: `admin-reg-${reg.id}`,
-      templateData: {
-        name: reg.name,
-        phone: reg.phone,
-        email: reg.email || "",
-        formType: formTypeLabel,
-        format: reg.format || "",
-        center: reg.center || "",
-        notes: reg.notes || "",
-      },
-    });
+    if (sendAdmin)
+      await invokeEmail({
+        templateName: "admin-new-registration",
+        recipientEmail: ADMIN_RECIPIENT,
+        idempotencyKey: `admin-reg-${reg.id}`,
+        templateData: {
+          name: reg.name,
+          phone: reg.phone,
+          email: reg.email || "",
+          formType: formTypeLabel,
+          format: reg.format || "",
+          center: reg.center || "",
+          notes: reg.notes || "",
+        },
+      });
 
     return new Response(JSON.stringify({ success: true }), {
       headers: { ...corsHeaders, "Content-Type": "application/json" },

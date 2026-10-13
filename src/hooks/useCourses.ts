@@ -15,7 +15,10 @@ export interface CourseFilters {
 
 type Row = Record<string, unknown> & { id: string; max_seats: number };
 
-function withSeats(rows: Row[], counts: { cohort_id: string; taken: number }[] | null): Course[] {
+function withSeats(
+  rows: Row[],
+  counts: { cohort_id: string; taken: number }[] | null,
+): Course[] {
   const taken = new Map<string, number>();
   (counts || []).forEach((c) => taken.set(c.cohort_id, Number(c.taken) || 0));
   return rows.map((r) => {
@@ -35,16 +38,23 @@ async function fetchCourses(f: CourseFilters): Promise<Course[]> {
   // Cast: the generated Supabase types predate the course columns (migration
   // 20260722120000). The columns exist in the DB; regenerate types to restore
   // full typing.
-  let q = (supabase.from("group_cohorts") as unknown as {
-    select: (c: string) => any;
-  }).select(COLS).eq("is_active", true).eq("course_type", f.courseType ?? "grup");
+  let q = (
+    supabase.from("group_cohorts") as unknown as {
+      select: (c: string) => any;
+    }
+  )
+    .select(COLS)
+    .eq("is_active", true)
+    .eq("course_type", f.courseType ?? "grup");
   if (!f.includeAll) {
     q = q.in("status", PUBLIC_COURSE_STATUSES).gte("start_date", today);
   }
   if (f.age) q = q.eq("age_category", f.age);
   // A chosen format shows that format plus format-agnostic rows (format IS NULL).
   if (f.format) q = q.or(`format.eq.${f.format},format.is.null`);
-  q = q.order("sort_order", { ascending: true }).order("start_date", { ascending: true });
+  q = q
+    .order("sort_order", { ascending: true })
+    .order("start_date", { ascending: true });
 
   const [{ data, error }, { data: counts }] = await Promise.all([
     q,
@@ -54,7 +64,10 @@ async function fetchCourses(f: CourseFilters): Promise<Course[]> {
     console.error("[useCourses] load error", error);
     return [];
   }
-  return withSeats((data as Row[]) || [], counts as { cohort_id: string; taken: number }[]);
+  return withSeats(
+    (data as Row[]) || [],
+    counts as { cohort_id: string; taken: number }[],
+  );
 }
 
 /** Group courses matching the chosen facets (age / modality). */
@@ -101,23 +114,37 @@ export function useCourseBySlug(slug: string | undefined) {
     let active = true;
     setLoading(true);
     (async () => {
-      const table = () => supabase.from("group_cohorts") as unknown as { select: (c: string) => any };
-      const counts = (await supabase.rpc("get_cohort_signup_counts")).data as { cohort_id: string; taken: number }[];
+      const table = () =>
+        supabase.from("group_cohorts") as unknown as {
+          select: (c: string) => any;
+        };
+      const counts = (await supabase.rpc("get_cohort_signup_counts")).data as {
+        cohort_id: string;
+        taken: number;
+      }[];
       // 1) owner-set slug
-      let { data: rows } = await table().select(COLS).eq("slug", slug).eq("is_active", true).limit(1);
+      let { data: rows } = await table()
+        .select(COLS)
+        .eq("slug", slug)
+        .eq("is_active", true)
+        .limit(1);
       // 2) synthetic "<level>-<format>" slug for courses without a manual one
       if (!rows || rows.length === 0) {
         const m = (slug as string).match(/^([a-cA-C][12])-(online|fizic)$/);
         if (m) {
-          ({ data: rows } = await table().select(COLS)
-            .eq("level", m[1]!.toUpperCase()).eq("format", m[2]!.toLowerCase())
-            .eq("course_type", "grup").eq("is_active", true)
-            .order("start_date", { ascending: true }).limit(1));
+          ({ data: rows } = await table()
+            .select(COLS)
+            .eq("level", m[1]!.toUpperCase())
+            .eq("format", m[2]!.toLowerCase())
+            .eq("course_type", "grup")
+            .eq("is_active", true)
+            .order("start_date", { ascending: true })
+            .limit(1));
         }
       }
       if (!active) return;
       const row = rows && rows[0];
-      setCourse(row ? withSeats([row as Row], counts)[0] ?? null : null);
+      setCourse(row ? (withSeats([row as Row], counts)[0] ?? null) : null);
       setLoading(false);
     })().catch((err) => {
       // Unreachable backend: fall through to the page's not-found/fallback

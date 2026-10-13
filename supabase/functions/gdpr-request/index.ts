@@ -3,7 +3,6 @@ import { buildCorsHeaders } from "../_shared/cors.ts";
 import { checkRateLimit, getClientIp } from "../_shared/rate-limit.ts";
 import { sendTemplateEmail } from "../_shared/managed-email.ts";
 
-
 // Self-service GDPR erasure request: the visitor submits their email and the
 // school inbox gets an actionable notification (the actual deletion is done by
 // the admin, who can verify identity — an unauthenticated endpoint must never
@@ -24,13 +23,20 @@ Deno.serve(async (req) => {
 
   try {
     const { email, name, message } = await req.json();
-    if (typeof email !== "string" || !EMAIL_RE.test(email.trim()) || email.length > 200) {
+    if (
+      typeof email !== "string" ||
+      !EMAIL_RE.test(email.trim()) ||
+      email.length > 200
+    ) {
       return json({ error: "Email invalid" }, 400);
     }
     if (name != null && (typeof name !== "string" || name.length > 200)) {
       return json({ error: "Nume invalid" }, 400);
     }
-    if (message != null && (typeof message !== "string" || message.length > 1000)) {
+    if (
+      message != null &&
+      (typeof message !== "string" || message.length > 1000)
+    ) {
       return json({ error: "Mesaj invalid" }, 400);
     }
 
@@ -71,13 +77,18 @@ Deno.serve(async (req) => {
       });
     } catch (sendError) {
       console.error("gdpr-request email send failed", sendError);
-      return json({ error: "Trimiterea a eșuat. Scrie-ne direct pe email." }, 500);
+      return json(
+        { error: "Trimiterea a eșuat. Scrie-ne direct pe email." },
+        500,
+      );
     }
-
 
     return json({ success: true });
   } catch (err) {
-    console.error("gdpr-request error:", err instanceof Error ? err.message : err);
+    console.error(
+      "gdpr-request error:",
+      err instanceof Error ? err.message : err,
+    );
     return json({ error: "Cerere invalidă" }, 400);
   }
 });

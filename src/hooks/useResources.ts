@@ -24,7 +24,9 @@ export const useResources = () =>
     queryFn: async (): Promise<ResourceRow[]> => {
       const { data, error } = await supabase
         .from("resources")
-        .select("slug, title_ro, title_en, description_ro, description_en, file_url, is_active, sort_order")
+        .select(
+          "slug, title_ro, title_en, description_ro, description_en, file_url, is_active, sort_order",
+        )
         .eq("is_active", true)
         .order("sort_order", { ascending: true });
       if (error) throw error;
@@ -34,5 +36,9 @@ export const useResources = () =>
 
 export const useResource = (slug: string) => {
   const { data, isLoading } = useResources();
-  return { resource: data?.find((r) => r.slug === slug) ?? null, isLoading, loaded: !!data };
+  return {
+    resource: data?.find((r) => r.slug === slug) ?? null,
+    isLoading,
+    loaded: !!data,
+  };
 };

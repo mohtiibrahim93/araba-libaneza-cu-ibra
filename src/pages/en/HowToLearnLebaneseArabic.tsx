@@ -65,86 +65,96 @@ const HowToLearnLebaneseArabic = () => (
     faq={FAQ}
   >
     <p>
-      Most people who try to learn Lebanese Arabic quit within three months — not because it's
-      hard, but because they picked the wrong route: MSA textbooks, generic Arabic apps, or
-      YouTube playlists with no structure. This guide gives you the shortest realistic path from
-      zero to real Lebanese conversation, and the exact lesson structure that makes it work.
+      Most people who try to learn Lebanese Arabic quit within three months —
+      not because it's hard, but because they picked the wrong route: MSA
+      textbooks, generic Arabic apps, or YouTube playlists with no structure.
+      This guide gives you the shortest realistic path from zero to real
+      Lebanese conversation, and the exact lesson structure that makes it work.
     </p>
 
     <h2>The 4-part learning path</h2>
     <p>
-      Every Lebanese-Arabic learner needs the same four ingredients. Miss any one of them and
-      progress stalls.
+      Every Lebanese-Arabic learner needs the same four ingredients. Miss any
+      one of them and progress stalls.
     </p>
     <ol className="list-decimal list-inside space-y-2">
       <li>
-        <strong>A structured curriculum</strong> — CEFR levels A1→C1 broken into weekly
-        objectives, so you always know what comes next.
+        <strong>A structured curriculum</strong> — CEFR levels A1→C1 broken into
+        weekly objectives, so you always know what comes next.
       </li>
       <li>
-        <strong>A native speaker</strong> — for pronunciation (ع, ح, غ don't exist in English)
-        and for correcting the patterns you can't hear yourself getting wrong.
+        <strong>A native speaker</strong> — for pronunciation (ع, ح, غ don't
+        exist in English) and for correcting the patterns you can't hear
+        yourself getting wrong.
       </li>
       <li>
-        <strong>Daily short practice</strong> — 15–20 minutes every day beats a single 2-hour
-        session on Sunday. Language sticks through repetition, not intensity.
+        <strong>Daily short practice</strong> — 15–20 minutes every day beats a
+        single 2-hour session on Sunday. Language sticks through repetition, not
+        intensity.
       </li>
       <li>
-        <strong>Real Lebanese input</strong> — music, TV, TikTok, WhatsApp voice notes from
-        friends. Textbook language sounds like textbook language; you need the real thing to
-        train your ear.
+        <strong>Real Lebanese input</strong> — music, TV, TikTok, WhatsApp voice
+        notes from friends. Textbook language sounds like textbook language; you
+        need the real thing to train your ear.
       </li>
     </ol>
 
     <h2>Recommended weekly lesson structure</h2>
     <p>
-      This is the structure we use in our group and private courses — refined over years of
-      teaching, and the fastest reliable format we've found.
+      This is the structure we use in our group and private courses — refined
+      over years of teaching, and the fastest reliable format we've found.
     </p>
 
     <h3>Two 90-minute lessons per week (with a native teacher)</h3>
     <p>Each 90-minute lesson breaks down like this:</p>
     <ul>
       <li>
-        <strong>0–10 min · Warm-up.</strong> Free conversation in Lebanese only, on last week's
-        topics. Forces active recall before new material lands.
+        <strong>0–10 min · Warm-up.</strong> Free conversation in Lebanese only,
+        on last week's topics. Forces active recall before new material lands.
       </li>
       <li>
-        <strong>10–30 min · Review.</strong> Correct homework, drill last lesson's grammar, and
-        clarify anything unclear. This is where mistakes get caught before they solidify.
+        <strong>10–30 min · Review.</strong> Correct homework, drill last
+        lesson's grammar, and clarify anything unclear. This is where mistakes
+        get caught before they solidify.
       </li>
       <li>
-        <strong>30–60 min · New material.</strong> One grammar concept + one theme (family, food,
-        directions…) + ~10 new words. Never more — capacity is the constraint.
+        <strong>30–60 min · New material.</strong> One grammar concept + one
+        theme (family, food, directions…) + ~10 new words. Never more — capacity
+        is the constraint.
       </li>
       <li>
-        <strong>60–80 min · Guided practice.</strong> Role-plays, dialogues, listening to a short
-        native clip and answering questions. This is where new material becomes usable.
+        <strong>60–80 min · Guided practice.</strong> Role-plays, dialogues,
+        listening to a short native clip and answering questions. This is where
+        new material becomes usable.
       </li>
       <li>
-        <strong>80–90 min · Homework assignment.</strong> A concrete task for the week — record a
-        1-minute voice note, write 5 sentences, message the teacher in Lebanese.
+        <strong>80–90 min · Homework assignment.</strong> A concrete task for
+        the week — record a 1-minute voice note, write 5 sentences, message the
+        teacher in Lebanese.
       </li>
     </ul>
 
     <h3>Daily 15–20 minute routine (on your own)</h3>
     <ul>
       <li>
-        <strong>5 min · Flashcards.</strong> Anki with the week's new vocabulary + audio. Skipping
-        this is the #1 reason people forget what they learn in class.
+        <strong>5 min · Flashcards.</strong> Anki with the week's new vocabulary
+        + audio. Skipping this is the #1 reason people forget what they learn in
+        class.
       </li>
       <li>
-        <strong>5 min · Shadowing.</strong> Play a native audio clip (song lyric, dialogue) and
-        repeat immediately after, matching rhythm and pitch. Trains pronunciation faster than
-        anything else.
+        <strong>5 min · Shadowing.</strong> Play a native audio clip (song
+        lyric, dialogue) and repeat immediately after, matching rhythm and
+        pitch. Trains pronunciation faster than anything else.
       </li>
       <li>
-        <strong>5 min · Spoken diary.</strong> Talk to yourself in Lebanese about your day. It
-        feels silly for the first week; by week three it's your fastest fluency builder.
+        <strong>5 min · Spoken diary.</strong> Talk to yourself in Lebanese
+        about your day. It feels silly for the first week; by week three it's
+        your fastest fluency builder.
       </li>
       <li>
-        <strong>5 min · Passive listening.</strong> Fairuz in the morning, a Lebanese podcast on
-        the commute, MTV Lebanon in the background. Your ear needs constant exposure.
+        <strong>5 min · Passive listening.</strong> Fairuz in the morning, a
+        Lebanese podcast on the commute, MTV Lebanon in the background. Your ear
+        needs constant exposure.
       </li>
     </ul>
 
@@ -185,91 +195,98 @@ const HowToLearnLebaneseArabic = () => (
 
     <h2>What to learn in your first month (concrete plan)</h2>
     <p>
-      If you want a checklist to start today, here's what a well-structured first month covers:
+      If you want a checklist to start today, here's what a well-structured
+      first month covers:
     </p>
     <ul>
       <li>
-        <strong>Week 1:</strong> the alphabet in Arabizi form, greetings (mar7aba, kifak/kifik,
-        shu akhbarak), numbers 1–20, personal pronouns.
+        <strong>Week 1:</strong> the alphabet in Arabizi form, greetings
+        (mar7aba, kifak/kifik, shu akhbarak), numbers 1–20, personal pronouns.
       </li>
       <li>
-        <strong>Week 2:</strong> introducing yourself (name, age, nationality, job), question
-        words (shu, wein, meen, kif, addesh, aymta), present tense of common verbs.
+        <strong>Week 2:</strong> introducing yourself (name, age, nationality,
+        job), question words (shu, wein, meen, kif, addesh, aymta), present
+        tense of common verbs.
       </li>
       <li>
-        <strong>Week 3:</strong> family vocabulary, possessives (baytak, baytik), simple location
-        prepositions, ordering in a café or restaurant.
+        <strong>Week 3:</strong> family vocabulary, possessives (baytak,
+        baytik), simple location prepositions, ordering in a café or restaurant.
       </li>
       <li>
-        <strong>Week 4:</strong> shopping and prices, colours and clothes, past tense of the most
-        common verbs, first 20-second spoken diary entries.
+        <strong>Week 4:</strong> shopping and prices, colours and clothes, past
+        tense of the most common verbs, first 20-second spoken diary entries.
       </li>
     </ul>
     <p>
-      By the end of month one you should be able to survive a short visit to Lebanon — introduce
-      yourself, order, shop, and ask directions.
+      By the end of month one you should be able to survive a short visit to
+      Lebanon — introduce yourself, order, shop, and ask directions.
     </p>
 
     <h2>Common mistakes that slow learners down</h2>
     <ul>
       <li>
-        <strong>Starting with MSA.</strong> You'll spend a year learning something nobody speaks
-        at home. If your goal is conversation, learn Lebanese directly — see{" "}
+        <strong>Starting with MSA.</strong> You'll spend a year learning
+        something nobody speaks at home. If your goal is conversation, learn
+        Lebanese directly — see{" "}
         <Link to="/en/lebanese-arabic-vs-msa-vs-egyptian">
           Lebanese vs MSA vs Egyptian
-        </Link>.
+        </Link>
+        .
       </li>
       <li>
-        <strong>Skipping speaking for months.</strong> "I'll speak when I'm ready" never arrives.
-        Speak badly from day one; that's the whole point.
+        <strong>Skipping speaking for months.</strong> "I'll speak when I'm
+        ready" never arrives. Speak badly from day one; that's the whole point.
       </li>
       <li>
-        <strong>Only using apps.</strong> Duolingo and similar apps teach MSA vocabulary, not
-        Lebanese dialect. Useful as a supplement, insufficient as the main method.
+        <strong>Only using apps.</strong> Duolingo and similar apps teach MSA
+        vocabulary, not Lebanese dialect. Useful as a supplement, insufficient
+        as the main method.
       </li>
       <li>
-        <strong>Studying grammar without context.</strong> Grammar rules stick when you use them
-        in real sentences, not when you memorise tables.
+        <strong>Studying grammar without context.</strong> Grammar rules stick
+        when you use them in real sentences, not when you memorise tables.
       </li>
       <li>
-        <strong>Consuming only "learner" content.</strong> Simplified content is fine for the
-        first two months. After that you need real Lebanese — songs, TV, TikTok — even if you
-        only understand 20%.
+        <strong>Consuming only "learner" content.</strong> Simplified content is
+        fine for the first two months. After that you need real Lebanese —
+        songs, TV, TikTok — even if you only understand 20%.
       </li>
     </ul>
 
     <h2>Recommended resources</h2>
     <ul>
       <li>
-        <strong>Music:</strong> Fairuz (start here), Wael Kfoury, Nancy Ajram, Mashrou' Leila.
-        Read the lyrics side-by-side with translations.
+        <strong>Music:</strong> Fairuz (start here), Wael Kfoury, Nancy Ajram,
+        Mashrou' Leila. Read the lyrics side-by-side with translations.
       </li>
       <li>
-        <strong>TV:</strong> MTV Lebanon, LBCI drama series (start with kids' or teen shows;
-        adult drama is faster).
+        <strong>TV:</strong> MTV Lebanon, LBCI drama series (start with kids' or
+        teen shows; adult drama is faster).
       </li>
       <li>
-        <strong>Social media:</strong> Lebanese TikTok, Instagram creators (search #Lebanon, or
-        follow chefs, comedians, news anchors).
+        <strong>Social media:</strong> Lebanese TikTok, Instagram creators
+        (search #Lebanon, or follow chefs, comedians, news anchors).
       </li>
       <li>
-        <strong>Apps:</strong> Anki for flashcards, Tandem or HelloTalk for finding Lebanese
-        language partners.
+        <strong>Apps:</strong> Anki for flashcards, Tandem or HelloTalk for
+        finding Lebanese language partners.
       </li>
       <li>
         <strong>Structured course:</strong> our{" "}
-        <Link to="/en/learn-lebanese-arabic">Lebanese Arabic course</Link> with a native teacher —
-        or if you want to see the whole dialect landscape first, read the{" "}
+        <Link to="/en/learn-lebanese-arabic">Lebanese Arabic course</Link> with
+        a native teacher — or if you want to see the whole dialect landscape
+        first, read the{" "}
         <Link to="/en/arabic-dialects-guide">Arabic dialects guide</Link>.
       </li>
     </ul>
 
     <h2>The single best step you can take today</h2>
     <p>
-      Book a free 30-minute trial lesson with a native Lebanese teacher. You'll learn your first
-      five phrases, hear the sound of the dialect, and get a personalised recommendation on where
-      to start based on your goal (family, travel, business, heritage). The trial remains 0 LEI
-      and carries no obligation; secure card confirmation simply holds the spot.
+      Book a free 30-minute trial lesson with a native Lebanese teacher. You'll
+      learn your first five phrases, hear the sound of the dialect, and get a
+      personalised recommendation on where to start based on your goal (family,
+      travel, business, heritage). The trial remains 0 LEI and carries no
+      obligation; secure card confirmation simply holds the spot.
     </p>
   </EnLandingLayout>
 );

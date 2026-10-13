@@ -21,14 +21,14 @@ Deno.serve(async (req) => {
     for (const [k, v] of Object.entries(corsHeaders)) res.headers.set(k, v);
     return res;
   };
-  if (req.method === "OPTIONS") return new Response(null, { headers: corsHeaders });
+  if (req.method === "OPTIONS")
+    return new Response(null, { headers: corsHeaders });
 
   // Cron-only endpoint: require the shared secret header (fail-closed).
   const cronSecret = Deno.env.get("CRON_SECRET");
   if (!cronSecret || req.headers.get("x-cron-secret") !== cronSecret) {
     return json({ error: "Unauthorized" }, 401);
   }
-
 
   const supabase = createClient(
     Deno.env.get("SUPABASE_URL")!,
@@ -87,10 +87,34 @@ Deno.serve(async (req) => {
   };
 
   const stages: Stage[] = [
-    offsetStage("2d", "reminder_2d_sent_at", 48 * 3_600_000, "în 2 zile", "in 2 days"),
-    offsetStage("3h", "reminder_3h_sent_at", 3 * 3_600_000, "în 3 ore", "in 3 hours"),
-    offsetStage("1h", "reminder_1h_sent_at", 1 * 3_600_000, "în 1 oră", "in 1 hour"),
-    offsetStage("30m", "reminder_30m_sent_at", 30 * 60_000, "în 30 de minute", "in 30 minutes"),
+    offsetStage(
+      "2d",
+      "reminder_2d_sent_at",
+      48 * 3_600_000,
+      "în 2 zile",
+      "in 2 days",
+    ),
+    offsetStage(
+      "3h",
+      "reminder_3h_sent_at",
+      3 * 3_600_000,
+      "în 3 ore",
+      "in 3 hours",
+    ),
+    offsetStage(
+      "1h",
+      "reminder_1h_sent_at",
+      1 * 3_600_000,
+      "în 1 oră",
+      "in 1 hour",
+    ),
+    offsetStage(
+      "30m",
+      "reminder_30m_sent_at",
+      30 * 60_000,
+      "în 30 de minute",
+      "in 30 minutes",
+    ),
   ];
 
   // Only run the day-of stage after 08:00 server-local time.
@@ -102,7 +126,8 @@ Deno.serve(async (req) => {
     const { data: rows, error } = await supabase
       .from("bookings")
       .select(
-        "id,start_at,student_name,student_email,format,meet_link,manage_token,language," + stage.flag,
+        "id,start_at,student_name,student_email,format,meet_link,manage_token,language," +
+          stage.flag,
       )
       .eq("status", "confirmed")
       .gte("start_at", stage.lo)
@@ -147,7 +172,12 @@ Deno.serve(async (req) => {
           idempotencyKey: `booking-reminder-${stage.key}-${r.id}`,
         });
       } catch (err) {
-        console.error("[reminders] send failed; will retry", stage.key, r.id, err);
+        console.error(
+          "[reminders] send failed; will retry",
+          stage.key,
+          r.id,
+          err,
+        );
         failed++;
         continue;
       }

@@ -23,7 +23,10 @@ serve(async (req) => {
   try {
     const { courseType, email, name, registrationId } = await req.json();
 
-    if (!courseType || (!COURSE_TYPES.includes(courseType) && courseType !== "kids_deposit")) {
+    if (
+      !courseType ||
+      (!COURSE_TYPES.includes(courseType) && courseType !== "kids_deposit")
+    ) {
       throw new Error("Invalid course type");
     }
     // Group/private amounts are derived from the registration row (level,
@@ -44,11 +47,17 @@ serve(async (req) => {
       quantity: number | null;
     } | null = null;
     if (registrationId) {
-      if (typeof registrationId !== "string" || !/^[0-9a-f-]{36}$/i.test(registrationId)) {
-        return new Response(JSON.stringify({ error: "Invalid registrationId" }), {
-          headers: { ...corsHeaders, "Content-Type": "application/json" },
-          status: 400,
-        });
+      if (
+        typeof registrationId !== "string" ||
+        !/^[0-9a-f-]{36}$/i.test(registrationId)
+      ) {
+        return new Response(
+          JSON.stringify({ error: "Invalid registrationId" }),
+          {
+            headers: { ...corsHeaders, "Content-Type": "application/json" },
+            status: 400,
+          },
+        );
       }
       const adminClient = createClient(
         Deno.env.get("SUPABASE_URL") ?? "",
@@ -56,24 +65,38 @@ serve(async (req) => {
       );
       const { data: regRow } = await adminClient
         .from("registrations")
-        .select("id, email, created_at, payment_status, stripe_session_id, form_type, level, cohort_id, format, quantity, lead_status")
+        .select(
+          "id, email, created_at, payment_status, stripe_session_id, form_type, level, cohort_id, format, quantity, lead_status",
+        )
         .eq("id", registrationId)
         .maybeSingle();
       if (!regRow) {
-        return new Response(JSON.stringify({ error: "Registration not found" }), {
-          headers: { ...corsHeaders, "Content-Type": "application/json" },
-          status: 404,
-        });
+        return new Response(
+          JSON.stringify({ error: "Registration not found" }),
+          {
+            headers: { ...corsHeaders, "Content-Type": "application/json" },
+            status: 404,
+          },
+        );
       }
       // Verify control of the stored mailbox, not knowledge of its address.
       if (!(await verifiedRegistrationOwner(req, regRow, adminClient.auth))) {
-        return new Response(JSON.stringify({ error: "Sign in with your verified registration email to continue" }), {
-          headers: { ...corsHeaders, "Content-Type": "application/json" },
-          status: 403,
-        });
+        return new Response(
+          JSON.stringify({
+            error: "Sign in with your verified registration email to continue",
+          }),
+          {
+            headers: { ...corsHeaders, "Content-Type": "application/json" },
+            status: 403,
+          },
+        );
       }
       const groupError = await groupEnrolmentError(adminClient, regRow);
-      if (groupError) return new Response(JSON.stringify({ error: groupError }), { status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" } });
+      if (groupError)
+        return new Response(JSON.stringify({ error: groupError }), {
+          status: 400,
+          headers: { ...corsHeaders, "Content-Type": "application/json" },
+        });
       if (regRow.payment_status === "paid") {
         return new Response(JSON.stringify({ error: "Already paid" }), {
           headers: { ...corsHeaders, "Content-Type": "application/json" },
@@ -81,12 +104,16 @@ serve(async (req) => {
         });
       }
       if (regRow.stripe_session_id) {
-        return new Response(JSON.stringify({ error: "Checkout already initiated" }), {
-          headers: { ...corsHeaders, "Content-Type": "application/json" },
-          status: 409,
-        });
+        return new Response(
+          JSON.stringify({ error: "Checkout already initiated" }),
+          {
+            headers: { ...corsHeaders, "Content-Type": "application/json" },
+            status: 409,
+          },
+        );
       }
-      const expectedFormType = courseType === "kids_deposit" ? "kids" : courseType;
+      const expectedFormType =
+        courseType === "kids_deposit" ? "kids" : courseType;
       if (regRow.form_type && regRow.form_type !== expectedFormType) {
         return new Response(JSON.stringify({ error: "Course type mismatch" }), {
           headers: { ...corsHeaders, "Content-Type": "application/json" },
@@ -120,39 +147,51 @@ serve(async (req) => {
       const depositBani = kidsDepositUnitAmount(existingReg?.format);
       const depositLei = Math.round(depositBani / 100);
       const pct = Math.round(KIDS_DEPOSIT_SHARE * 100);
-      lineItems = [{
-        price_data: {
-          currency: "ron",
-          product_data: {
-            name: "Avans loc grupa Copii — Arabă Libaneză",
-            description: `Avans rambursabil ${pct}% (${depositLei} LEI) pentru rezervarea locului în grupa de copii.`,
+      lineItems = [
+        {
+          price_data: {
+            currency: "ron",
+            product_data: {
+              name: "Avans loc grupa Copii — Arabă Libaneză",
+              description: `Avans rambursabil ${pct}% (${depositLei} LEI) pentru rezervarea locului în grupa de copii.`,
+            },
+            unit_amount: depositBani,
           },
-          unit_amount: depositBani,
+          quantity: 1,
         },
-        quantity: 1,
-      }];
+      ];
     } else {
-      const quantity = Math.max(1, Math.min(100, Number.parseInt(String(existingReg?.quantity ?? 1), 10) || 1));
-      const unitAmount = courseType === "group"
-        ? groupMonthlyUnitAmount(existingReg?.level, existingReg?.format)
-        : privateLessonUnitAmount(existingReg?.format);
+      const quantity = Math.max(
+        1,
+        Math.min(
+          100,
+          Number.parseInt(String(existingReg?.quantity ?? 1), 10) || 1,
+        ),
+      );
+      const unitAmount =
+        courseType === "group"
+          ? groupMonthlyUnitAmount(existingReg?.level, existingReg?.format)
+          : privateLessonUnitAmount(existingReg?.format);
       // Only private lessons have a volume discount (20 -> -15%).
       // A `group && quantity >= 3 -> 0.9` branch used to live here, left over
       // from when a group "quantity" meant months; groups now always submit
       // quantity 1 and their upfront discount is groupFullCourseUnitAmount.
       const discountRate =
         courseType === "private" ? 1 - privateDiscountFor(quantity) : 1;
-      const productName = courseType === "group"
-        ? `Curs de grup Arabă Libaneză${existingReg?.level ? ` — nivel ${existingReg.level}` : ""}`
-        : "Lecții private Arabă Libaneză";
-      lineItems = [{
-        price_data: {
-          currency: "ron",
-          product_data: { name: productName },
-          unit_amount: Math.round(unitAmount * discountRate),
+      const productName =
+        courseType === "group"
+          ? `Curs de grup Arabă Libaneză${existingReg?.level ? ` — nivel ${existingReg.level}` : ""}`
+          : "Lecții private Arabă Libaneză";
+      lineItems = [
+        {
+          price_data: {
+            currency: "ron",
+            product_data: { name: productName },
+            unit_amount: Math.round(unitAmount * discountRate),
+          },
+          quantity,
         },
-        quantity,
-      }];
+      ];
     }
 
     const session = await stripe.checkout.sessions.create(
@@ -171,7 +210,9 @@ serve(async (req) => {
       },
       // Ties repeated calls for the same registration to the same session
       // instead of creating orphaned duplicate checkout sessions.
-      registrationId ? { idempotencyKey: `cs_${registrationId}_${courseType}` } : undefined,
+      registrationId
+        ? { idempotencyKey: `cs_${registrationId}_${courseType}` }
+        : undefined,
     );
 
     // Persist Stripe session id on the registration so the webhook can match it
@@ -190,14 +231,20 @@ serve(async (req) => {
         .is("stripe_session_id", null)
         .neq("payment_status", "paid");
       if (updateError) {
-        console.error("Failed to attach stripe_session_id to registration:", updateError);
+        console.error(
+          "Failed to attach stripe_session_id to registration:",
+          updateError,
+        );
       }
     }
 
-    return new Response(JSON.stringify({ url: session.url, sessionId: session.id }), {
-      headers: { ...corsHeaders, "Content-Type": "application/json" },
-      status: 200,
-    });
+    return new Response(
+      JSON.stringify({ url: session.url, sessionId: session.id }),
+      {
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+        status: 200,
+      },
+    );
   } catch (error) {
     const message = error instanceof Error ? error.message : "Unknown error";
     console.error("Checkout error:", message);

@@ -12,9 +12,14 @@ interface Props {
 }
 
 const EmailSettingsForm = ({ settings, saving, onChange, onSubmit }: Props) => (
-  <form onSubmit={onSubmit} className="mb-6 rounded-lg border border-border bg-card p-4">
+  <form
+    onSubmit={onSubmit}
+    className="mb-6 rounded-lg border border-border bg-card p-4"
+  >
     <div className="mb-4">
-      <h2 className="text-base font-semibold text-foreground">Setări email confirmare</h2>
+      <h2 className="text-base font-semibold text-foreground">
+        Setări email confirmare
+      </h2>
       <p className="text-sm text-muted-foreground">
         Configurează numele și adresa afișate ca expeditor.
       </p>
@@ -25,7 +30,9 @@ const EmailSettingsForm = ({ settings, saving, onChange, onSubmit }: Props) => (
         <Input
           id="sender-name"
           value={settings.sender_name}
-          onChange={(e) => onChange({ ...settings, sender_name: e.target.value })}
+          onChange={(e) =>
+            onChange({ ...settings, sender_name: e.target.value })
+          }
           maxLength={80}
           required
         />
@@ -36,7 +43,9 @@ const EmailSettingsForm = ({ settings, saving, onChange, onSubmit }: Props) => (
           id="sender-email"
           type="email"
           value={settings.sender_email}
-          onChange={(e) => onChange({ ...settings, sender_email: e.target.value })}
+          onChange={(e) =>
+            onChange({ ...settings, sender_email: e.target.value })
+          }
           placeholder="noreply@centruldearabalibaneza.com"
           required
         />

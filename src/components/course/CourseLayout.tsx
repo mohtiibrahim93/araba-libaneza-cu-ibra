@@ -82,8 +82,18 @@ const CourseLayout = ({
     "@context": "https://schema.org",
     "@type": "BreadcrumbList",
     itemListElement: [
-      { "@type": "ListItem", position: 1, name: t.courseBreadcrumbHome, item: `${BASE_URL}/` },
-      { "@type": "ListItem", position: 2, name: t.courseBreadcrumbCourses, item: `${BASE_URL}/cursuri` },
+      {
+        "@type": "ListItem",
+        position: 1,
+        name: t.courseBreadcrumbHome,
+        item: `${BASE_URL}/`,
+      },
+      {
+        "@type": "ListItem",
+        position: 2,
+        name: t.courseBreadcrumbCourses,
+        item: `${BASE_URL}/cursuri`,
+      },
       { "@type": "ListItem", position: 3, name: h1, item: canonical },
     ],
   };
@@ -108,10 +118,16 @@ const CourseLayout = ({
     <div className="min-h-screen bg-background">
       <Helmet>
         {!served ? <title>{resolvedMetaTitle}</title> : null}
-        {!served ? <meta name="description" content={resolvedMetaDescription} /> : null}
+        {!served ? (
+          <meta name="description" content={resolvedMetaDescription} />
+        ) : null}
         {!served ? <link rel="canonical" href={canonical} /> : null}
-        {!served ? <meta property="og:title" content={resolvedMetaTitle} /> : null}
-        {!served ? <meta property="og:description" content={resolvedMetaDescription} /> : null}
+        {!served ? (
+          <meta property="og:title" content={resolvedMetaTitle} />
+        ) : null}
+        {!served ? (
+          <meta property="og:description" content={resolvedMetaDescription} />
+        ) : null}
         {!served ? <meta property="og:url" content={canonical} /> : null}
         {/* No hreflang here on purpose. These four course pages exist only in
             Romanian — the /en/ pages are separate landing pages, not
@@ -121,8 +137,12 @@ const CourseLayout = ({
             than one language" on /cursuri/grup, /cursuri/copii and
             /cursuri/private. LandingLayout already follows the rule that
             hreflang is announced only for a real reciprocal twin. */}
-        <script type="application/ld+json">{JSON.stringify(fullCourseSchema)}</script>
-        <script type="application/ld+json">{JSON.stringify(breadcrumbJsonLd)}</script>
+        <script type="application/ld+json">
+          {JSON.stringify(fullCourseSchema)}
+        </script>
+        <script type="application/ld+json">
+          {JSON.stringify(breadcrumbJsonLd)}
+        </script>
       </Helmet>
       <Navbar />
 
@@ -142,7 +162,10 @@ const CourseLayout = ({
               <ChevronRight className="w-3.5 h-3.5 inline -mt-0.5" />
             </li>
             <li>
-              <Link to="/cursuri" className="hover:text-foreground transition-colors">
+              <Link
+                to="/cursuri"
+                className="hover:text-foreground transition-colors"
+              >
                 {t.courseBreadcrumbCourses}
               </Link>
             </li>
@@ -168,12 +191,19 @@ const CourseLayout = ({
                 {h1}
               </h1>
               {priceLine && (
-                <p className="text-lg font-semibold text-foreground mb-4">{priceLine}</p>
+                <p className="text-lg font-semibold text-foreground mb-4">
+                  {priceLine}
+                </p>
               )}
-              <p className="text-lg text-muted-foreground leading-relaxed mb-6">{intro}</p>
+              <p className="text-lg text-muted-foreground leading-relaxed mb-6">
+                {intro}
+              </p>
               <ul className="space-y-2 mb-8">
                 {features.map((f, i) => (
-                  <li key={i} className="flex items-start gap-2.5 text-[15px] text-foreground">
+                  <li
+                    key={i}
+                    className="flex items-start gap-2.5 text-[15px] text-foreground"
+                  >
                     <span
                       aria-hidden="true"
                       className="mt-0.5 inline-flex h-5 w-5 flex-shrink-0 items-center justify-center rounded-full bg-brand-green/10 text-brand-green"
@@ -216,12 +246,16 @@ const CourseLayout = ({
         </section>
 
         {/* Page body */}
-        <div className="w-full max-w-content mx-auto px-gutter pb-16">{children}</div>
+        <div className="w-full max-w-content mx-auto px-gutter pb-16">
+          {children}
+        </div>
 
         {/* Other courses */}
         <section className="bg-cream">
           <div className="w-full max-w-content mx-auto px-gutter py-section">
-            <h2 className="font-display text-2xl font-bold text-foreground mb-5">{t.courseOtherCoursesTitle}</h2>
+            <h2 className="font-display text-2xl font-bold text-foreground mb-5">
+              {t.courseOtherCoursesTitle}
+            </h2>
             <ul className="grid sm:grid-cols-2 lg:grid-cols-3 gap-3">
               {otherCourses.map((c) => (
                 <li key={c.to}>
@@ -236,7 +270,10 @@ const CourseLayout = ({
               ))}
             </ul>
             <p className="mt-4 text-sm">
-              <Link to="/cursuri" className="text-brand-green font-semibold hover:underline underline-offset-4">
+              <Link
+                to="/cursuri"
+                className="text-brand-green font-semibold hover:underline underline-offset-4"
+              >
                 {t.courseSeeAllPrograms}
               </Link>
             </p>

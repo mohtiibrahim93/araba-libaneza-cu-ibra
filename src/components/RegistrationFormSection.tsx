@@ -29,10 +29,18 @@ import TrustBand from "@/components/TrustBand";
 import GroupFields from "./RegistrationForm/GroupFields";
 import PrivateFields from "./RegistrationForm/PrivateFields";
 import KidsFields from "./RegistrationForm/KidsFields";
-import LeadFields, { isValidPhone, isValidEmail } from "./RegistrationForm/LeadFields";
+import LeadFields, {
+  isValidPhone,
+  isValidEmail,
+} from "./RegistrationForm/LeadFields";
 import CapacityBanner from "./RegistrationForm/CapacityBanner";
 import PostSubmitView from "./RegistrationForm/PostSubmitView";
-import type { CourseType, FormatType, LevelType, SubmittedData } from "./RegistrationForm/types";
+import type {
+  CourseType,
+  FormatType,
+  LevelType,
+  SubmittedData,
+} from "./RegistrationForm/types";
 import type { Cohort } from "@/lib/cohortTypes";
 import type { KidsSlot } from "@/hooks/useKidsSlots";
 import CheckoutEmailGate from "@/components/CheckoutEmailGate";
@@ -84,7 +92,9 @@ const RegistrationFormSection = ({
   const { t, lang } = useI18n();
   const { get: getCapacity } = useGroupCapacities();
 
-  const [courseType, setCourseType] = useState<CourseType | "">(defaultCourseType ?? "");
+  const [courseType, setCourseType] = useState<CourseType | "">(
+    defaultCourseType ?? "",
+  );
   const [format, setFormat] = useState<FormatType | "">(defaultFormat ?? "");
   const [level, setLevel] = useState<LevelType | "">(defaultLevel ?? "A1");
   const [center, setCenter] = useState<string>("");
@@ -117,23 +127,32 @@ const RegistrationFormSection = ({
   const [privateQuantity, setPrivateQuantity] = useState<number>(1);
   // Private lessons, step 2: the details are in, now the day and time, then
   // payment. Nothing is a booking — or a lead — until the payment clears.
-  const [privatePay, setPrivatePay] = useState<
-    { registrationId: string; email: string; quantity: number; format: "online" | "physical" } | null
-  >(null);
+  const [privatePay, setPrivatePay] = useState<{
+    registrationId: string;
+    email: string;
+    quantity: number;
+    format: "online" | "physical";
+  } | null>(null);
   // Which of those two the scheduler is actually showing. The heading above it
   // said "Pasul 2 din 3 — alege ziua și ora" the whole way through, including
   // on the payment screen, so the last step of a three-step flow never
   // appeared: you were paying under a heading telling you to pick a time.
-  const [privatePayPhase, setPrivatePayPhase] = useState<"pick" | "pay">("pick");
+  const [privatePayPhase, setPrivatePayPhase] = useState<"pick" | "pay">(
+    "pick",
+  );
   const [groupPlan, setGroupPlan] = useState<"monthly" | "full">("monthly");
   const [payDeposit, setPayDeposit] = useState(false);
-  const [submittedData, setSubmittedData] = useState<SubmittedData | null>(null);
+  const [submittedData, setSubmittedData] = useState<SubmittedData | null>(
+    null,
+  );
   const [honeypot, setHoneypot] = useState("");
   const [cohortId, setCohortId] = useState<string | null>(null);
   // The language the chosen class is taught in, which is not necessarily the
   // language the form was filled in. Kept so the registration records what the
   // student actually signed up for.
-  const [cohortLanguage, setCohortLanguage] = useState<"ro" | "en" | null>(null);
+  const [cohortLanguage, setCohortLanguage] = useState<"ro" | "en" | null>(
+    null,
+  );
   const [kidsSlotId, setKidsSlotId] = useState<string | null>(null);
   const [depositCheckoutFailed, setDepositCheckoutFailed] = useState(false);
   const [retryingDeposit, setRetryingDeposit] = useState(false);
@@ -149,7 +168,9 @@ const RegistrationFormSection = ({
     return m ? Number.parseInt(m[0], 10) : NaN;
   })();
   const kidsOnlineAllowed =
-    courseType !== "kids" || Number.isNaN(parsedChildAge) || parsedChildAge >= 10;
+    courseType !== "kids" ||
+    Number.isNaN(parsedChildAge) ||
+    parsedChildAge >= 10;
 
   // If the user picked online first and then entered an age <10, force fizic.
   useEffect(() => {
@@ -170,7 +191,10 @@ const RegistrationFormSection = ({
       // opened for a different audience (the kids CTA showed the B1 group form).
       // Skip when the selection is locked (dedicated routes) or when a specific
       // course type was requested and the draft is for a different one.
-      const typeMatches = !defaultCourseType || !draft.courseType || draft.courseType === defaultCourseType;
+      const typeMatches =
+        !defaultCourseType ||
+        !draft.courseType ||
+        draft.courseType === defaultCourseType;
       if (!lockSelection && typeMatches) {
         if (draft.courseType) setCourseType(draft.courseType);
         if (draft.format !== undefined) setFormat(draft.format);
@@ -178,7 +202,8 @@ const RegistrationFormSection = ({
         if (draft.center !== undefined) setCenter(draft.center);
         if (draft.childName !== undefined) setChildName(draft.childName);
         if (draft.childAge !== undefined) setChildAge(draft.childAge);
-        if (draft.privateQuantity !== undefined) setPrivateQuantity(draft.privateQuantity);
+        if (draft.privateQuantity !== undefined)
+          setPrivateQuantity(draft.privateQuantity);
         if (draft.groupPlan !== undefined) setGroupPlan(draft.groupPlan);
         if (draft.payDeposit !== undefined) setPayDeposit(draft.payDeposit);
       }
@@ -217,9 +242,22 @@ const RegistrationFormSection = ({
     };
     sessionStorage.setItem(STORAGE_KEY, JSON.stringify(draft));
   }, [
-    courseType, format, level, center, name, phone, email,
-    childName, childAge, message, gdpr,
-    referralCode, privateQuantity, groupPlan, payDeposit, submitted,
+    courseType,
+    format,
+    level,
+    center,
+    name,
+    phone,
+    email,
+    childName,
+    childAge,
+    message,
+    gdpr,
+    referralCode,
+    privateQuantity,
+    groupPlan,
+    payDeposit,
+    submitted,
   ]);
 
   const onCourseChange = (value: CourseType) => {
@@ -262,9 +300,17 @@ const RegistrationFormSection = ({
     recipientName: string,
   ) => {
     try {
-      const { data: ck, error: ckErr } = await supabase.functions.invoke("create-checkout", {
-        body: { courseType: "kids_deposit", email: emailAddr, name: recipientName, registrationId: regId },
-      });
+      const { data: ck, error: ckErr } = await supabase.functions.invoke(
+        "create-checkout",
+        {
+          body: {
+            courseType: "kids_deposit",
+            email: emailAddr,
+            name: recipientName,
+            registrationId: regId,
+          },
+        },
+      );
       if (ckErr) throw ckErr;
       if (!ck?.url) throw new Error("create-checkout returned no redirect URL");
       setDepositCheckoutFailed(false);
@@ -302,12 +348,19 @@ const RegistrationFormSection = ({
    * field, scroll it into view, focus it, and record which field it was so the
    * drop-off can be read from analytics instead of guessed at.
    */
-  const fail = (field: Exclude<InvalidField, null>, message: string, elementId?: string) => {
+  const fail = (
+    field: Exclude<InvalidField, null>,
+    message: string,
+    elementId?: string,
+  ) => {
     setInvalidField(field);
     if (field === "format") setFormatError(true);
     if (field === "center") setCenterError(true);
     toast.error(message);
-    trackRegistrationValidationFailed(field, (courseType || "unknown") as CourseType | "unknown");
+    trackRegistrationValidationFailed(
+      field,
+      (courseType || "unknown") as CourseType | "unknown",
+    );
     const el = elementId ? document.getElementById(elementId) : null;
     if (el) {
       el.scrollIntoView({ behavior: "smooth", block: "center" });
@@ -337,7 +390,9 @@ const RegistrationFormSection = ({
     if (!format) {
       fail(
         "format",
-        courseType === "kids" ? t.mainLeadErrorKidsFormat : t.mainLeadErrorFormat,
+        courseType === "kids"
+          ? t.mainLeadErrorKidsFormat
+          : t.mainLeadErrorFormat,
         "format",
       );
       return;
@@ -347,7 +402,13 @@ const RegistrationFormSection = ({
       return;
     }
     if (courseType === "group" && !cohortId) {
-      fail("cohort", lang === "en" ? "Choose a group before continuing." : "Alege o grupă înainte de a continua.", "cohort-selection");
+      fail(
+        "cohort",
+        lang === "en"
+          ? "Choose a group before continuing."
+          : "Alege o grupă înainte de a continua.",
+        "cohort-selection",
+      );
       return;
     }
     if (format === "fizic" && !center) {
@@ -385,31 +446,42 @@ const RegistrationFormSection = ({
       // which can't be bypassed by simply omitting a reCAPTCHA token.
       const recaptchaToken = await getRecaptchaToken("registration");
       if (recaptchaToken) {
-        const { data: verify, error: verifyErr } = await supabase.functions.invoke(
-          "verify-recaptcha",
-          { body: { token: recaptchaToken } },
-        );
+        const { data: verify, error: verifyErr } =
+          await supabase.functions.invoke("verify-recaptcha", {
+            body: { token: recaptchaToken },
+          });
         // Block only on Google's own verdict (a low score, no error codes).
         // A broken key or Google project answers success:false with error
         // codes for everyone — October 2026: "Project … has been deleted"
         // kept every registration at step 1 — so that lets people through.
         const configProblem =
-          !verify || (Array.isArray(verify.errors) && verify.errors.length > 0) || Boolean(verify.error);
+          !verify ||
+          (Array.isArray(verify.errors) && verify.errors.length > 0) ||
+          Boolean(verify.error);
         if (verifyErr || configProblem) {
-          console.warn("[registration] recaptcha unavailable, proceeding", verifyErr ?? verify);
+          console.warn(
+            "[registration] recaptcha unavailable, proceeding",
+            verifyErr ?? verify,
+          );
         } else if (verify.success === false) {
           toast.error(t.recaptchaFailed);
           setSubmitting(false);
           return;
         }
       } else {
-        console.warn("[registration] no recaptcha token — proceeding without verification");
+        console.warn(
+          "[registration] no recaptcha token — proceeding without verification",
+        );
       }
 
       const id = crypto.randomUUID();
       const formType = courseType;
       const formTypeLabel =
-        courseType === "group" ? "Grup" : courseType === "private" ? "Privat" : "Copii";
+        courseType === "group"
+          ? "Grup"
+          : courseType === "private"
+            ? "Privat"
+            : "Copii";
 
       const notesParts: string[] = [];
       if (courseType === "group" && level) notesParts.push(`Nivel: ${level}`);
@@ -438,7 +510,8 @@ const RegistrationFormSection = ({
       if (message) notesParts.push(`Message: ${message}`);
       const notes = notesParts.join(" | ") || null;
 
-      const recipientName = courseType === "kids" && childName ? childName : name;
+      const recipientName =
+        courseType === "kids" && childName ? childName : name;
       // Persisted so create-payment-intent can charge the agreed amount
       // server-side instead of trusting a client-supplied quantity.
       // Group amounts are derived server-side from level+format (+ months for
@@ -517,15 +590,22 @@ const RegistrationFormSection = ({
       console.error("Registration error", err);
       // The database refuses a full or closed group (it may have filled since
       // this page loaded); say so instead of a generic failure.
-      const message = err && typeof err === "object" && "message" in err ? String((err as { message?: unknown }).message ?? "") : "";
+      const message =
+        err && typeof err === "object" && "message" in err
+          ? String((err as { message?: unknown }).message ?? "")
+          : "";
       if (message.includes("group_full")) {
-        toast.error(lang === "en"
-          ? "This group has just filled up. Choose another group or join its waiting list."
-          : "Grupa tocmai s-a ocupat. Alege altă grupă sau intră pe lista de așteptare.");
+        toast.error(
+          lang === "en"
+            ? "This group has just filled up. Choose another group or join its waiting list."
+            : "Grupa tocmai s-a ocupat. Alege altă grupă sau intră pe lista de așteptare.",
+        );
       } else if (message.includes("selected group is unavailable")) {
-        toast.error(lang === "en"
-          ? "This group is no longer open for registration. Choose another group."
-          : "Grupa nu mai primește înscrieri. Alege altă grupă.");
+        toast.error(
+          lang === "en"
+            ? "This group is no longer open for registration. Choose another group."
+            : "Grupa nu mai primește înscrieri. Alege altă grupă.",
+        );
       } else {
         toast.error(t.mainLeadError);
       }
@@ -581,7 +661,11 @@ const RegistrationFormSection = ({
           <NativeScheduler
             eventType="paid"
             registrationId={privatePay.registrationId}
-            purchase={{ quantity: privatePay.quantity, email: privatePay.email, format: privatePay.format }}
+            purchase={{
+              quantity: privatePay.quantity,
+              email: privatePay.email,
+              format: privatePay.format,
+            }}
             onPhaseChange={setPrivatePayPhase}
           />
         </div>
@@ -674,38 +758,42 @@ const RegistrationFormSection = ({
 
           {/* Course type */}
           {(lockSelection || lockCourseType) && courseType ? null : (
-          <div className="space-y-2">
-            <Label htmlFor="courseType">{t.mainLeadCourseTypeLabel} *</Label>
-            <Select
-              value={courseType}
-              onValueChange={(v) => {
-                noteStart();
-                setInvalidField(null);
-                trackRegistrationStep("course_type", v as CourseType, v);
-                onCourseChange(v as CourseType);
-              }}
-            >
-              <SelectTrigger
-                id="courseType"
-                aria-invalid={invalidField === "course_type" || undefined}
-                className={
-                  invalidField === "course_type"
-                    ? "border-destructive focus:ring-destructive"
-                    : ""
-                }
+            <div className="space-y-2">
+              <Label htmlFor="courseType">{t.mainLeadCourseTypeLabel} *</Label>
+              <Select
+                value={courseType}
+                onValueChange={(v) => {
+                  noteStart();
+                  setInvalidField(null);
+                  trackRegistrationStep("course_type", v as CourseType, v);
+                  onCourseChange(v as CourseType);
+                }}
               >
-                <SelectValue placeholder={t.mainLeadCourseTypePlaceholder} />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="group">{t.mainLeadCourseGroup}</SelectItem>
-                <SelectItem value="private">{t.mainLeadCoursePrivate}</SelectItem>
-                <SelectItem value="kids">{t.mainLeadCourseKids}</SelectItem>
-              </SelectContent>
-            </Select>
-            {invalidField === "course_type" && (
-              <p className="text-xs text-destructive">{t.mainLeadErrorCourseType}</p>
-            )}
-          </div>
+                <SelectTrigger
+                  id="courseType"
+                  aria-invalid={invalidField === "course_type" || undefined}
+                  className={
+                    invalidField === "course_type"
+                      ? "border-destructive focus:ring-destructive"
+                      : ""
+                  }
+                >
+                  <SelectValue placeholder={t.mainLeadCourseTypePlaceholder} />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="group">{t.mainLeadCourseGroup}</SelectItem>
+                  <SelectItem value="private">
+                    {t.mainLeadCoursePrivate}
+                  </SelectItem>
+                  <SelectItem value="kids">{t.mainLeadCourseKids}</SelectItem>
+                </SelectContent>
+              </Select>
+              {invalidField === "course_type" && (
+                <p className="text-xs text-destructive">
+                  {t.mainLeadErrorCourseType}
+                </p>
+              )}
+            </div>
           )}
 
           {/* Format */}
@@ -720,30 +808,46 @@ const RegistrationFormSection = ({
                   setCohortId(null);
                   setFormatError(false);
                   setInvalidField(null);
-                  trackRegistrationStep("format", (courseType || "unknown") as CourseType | "unknown", v);
+                  trackRegistrationStep(
+                    "format",
+                    (courseType || "unknown") as CourseType | "unknown",
+                    v,
+                  );
                 }}
               >
                 <SelectTrigger
                   id="format"
                   aria-invalid={formatError || undefined}
-                  className={formatError ? "border-destructive focus:ring-destructive" : ""}
+                  className={
+                    formatError
+                      ? "border-destructive focus:ring-destructive"
+                      : ""
+                  }
                 >
                   <SelectValue placeholder={t.labelFormat} />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="fizic">{t.privateFormatPhysical}</SelectItem>
+                  <SelectItem value="fizic">
+                    {t.privateFormatPhysical}
+                  </SelectItem>
                   {kidsOnlineAllowed && (
-                    <SelectItem value="online">{t.privateFormatOnline}</SelectItem>
+                    <SelectItem value="online">
+                      {t.privateFormatOnline}
+                    </SelectItem>
                   )}
                 </SelectContent>
               </Select>
               {formatError && (
                 <p className="text-xs text-destructive">
-                  {courseType === "kids" ? t.mainLeadErrorKidsFormat : t.mainLeadErrorFormat}
+                  {courseType === "kids"
+                    ? t.mainLeadErrorKidsFormat
+                    : t.mainLeadErrorFormat}
                 </p>
               )}
               {courseType === "kids" && (
-                <p className="text-xs text-muted-foreground">{t.kidsFormatNote}</p>
+                <p className="text-xs text-muted-foreground">
+                  {t.kidsFormatNote}
+                </p>
               )}
             </div>
           )}
@@ -796,7 +900,11 @@ const RegistrationFormSection = ({
                 <SelectTrigger
                   id="center"
                   aria-invalid={centerError || undefined}
-                  className={centerError ? "border-destructive focus:ring-destructive" : ""}
+                  className={
+                    centerError
+                      ? "border-destructive focus:ring-destructive"
+                      : ""
+                  }
                 >
                   <SelectValue placeholder={t.mainLeadLocationPlaceholder} />
                 </SelectTrigger>
@@ -807,17 +915,25 @@ const RegistrationFormSection = ({
                 </SelectContent>
               </Select>
               {centerError && (
-                <p className="text-xs text-destructive">{t.mainLeadErrorLocation}</p>
+                <p className="text-xs text-destructive">
+                  {t.mainLeadErrorLocation}
+                </p>
               )}
-              <p className="text-xs text-muted-foreground">{t.mainLeadLocationHelp}</p>
+              <p className="text-xs text-muted-foreground">
+                {t.mainLeadLocationHelp}
+              </p>
             </div>
           )}
 
           {/* Online info */}
           {format === "online" && (
             <div className="rounded-xl border border-brand-green/25 bg-brand-green/5 px-4 py-3">
-              <p className="text-sm font-semibold text-foreground">{t.mainLeadOnlineInfoTitle}</p>
-              <p className="text-xs text-muted-foreground mt-1">{t.mainLeadOnlineInfoDesc}</p>
+              <p className="text-sm font-semibold text-foreground">
+                {t.mainLeadOnlineInfoTitle}
+              </p>
+              <p className="text-xs text-muted-foreground mt-1">
+                {t.mainLeadOnlineInfoDesc}
+              </p>
             </div>
           )}
 
@@ -825,7 +941,9 @@ const RegistrationFormSection = ({
               cohort in the cohort picker — a level-wide total mixed the
               running groups with the ones still open and read "full" while
               the new groups had every seat free. */}
-          {capacity && courseType === "kids" && <CapacityBanner capacity={capacity} />}
+          {capacity && courseType === "kids" && (
+            <CapacityBanner capacity={capacity} />
+          )}
 
           {/* Kids: child fields + (conditional) waitlist deposit */}
           {courseType === "kids" && (
@@ -852,7 +970,10 @@ const RegistrationFormSection = ({
             </>
           )}
 
-          <StepHeading n={2} title={lang === "en" ? "Your details" : "Datele tale"} />
+          <StepHeading
+            n={2}
+            title={lang === "en" ? "Your details" : "Datele tale"}
+          />
 
           {/* Contact + message */}
           <LeadFields
@@ -895,7 +1016,10 @@ const RegistrationFormSection = ({
               request instead of being a field everyone has to read past. */}
           {showReferral || referralCode ? (
             <div className="space-y-1.5">
-              <Label htmlFor="referralCode" className="text-sm text-muted-foreground font-normal">
+              <Label
+                htmlFor="referralCode"
+                className="text-sm text-muted-foreground font-normal"
+              >
                 {t.referralCodeLabel}
               </Label>
               <Input
@@ -918,16 +1042,28 @@ const RegistrationFormSection = ({
             </button>
           )}
 
-          <Button type="submit" className="w-full h-12 rounded-xl text-base font-semibold" disabled={submitting}>
+          <Button
+            type="submit"
+            className="w-full h-12 rounded-xl text-base font-semibold"
+            disabled={submitting}
+          >
             {submitting ? (
               <>
                 <Loader2 className="w-4 h-4 mr-2 animate-spin" />
                 {t.groupSubmitting}
               </>
             ) : courseType === "private" ? (
-              lang === "en" ? "Continue: choose the day and time →" : "Continuă: alege ziua și ora →"
+              lang === "en" ? (
+                "Continue: choose the day and time →"
+              ) : (
+                "Continuă: alege ziua și ora →"
+              )
             ) : courseType === "group" ? (
-              lang === "en" ? "Send and continue to payment →" : "Trimite și continuă la plată →"
+              lang === "en" ? (
+                "Send and continue to payment →"
+              ) : (
+                "Trimite și continuă la plată →"
+              )
             ) : (
               t.mainLeadSubmit
             )}
@@ -952,14 +1088,15 @@ const RegistrationFormSection = ({
   );
 };
 
-
 /** A numbered part of the sign-up form, in the homepage's label style. */
 const StepHeading = ({ n, title }: { n: number; title: string }) => (
   <div className="flex items-center gap-3 border-t border-[#E7E1D6] pt-5 first-of-type:border-t-0 first-of-type:pt-0 dark:border-border">
     <span className="inline-flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-brand-green text-xs font-bold text-white">
       {n}
     </span>
-    <span className="text-sm font-bold uppercase tracking-[0.1em] text-foreground">{title}</span>
+    <span className="text-sm font-bold uppercase tracking-[0.1em] text-foreground">
+      {title}
+    </span>
   </div>
 );
 

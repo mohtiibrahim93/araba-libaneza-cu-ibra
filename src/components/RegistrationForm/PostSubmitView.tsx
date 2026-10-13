@@ -1,6 +1,19 @@
 import { useState } from "react";
 import { useI18n } from "@/lib/i18n";
-import { CheckCircle2, MessageCircle, Phone, CreditCard, RotateCcw, Loader2, AlertTriangle, Gift, ArrowLeft, ArrowRight, Mail, CalendarCheck } from "lucide-react";
+import {
+  CheckCircle2,
+  MessageCircle,
+  Phone,
+  CreditCard,
+  RotateCcw,
+  Loader2,
+  AlertTriangle,
+  Gift,
+  ArrowLeft,
+  ArrowRight,
+  Mail,
+  CalendarCheck,
+} from "lucide-react";
 import PaymentInstructions from "@/components/PaymentInstructions";
 import NativeScheduler from "@/components/NativeScheduler";
 import type { SubmittedData } from "./types";
@@ -39,14 +52,17 @@ const PostSubmitView = ({
   const { t, lang } = useI18n();
   // Private only: explicit choice between the free first-lesson trial and
   // paying directly. Starts unchosen so both options are equally visible.
-  const [privateChoice, setPrivateChoice] = useState<"trial" | "pay" | null>(null);
+  const [privateChoice, setPrivateChoice] = useState<"trial" | "pay" | null>(
+    null,
+  );
 
   const isPrivate = data.courseType === "private";
   const isGroup = data.courseType === "group";
   // Kids "pay to enroll" path: full group (not the deposit-only fallback).
   // We show payment when they were NOT redirected to the deposit checkout.
   const isKidsPay = data.courseType === "kids" && data.waitlistDeposit !== true;
-  const isKidsDeposit = data.courseType === "kids" && data.waitlistDeposit === true;
+  const isKidsDeposit =
+    data.courseType === "kids" && data.waitlistDeposit === true;
 
   const showPrivateChoice = isPrivate && privateChoice === null;
   const showPrivateTrial = isPrivate && privateChoice === "trial";
@@ -66,13 +82,19 @@ const PostSubmitView = ({
               <CheckCircle2 className="w-6 h-6 text-primary" />
             </div>
             <div className="flex-1 min-w-0">
-              <h2 className="text-2xl font-bold text-foreground">{t.mainLeadSuccessTitle}</h2>
-              <p className="text-muted-foreground mt-1">{t.mainLeadSuccessDesc}</p>
+              <h2 className="text-2xl font-bold text-foreground">
+                {t.mainLeadSuccessTitle}
+              </h2>
+              <p className="text-muted-foreground mt-1">
+                {t.mainLeadSuccessDesc}
+              </p>
             </div>
           </div>
 
           <div className="mt-6 pt-6 border-t border-border">
-            <h3 className="text-sm font-semibold text-foreground mb-3">{t.successNextStepsTitle}</h3>
+            <h3 className="text-sm font-semibold text-foreground mb-3">
+              {t.successNextStepsTitle}
+            </h3>
             <ol className="space-y-3">
               <li className="flex items-start gap-3 text-sm text-foreground">
                 <span className="flex-shrink-0 w-6 h-6 rounded-full bg-muted text-xs font-semibold flex items-center justify-center text-foreground">
@@ -168,7 +190,9 @@ const PostSubmitView = ({
               <div className="flex-shrink-0 w-10 h-10 rounded-full bg-destructive/10 flex items-center justify-center">
                 <AlertTriangle className="w-5 h-5 text-destructive" />
               </div>
-              <p className="text-sm text-foreground">{t.kidsDepositFailedDesc}</p>
+              <p className="text-sm text-foreground">
+                {t.kidsDepositFailedDesc}
+              </p>
             </div>
             <button
               type="button"
@@ -198,7 +222,9 @@ const PostSubmitView = ({
                 <Gift className="w-5 h-5 text-primary" />
               </div>
               <h3 className="font-bold text-foreground group-hover:text-primary transition-colors">
-                {lang === "ro" ? "E prima ta lecție la noi?" : "Is this your first lesson with us?"}
+                {lang === "ro"
+                  ? "E prima ta lecție la noi?"
+                  : "Is this your first lesson with us?"}
               </h3>
               <p className="text-sm text-muted-foreground mt-1">
                 {lang === "ro"
@@ -206,7 +232,9 @@ const PostSubmitView = ({
                   : "Book a free trial — once per person, confirm your spot with your card (0 lei charged)."}
               </p>
               <span className="mt-4 inline-flex items-center gap-2 rounded-lg bg-primary text-primary-foreground px-4 py-2 text-sm font-semibold group-hover:bg-primary/90 transition-colors">
-                {lang === "ro" ? "Programează proba gratuită" : "Book the free trial"}
+                {lang === "ro"
+                  ? "Programează proba gratuită"
+                  : "Book the free trial"}
                 <ArrowRight className="w-4 h-4" />
               </span>
             </button>
@@ -219,7 +247,9 @@ const PostSubmitView = ({
                 <CreditCard className="w-5 h-5 text-primary" />
               </div>
               <h3 className="font-bold text-foreground group-hover:text-primary transition-colors">
-                {lang === "ro" ? "Ai mai învățat cu noi?" : "Have you studied with us before?"}
+                {lang === "ro"
+                  ? "Ai mai învățat cu noi?"
+                  : "Have you studied with us before?"}
               </h3>
               <p className="text-sm text-muted-foreground mt-1">
                 {lang === "ro"
@@ -250,8 +280,12 @@ const PostSubmitView = ({
                 <CheckCircle2 className="w-5 h-5 text-primary" />
               </div>
               <div>
-                <h3 className="text-lg font-bold text-foreground">{t.bookingIntroTitle}</h3>
-                <p className="text-sm text-muted-foreground mt-1">{t.bookingIntroDesc}</p>
+                <h3 className="text-lg font-bold text-foreground">
+                  {t.bookingIntroTitle}
+                </h3>
+                <p className="text-sm text-muted-foreground mt-1">
+                  {t.bookingIntroDesc}
+                </p>
               </div>
             </div>
             <NativeScheduler

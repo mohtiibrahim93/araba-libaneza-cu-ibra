@@ -62,7 +62,9 @@ const InstructorSection = () => {
           <div className="grid grid-cols-2 gap-x-8 gap-y-5 sm:flex sm:flex-wrap sm:gap-x-10">
             {stats.map(({ val, label }) => (
               <div key={label}>
-                <p className="font-display text-2xl font-bold text-foreground sm:text-3xl">{val}</p>
+                <p className="font-display text-2xl font-bold text-foreground sm:text-3xl">
+                  {val}
+                </p>
                 <p className="text-sm text-muted-foreground">{label}</p>
               </div>
             ))}

@@ -30,7 +30,9 @@ export function usePageContent(path: string) {
       if (error || !data) return null;
       return {
         ...data,
-        faq: Array.isArray(data.faq) ? (data.faq as { q: string; a: string }[]) : [],
+        faq: Array.isArray(data.faq)
+          ? (data.faq as { q: string; a: string }[])
+          : [],
       };
     },
     staleTime: 5 * 60 * 1000,

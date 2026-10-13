@@ -8,10 +8,11 @@ import { PhoneInput } from "@/components/ui/phone-input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import GdprCheckbox from "@/components/GdprCheckbox";
-import { isValidEmail, isValidPhone } from "@/components/RegistrationForm/LeadFields";
 import {
-  trackGenerateLead,
-} from "@/lib/tracking";
+  isValidEmail,
+  isValidPhone,
+} from "@/components/RegistrationForm/LeadFields";
+import { trackGenerateLead } from "@/lib/tracking";
 
 interface NotifyMeFormProps {
   /** What the person is asking to be notified about — stored so the admin
@@ -45,12 +46,23 @@ interface NotifyMeFormProps {
  * scheduled yet. Writes to public.course_requests (anon INSERT policy,
  * status='new'), so requests land in the admin instead of a WhatsApp thread.
  */
-const NotifyMeForm = ({ context, level, label, className, cohortId, presetFormat, title, nested }: NotifyMeFormProps) => {
+const NotifyMeForm = ({
+  context,
+  level,
+  label,
+  className,
+  cohortId,
+  presetFormat,
+  title,
+  nested,
+}: NotifyMeFormProps) => {
   const { t, lang } = useI18n();
   const [name, setName] = useState("");
   const [phone, setPhone] = useState("");
   const [email, setEmail] = useState("");
-  const [format, setFormat] = useState<"online" | "fizic" | "">(presetFormat ?? "");
+  const [format, setFormat] = useState<"online" | "fizic" | "">(
+    presetFormat ?? "",
+  );
   const [gdpr, setGdpr] = useState(false);
   const [submitting, setSubmitting] = useState(false);
   const [sent, setSent] = useState(false);
@@ -102,7 +114,9 @@ const NotifyMeForm = ({ context, level, label, className, cohortId, presetFormat
 
   if (sent) {
     return (
-      <div className={`rounded-2xl border border-border bg-card p-6 text-center space-y-3 ${className ?? ""}`}>
+      <div
+        className={`rounded-2xl border border-border bg-card p-6 text-center space-y-3 ${className ?? ""}`}
+      >
         <CheckCircle2 className="w-10 h-10 text-primary mx-auto" />
         <h3 className="font-display text-lg font-bold text-foreground">
           {lang === "en" ? "You're on the list!" : "Ești pe listă!"}
@@ -132,7 +146,10 @@ const NotifyMeForm = ({ context, level, label, className, cohortId, presetFormat
         </div>
         <div>
           <h3 className="font-display text-lg font-bold text-foreground">
-            {title ?? (lang === "en" ? "Notify me when it starts" : "Anunță-mă când pornește")}
+            {title ??
+              (lang === "en"
+                ? "Notify me when it starts"
+                : "Anunță-mă când pornește")}
           </h3>
           <p className="text-sm text-muted-foreground">{label ?? context}</p>
         </div>
@@ -141,29 +158,58 @@ const NotifyMeForm = ({ context, level, label, className, cohortId, presetFormat
       <div className="grid sm:grid-cols-2 gap-3">
         <div className="space-y-1.5">
           <Label htmlFor="nm-name">{t.labelName} *</Label>
-          <Input id="nm-name" value={name} onChange={(e) => setName(e.target.value)} required maxLength={100} />
+          <Input
+            id="nm-name"
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+            required
+            maxLength={100}
+          />
         </div>
         <div className="space-y-1.5">
           <Label htmlFor="nm-phone">{t.labelPhone} *</Label>
-          <PhoneInput id="nm-phone" value={phone} onChange={setPhone} required maxLength={30} autoComplete="tel" />
+          <PhoneInput
+            id="nm-phone"
+            value={phone}
+            onChange={setPhone}
+            required
+            maxLength={30}
+            autoComplete="tel"
+          />
         </div>
         <div className="space-y-1.5">
           <Label htmlFor="nm-email">{t.labelEmail}</Label>
-          <Input id="nm-email" type="email" value={email} onChange={(e) => setEmail(e.target.value)} maxLength={255} />
+          <Input
+            id="nm-email"
+            type="email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            maxLength={255}
+          />
         </div>
-        {!presetFormat && <div className="space-y-1.5">
-          <Label htmlFor="nm-format">{lang === "en" ? "Preferred format" : "Format preferat"}</Label>
-          <select
-            id="nm-format"
-            value={format}
-            onChange={(e) => setFormat(e.target.value as "online" | "fizic" | "")}
-            className="w-full h-10 px-3 rounded-md border border-input bg-background text-sm"
-          >
-            <option value="">{lang === "en" ? "No preference" : "Fără preferință"}</option>
-            <option value="online">Online</option>
-            <option value="fizic">{lang === "en" ? "In person (Bucharest)" : "Fizic (București)"}</option>
-          </select>
-        </div>}
+        {!presetFormat && (
+          <div className="space-y-1.5">
+            <Label htmlFor="nm-format">
+              {lang === "en" ? "Preferred format" : "Format preferat"}
+            </Label>
+            <select
+              id="nm-format"
+              value={format}
+              onChange={(e) =>
+                setFormat(e.target.value as "online" | "fizic" | "")
+              }
+              className="w-full h-10 px-3 rounded-md border border-input bg-background text-sm"
+            >
+              <option value="">
+                {lang === "en" ? "No preference" : "Fără preferință"}
+              </option>
+              <option value="online">Online</option>
+              <option value="fizic">
+                {lang === "en" ? "In person (Bucharest)" : "Fizic (București)"}
+              </option>
+            </select>
+          </div>
+        )}
       </div>
 
       <GdprCheckbox checked={gdpr} onCheckedChange={setGdpr} />
@@ -174,7 +220,11 @@ const NotifyMeForm = ({ context, level, label, className, cohortId, presetFormat
         className="w-full"
         disabled={submitting}
       >
-        {submitting ? <Loader2 className="w-4 h-4 mr-2 animate-spin" /> : <BellRing className="w-4 h-4 mr-2" />}
+        {submitting ? (
+          <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+        ) : (
+          <BellRing className="w-4 h-4 mr-2" />
+        )}
         {lang === "en" ? "Add me to the list" : "Adaugă-mă pe listă"}
       </Button>
     </Root>

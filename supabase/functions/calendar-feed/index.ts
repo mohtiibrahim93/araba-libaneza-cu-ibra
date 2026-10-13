@@ -58,7 +58,8 @@ function fold(line: string): string {
 function tokenMatches(given: string, expected: string): boolean {
   if (given.length !== expected.length) return false;
   let diff = 0;
-  for (let i = 0; i < given.length; i++) diff |= given.charCodeAt(i) ^ expected.charCodeAt(i);
+  for (let i = 0; i < given.length; i++)
+    diff |= given.charCodeAt(i) ^ expected.charCodeAt(i);
   return diff === 0;
 }
 
@@ -124,7 +125,9 @@ Deno.serve(async (req) => {
   const { data: types } = await supabase
     .from("booking_event_types")
     .select("slug, name_ro");
-  const typeName = new Map((types ?? []).map((t) => [t.slug, t.name_ro as string]));
+  const typeName = new Map(
+    (types ?? []).map((t) => [t.slug, t.name_ro as string]),
+  );
 
   const stamp = toIcsUtc(new Date());
   const lines: string[] = [
@@ -162,7 +165,9 @@ Deno.serve(async (req) => {
       `DTEND:${toIcsUtc(new Date(b.end_at))}`,
       fold(`SUMMARY:${esc(`${label} — ${b.student_name}`)}`),
       fold(`DESCRIPTION:${esc(description)}`),
-      fold(`LOCATION:${esc(b.format === "online" ? (b.meet_link ?? "Online") : "Raduga Creative Center, Strada Icoanei 80, București")}`),
+      fold(
+        `LOCATION:${esc(b.format === "online" ? (b.meet_link ?? "Online") : "Raduga Creative Center, Strada Icoanei 80, București")}`,
+      ),
       "STATUS:CONFIRMED",
       "END:VEVENT",
     );

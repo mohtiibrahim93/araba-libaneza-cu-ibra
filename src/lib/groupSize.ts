@@ -21,7 +21,8 @@ export const MAX_GROUP_SIZE = {
 } as const;
 
 /** A group starts once half its places are taken (rounded up). */
-export const minGroupSize = (maxSeats: number): number => Math.ceil(maxSeats / 2);
+export const minGroupSize = (maxSeats: number): number =>
+  Math.ceil(maxSeats / 2);
 
 /** Kids groups are in person, so they take the in-person cap (8, from 4). */
 export const MAX_KIDS_GROUP_SIZE = MAX_GROUP_SIZE.fizic;

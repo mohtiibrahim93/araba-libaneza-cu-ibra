@@ -23,7 +23,8 @@ const content = {
     successTitle: "Cererea a fost trimisă",
     successBody:
       "Am primit cererea ta de ștergere. O procesăm în cel mult 30 de zile și îți confirmăm pe email. Dacă e urgent, scrie-ne la marhaba@centruldearabalibaneza.com.",
-    errorGeneric: "Trimiterea a eșuat. Încearcă din nou sau scrie-ne la marhaba@centruldearabalibaneza.com.",
+    errorGeneric:
+      "Trimiterea a eșuat. Încearcă din nou sau scrie-ne la marhaba@centruldearabalibaneza.com.",
     errorEmail: "Introdu un email valid.",
   },
   en: {
@@ -39,7 +40,8 @@ const content = {
     successTitle: "Request sent",
     successBody:
       "We received your deletion request. We will process it within 30 days and confirm by email. If it's urgent, write to marhaba@centruldearabalibaneza.com.",
-    errorGeneric: "Sending failed. Try again or write to marhaba@centruldearabalibaneza.com.",
+    errorGeneric:
+      "Sending failed. Try again or write to marhaba@centruldearabalibaneza.com.",
     errorEmail: "Enter a valid email.",
   },
 } as const;
@@ -68,14 +70,25 @@ const DataDeletion = () => {
     }
     setSubmitting(true);
     try {
-      const { data, error: fnError } = await supabase.functions.invoke("gdpr-request", {
-        body: { email: email.trim(), name: name.trim() || undefined, message: message.trim() || undefined },
-      });
+      const { data, error: fnError } = await supabase.functions.invoke(
+        "gdpr-request",
+        {
+          body: {
+            email: email.trim(),
+            name: name.trim() || undefined,
+            message: message.trim() || undefined,
+          },
+        },
+      );
       if (fnError) throw fnError;
       if (data?.error) throw new Error(data.error);
       setSent(true);
     } catch (err) {
-      setError(err instanceof Error && err.message !== "" ? page.errorGeneric : page.errorGeneric);
+      setError(
+        err instanceof Error && err.message !== ""
+          ? page.errorGeneric
+          : page.errorGeneric,
+      );
       console.error("gdpr-request failed", err);
     } finally {
       setSubmitting(false);
@@ -85,21 +98,31 @@ const DataDeletion = () => {
   return (
     <div className="min-h-screen bg-background">
       <Navbar />
-      <main id="main-content" className="max-w-xl mx-auto px-gutter pt-36 pb-16">
+      <main
+        id="main-content"
+        className="max-w-xl mx-auto px-gutter pt-36 pb-16"
+      >
         <div className="flex items-center gap-3 mb-4">
           <Trash2 className="w-6 h-6 text-primary" />
-          <h1 className="font-display text-3xl font-bold text-foreground">{page.title}</h1>
+          <h1 className="font-display text-3xl font-bold text-foreground">
+            {page.title}
+          </h1>
         </div>
         <p className="text-sm text-muted-foreground mb-8">{page.intro}</p>
 
         {sent ? (
           <div className="rounded-2xl border border-border bg-card p-8 text-center space-y-3">
             <CheckCircle2 className="w-10 h-10 text-primary mx-auto" />
-            <h2 className="text-lg font-semibold text-foreground">{page.successTitle}</h2>
+            <h2 className="text-lg font-semibold text-foreground">
+              {page.successTitle}
+            </h2>
             <p className="text-sm text-muted-foreground">{page.successBody}</p>
           </div>
         ) : (
-          <form onSubmit={submit} className="space-y-5 rounded-2xl border border-border bg-card p-6 sm:p-8">
+          <form
+            onSubmit={submit}
+            className="space-y-5 rounded-2xl border border-border bg-card p-6 sm:p-8"
+          >
             <div className="space-y-2">
               <Label htmlFor="gdpr-email">{page.emailLabel} *</Label>
               <Input
@@ -113,7 +136,12 @@ const DataDeletion = () => {
             </div>
             <div className="space-y-2">
               <Label htmlFor="gdpr-name">{page.nameLabel}</Label>
-              <Input id="gdpr-name" value={name} onChange={(e) => setName(e.target.value)} maxLength={200} />
+              <Input
+                id="gdpr-name"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+                maxLength={200}
+              />
             </div>
             <div className="space-y-2">
               <Label htmlFor="gdpr-message">{page.messageLabel}</Label>

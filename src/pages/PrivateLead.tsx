@@ -5,7 +5,13 @@ import { invokeAdmin } from "@/lib/adminAuth";
 import { lovable } from "@/integrations/lovable";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { ArrowLeft, Loader2, Mail, Phone } from "lucide-react";
 import { toast } from "@/hooks/use-toast";
 import {
@@ -46,7 +52,8 @@ const extractMessage = (notes: string | null) => {
   return index >= 0 ? notes.slice(index + marker.length).trim() || "—" : notes;
 };
 
-const UUID_RE = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+const UUID_RE =
+  /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 
 const PrivateLead = () => {
   const { id } = useParams();
@@ -67,7 +74,10 @@ const PrivateLead = () => {
     setError("");
 
     try {
-      const { data, error: fnError } = await invokeAdmin({ action: "get_private_lead", id });
+      const { data, error: fnError } = await invokeAdmin({
+        action: "get_private_lead",
+        id,
+      });
 
       if (fnError) throw fnError;
       if (data?.error) {
@@ -142,7 +152,10 @@ const PrivateLead = () => {
       await loadLead();
     } catch {
       setLead(previous);
-      toast({ title: "Statusul nu a putut fi actualizat", variant: "destructive" });
+      toast({
+        title: "Statusul nu a putut fi actualizat",
+        variant: "destructive",
+      });
     }
   };
 
@@ -153,10 +166,13 @@ const PrivateLead = () => {
           <div className="w-full max-w-sm space-y-4 rounded-xl border border-border bg-card p-8 text-center shadow-lg">
             <h2 className="text-xl font-bold text-foreground">Link invalid</h2>
             <p className="text-sm text-muted-foreground">
-              Acest URL nu conține un ID de lead valid. Deschide un lead din lista de admin.
+              Acest URL nu conține un ID de lead valid. Deschide un lead din
+              lista de admin.
             </p>
             <Button asChild className="w-full">
-              <Link to="/admin"><ArrowLeft className="h-4 w-4" /> Înapoi la admin</Link>
+              <Link to="/admin">
+                <ArrowLeft className="h-4 w-4" /> Înapoi la admin
+              </Link>
             </Button>
           </div>
         </div>
@@ -174,11 +190,21 @@ const PrivateLead = () => {
         <div className="min-h-screen bg-background flex items-center justify-center p-4">
           <div className="w-full max-w-sm space-y-6 rounded-xl border border-border bg-card p-8 shadow-lg">
             <div className="space-y-2 text-center">
-              <h2 className="text-xl font-bold text-foreground">Lead lecții private</h2>
-              <p className="text-sm text-muted-foreground">Autentifică-te cu contul Google de admin.</p>
+              <h2 className="text-xl font-bold text-foreground">
+                Lead lecții private
+              </h2>
+              <p className="text-sm text-muted-foreground">
+                Autentifică-te cu contul Google de admin.
+              </p>
             </div>
-            {error && <p className="text-center text-sm text-destructive">{error}</p>}
-            <Button onClick={handleGoogleSignIn} className="w-full" disabled={loading}>
+            {error && (
+              <p className="text-center text-sm text-destructive">{error}</p>
+            )}
+            <Button
+              onClick={handleGoogleSignIn}
+              className="w-full"
+              disabled={loading}
+            >
               {loading && <Loader2 className="h-4 w-4 animate-spin" />}
               Continuă cu Google
             </Button>
@@ -197,12 +223,16 @@ const PrivateLead = () => {
     <div className="min-h-screen bg-background">
       <main className="mx-auto w-full max-w-content px-gutter py-8 sm:px-gutter">
         <Button asChild variant="ghost" size="sm" className="mb-6">
-          <Link to="/admin"><ArrowLeft className="h-4 w-4" /> Înapoi la admin</Link>
+          <Link to="/admin">
+            <ArrowLeft className="h-4 w-4" /> Înapoi la admin
+          </Link>
         </Button>
 
         <div className="mb-6 flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
           <div>
-            <p className="text-sm font-medium text-primary">Lead lecții private</p>
+            <p className="text-sm font-medium text-primary">
+              Lead lecții private
+            </p>
             <h1 className="text-3xl font-bold text-foreground">{lead.name}</h1>
             <p className="text-sm text-muted-foreground">
               Creat pe {new Date(lead.created_at).toLocaleString("ro-RO")}
@@ -210,7 +240,10 @@ const PrivateLead = () => {
           </div>
           <div className="w-full sm:w-48">
             <Label>Status lead</Label>
-            <Select value={lead.lead_status || "new"} onValueChange={(value) => handleStatusChange(value as LeadStatus)}>
+            <Select
+              value={lead.lead_status || "new"}
+              onValueChange={(value) => handleStatusChange(value as LeadStatus)}
+            >
               <SelectTrigger className="mt-1">
                 <SelectValue />
               </SelectTrigger>
@@ -227,29 +260,45 @@ const PrivateLead = () => {
 
         <div className="grid gap-6 lg:grid-cols-[1fr_360px]">
           <section className="rounded-lg border border-border bg-card p-6">
-            <h2 className="mb-4 text-lg font-semibold text-foreground">Detalii contact</h2>
+            <h2 className="mb-4 text-lg font-semibold text-foreground">
+              Detalii contact
+            </h2>
             <div className="grid gap-4 sm:grid-cols-2">
-              <a href={`tel:${lead.phone}`} className="rounded-lg border border-border p-4 transition-colors hover:bg-muted">
+              <a
+                href={`tel:${lead.phone}`}
+                className="rounded-lg border border-border p-4 transition-colors hover:bg-muted"
+              >
                 <Phone className="mb-2 h-4 w-4 text-primary" />
                 <p className="text-xs text-muted-foreground">Telefon</p>
                 <p className="font-medium text-foreground">{lead.phone}</p>
               </a>
-              <a href={lead.email ? `mailto:${lead.email}` : undefined} className="rounded-lg border border-border p-4 transition-colors hover:bg-muted">
+              <a
+                href={lead.email ? `mailto:${lead.email}` : undefined}
+                className="rounded-lg border border-border p-4 transition-colors hover:bg-muted"
+              >
                 <Mail className="mb-2 h-4 w-4 text-primary" />
                 <p className="text-xs text-muted-foreground">Email</p>
-                <p className="font-medium text-foreground">{lead.email || "—"}</p>
+                <p className="font-medium text-foreground">
+                  {lead.email || "—"}
+                </p>
               </a>
               <div className="rounded-lg border border-border p-4">
                 <p className="text-xs text-muted-foreground">Format</p>
-                <p className="font-medium text-foreground">{lead.format ? formatLabels[lead.format] || lead.format : "—"}</p>
+                <p className="font-medium text-foreground">
+                  {lead.format ? formatLabels[lead.format] || lead.format : "—"}
+                </p>
               </div>
               <div className="rounded-lg border border-border p-4">
                 <p className="text-xs text-muted-foreground">Centru</p>
-                <p className="font-medium text-foreground">{lead.center || "—"}</p>
+                <p className="font-medium text-foreground">
+                  {lead.center || "—"}
+                </p>
               </div>
             </div>
             <div className="mt-6">
-              <h2 className="mb-2 text-lg font-semibold text-foreground">Mesaj</h2>
+              <h2 className="mb-2 text-lg font-semibold text-foreground">
+                Mesaj
+              </h2>
               <p className="whitespace-pre-wrap rounded-lg border border-border bg-background p-4 text-sm text-foreground">
                 {extractMessage(lead.notes)}
               </p>
@@ -257,18 +306,26 @@ const PrivateLead = () => {
           </section>
 
           <aside className="rounded-lg border border-border bg-card p-6">
-            <h2 className="mb-4 text-lg font-semibold text-foreground">Istoric statusuri</h2>
+            <h2 className="mb-4 text-lg font-semibold text-foreground">
+              Istoric statusuri
+            </h2>
             {history.length === 0 ? (
-              <p className="text-sm text-muted-foreground">Nu există schimbări de status încă.</p>
+              <p className="text-sm text-muted-foreground">
+                Nu există schimbări de status încă.
+              </p>
             ) : (
               <div className="space-y-4">
                 {history.map((item) => (
                   <div key={item.id} className="border-l-2 border-primary pl-4">
                     <p className="text-sm font-medium text-foreground">
-                      {item.previous_status ? leadStatusLabels[item.previous_status] : "—"} → {leadStatusLabels[item.new_status]}
+                      {item.previous_status
+                        ? leadStatusLabels[item.previous_status]
+                        : "—"}{" "}
+                      → {leadStatusLabels[item.new_status]}
                     </p>
                     <p className="text-xs text-muted-foreground">
-                      {new Date(item.created_at).toLocaleString("ro-RO")} · {item.changed_by}
+                      {new Date(item.created_at).toLocaleString("ro-RO")} ·{" "}
+                      {item.changed_by}
                     </p>
                   </div>
                 ))}

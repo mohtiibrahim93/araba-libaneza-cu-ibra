@@ -6,14 +6,24 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Switch } from "@/components/ui/switch";
 import { toast } from "@/hooks/use-toast";
-import { Loader2, Trash2, Pencil, Plus, ExternalLink, Upload, Copy } from "lucide-react";
+import {
+  Loader2,
+  Trash2,
+  Pencil,
+  Plus,
+  ExternalLink,
+  Upload,
+  Copy,
+} from "lucide-react";
 
 const SITE_ORIGIN = "https://centruldearabalibaneza.com";
 
 /** Resource files may be stored as /file.pdf — make them absolute so the link
  *  works when opened from the admin preview iframe. */
 const absoluteFileUrl = (url: string) =>
-  /^https?:\/\//i.test(url) ? url : `${SITE_ORIGIN}${url.startsWith("/") ? "" : "/"}${url}`;
+  /^https?:\/\//i.test(url)
+    ? url
+    : `${SITE_ORIGIN}${url.startsWith("/") ? "" : "/"}${url}`;
 
 interface ResourceRow {
   slug: string;
@@ -100,7 +110,8 @@ const ResourcesAdmin = () => {
   };
 
   const remove = async (slug: string) => {
-    if (!confirm(`Ștergi resursa „${slug}”? Formularul ei dispare de pe site.`)) return;
+    if (!confirm(`Ștergi resursa „${slug}”? Formularul ei dispare de pe site.`))
+      return;
     try {
       await call({ action: "delete_resource", slug });
       toast({ title: "Resursă ștearsă" });
@@ -154,13 +165,17 @@ const ResourcesAdmin = () => {
           rows={3}
           value={String(draft?.[key] ?? "")}
           placeholder={placeholder}
-          onChange={(e) => setDraft((d) => (d ? { ...d, [key]: e.target.value } : d))}
+          onChange={(e) =>
+            setDraft((d) => (d ? { ...d, [key]: e.target.value } : d))
+          }
         />
       ) : (
         <Input
           value={String(draft?.[key] ?? "")}
           placeholder={placeholder}
-          onChange={(e) => setDraft((d) => (d ? { ...d, [key]: e.target.value } : d))}
+          onChange={(e) =>
+            setDraft((d) => (d ? { ...d, [key]: e.target.value } : d))
+          }
         />
       )}
     </div>
@@ -180,7 +195,8 @@ const ResourcesAdmin = () => {
         <div>
           <h2 className="font-display text-xl font-bold">Resurse gratuite</h2>
           <p className="text-sm text-muted-foreground">
-            Titlul, descrierea și PDF-ul folosite de formularele de descărcare de pe site.
+            Titlul, descrierea și PDF-ul folosite de formularele de descărcare
+            de pe site.
           </p>
         </div>
         <Button onClick={() => setDraft(emptyDraft())} className="gap-1.5">
@@ -190,14 +206,19 @@ const ResourcesAdmin = () => {
 
       <div className="rounded-xl border border-border divide-y">
         {rows.length === 0 && (
-          <p className="p-4 text-sm text-muted-foreground">Nicio resursă încă.</p>
+          <p className="p-4 text-sm text-muted-foreground">
+            Nicio resursă încă.
+          </p>
         )}
         {rows.map((r) => (
           <div key={r.slug} className="p-4 flex flex-wrap items-center gap-3">
             <div className="flex-1 min-w-[220px]">
-              <p className="font-semibold text-foreground">{r.title_ro || r.slug}</p>
+              <p className="font-semibold text-foreground">
+                {r.title_ro || r.slug}
+              </p>
               <p className="text-xs text-muted-foreground">
-                {r.slug} · {r.is_active ? "activă" : "ascunsă"} · ordine {r.sort_order}
+                {r.slug} · {r.is_active ? "activă" : "ascunsă"} · ordine{" "}
+                {r.sort_order}
               </p>
             </div>
             {r.file_url && (
@@ -221,7 +242,9 @@ const ResourcesAdmin = () => {
                   variant="ghost"
                   size="sm"
                   onClick={async () => {
-                    await navigator.clipboard.writeText(absoluteFileUrl(r.file_url));
+                    await navigator.clipboard.writeText(
+                      absoluteFileUrl(r.file_url),
+                    );
                     toast({ title: "Link copiat" });
                   }}
                 >
@@ -229,7 +252,12 @@ const ResourcesAdmin = () => {
                 </Button>
               </div>
             )}
-            <Button variant="outline" size="sm" onClick={() => setDraft(r)} className="gap-1.5">
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => setDraft(r)}
+              className="gap-1.5"
+            >
               <Pencil className="w-3.5 h-3.5" /> Editează
             </Button>
             <Button variant="ghost" size="sm" onClick={() => remove(r.slug)}>
@@ -242,12 +270,24 @@ const ResourcesAdmin = () => {
       {draft && (
         <div className="rounded-xl border border-border p-5 space-y-4">
           <h3 className="font-semibold">
-            {rows.some((r) => r.slug === draft.slug) ? "Editează resursa" : "Resursă nouă"}
+            {rows.some((r) => r.slug === draft.slug)
+              ? "Editează resursa"
+              : "Resursă nouă"}
           </h3>
 
           <div className="grid sm:grid-cols-2 gap-4">
-            {field("slug", "Slug (identificator, ex. plan-30-zile)", false, "plan-30-zile")}
-            {field("email_template", "Template email transactional", false, "plan-30-zile")}
+            {field(
+              "slug",
+              "Slug (identificator, ex. plan-30-zile)",
+              false,
+              "plan-30-zile",
+            )}
+            {field(
+              "email_template",
+              "Template email transactional",
+              false,
+              "plan-30-zile",
+            )}
             {field("title_ro", "Titlu (RO)")}
             {field("title_en", "Titlu (EN)")}
           </div>
@@ -258,7 +298,12 @@ const ResourcesAdmin = () => {
           </div>
 
           <div className="grid sm:grid-cols-2 gap-4">
-            {field("file_url", "Link PDF", false, "/plan-30-zile-araba-libaneza.pdf")}
+            {field(
+              "file_url",
+              "Link PDF",
+              false,
+              "/plan-30-zile-araba-libaneza.pdf",
+            )}
             <div className="space-y-1.5">
               <Label className="text-sm">Încarcă PDF nou</Label>
               <input
@@ -279,9 +324,13 @@ const ResourcesAdmin = () => {
                 className="gap-1.5 w-full"
               >
                 {uploading ? (
-                  <><Loader2 className="w-4 h-4 animate-spin" /> Se încarcă…</>
+                  <>
+                    <Loader2 className="w-4 h-4 animate-spin" /> Se încarcă…
+                  </>
                 ) : (
-                  <><Upload className="w-4 h-4" /> Alege fișier PDF</>
+                  <>
+                    <Upload className="w-4 h-4" /> Alege fișier PDF
+                  </>
                 )}
               </Button>
             </div>
@@ -301,7 +350,12 @@ const ResourcesAdmin = () => {
                 type="number"
                 className="w-24"
                 value={draft.sort_order}
-                onChange={(e) => setDraft({ ...draft, sort_order: Number(e.target.value) || 0 })}
+                onChange={(e) =>
+                  setDraft({
+                    ...draft,
+                    sort_order: Number(e.target.value) || 0,
+                  })
+                }
               />
             </div>
           </div>

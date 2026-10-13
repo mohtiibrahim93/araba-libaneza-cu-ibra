@@ -22,7 +22,9 @@ export const Route = createFileRoute("/checkout")({
       // links to it — the crawler cannot fetch the page to learn otherwise.
       { name: "robots", content: "noindex" },
     ],
-    links: [{ rel: "canonical", href: "https://centruldearabalibaneza.com/checkout" }],
+    links: [
+      { rel: "canonical", href: "https://centruldearabalibaneza.com/checkout" },
+    ],
   }),
   component: Checkout,
 });

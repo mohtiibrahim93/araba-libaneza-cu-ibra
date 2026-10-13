@@ -26,16 +26,22 @@ async function waitForGrecaptcha(timeoutMs = 4000): Promise<boolean> {
   });
 }
 
-export async function getRecaptchaToken(action: string): Promise<string | null> {
+export async function getRecaptchaToken(
+  action: string,
+): Promise<string | null> {
   const ready = await waitForGrecaptcha();
   if (!ready) {
-    console.warn("[recaptcha] grecaptcha not available — skipping verification");
+    console.warn(
+      "[recaptcha] grecaptcha not available — skipping verification",
+    );
     return null;
   }
   return new Promise((resolve) => {
     window.grecaptcha!.ready(async () => {
       try {
-        const token = await window.grecaptcha!.execute(RECAPTCHA_SITE_KEY, { action });
+        const token = await window.grecaptcha!.execute(RECAPTCHA_SITE_KEY, {
+          action,
+        });
         resolve(token || null);
       } catch (e) {
         console.warn("[recaptcha] execute failed", e);

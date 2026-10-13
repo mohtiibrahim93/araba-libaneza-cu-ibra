@@ -3,8 +3,10 @@
 // banner flips it to "granted" when the visitor accepts, so we send events unconditionally and
 // let Consent Mode gate them. Meta Pixel isn't set up yet.
 
-
-export function trackEvent(eventName: string, params?: Record<string, unknown>) {
+export function trackEvent(
+  eventName: string,
+  params?: Record<string, unknown>,
+) {
   if (typeof (window as any).gtag !== "function") return;
   (window as any).gtag("event", eventName, params);
 }
@@ -100,7 +102,9 @@ export function trackPurchase({
 export type RegistrationFormType = "group" | "private" | "kids";
 
 /** First real interaction with the registration form, once per mount. */
-export function trackRegistrationStart(formType: RegistrationFormType | "unknown") {
+export function trackRegistrationStart(
+  formType: RegistrationFormType | "unknown",
+) {
   trackEvent("registration_start", { form_type: formType });
 }
 
@@ -122,7 +126,15 @@ export function trackRegistrationStep(
  * it we know people fail, not what they fail on.
  */
 export function trackRegistrationValidationFailed(
-  field: "cohort" | "course_type" | "format" | "level" | "center" | "gdpr" | "phone" | "email",
+  field:
+    | "cohort"
+    | "course_type"
+    | "format"
+    | "level"
+    | "center"
+    | "gdpr"
+    | "phone"
+    | "email",
   formType: RegistrationFormType | "unknown",
 ) {
   trackEvent("registration_validation_failed", { field, form_type: formType });
@@ -164,7 +176,9 @@ export function initContactClickTracking() {
   // Intercepting this single endpoint avoids false positives from button clicks
   // and covers every scheduler entry point without duplicating component logic.
   const originalFetch = window.fetch.bind(window);
-  window.fetch = async (...args: Parameters<typeof fetch>): Promise<Response> => {
+  window.fetch = async (
+    ...args: Parameters<typeof fetch>
+  ): Promise<Response> => {
     const [input, init] = args;
     const url =
       typeof input === "string"
@@ -197,11 +211,16 @@ export function initContactClickTracking() {
         .json()
         .then((payload) => {
           if (!payload?.ok) return;
-          trackEvent(bookingType === "trial" ? "trial_booking_complete" : "paid_booking_complete", {
-            booking_type: bookingType || "unknown",
-            booking_format: payload?.format,
-            page_path: window.location.pathname,
-          });
+          trackEvent(
+            bookingType === "trial"
+              ? "trial_booking_complete"
+              : "paid_booking_complete",
+            {
+              booking_type: bookingType || "unknown",
+              booking_format: payload?.format,
+              page_path: window.location.pathname,
+            },
+          );
         })
         .catch(() => undefined);
     }
@@ -240,4 +259,3 @@ export function initContactClickTracking() {
     }
   });
 }
-

@@ -22,7 +22,13 @@
  *
  * Idempotent: an already-guarded call is left alone, so running twice is safe.
  */
-import { readFileSync, writeFileSync, existsSync, readdirSync, statSync } from "node:fs";
+import {
+  readFileSync,
+  writeFileSync,
+  existsSync,
+  readdirSync,
+  statSync,
+} from "node:fs";
 import { join } from "node:path";
 
 /** The bare call, not one that already carries a fallback. */
@@ -79,4 +85,5 @@ function main() {
 }
 
 // Only run when invoked directly, so the test can import guardSource.
-if (process.argv[1] && process.argv[1].endsWith("guardWorkerRuntime.mjs")) main();
+if (process.argv[1] && process.argv[1].endsWith("guardWorkerRuntime.mjs"))
+  main();

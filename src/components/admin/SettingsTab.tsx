@@ -1,4 +1,12 @@
-import { Bell, CreditCard, ExternalLink, LogOut, Mail, ShieldCheck, User } from "lucide-react";
+import {
+  Bell,
+  CreditCard,
+  ExternalLink,
+  LogOut,
+  Mail,
+  ShieldCheck,
+  User,
+} from "lucide-react";
 import { Link } from "@/lib/router-compat";
 import { Button } from "@/components/ui/button";
 import EmailSettingsForm from "./EmailSettingsForm";
@@ -89,9 +97,7 @@ const SettingsTab = ({
         desc="Alertele pe care le primești când apare o înscriere sau o programare nouă."
       >
         <Button asChild variant="outline" size="sm">
-          <Link to="/admin/notifications">
-            Deschide setările de notificări
-          </Link>
+          <Link to="/admin/notifications">Deschide setările de notificări</Link>
         </Button>
       </SectionCard>
     </div>
@@ -113,7 +119,8 @@ const SettingsTab = ({
               Stripe Dashboard <ExternalLink className="h-3.5 w-3.5" />
             </a>
             <span className="block text-xs text-muted-foreground">
-              Plăți, abonamente, rambursări · descriptor extras: CENTRUL ARABA LIBANEZA
+              Plăți, abonamente, rambursări · descriptor extras: CENTRUL ARABA
+              LIBANEZA
             </span>
           </li>
           <li>
@@ -152,7 +159,9 @@ const SettingsTab = ({
       >
         <div className="flex flex-wrap items-center justify-between gap-3">
           <div className="min-w-0">
-            <p className="truncate text-sm font-medium text-foreground">{adminEmail || "—"}</p>
+            <p className="truncate text-sm font-medium text-foreground">
+              {adminEmail || "—"}
+            </p>
             <p className="mt-0.5 flex items-center gap-1 text-xs text-muted-foreground">
               <ShieldCheck className="h-3.5 w-3.5 text-brand-green" />
               Autentificat cu Google · acces pe listă de administratori

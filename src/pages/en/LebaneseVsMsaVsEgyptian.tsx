@@ -40,7 +40,10 @@ const Row = ({
   egyptian: string;
 }) => (
   <tr className="border-t border-border">
-    <th scope="row" className="text-left font-semibold text-foreground align-top p-3 bg-muted/40">
+    <th
+      scope="row"
+      className="text-left font-semibold text-foreground align-top p-3 bg-muted/40"
+    >
       {feature}
     </th>
     <td className="align-top p-3 text-sm">{msa}</td>
@@ -62,28 +65,30 @@ const LebaneseVsMsaVsEgyptian = () => (
     faq={FAQ}
   >
     <p>
-      "Should I learn Lebanese, Egyptian, or MSA?" is one of the most common questions from new
-      Arabic learners — and the honest answer is: <strong>they're not competing choices</strong>.
-      MSA is the shared written standard. Lebanese and Egyptian are two of the biggest spoken
-      dialects. Which one belongs in your life depends on <em>why</em> you want Arabic.
+      "Should I learn Lebanese, Egyptian, or MSA?" is one of the most common
+      questions from new Arabic learners — and the honest answer is:{" "}
+      <strong>they're not competing choices</strong>. MSA is the shared written
+      standard. Lebanese and Egyptian are two of the biggest spoken dialects.
+      Which one belongs in your life depends on <em>why</em> you want Arabic.
     </p>
 
     <h2>The 60-second summary</h2>
     <ul>
       <li>
-        <strong>MSA (Modern Standard Arabic / Fusha)</strong> — the formal, pan-Arab written
-        standard. Used in news, books, official speeches, and religious contexts. Nobody speaks it
-        at home.
+        <strong>MSA (Modern Standard Arabic / Fusha)</strong> — the formal,
+        pan-Arab written standard. Used in news, books, official speeches, and
+        religious contexts. Nobody speaks it at home.
       </li>
       <li>
-        <strong>Lebanese Arabic</strong> — a Levantine dialect, spoken in Lebanon and closely
-        related to Syrian, Palestinian and Jordanian. Dominant in modern Arabic pop music,
-        satellite TV, and Levantine business.
+        <strong>Lebanese Arabic</strong> — a Levantine dialect, spoken in
+        Lebanon and closely related to Syrian, Palestinian and Jordanian.
+        Dominant in modern Arabic pop music, satellite TV, and Levantine
+        business.
       </li>
       <li>
-        <strong>Egyptian Arabic</strong> — the dialect of Egypt (over 100 million speakers), spread
-        globally through decades of cinema and classic television. The most widely understood
-        spoken dialect in the Arab world.
+        <strong>Egyptian Arabic</strong> — the dialect of Egypt (over 100
+        million speakers), spread globally through decades of cinema and classic
+        television. The most widely understood spoken dialect in the Arab world.
       </li>
     </ul>
 
@@ -92,10 +97,18 @@ const LebaneseVsMsaVsEgyptian = () => (
       <table className="min-w-full text-left border border-border rounded-lg overflow-hidden">
         <thead className="bg-muted">
           <tr>
-            <th className="p-3 text-sm font-semibold text-foreground">Feature</th>
-            <th className="p-3 text-sm font-semibold text-foreground">MSA (Fusha)</th>
-            <th className="p-3 text-sm font-semibold text-foreground">Lebanese Arabic</th>
-            <th className="p-3 text-sm font-semibold text-foreground">Egyptian Arabic</th>
+            <th className="p-3 text-sm font-semibold text-foreground">
+              Feature
+            </th>
+            <th className="p-3 text-sm font-semibold text-foreground">
+              MSA (Fusha)
+            </th>
+            <th className="p-3 text-sm font-semibold text-foreground">
+              Lebanese Arabic
+            </th>
+            <th className="p-3 text-sm font-semibold text-foreground">
+              Egyptian Arabic
+            </th>
           </tr>
         </thead>
         <tbody>
@@ -158,23 +171,26 @@ const LebaneseVsMsaVsEgyptian = () => (
     </div>
 
     <h2>How the same sentence sounds in each</h2>
-    <p>Take a simple sentence: <em>"I want to drink coffee."</em></p>
+    <p>
+      Take a simple sentence: <em>"I want to drink coffee."</em>
+    </p>
     <ul>
       <li>
-        <strong>MSA:</strong> <em>ʾurīdu an ashraba qahwatan</em> — grammatically complete, sounds
-        formal, nobody talks like this at a café.
+        <strong>MSA:</strong> <em>ʾurīdu an ashraba qahwatan</em> —
+        grammatically complete, sounds formal, nobody talks like this at a café.
       </li>
       <li>
-        <strong>Lebanese:</strong> <em>baddi ishrab ʾahwe</em> — short, relaxed, ق dropped to a
-        glottal stop.
+        <strong>Lebanese:</strong> <em>baddi ishrab ʾahwe</em> — short, relaxed,
+        ق dropped to a glottal stop.
       </li>
       <li>
-        <strong>Egyptian:</strong> <em>ʿāyiz ashrab ʾahwa</em> — different verb ("ʿāyiz" instead of
-        "baddi"), same glottal stop on ق.
+        <strong>Egyptian:</strong> <em>ʿāyiz ashrab ʾahwa</em> — different verb
+        ("ʿāyiz" instead of "baddi"), same glottal stop on ق.
       </li>
     </ul>
     <p>
-      Same alphabet, same core roots (ش-ر-ب "sh-r-b" = to drink), completely different flavour.
+      Same alphabet, same core roots (ش-ر-ب "sh-r-b" = to drink), completely
+      different flavour.
     </p>
 
     <h2>So — which one should you actually learn?</h2>
@@ -187,11 +203,14 @@ const LebaneseVsMsaVsEgyptian = () => (
 
     <h3>Pick Lebanese (Levantine) if you want to…</h3>
     <ul>
-      <li>Talk with family or friends in Lebanon, Syria, Jordan, or Palestine.</li>
+      <li>
+        Talk with family or friends in Lebanon, Syria, Jordan, or Palestine.
+      </li>
       <li>Understand modern Arabic music, satellite TV, and social media.</li>
       <li>Do business or travel across the Levant.</li>
       <li>
-        Learn the dialect widely considered one of the most musical and expressive — see our{" "}
+        Learn the dialect widely considered one of the most musical and
+        expressive — see our{" "}
         <Link to="/en/learn-lebanese-arabic">Lebanese Arabic course</Link>.
       </li>
     </ul>
@@ -200,38 +219,68 @@ const LebaneseVsMsaVsEgyptian = () => (
     <ul>
       <li>Watch classic Egyptian cinema in the original.</li>
       <li>Live or work in Egypt specifically.</li>
-      <li>Have a dialect maximally understood by casual listeners across all Arab countries.</li>
+      <li>
+        Have a dialect maximally understood by casual listeners across all Arab
+        countries.
+      </li>
     </ul>
 
     <h2>Do you have to choose only one?</h2>
     <p>
-      No. In practice, most serious learners end up with a spoken dialect <em>plus</em> passive MSA
-      reading ability. Start with the dialect that matches your life — you'll speak from day one —
-      and add MSA later if reading or formal contexts become important. Trying to learn all three
-      at once dilutes progress in each.
+      No. In practice, most serious learners end up with a spoken dialect{" "}
+      <em>plus</em> passive MSA reading ability. Start with the dialect that
+      matches your life — you'll speak from day one — and add MSA later if
+      reading or formal contexts become important. Trying to learn all three at
+      once dilutes progress in each.
     </p>
 
     <h2>Going deeper</h2>
     <p>
-      This page answers the big question: standard or dialect, and which dialect. Below it sits the{" "}
-      <Link to="/en/arabic-dialects-guide">Arabic dialects guide</Link>, which maps every family,
-      and below that one page for each comparison people keep asking about:
+      This page answers the big question: standard or dialect, and which
+      dialect. Below it sits the{" "}
+      <Link to="/en/arabic-dialects-guide">Arabic dialects guide</Link>, which
+      maps every family, and below that one page for each comparison people keep
+      asking about:
     </p>
     <ul>
-      <li><Link to="/en/arabic-dialects-guide/lebanese-vs-egyptian-arabic">Lebanese vs Egyptian</Link></li>
-      <li><Link to="/en/arabic-dialects-guide/lebanese-vs-syrian-arabic">Lebanese vs Syrian, Palestinian, Jordanian</Link></li>
-      <li><Link to="/en/arabic-dialects-guide/levantine-vs-gulf-arabic">Levantine vs Gulf Arabic</Link></li>
-      <li><Link to="/en/arabic-dialects-guide/levantine-vs-iraqi-arabic">Levantine vs Iraqi Arabic</Link></li>
-      <li><Link to="/en/arabic-dialects-guide/levantine-vs-maghrebi-arabic">Levantine vs Maghrebi Arabic</Link></li>
-      <li><Link to="/en/arabic-dialects-guide/levantine-vs-peninsular-arabic">Levantine vs Peninsular Arabic</Link></li>
+      <li>
+        <Link to="/en/arabic-dialects-guide/lebanese-vs-egyptian-arabic">
+          Lebanese vs Egyptian
+        </Link>
+      </li>
+      <li>
+        <Link to="/en/arabic-dialects-guide/lebanese-vs-syrian-arabic">
+          Lebanese vs Syrian, Palestinian, Jordanian
+        </Link>
+      </li>
+      <li>
+        <Link to="/en/arabic-dialects-guide/levantine-vs-gulf-arabic">
+          Levantine vs Gulf Arabic
+        </Link>
+      </li>
+      <li>
+        <Link to="/en/arabic-dialects-guide/levantine-vs-iraqi-arabic">
+          Levantine vs Iraqi Arabic
+        </Link>
+      </li>
+      <li>
+        <Link to="/en/arabic-dialects-guide/levantine-vs-maghrebi-arabic">
+          Levantine vs Maghrebi Arabic
+        </Link>
+      </li>
+      <li>
+        <Link to="/en/arabic-dialects-guide/levantine-vs-peninsular-arabic">
+          Levantine vs Peninsular Arabic
+        </Link>
+      </li>
     </ul>
 
     <h2>Where Lebanese fits</h2>
     <p>
-      Lebanese sits inside the broader Levantine Arabic{" "}
-      family and, thanks to Lebanese music and satellite TV, is one of the most widely understood
-      dialects across the Arab world. If you want the full map of the dialect landscape — Gulf,
-      Maghrebi, Mesopotamian and more — see our{" "}
+      Lebanese sits inside the broader Levantine Arabic family and, thanks to
+      Lebanese music and satellite TV, is one of the most widely understood
+      dialects across the Arab world. If you want the full map of the dialect
+      landscape — Gulf, Maghrebi, Mesopotamian and more — see our{" "}
       <Link to="/en/arabic-dialects-guide">Arabic dialects guide</Link>.
     </p>
   </EnLandingLayout>

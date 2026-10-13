@@ -84,9 +84,26 @@ interface Today {
   /** Past lessons that never reached the calendar — a backlog, not work. */
   olderUnsyncedLessons?: number;
   /** Free trials that ended in the last 24h with no outcome yet; after 24h they count as done. */
-  trialsToMark?: Array<{ id: string; start_at: string; end_at: string; student_name: string; student_email: string; student_phone: string | null; format: string; trial_outcome: null }>;
+  trialsToMark?: Array<{
+    id: string;
+    start_at: string;
+    end_at: string;
+    student_name: string;
+    student_email: string;
+    student_phone: string | null;
+    format: string;
+    trial_outcome: null;
+  }>;
   /** Lessons still booked for a registration whose payment was fully refunded; the owner decides whether to cancel. */
-  refundedLessons?: Array<{ id: string; registration_id: string; start_at: string; end_at: string; student_name: string; student_email: string; format: string }>;
+  refundedLessons?: Array<{
+    id: string;
+    registration_id: string;
+    start_at: string;
+    end_at: string;
+    student_name: string;
+    student_email: string;
+    format: string;
+  }>;
 }
 
 const TZ = "Europe/Bucharest";
@@ -114,7 +131,8 @@ const dayLabel = (iso: string, now: string) => {
   return dayFmt.format(new Date(iso));
 };
 
-const waitLabel = (d: number) => (d === 0 ? "azi" : d === 1 ? "de ieri" : `de ${d} zile`);
+const waitLabel = (d: number) =>
+  d === 0 ? "azi" : d === 1 ? "de ieri" : `de ${d} zile`;
 
 const COHORT_STATUS: Record<string, string> = {
   draft: "Draft",
@@ -159,27 +177,50 @@ const rowBtn =
  * oldest first, with a filter for each. Beside it, the lessons of today and
  * tomorrow and the groups about to start. Every row leads somewhere you can act.
  */
-const TodayAdmin = ({ onGoToLeads, onOpenPerson, onGo, newLast7, onLoaded }: Props) => {
+const TodayAdmin = ({
+  onGoToLeads,
+  onOpenPerson,
+  onGo,
+  newLast7,
+  onLoaded,
+}: Props) => {
   const [data, setData] = useState<Today | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const [filter, setFilter] = useState<Filter>("all");
   const [busyRow, setBusyRow] = useState<string | null>(null);
-  const [rowError, setRowError] = useState<{ id: string; message: string } | null>(null);
+  const [rowError, setRowError] = useState<{
+    id: string;
+    message: string;
+  } | null>(null);
 
   // One click from the worklist: a lead nobody answered gets its status (and
   // leaves the list, because only "new" leads are listed); someone who said
   // yes and has not paid can be put aside for 7 days after the owner talked to
   // them. Both are saved before the row disappears.
-  const act = async (id: string, list: "uncontacted" | "unpaid", body: Record<string, unknown>) => {
+  const act = async (
+    id: string,
+    list: "uncontacted" | "unpaid",
+    body: Record<string, unknown>,
+  ) => {
     setBusyRow(id);
     setRowError(null);
     try {
-      const { data: res, error: err } = await invokeAdmin<{ error?: string; success?: boolean; data?: unknown }>({ ...body, id });
-      if (err || res?.error) throw new Error(res?.error || err?.message || "Nu s-a salvat.");
-      setData((d) => (d ? { ...d, [list]: d[list].filter((r) => r.id !== id) } : d));
+      const { data: res, error: err } = await invokeAdmin<{
+        error?: string;
+        success?: boolean;
+        data?: unknown;
+      }>({ ...body, id });
+      if (err || res?.error)
+        throw new Error(res?.error || err?.message || "Nu s-a salvat.");
+      setData((d) =>
+        d ? { ...d, [list]: d[list].filter((r) => r.id !== id) } : d,
+      );
     } catch (e) {
-      setRowError({ id, message: e instanceof Error ? e.message : "Nu s-a salvat." });
+      setRowError({
+        id,
+        message: e instanceof Error ? e.message : "Nu s-a salvat.",
+      });
     } finally {
       setBusyRow(null);
     }
@@ -189,7 +230,9 @@ const TodayAdmin = ({ onGoToLeads, onOpenPerson, onGo, newLast7, onLoaded }: Pro
     setLoading(true);
     setError("");
     try {
-      const { data: res, error: err } = await invokeAdmin({ action: "list_today" });
+      const { data: res, error: err } = await invokeAdmin({
+        action: "list_today",
+      });
       if (err) throw err;
       if (res?.error) throw new Error(res.error);
       setData(res?.data ?? null);
@@ -208,7 +251,9 @@ const TodayAdmin = ({ onGoToLeads, onOpenPerson, onGo, newLast7, onLoaded }: Pro
   useEffect(() => {
     if (!data) return;
     onLoaded?.({
-      calendarOk: !data.problems.some((p) => p.kind === "calendar") && !data.olderUnsyncedLessons,
+      calendarOk:
+        !data.problems.some((p) => p.kind === "calendar") &&
+        !data.olderUnsyncedLessons,
       peopleToDo: data.uncontacted.length + data.unpaid.length,
     });
   }, [data, onLoaded]);
@@ -224,10 +269,22 @@ const TodayAdmin = ({ onGoToLeads, onOpenPerson, onGo, newLast7, onLoaded }: Pro
 
   const todo = useMemo(() => {
     if (!data) return [];
-    const problems = data.problems.map((p) => ({ type: "problems" as const, key: `p-${p.kind}-${p.id}`, p }));
+    const problems = data.problems.map((p) => ({
+      type: "problems" as const,
+      key: `p-${p.kind}-${p.id}`,
+      p,
+    }));
     const people = [
-      ...data.uncontacted.map((r) => ({ type: "uncontacted" as const, key: `u-${r.id}`, r })),
-      ...data.unpaid.map((r) => ({ type: "unpaid" as const, key: `n-${r.id}`, r })),
+      ...data.uncontacted.map((r) => ({
+        type: "uncontacted" as const,
+        key: `u-${r.id}`,
+        r,
+      })),
+      ...data.unpaid.map((r) => ({
+        type: "unpaid" as const,
+        key: `n-${r.id}`,
+        r,
+      })),
     ].sort((a, b) => b.r.waitingDays - a.r.waitingDays);
     return [...problems, ...people];
   }, [data]);
@@ -252,10 +309,13 @@ const TodayAdmin = ({ onGoToLeads, onOpenPerson, onGo, newLast7, onLoaded }: Pro
   }, [data]);
 
   const todayLessons = lessonsByDay.find((g) => g.day === "Azi")?.lessons ?? [];
-  const nextToday = todayLessons.find((l) => Date.parse(l.start_at) > Date.now());
+  const nextToday = todayLessons.find(
+    (l) => Date.parse(l.start_at) > Date.now(),
+  );
   const urgent = counts.problems + (data?.olderUnsyncedLessons ? 1 : 0);
 
-  const tile = "flex min-h-[124px] flex-col gap-1.5 rounded-2xl p-5 text-left transition-colors";
+  const tile =
+    "flex min-h-[124px] flex-col gap-1.5 rounded-2xl p-5 text-left transition-colors";
 
   return (
     <div className="space-y-7">
@@ -270,29 +330,72 @@ const TodayAdmin = ({ onGoToLeads, onOpenPerson, onGo, newLast7, onLoaded }: Pro
             className={cn(tile, "bg-brand-green text-white hover:opacity-95")}
           >
             <span className="text-[0.8125rem] text-white/80">De rezolvat</span>
-            <span className="font-display text-[2.125rem] font-semibold leading-none">{counts.all}</span>
+            <span className="font-display text-[2.125rem] font-semibold leading-none">
+              {counts.all}
+            </span>
             <span className="text-[0.8125rem] text-white/80">
-              {urgent ? `${urgent} ${urgent === 1 ? "problemă" : "probleme"}` : "nicio problemă"}
+              {urgent
+                ? `${urgent} ${urgent === 1 ? "problemă" : "probleme"}`
+                : "nicio problemă"}
             </span>
           </button>
-          <button type="button" onClick={() => onGo?.("week")} className={cn(tile, "border border-border bg-card hover:border-brand-green/50")}>
-            <span className="text-[0.8125rem] text-muted-foreground">Lecții azi</span>
-            <span className="font-display text-[2.125rem] font-semibold leading-none">{todayLessons.length}</span>
+          <button
+            type="button"
+            onClick={() => onGo?.("week")}
+            className={cn(
+              tile,
+              "border border-border bg-card hover:border-brand-green/50",
+            )}
+          >
             <span className="text-[0.8125rem] text-muted-foreground">
-              {nextToday ? `următoarea la ${timeFmt.format(new Date(nextToday.start_at))}` : "niciuna de acum încolo"}
+              Lecții azi
             </span>
-          </button>
-          <button type="button" onClick={() => onGoToLeads?.()} className={cn(tile, "border border-border bg-card hover:border-brand-green/50")}>
-            <span className="text-[0.8125rem] text-muted-foreground">Înscrieri noi, 7 zile</span>
-            <span className="font-display text-[2.125rem] font-semibold leading-none">{newLast7?.total ?? "—"}</span>
+            <span className="font-display text-[2.125rem] font-semibold leading-none">
+              {todayLessons.length}
+            </span>
             <span className="text-[0.8125rem] text-muted-foreground">
-              {newLast7 ? `${newLast7.trials} ${newLast7.trials === 1 ? "lecție de probă" : "lecții de probă"}` : ""}
+              {nextToday
+                ? `următoarea la ${timeFmt.format(new Date(nextToday.start_at))}`
+                : "niciuna de acum încolo"}
             </span>
           </button>
-          <button type="button" onClick={() => onGo?.("cohorts")} className={cn(tile, "border border-border bg-card hover:border-brand-green/50")}>
-            <span className="text-[0.8125rem] text-muted-foreground">Grupe care încep</span>
-            <span className="font-display text-[2.125rem] font-semibold leading-none">{data.cohortsStartingSoon.length}</span>
-            <span className="text-[0.8125rem] text-muted-foreground">în următoarele 14 zile</span>
+          <button
+            type="button"
+            onClick={() => onGoToLeads?.()}
+            className={cn(
+              tile,
+              "border border-border bg-card hover:border-brand-green/50",
+            )}
+          >
+            <span className="text-[0.8125rem] text-muted-foreground">
+              Înscrieri noi, 7 zile
+            </span>
+            <span className="font-display text-[2.125rem] font-semibold leading-none">
+              {newLast7?.total ?? "—"}
+            </span>
+            <span className="text-[0.8125rem] text-muted-foreground">
+              {newLast7
+                ? `${newLast7.trials} ${newLast7.trials === 1 ? "lecție de probă" : "lecții de probă"}`
+                : ""}
+            </span>
+          </button>
+          <button
+            type="button"
+            onClick={() => onGo?.("cohorts")}
+            className={cn(
+              tile,
+              "border border-border bg-card hover:border-brand-green/50",
+            )}
+          >
+            <span className="text-[0.8125rem] text-muted-foreground">
+              Grupe care încep
+            </span>
+            <span className="font-display text-[2.125rem] font-semibold leading-none">
+              {data.cohortsStartingSoon.length}
+            </span>
+            <span className="text-[0.8125rem] text-muted-foreground">
+              în următoarele 14 zile
+            </span>
           </button>
         </div>
       )}
@@ -309,9 +412,13 @@ const TodayAdmin = ({ onGoToLeads, onOpenPerson, onGo, newLast7, onLoaded }: Pro
         <div className="grid items-start gap-5 xl:grid-cols-[minmax(0,1.25fr)_minmax(0,1fr)]">
           <section className={cn(card, "flex flex-col gap-4 p-5 sm:p-6")}>
             <div className="flex flex-wrap items-center justify-between gap-3">
-              <h2 className="font-display text-2xl font-semibold">De rezolvat</h2>
+              <h2 className="font-display text-2xl font-semibold">
+                De rezolvat
+              </h2>
               <div className="flex items-center gap-2">
-                <span className="text-[0.8125rem] text-muted-foreground">Cei care așteaptă de mai mult, primii</span>
+                <span className="text-[0.8125rem] text-muted-foreground">
+                  Cei care așteaptă de mai mult, primii
+                </span>
                 <button
                   type="button"
                   aria-label="Reîncarcă"
@@ -319,7 +426,11 @@ const TodayAdmin = ({ onGoToLeads, onOpenPerson, onGo, newLast7, onLoaded }: Pro
                   disabled={loading}
                   className="flex h-11 w-11 items-center justify-center rounded-xl border border-border hover:bg-muted"
                 >
-                  {loading ? <Loader2 className="h-4 w-4 animate-spin" /> : <RefreshCw className="h-4 w-4" />}
+                  {loading ? (
+                    <Loader2 className="h-4 w-4 animate-spin" />
+                  ) : (
+                    <RefreshCw className="h-4 w-4" />
+                  )}
                 </button>
               </div>
             </div>
@@ -352,46 +463,88 @@ const TodayAdmin = ({ onGoToLeads, onOpenPerson, onGo, newLast7, onLoaded }: Pro
 
             {!!data.trialsToMark?.length && filter === "all" && (
               <div className="space-y-2 rounded-2xl border border-border bg-card p-4">
-                <p className="text-sm font-semibold">Probe gratuite de ieri: a venit?</p>
-                <p className="text-xs text-muted-foreground">Dacă nu marchezi nimic, după 24 de ore proba se consideră făcută.</p>
+                <p className="text-sm font-semibold">
+                  Probe gratuite de ieri: a venit?
+                </p>
+                <p className="text-xs text-muted-foreground">
+                  Dacă nu marchezi nimic, după 24 de ore proba se consideră
+                  făcută.
+                </p>
                 {data.trialsToMark.map((t) => (
-                  <div key={t.id} className="rounded-xl border border-border p-3">
-                    <p className="text-sm font-medium">{t.student_name} · {timeFmt.format(new Date(t.start_at))}</p>
+                  <div
+                    key={t.id}
+                    className="rounded-xl border border-border p-3"
+                  >
+                    <p className="text-sm font-medium">
+                      {t.student_name} · {timeFmt.format(new Date(t.start_at))}
+                    </p>
                     <TrialOutcomeControl
                       booking={{ ...t, status: "confirmed" }}
-                      onChanged={() => setData((d) => (d ? { ...d, trialsToMark: (d.trialsToMark ?? []).filter((x) => x.id !== t.id) } : d))}
+                      onChanged={() =>
+                        setData((d) =>
+                          d
+                            ? {
+                                ...d,
+                                trialsToMark: (d.trialsToMark ?? []).filter(
+                                  (x) => x.id !== t.id,
+                                ),
+                              }
+                            : d,
+                        )
+                      }
                     />
                   </div>
                 ))}
               </div>
             )}
 
-            {!!data.refundedLessons?.length && (filter === "all" || filter === "problems") && (
-              <div className="space-y-2 rounded-2xl border border-admin-warn-line bg-admin-warn-bg p-4 text-admin-warn-fg">
-                <p className="text-sm font-semibold">Plată rambursată, dar lecția e încă programată</p>
-                <p className="text-xs">Banii au fost returnați. Dacă lecția nu mai are loc, anuleaz-o din Toate lecțiile; nu se anulează automat.</p>
-                <ul className="space-y-1 text-sm">
-                  {data.refundedLessons.map((b) => (
-                    <li key={b.id}>{b.student_name} · {new Intl.DateTimeFormat("ro-RO", { timeZone: TZ, dateStyle: "short", timeStyle: "short" }).format(new Date(b.start_at))}</li>
-                  ))}
-                </ul>
-              </div>
-            )}
+            {!!data.refundedLessons?.length &&
+              (filter === "all" || filter === "problems") && (
+                <div className="space-y-2 rounded-2xl border border-admin-warn-line bg-admin-warn-bg p-4 text-admin-warn-fg">
+                  <p className="text-sm font-semibold">
+                    Plată rambursată, dar lecția e încă programată
+                  </p>
+                  <p className="text-xs">
+                    Banii au fost returnați. Dacă lecția nu mai are loc,
+                    anuleaz-o din Toate lecțiile; nu se anulează automat.
+                  </p>
+                  <ul className="space-y-1 text-sm">
+                    {data.refundedLessons.map((b) => (
+                      <li key={b.id}>
+                        {b.student_name} ·{" "}
+                        {new Intl.DateTimeFormat("ro-RO", {
+                          timeZone: TZ,
+                          dateStyle: "short",
+                          timeStyle: "short",
+                        }).format(new Date(b.start_at))}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              )}
 
-            {!!data.olderUnsyncedLessons && (filter === "all" || filter === "problems") && (
-              <div className="flex flex-wrap items-center gap-3 rounded-2xl border border-admin-warn-line bg-admin-warn-bg p-4 text-admin-warn-fg">
-                <AlertTriangle className="h-5 w-5 shrink-0" aria-hidden />
-                <p className="min-w-[200px] flex-1 text-sm">
-                  {data.olderUnsyncedLessons === 1
-                    ? "O lecție deja trecută nu a ajuns niciodată în Google Calendar."
-                    : `${data.olderUnsyncedLessons} lecții deja trecute nu au ajuns niciodată în Google Calendar.`}{" "}
-                  Înseamnă că sincronizarea a căzut, nu că a fost ghinion.
-                </p>
-                <button type="button" onClick={() => onGo?.("calendar-health")} className={cn(rowBtn, "border border-admin-warn-line bg-card text-foreground")}>
-                  Sănătate calendar
-                </button>
-              </div>
-            )}
+            {!!data.olderUnsyncedLessons &&
+              (filter === "all" || filter === "problems") && (
+                <div className="flex flex-wrap items-center gap-3 rounded-2xl border border-admin-warn-line bg-admin-warn-bg p-4 text-admin-warn-fg">
+                  <AlertTriangle className="h-5 w-5 shrink-0" aria-hidden />
+                  <p className="min-w-[200px] flex-1 text-sm">
+                    {data.olderUnsyncedLessons === 1
+                      ? "O lecție deja trecută nu a ajuns niciodată în Google Calendar."
+                      : `${data.olderUnsyncedLessons} lecții deja trecute nu au ajuns niciodată în Google Calendar.`}{" "}
+                    Înseamnă că sincronizarea a căzut, nu că a fost ghinion.
+                  </p>
+                  <button
+                    type="button"
+                    onClick={() => onGo?.("calendar-health")}
+                    className={cn(
+                      rowBtn,
+                      "border border-admin-warn-line bg-card text-foreground",
+                    )}
+                  >
+                    Sănătate calendar
+                  </button>
+                </div>
+              )}
 
             {shown.length === 0 ? (
               <p className="py-4 text-sm text-muted-foreground">Nimic aici.</p>
@@ -401,18 +554,34 @@ const TodayAdmin = ({ onGoToLeads, onOpenPerson, onGo, newLast7, onLoaded }: Pro
                   if (t.type === "problems") {
                     const calendar = t.p.kind === "calendar";
                     return (
-                      <li key={t.key} className="flex flex-wrap items-center gap-3.5 border-t border-border/70 py-3.5">
+                      <li
+                        key={t.key}
+                        className="flex flex-wrap items-center gap-3.5 border-t border-border/70 py-3.5"
+                      >
                         <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-admin-warn-bg text-admin-warn-fg">
                           <AlertTriangle className="h-5 w-5" aria-hidden />
                         </span>
                         <div className="min-w-[180px] flex-1">
-                          <p className="font-semibold">{calendar ? "Lecție care nu e în Google Calendar" : "Plată cu probleme"}</p>
-                          <p className="text-[0.8125rem] text-muted-foreground">{t.p.detail}</p>
+                          <p className="font-semibold">
+                            {calendar
+                              ? "Lecție care nu e în Google Calendar"
+                              : "Plată cu probleme"}
+                          </p>
+                          <p className="text-[0.8125rem] text-muted-foreground">
+                            {t.p.detail}
+                          </p>
                         </div>
                         <button
                           type="button"
-                          onClick={() => (calendar ? onGo?.("calendar-health") : onOpenPerson?.(t.p.id))}
-                          className={cn(rowBtn, "border border-border hover:border-brand-green/60")}
+                          onClick={() =>
+                            calendar
+                              ? onGo?.("calendar-health")
+                              : onOpenPerson?.(t.p.id)
+                          }
+                          className={cn(
+                            rowBtn,
+                            "border border-border hover:border-brand-green/60",
+                          )}
                         >
                           {calendar ? "Sănătate calendar" : "Deschide"}
                         </button>
@@ -422,14 +591,23 @@ const TodayAdmin = ({ onGoToLeads, onOpenPerson, onGo, newLast7, onLoaded }: Pro
                   const r = t.r;
                   const unpaid = t.type === "unpaid";
                   return (
-                    <li key={t.key} className="flex flex-wrap items-center gap-3.5 border-t border-border/70 py-3.5">
+                    <li
+                      key={t.key}
+                      className="flex flex-wrap items-center gap-3.5 border-t border-border/70 py-3.5"
+                    >
                       <span
                         className={cn(
                           "flex h-10 w-10 shrink-0 items-center justify-center rounded-xl",
-                          unpaid ? "bg-admin-info-bg text-admin-info-fg" : "bg-accent text-brand-green dark:text-primary",
+                          unpaid
+                            ? "bg-admin-info-bg text-admin-info-fg"
+                            : "bg-accent text-brand-green dark:text-primary",
                         )}
                       >
-                        {unpaid ? <CreditCard className="h-5 w-5" aria-hidden /> : <MessageCircle className="h-5 w-5" aria-hidden />}
+                        {unpaid ? (
+                          <CreditCard className="h-5 w-5" aria-hidden />
+                        ) : (
+                          <MessageCircle className="h-5 w-5" aria-hidden />
+                        )}
                       </span>
                       <div className="min-w-[180px] flex-1">
                         <p className="font-semibold">{r.name}</p>
@@ -442,58 +620,106 @@ const TodayAdmin = ({ onGoToLeads, onOpenPerson, onGo, newLast7, onLoaded }: Pro
                         </p>
                       </div>
                       {!unpaid && (
-                        <div className="flex flex-wrap gap-1.5" role="group" aria-label={`Marchează ${r.name}`}>
-                          {([
-                            ["contacted", "Contactat"],
-                            ["no_response", "Fără răspuns"],
-                            ["not_suitable", "Nepotrivit"],
-                          ] as const).map(([status, label]) => (
+                        <div
+                          className="flex flex-wrap gap-1.5"
+                          role="group"
+                          aria-label={`Marchează ${r.name}`}
+                        >
+                          {(
+                            [
+                              ["contacted", "Contactat"],
+                              ["no_response", "Fără răspuns"],
+                              ["not_suitable", "Nepotrivit"],
+                            ] as const
+                          ).map(([status, label]) => (
                             <button
                               key={status}
                               type="button"
                               disabled={busyRow === r.id}
-                              onClick={() => void act(r.id, "uncontacted", { action: "update_status", lead_status: status })}
-                              className={cn(rowBtn, "border border-border hover:border-brand-green/60 disabled:opacity-50")}
+                              onClick={() =>
+                                void act(r.id, "uncontacted", {
+                                  action: "update_status",
+                                  lead_status: status,
+                                })
+                              }
+                              className={cn(
+                                rowBtn,
+                                "border border-border hover:border-brand-green/60 disabled:opacity-50",
+                              )}
                             >
                               {label}
                             </button>
                           ))}
                         </div>
                       )}
-                      {unpaid && (["cash", "transfer"] as const).map((method) => (
-                        <button
-                          key={method}
-                          type="button"
-                          disabled={busyRow === r.id}
-                          onClick={() => {
-                            const how = method === "cash" ? "cash" : "prin transfer bancar";
-                            if (window.confirm(`Marchezi ${r.name} ca plătit ${how}? Folosește doar dacă banii au ajuns la tine.`)) {
-                              void act(r.id, "unpaid", { action: "mark_paid_offline", method });
-                            }
-                          }}
-                          className={cn(rowBtn, "border border-border hover:border-brand-green/60 disabled:opacity-50")}
-                        >
-                          {method === "cash" ? "Plătit cash" : "Plătit prin transfer"}
-                        </button>
-                      ))}
+                      {unpaid &&
+                        (["cash", "transfer"] as const).map((method) => (
+                          <button
+                            key={method}
+                            type="button"
+                            disabled={busyRow === r.id}
+                            onClick={() => {
+                              const how =
+                                method === "cash"
+                                  ? "cash"
+                                  : "prin transfer bancar";
+                              if (
+                                window.confirm(
+                                  `Marchezi ${r.name} ca plătit ${how}? Folosește doar dacă banii au ajuns la tine.`,
+                                )
+                              ) {
+                                void act(r.id, "unpaid", {
+                                  action: "mark_paid_offline",
+                                  method,
+                                });
+                              }
+                            }}
+                            className={cn(
+                              rowBtn,
+                              "border border-border hover:border-brand-green/60 disabled:opacity-50",
+                            )}
+                          >
+                            {method === "cash"
+                              ? "Plătit cash"
+                              : "Plătit prin transfer"}
+                          </button>
+                        ))}
                       {unpaid && (
                         <button
                           type="button"
                           disabled={busyRow === r.id}
-                          onClick={() => void act(r.id, "unpaid", { action: "snooze_followup", days: 7 })}
+                          onClick={() =>
+                            void act(r.id, "unpaid", {
+                              action: "snooze_followup",
+                              days: 7,
+                            })
+                          }
                           title="Dispare din listă 7 zile; revine dacă tot nu a plătit"
-                          className={cn(rowBtn, "border border-border hover:border-brand-green/60 disabled:opacity-50")}
+                          className={cn(
+                            rowBtn,
+                            "border border-border hover:border-brand-green/60 disabled:opacity-50",
+                          )}
                         >
                           Am vorbit cu el · 7 zile
                         </button>
                       )}
-                      {rowError?.id === r.id && <p role="alert" className="w-full text-xs text-destructive">{rowError.message}</p>}
+                      {rowError?.id === r.id && (
+                        <p
+                          role="alert"
+                          className="w-full text-xs text-destructive"
+                        >
+                          {rowError.message}
+                        </p>
+                      )}
                       {!unpaid && r.phone && (
                         <a
                           href={buildWhatsAppUrl(r.phone)}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className={cn(rowBtn, "bg-brand-green text-white hover:opacity-90")}
+                          className={cn(
+                            rowBtn,
+                            "bg-brand-green text-white hover:opacity-90",
+                          )}
                         >
                           WhatsApp
                         </a>
@@ -501,7 +727,10 @@ const TodayAdmin = ({ onGoToLeads, onOpenPerson, onGo, newLast7, onLoaded }: Pro
                       <button
                         type="button"
                         onClick={() => onOpenPerson?.(r.id)}
-                        className={cn(rowBtn, "text-brand-green hover:bg-muted dark:text-primary")}
+                        className={cn(
+                          rowBtn,
+                          "text-brand-green hover:bg-muted dark:text-primary",
+                        )}
                       >
                         Deschide
                       </button>
@@ -516,7 +745,8 @@ const TodayAdmin = ({ onGoToLeads, onOpenPerson, onGo, newLast7, onLoaded }: Pro
                 onClick={onGoToLeads}
                 className="inline-flex min-h-11 items-center gap-2 self-start font-semibold text-brand-green hover:underline dark:text-primary"
               >
-                Vezi toate înscrierile <ArrowRight className="h-[18px] w-[18px]" aria-hidden />
+                Vezi toate înscrierile{" "}
+                <ArrowRight className="h-[18px] w-[18px]" aria-hidden />
               </button>
             )}
           </section>
@@ -524,7 +754,9 @@ const TodayAdmin = ({ onGoToLeads, onOpenPerson, onGo, newLast7, onLoaded }: Pro
           <div className="flex flex-col gap-5">
             <section className={cn(card, "flex flex-col gap-3.5 p-5 sm:p-6")}>
               <div className="flex items-center justify-between">
-                <h2 className="font-display text-2xl font-semibold">Lecții, azi și mâine</h2>
+                <h2 className="font-display text-2xl font-semibold">
+                  Lecții, azi și mâine
+                </h2>
                 <button
                   type="button"
                   onClick={() => onGo?.("week")}
@@ -534,11 +766,15 @@ const TodayAdmin = ({ onGoToLeads, onOpenPerson, onGo, newLast7, onLoaded }: Pro
                 </button>
               </div>
               {lessonsByDay.length === 0 && (
-                <p className="text-sm text-muted-foreground">Nicio lecție rezervată în următoarele două zile.</p>
+                <p className="text-sm text-muted-foreground">
+                  Nicio lecție rezervată în următoarele două zile.
+                </p>
               )}
               {lessonsByDay.map((g) => (
                 <div key={g.day} className="flex flex-col gap-2.5">
-                  <span className="text-xs font-bold uppercase tracking-[0.12em] text-muted-foreground">{g.day}</span>
+                  <span className="text-xs font-bold uppercase tracking-[0.12em] text-muted-foreground">
+                    {g.day}
+                  </span>
                   {g.lessons.map((l) => {
                     const missing = !l.google_event_id;
                     const next = l.id === nextToday?.id;
@@ -554,18 +790,34 @@ const TodayAdmin = ({ onGoToLeads, onOpenPerson, onGo, newLast7, onLoaded }: Pro
                               : "border border-border/70",
                         )}
                       >
-                        <span className="w-14 shrink-0 font-bold tabular-nums">{timeFmt.format(new Date(l.start_at))}</span>
+                        <span className="w-14 shrink-0 font-bold tabular-nums">
+                          {timeFmt.format(new Date(l.start_at))}
+                        </span>
                         <div className="min-w-0 flex-1">
                           <p className="truncate font-semibold">
                             {l.student_name}
-                            {(l.event_type_slug === "trial" || l.event_type_slug === "verificare-nivel") && (
+                            {(l.event_type_slug === "trial" ||
+                              l.event_type_slug === "verificare-nivel") && (
                               <span className="ml-1.5 rounded-md bg-card px-1.5 py-0.5 text-xs font-semibold text-brand-green dark:text-primary">
-                                {l.event_type_slug === "trial" ? "probă" : "verificare nivel"}
+                                {l.event_type_slug === "trial"
+                                  ? "probă"
+                                  : "verificare nivel"}
                               </span>
                             )}
                           </p>
-                          <p className={cn("flex items-center gap-1 text-[0.8125rem]", missing ? "text-admin-warn-fg" : "text-muted-foreground")}>
-                            {l.format === "online" ? <Video className="h-3.5 w-3.5" aria-hidden /> : <MapPin className="h-3.5 w-3.5" aria-hidden />}
+                          <p
+                            className={cn(
+                              "flex items-center gap-1 text-[0.8125rem]",
+                              missing
+                                ? "text-admin-warn-fg"
+                                : "text-muted-foreground",
+                            )}
+                          >
+                            {l.format === "online" ? (
+                              <Video className="h-3.5 w-3.5" aria-hidden />
+                            ) : (
+                              <MapPin className="h-3.5 w-3.5" aria-hidden />
+                            )}
                             {l.format === "online" ? "online" : "la centru"}
                             {missing ? " · nu e în Google Calendar" : ""}
                           </p>
@@ -577,7 +829,9 @@ const TodayAdmin = ({ onGoToLeads, onOpenPerson, onGo, newLast7, onLoaded }: Pro
                             rel="noopener noreferrer"
                             className={cn(
                               rowBtn,
-                              next ? "bg-brand-green text-white hover:opacity-90" : "border border-border hover:border-brand-green/60",
+                              next
+                                ? "bg-brand-green text-white hover:opacity-90"
+                                : "border border-border hover:border-brand-green/60",
                             )}
                           >
                             Intră
@@ -592,7 +846,9 @@ const TodayAdmin = ({ onGoToLeads, onOpenPerson, onGo, newLast7, onLoaded }: Pro
 
             <section className={cn(card, "flex flex-col gap-3 p-5 sm:p-6")}>
               <div className="flex items-center justify-between">
-                <h2 className="font-display text-2xl font-semibold">Grupe care încep curând</h2>
+                <h2 className="font-display text-2xl font-semibold">
+                  Grupe care încep curând
+                </h2>
                 <button
                   type="button"
                   onClick={() => onGo?.("cohorts")}
@@ -602,14 +858,28 @@ const TodayAdmin = ({ onGoToLeads, onOpenPerson, onGo, newLast7, onLoaded }: Pro
                 </button>
               </div>
               {data.cohortsStartingSoon.length === 0 ? (
-                <p className="text-sm text-muted-foreground">Nicio grupă nu începe în următoarele 14 zile.</p>
+                <p className="text-sm text-muted-foreground">
+                  Nicio grupă nu începe în următoarele 14 zile.
+                </p>
               ) : (
                 <ul className="flex flex-col">
                   {data.cohortsStartingSoon.map((c) => (
-                    <li key={c.id} className="flex flex-wrap items-center gap-x-3 gap-y-1 border-t border-border/70 py-3 first:border-0">
-                      <span className="min-w-0 flex-1 font-semibold">{c.title_ro || c.title_en || c.level || "Grupă"}</span>
+                    <li
+                      key={c.id}
+                      className="flex flex-wrap items-center gap-x-3 gap-y-1 border-t border-border/70 py-3 first:border-0"
+                    >
+                      <span className="min-w-0 flex-1 font-semibold">
+                        {c.title_ro || c.title_en || c.level || "Grupă"}
+                      </span>
                       <span className="text-[0.8125rem] text-muted-foreground">
-                        de pe {new Date(`${c.start_date}T12:00:00Z`).toLocaleDateString("ro-RO", { day: "numeric", month: "short", timeZone: "UTC" })}
+                        de pe{" "}
+                        {new Date(
+                          `${c.start_date}T12:00:00Z`,
+                        ).toLocaleDateString("ro-RO", {
+                          day: "numeric",
+                          month: "short",
+                          timeZone: "UTC",
+                        })}
                       </span>
                       <span className="rounded-full bg-muted px-2.5 py-1 text-xs font-semibold">
                         {COHORT_STATUS[c.status] ?? c.status}
@@ -619,7 +889,8 @@ const TodayAdmin = ({ onGoToLeads, onOpenPerson, onGo, newLast7, onLoaded }: Pro
                 </ul>
               )}
               <p className="text-[0.8125rem] text-muted-foreground">
-                Locurile ocupate se văd în Grupe — acolo se calculează, inclusiv ajustarea manuală.
+                Locurile ocupate se văd în Grupe — acolo se calculează, inclusiv
+                ajustarea manuală.
               </p>
             </section>
           </div>

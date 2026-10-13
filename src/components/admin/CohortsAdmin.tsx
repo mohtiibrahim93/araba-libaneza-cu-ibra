@@ -29,7 +29,10 @@ type CohortStatus =
 const STATUSES: { value: CohortStatus; label: string }[] = [
   { value: "draft", label: "Draft (ascuns)" },
   { value: "forming", label: "În formare" },
-  { value: "minimum_reached", label: "Minim atins (trimite email: pornește sigur)" },
+  {
+    value: "minimum_reached",
+    label: "Minim atins (trimite email: pornește sigur)",
+  },
   { value: "confirmed", label: "Confirmată" },
   { value: "full", label: "Plină (waitlist)" },
   { value: "in_progress", label: "În desfășurare" },
@@ -119,8 +122,14 @@ const CohortsAdmin = () => {
   const [draft, setDraft] = useState<Cohort>(blank());
   const [expandedId, setExpandedId] = useState<string | null>(null);
 
-  const call = async (action: string, extra: Record<string, unknown> | Cohort = {}) => {
-    const { data, error } = await invokeAdmin({ action, ...(extra as Record<string, unknown>) });
+  const call = async (
+    action: string,
+    extra: Record<string, unknown> | Cohort = {},
+  ) => {
+    const { data, error } = await invokeAdmin({
+      action,
+      ...(extra as Record<string, unknown>),
+    });
     if (error) throw error;
     if (data?.error) throw new Error(data.error);
     return data;
@@ -198,9 +207,12 @@ const CohortsAdmin = () => {
   return (
     <section className="mb-6 rounded-lg border border-border bg-card p-4">
       <div className="mb-4">
-        <h2 className="text-base font-semibold text-foreground">Cohorte grupe</h2>
+        <h2 className="text-base font-semibold text-foreground">
+          Cohorte grupe
+        </h2>
         <p className="text-sm text-muted-foreground">
-          Configurează 1–3 date de start per nivel. Studenții aleg cohorta dorită la înscriere.
+          Configurează 1–3 date de start per nivel. Studenții aleg cohorta
+          dorită la înscriere.
         </p>
       </div>
 
@@ -223,7 +235,9 @@ const CohortsAdmin = () => {
                 })
               }
             >
-              <SelectTrigger><SelectValue /></SelectTrigger>
+              <SelectTrigger>
+                <SelectValue />
+              </SelectTrigger>
               <SelectContent>
                 <SelectItem value="group">Grup</SelectItem>
                 <SelectItem value="kids">Copii</SelectItem>
@@ -233,10 +247,19 @@ const CohortsAdmin = () => {
           {draft.form_type === "group" && (
             <div>
               <Label className="text-xs">Nivel</Label>
-              <Select value={draft.level ?? "A1"} onValueChange={(v) => setDraft({ ...draft, level: v })}>
-                <SelectTrigger><SelectValue /></SelectTrigger>
+              <Select
+                value={draft.level ?? "A1"}
+                onValueChange={(v) => setDraft({ ...draft, level: v })}
+              >
+                <SelectTrigger>
+                  <SelectValue />
+                </SelectTrigger>
                 <SelectContent>
-                  {LEVELS.map((l) => <SelectItem key={l} value={l}>{l}</SelectItem>)}
+                  {LEVELS.map((l) => (
+                    <SelectItem key={l} value={l}>
+                      {l}
+                    </SelectItem>
+                  ))}
                 </SelectContent>
               </Select>
             </div>
@@ -244,8 +267,13 @@ const CohortsAdmin = () => {
           {draft.form_type === "group" && (
             <div>
               <Label className="text-xs">Format</Label>
-              <Select value={draft.format ?? "online"} onValueChange={(v) => setDraft({ ...draft, format: v })}>
-                <SelectTrigger><SelectValue /></SelectTrigger>
+              <Select
+                value={draft.format ?? "online"}
+                onValueChange={(v) => setDraft({ ...draft, format: v })}
+              >
+                <SelectTrigger>
+                  <SelectValue />
+                </SelectTrigger>
                 <SelectContent>
                   <SelectItem value="online">Online</SelectItem>
                   <SelectItem value="fizic">Fizic</SelectItem>
@@ -258,7 +286,9 @@ const CohortsAdmin = () => {
             <Input
               placeholder="Ex: Pauză aproximativ două săptămâni în jurul Crăciunului — datele exacte se stabilesc cu grupa"
               value={draft.break_note_ro ?? ""}
-              onChange={(e) => setDraft({ ...draft, break_note_ro: e.target.value })}
+              onChange={(e) =>
+                setDraft({ ...draft, break_note_ro: e.target.value })
+              }
             />
           </div>
           <div className="md:col-span-2">
@@ -266,7 +296,9 @@ const CohortsAdmin = () => {
             <Input
               placeholder="e.g. Holiday break of roughly two weeks — exact dates agreed with the group"
               value={draft.break_note_en ?? ""}
-              onChange={(e) => setDraft({ ...draft, break_note_en: e.target.value })}
+              onChange={(e) =>
+                setDraft({ ...draft, break_note_en: e.target.value })
+              }
             />
           </div>
           <div className="flex items-end">
@@ -274,7 +306,9 @@ const CohortsAdmin = () => {
               <input
                 type="checkbox"
                 checked={Boolean(draft.end_date_is_estimate)}
-                onChange={(e) => setDraft({ ...draft, end_date_is_estimate: e.target.checked })}
+                onChange={(e) =>
+                  setDraft({ ...draft, end_date_is_estimate: e.target.checked })
+                }
               />
               Data de final e estimativă
             </label>
@@ -283,9 +317,13 @@ const CohortsAdmin = () => {
             <Label className="text-xs">Limba de predare</Label>
             <Select
               value={draft.teaching_language}
-              onValueChange={(v) => setDraft({ ...draft, teaching_language: v as "ro" | "en" })}
+              onValueChange={(v) =>
+                setDraft({ ...draft, teaching_language: v as "ro" | "en" })
+              }
             >
-              <SelectTrigger><SelectValue /></SelectTrigger>
+              <SelectTrigger>
+                <SelectValue />
+              </SelectTrigger>
               <SelectContent>
                 <SelectItem value="ro">Română</SelectItem>
                 <SelectItem value="en">Engleză</SelectItem>
@@ -300,7 +338,9 @@ const CohortsAdmin = () => {
             <Input
               type="date"
               value={draft.start_date}
-              onChange={(e) => setDraft({ ...draft, start_date: e.target.value })}
+              onChange={(e) =>
+                setDraft({ ...draft, start_date: e.target.value })
+              }
             />
           </div>
           <div>
@@ -308,12 +348,19 @@ const CohortsAdmin = () => {
             <Input
               type="number"
               min={1}
-              max={draft.format === "online" ? MAX_GROUP_SIZE.online : MAX_GROUP_SIZE.fizic}
+              max={
+                draft.format === "online"
+                  ? MAX_GROUP_SIZE.online
+                  : MAX_GROUP_SIZE.fizic
+              }
               value={draft.max_seats}
-              onChange={(e) => setDraft({ ...draft, max_seats: Number(e.target.value) })}
+              onChange={(e) =>
+                setDraft({ ...draft, max_seats: Number(e.target.value) })
+              }
             />
             <p className="text-[11px] text-muted-foreground mt-1">
-              Max. {MAX_GROUP_SIZE.online} online · {MAX_GROUP_SIZE.fizic} fizic · pornește la jumătate din locuri
+              Max. {MAX_GROUP_SIZE.online} online · {MAX_GROUP_SIZE.fizic} fizic
+              · pornește la jumătate din locuri
             </p>
           </div>
           <div className="md:col-span-2">
@@ -321,7 +368,9 @@ const CohortsAdmin = () => {
             <Input
               placeholder="Ex: Luni & Miercuri 19:00"
               value={draft.schedule_label_ro}
-              onChange={(e) => setDraft({ ...draft, schedule_label_ro: e.target.value })}
+              onChange={(e) =>
+                setDraft({ ...draft, schedule_label_ro: e.target.value })
+              }
             />
           </div>
           <div className="md:col-span-2">
@@ -329,7 +378,9 @@ const CohortsAdmin = () => {
             <Input
               placeholder="Ex: Mon & Wed 7pm"
               value={draft.schedule_label_en}
-              onChange={(e) => setDraft({ ...draft, schedule_label_en: e.target.value })}
+              onChange={(e) =>
+                setDraft({ ...draft, schedule_label_en: e.target.value })
+              }
             />
           </div>
         </div>
@@ -345,115 +396,174 @@ const CohortsAdmin = () => {
           <Loader2 className="h-4 w-4 animate-spin" /> Se încarcă…
         </div>
       ) : rows.length === 0 ? (
-        <p className="text-sm text-muted-foreground">Nicio cohortă configurată.</p>
+        <p className="text-sm text-muted-foreground">
+          Nicio cohortă configurată.
+        </p>
       ) : (
         <div className="space-y-2">
           {rows.map((r) => (
-            <div key={r.id} className="rounded-md border border-border bg-background p-2">
-             <div className="grid gap-2 md:grid-cols-[70px_50px_96px_64px_130px_64px_84px_1fr_1fr_150px_auto] items-end">
-              <div className="text-xs font-semibold">{r.form_type === "kids" ? "Copii" : "Grup"}</div>
-              <div className="text-xs font-semibold">{r.level ?? "—"}</div>
-              {r.form_type === "kids" ? (
-                <div className="text-xs text-muted-foreground self-center">—</div>
-              ) : (
+            <div
+              key={r.id}
+              className="rounded-md border border-border bg-background p-2"
+            >
+              <div className="grid gap-2 md:grid-cols-[70px_50px_96px_64px_130px_64px_84px_1fr_1fr_150px_auto] items-end">
+                <div className="text-xs font-semibold">
+                  {r.form_type === "kids" ? "Copii" : "Grup"}
+                </div>
+                <div className="text-xs font-semibold">{r.level ?? "—"}</div>
+                {r.form_type === "kids" ? (
+                  <div className="text-xs text-muted-foreground self-center">
+                    —
+                  </div>
+                ) : (
+                  <Select
+                    value={r.format ?? "online"}
+                    onValueChange={(v) => update(r.id, { format: v })}
+                  >
+                    <SelectTrigger className="h-9 text-xs">
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="online">Online</SelectItem>
+                      <SelectItem value="fizic">Fizic</SelectItem>
+                    </SelectContent>
+                  </Select>
+                )}
                 <Select
-                  value={r.format ?? "online"}
-                  onValueChange={(v) => update(r.id, { format: v })}
+                  value={r.teaching_language ?? "ro"}
+                  onValueChange={(v) =>
+                    update(r.id, { teaching_language: v as "ro" | "en" })
+                  }
                 >
-                  <SelectTrigger className="h-9 text-xs"><SelectValue /></SelectTrigger>
+                  <SelectTrigger
+                    className="h-9 text-xs"
+                    title="Limba de predare"
+                  >
+                    <SelectValue />
+                  </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="online">Online</SelectItem>
-                    <SelectItem value="fizic">Fizic</SelectItem>
+                    <SelectItem value="ro">RO</SelectItem>
+                    <SelectItem value="en">EN</SelectItem>
                   </SelectContent>
                 </Select>
-              )}
-              <Select
-                value={r.teaching_language ?? "ro"}
-                onValueChange={(v) => update(r.id, { teaching_language: v as "ro" | "en" })}
-              >
-                <SelectTrigger className="h-9 text-xs" title="Limba de predare"><SelectValue /></SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="ro">RO</SelectItem>
-                  <SelectItem value="en">EN</SelectItem>
-                </SelectContent>
-              </Select>
-              <Input
-                type="date"
-                value={r.start_date}
-                onChange={(e) => update(r.id, { start_date: e.target.value })}
-              />
-              {/* The cohorts running now were created before the caps and keep
+                <Input
+                  type="date"
+                  value={r.start_date}
+                  onChange={(e) => update(r.id, { start_date: e.target.value })}
+                />
+                {/* The cohorts running now were created before the caps and keep
                   their larger numbers; the database grandfathers them with a
                   NOT VALID constraint. So this field cannot simply clamp to the
                   cap — that would silently shrink a running group on the next
                   save — but it must not let a row drift further over it either.
                   The ceiling is the cap, or the seats the row already has,
                   whichever is higher, and the row says why when it is over. */}
-              <div>
+                <div>
+                  <Input
+                    type="number"
+                    min={1}
+                    max={Math.max(capFor(r.format), r.max_seats)}
+                    value={r.max_seats}
+                    onChange={(e) =>
+                      update(r.id, { max_seats: Number(e.target.value) })
+                    }
+                  />
+                  {r.max_seats > capFor(r.format) && (
+                    <p className="mt-0.5 text-[10px] leading-tight text-muted-foreground">
+                      Peste plafonul de {capFor(r.format)} — grupă începută
+                      înainte de regulă.
+                    </p>
+                  )}
+                </div>
+                <div>
+                  <Label className="text-[10px] uppercase text-muted-foreground">
+                    Manual
+                  </Label>
+                  <Input
+                    type="number"
+                    min={0}
+                    title="Înscrieri manuale (WhatsApp/TikTok/direct)"
+                    value={r.manual_offset ?? 0}
+                    onChange={(e) =>
+                      update(r.id, {
+                        manual_offset: Math.max(0, Number(e.target.value)),
+                      })
+                    }
+                  />
+                </div>
                 <Input
-                  type="number"
-                  min={1}
-                  max={Math.max(capFor(r.format), r.max_seats)}
-                  value={r.max_seats}
-                  onChange={(e) => update(r.id, { max_seats: Number(e.target.value) })}
+                  placeholder="Program RO"
+                  value={r.schedule_label_ro}
+                  onChange={(e) =>
+                    update(r.id, { schedule_label_ro: e.target.value })
+                  }
                 />
-                {r.max_seats > capFor(r.format) && (
-                  <p className="mt-0.5 text-[10px] leading-tight text-muted-foreground">
-                    Peste plafonul de {capFor(r.format)} — grupă începută înainte de regulă.
-                  </p>
-                )}
-              </div>
-              <div>
-                <Label className="text-[10px] uppercase text-muted-foreground">Manual</Label>
                 <Input
-                  type="number" min={0}
-                  title="Înscrieri manuale (WhatsApp/TikTok/direct)"
-                  value={r.manual_offset ?? 0}
-                  onChange={(e) => update(r.id, { manual_offset: Math.max(0, Number(e.target.value)) })}
+                  placeholder="Schedule EN"
+                  value={r.schedule_label_en}
+                  onChange={(e) =>
+                    update(r.id, { schedule_label_en: e.target.value })
+                  }
                 />
+                <div className="min-w-[150px]">
+                  <Select
+                    value={r.status ?? (r.is_active ? "forming" : "cancelled")}
+                    onValueChange={(v) =>
+                      update(r.id, { status: v as CohortStatus })
+                    }
+                  >
+                    <SelectTrigger className="h-9 text-xs">
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {STATUSES.map((s) => (
+                        <SelectItem key={s.value} value={s.value}>
+                          {s.label}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </div>
+                <div className="flex gap-1">
+                  <Button
+                    size="sm"
+                    variant="outline"
+                    title="Detalii curs"
+                    onClick={() =>
+                      setExpandedId(expandedId === r.id ? null : r.id)
+                    }
+                  >
+                    {expandedId === r.id ? (
+                      <ChevronUp className="h-4 w-4" />
+                    ) : (
+                      <ChevronDown className="h-4 w-4" />
+                    )}
+                  </Button>
+                  <Button
+                    size="sm"
+                    onClick={() => save(r)}
+                    disabled={savingId === r.id}
+                  >
+                    {savingId === r.id ? (
+                      <Loader2 className="h-4 w-4 animate-spin" />
+                    ) : (
+                      "Salvează"
+                    )}
+                  </Button>
+                  <Button
+                    size="sm"
+                    variant="ghost"
+                    onClick={() => remove(r.id)}
+                  >
+                    <Trash2 className="h-4 w-4" />
+                  </Button>
+                </div>
               </div>
-              <Input
-                placeholder="Program RO"
-                value={r.schedule_label_ro}
-                onChange={(e) => update(r.id, { schedule_label_ro: e.target.value })}
-              />
-              <Input
-                placeholder="Schedule EN"
-                value={r.schedule_label_en}
-                onChange={(e) => update(r.id, { schedule_label_en: e.target.value })}
-              />
-              <div className="min-w-[150px]">
-                <Select
-                  value={r.status ?? (r.is_active ? "forming" : "cancelled")}
-                  onValueChange={(v) => update(r.id, { status: v as CohortStatus })}
-                >
-                  <SelectTrigger className="h-9 text-xs">
-                    <SelectValue />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {STATUSES.map((s) => (
-                      <SelectItem key={s.value} value={s.value}>
-                        {s.label}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-              </div>
-              <div className="flex gap-1">
-                <Button size="sm" variant="outline" title="Detalii curs"
-                  onClick={() => setExpandedId(expandedId === r.id ? null : r.id)}>
-                  {expandedId === r.id ? <ChevronUp className="h-4 w-4" /> : <ChevronDown className="h-4 w-4" />}
-                </Button>
-                <Button size="sm" onClick={() => save(r)} disabled={savingId === r.id}>
-                  {savingId === r.id ? <Loader2 className="h-4 w-4 animate-spin" /> : "Salvează"}
-                </Button>
-                <Button size="sm" variant="ghost" onClick={() => remove(r.id)}>
-                  <Trash2 className="h-4 w-4" />
-                </Button>
-              </div>
-             </div>
               {expandedId === r.id && (
-                <CourseDetailsEditor value={r} onChange={(patch) => update(r.id, patch)} />
+                <CourseDetailsEditor
+                  value={r}
+                  onChange={(patch) => update(r.id, patch)}
+                />
               )}
             </div>
           ))}

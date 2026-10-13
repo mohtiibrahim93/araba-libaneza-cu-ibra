@@ -36,26 +36,40 @@ const ArabicForTeenagers = () => (
     faq={FAQ}
   >
     <p>
-      Teenagers learn a language when they can use it immediately. That's why our{" "}
-      <strong>Lebanese Arabic classes for teenagers</strong> (12–17) start from the living language —
-      the Levantine dialect spoken in Lebanon, Syria, Jordan and Palestine — rather than the Modern
-      Standard Arabic of textbooks that nobody speaks in conversation.
+      Teenagers learn a language when they can use it immediately. That's why
+      our <strong>Lebanese Arabic classes for teenagers</strong> (12–17) start
+      from the living language — the Levantine dialect spoken in Lebanon, Syria,
+      Jordan and Palestine — rather than the Modern Standard Arabic of textbooks
+      that nobody speaks in conversation.
     </p>
 
     <h2>Who it's for</h2>
     <ul>
-      <li><strong>Teens from Lebanese or Arab families</strong> who want to talk to grandparents, cousins and relatives back home.</li>
-      <li><strong>Teens with no family connection</strong> who are into Arabic music, series, TikTok or travel.</li>
-      <li><strong>Students adding a third language</strong> that is genuinely rare and useful (Arabic has 400+ million speakers).</li>
-      <li><strong>Mixed families</strong> where one parent is a native speaker.</li>
+      <li>
+        <strong>Teens from Lebanese or Arab families</strong> who want to talk
+        to grandparents, cousins and relatives back home.
+      </li>
+      <li>
+        <strong>Teens with no family connection</strong> who are into Arabic
+        music, series, TikTok or travel.
+      </li>
+      <li>
+        <strong>Students adding a third language</strong> that is genuinely rare
+        and useful (Arabic has 400+ million speakers).
+      </li>
+      <li>
+        <strong>Mixed families</strong> where one parent is a native speaker.
+      </li>
     </ul>
 
     <h2>What a lesson looks like</h2>
     <p>
-      90 minutes at a brisk pace: 10 min recap, 25 min new vocabulary and structures through real
-      material (messages, song lyrics, film scenes), 40 min conversation and role-play, 15 min
-      pronunciation feedback. No dictation, no long memorisation lists — homework is short and audio.
-      The method is <strong>Oral First</strong>: you speak from lesson one, using Arabizi.
+      90 minutes at a brisk pace: 10 min recap, 25 min new vocabulary and
+      structures through real material (messages, song lyrics, film scenes), 40
+      min conversation and role-play, 15 min pronunciation feedback. No
+      dictation, no long memorisation lists — homework is short and audio. The
+      method is <strong>Oral First</strong>: you speak from lesson one, using
+      Arabizi.
     </p>
 
     <h2>Ages and pathway</h2>
@@ -71,43 +85,63 @@ const ArabicForTeenagers = () => (
         <tbody>
           <tr className="border-b border-border/60 align-top">
             <td className="py-2 pr-3 font-semibold">6–11</td>
-            <td className="py-2 px-3">Play-based kids course (not running at the moment)</td>
+            <td className="py-2 px-3">
+              Play-based kids course (not running at the moment)
+            </td>
             <td className="py-2 pl-3">In person, Bucharest</td>
           </tr>
           <tr className="border-b border-border/60 align-top">
             <td className="py-2 pr-3 font-semibold">12–15</td>
-            <td className="py-2 px-3">Teen group (forming) or private 1-on-1</td>
+            <td className="py-2 px-3">
+              Teen group (forming) or private 1-on-1
+            </td>
             <td className="py-2 pl-3">In person or online</td>
           </tr>
           <tr className="border-b border-border/60 align-top">
             <td className="py-2 pr-3 font-semibold">16–17</td>
-            <td className="py-2 px-3">Adult groups A1–C2, with parental consent</td>
+            <td className="py-2 px-3">
+              Adult groups A1–C2, with parental consent
+            </td>
             <td className="py-2 pl-3">In person or online</td>
           </tr>
         </tbody>
       </table>
     </div>
     <p>
-      Dedicated 12–15 groups open once 4–8 students have registered interest. You can reserve a place
-      below — we'll notify you the moment a group
+      Dedicated 12–15 groups open once 4–8 students have registered interest.
+      You can reserve a place below — we'll notify you the moment a group
       starts, and in the meantime{" "}
-      <Link to="/en/arabic-tutor">private lessons</Link> are available immediately.
+      <Link to="/en/arabic-tutor">private lessons</Link> are available
+      immediately.
     </p>
 
     <h2>Pricing</h2>
     <ul>
-      <li><strong>Group:</strong> from 500 LEI / month (2 × 90 min per week), 15% off when the level is paid in full.</li>
-      <li><strong>Private 1-on-1:</strong> 150 LEI online / 210 LEI in person per 60-minute lesson, with −15% from 20 lessons.</li>
-      <li><strong>Trial lesson (30 min):</strong> free, with a parent present if they prefer.</li>
+      <li>
+        <strong>Group:</strong> from 500 LEI / month (2 × 90 min per week), 15%
+        off when the level is paid in full.
+      </li>
+      <li>
+        <strong>Private 1-on-1:</strong> 150 LEI online / 210 LEI in person per
+        60-minute lesson, with −15% from 20 lessons.
+      </li>
+      <li>
+        <strong>Trial lesson (30 min):</strong> free, with a parent present if
+        they prefer.
+      </li>
     </ul>
 
     <h2>Native teacher, in Bucharest or online</h2>
     <p>
-      Ibra is a native Lebanese Arabic speaker with 5+ years of teaching experience, and teaches in
-      English, French, Arabic or Romanian — whichever the teenager is most comfortable with. In-person
-      lessons run at Raduga Creative Center (Strada Icoanei 80, Bucharest); online lessons run on
+      Ibra is a native Lebanese Arabic speaker with 5+ years of teaching
+      experience, and teaches in English, French, Arabic or Romanian — whichever
+      the teenager is most comfortable with. In-person lessons run at Raduga
+      Creative Center (Strada Icoanei 80, Bucharest); online lessons run on
       Zoom. See also{" "}
-      <Link to="/en/best-arabic-course">how to choose the best Arabic course</Link> and{" "}
+      <Link to="/en/best-arabic-course">
+        how to choose the best Arabic course
+      </Link>{" "}
+      and{" "}
       <Link to="/en/arabic-classes-near-me">Arabic classes in Bucharest</Link>.
     </p>
   </EnLandingLayout>

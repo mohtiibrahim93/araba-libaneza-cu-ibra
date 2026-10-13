@@ -2,7 +2,17 @@ import { useCallback, useEffect, useState } from "react";
 import { RefreshCw, ScrollText, ShieldAlert } from "lucide-react";
 import { invokeAdmin } from "@/lib/adminAuth";
 import { Button } from "@/components/ui/button";
-import { Empty, ErrorNote, Loading, ScreenToolbar, Section, TableWrap, Td, Th, Tr } from "./ui";
+import {
+  Empty,
+  ErrorNote,
+  Loading,
+  ScreenToolbar,
+  Section,
+  TableWrap,
+  Td,
+  Th,
+  Tr,
+} from "./ui";
 import { leadStatusLabels } from "./types";
 
 /**
@@ -73,15 +83,23 @@ function describeDetails(details: unknown): string {
 
   const d = details as Record<string, unknown>;
   const name = (v: unknown) =>
-    typeof v === "string" ? (leadStatusLabels[v as keyof typeof leadStatusLabels] ?? v) : String(v);
+    typeof v === "string"
+      ? (leadStatusLabels[v as keyof typeof leadStatusLabels] ?? v)
+      : String(v);
 
   if ("from" in d && "to" in d) return `${name(d["from"])} → ${name(d["to"])}`;
 
   // A reschedule carries only the new time, and a raw ISO string in a
   // Romanian panel is not a time anyone reads.
-  if ("to" in d && typeof d["to"] === "string" && !Number.isNaN(Date.parse(d["to"] as string))) {
+  if (
+    "to" in d &&
+    typeof d["to"] === "string" &&
+    !Number.isNaN(Date.parse(d["to"] as string))
+  ) {
     const when = stamp.format(new Date(d["to"] as string));
-    return d["forced"] === true ? `mutată la ${when} (forțat)` : `mutată la ${when}`;
+    return d["forced"] === true
+      ? `mutată la ${when} (forțat)`
+      : `mutată la ${when}`;
   }
 
   const pairs = Object.entries(d).map(([k, v]) => `${k}: ${name(v)}`);
@@ -97,7 +115,9 @@ const AuditLogAdmin = () => {
     setLoading(true);
     setError("");
     try {
-      const { data, error: err } = await invokeAdmin({ action: "list_audit_logs" });
+      const { data, error: err } = await invokeAdmin({
+        action: "list_audit_logs",
+      });
       if (err) throw err;
       if (data?.error) throw new Error(data.error);
       setRows(data?.data ?? []);
@@ -116,7 +136,13 @@ const AuditLogAdmin = () => {
   return (
     <div className="space-y-5">
       <ScreenToolbar>
-        <Button variant="outline" size="sm" onClick={() => void load()} disabled={loading} aria-label="Reîncarcă">
+        <Button
+          variant="outline"
+          size="sm"
+          onClick={() => void load()}
+          disabled={loading}
+          aria-label="Reîncarcă"
+        >
           <RefreshCw className="h-4 w-4" />
         </Button>
       </ScreenToolbar>
@@ -157,7 +183,9 @@ const AuditLogAdmin = () => {
                     <Td className="whitespace-nowrap tabular-nums text-muted-foreground">
                       {stamp.format(new Date(r.created_at))}
                     </Td>
-                    <Td className="max-w-[14rem] truncate text-foreground">{r.actor}</Td>
+                    <Td className="max-w-[14rem] truncate text-foreground">
+                      {r.actor}
+                    </Td>
                     <Td>
                       <span
                         className={

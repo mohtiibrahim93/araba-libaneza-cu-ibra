@@ -41,66 +41,148 @@ const LevantinaVsPeninsulara = () => (
   >
     <h2>Pe scurt</h2>
     <p>
-      Prin „arabă peninsulară” înțelegem aici varietățile din interiorul și vestul Peninsulei
-      Arabice: <strong>hijazi</strong> (Jeddah, Mecca, Medina), <strong>najdi</strong> (Riad și
-      podișul central) și <strong>dialectele yemenite</strong>. Coasta Golfului — Kuweit, Qatar,
+      Prin „arabă peninsulară” înțelegem aici varietățile din interiorul și
+      vestul Peninsulei Arabice: <strong>hijazi</strong> (Jeddah, Mecca,
+      Medina), <strong>najdi</strong> (Riad și podișul central) și{" "}
+      <strong>dialectele yemenite</strong>. Coasta Golfului — Kuweit, Qatar,
       Emirate — e un grup separat, tratat în{" "}
-      <Link to="/dialecte-arabe/levantina-vs-golf">levantina vs. araba din Golf</Link>. Față de
-      levantină, toate trei schimbă pronunția lui ق în „g”, renunță la prefixul <em>b-</em> al
-      prezentului levantin și folosesc alte cuvinte pentru cele mai frecvente verbe.
+      <Link to="/dialecte-arabe/levantina-vs-golf">
+        levantina vs. araba din Golf
+      </Link>
+      . Față de levantină, toate trei schimbă pronunția lui ق în „g”, renunță la
+      prefixul <em>b-</em> al prezentului levantin și folosesc alte cuvinte
+      pentru cele mai frecvente verbe.
     </p>
 
     <h2>Comparație pe puncte</h2>
     <ComparisonTable
       caption="Araba levantină comparată cu varietățile din Peninsula Arabică"
-      columns={["Criteriu", "Levantină (shami)", "Hijazi (vestul saudit)", "Najdi (centrul saudit)", "Yemenită"]}
+      columns={[
+        "Criteriu",
+        "Levantină (shami)",
+        "Hijazi (vestul saudit)",
+        "Najdi (centrul saudit)",
+        "Yemenită",
+      ]}
       rows={[
-        ["Unde se vorbește", "Liban, Siria, Iordania, Palestina.", "Jeddah, Mecca, Medina.", "Riad și podișul Najd.", "Yemen, în mai multe varietăți."],
-        ["Litera ق", "Oprire glotală: ʾāl.", "„g” dur: gāl.", "„g” dur: gāl.", "Adesea păstrat ca q profund, mai ales la Sanaa."],
-        ["Litera ج", "„j” moale.", "„j” ca în araba standard.", "„j” ca în araba standard.", "La Sanaa, pronunțat „g”."],
-        ["Prezentul", "Prefixul b-: baʿrif.", "Verb simplu: aʿrif.", "Verb simplu: aʿrif.", "Verb simplu."],
-        ["Acțiunea în desfășurare", "ʿam + verb.", "gāʿid sau verb simplu.", "gāʿid sau verb simplu.", "Variază de la o zonă la alta."],
-        ["„Vreau”", "baddi", "abī / widdi", "abgha", "Variază: ashti, abghi și altele."],
-        ["Caracterizare", "Melodică, larg înțeleasă din media.", "Descrisă des ca sunând neutru.", "Cu afrikate caracteristice în unele poziții.", "Printre cele mai conservatoare varietăți arabe."],
+        [
+          "Unde se vorbește",
+          "Liban, Siria, Iordania, Palestina.",
+          "Jeddah, Mecca, Medina.",
+          "Riad și podișul Najd.",
+          "Yemen, în mai multe varietăți.",
+        ],
+        [
+          "Litera ق",
+          "Oprire glotală: ʾāl.",
+          "„g” dur: gāl.",
+          "„g” dur: gāl.",
+          "Adesea păstrat ca q profund, mai ales la Sanaa.",
+        ],
+        [
+          "Litera ج",
+          "„j” moale.",
+          "„j” ca în araba standard.",
+          "„j” ca în araba standard.",
+          "La Sanaa, pronunțat „g”.",
+        ],
+        [
+          "Prezentul",
+          "Prefixul b-: baʿrif.",
+          "Verb simplu: aʿrif.",
+          "Verb simplu: aʿrif.",
+          "Verb simplu.",
+        ],
+        [
+          "Acțiunea în desfășurare",
+          "ʿam + verb.",
+          "gāʿid sau verb simplu.",
+          "gāʿid sau verb simplu.",
+          "Variază de la o zonă la alta.",
+        ],
+        [
+          "„Vreau”",
+          "baddi",
+          "abī / widdi",
+          "abgha",
+          "Variază: ashti, abghi și altele.",
+        ],
+        [
+          "Caracterizare",
+          "Melodică, larg înțeleasă din media.",
+          "Descrisă des ca sunând neutru.",
+          "Cu afrikate caracteristice în unele poziții.",
+          "Printre cele mai conservatoare varietăți arabe.",
+        ],
       ]}
     />
 
     <h2>Aceeași propoziție</h2>
-    <p><em>„Vreau să beau o cafea.”</em></p>
+    <p>
+      <em>„Vreau să beau o cafea.”</em>
+    </p>
     <ul>
-      <li><strong>Levantină (libaneză):</strong> <em>baddi ishrab ʾahwe</em></li>
-      <li><strong>Hijazi:</strong> <em>abī ashrab gahwa</em></li>
-      <li><strong>Najdi:</strong> <em>abgha ashrab gahwa</em></li>
+      <li>
+        <strong>Levantină (libaneză):</strong> <em>baddi ishrab ʾahwe</em>
+      </li>
+      <li>
+        <strong>Hijazi:</strong> <em>abī ashrab gahwa</em>
+      </li>
+      <li>
+        <strong>Najdi:</strong> <em>abgha ashrab gahwa</em>
+      </li>
     </ul>
 
     <h2>Cine pe cine înțelege</h2>
     <p>
-      Vorbitorii din peninsulă înțeleg levantina bine: muzica libaneză, serialele siriene și
-      filmele egiptene se consumă peste tot în regiune, iar comunitățile de expați levantini sunt
-      mari. Un vorbitor de levantină care aude prima dată najdi rapid prinde sensul general și
-      pierde detaliile. Ca peste tot în lumea arabă, când conversația se împotmolește se comută
-      spre un registru mai neutru, apropiat de araba standard.
+      Vorbitorii din peninsulă înțeleg levantina bine: muzica libaneză,
+      serialele siriene și filmele egiptene se consumă peste tot în regiune, iar
+      comunitățile de expați levantini sunt mari. Un vorbitor de levantină care
+      aude prima dată najdi rapid prinde sensul general și pierde detaliile. Ca
+      peste tot în lumea arabă, când conversația se împotmolește se comută spre
+      un registru mai neutru, apropiat de araba standard.
     </p>
 
     <h2>Ce alegi, în funcție de scop</h2>
     <ul>
-      <li><strong>Familie sau prieteni din Levant</strong> → levantină, adică <Link to="/cursuri-limba-araba">araba libaneză</Link>.</li>
-      <li><strong>Muncă sau studii în Arabia Saudită</strong> → o bază levantină sau egipteană te ține în conversație; accentul local se prinde pe loc.</li>
-      <li><strong>Context religios, texte, Coran</strong> → arabă standard. Vezi <Link to="/ce-araba-sa-inveti">ce arabă să înveți</Link>.</li>
-      <li><strong>Călătorie scurtă</strong> → o sută de expresii de bază din <Link to="/resurse">resursele gratuite</Link> acoperă situațiile obișnuite.</li>
+      <li>
+        <strong>Familie sau prieteni din Levant</strong> → levantină, adică{" "}
+        <Link to="/cursuri-limba-araba">araba libaneză</Link>.
+      </li>
+      <li>
+        <strong>Muncă sau studii în Arabia Saudită</strong> → o bază levantină
+        sau egipteană te ține în conversație; accentul local se prinde pe loc.
+      </li>
+      <li>
+        <strong>Context religios, texte, Coran</strong> → arabă standard. Vezi{" "}
+        <Link to="/ce-araba-sa-inveti">ce arabă să înveți</Link>.
+      </li>
+      <li>
+        <strong>Călătorie scurtă</strong> → o sută de expresii de bază din{" "}
+        <Link to="/resurse">resursele gratuite</Link> acoperă situațiile
+        obișnuite.
+      </li>
     </ul>
 
     <h2>Restul hărții</h2>
     <p>
       Pentru celelalte comparații:{" "}
       <Link to="/dialecte-arabe/levantina-vs-golf">levantina vs. Golf</Link>,{" "}
-      <Link to="/dialecte-arabe/levantina-vs-irakiana">levantina vs. irakiană</Link>,{" "}
-      <Link to="/dialecte-arabe/levantina-vs-maghrebina">levantina vs. maghrebină</Link> și{" "}
-      <Link to="/dialecte-arabe/libaneza-vs-egipteana">libaneza vs. egipteana</Link>. Privirea de
-      ansamblu, cu hărți, e în <Link to="/dialecte-arabe">ghidul dialectelor arabe</Link>.
+      <Link to="/dialecte-arabe/levantina-vs-irakiana">
+        levantina vs. irakiană
+      </Link>
+      ,{" "}
+      <Link to="/dialecte-arabe/levantina-vs-maghrebina">
+        levantina vs. maghrebină
+      </Link>{" "}
+      și{" "}
+      <Link to="/dialecte-arabe/libaneza-vs-egipteana">
+        libaneza vs. egipteana
+      </Link>
+      . Privirea de ansamblu, cu hărți, e în{" "}
+      <Link to="/dialecte-arabe">ghidul dialectelor arabe</Link>.
     </p>
     <DialectSiblings current="/dialecte-arabe/levantina-vs-peninsulara" />
-
   </LandingLayout>
 );
 

@@ -14,7 +14,11 @@ interface GdprCheckboxProps {
   error?: string | undefined;
 }
 
-const GdprCheckbox = ({ checked, onCheckedChange, error }: GdprCheckboxProps) => {
+const GdprCheckbox = ({
+  checked,
+  onCheckedChange,
+  error,
+}: GdprCheckboxProps) => {
   const { t } = useI18n();
 
   return (
@@ -35,13 +39,22 @@ const GdprCheckbox = ({ checked, onCheckedChange, error }: GdprCheckboxProps) =>
           }`}
         >
           {t.gdprConsent}{" "}
-          <a href="/privacy" target="_blank" rel="noopener noreferrer" className="text-primary underline">
+          <a
+            href="/privacy"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-primary underline"
+          >
             {t.gdprPrivacy}
           </a>
         </Label>
       </div>
       {error && (
-        <p id="gdpr-error" role="alert" className="text-xs font-medium text-destructive pl-6">
+        <p
+          id="gdpr-error"
+          role="alert"
+          className="text-xs font-medium text-destructive pl-6"
+        >
           {error}
         </p>
       )}

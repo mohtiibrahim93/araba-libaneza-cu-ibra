@@ -30,9 +30,7 @@ const LocalTimezoneToggle = ({ className }: Props) => {
       <Globe className="w-3.5 h-3.5 text-muted-foreground" />
       <label htmlFor="tz-local-toggle" className="flex-1 cursor-pointer">
         <span className="font-medium text-foreground">{t.tzToggleLabel}</span>
-        <span className="ml-1 text-muted-foreground">
-          ({shortTzLabel(tz)})
-        </span>
+        <span className="ml-1 text-muted-foreground">({shortTzLabel(tz)})</span>
       </label>
       <Switch
         id="tz-local-toggle"

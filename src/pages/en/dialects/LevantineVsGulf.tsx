@@ -42,12 +42,14 @@ const LevantineVsGulf = () => (
   >
     <h2>Short answer</h2>
     <p>
-      <strong>Levantine (shami)</strong> is spoken in Lebanon, Syria, Jordan and Palestine.{" "}
-      <strong>Gulf Arabic (khaliji)</strong> covers Kuwait, Bahrain, Qatar, the UAE and eastern
-      Saudi Arabia. They are related but not interchangeable: several consonants are pronounced
-      differently, part of the verb morphology diverges, and a solid layer of vocabulary is simply
-      not shared. A Gulf speaker understands Levantine more easily than the reverse, because
-      Levantine and Egyptian media travel everywhere and Gulf media much less.
+      <strong>Levantine (shami)</strong> is spoken in Lebanon, Syria, Jordan and
+      Palestine. <strong>Gulf Arabic (khaliji)</strong> covers Kuwait, Bahrain,
+      Qatar, the UAE and eastern Saudi Arabia. They are related but not
+      interchangeable: several consonants are pronounced differently, part of
+      the verb morphology diverges, and a solid layer of vocabulary is simply
+      not shared. A Gulf speaker understands Levantine more easily than the
+      reverse, because Levantine and Egyptian media travel everywhere and Gulf
+      media much less.
     </p>
 
     <h2>Side by side</h2>
@@ -55,58 +57,117 @@ const LevantineVsGulf = () => (
       caption="Levantine Arabic compared with Gulf Arabic"
       columns={["Feature", "Levantine (shami)", "Gulf (khaliji)"]}
       rows={[
-        ["Where it is spoken", "Lebanon, Syria, Jordan, Palestine.", "Kuwait, Bahrain, Qatar, UAE, eastern Saudi Arabia."],
+        [
+          "Where it is spoken",
+          "Lebanon, Syria, Jordan, Palestine.",
+          "Kuwait, Bahrain, Qatar, UAE, eastern Saudi Arabia.",
+        ],
         ["The letter ق", "Glottal stop in urban speech: ʾāl.", "Hard g: gāl."],
-        ["The letter ك", "Stays k throughout.", "Often affricated to ch next to front vowels."],
-        ["ث and ذ", "Usually lost, becoming t and d.", "More often kept, as in Standard Arabic."],
-        ["The b- prefix", "Marks the present: baʿrif — 'I know'.", "Leans towards intention or the future."],
-        ["Action in progress", "ʿam + verb: ʿam bishrab.", "Bare verb, or gāʿid in front of it."],
+        [
+          "The letter ك",
+          "Stays k throughout.",
+          "Often affricated to ch next to front vowels.",
+        ],
+        [
+          "ث and ذ",
+          "Usually lost, becoming t and d.",
+          "More often kept, as in Standard Arabic.",
+        ],
+        [
+          "The b- prefix",
+          "Marks the present: baʿrif — 'I know'.",
+          "Leans towards intention or the future.",
+        ],
+        [
+          "Action in progress",
+          "ʿam + verb: ʿam bishrab.",
+          "Bare verb, or gāʿid in front of it.",
+        ],
         ["'How are you?'", "kīfak", "shlōnak"],
         ["'I want'", "baddi", "abī / arīd"],
-        ["Loanwords", "French, English, some Turkish.", "Persian, English, Hindi and Urdu."],
-        ["Media reach", "Music and drama broadcast region-wide.", "More local production, less exported."],
+        [
+          "Loanwords",
+          "French, English, some Turkish.",
+          "Persian, English, Hindi and Urdu.",
+        ],
+        [
+          "Media reach",
+          "Music and drama broadcast region-wide.",
+          "More local production, less exported.",
+        ],
       ]}
     />
 
     <h2>The same sentence in both</h2>
-    <p><em>"I want to drink a coffee."</em></p>
+    <p>
+      <em>"I want to drink a coffee."</em>
+    </p>
     <ul>
-      <li><strong>Levantine (Lebanese):</strong> <em>baddi ishrab ʾahwe</em></li>
-      <li><strong>Gulf:</strong> <em>abī ashrab gahwa</em></li>
+      <li>
+        <strong>Levantine (Lebanese):</strong> <em>baddi ishrab ʾahwe</em>
+      </li>
+      <li>
+        <strong>Gulf:</strong> <em>abī ashrab gahwa</em>
+      </li>
     </ul>
     <p>
-      The same word for coffee, carrying the two values of ق — <em>ʾahwe</em> in Beirut,{" "}
-      <em>gahwa</em> in Kuwait. The verb "to want" is entirely different, and that happens exactly
-      at the words you use most.
+      The same word for coffee, carrying the two values of ق — <em>ʾahwe</em> in
+      Beirut, <em>gahwa</em> in Kuwait. The verb "to want" is entirely
+      different, and that happens exactly at the words you use most.
     </p>
 
     <h2>Who understands whom</h2>
     <p>
-      Asymmetrically, as almost everywhere in the Arab world. Gulf speakers follow Lebanese drama
-      and Egyptian film without difficulty, so Levantine is easy for them. A Levantine speaker
-      hearing fast khaliji for the first time gets the gist and loses the detail, mostly on local
-      vocabulary. Context rescues a lot: across the region people shift towards a neutral register
-      close to Egyptian or Standard Arabic.
+      Asymmetrically, as almost everywhere in the Arab world. Gulf speakers
+      follow Lebanese drama and Egyptian film without difficulty, so Levantine
+      is easy for them. A Levantine speaker hearing fast khaliji for the first
+      time gets the gist and loses the detail, mostly on local vocabulary.
+      Context rescues a lot: across the region people shift towards a neutral
+      register close to Egyptian or Standard Arabic.
     </p>
 
     <h2>What to choose, by goal</h2>
     <ul>
-      <li><strong>Family or friends in the Levant</strong> → Levantine. See <Link to="/en/learn-lebanese-arabic">Lebanese Arabic</Link>.</li>
-      <li><strong>Work in the UAE, Qatar or Kuwait with native clients</strong> → khaliji is most direct, but Levantine or Egyptian keeps you in the conversation.</li>
-      <li><strong>Widest reach across the Arab world</strong> → Levantine or Egyptian, not khaliji.</li>
-      <li><strong>Documents, contracts, news</strong> → Standard Arabic. See <Link to="/en/lebanese-arabic-vs-msa-vs-egyptian">which Arabic to learn</Link>.</li>
+      <li>
+        <strong>Family or friends in the Levant</strong> → Levantine. See{" "}
+        <Link to="/en/learn-lebanese-arabic">Lebanese Arabic</Link>.
+      </li>
+      <li>
+        <strong>Work in the UAE, Qatar or Kuwait with native clients</strong> →
+        khaliji is most direct, but Levantine or Egyptian keeps you in the
+        conversation.
+      </li>
+      <li>
+        <strong>Widest reach across the Arab world</strong> → Levantine or
+        Egyptian, not khaliji.
+      </li>
+      <li>
+        <strong>Documents, contracts, news</strong> → Standard Arabic. See{" "}
+        <Link to="/en/lebanese-arabic-vs-msa-vs-egyptian">
+          which Arabic to learn
+        </Link>
+        .
+      </li>
     </ul>
 
     <h2>The rest of the map</h2>
     <p>
       The Gulf is not Levantine's only neighbour. For the rest:{" "}
-      <Link to="/en/arabic-dialects-guide/levantine-vs-iraqi-arabic">Levantine vs Iraqi Arabic</Link>,{" "}
-      <Link to="/en/arabic-dialects-guide/levantine-vs-peninsular-arabic">Levantine vs Peninsular Arabic</Link>{" "}
-      and <Link to="/en/arabic-dialects-guide/levantine-vs-maghrebi-arabic">Levantine vs Maghrebi Arabic</Link>.
-      The overview is in the <Link to="/en/arabic-dialects-guide">Arabic dialects guide</Link>.
+      <Link to="/en/arabic-dialects-guide/levantine-vs-iraqi-arabic">
+        Levantine vs Iraqi Arabic
+      </Link>
+      ,{" "}
+      <Link to="/en/arabic-dialects-guide/levantine-vs-peninsular-arabic">
+        Levantine vs Peninsular Arabic
+      </Link>{" "}
+      and{" "}
+      <Link to="/en/arabic-dialects-guide/levantine-vs-maghrebi-arabic">
+        Levantine vs Maghrebi Arabic
+      </Link>
+      . The overview is in the{" "}
+      <Link to="/en/arabic-dialects-guide">Arabic dialects guide</Link>.
     </p>
     <DialectSiblings current="/en/arabic-dialects-guide/levantine-vs-gulf-arabic" />
-
   </EnLandingLayout>
 );
 

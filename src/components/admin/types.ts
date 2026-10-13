@@ -22,7 +22,8 @@ export const LEAD_STATUSES: readonly LeadStatus[] = [
   "converted",
 ] as const;
 
-export type CourseTypeFilter = "all" | "group" | "private" | "kids" | "trial" | "level_check";
+export type CourseTypeFilter =
+  "all" | "group" | "private" | "kids" | "trial" | "level_check";
 export type LeadStatusFilter = "all" | LeadStatus;
 
 export type LeadSource = "form" | "whatsapp" | "admin";
@@ -170,7 +171,10 @@ export const paymentStatusLabels: Record<string, string> = {
  * the amount is shown next to it. Only a full refund is `refunded`.
  * refunded_amount is in bani (Stripe's smallest unit); prices are in lei.
  */
-export function partialRefundNote(r: { payment_status?: string | null; refunded_amount?: number | null }): string | null {
+export function partialRefundNote(r: {
+  payment_status?: string | null;
+  refunded_amount?: number | null;
+}): string | null {
   const amount = Number(r.refunded_amount) || 0;
   if (amount <= 0 || r.payment_status === "refunded") return null;
   return `rambursat parțial: ${(amount / 100).toLocaleString("ro-RO")} lei`;
@@ -188,13 +192,26 @@ export const leadSegmentLabels: Record<LeadSegment, string> = {
   students: "Cursanți",
   closed: "Închise",
 };
-export function leadSegment(r: { lead_status?: string | null; payment_status?: string | null }): LeadSegment {
-  if (r.lead_status === "converted" || r.payment_status === "paid" || r.payment_status === "past_due") return "students";
-  if (r.lead_status === "not_suitable" || r.lead_status === "spam") return "closed";
+export function leadSegment(r: {
+  lead_status?: string | null;
+  payment_status?: string | null;
+}): LeadSegment {
+  if (
+    r.lead_status === "converted" ||
+    r.payment_status === "paid" ||
+    r.payment_status === "past_due"
+  )
+    return "students";
+  if (r.lead_status === "not_suitable" || r.lead_status === "spam")
+    return "closed";
   return "leads";
 }
 /** "Cursant · Grupă A1", "Cursant · Privat", "Cursant · Copii". */
-export function studentLabel(r: { form_type: string; level?: string | null; cohort?: { level: string | null } | null }): string {
+export function studentLabel(r: {
+  form_type: string;
+  level?: string | null;
+  cohort?: { level: string | null } | null;
+}): string {
   if (r.form_type === "group") {
     const level = r.cohort?.level ?? r.level;
     return level ? `Cursant · Grupă ${level}` : "Cursant · Grupă";

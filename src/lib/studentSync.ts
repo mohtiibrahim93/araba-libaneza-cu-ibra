@@ -14,43 +14,74 @@
  */
 import { YALLA_STORAGE_KEY } from "@/lib/yallaProgress";
 
-type ItemProgress = { last?: number; seen?: number | boolean; [k: string]: unknown };
+type ItemProgress = {
+  last?: number;
+  seen?: number | boolean;
+  [k: string]: unknown;
+};
 export type GameState = {
   xp?: number;
   rounds?: number;
   progress?: Record<string, ItemProgress>;
   daily?: Record<string, number>;
   badges?: unknown[];
-  placementResult?: { level?: string; title?: string; scores?: number[]; date?: string } & Record<string, unknown>;
+  placementResult?: {
+    level?: string;
+    title?: string;
+    scores?: number[];
+    date?: string;
+  } & Record<string, unknown>;
   [k: string]: unknown;
 };
 
-const num = (v: unknown) => (typeof v === "number" && Number.isFinite(v) ? v : 0);
-const seenOf = (p?: ItemProgress) => (typeof p?.seen === "number" ? p.seen : p?.seen ? 1 : 0);
+const num = (v: unknown) =>
+  typeof v === "number" && Number.isFinite(v) ? v : 0;
+const seenOf = (p?: ItemProgress) =>
+  typeof p?.seen === "number" ? p.seen : p?.seen ? 1 : 0;
 
-export function mergeStates(local: GameState | null, remote: GameState | null): GameState {
+export function mergeStates(
+  local: GameState | null,
+  remote: GameState | null,
+): GameState {
   if (!local) return remote ?? {};
   if (!remote) return local;
   const progress: Record<string, ItemProgress> = { ...(remote.progress ?? {}) };
   for (const [id, p] of Object.entries(local.progress ?? {})) {
     const old = progress[id];
-    if (!old || num(p.last) > num(old.last) || (num(p.last) === num(old.last) && seenOf(p) > seenOf(old))) {
+    if (
+      !old ||
+      num(p.last) > num(old.last) ||
+      (num(p.last) === num(old.last) && seenOf(p) > seenOf(old))
+    ) {
       progress[id] = p;
     }
   }
   const daily: Record<string, number> = { ...(remote.daily ?? {}) };
-  for (const [d, n] of Object.entries(local.daily ?? {})) daily[d] = Math.max(num(daily[d]), num(n));
-  const badges = Array.from(new Set([...(remote.badges ?? []), ...(local.badges ?? [])].map((b) => JSON.stringify(b)))).map(
-    (b) => JSON.parse(b) as unknown,
-  );
+  for (const [d, n] of Object.entries(local.daily ?? {}))
+    daily[d] = Math.max(num(daily[d]), num(n));
+  const badges = Array.from(
+    new Set(
+      [...(remote.badges ?? []), ...(local.badges ?? [])].map((b) =>
+        JSON.stringify(b),
+      ),
+    ),
+  ).map((b) => JSON.parse(b) as unknown);
   // The more recent level test wins.
   const lp = local.placementResult;
   const rp = remote.placementResult;
-  const placementResult = !lp ? rp : !rp ? lp : String(lp.date ?? "") >= String(rp.date ?? "") ? lp : rp;
+  const placementResult = !lp
+    ? rp
+    : !rp
+      ? lp
+      : String(lp.date ?? "") >= String(rp.date ?? "")
+        ? lp
+        : rp;
   return {
     ...remote,
     ...local,
-    ...(local.xp !== undefined || remote.xp !== undefined ? { xp: Math.max(num(local.xp), num(remote.xp)) } : {}),
+    ...(local.xp !== undefined || remote.xp !== undefined
+      ? { xp: Math.max(num(local.xp), num(remote.xp)) }
+      : {}),
     ...(local.rounds !== undefined || remote.rounds !== undefined
       ? { rounds: Math.max(num(local.rounds), num(remote.rounds)) }
       : {}),
@@ -99,9 +130,13 @@ const stable = (v: unknown): string =>
     : v && typeof v === "object"
       ? `{${Object.keys(v as object)
           .sort()
-          .map((k) => `${JSON.stringify(k)}:${stable((v as Record<string, unknown>)[k])}`)
+          .map(
+            (k) =>
+              `${JSON.stringify(k)}:${stable((v as Record<string, unknown>)[k])}`,
+          )
           .join(",")}}`
       : JSON.stringify(v);
 
 /** Same content, ignoring key order — decides whether the game must reload. */
-export const sameState = (a: GameState | null, b: GameState | null) => stable(a ?? {}) === stable(b ?? {});
+export const sameState = (a: GameState | null, b: GameState | null) =>
+  stable(a ?? {}) === stable(b ?? {});

@@ -23,7 +23,7 @@ const BASE = "https://centruldearabalibaneza.com";
 // articles) or a bilingual object; normalize + pick the current language.
 type Loc = string | Localized;
 const pick = (v: Loc, lang: "ro" | "en") =>
-  typeof v === "string" ? v : v[lang] ?? v.ro;
+  typeof v === "string" ? v : (v[lang] ?? v.ro);
 
 interface Props {
   slug: string;
@@ -111,8 +111,11 @@ const BlogArticleLayout = ({
   const override = useBlogOverride(slug);
   const ov = (en: string, ro: string) => (lang === "en" ? en || ro : ro) || "";
 
-  const tTitle = (override && ov(override.title_en, override.title_ro)) || pick(title, lang);
-  const tDesc = (override && ov(override.description_en, override.description_ro)) || pick(description, lang);
+  const tTitle =
+    (override && ov(override.title_en, override.title_ro)) || pick(title, lang);
+  const tDesc =
+    (override && ov(override.description_en, override.description_ro)) ||
+    pick(description, lang);
   // The head comes from the registry in src/lib/blogPosts.ts, not from this
   // page's own props. src/lib/seoHead.ts serves that same registry value
   // server-side, and src/test/meta-length.test.ts keeps it inside the
@@ -122,20 +125,23 @@ const BlogArticleLayout = ({
   // runs JavaScript and another to one that does not, several of them well
   // past the length a result ever shows. An owner edit still wins over both:
   // that one is deliberate, and the server cannot know about it anyway.
-  const titleOverride = (override && ov(override.title_en, override.title_ro)) || "";
+  const titleOverride =
+    (override && ov(override.title_en, override.title_ro)) || "";
   const descriptionOverride =
     (override && ov(override.description_en, override.description_ro)) || "";
   const resolvedMetaTitle =
     titleOverride || (registryPost ? pick(registryPost.title, lang) : tTitle);
   const resolvedMetaDescription =
-    descriptionOverride || (registryPost ? pick(registryPost.description, lang) : tDesc);
+    descriptionOverride ||
+    (registryPost ? pick(registryPost.description, lang) : tDesc);
   // An article in the registry had its whole head served by the route already
   // (src/lib/seoHead.ts reads the same registry), so the tags below are only
   // what that HTML cannot hold: the fallback for an article the registry does
   // not list, and the owner's edit, which is fetched in the browser. Rendering
   // the rest a second time is what put two titles on every article.
   const served = Boolean(registryPost);
-  const tLead = (override && ov(override.lead_en, override.lead_ro)) || pick(lead, lang);
+  const tLead =
+    (override && ov(override.lead_en, override.lead_ro)) || pick(lead, lang);
   const overrideBody = override ? ov(override.body_en, override.body_ro) : "";
   const tReadingMinutes = override?.reading_minutes || readingMinutes;
   const tCrumb = crumb ? pick(crumb, lang) : tTitle;
@@ -174,9 +180,14 @@ const BlogArticleLayout = ({
       { "@type": "ListItem", position: 3, name: tCrumb, item: url },
     ],
   };
-  const dateLabel = new Date(published).toLocaleDateString(lang === "en" ? "en-GB" : "ro-RO", {
-    day: "numeric", month: "long", year: "numeric",
-  });
+  const dateLabel = new Date(published).toLocaleDateString(
+    lang === "en" ? "en-GB" : "ro-RO",
+    {
+      day: "numeric",
+      month: "long",
+      year: "numeric",
+    },
+  );
   const metaLine =
     lang === "en"
       ? `Published on ${dateLabel} · About ${tReadingMinutes} min read`
@@ -226,17 +237,37 @@ const BlogArticleLayout = ({
         {!served ? <link rel="canonical" href={canonicalUrl} /> : null}
         {!served ? <meta property="og:type" content="article" /> : null}
         {!served ? <meta property="og:url" content={url} /> : null}
-        {!served ? <meta property="article:published_time" content={published} /> : null}
+        {!served ? (
+          <meta property="article:published_time" content={published} />
+        ) : null}
         {/* The cover is served by the route too (src/lib/seoHead.ts), which is
             what a link-preview scraper reads. These are the fallback for an
             article the registry does not list. */}
-        {!served && cover ? <meta property="og:image" content={socialImage} /> : null}
-        {!served && cover ? <meta property="og:image:alt" content={L(cover.alt, lang)} /> : null}
-        {!served && cover ? <meta name="twitter:image" content={socialImage} /> : null}
-        <script type="application/ld+json">{JSON.stringify(articleJsonLd)}</script>
-        <script type="application/ld+json">{JSON.stringify(breadcrumbJsonLd)}</script>
-        {faqJsonLd && <script type="application/ld+json">{JSON.stringify(faqJsonLd)}</script>}
-        {howToJsonLd && <script type="application/ld+json">{JSON.stringify(howToJsonLd)}</script>}
+        {!served && cover ? (
+          <meta property="og:image" content={socialImage} />
+        ) : null}
+        {!served && cover ? (
+          <meta property="og:image:alt" content={L(cover.alt, lang)} />
+        ) : null}
+        {!served && cover ? (
+          <meta name="twitter:image" content={socialImage} />
+        ) : null}
+        <script type="application/ld+json">
+          {JSON.stringify(articleJsonLd)}
+        </script>
+        <script type="application/ld+json">
+          {JSON.stringify(breadcrumbJsonLd)}
+        </script>
+        {faqJsonLd && (
+          <script type="application/ld+json">
+            {JSON.stringify(faqJsonLd)}
+          </script>
+        )}
+        {howToJsonLd && (
+          <script type="application/ld+json">
+            {JSON.stringify(howToJsonLd)}
+          </script>
+        )}
       </Helmet>
 
       <Navbar />
@@ -247,96 +278,139 @@ const BlogArticleLayout = ({
             <ArticleOutline containerRef={bodyRef} />
           </aside>
           <article className="min-w-0 flex-1 lg:max-w-3xl">
-          <nav aria-label="Breadcrumb" className="text-sm text-muted-foreground mb-6">
-            <Link to="/" className="hover:text-primary">{homeLabel}</Link>
-            <ChevronRight className="w-3.5 h-3.5 inline mx-1 -mt-0.5" aria-hidden />
-            <Link to="/blog" className="hover:text-primary">Blog</Link>
-            <ChevronRight className="w-3.5 h-3.5 inline mx-1 -mt-0.5" aria-hidden />
-            <span className="text-foreground">{tCrumb}</span>
-          </nav>
-
-          <header className="mb-10 space-y-4">
-            {registryPost?.tag && (
-              <p className="text-xs font-semibold uppercase tracking-widest text-brand-green">
-                Blog · {L(registryPost.tag, lang)}
-              </p>
-            )}
-            <h1 className="font-display text-display-xl font-bold tracking-tight text-foreground">
-              {tTitle}
-            </h1>
-            <p className="text-lg text-muted-foreground">{tLead}</p>
-            <p className="flex items-center gap-2.5 text-sm text-muted-foreground">
-              <img src={instructorPhotoWebp} alt="" width={32} height={32} className="h-8 w-8 rounded-full object-cover" />
-              <span>
-                <span className="font-semibold text-foreground">Ibra</span> · {metaLine}
-              </span>
-            </p>
-            {cover && (
-              /* Eager + high priority: this is the largest element above the
-                 fold, so lazy-loading it would only delay the paint. */
-              <img
-                src={cover.src}
-                alt={L(cover.alt, lang)}
-                width={1200}
-                height={675}
-                loading="eager"
-                fetchPriority="high"
-                decoding="async"
-                className="aspect-[16/9] w-full rounded-2xl border border-border object-cover"
-              />
-            )}
-          </header>
-
-          <div ref={bodyRef}>
-          <div className="space-y-8 text-foreground/80 leading-relaxed [&_h2]:font-display [&_h2]:text-2xl [&_h2]:md:text-3xl [&_h2]:font-bold [&_h2]:text-foreground [&_h2]:mt-10 [&_h2]:mb-3 [&_p]:leading-relaxed [&_ul]:list-disc [&_ul]:list-inside [&_ul]:space-y-2 [&_ol]:list-decimal [&_ol]:list-inside [&_ol]:space-y-2 [&_a:not([data-cta])]:text-primary [&_a:not([data-cta])]:underline">
-            {overrideBody ? <MarkdownBody markdown={overrideBody} /> : children}
-          </div>
-
-          {faq?.length ? (
-            <section className="mt-12">
-              <h2 className="font-display text-2xl font-bold text-foreground">
-                {lang === "en" ? "Frequently asked questions" : "Întrebări frecvente"}
-              </h2>
-              <div className="mt-4 space-y-4">
-                {faq.map(({ q, a }) => (
-                  <div key={pick(q, lang)} className="rounded-2xl border border-[#E7E1D6] bg-card p-5 dark:border-border">
-                    <h3 className="font-semibold text-foreground">{pick(q, lang)}</h3>
-                    <p className="mt-1 text-sm text-muted-foreground">{pick(a, lang)}</p>
-                  </div>
-                ))}
-              </div>
-            </section>
-          ) : null}
-
-          </div>
-
-          <aside className="mt-12 flex items-center gap-4 rounded-2xl bg-cream p-5 sm:p-6">
-            <img src={instructorPhotoWebp} alt="" width={64} height={64} loading="lazy" className="h-16 w-16 shrink-0 rounded-2xl object-cover" />
-            <div>
-              <p className="text-xs font-semibold uppercase tracking-widest text-brand-green">
-                {lang === "en" ? "Written by" : "Scris de"}
-              </p>
-              <p className="font-display text-lg font-bold text-foreground">Ibra</p>
-              <p className="text-sm text-foreground/75">
-                {lang === "en"
-                  ? "Native Lebanese Arabic teacher, in Bucharest and online."
-                  : "Profesor nativ de arabă libaneză, în București și online."}
-              </p>
-            </div>
-          </aside>
-
-          <RelatedPosts currentSlug={slug} />
-
-          <div className="mt-16 rounded-3xl bg-brand-green p-6 md:p-10 text-center space-y-4">
-            <h2 className="font-display text-2xl font-bold text-white md:text-3xl">{pick(cta.title, lang)}</h2>
-            <p className="text-white/85">{pick(cta.text, lang)}</p>
-            <Link
-              to={cta.href}
-              className="inline-flex h-12 items-center justify-center bg-white text-brand-green px-6 rounded-xl font-semibold hover:opacity-90 transition"
+            <nav
+              aria-label="Breadcrumb"
+              className="text-sm text-muted-foreground mb-6"
             >
-              {pick(cta.label, lang)}
-            </Link>
-          </div>
+              <Link to="/" className="hover:text-primary">
+                {homeLabel}
+              </Link>
+              <ChevronRight
+                className="w-3.5 h-3.5 inline mx-1 -mt-0.5"
+                aria-hidden
+              />
+              <Link to="/blog" className="hover:text-primary">
+                Blog
+              </Link>
+              <ChevronRight
+                className="w-3.5 h-3.5 inline mx-1 -mt-0.5"
+                aria-hidden
+              />
+              <span className="text-foreground">{tCrumb}</span>
+            </nav>
+
+            <header className="mb-10 space-y-4">
+              {registryPost?.tag && (
+                <p className="text-xs font-semibold uppercase tracking-widest text-brand-green">
+                  Blog · {L(registryPost.tag, lang)}
+                </p>
+              )}
+              <h1 className="font-display text-display-xl font-bold tracking-tight text-foreground">
+                {tTitle}
+              </h1>
+              <p className="text-lg text-muted-foreground">{tLead}</p>
+              <p className="flex items-center gap-2.5 text-sm text-muted-foreground">
+                <img
+                  src={instructorPhotoWebp}
+                  alt=""
+                  width={32}
+                  height={32}
+                  className="h-8 w-8 rounded-full object-cover"
+                />
+                <span>
+                  <span className="font-semibold text-foreground">Ibra</span> ·{" "}
+                  {metaLine}
+                </span>
+              </p>
+              {cover && (
+                /* Eager + high priority: this is the largest element above the
+                 fold, so lazy-loading it would only delay the paint. */
+                <img
+                  src={cover.src}
+                  alt={L(cover.alt, lang)}
+                  width={1200}
+                  height={675}
+                  loading="eager"
+                  fetchPriority="high"
+                  decoding="async"
+                  className="aspect-[16/9] w-full rounded-2xl border border-border object-cover"
+                />
+              )}
+            </header>
+
+            <div ref={bodyRef}>
+              <div className="space-y-8 text-foreground/80 leading-relaxed [&_h2]:font-display [&_h2]:text-2xl [&_h2]:md:text-3xl [&_h2]:font-bold [&_h2]:text-foreground [&_h2]:mt-10 [&_h2]:mb-3 [&_p]:leading-relaxed [&_ul]:list-disc [&_ul]:list-inside [&_ul]:space-y-2 [&_ol]:list-decimal [&_ol]:list-inside [&_ol]:space-y-2 [&_a:not([data-cta])]:text-primary [&_a:not([data-cta])]:underline">
+                {overrideBody ? (
+                  <MarkdownBody markdown={overrideBody} />
+                ) : (
+                  children
+                )}
+              </div>
+
+              {faq?.length ? (
+                <section className="mt-12">
+                  <h2 className="font-display text-2xl font-bold text-foreground">
+                    {lang === "en"
+                      ? "Frequently asked questions"
+                      : "Întrebări frecvente"}
+                  </h2>
+                  <div className="mt-4 space-y-4">
+                    {faq.map(({ q, a }) => (
+                      <div
+                        key={pick(q, lang)}
+                        className="rounded-2xl border border-[#E7E1D6] bg-card p-5 dark:border-border"
+                      >
+                        <h3 className="font-semibold text-foreground">
+                          {pick(q, lang)}
+                        </h3>
+                        <p className="mt-1 text-sm text-muted-foreground">
+                          {pick(a, lang)}
+                        </p>
+                      </div>
+                    ))}
+                  </div>
+                </section>
+              ) : null}
+            </div>
+
+            <aside className="mt-12 flex items-center gap-4 rounded-2xl bg-cream p-5 sm:p-6">
+              <img
+                src={instructorPhotoWebp}
+                alt=""
+                width={64}
+                height={64}
+                loading="lazy"
+                className="h-16 w-16 shrink-0 rounded-2xl object-cover"
+              />
+              <div>
+                <p className="text-xs font-semibold uppercase tracking-widest text-brand-green">
+                  {lang === "en" ? "Written by" : "Scris de"}
+                </p>
+                <p className="font-display text-lg font-bold text-foreground">
+                  Ibra
+                </p>
+                <p className="text-sm text-foreground/75">
+                  {lang === "en"
+                    ? "Native Lebanese Arabic teacher, in Bucharest and online."
+                    : "Profesor nativ de arabă libaneză, în București și online."}
+                </p>
+              </div>
+            </aside>
+
+            <RelatedPosts currentSlug={slug} />
+
+            <div className="mt-16 rounded-3xl bg-brand-green p-6 md:p-10 text-center space-y-4">
+              <h2 className="font-display text-2xl font-bold text-white md:text-3xl">
+                {pick(cta.title, lang)}
+              </h2>
+              <p className="text-white/85">{pick(cta.text, lang)}</p>
+              <Link
+                to={cta.href}
+                className="inline-flex h-12 items-center justify-center bg-white text-brand-green px-6 rounded-xl font-semibold hover:opacity-90 transition"
+              >
+                {pick(cta.label, lang)}
+              </Link>
+            </div>
           </article>
         </div>
       </main>

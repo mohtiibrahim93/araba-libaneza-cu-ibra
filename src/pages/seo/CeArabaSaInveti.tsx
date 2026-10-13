@@ -42,32 +42,36 @@ const CeArabaSaInveti = () => (
     faq={FAQ}
   >
     <p>
-      Majoritatea celor care abandonează araba au ales varianta greșită de la început: au studiat
-      araba standard când voiau, de fapt, să vorbească cu soacra, cu prietenii sau cu partenerul.
-      Alege întâi <strong>pentru cine</strong> înveți.
+      Majoritatea celor care abandonează araba au ales varianta greșită de la
+      început: au studiat araba standard când voiau, de fapt, să vorbească cu
+      soacra, cu prietenii sau cu partenerul. Alege întâi{" "}
+      <strong>pentru cine</strong> înveți.
     </p>
 
     <h2>Pe scurt</h2>
     <p>
-      „Libaneză, egipteană sau standard?” este cea mai frecventă întrebare a începătorilor — și
-      răspunsul onest e că <strong>nu sunt trei opțiuni care se exclud</strong>. Araba standard e
-      standardul scris comun. Libaneza și egipteana sunt două dintre cele mai mari dialecte
-      vorbite. Care îți este utilă depinde de <em>motivul</em> pentru care înveți.
+      „Libaneză, egipteană sau standard?” este cea mai frecventă întrebare a
+      începătorilor — și răspunsul onest e că{" "}
+      <strong>nu sunt trei opțiuni care se exclud</strong>. Araba standard e
+      standardul scris comun. Libaneza și egipteana sunt două dintre cele mai
+      mari dialecte vorbite. Care îți este utilă depinde de <em>motivul</em>{" "}
+      pentru care înveți.
     </p>
     <ul>
       <li>
-        <strong>Arabă standard (fusha)</strong> — standardul formal, pan-arab, scris. Presă, cărți,
-        discursuri oficiale, context religios. Nimeni nu o vorbește acasă.
+        <strong>Arabă standard (fusha)</strong> — standardul formal, pan-arab,
+        scris. Presă, cărți, discursuri oficiale, context religios. Nimeni nu o
+        vorbește acasă.
       </li>
       <li>
-        <strong>Arabă libaneză</strong> — dialect levantin, vorbit în Liban și îndeaproape înrudit
-        cu siriana, palestiniana și iordaniana. Dominantă în muzica arabă modernă și în televiziunea
-        prin satelit.
+        <strong>Arabă libaneză</strong> — dialect levantin, vorbit în Liban și
+        îndeaproape înrudit cu siriana, palestiniana și iordaniana. Dominantă în
+        muzica arabă modernă și în televiziunea prin satelit.
       </li>
       <li>
-        <strong>Arabă egipteană</strong> — dialectul Egiptului (peste 100 de milioane de vorbitori), răspândit
-        global prin decenii de cinema și televiziune. Cel mai larg înțeles dialect vorbit din lumea
-        arabă.
+        <strong>Arabă egipteană</strong> — dialectul Egiptului (peste 100 de
+        milioane de vorbitori), răspândit global prin decenii de cinema și
+        televiziune. Cel mai larg înțeles dialect vorbit din lumea arabă.
       </li>
     </ul>
 
@@ -76,24 +80,69 @@ const CeArabaSaInveti = () => (
       <table className="min-w-full text-left border border-border rounded-lg overflow-hidden">
         <thead className="bg-muted">
           <tr>
-            <th className="p-3 text-sm font-semibold text-foreground">Criteriu</th>
-            <th className="p-3 text-sm font-semibold text-foreground">Standard (fusha)</th>
-            <th className="p-3 text-sm font-semibold text-foreground">Libaneză</th>
-            <th className="p-3 text-sm font-semibold text-foreground">Egipteană</th>
+            <th className="p-3 text-sm font-semibold text-foreground">
+              Criteriu
+            </th>
+            <th className="p-3 text-sm font-semibold text-foreground">
+              Standard (fusha)
+            </th>
+            <th className="p-3 text-sm font-semibold text-foreground">
+              Libaneză
+            </th>
+            <th className="p-3 text-sm font-semibold text-foreground">
+              Egipteană
+            </th>
           </tr>
         </thead>
         <tbody>
           {[
-            ["Unde se folosește zilnic", "Citit, știri, scriere formală, context religios.", "Acasă, la muncă, muzică, TV, WhatsApp.", "Acasă, la muncă, cinema, muzică, rețele sociale."],
-            ["Dificultatea gramaticii", "Cea mai mare — terminații cazuale, dual, conjugări complexe.", "Mai simplă — fără terminații cazuale, verbe mai regulate.", "Mai simplă — simplificări asemănătoare, cu tipare proprii."],
-            ["Pronunția lui ق", "Un q profund, din fundul gâtului.", "De obicei oprire glotală: „qalb” → „ʔalb”.", "De obicei tot oprire glotală: „qalb” → „ʔalb”."],
-            ["Pronunția lui ج", "„j” ca în englezescul „jam”.", "„j” / „zh” moale, ca în „jurnal”.", "„g” dur, ca în „gară”: „gamal”, nu „jamal”."],
-            ["Împrumuturi", "Aproape deloc — deliberat puristă.", "Multă franceză și engleză; ceva turcă și aramaică.", "Engleză, ceva turcă și italiană."],
-            ["Acoperire media", "Știri (Al Jazeera, BBC Arabic), emisiuni formale.", "Muzică modernă (Fairuz, Wael Kfoury), TV prin satelit.", "Cinema, seriale TV, muzică."],
-            ["Potrivită dacă vrei să…", "Citești presă, studiezi islamul, lucrezi academic sau formal.", "Vorbești cu familie libaneză/siriană/iordaniană/palestiniană.", "Înțelegi filmele egiptene și cea mai largă parte a lumii arabe."],
+            [
+              "Unde se folosește zilnic",
+              "Citit, știri, scriere formală, context religios.",
+              "Acasă, la muncă, muzică, TV, WhatsApp.",
+              "Acasă, la muncă, cinema, muzică, rețele sociale.",
+            ],
+            [
+              "Dificultatea gramaticii",
+              "Cea mai mare — terminații cazuale, dual, conjugări complexe.",
+              "Mai simplă — fără terminații cazuale, verbe mai regulate.",
+              "Mai simplă — simplificări asemănătoare, cu tipare proprii.",
+            ],
+            [
+              "Pronunția lui ق",
+              "Un q profund, din fundul gâtului.",
+              "De obicei oprire glotală: „qalb” → „ʔalb”.",
+              "De obicei tot oprire glotală: „qalb” → „ʔalb”.",
+            ],
+            [
+              "Pronunția lui ج",
+              "„j” ca în englezescul „jam”.",
+              "„j” / „zh” moale, ca în „jurnal”.",
+              "„g” dur, ca în „gară”: „gamal”, nu „jamal”.",
+            ],
+            [
+              "Împrumuturi",
+              "Aproape deloc — deliberat puristă.",
+              "Multă franceză și engleză; ceva turcă și aramaică.",
+              "Engleză, ceva turcă și italiană.",
+            ],
+            [
+              "Acoperire media",
+              "Știri (Al Jazeera, BBC Arabic), emisiuni formale.",
+              "Muzică modernă (Fairuz, Wael Kfoury), TV prin satelit.",
+              "Cinema, seriale TV, muzică.",
+            ],
+            [
+              "Potrivită dacă vrei să…",
+              "Citești presă, studiezi islamul, lucrezi academic sau formal.",
+              "Vorbești cu familie libaneză/siriană/iordaniană/palestiniană.",
+              "Înțelegi filmele egiptene și cea mai largă parte a lumii arabe.",
+            ],
           ].map(([criteriu, msa, lb, eg]) => (
             <tr key={criteriu} className="border-t border-border align-top">
-              <td className="p-3 text-sm font-medium text-foreground">{criteriu}</td>
+              <td className="p-3 text-sm font-medium text-foreground">
+                {criteriu}
+              </td>
               <td className="p-3 text-sm text-muted-foreground">{msa}</td>
               <td className="p-3 text-sm text-muted-foreground">{lb}</td>
               <td className="p-3 text-sm text-muted-foreground">{eg}</td>
@@ -104,73 +153,142 @@ const CeArabaSaInveti = () => (
     </div>
 
     <h2>Cum sună aceeași propoziție în fiecare</h2>
-    <p>O propoziție simplă: <em>„Vreau să beau o cafea.”</em></p>
+    <p>
+      O propoziție simplă: <em>„Vreau să beau o cafea.”</em>
+    </p>
     <ul>
       <li>
-        <strong>Standard:</strong> <em>ʾurīdu an ashraba qahwatan</em> — corectă gramatical, sună
-        formal, nimeni nu vorbește așa la cafenea.
+        <strong>Standard:</strong> <em>ʾurīdu an ashraba qahwatan</em> — corectă
+        gramatical, sună formal, nimeni nu vorbește așa la cafenea.
       </li>
       <li>
-        <strong>Libaneză:</strong> <em>baddi ishrab ʾahwe</em> — scurt, relaxat, ق devine oprire
-        glotală.
+        <strong>Libaneză:</strong> <em>baddi ishrab ʾahwe</em> — scurt, relaxat,
+        ق devine oprire glotală.
       </li>
       <li>
-        <strong>Egipteană:</strong> <em>ʿāyiz ashrab ʾahwa</em> — alt verb („ʿāyiz” în loc de
-        „baddi”), aceeași oprire glotală pe ق.
+        <strong>Egipteană:</strong> <em>ʿāyiz ashrab ʾahwa</em> — alt verb
+        („ʿāyiz” în loc de „baddi”), aceeași oprire glotală pe ق.
       </li>
     </ul>
     <p>
-      Același alfabet, aceeași rădăcină (ش-ر-ب „sh-r-b” = a bea), cu totul altă textură.
+      Același alfabet, aceeași rădăcină (ش-ر-ب „sh-r-b” = a bea), cu totul altă
+      textură.
     </p>
 
     <h2>Comparația rapidă</h2>
     <ul>
-      <li><strong>Arabă standard (fusha)</strong> — presă, documente, texte religioase, examene. Se scrie și se citește peste tot; nu se vorbește nicăieri ca limbă maternă.</li>
-      <li><strong>Arabă libaneză (levantină)</strong> — conversație reală în Liban, Siria, Iordania, Palestina. Gramatică simplificată, vocabular de zi cu zi, mult contact cu franceza și engleza.</li>
-      <li><strong>Arabă egipteană</strong> — cea mai largă acoperire în filme și muzică; utilă dacă ai legături cu Egiptul.</li>
-      <li><strong>Dialecte din Golf / Maghreb</strong> — nișate geografic: utile pentru muncă în Emirate, respectiv pentru Maroc, Algeria, Tunisia.</li>
+      <li>
+        <strong>Arabă standard (fusha)</strong> — presă, documente, texte
+        religioase, examene. Se scrie și se citește peste tot; nu se vorbește
+        nicăieri ca limbă maternă.
+      </li>
+      <li>
+        <strong>Arabă libaneză (levantină)</strong> — conversație reală în
+        Liban, Siria, Iordania, Palestina. Gramatică simplificată, vocabular de
+        zi cu zi, mult contact cu franceza și engleza.
+      </li>
+      <li>
+        <strong>Arabă egipteană</strong> — cea mai largă acoperire în filme și
+        muzică; utilă dacă ai legături cu Egiptul.
+      </li>
+      <li>
+        <strong>Dialecte din Golf / Maghreb</strong> — nișate geografic: utile
+        pentru muncă în Emirate, respectiv pentru Maroc, Algeria, Tunisia.
+      </li>
     </ul>
 
     <h2>Alege după motivul tău</h2>
     <ul>
-      <li><strong>Partener, soț/soție sau socri libanezi</strong> → arabă libaneză, fără ezitare. Vezi <Link to="/meditatii-araba">meditațiile 1:1</Link>.</li>
-      <li><strong>Prieteni sau colegi din Orientul Mijlociu</strong> → levantină; e înțeleasă în toată regiunea.</li>
-      <li><strong>Călătorii în Liban, Iordania, Palestina</strong> → libaneză, plus 100 de expresii de bază din <Link to="/resurse">resursele gratuite</Link>.</li>
-      <li><strong>Studii academice, traduceri, presă</strong> → arabă standard, eventual după o bază de dialect.</li>
-      <li><strong>Copii dintr-o familie mixtă</strong> → dialectul vorbit acasă; vezi <Link to="/curs-araba-copii">cursul pentru copii</Link>.</li>
+      <li>
+        <strong>Partener, soț/soție sau socri libanezi</strong> → arabă
+        libaneză, fără ezitare. Vezi{" "}
+        <Link to="/meditatii-araba">meditațiile 1:1</Link>.
+      </li>
+      <li>
+        <strong>Prieteni sau colegi din Orientul Mijlociu</strong> → levantină;
+        e înțeleasă în toată regiunea.
+      </li>
+      <li>
+        <strong>Călătorii în Liban, Iordania, Palestina</strong> → libaneză,
+        plus 100 de expresii de bază din{" "}
+        <Link to="/resurse">resursele gratuite</Link>.
+      </li>
+      <li>
+        <strong>Studii academice, traduceri, presă</strong> → arabă standard,
+        eventual după o bază de dialect.
+      </li>
+      <li>
+        <strong>Copii dintr-o familie mixtă</strong> → dialectul vorbit acasă;
+        vezi <Link to="/curs-araba-copii">cursul pentru copii</Link>.
+      </li>
     </ul>
 
     <h2>De ce libaneza e un start bun chiar și pentru fusha</h2>
     <p>
-      Dialectul îți dă rapid vocabular activ, ureche și încredere. Structurile de bază (pronume,
-      posesive, verbe frecvente) se suprapun în mare parte cu fusha, deci treci mai ușor la limba
-      standard mai târziu. Comparația detaliată e în{" "}
-      <Link to="/blog/araba-libaneza-vs-araba-standard">libaneză vs. arabă standard</Link>, iar harta
-      completă a variantelor în <Link to="/dialecte-arabe">ghidul dialectelor arabe</Link>.
+      Dialectul îți dă rapid vocabular activ, ureche și încredere. Structurile
+      de bază (pronume, posesive, verbe frecvente) se suprapun în mare parte cu
+      fusha, deci treci mai ușor la limba standard mai târziu. Comparația
+      detaliată e în{" "}
+      <Link to="/blog/araba-libaneza-vs-araba-standard">
+        libaneză vs. arabă standard
+      </Link>
+      , iar harta completă a variantelor în{" "}
+      <Link to="/dialecte-arabe">ghidul dialectelor arabe</Link>.
     </p>
 
     <h2>Mergi mai în adâncime</h2>
     <p>
-      Pagina asta răspunde la întrebarea mare: standard sau dialect, și care dialect. Sub ea stă{" "}
-      <Link to="/dialecte-arabe">ghidul dialectelor arabe</Link>, care acoperă toate familiile de dialecte,
-      iar sub el câte o pagină pentru fiecare comparație care se pune des:
+      Pagina asta răspunde la întrebarea mare: standard sau dialect, și care
+      dialect. Sub ea stă{" "}
+      <Link to="/dialecte-arabe">ghidul dialectelor arabe</Link>, care acoperă
+      toate familiile de dialecte, iar sub el câte o pagină pentru fiecare
+      comparație care se pune des:
     </p>
     <ul>
-      <li><Link to="/dialecte-arabe/libaneza-vs-egipteana">Libaneză vs. egipteană</Link></li>
-      <li><Link to="/blog/araba-libaneza-vs-araba-standard">Libaneză vs. arabă standard</Link></li>
-      <li><Link to="/dialecte-arabe/libaneza-vs-siriana">Libaneză vs. siriană, palestiniană, iordaniană</Link></li>
-      <li><Link to="/dialecte-arabe/levantina-vs-golf">Levantină vs. araba din Golf</Link></li>
-      <li><Link to="/dialecte-arabe/levantina-vs-irakiana">Levantină vs. araba irakiană</Link></li>
-      <li><Link to="/dialecte-arabe/levantina-vs-maghrebina">Levantină vs. araba maghrebină</Link></li>
-      <li><Link to="/dialecte-arabe/levantina-vs-peninsulara">Levantină vs. araba din Peninsula Arabică</Link></li>
+      <li>
+        <Link to="/dialecte-arabe/libaneza-vs-egipteana">
+          Libaneză vs. egipteană
+        </Link>
+      </li>
+      <li>
+        <Link to="/blog/araba-libaneza-vs-araba-standard">
+          Libaneză vs. arabă standard
+        </Link>
+      </li>
+      <li>
+        <Link to="/dialecte-arabe/libaneza-vs-siriana">
+          Libaneză vs. siriană, palestiniană, iordaniană
+        </Link>
+      </li>
+      <li>
+        <Link to="/dialecte-arabe/levantina-vs-golf">
+          Levantină vs. araba din Golf
+        </Link>
+      </li>
+      <li>
+        <Link to="/dialecte-arabe/levantina-vs-irakiana">
+          Levantină vs. araba irakiană
+        </Link>
+      </li>
+      <li>
+        <Link to="/dialecte-arabe/levantina-vs-maghrebina">
+          Levantină vs. araba maghrebină
+        </Link>
+      </li>
+      <li>
+        <Link to="/dialecte-arabe/levantina-vs-peninsulara">
+          Levantină vs. araba din Peninsula Arabică
+        </Link>
+      </li>
     </ul>
 
     <h2>Ce faci mai departe</h2>
     <p>
       Dă <Link to="/test-de-nivel">testul de nivel</Link> (~15 minute), descarcă{" "}
       <Link to="/invata-araba-gratis">materialele gratuite</Link> și rezervă o{" "}
-      <Link to="/trial">lecție de probă gratuită</Link> cu profesor nativ. Dacă vrei un cadru fix,
-      grupele A1 pornesc periodic — detalii la <Link to="/cursuri/grup">cursurile de grup</Link>.
+      <Link to="/trial">lecție de probă gratuită</Link> cu profesor nativ. Dacă
+      vrei un cadru fix, grupele A1 pornesc periodic — detalii la{" "}
+      <Link to="/cursuri/grup">cursurile de grup</Link>.
     </p>
   </LandingLayout>
 );

@@ -1,12 +1,27 @@
 import { useEffect, useState } from "react";
 import { Link, useNavigate, useParams } from "@/lib/router-compat";
-import { ArrowLeft, Calendar, CheckCircle2, Clock, Download, Loader2, MessageCircle, X } from "lucide-react";
+import {
+  ArrowLeft,
+  Calendar,
+  CheckCircle2,
+  Clock,
+  Download,
+  Loader2,
+  MessageCircle,
+  X,
+} from "lucide-react";
 import { useI18n } from "@/lib/i18n";
 import { WHATSAPP_CONTACT_URL } from "@/lib/social";
 import { toast } from "sonner";
 import NativeScheduler from "@/components/NativeScheduler";
 import { buildIcs, downloadIcs } from "@/lib/ics";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogDescription,
+} from "@/components/ui/dialog";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -85,7 +100,8 @@ const BookingManageInner = () => {
   // that email is the language to read it in — including the scheduler inside
   // the reschedule dialog, which reads the site language rather than a prop.
   useEffect(() => {
-    if (booking?.language && booking.language !== lang) setLang(booking.language);
+    if (booking?.language && booking.language !== lang)
+      setLang(booking.language);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [booking?.language]);
 
@@ -95,7 +111,8 @@ const BookingManageInner = () => {
   const tooLate =
     booking?.changes_allowed !== undefined
       ? !booking.changes_allowed
-      : !!booking && Date.parse(booking.start_at) - Date.now() < 24 * 60 * 60 * 1000;
+      : !!booking &&
+        Date.parse(booking.start_at) - Date.now() < 24 * 60 * 60 * 1000;
 
   const handleCancel = async () => {
     if (!confirm(t.manageConfirmCancel)) return;
@@ -176,7 +193,9 @@ const BookingManageInner = () => {
       description: booking.meet_link
         ? `${t.icsZoomLabel}: ${booking.meet_link}\n${t.icsManageLabel}: ${manageUrl}`
         : `${t.icsManageLabel}: ${manageUrl}`,
-      location: booking.meet_link ?? "Raduga Creative Center, Strada Icoanei 80, București",
+      location:
+        booking.meet_link ??
+        "Raduga Creative Center, Strada Icoanei 80, București",
       startISO: booking.start_at,
       endISO: booking.end_at,
       url: manageUrl,
@@ -191,12 +210,13 @@ const BookingManageInner = () => {
   return (
     <main className="min-h-screen bg-background py-12 px-gutter">
       <div className="w-full max-w-2xl 2xl:max-w-3xl mx-auto">
-        <Link to="/" className="inline-flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground mb-6">
+        <Link
+          to="/"
+          className="inline-flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground mb-6"
+        >
           <ArrowLeft className="w-4 h-4" /> {t.navHome}
         </Link>
-        <h1 className="text-3xl font-bold mb-6">
-          {t.manageHeading}
-        </h1>
+        <h1 className="text-3xl font-bold mb-6">{t.manageHeading}</h1>
 
         {loading && (
           <div className="flex items-center gap-2 text-muted-foreground">
@@ -219,11 +239,17 @@ const BookingManageInner = () => {
               </div>
               <div className="flex-1">
                 <h2 className="font-semibold">
-                  {lang === "ro" ? booking.event_type_name_ro : booking.event_type_name_en}
+                  {lang === "ro"
+                    ? booking.event_type_name_ro
+                    : booking.event_type_name_en}
                 </h2>
-                <p className="text-sm text-muted-foreground">{fmt(booking.start_at, lang)}</p>
+                <p className="text-sm text-muted-foreground">
+                  {fmt(booking.start_at, lang)}
+                </p>
                 <p className="text-xs text-muted-foreground mt-1">
-                  {booking.format === "online" ? t.bookingFormatOnline : t.bookingFormatPhysical}
+                  {booking.format === "online"
+                    ? t.bookingFormatOnline
+                    : t.bookingFormatPhysical}
                 </p>
               </div>
               <span
@@ -231,8 +257,8 @@ const BookingManageInner = () => {
                   booking.status === "confirmed"
                     ? "bg-green-500/10 text-green-700"
                     : booking.status === "cancelled"
-                    ? "bg-red-500/10 text-red-700"
-                    : "bg-muted text-muted-foreground"
+                      ? "bg-red-500/10 text-red-700"
+                      : "bg-muted text-muted-foreground"
                 }`}
               >
                 {booking.status === "confirmed" && t.manageStatusConfirmed}
@@ -244,13 +270,22 @@ const BookingManageInner = () => {
 
             {booking.format === "online" && booking.status === "confirmed" && (
               <div className="rounded-md bg-muted/40 border border-border p-3">
-                <p className="text-xs font-medium mb-1">{t.bookingZoomLinkLabel}</p>
+                <p className="text-xs font-medium mb-1">
+                  {t.bookingZoomLinkLabel}
+                </p>
                 {booking.meet_link ? (
-                  <a href={booking.meet_link} target="_blank" rel="noopener noreferrer" className="block text-sm text-primary underline break-all">
+                  <a
+                    href={booking.meet_link}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="block text-sm text-primary underline break-all"
+                  >
                     {booking.meet_link}
                   </a>
                 ) : (
-                  <p className="text-xs text-muted-foreground">{t.bookingZoomNotice}</p>
+                  <p className="text-xs text-muted-foreground">
+                    {t.bookingZoomNotice}
+                  </p>
                 )}
               </div>
             )}
@@ -295,8 +330,12 @@ const BookingManageInner = () => {
                   <Clock className="w-4 h-4" />
                   {t.manageTooLateTitle}
                 </p>
-                <p className="mt-2 text-xs leading-relaxed">{t.manageTooLateBody}</p>
-                <p className="mt-2 text-xs leading-relaxed">{t.manageTooLateEmergency}</p>
+                <p className="mt-2 text-xs leading-relaxed">
+                  {t.manageTooLateBody}
+                </p>
+                <p className="mt-2 text-xs leading-relaxed">
+                  {t.manageTooLateEmergency}
+                </p>
                 <a
                   href={WHATSAPP_CONTACT_URL}
                   target="_blank"
@@ -319,7 +358,12 @@ const BookingManageInner = () => {
         )}
 
         {booking && (
-          <Dialog open={rescheduleOpen} onOpenChange={(o) => { if (!busy) setRescheduleOpen(o); }}>
+          <Dialog
+            open={rescheduleOpen}
+            onOpenChange={(o) => {
+              if (!busy) setRescheduleOpen(o);
+            }}
+          >
             <DialogContent className="max-w-3xl max-h-[90vh] overflow-y-auto">
               <DialogHeader>
                 <DialogTitle>{t.manageRescheduleDialogTitle}</DialogTitle>
@@ -336,20 +380,35 @@ const BookingManageInner = () => {
         )}
 
         {booking && (
-          <AlertDialog open={!!pendingSlot} onOpenChange={(o) => { if (!o && !busy) setPendingSlot(null); }}>
+          <AlertDialog
+            open={!!pendingSlot}
+            onOpenChange={(o) => {
+              if (!o && !busy) setPendingSlot(null);
+            }}
+          >
             <AlertDialogContent>
               <AlertDialogHeader>
-                <AlertDialogTitle>{t.manageRescheduleConfirmTitle}</AlertDialogTitle>
+                <AlertDialogTitle>
+                  {t.manageRescheduleConfirmTitle}
+                </AlertDialogTitle>
                 <AlertDialogDescription asChild>
                   <div className="space-y-2 text-sm">
                     <div>
-                      <span className="text-muted-foreground">{t.manageRescheduleFromLabel}:</span>{" "}
-                      <span className="font-medium text-foreground line-through">{fmt(booking.start_at, lang)}</span>
+                      <span className="text-muted-foreground">
+                        {t.manageRescheduleFromLabel}:
+                      </span>{" "}
+                      <span className="font-medium text-foreground line-through">
+                        {fmt(booking.start_at, lang)}
+                      </span>
                     </div>
                     {pendingSlot && (
                       <div>
-                        <span className="text-muted-foreground">{t.manageRescheduleToLabel}:</span>{" "}
-                        <span className="font-semibold text-foreground">{fmt(pendingSlot, lang)}</span>
+                        <span className="text-muted-foreground">
+                          {t.manageRescheduleToLabel}:
+                        </span>{" "}
+                        <span className="font-semibold text-foreground">
+                          {fmt(pendingSlot, lang)}
+                        </span>
                       </div>
                     )}
                     <p className="pt-2">{t.manageRescheduleConfirmQuestion}</p>
@@ -357,7 +416,9 @@ const BookingManageInner = () => {
                 </AlertDialogDescription>
               </AlertDialogHeader>
               <AlertDialogFooter>
-                <AlertDialogCancel disabled={busy}>{t.manageCancelButton}</AlertDialogCancel>
+                <AlertDialogCancel disabled={busy}>
+                  {t.manageCancelButton}
+                </AlertDialogCancel>
                 <AlertDialogAction
                   disabled={busy}
                   onClick={(e) => {

@@ -17,14 +17,27 @@ interface TextRow {
 /** Rough section grouping so the key list is browsable, not a wall of names. */
 const SECTIONS: { label: string; test: (k: string) => boolean }[] = [
   { label: "Meniu & navigație", test: (k) => /^nav|menu|footer/i.test(k) },
-  { label: "Homepage & hero", test: (k) => /^hero|^steps?|^why|^social|^cta/i.test(k) },
-  { label: "Cursuri & programe", test: (k) => /^curs|^program|^track|^level|^kids|^copii|^grup/i.test(k) },
-  { label: "Prețuri & plată", test: (k) => /pric|pret|price|plat|pay|checkout|abonament/i.test(k) },
-  { label: "Formulare", test: (k) => /form|field|submit|valid|consent|register|inscri/i.test(k) },
+  {
+    label: "Homepage & hero",
+    test: (k) => /^hero|^steps?|^why|^social|^cta/i.test(k),
+  },
+  {
+    label: "Cursuri & programe",
+    test: (k) => /^curs|^program|^track|^level|^kids|^copii|^grup/i.test(k),
+  },
+  {
+    label: "Prețuri & plată",
+    test: (k) => /pric|pret|price|plat|pay|checkout|abonament/i.test(k),
+  },
+  {
+    label: "Formulare",
+    test: (k) => /form|field|submit|valid|consent|register|inscri/i.test(k),
+  },
   { label: "FAQ & blog", test: (k) => /faq|blog|articol|resurs/i.test(k) },
 ];
 
-const sectionOf = (key: string) => SECTIONS.find((s) => s.test(key))?.label ?? "Restul site-ului";
+const sectionOf = (key: string) =>
+  SECTIONS.find((s) => s.test(key))?.label ?? "Restul site-ului";
 
 /**
  * Owner editor for every shared string on the site (RO + EN). Rows are stored
@@ -37,7 +50,9 @@ const SiteTextsAdmin = () => {
   const [savingKey, setSavingKey] = useState<string | null>(null);
   const [query, setQuery] = useState("");
   const [onlyEdited, setOnlyEdited] = useState(false);
-  const [drafts, setDrafts] = useState<Record<string, { ro: string; en: string }>>({});
+  const [drafts, setDrafts] = useState<
+    Record<string, { ro: string; en: string }>
+  >({});
 
   const call = async (payload: Record<string, unknown>) => {
     const { data, error } = await invokeAdmin(payload);
@@ -54,13 +69,19 @@ const SiteTextsAdmin = () => {
       for (const row of (data?.data ?? []) as TextRow[]) map[row.key] = row;
       setOverrides(map);
     } catch (e) {
-      toast({ title: "Nu am putut încărca textele", description: String((e as Error).message), variant: "destructive" });
+      toast({
+        title: "Nu am putut încărca textele",
+        description: String((e as Error).message),
+        variant: "destructive",
+      });
     } finally {
       setLoading(false);
     }
   }, []);
 
-  useEffect(() => { void load(); }, [load]);
+  useEffect(() => {
+    void load();
+  }, [load]);
 
   const allKeys = useMemo(() => Object.keys(translations.ro).sort(), []);
 
@@ -118,14 +139,23 @@ const SiteTextsAdmin = () => {
       setDrafts(({ [key]: _drop, ...rest }) => rest);
       toast({ title: "Text salvat", description: key });
     } catch (e) {
-      toast({ title: "Salvare eșuată", description: String((e as Error).message), variant: "destructive" });
+      toast({
+        title: "Salvare eșuată",
+        description: String((e as Error).message),
+        variant: "destructive",
+      });
     } finally {
       setSavingKey(null);
     }
   };
 
   const reset = async (key: string) => {
-    if (!confirm(`Revii la textul original pentru „${key}”? Textul editat se pierde.`)) return;
+    if (
+      !confirm(
+        `Revii la textul original pentru „${key}”? Textul editat se pierde.`,
+      )
+    )
+      return;
     setSavingKey(key);
     try {
       await call({ action: "delete_site_text", key });
@@ -133,7 +163,11 @@ const SiteTextsAdmin = () => {
       setDrafts(({ [key]: _d, ...rest }) => rest);
       toast({ title: "Revenit la textul original", description: key });
     } catch (e) {
-      toast({ title: "Operațiune eșuată", description: String((e as Error).message), variant: "destructive" });
+      toast({
+        title: "Operațiune eșuată",
+        description: String((e as Error).message),
+        variant: "destructive",
+      });
     } finally {
       setSavingKey(null);
     }
@@ -150,8 +184,9 @@ const SiteTextsAdmin = () => {
   return (
     <div className="space-y-5">
       <div className="rounded-lg border border-border bg-muted/30 p-4 text-sm text-muted-foreground">
-        Aici corectezi orice text din site (română și engleză). Modificările apar imediat pe site.
-        „Revino la original” șterge versiunea ta și readuce textul din cod.
+        Aici corectezi orice text din site (română și engleză). Modificările
+        apar imediat pe site. „Revino la original” șterge versiunea ta și
+        readuce textul din cod.
       </div>
 
       <div className="flex flex-col sm:flex-row gap-3 sm:items-center">
@@ -164,13 +199,18 @@ const SiteTextsAdmin = () => {
             onChange={(e) => setQuery(e.target.value)}
           />
         </div>
-        <Button variant={onlyEdited ? "default" : "outline"} onClick={() => setOnlyEdited((v) => !v)}>
+        <Button
+          variant={onlyEdited ? "default" : "outline"}
+          onClick={() => setOnlyEdited((v) => !v)}
+        >
           Doar modificate ({Object.keys(overrides).length})
         </Button>
       </div>
 
       {rows.length === 0 ? (
-        <p className="text-sm text-muted-foreground">Niciun text găsit pentru căutarea asta.</p>
+        <p className="text-sm text-muted-foreground">
+          Niciun text găsit pentru căutarea asta.
+        </p>
       ) : null}
 
       {Object.entries(grouped).map(([section, keys]) => (
@@ -188,12 +228,26 @@ const SiteTextsAdmin = () => {
                   <code className="text-xs text-muted-foreground">{key}</code>
                   <div className="flex gap-2">
                     {edited ? (
-                      <Button size="sm" variant="ghost" onClick={() => reset(key)} disabled={savingKey === key}>
-                        <RotateCcw className="w-3.5 h-3.5 mr-1" /> Revino la original
+                      <Button
+                        size="sm"
+                        variant="ghost"
+                        onClick={() => reset(key)}
+                        disabled={savingKey === key}
+                      >
+                        <RotateCcw className="w-3.5 h-3.5 mr-1" /> Revino la
+                        original
                       </Button>
                     ) : null}
-                    <Button size="sm" onClick={() => save(key)} disabled={savingKey === key || !dirty}>
-                      {savingKey === key ? <Loader2 className="w-3.5 h-3.5 mr-1 animate-spin" /> : <Save className="w-3.5 h-3.5 mr-1" />}
+                    <Button
+                      size="sm"
+                      onClick={() => save(key)}
+                      disabled={savingKey === key || !dirty}
+                    >
+                      {savingKey === key ? (
+                        <Loader2 className="w-3.5 h-3.5 mr-1 animate-spin" />
+                      ) : (
+                        <Save className="w-3.5 h-3.5 mr-1" />
+                      )}
                       Salvează
                     </Button>
                   </div>
@@ -201,11 +255,19 @@ const SiteTextsAdmin = () => {
                 <div className="grid md:grid-cols-2 gap-3">
                   <div className="space-y-1">
                     <Label className="text-xs">Română</Label>
-                    <Textarea rows={2} value={valueFor(key, "ro")} onChange={(e) => setDraft(key, "ro", e.target.value)} />
+                    <Textarea
+                      rows={2}
+                      value={valueFor(key, "ro")}
+                      onChange={(e) => setDraft(key, "ro", e.target.value)}
+                    />
                   </div>
                   <div className="space-y-1">
                     <Label className="text-xs">Engleză</Label>
-                    <Textarea rows={2} value={valueFor(key, "en")} onChange={(e) => setDraft(key, "en", e.target.value)} />
+                    <Textarea
+                      rows={2}
+                      value={valueFor(key, "en")}
+                      onChange={(e) => setDraft(key, "en", e.target.value)}
+                    />
                   </div>
                 </div>
               </div>
@@ -216,7 +278,8 @@ const SiteTextsAdmin = () => {
 
       {rows.length >= 300 ? (
         <p className="text-sm text-muted-foreground">
-          Se afișează primele 300 de texte. Folosește căutarea ca să ajungi la ce vrei să corectezi.
+          Se afișează primele 300 de texte. Folosește căutarea ca să ajungi la
+          ce vrei să corectezi.
         </p>
       ) : null}
     </div>

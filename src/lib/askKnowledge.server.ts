@@ -4,7 +4,11 @@
 // the assistant can never quote a figure the site itself does not show. The
 // rest is the same course information the pages carry.
 
-import { ONLINE_PRICES, physicalPrice, GROUP_COURSE_MONTHS } from "@/lib/pricing";
+import {
+  ONLINE_PRICES,
+  physicalPrice,
+  GROUP_COURSE_MONTHS,
+} from "@/lib/pricing";
 
 const groupLine = (level: keyof typeof ONLINE_PRICES.groupMonthly) => {
   const online = ONLINE_PRICES.groupMonthly[level];

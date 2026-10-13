@@ -24,7 +24,11 @@ const CursAdulti = () => {
       repeatFrequency: "Weekly",
     }),
     educationalLevel: "A1, A2, B1, B2, C1, C2",
-    audience: { "@type": "EducationalAudience", educationalRole: "student", audienceType: "Adults" },
+    audience: {
+      "@type": "EducationalAudience",
+      educationalRole: "student",
+      audienceType: "Adults",
+    },
   };
 
   return (
@@ -57,24 +61,40 @@ const CursAdulti = () => {
       ]}
     >
       <section id="options" className="scroll-mt-24 mt-4">
-        <h2 className="font-display text-display-lg font-bold tracking-tight text-foreground mb-6">{t.courseCtaSeeOptions}</h2>
+        <h2 className="font-display text-display-lg font-bold tracking-tight text-foreground mb-6">
+          {t.courseCtaSeeOptions}
+        </h2>
         <div className="grid sm:grid-cols-2 gap-5">
-          <Link to="/cursuri/grup" className="group rounded-3xl border border-[#E7E1D6] bg-card p-6 sm:p-7 hover:border-brand-green/50 transition-colors dark:border-border">
+          <Link
+            to="/cursuri/grup"
+            className="group rounded-3xl border border-[#E7E1D6] bg-card p-6 sm:p-7 hover:border-brand-green/50 transition-colors dark:border-border"
+          >
             <span className="mb-4 inline-flex h-11 w-11 items-center justify-center rounded-2xl bg-brand-green/10 text-brand-green">
               <Users className="w-5 h-5" aria-hidden="true" />
             </span>
-            <h3 className="font-display text-xl font-bold text-foreground mb-2">{t.courseGrupH1}</h3>
-            <p className="text-[15px] leading-relaxed text-foreground/75 mb-4">{t.courseGrupIntro}</p>
+            <h3 className="font-display text-xl font-bold text-foreground mb-2">
+              {t.courseGrupH1}
+            </h3>
+            <p className="text-[15px] leading-relaxed text-foreground/75 mb-4">
+              {t.courseGrupIntro}
+            </p>
             <span className="inline-flex items-center gap-1 text-sm font-semibold text-brand-green group-hover:underline">
               {t.programsSeeFullPage} <ChevronRight className="w-3.5 h-3.5" />
             </span>
           </Link>
-          <Link to="/cursuri/private" className="group rounded-3xl border border-[#E7E1D6] bg-card p-6 sm:p-7 hover:border-brand-green/50 transition-colors dark:border-border">
+          <Link
+            to="/cursuri/private"
+            className="group rounded-3xl border border-[#E7E1D6] bg-card p-6 sm:p-7 hover:border-brand-green/50 transition-colors dark:border-border"
+          >
             <span className="mb-4 inline-flex h-11 w-11 items-center justify-center rounded-2xl bg-brand-green/10 text-brand-green">
               <User className="w-5 h-5" aria-hidden="true" />
             </span>
-            <h3 className="font-display text-xl font-bold text-foreground mb-2">{t.coursePrivateH1}</h3>
-            <p className="text-[15px] leading-relaxed text-foreground/75 mb-4">{t.coursePrivateIntro}</p>
+            <h3 className="font-display text-xl font-bold text-foreground mb-2">
+              {t.coursePrivateH1}
+            </h3>
+            <p className="text-[15px] leading-relaxed text-foreground/75 mb-4">
+              {t.coursePrivateIntro}
+            </p>
             <span className="inline-flex items-center gap-1 text-sm font-semibold text-brand-green group-hover:underline">
               {t.programsSeeFullPage} <ChevronRight className="w-3.5 h-3.5" />
             </span>
@@ -111,15 +131,32 @@ const CursAdulti = () => {
                   className="flex h-full flex-col gap-1 rounded-2xl border border-[#E7E1D6] bg-card p-5 hover:border-brand-green/50 transition-colors dark:border-border"
                 >
                   <span className="text-sm font-bold text-brand-green">
-                    {c.level} · {c.format === "fizic" ? (en ? "in person" : "fizic") : "online"} ·{" "}
-                    {c.teaching_language === "en" ? (en ? "taught in English" : "în engleză") : en ? "taught in Romanian" : "în română"}
+                    {c.level} ·{" "}
+                    {c.format === "fizic"
+                      ? en
+                        ? "in person"
+                        : "fizic"
+                      : "online"}{" "}
+                    ·{" "}
+                    {c.teaching_language === "en"
+                      ? en
+                        ? "taught in English"
+                        : "în engleză"
+                      : en
+                        ? "taught in Romanian"
+                        : "în română"}
                   </span>
                   <span className="font-display text-lg font-bold text-foreground">
-                    {en ? "Starts " : "Începe pe "}{longDate(c.start_date, en ? "en" : "ro")}
+                    {en ? "Starts " : "Începe pe "}
+                    {longDate(c.start_date, en ? "en" : "ro")}
                   </span>
-                  <span className="text-sm text-foreground/70">{en ? c.schedule_label_en : c.schedule_label_ro}</span>
+                  <span className="text-sm text-foreground/70">
+                    {en ? c.schedule_label_en : c.schedule_label_ro}
+                  </span>
                   <span className="mt-auto pt-2 text-sm font-semibold text-foreground">
-                    {en ? `${c.seatsLeft} of ${c.max_seats} seats free` : `${c.seatsLeft} din ${c.max_seats} locuri libere`}
+                    {en
+                      ? `${c.seatsLeft} of ${c.max_seats} seats free`
+                      : `${c.seatsLeft} din ${c.max_seats} locuri libere`}
                   </span>
                 </Link>
               </li>
@@ -131,10 +168,14 @@ const CursAdulti = () => {
       <section className="mt-section flex flex-col gap-5 rounded-3xl bg-cream px-6 py-8 sm:px-10 md:flex-row md:items-center md:justify-between">
         <div>
           <h2 className="font-display text-2xl font-bold text-foreground">
-            {en ? "Not sure yet? Start with the free trial." : "Nu ești sigur? Începe cu lecția gratuită."}
+            {en
+              ? "Not sure yet? Start with the free trial."
+              : "Nu ești sigur? Începe cu lecția gratuită."}
           </h2>
           <p className="mt-1 text-foreground/75">
-            {en ? "30 minutes, 0 lei: we meet and find your level." : "30 de minute, 0 lei: ne cunoaștem și îți aflăm nivelul."}
+            {en
+              ? "30 minutes, 0 lei: we meet and find your level."
+              : "30 de minute, 0 lei: ne cunoaștem și îți aflăm nivelul."}
           </p>
         </div>
         <Link

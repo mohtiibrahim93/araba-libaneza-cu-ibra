@@ -34,8 +34,7 @@ const COPY = {
       "Peste 4.300 de expresii din materialele cursului, cu sens în română. Exersezi cu carduri, exerciții și potriviri, iar ce greșești se întoarce la recapitulare.",
     langNote: null as string | null,
     howH2: "Cum funcționează",
-    howP:
-      "O rundă are 20 de expresii. Cele noi, cele greșite și cele programate pentru recapitulare sunt acțiuni separate, ca să știi mereu ce exersezi. După fiecare răspuns corect, expresia revine peste 1, 3, 7, 14 și apoi 30 de zile — intervalele cresc doar când chiar ai reținut-o, nu pentru că ai apăsat repede.",
+    howP: "O rundă are 20 de expresii. Cele noi, cele greșite și cele programate pentru recapitulare sunt acțiuni separate, ca să știi mereu ce exersezi. După fiecare răspuns corect, expresia revine peste 1, 3, 7, 14 și apoi 30 de zile — intervalele cresc doar când chiar ai reținut-o, nu pentru că ai apăsat repede.",
     progressH2: "Unde se salvează progresul",
     progressP:
       "În browserul tău, pe acest dispozitiv. Nu e un cont: nu se sincronizează între telefon și laptop și nu îl vede nimeni altcineva. Dacă schimbi dispozitivul, folosește controlul de transfer din joc — descarci progresul ca fișier și îl încarci înapoi.",
@@ -64,8 +63,7 @@ const COPY = {
     // something built for them.
     langNote: null as string | null,
     howH2: "How it works",
-    howP:
-      "A round is 20 expressions. New ones, ones you got wrong, and ones due for review are separate actions, so you always know what you are practising. After each correct answer an expression returns in 1, 3, 7, 14 and then 30 days — the intervals grow only when you have actually retained it, not because you answered quickly.",
+    howP: "A round is 20 expressions. New ones, ones you got wrong, and ones due for review are separate actions, so you always know what you are practising. After each correct answer an expression returns in 1, 3, 7, 14 and then 30 days — the intervals grow only when you have actually retained it, not because you answered quickly.",
     progressH2: "Where your progress is saved",
     progressP:
       "In your own browser, on this device. It is not an account: it does not sync between your phone and your laptop, and nobody else can see it. If you switch devices, use the transfer control inside the game — you download your progress as a file and load it back.",
@@ -117,24 +115,32 @@ const Joaca = () => {
 
   return (
     <div className="min-h-screen bg-background flex flex-col">
-
       <Navbar />
 
       <main id="main-content" className="flex-1 pt-16">
-        <nav aria-label="Breadcrumb" className="mx-auto w-full max-w-content px-gutter pb-2 pt-6 text-xs text-muted-foreground">
+        <nav
+          aria-label="Breadcrumb"
+          className="mx-auto w-full max-w-content px-gutter pb-2 pt-6 text-xs text-muted-foreground"
+        >
           <ol className="flex flex-wrap items-center gap-1">
             <li>
-              <Link to="/" className="transition-colors hover:text-foreground">{c.home}</Link>
+              <Link to="/" className="transition-colors hover:text-foreground">
+                {c.home}
+              </Link>
             </li>
             <li aria-hidden="true">
               <ChevronRight className="inline h-3.5 w-3.5 -mt-0.5" />
             </li>
-            <li className="font-medium text-foreground" aria-current="page">{c.crumb}</li>
+            <li className="font-medium text-foreground" aria-current="page">
+              {c.crumb}
+            </li>
           </ol>
         </nav>
 
         <header className="mx-auto w-full max-w-content px-gutter pb-8 pt-4 text-center">
-          <span className="text-sm font-medium text-primary mb-2 block">{c.eyebrow}</span>
+          <span className="text-sm font-medium text-primary mb-2 block">
+            {c.eyebrow}
+          </span>
           <h1 className="font-display text-display-xl font-bold tracking-tight text-foreground mb-3">
             {c.h1}
           </h1>
@@ -152,11 +158,19 @@ const Joaca = () => {
         <div className="mx-auto w-full max-w-content px-gutter pb-6">
           <div className="flex flex-col gap-4 rounded-xl border bg-card p-6 sm:flex-row sm:items-center sm:gap-8 sm:p-8">
             <div className="flex-1">
-              <h2 className="font-display text-2xl font-bold text-foreground">{c.levelH2}</h2>
-              <p className="mt-2 leading-relaxed text-muted-foreground">{c.levelP}</p>
+              <h2 className="font-display text-2xl font-bold text-foreground">
+                {c.levelH2}
+              </h2>
+              <p className="mt-2 leading-relaxed text-muted-foreground">
+                {c.levelP}
+              </p>
             </div>
             <div className="flex shrink-0 flex-col gap-3">
-              <Button size="lg" variant={mode === "placement" ? "outline" : "default"} onClick={toggleMode}>
+              <Button
+                size="lg"
+                variant={mode === "placement" ? "outline" : "default"}
+                onClick={toggleMode}
+              >
                 {mode === "placement" ? c.ctaBack : c.ctaLevel}
               </Button>
               {/* The practice history is a level signal too — /joc/scor reads
@@ -168,7 +182,10 @@ const Joaca = () => {
           </div>
         </div>
 
-        <div className="mx-auto w-full max-w-content px-gutter pb-section-sm" ref={frameRef}>
+        <div
+          className="mx-auto w-full max-w-content px-gutter pb-section-sm"
+          ref={frameRef}
+        >
           <div className="mb-4">
             <StudentAccountBox user={user} syncing={syncing} />
           </div>
@@ -181,16 +198,26 @@ const Joaca = () => {
         <section className="w-full bg-cream">
           <div className="mx-auto grid w-full max-w-content gap-8 px-gutter py-section sm:grid-cols-2 lg:grid-cols-3 lg:gap-10">
             <div className="space-y-3">
-              <h2 className="font-display text-2xl font-bold text-foreground">{c.howH2}</h2>
+              <h2 className="font-display text-2xl font-bold text-foreground">
+                {c.howH2}
+              </h2>
               <p className="leading-relaxed text-muted-foreground">{c.howP}</p>
             </div>
             <div className="space-y-3">
-              <h2 className="font-display text-2xl font-bold text-foreground">{c.progressH2}</h2>
-              <p className="leading-relaxed text-muted-foreground">{c.progressP}</p>
+              <h2 className="font-display text-2xl font-bold text-foreground">
+                {c.progressH2}
+              </h2>
+              <p className="leading-relaxed text-muted-foreground">
+                {c.progressP}
+              </p>
             </div>
             <div className="space-y-3 sm:col-span-2 lg:col-span-1">
-              <h2 className="font-display text-2xl font-bold text-foreground">{c.courseH2}</h2>
-              <p className="leading-relaxed text-muted-foreground">{c.courseP}</p>
+              <h2 className="font-display text-2xl font-bold text-foreground">
+                {c.courseH2}
+              </h2>
+              <p className="leading-relaxed text-muted-foreground">
+                {c.courseP}
+              </p>
               <div className="flex flex-col gap-3 pt-2 sm:flex-row lg:flex-col xl:flex-row">
                 <Button asChild>
                   <Link to="/cursuri-limba-araba">{c.ctaCourses}</Link>

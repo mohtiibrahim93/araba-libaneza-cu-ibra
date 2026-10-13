@@ -5,7 +5,10 @@ import type { Cohort } from "@/lib/cohortTypes";
  * not started yet and still has a free seat. Shared by the menu's green band
  * and the "Cursuri" dropdown so both always name the same course.
  */
-export const nextOpenCohort = (cohorts: Cohort[], today = new Date()): Cohort | null => {
+export const nextOpenCohort = (
+  cohorts: Cohort[],
+  today = new Date(),
+): Cohort | null => {
   const day = today.toISOString().slice(0, 10);
   return (
     cohorts
@@ -16,17 +19,22 @@ export const nextOpenCohort = (cohorts: Cohort[], today = new Date()): Cohort | 
 
 /** "17 oct" / "17 Oct". */
 export const shortDate = (iso: string, lang: "ro" | "en") =>
-  new Date(`${iso}T12:00:00`).toLocaleDateString(lang === "en" ? "en-GB" : "ro-RO", {
-    day: "numeric",
-    month: "short",
-  }).replace(".", "");
+  new Date(`${iso}T12:00:00`)
+    .toLocaleDateString(lang === "en" ? "en-GB" : "ro-RO", {
+      day: "numeric",
+      month: "short",
+    })
+    .replace(".", "");
 
 /** "17 octombrie" / "17 October". */
 export const longDate = (iso: string, lang: "ro" | "en") =>
-  new Date(`${iso}T12:00:00`).toLocaleDateString(lang === "en" ? "en-GB" : "ro-RO", {
-    day: "numeric",
-    month: "long",
-  });
+  new Date(`${iso}T12:00:00`).toLocaleDateString(
+    lang === "en" ? "en-GB" : "ro-RO",
+    {
+      day: "numeric",
+      month: "long",
+    },
+  );
 
 /**
  * Where "sign up" for a cohort leads: its level page, with the format and the

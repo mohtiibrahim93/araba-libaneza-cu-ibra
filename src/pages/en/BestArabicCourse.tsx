@@ -39,34 +39,38 @@ const BestArabicCourse = () => (
   >
     <DirectAnswer question="Which Arabic course is the best one?">
       <p>
-        The best Arabic course is the one that matches your goal, and for almost everyone
-        who wants to <em>talk</em> to people, that means a spoken dialect rather than
-        Modern Standard Arabic. MSA is the written language of news and officialdom;
-        nobody speaks it at home, which is why a year of it often ends with no
-        conversation. If the people you want to talk to are Lebanese, Syrian, Jordanian or
-        Palestinian, learn <strong>Lebanese Arabic (Levantine)</strong> — one dialect,
-        four countries, about 30–35 million speakers.
+        The best Arabic course is the one that matches your goal, and for almost
+        everyone who wants to <em>talk</em> to people, that means a spoken
+        dialect rather than Modern Standard Arabic. MSA is the written language
+        of news and officialdom; nobody speaks it at home, which is why a year
+        of it often ends with no conversation. If the people you want to talk to
+        are Lebanese, Syrian, Jordanian or Palestinian, learn{" "}
+        <strong>Lebanese Arabic (Levantine)</strong> — one dialect, four
+        countries, about 30–35 million speakers.
       </p>
       <p>
-        Then pick the format by what you need: a small group for motivation and the
-        cheapest hour ({ONLINE_PRICES.groupMonthly.A1} RON a month here, two 90-minute
-        lessons a week), private 1-on-1 for speed and a specific goal
-        ({ONLINE_PRICES.privateLesson} RON per 60 minutes, with −15% on a package of 20), an app
-        for vocabulary drilling and nothing else. Whatever you choose, judge it on three
-        things: a native teacher, speaking in the first lesson, and public prices. Ours are
-        taught by <strong>Ibra</strong>, online worldwide or in
-        person in Bucharest, and the first 30-minute lesson is free.
+        Then pick the format by what you need: a small group for motivation and
+        the cheapest hour ({ONLINE_PRICES.groupMonthly.A1} RON a month here, two
+        90-minute lessons a week), private 1-on-1 for speed and a specific goal
+        ({ONLINE_PRICES.privateLesson} RON per 60 minutes, with −15% on a
+        package of 20), an app for vocabulary drilling and nothing else.
+        Whatever you choose, judge it on three things: a native teacher,
+        speaking in the first lesson, and public prices. Ours are taught by{" "}
+        <strong>Ibra</strong>, online worldwide or in person in Bucharest, and
+        the first 30-minute lesson is free.
       </p>
     </DirectAnswer>
 
     <p>
       The most common regret among Arabic learners: a full year of{" "}
-      <strong>Modern Standard Arabic</strong> (MSA / Fusha) and still no ability to hold a simple
-      conversation with a native speaker. The reason is structural — MSA is the written language of
-      news and official documents, not the language anyone speaks at home. If your goal is speaking,
-      the best Arabic course is a <strong>dialect</strong> course, and the most widely useful dialect
-      for Europe-based learners is <strong>Lebanese Arabic (Levantine)</strong>, spoken across
-      Lebanon, Syria, Jordan and Palestine.
+      <strong>Modern Standard Arabic</strong> (MSA / Fusha) and still no ability
+      to hold a simple conversation with a native speaker. The reason is
+      structural — MSA is the written language of news and official documents,
+      not the language anyone speaks at home. If your goal is speaking, the best
+      Arabic course is a <strong>dialect</strong> course, and the most widely
+      useful dialect for Europe-based learners is{" "}
+      <strong>Lebanese Arabic (Levantine)</strong>, spoken across Lebanon,
+      Syria, Jordan and Palestine.
     </p>
 
     <h2>Decision one: Lebanese (Levantine) or Modern Standard Arabic?</h2>
@@ -82,31 +86,45 @@ const BestArabicCourse = () => (
         <tbody>
           <tr className="border-b border-border/60 align-top">
             <td className="py-2 pr-3 font-semibold">Where you use it</td>
-            <td className="py-2 px-3">Real conversation, family, travel, music, series, social media</td>
-            <td className="py-2 pl-3">Press, documents, religious texts, exams</td>
+            <td className="py-2 px-3">
+              Real conversation, family, travel, music, series, social media
+            </td>
+            <td className="py-2 pl-3">
+              Press, documents, religious texts, exams
+            </td>
           </tr>
           <tr className="border-b border-border/60 align-top">
-            <td className="py-2 pr-3 font-semibold">Time to first conversation</td>
+            <td className="py-2 pr-3 font-semibold">
+              Time to first conversation
+            </td>
             <td className="py-2 px-3">2–4 weeks</td>
             <td className="py-2 pl-3">6–12 months</td>
           </tr>
           <tr className="border-b border-border/60 align-top">
-            <td className="py-2 pr-3 font-semibold">Alphabet required upfront</td>
+            <td className="py-2 pr-3 font-semibold">
+              Alphabet required upfront
+            </td>
             <td className="py-2 px-3">No — start with Arabizi</td>
             <td className="py-2 pl-3">Yes</td>
           </tr>
           <tr className="border-b border-border/60 align-top">
             <td className="py-2 pr-3 font-semibold">Understood by natives</td>
-            <td className="py-2 px-3">Yes across the Levant, widely understood elsewhere</td>
-            <td className="py-2 pl-3">Understood, but sounds formal or bookish when spoken</td>
+            <td className="py-2 px-3">
+              Yes across the Levant, widely understood elsewhere
+            </td>
+            <td className="py-2 pl-3">
+              Understood, but sounds formal or bookish when spoken
+            </td>
           </tr>
         </tbody>
       </table>
     </div>
     <p>
       The full breakdown with example sentences is in{" "}
-      <Link to="/en/lebanese-arabic-vs-msa-vs-egyptian">Lebanese vs MSA vs Egyptian Arabic</Link> and{" "}
-      <Link to="/en/arabic-dialects-guide">the Arabic dialects guide</Link>.
+      <Link to="/en/lebanese-arabic-vs-msa-vs-egyptian">
+        Lebanese vs MSA vs Egyptian Arabic
+      </Link>{" "}
+      and <Link to="/en/arabic-dialects-guide">the Arabic dialects guide</Link>.
     </p>
 
     <h2>Decision two: group, private, online or app</h2>
@@ -128,22 +146,36 @@ const BestArabicCourse = () => (
             <td className="py-2 pl-3">Fixed schedule, shared pace</td>
           </tr>
           <tr className="border-b border-border/60 align-top">
-            <td className="py-2 pr-3 font-semibold"><Link to="/en/arabic-tutor">Private 1-on-1</Link></td>
-            <td className="py-2 px-3">Specific goals, fastest progress, flexible hours</td>
-            <td className="py-2 px-3">150 LEI online / 210 LEI in person, 60 min (−15% for 20 lessons)</td>
+            <td className="py-2 pr-3 font-semibold">
+              <Link to="/en/arabic-tutor">Private 1-on-1</Link>
+            </td>
+            <td className="py-2 px-3">
+              Specific goals, fastest progress, flexible hours
+            </td>
+            <td className="py-2 px-3">
+              150 LEI online / 210 LEI in person, 60 min (−15% for 20 lessons)
+            </td>
             <td className="py-2 pl-3">Higher hourly cost</td>
           </tr>
           <tr className="border-b border-border/60 align-top">
-            <td className="py-2 pr-3 font-semibold"><Link to="/en/learn-lebanese-arabic">Online over Zoom</Link></td>
-            <td className="py-2 px-3">Learners outside Bucharest, diaspora, any time zone</td>
-            <td className="py-2 px-3">Cheaper than in person (500 vs 700 LEI / month at A1)</td>
+            <td className="py-2 pr-3 font-semibold">
+              <Link to="/en/learn-lebanese-arabic">Online over Zoom</Link>
+            </td>
+            <td className="py-2 px-3">
+              Learners outside Bucharest, diaspora, any time zone
+            </td>
+            <td className="py-2 px-3">
+              Cheaper than in person (500 vs 700 LEI / month at A1)
+            </td>
             <td className="py-2 pl-3">Requires self-discipline</td>
           </tr>
           <tr className="border-b border-border/60 align-top">
             <td className="py-2 pr-3 font-semibold">Apps (Duolingo etc.)</td>
             <td className="py-2 px-3">Vocabulary upkeep between lessons</td>
             <td className="py-2 px-3">Free / subscription</td>
-            <td className="py-2 pl-3">MSA only, no pronunciation feedback, no conversation</td>
+            <td className="py-2 pl-3">
+              MSA only, no pronunciation feedback, no conversation
+            </td>
           </tr>
         </tbody>
       </table>
@@ -151,22 +183,40 @@ const BestArabicCourse = () => (
 
     <h2>Five criteria for comparing any Arabic course</h2>
     <ul>
-      <li><strong>Native speaker of the dialect taught.</strong> For Lebanese, a native Lebanese teacher — living pronunciation and idiom don't come from textbooks.</li>
-      <li><strong>You speak from lesson one.</strong> If the first months are alphabet drills and grammar tables, you'll quit before you speak.</li>
-      <li><strong>Small groups (max 6 students online, 8 in person).</strong> Past that, your own speaking time drops below five minutes per lesson.</li>
-      <li><strong>CEFR structure (A1–C2)</strong> with an assessment every 8–10 lessons, so your level is an objective fact.</li>
-      <li><strong>Public pricing and a trial lesson.</strong> A good course has no reason to hide either.</li>
+      <li>
+        <strong>Native speaker of the dialect taught.</strong> For Lebanese, a
+        native Lebanese teacher — living pronunciation and idiom don't come from
+        textbooks.
+      </li>
+      <li>
+        <strong>You speak from lesson one.</strong> If the first months are
+        alphabet drills and grammar tables, you'll quit before you speak.
+      </li>
+      <li>
+        <strong>Small groups (max 6 students online, 8 in person).</strong> Past
+        that, your own speaking time drops below five minutes per lesson.
+      </li>
+      <li>
+        <strong>CEFR structure (A1–C2)</strong> with an assessment every 8–10
+        lessons, so your level is an objective fact.
+      </li>
+      <li>
+        <strong>Public pricing and a trial lesson.</strong> A good course has no
+        reason to hide either.
+      </li>
     </ul>
 
     <h2>What we offer, and who we're not right for</h2>
     <p>
       At <Link to="/">Centrul de Arabă Libaneză cu Ibra</Link> we teach{" "}
-      <strong>Lebanese Arabic (Levantine) only</strong>, with a native Lebanese teacher, in person in
-      Bucharest (Strada Icoanei 80) and online worldwide. Formats: group levels A1–C2,{" "}
-      <Link to="/en/arabic-tutor">private 1-on-1 lessons</Link>, a kids course (ages 6–11, not running at the moment) and{" "}
-      <Link to="/en/arabic-for-teenagers">teen groups (12–17)</Link>. We're not the right fit if you
-      need strictly Modern Standard Arabic for an academic exam — we'll tell you that plainly during
-      the free trial.
+      <strong>Lebanese Arabic (Levantine) only</strong>, with a native Lebanese
+      teacher, in person in Bucharest (Strada Icoanei 80) and online worldwide.
+      Formats: group levels A1–C2,{" "}
+      <Link to="/en/arabic-tutor">private 1-on-1 lessons</Link>, a kids course
+      (ages 6–11, not running at the moment) and{" "}
+      <Link to="/en/arabic-for-teenagers">teen groups (12–17)</Link>. We're not
+      the right fit if you need strictly Modern Standard Arabic for an academic
+      exam — we'll tell you that plainly during the free trial.
     </p>
     <p>
       The fastest way to find out whether it fits:{" "}

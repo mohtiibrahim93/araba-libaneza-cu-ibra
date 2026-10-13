@@ -1,4 +1,4 @@
-import * as React from 'react'
+import * as React from "react";
 
 import {
   Body,
@@ -9,11 +9,11 @@ import {
   Html,
   Preview,
   Text,
-} from '@react-email/components'
+} from "@react-email/components";
 
 interface RecoveryEmailProps {
-  siteName: string
-  confirmationUrl: string
+  siteName: string;
+  confirmationUrl: string;
 }
 
 export const RecoveryEmail = ({
@@ -34,43 +34,49 @@ export const RecoveryEmail = ({
           Resetează parola
         </Button>
         <Text style={footer}>
-          Dacă nu ai cerut resetarea parolei, poți ignora acest email.
-          Parola ta nu va fi schimbată.
+          Dacă nu ai cerut resetarea parolei, poți ignora acest email. Parola ta
+          nu va fi schimbată.
         </Text>
       </Container>
     </Body>
   </Html>
-)
+);
 
-export default RecoveryEmail
+export default RecoveryEmail;
 
 const main = {
-  backgroundColor: '#ffffff',
-  fontFamily: "'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif",
-}
-const container = { padding: '32px 28px', maxWidth: '560px' }
+  backgroundColor: "#ffffff",
+  fontFamily:
+    "'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif",
+};
+const container = { padding: "32px 28px", maxWidth: "560px" };
 const h1 = {
-  fontSize: '24px',
+  fontSize: "24px",
   fontWeight: 700 as const,
-  color: 'hsl(220, 14%, 10%)',
-  margin: '0 0 20px',
-  letterSpacing: '-0.01em',
-}
+  color: "hsl(220, 14%, 10%)",
+  margin: "0 0 20px",
+  letterSpacing: "-0.01em",
+};
 const text = {
-  fontSize: '15px',
-  color: 'hsl(220, 9%, 35%)',
-  lineHeight: '1.6',
-  margin: '0 0 20px',
-}
+  fontSize: "15px",
+  color: "hsl(220, 9%, 35%)",
+  lineHeight: "1.6",
+  margin: "0 0 20px",
+};
 const button = {
-  backgroundColor: 'hsl(0, 72%, 51%)',
-  color: '#ffffff',
-  fontSize: '15px',
+  backgroundColor: "hsl(0, 72%, 51%)",
+  color: "#ffffff",
+  fontSize: "15px",
   fontWeight: 600 as const,
-  borderRadius: '12px',
-  padding: '14px 24px',
-  textDecoration: 'none',
-  display: 'inline-block',
-  margin: '8px 0 24px',
-}
-const footer = { fontSize: '13px', color: 'hsl(220, 9%, 55%)', margin: '32px 0 0', lineHeight: '1.5' }
+  borderRadius: "12px",
+  padding: "14px 24px",
+  textDecoration: "none",
+  display: "inline-block",
+  margin: "8px 0 24px",
+};
+const footer = {
+  fontSize: "13px",
+  color: "hsl(220, 9%, 55%)",
+  margin: "32px 0 0",
+  lineHeight: "1.5",
+};

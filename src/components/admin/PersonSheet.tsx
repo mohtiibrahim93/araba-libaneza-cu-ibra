@@ -39,21 +39,26 @@ interface Progress {
 // Loaded once per visit: the same list Elevi cu cont shows.
 let progressCache: Promise<Progress[]> | null = null;
 const loadProgress = () => {
-  progressCache ??= invokeAdmin<{ data?: Progress[] }>({ action: "list_student_progress" }).then(
-    ({ data, error }) => {
-      if (error) {
-        progressCache = null;
-        return [];
-      }
-      return data?.data ?? [];
-    },
-  );
+  progressCache ??= invokeAdmin<{ data?: Progress[] }>({
+    action: "list_student_progress",
+  }).then(({ data, error }) => {
+    if (error) {
+      progressCache = null;
+      return [];
+    }
+    return data?.data ?? [];
+  });
   return progressCache;
 };
 
 const fmt = (iso: string | null | undefined) =>
   iso
-    ? new Date(iso).toLocaleDateString("ro-RO", { timeZone: "Europe/Bucharest", day: "numeric", month: "short", year: "numeric" })
+    ? new Date(iso).toLocaleDateString("ro-RO", {
+        timeZone: "Europe/Bucharest",
+        day: "numeric",
+        month: "short",
+        year: "numeric",
+      })
     : "";
 
 const initials = (name: string) =>
@@ -64,7 +69,12 @@ const initials = (name: string) =>
     .map((w) => w[0]?.toUpperCase())
     .join("") || "?";
 
-const CONTACTED: LeadStatus[] = ["contacted", "qualified", "converted", "no_response"];
+const CONTACTED: LeadStatus[] = [
+  "contacted",
+  "qualified",
+  "converted",
+  "no_response",
+];
 
 interface Props {
   person: Registration | null;
@@ -75,12 +85,24 @@ interface Props {
   onChanged?: () => void;
 }
 
-const PersonSheet = ({ person, onClose, onStatusChange, updating, onShowInTable, onChanged }: Props) => {
-  const [progress, setProgress] = useState<Progress | null | undefined>(undefined);
+const PersonSheet = ({
+  person,
+  onClose,
+  onStatusChange,
+  updating,
+  onShowInTable,
+  onChanged,
+}: Props) => {
+  const [progress, setProgress] = useState<Progress | null | undefined>(
+    undefined,
+  );
 
   useEffect(() => {
     setProgress(undefined);
-    const identityEmail = person?.account_email !== undefined ? person.account_email : person?.email;
+    const identityEmail =
+      person?.account_email !== undefined
+        ? person.account_email
+        : person?.email;
     const email = identityEmail?.trim().toLowerCase();
     if (!email) {
       setProgress(null);
@@ -88,7 +110,10 @@ const PersonSheet = ({ person, onClose, onStatusChange, updating, onShowInTable,
     }
     let cancelled = false;
     void loadProgress().then((rows) => {
-      if (!cancelled) setProgress(rows.find((r) => r.email?.trim().toLowerCase() === email) ?? null);
+      if (!cancelled)
+        setProgress(
+          rows.find((r) => r.email?.trim().toLowerCase() === email) ?? null,
+        );
     });
     return () => {
       cancelled = true;
@@ -109,11 +134,25 @@ const PersonSheet = ({ person, onClose, onStatusChange, updating, onShowInTable,
 
   const history = person
     ? [
-        { what: `Formular „${formTypeLabels[person.form_type] ?? person.form_type}” trimis`, when: person.created_at },
+        {
+          what: `Formular „${formTypeLabels[person.form_type] ?? person.form_type}” trimis`,
+          when: person.created_at,
+        },
         person.paid_at && { what: "Plată primită", when: person.paid_at },
-        person.refunded_at && { what: partialRefundNote(person) ? `Rambursare parțială: ${(Number(person.refunded_amount) / 100).toLocaleString("ro-RO")} lei` : "Rambursat", when: person.refunded_at },
-        person.canceled_at && { what: "Abonament anulat", when: person.canceled_at },
-        progress?.placement?.date && { what: `Test de nivel în Jocul Yalla: ${progress.placement.level ?? "—"}`, when: progress.placement.date },
+        person.refunded_at && {
+          what: partialRefundNote(person)
+            ? `Rambursare parțială: ${(Number(person.refunded_amount) / 100).toLocaleString("ro-RO")} lei`
+            : "Rambursat",
+          when: person.refunded_at,
+        },
+        person.canceled_at && {
+          what: "Abonament anulat",
+          when: person.canceled_at,
+        },
+        progress?.placement?.date && {
+          what: `Test de nivel în Jocul Yalla: ${progress.placement.level ?? "—"}`,
+          when: progress.placement.date,
+        },
       ]
         .filter((h): h is { what: string; when: string } => !!h)
         .sort((a, b) => b.when.localeCompare(a.when))
@@ -168,7 +207,8 @@ const PersonSheet = ({ person, onClose, onStatusChange, updating, onShowInTable,
 
                 {person.anonymized_at ? (
                   <p className="rounded-xl border border-border bg-card p-4 text-sm text-muted-foreground">
-                    Datele personale au fost șterse (GDPR) pe {fmt(person.anonymized_at)}.
+                    Datele personale au fost șterse (GDPR) pe{" "}
+                    {fmt(person.anonymized_at)}.
                   </p>
                 ) : (
                   <div className="grid grid-cols-[1.4fr_1fr_1fr] gap-2">
@@ -179,7 +219,11 @@ const PersonSheet = ({ person, onClose, onStatusChange, updating, onShowInTable,
                         rel="noopener noreferrer"
                         className="flex min-h-12 items-center justify-center gap-1.5 rounded-xl bg-brand-green font-semibold text-white hover:opacity-90"
                       >
-                        <MessageCircle className="h-[18px] w-[18px]" aria-hidden /> WhatsApp
+                        <MessageCircle
+                          className="h-[18px] w-[18px]"
+                          aria-hidden
+                        />{" "}
+                        WhatsApp
                       </a>
                     ) : (
                       <span />
@@ -214,7 +258,12 @@ const PersonSheet = ({ person, onClose, onStatusChange, updating, onShowInTable,
                       <select
                         value={status}
                         disabled={updating}
-                        onChange={(e) => onStatusChange(person.id, e.target.value as LeadStatus)}
+                        onChange={(e) =>
+                          onStatusChange(
+                            person.id,
+                            e.target.value as LeadStatus,
+                          )
+                        }
                         className="h-12 w-full rounded-xl border border-input bg-background px-3 text-base text-foreground"
                       >
                         {LEAD_STATUSES.map((s) => (
@@ -223,20 +272,31 @@ const PersonSheet = ({ person, onClose, onStatusChange, updating, onShowInTable,
                           </option>
                         ))}
                       </select>
-                      {updating && <Loader2 className="absolute right-9 top-3.5 h-5 w-5 animate-spin text-muted-foreground" />}
+                      {updating && (
+                        <Loader2 className="absolute right-9 top-3.5 h-5 w-5 animate-spin text-muted-foreground" />
+                      )}
                     </span>
                   </label>
                   <div className="flex flex-col gap-1.5 text-sm text-muted-foreground">
                     Plată
                     <span className="flex h-12 items-center rounded-xl bg-muted px-3 text-base font-semibold text-foreground">
-                      {person.payment_status ? paymentStatusLabels[person.payment_status] ?? person.payment_status : "—"}
-                      {partialRefundNote(person) && <span className="ml-2 text-sm font-normal text-muted-foreground">· {partialRefundNote(person)}</span>}
+                      {person.payment_status
+                        ? (paymentStatusLabels[person.payment_status] ??
+                          person.payment_status)
+                        : "—"}
+                      {partialRefundNote(person) && (
+                        <span className="ml-2 text-sm font-normal text-muted-foreground">
+                          · {partialRefundNote(person)}
+                        </span>
+                      )}
                     </span>
                   </div>
                 </div>
 
                 <section className="space-y-3">
-                  <h2 className="text-xs font-bold uppercase tracking-[0.12em] text-muted-foreground">Parcurs</h2>
+                  <h2 className="text-xs font-bold uppercase tracking-[0.12em] text-muted-foreground">
+                    Parcurs
+                  </h2>
                   <ol className="flex flex-col">
                     {steps.map((s, i) => (
                       <li key={s.label} className="flex gap-3">
@@ -251,16 +311,26 @@ const PersonSheet = ({ person, onClose, onStatusChange, updating, onShowInTable,
                                   : "border-border bg-card",
                             )}
                           />
-                          {i < steps.length - 1 && <span className="h-6 w-0.5 bg-border" />}
+                          {i < steps.length - 1 && (
+                            <span className="h-6 w-0.5 bg-border" />
+                          )}
                         </div>
                         <span
                           className={cn(
                             "-mt-0.5 text-sm",
-                            s.done ? "font-semibold" : i === next ? "font-semibold text-admin-warn-fg" : "text-muted-foreground",
+                            s.done
+                              ? "font-semibold"
+                              : i === next
+                                ? "font-semibold text-admin-warn-fg"
+                                : "text-muted-foreground",
                           )}
                         >
                           {s.label}
-                          {s.done && s.date ? ` · ${s.date}` : !s.done && i === next ? " — urmează" : ""}
+                          {s.done && s.date
+                            ? ` · ${s.date}`
+                            : !s.done && i === next
+                              ? " — urmează"
+                              : ""}
                         </span>
                       </li>
                     ))}
@@ -269,7 +339,8 @@ const PersonSheet = ({ person, onClose, onStatusChange, updating, onShowInTable,
 
                 <section className="space-y-1.5 rounded-2xl border border-border bg-card p-4">
                   <p className="flex items-center gap-2 text-sm text-muted-foreground">
-                    <Gamepad2 className="h-4 w-4" aria-hidden /> Jocul Yalla · cont cu același email
+                    <Gamepad2 className="h-4 w-4" aria-hidden /> Jocul Yalla ·
+                    cont cu același email
                   </p>
                   {progress === undefined ? (
                     <p className="flex items-center gap-2 text-sm text-muted-foreground">
@@ -281,21 +352,33 @@ const PersonSheet = ({ person, onClose, onStatusChange, updating, onShowInTable,
                         Test de nivel: {progress.placement?.level ?? "nefăcut"}
                       </p>
                       <div className="flex flex-wrap gap-2 pt-1 text-sm">
-                        <span className="rounded-full bg-muted px-2.5 py-1">{progress.xp} XP</span>
-                        <span className="rounded-full bg-muted px-2.5 py-1">{progress.rounds} runde</span>
-                        <span className="rounded-full bg-muted px-2.5 py-1">{progress.items_seen} expresii</span>
+                        <span className="rounded-full bg-muted px-2.5 py-1">
+                          {progress.xp} XP
+                        </span>
+                        <span className="rounded-full bg-muted px-2.5 py-1">
+                          {progress.rounds} runde
+                        </span>
+                        <span className="rounded-full bg-muted px-2.5 py-1">
+                          {progress.items_seen} expresii
+                        </span>
                       </div>
                     </>
                   ) : (
-                    <p className="text-sm">Nu are cont în joc cu acest email.</p>
+                    <p className="text-sm">
+                      Nu are cont în joc cu acest email.
+                    </p>
                   )}
                 </section>
 
                 {!person.anonymized_at && (
                   <section className="space-y-1.5 rounded-2xl border border-border bg-card p-4 text-sm">
                     <p className="text-muted-foreground">Contact</p>
-                    {person.phone && <p className="font-semibold">{person.phone}</p>}
-                    {person.email && <p className="break-all font-semibold">{person.email}</p>}
+                    {person.phone && (
+                      <p className="font-semibold">{person.phone}</p>
+                    )}
+                    {person.email && (
+                      <p className="break-all font-semibold">{person.email}</p>
+                    )}
                     {person.center && <p>Centru: {person.center}</p>}
                   </section>
                 )}
@@ -303,16 +386,25 @@ const PersonSheet = ({ person, onClose, onStatusChange, updating, onShowInTable,
                 {person.notes && (
                   <section className="space-y-1.5 rounded-2xl border border-border bg-card p-4">
                     <p className="text-sm text-muted-foreground">Mesajul lor</p>
-                    <p className="whitespace-pre-wrap text-[0.9375rem]">{person.notes}</p>
+                    <p className="whitespace-pre-wrap text-[0.9375rem]">
+                      {person.notes}
+                    </p>
                   </section>
                 )}
 
                 <section className="space-y-1">
-                  <h2 className="pb-1 text-xs font-bold uppercase tracking-[0.12em] text-muted-foreground">Istoric</h2>
+                  <h2 className="pb-1 text-xs font-bold uppercase tracking-[0.12em] text-muted-foreground">
+                    Istoric
+                  </h2>
                   {history.map((h) => (
-                    <div key={h.what + h.when} className="flex justify-between gap-3 border-t border-border/70 py-2 text-sm">
+                    <div
+                      key={h.what + h.when}
+                      className="flex justify-between gap-3 border-t border-border/70 py-2 text-sm"
+                    >
                       <span>{h.what}</span>
-                      <span className="shrink-0 text-muted-foreground">{fmt(h.when)}</span>
+                      <span className="shrink-0 text-muted-foreground">
+                        {fmt(h.when)}
+                      </span>
                     </div>
                   ))}
                 </section>

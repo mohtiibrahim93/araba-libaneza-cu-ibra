@@ -2,7 +2,6 @@ import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 import { buildCorsHeaders } from "../_shared/cors.ts";
 import { sendTemplateEmail } from "../_shared/managed-email.ts";
 
-
 /**
  * Cron-driven (twice daily). Sends exactly two follow-up emails per trial:
  *   - Stage 1: shortly after the lesson (ended 1h–18h ago)
@@ -12,7 +11,8 @@ import { sendTemplateEmail } from "../_shared/managed-email.ts";
  */
 Deno.serve(async (req) => {
   const corsHeaders = buildCorsHeaders(req);
-  if (req.method === "OPTIONS") return new Response(null, { headers: corsHeaders });
+  if (req.method === "OPTIONS")
+    return new Response(null, { headers: corsHeaders });
 
   // Cron-only endpoint: require the shared secret header (fail-closed).
   const cronSecret = Deno.env.get("CRON_SECRET");
@@ -22,7 +22,6 @@ Deno.serve(async (req) => {
       headers: { ...corsHeaders, "Content-Type": "application/json" },
     });
   }
-
 
   const supabase = createClient(
     Deno.env.get("SUPABASE_URL")!,
@@ -73,19 +72,28 @@ Deno.serve(async (req) => {
 
     let sent = 0;
     // The select list is built at runtime, so the client can't infer a row type.
-    type Row = { id: string; student_name: string; student_email: string; language: string | null };
-    for (const r of ((rows ?? []) as unknown as Row[])) {
+    type Row = {
+      id: string;
+      student_name: string;
+      student_email: string;
+      language: string | null;
+    };
+    for (const r of (rows ?? []) as unknown as Row[]) {
       const lang = (r.language as "ro" | "en") ?? "ro";
       try {
-        const result = await sendTemplateEmail("trial-followup", r.student_email, {
-          idempotencyKey: `${stage.idemPrefix}-${r.id}`,
-          templateData: {
-            name: r.student_name,
-            lang,
-            stage: stage.key,
-            enrollUrl: "https://centruldearabalibaneza.com/#programs",
+        const result = await sendTemplateEmail(
+          "trial-followup",
+          r.student_email,
+          {
+            idempotencyKey: `${stage.idemPrefix}-${r.id}`,
+            templateData: {
+              name: r.student_name,
+              lang,
+              stage: stage.key,
+              enrollUrl: "https://centruldearabalibaneza.com/#programs",
+            },
           },
-        });
+        );
         // A suppressed recipient is final — flag the stage so the cron does not
         // keep retrying a send that can never be delivered.
         await supabase
@@ -93,7 +101,6 @@ Deno.serve(async (req) => {
           .update({ [stage.flag]: new Date().toISOString() })
           .eq("id", r.id);
         if (result.sent) sent++;
-
       } catch (e) {
         console.error("[trial-followup] error", stage.key, r.id, e);
       }

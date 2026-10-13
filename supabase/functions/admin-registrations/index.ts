@@ -1,9 +1,24 @@
-import { importCalendarEvent, reconcileCalendar, repairBookingCalendar } from "../_shared/calendar-reconciliation.ts";
+import {
+  importCalendarEvent,
+  reconcileCalendar,
+  repairBookingCalendar,
+} from "../_shared/calendar-reconciliation.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 import Stripe from "https://esm.sh/stripe@18.5.0";
 import { buildCorsHeaders } from "../_shared/cors.ts";
-import { GCAL_GATEWAY, gcalDiagnose, utcToZonedParts, zonedToUtc } from "../_shared/booking.ts";
-import { lessonNumber, normTitle, planMissing, titleForLesson, type Meeting } from "../_shared/cohort-sessions.ts";
+import {
+  GCAL_GATEWAY,
+  gcalDiagnose,
+  utcToZonedParts,
+  zonedToUtc,
+} from "../_shared/booking.ts";
+import {
+  lessonNumber,
+  normTitle,
+  planMissing,
+  titleForLesson,
+  type Meeting,
+} from "../_shared/cohort-sessions.ts";
 import {
   COURSE_LESSONS,
   computeRefund,
@@ -14,7 +29,6 @@ import { GROUP_MONTHS, KIDS_GROUP_MONTHS } from "../_shared/prices.ts";
 import { sendTemplateEmail } from "../_shared/managed-email.ts";
 import { verifyRegistrationSignature } from "../_shared/registration-access.ts";
 
-
 function jsonResponseWith(cors: Record<string, string>) {
   return (body: unknown, status = 200) =>
     new Response(JSON.stringify(body), {
@@ -23,14 +37,19 @@ function jsonResponseWith(cors: Record<string, string>) {
     });
 }
 
-const allowedSenderDomains = ["centruldearabalibaneza.com", "notify.centruldearabalibaneza.com"];
+const allowedSenderDomains = [
+  "centruldearabalibaneza.com",
+  "notify.centruldearabalibaneza.com",
+];
 
 function isAllowedSenderEmail(email: string) {
   const normalized = email.trim().toLowerCase();
   const domain = normalized.split("@")[1];
-  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(normalized) && allowedSenderDomains.includes(domain);
+  return (
+    /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(normalized) &&
+    allowedSenderDomains.includes(domain)
+  );
 }
-
 
 /**
  * Everything computeRefund needs for one registration, read from the row, the
@@ -70,16 +89,13 @@ function isAllowedSenderEmail(email: string) {
  */
 async function calendarDrift(
   rows: Array<Record<string, unknown>>,
-): Promise<
-  | null
-  | Array<{
-      id: string;
-      student_name: string | null;
-      booked_at: string;
-      google_at: string | null;
-      kind: "moved" | "cancelled_in_google" | "not_found";
-    }>
-> {
+): Promise<null | Array<{
+  id: string;
+  student_name: string | null;
+  booked_at: string;
+  google_at: string | null;
+  kind: "moved" | "cancelled_in_google" | "not_found";
+}>> {
   const lovableKey = Deno.env.get("LOVABLE_API_KEY");
   const gcalKey = Deno.env.get("GOOGLE_CALENDAR_API_KEY");
   if (!lovableKey || !gcalKey) return null;
@@ -88,7 +104,9 @@ async function calendarDrift(
   // Only lessons still to come: a past lesson moved in Google needs no action,
   // and including them would make the list long and ignorable.
   const upcoming = rows.filter(
-    (r) => typeof r["google_event_id"] === "string" && Date.parse(String(r["start_at"])) >= now,
+    (r) =>
+      typeof r["google_event_id"] === "string" &&
+      Date.parse(String(r["start_at"])) >= now,
   );
   if (upcoming.length === 0) return [];
 
@@ -115,7 +133,10 @@ async function calendarDrift(
         maxResults: "250",
       });
       if (pageToken) qs.set("pageToken", pageToken);
-      const res = await fetch(`${GCAL_GATEWAY}/calendars/primary/events?${qs}`, { headers: gHeaders });
+      const res = await fetch(
+        `${GCAL_GATEWAY}/calendars/primary/events?${qs}`,
+        { headers: gHeaders },
+      );
       if (!res.ok) {
         console.error("[calendar_drift] list failed", res.status);
         return null;
@@ -166,7 +187,10 @@ async function calendarDrift(
     }
     // A minute of slack: Google returns its own offset format, and comparing
     // the instants rather than the strings is the only reliable way.
-    if (ev.start && Math.abs(Date.parse(ev.start) - Date.parse(bookedAt)) > 60_000) {
+    if (
+      ev.start &&
+      Math.abs(Date.parse(ev.start) - Date.parse(bookedAt)) > 60_000
+    ) {
       out.push({
         id: String(r["id"]),
         student_name: (r["student_name"] as string | null) ?? null,
@@ -185,7 +209,9 @@ async function refundInputsFor(
   stripe: Stripe,
   reg: Record<string, unknown>,
   lessonsTaken: number,
-): Promise<{ breakdown: RefundBreakdown; paymentIntentId: string } | { error: string }> {
+): Promise<
+  { breakdown: RefundBreakdown; paymentIntentId: string } | { error: string }
+> {
   const sessionOrIntent = String(reg.stripe_session_id ?? "");
   if (!sessionOrIntent) return { error: "Nu s-a găsit plata Stripe asociată" };
 
@@ -193,7 +219,7 @@ async function refundInputsFor(
   if (paymentIntentId.startsWith("cs_")) {
     const session = await stripe.checkout.sessions.retrieve(paymentIntentId);
     const pi = session.payment_intent;
-    paymentIntentId = typeof pi === "string" ? pi : pi?.id ?? "";
+    paymentIntentId = typeof pi === "string" ? pi : (pi?.id ?? "");
   }
   if (!paymentIntentId) return { error: "Nu s-a găsit plata Stripe asociată" };
 
@@ -203,7 +229,8 @@ async function refundInputsFor(
   if (!paidBani) return { error: "Plata Stripe nu are o sumă încasată" };
 
   const alreadyRefunded = Number(intent.amount_refunded ?? 0);
-  if (alreadyRefunded >= paidBani) return { error: "Plata a fost deja rambursată integral" };
+  if (alreadyRefunded >= paidBani)
+    return { error: "Plata a fost deja rambursată integral" };
 
   // How many lessons the whole course holds, so a pro-rata share means something.
   const formType = String(reg.form_type ?? "");
@@ -226,7 +253,8 @@ async function refundInputsFor(
       .eq("id", reg.cohort_id)
       .maybeSingle();
     const cohort = cohortData as { start_date: string | null } | null;
-    if (cohort?.start_date) courseStartsAt = `${cohort.start_date}T00:00:00.000Z`;
+    if (cohort?.start_date)
+      courseStartsAt = `${cohort.start_date}T00:00:00.000Z`;
   }
 
   return {
@@ -249,11 +277,19 @@ Deno.serve(async (req) => {
 
   try {
     const body = await req.json();
-    const { action, ids, id, lead_status, sender_name, sender_email, refund_reason } = body;
+    const {
+      action,
+      ids,
+      id,
+      lead_status,
+      sender_name,
+      sender_email,
+      refund_reason,
+    } = body;
 
     const supabase = createClient(
       Deno.env.get("SUPABASE_URL")!,
-      Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!
+      Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!,
     );
 
     if (action === "get_private_status") {
@@ -285,12 +321,15 @@ Deno.serve(async (req) => {
     // instead of a single shared password with no rate limiting or identity.
     const authHeader = req.headers.get("Authorization") || "";
     const token = authHeader.startsWith("Bearer ") ? authHeader.slice(7) : "";
-    const { data: userData } = token ? await supabase.auth.getUser(token) : { data: { user: null } };
+    const { data: userData } = token
+      ? await supabase.auth.getUser(token)
+      : { data: { user: null } };
     const caller = userData?.user;
     // Only a confirmed, non-anonymous mailbox counts as proof of the admin address.
-    const callerEmail = caller && caller.email_confirmed_at && !caller.is_anonymous
-      ? caller.email?.trim().toLowerCase()
-      : undefined;
+    const callerEmail =
+      caller && caller.email_confirmed_at && !caller.is_anonymous
+        ? caller.email?.trim().toLowerCase()
+        : undefined;
     const adminEmails = (Deno.env.get("ADMIN_EMAILS") || "")
       .split(",")
       .map((e) => e.trim().toLowerCase())
@@ -303,24 +342,55 @@ Deno.serve(async (req) => {
 
     if (action === "update_contact") {
       const contactName = typeof body.name === "string" ? body.name.trim() : "";
-      const contactEmail = typeof body.email === "string" ? body.email.trim().toLowerCase() : "";
-      const contactPhone = typeof body.phone === "string" ? body.phone.trim() : "";
-      if (typeof id !== "string" || !contactName || contactName.length > 160 || contactEmail.length > 254 || (contactEmail && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(contactEmail)) || contactPhone.length > 40) {
+      const contactEmail =
+        typeof body.email === "string" ? body.email.trim().toLowerCase() : "";
+      const contactPhone =
+        typeof body.phone === "string" ? body.phone.trim() : "";
+      if (
+        typeof id !== "string" ||
+        !contactName ||
+        contactName.length > 160 ||
+        contactEmail.length > 254 ||
+        (contactEmail && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(contactEmail)) ||
+        contactPhone.length > 40
+      ) {
         return jsonResponse({ error: "Date de contact invalide." }, 400);
       }
-      const { error } = await supabase.rpc("admin_update_registration_contact", {
-        p_id: id, p_name: contactName, p_email: contactEmail || null, p_phone: contactPhone || null, p_actor: callerEmail,
-      });
-      if (error) return jsonResponse({ error: "Contactul nu a fost salvat. Reîncearcă.", code: "contact_update_failed" }, 500);
+      const { error } = await supabase.rpc(
+        "admin_update_registration_contact",
+        {
+          p_id: id,
+          p_name: contactName,
+          p_email: contactEmail || null,
+          p_phone: contactPhone || null,
+          p_actor: callerEmail,
+        },
+      );
+      if (error)
+        return jsonResponse(
+          {
+            error: "Contactul nu a fost salvat. Reîncearcă.",
+            code: "contact_update_failed",
+          },
+          500,
+        );
       return jsonResponse({ success: true });
     }
 
     // PostgREST caps a read at one page. Use stable pages for admin totals
     // and the enrolment list rather than silently truncating older records.
-    const readAll = async (table: string, fields: string, orderBy = "id", ascending = true) => {
+    const readAll = async (
+      table: string,
+      fields: string,
+      orderBy = "id",
+      ascending = true,
+    ) => {
       const data: Array<Record<string, any>> = [];
       for (let offset = 0; ; offset += 1000) {
-        let query = supabase.from(table).select(fields).order(orderBy, { ascending });
+        let query = supabase
+          .from(table)
+          .select(fields)
+          .order(orderBy, { ascending });
         if (orderBy !== "id") query = query.order("id", { ascending: true });
         const result = await query.range(offset, offset + 999);
         if (result.error) throw result.error;
@@ -343,29 +413,58 @@ Deno.serve(async (req) => {
     if (action === "list_student_progress") {
       const { data: rows, error: rowsErr } = await supabase
         .from("student_progress")
-        .select("user_id, email, placement, xp, rounds, items_seen, last_played_at, created_at, updated_at")
+        .select(
+          "user_id, email, placement, xp, rounds, items_seen, last_played_at, created_at, updated_at",
+        )
         .order("updated_at", { ascending: false })
         .limit(500);
       if (rowsErr) {
-        console.error("[admin-registrations] list_student_progress failed", rowsErr);
-        return jsonResponse({ error: "Nu am putut încărca progresul elevilor" });
+        console.error(
+          "[admin-registrations] list_student_progress failed",
+          rowsErr,
+        );
+        return jsonResponse({
+          error: "Nu am putut încărca progresul elevilor",
+        });
       }
       const emails = Array.from(
-        new Set((rows ?? []).map((r: { email: string | null }) => (r.email ?? "").toLowerCase()).filter(Boolean)),
+        new Set(
+          (rows ?? [])
+            .map((r: { email: string | null }) => (r.email ?? "").toLowerCase())
+            .filter(Boolean),
+        ),
       );
-      let regs: Array<{ id: string; email: string | null; name: string; form_type: string; level: string | null; lead_status: string | null; payment_status: string | null; created_at: string }> = [];
+      let regs: Array<{
+        id: string;
+        email: string | null;
+        name: string;
+        form_type: string;
+        level: string | null;
+        lead_status: string | null;
+        payment_status: string | null;
+        created_at: string;
+      }> = [];
       if (emails.length) {
         const { data: regRows } = await supabase
           .from("registrations")
-          .select("id, email, name, form_type, level, lead_status, payment_status, created_at")
+          .select(
+            "id, email, name, form_type, level, lead_status, payment_status, created_at",
+          )
           // Case-insensitive: a registration may have been typed "Maria@…".
-          .or(emails.map((e) => `email.ilike.${e.replace(/([%_\\])/g, "\\$1")}`).join(","))
+          .or(
+            emails
+              .map((e) => `email.ilike.${e.replace(/([%_\\])/g, "\\$1")}`)
+              .join(","),
+          )
           .order("created_at", { ascending: false });
         regs = regRows ?? [];
       }
       const data = (rows ?? []).map((r: { email: string | null }) => ({
         ...r,
-        registrations: regs.filter((g) => (g.email ?? "").toLowerCase() === (r.email ?? "").toLowerCase()),
+        registrations: regs.filter(
+          (g) =>
+            (g.email ?? "").toLowerCase() === (r.email ?? "").toLowerCase(),
+        ),
       }));
       return jsonResponse({ data });
     }
@@ -373,7 +472,9 @@ Deno.serve(async (req) => {
     if (action === "list_capacities") {
       const { data, error } = await supabase
         .from("group_capacities")
-        .select("id, form_type, level, format, max_seats, min_seats, manual_offset")
+        .select(
+          "id, form_type, level, format, max_seats, min_seats, manual_offset",
+        )
         .order("form_type", { ascending: true })
         .order("level", { ascending: true, nullsFirst: false })
         .order("format", { ascending: true, nullsFirst: true });
@@ -383,11 +484,20 @@ Deno.serve(async (req) => {
 
     if (action === "update_capacity") {
       const { id: capId, max_seats, min_seats, manual_offset } = body;
-      if (typeof capId !== "string") return jsonResponse({ error: "ID invalid" });
+      if (typeof capId !== "string")
+        return jsonResponse({ error: "ID invalid" });
       const max = Number(max_seats);
       const min = Number(min_seats);
-      if (!Number.isInteger(max) || !Number.isInteger(min) || max < 1 || min < 1 || min > max) {
-        return jsonResponse({ error: "Valori invalide (min ≤ max, ambele ≥ 1)" });
+      if (
+        !Number.isInteger(max) ||
+        !Number.isInteger(min) ||
+        max < 1 ||
+        min < 1 ||
+        min > max
+      ) {
+        return jsonResponse({
+          error: "Valori invalide (min ≤ max, ambele ≥ 1)",
+        });
       }
       const update: Record<string, unknown> = {
         max_seats: max,
@@ -405,7 +515,9 @@ Deno.serve(async (req) => {
         .from("group_capacities")
         .update(update)
         .eq("id", capId)
-        .select("id, form_type, level, format, max_seats, min_seats, manual_offset")
+        .select(
+          "id, form_type, level, format, max_seats, min_seats, manual_offset",
+        )
         .single();
       if (error) throw error;
       return jsonResponse({ success: true, data });
@@ -436,15 +548,19 @@ Deno.serve(async (req) => {
       if (!Number.isInteger(n) || n < 0 || n > 1000) {
         return jsonResponse({ error: "Număr invalid (0–1000)" });
       }
-      if (typeof source !== "string" || source.trim().length === 0 || source.length > 40) {
+      if (
+        typeof source !== "string" ||
+        source.trim().length === 0 ||
+        source.length > 40
+      ) {
         return jsonResponse({ error: "Sursă invalidă" });
       }
       // Auto-attach group manual signups to the level+format's single active
       // cohort so they count on the cohort card too, not just the level badge.
       // Ambiguous (0 or 2+ matching cohorts) → left unattached; counts at level.
       let cohortId: string | null = null;
-      const rowLevel = form_type === "kids" ? null : (level || null);
-      const rowFormat = form_type === "kids" ? null : (format || null);
+      const rowLevel = form_type === "kids" ? null : level || null;
+      const rowFormat = form_type === "kids" ? null : format || null;
       if (form_type === "group" && rowLevel && rowFormat) {
         const { data: matching } = await supabase
           .from("group_cohorts")
@@ -462,7 +578,8 @@ Deno.serve(async (req) => {
         cohort_id: cohortId,
         source: source.trim(),
         count: n,
-        note: note != null && typeof note === "string" ? note.slice(0, 500) : null,
+        note:
+          note != null && typeof note === "string" ? note.slice(0, 500) : null,
         updated_at: new Date().toISOString(),
       };
       let result;
@@ -471,13 +588,17 @@ Deno.serve(async (req) => {
           .from("manual_signups")
           .update(row)
           .eq("id", msId)
-          .select("id, form_type, level, format, source, count, note, updated_at")
+          .select(
+            "id, form_type, level, format, source, count, note, updated_at",
+          )
           .single();
       } else {
         result = await supabase
           .from("manual_signups")
           .insert(row)
-          .select("id, form_type, level, format, source, count, note, updated_at")
+          .select(
+            "id, form_type, level, format, source, count, note, updated_at",
+          )
           .single();
       }
       if (result.error) throw result.error;
@@ -486,8 +607,12 @@ Deno.serve(async (req) => {
 
     if (action === "delete_manual_signup") {
       const { id: msId } = body;
-      if (typeof msId !== "string" || !msId) return jsonResponse({ error: "ID invalid" });
-      const { error } = await supabase.from("manual_signups").delete().eq("id", msId);
+      if (typeof msId !== "string" || !msId)
+        return jsonResponse({ error: "ID invalid" });
+      const { error } = await supabase
+        .from("manual_signups")
+        .delete()
+        .eq("id", msId);
       if (error) throw error;
       return jsonResponse({ success: true });
     }
@@ -519,11 +644,26 @@ Deno.serve(async (req) => {
     }
 
     if (action === "upsert_blog_article") {
-      const { slug, title_ro, title_en, description_ro, description_en, lead_ro, lead_en, body_ro, body_en, reading_minutes, is_published } = body;
+      const {
+        slug,
+        title_ro,
+        title_en,
+        description_ro,
+        description_en,
+        lead_ro,
+        lead_en,
+        body_ro,
+        body_en,
+        reading_minutes,
+        is_published,
+      } = body;
       if (typeof slug !== "string" || !/^[a-z0-9-]{3,120}$/.test(slug)) {
-        return jsonResponse({ error: "Slug invalid (litere mici, cifre, cratime)" });
+        return jsonResponse({
+          error: "Slug invalid (litere mici, cifre, cratime)",
+        });
       }
-      const str = (v: unknown, max: number) => (typeof v === "string" ? v.slice(0, max) : "");
+      const str = (v: unknown, max: number) =>
+        typeof v === "string" ? v.slice(0, max) : "";
       const mins = Number(reading_minutes);
       const row = {
         slug,
@@ -535,7 +675,8 @@ Deno.serve(async (req) => {
         lead_en: str(lead_en, 500),
         body_ro: str(body_ro, 100_000),
         body_en: str(body_en, 100_000),
-        reading_minutes: Number.isInteger(mins) && mins >= 1 && mins <= 60 ? mins : 5,
+        reading_minutes:
+          Number.isInteger(mins) && mins >= 1 && mins <= 60 ? mins : 5,
         is_published: is_published === true,
         updated_at: new Date().toISOString(),
       };
@@ -550,30 +691,53 @@ Deno.serve(async (req) => {
 
     if (action === "delete_blog_article") {
       const { slug } = body;
-      if (typeof slug !== "string" || !slug) return jsonResponse({ error: "Slug invalid" });
-      const { error } = await supabase.from("blog_articles").delete().eq("slug", slug);
+      if (typeof slug !== "string" || !slug)
+        return jsonResponse({ error: "Slug invalid" });
+      const { error } = await supabase
+        .from("blog_articles")
+        .delete()
+        .eq("slug", slug);
       if (error) throw error;
       return jsonResponse({ success: true });
     }
 
     if (action === "upload_blog_media") {
       const { file_name, content_type, data_base64 } = body;
-      if (typeof file_name !== "string" || typeof content_type !== "string" || typeof data_base64 !== "string") {
+      if (
+        typeof file_name !== "string" ||
+        typeof content_type !== "string" ||
+        typeof data_base64 !== "string"
+      ) {
         return jsonResponse({ error: "Fișier invalid" });
       }
-      const okType = /^(image\/(png|jpe?g|webp|gif|avif)|audio\/(mpeg|mp4|ogg|wav|webm))$/.test(content_type);
-      if (!okType) return jsonResponse({ error: "Doar imagini (png/jpg/webp/gif/avif) sau audio (mp3/m4a/ogg/wav)" });
+      const okType =
+        /^(image\/(png|jpe?g|webp|gif|avif)|audio\/(mpeg|mp4|ogg|wav|webm))$/.test(
+          content_type,
+        );
+      if (!okType)
+        return jsonResponse({
+          error:
+            "Doar imagini (png/jpg/webp/gif/avif) sau audio (mp3/m4a/ogg/wav)",
+        });
       // ~8 MB decoded cap keeps uploads reasonable for web use.
-      if (data_base64.length > 11_000_000) return jsonResponse({ error: "Fișier prea mare (max ~8 MB)" });
+      if (data_base64.length > 11_000_000)
+        return jsonResponse({ error: "Fișier prea mare (max ~8 MB)" });
       const bytes = Uint8Array.from(atob(data_base64), (c) => c.charCodeAt(0));
-      const safeName = file_name.toLowerCase().replace(/[^a-z0-9.-]+/g, "-").slice(-80);
+      const safeName = file_name
+        .toLowerCase()
+        .replace(/[^a-z0-9.-]+/g, "-")
+        .slice(-80);
       const path = `${Date.now()}-${safeName}`;
-      const { error } = await supabase.storage.from("blog-media").upload(path, bytes, {
-        contentType: content_type,
-        upsert: false,
-      });
+      const { error } = await supabase.storage
+        .from("blog-media")
+        .upload(path, bytes, {
+          contentType: content_type,
+          upsert: false,
+        });
       if (error) throw error;
-      const { data: pub } = supabase.storage.from("blog-media").getPublicUrl(path);
+      const { data: pub } = supabase.storage
+        .from("blog-media")
+        .getPublicUrl(path);
       return jsonResponse({ success: true, url: pub.publicUrl });
     }
 
@@ -589,27 +753,40 @@ Deno.serve(async (req) => {
 
     if (action === "upsert_resource") {
       const {
-        slug: rSlug, title_ro, title_en, description_ro, description_en,
-        file_url, email_template, is_active, sort_order,
+        slug: rSlug,
+        title_ro,
+        title_en,
+        description_ro,
+        description_en,
+        file_url,
+        email_template,
+        is_active,
+        sort_order,
       } = body;
       if (typeof rSlug !== "string" || !/^[a-z0-9-]{3,120}$/.test(rSlug)) {
-        return jsonResponse({ error: "Slug invalid (litere mici, cifre, cratime)" });
+        return jsonResponse({
+          error: "Slug invalid (litere mici, cifre, cratime)",
+        });
       }
-      const str = (v: unknown, max: number) => (typeof v === "string" ? v.slice(0, max) : "");
+      const str = (v: unknown, max: number) =>
+        typeof v === "string" ? v.slice(0, max) : "";
       const order = Number(sort_order);
       const { data, error } = await supabase
         .from("resources")
-        .upsert({
-          slug: rSlug,
-          title_ro: str(title_ro, 200),
-          title_en: str(title_en, 200),
-          description_ro: str(description_ro, 500),
-          description_en: str(description_en, 500),
-          file_url: str(file_url, 500),
-          email_template: str(email_template, 120),
-          is_active: is_active !== false,
-          sort_order: Number.isFinite(order) ? Math.trunc(order) : 0,
-        }, { onConflict: "slug" })
+        .upsert(
+          {
+            slug: rSlug,
+            title_ro: str(title_ro, 200),
+            title_en: str(title_en, 200),
+            description_ro: str(description_ro, 500),
+            description_en: str(description_en, 500),
+            file_url: str(file_url, 500),
+            email_template: str(email_template, 120),
+            is_active: is_active !== false,
+            sort_order: Number.isFinite(order) ? Math.trunc(order) : 0,
+          },
+          { onConflict: "slug" },
+        )
         .select()
         .single();
       if (error) throw error;
@@ -618,8 +795,12 @@ Deno.serve(async (req) => {
 
     if (action === "delete_resource") {
       const { slug: rSlug } = body;
-      if (typeof rSlug !== "string" || !rSlug) return jsonResponse({ error: "Slug invalid" });
-      const { error } = await supabase.from("resources").delete().eq("slug", rSlug);
+      if (typeof rSlug !== "string" || !rSlug)
+        return jsonResponse({ error: "Slug invalid" });
+      const { error } = await supabase
+        .from("resources")
+        .delete()
+        .eq("slug", rSlug);
       if (error) throw error;
       return jsonResponse({ success: true });
     }
@@ -629,18 +810,27 @@ Deno.serve(async (req) => {
       if (typeof file_name !== "string" || typeof data_base64 !== "string") {
         return jsonResponse({ error: "Fișier invalid" });
       }
-      if (!/\.pdf$/i.test(file_name)) return jsonResponse({ error: "Doar fișiere PDF" });
+      if (!/\.pdf$/i.test(file_name))
+        return jsonResponse({ error: "Doar fișiere PDF" });
       // ~15 MB decoded cap.
-      if (data_base64.length > 21_000_000) return jsonResponse({ error: "Fișier prea mare (max ~15 MB)" });
+      if (data_base64.length > 21_000_000)
+        return jsonResponse({ error: "Fișier prea mare (max ~15 MB)" });
       const bytes = Uint8Array.from(atob(data_base64), (c) => c.charCodeAt(0));
-      const safeName = file_name.toLowerCase().replace(/[^a-z0-9.-]+/g, "-").slice(-80);
+      const safeName = file_name
+        .toLowerCase()
+        .replace(/[^a-z0-9.-]+/g, "-")
+        .slice(-80);
       const path = `resurse/${Date.now()}-${safeName}`;
-      const { error } = await supabase.storage.from("blog-media").upload(path, bytes, {
-        contentType: "application/pdf",
-        upsert: false,
-      });
+      const { error } = await supabase.storage
+        .from("blog-media")
+        .upload(path, bytes, {
+          contentType: "application/pdf",
+          upsert: false,
+        });
       if (error) throw error;
-      const { data: pub } = supabase.storage.from("blog-media").getPublicUrl(path);
+      const { data: pub } = supabase.storage
+        .from("blog-media")
+        .getPublicUrl(path);
       return jsonResponse({ success: true, url: pub.publicUrl });
     }
 
@@ -671,18 +861,29 @@ Deno.serve(async (req) => {
       if (!edits || typeof edits !== "object" || Array.isArray(edits)) {
         return jsonResponse({ error: "Corecturi invalide" });
       }
-      const str = (v: unknown, max: number) => (typeof v === "string" ? v.trim().slice(0, max) : "");
-      const rows: { card_id: string; ar: string; ro: string; variants: string[] }[] = [];
-      for (const [card_id, raw] of Object.entries(edits as Record<string, unknown>)) {
+      const str = (v: unknown, max: number) =>
+        typeof v === "string" ? v.trim().slice(0, max) : "";
+      const rows: {
+        card_id: string;
+        ar: string;
+        ro: string;
+        variants: string[];
+      }[] = [];
+      for (const [card_id, raw] of Object.entries(
+        edits as Record<string, unknown>,
+      )) {
         if (!/^[A-Za-z0-9_-]{1,64}$/.test(card_id)) {
-          return jsonResponse({ error: `Identificator de card invalid: ${card_id.slice(0, 40)}` });
+          return jsonResponse({
+            error: `Identificator de card invalid: ${card_id.slice(0, 40)}`,
+          });
         }
         const v = raw as { ar?: unknown; ro?: unknown; variants?: unknown };
         const ar = str(v?.ar, 500);
         const ro = str(v?.ro, 1000);
         // The table rejects blanks too; refusing here names the offending card
         // instead of surfacing a constraint violation.
-        if (!ar || !ro) return jsonResponse({ error: `Card incomplet: ${card_id}` });
+        if (!ar || !ro)
+          return jsonResponse({ error: `Card incomplet: ${card_id}` });
         const variants = Array.isArray(v?.variants)
           ? (v.variants as unknown[])
               .map((x) => str(x, 500))
@@ -693,7 +894,10 @@ Deno.serve(async (req) => {
           : [];
         rows.push({ card_id, ar, ro, variants });
       }
-      if (rows.length > 5000) return jsonResponse({ error: "Prea multe corecturi într-o singură cerere" });
+      if (rows.length > 5000)
+        return jsonResponse({
+          error: "Prea multe corecturi într-o singură cerere",
+        });
 
       const keep = rows.map((r) => r.card_id);
       if (rows.length) {
@@ -705,7 +909,11 @@ Deno.serve(async (req) => {
       // Drop anything the teacher has since reverted.
       const del = supabase.from("yalla_card_overrides").delete();
       const { error: delError } = keep.length
-        ? await del.not("card_id", "in", `(${keep.map((k) => `"${k}"`).join(",")})`)
+        ? await del.not(
+            "card_id",
+            "in",
+            `(${keep.map((k) => `"${k}"`).join(",")})`,
+          )
         : await del.neq("card_id", "");
       if (delError) throw delError;
       return jsonResponse({ success: true, count: rows.length });
@@ -725,10 +933,14 @@ Deno.serve(async (req) => {
       if (typeof key !== "string" || !/^[A-Za-z0-9_.-]{1,200}$/.test(key)) {
         return jsonResponse({ error: "Cheie invalidă" });
       }
-      const str = (v: unknown) => (typeof v === "string" ? v.slice(0, 8000) : "");
+      const str = (v: unknown) =>
+        typeof v === "string" ? v.slice(0, 8000) : "";
       const { data, error } = await supabase
         .from("site_texts")
-        .upsert({ key, value_ro: str(value_ro), value_en: str(value_en) }, { onConflict: "key" })
+        .upsert(
+          { key, value_ro: str(value_ro), value_en: str(value_en) },
+          { onConflict: "key" },
+        )
         .select()
         .single();
       if (error) throw error;
@@ -737,8 +949,12 @@ Deno.serve(async (req) => {
 
     if (action === "delete_site_text") {
       const { key } = body;
-      if (typeof key !== "string" || !key) return jsonResponse({ error: "Cheie invalidă" });
-      const { error } = await supabase.from("site_texts").delete().eq("key", key);
+      if (typeof key !== "string" || !key)
+        return jsonResponse({ error: "Cheie invalidă" });
+      const { error } = await supabase
+        .from("site_texts")
+        .delete()
+        .eq("key", key);
       if (error) throw error;
       return jsonResponse({ success: true });
     }
@@ -753,11 +969,21 @@ Deno.serve(async (req) => {
     }
 
     if (action === "upsert_page_content") {
-      const { path, meta_title, meta_description, h1, lead, body_md, faq, is_published } = body;
+      const {
+        path,
+        meta_title,
+        meta_description,
+        h1,
+        lead,
+        body_md,
+        faq,
+        is_published,
+      } = body;
       if (typeof path !== "string" || !/^\/[A-Za-z0-9/_-]{0,200}$/.test(path)) {
         return jsonResponse({ error: "Cale invalidă (ex: /arabizi)" });
       }
-      const str = (v: unknown, max: number) => (typeof v === "string" ? v.slice(0, max) : "");
+      const str = (v: unknown, max: number) =>
+        typeof v === "string" ? v.slice(0, max) : "";
       const faqClean = Array.isArray(faq)
         ? faq
             .filter((f) => f && typeof f === "object")
@@ -770,16 +996,19 @@ Deno.serve(async (req) => {
         : [];
       const { data, error } = await supabase
         .from("page_contents")
-        .upsert({
-          path,
-          meta_title: str(meta_title, 200),
-          meta_description: str(meta_description, 400),
-          h1: str(h1, 300),
-          lead: str(lead, 1000),
-          body_md: str(body_md, 200000),
-          faq: faqClean,
-          is_published: is_published !== false,
-        }, { onConflict: "path" })
+        .upsert(
+          {
+            path,
+            meta_title: str(meta_title, 200),
+            meta_description: str(meta_description, 400),
+            h1: str(h1, 300),
+            lead: str(lead, 1000),
+            body_md: str(body_md, 200000),
+            faq: faqClean,
+            is_published: is_published !== false,
+          },
+          { onConflict: "path" },
+        )
         .select()
         .single();
       if (error) throw error;
@@ -788,37 +1017,62 @@ Deno.serve(async (req) => {
 
     if (action === "delete_page_content") {
       const { path } = body;
-      if (typeof path !== "string" || !path) return jsonResponse({ error: "Cale invalidă" });
-      const { error } = await supabase.from("page_contents").delete().eq("path", path);
+      if (typeof path !== "string" || !path)
+        return jsonResponse({ error: "Cale invalidă" });
+      const { error } = await supabase
+        .from("page_contents")
+        .delete()
+        .eq("path", path);
       if (error) throw error;
       return jsonResponse({ success: true });
     }
-
 
     // Read-only course overview. Occupancy remains owned by the existing RPC;
     // payment counts only describe registrations with recorded payment states.
     if (action === "course_overview") {
       const [cohorts, registrations, manual, occupancy] = await Promise.all([
-        readAll("group_cohorts", "id,form_type,course_type,title_ro,level,format,age_category,teaching_language,start_date,end_date,schedule_label_ro,status,max_seats,manual_offset"),
-        readAll("registrations", "cohort_id,payment_status,refunded_at,lead_status"),
+        readAll(
+          "group_cohorts",
+          "id,form_type,course_type,title_ro,level,format,age_category,teaching_language,start_date,end_date,schedule_label_ro,status,max_seats,manual_offset",
+        ),
+        readAll(
+          "registrations",
+          "cohort_id,payment_status,refunded_at,lead_status",
+        ),
         readAll("manual_signups", "cohort_id,count"),
         supabase.rpc("get_cohort_signup_counts"),
       ]);
       if (occupancy.error) throw occupancy.error;
-      const seats = new Map((occupancy.data ?? []).map((r: { cohort_id: string; taken: number }) => [r.cohort_id, Number(r.taken)]));
+      const seats = new Map(
+        (occupancy.data ?? []).map(
+          (r: { cohort_id: string; taken: number }) => [
+            r.cohort_id,
+            Number(r.taken),
+          ],
+        ),
+      );
       const data = (cohorts.data ?? []).map((c) => {
-        const regs = (registrations.data ?? []).filter((r) => r.cohort_id === c.id);
+        const regs = (registrations.data ?? []).filter(
+          (r) => r.cohort_id === c.id,
+        );
         const payments: Record<string, number> = {};
         for (const r of regs) {
-          const state = r.refunded_at ? "refunded" : (r.payment_status || "unspecified");
+          const state = r.refunded_at
+            ? "refunded"
+            : r.payment_status || "unspecified";
           payments[state] = (payments[state] ?? 0) + 1;
         }
         return {
           ...c,
-          taken: seats.has(c.id) && Number.isFinite(seats.get(c.id)) ? seats.get(c.id) : null,
+          taken:
+            seats.has(c.id) && Number.isFinite(seats.get(c.id))
+              ? seats.get(c.id)
+              : null,
           registration_count: regs.length,
-          incomplete_count: regs.filter((r) => r.lead_status === "incomplete").length,
-          manual_signup_count: (manual.data ?? []).filter((r) => r.cohort_id === c.id)
+          incomplete_count: regs.filter((r) => r.lead_status === "incomplete")
+            .length,
+          manual_signup_count: (manual.data ?? [])
+            .filter((r) => r.cohort_id === c.id)
             .reduce((sum: number, r) => sum + Number(r.count), 0),
           payments,
         };
@@ -830,7 +1084,9 @@ Deno.serve(async (req) => {
     if (action === "list_cohorts") {
       const { data, error } = await supabase
         .from("group_cohorts")
-        .select("id, form_type, level, format, teaching_language, break_note_ro, break_note_en, end_date_is_estimate, start_date, schedule_label_ro, schedule_label_en, max_seats, is_active, status, sort_order, manual_offset, age_category, course_type, slug, title_ro, title_en, price_lei, end_date, session_count, total_hours, image_url, content")
+        .select(
+          "id, form_type, level, format, teaching_language, break_note_ro, break_note_en, end_date_is_estimate, start_date, schedule_label_ro, schedule_label_en, max_seats, is_active, status, sort_order, manual_offset, age_category, course_type, slug, title_ro, title_en, price_lei, end_date, session_count, total_hours, image_url, content",
+        )
         .order("form_type", { ascending: true })
         .order("level", { ascending: true, nullsFirst: false })
         .order("sort_order", { ascending: true })
@@ -844,20 +1100,43 @@ Deno.serve(async (req) => {
     // and get the group's emails. Paid → converted; not paid yet → qualified
     // (both hold a place — see get_cohort_signup_counts).
     if (action === "add_manual_registration") {
-      const MANUAL_SOURCES = ["whatsapp", "tiktok", "instagram", "direct", "telefon", "other"];
+      const MANUAL_SOURCES = [
+        "whatsapp",
+        "tiktok",
+        "instagram",
+        "direct",
+        "telefon",
+        "other",
+      ];
       const PAY_METHODS = ["cash", "transfer", "card", "paypal"];
-      const { name, phone, email, cohort_id: mCohort, source: mSource, paid, payment_method: method, notes: mNotes } = body;
-      const clean = (v: unknown, max: number) => (typeof v === "string" ? v.trim().slice(0, max) : "");
+      const {
+        name,
+        phone,
+        email,
+        cohort_id: mCohort,
+        source: mSource,
+        paid,
+        payment_method: method,
+        notes: mNotes,
+      } = body;
+      const clean = (v: unknown, max: number) =>
+        typeof v === "string" ? v.trim().slice(0, max) : "";
       const mName = clean(name, 200);
       const mPhone = clean(phone, 40);
       const mEmail = clean(email, 320);
       if (!mName) return jsonResponse({ error: "Numele e obligatoriu" });
       if (!mPhone) return jsonResponse({ error: "Telefonul e obligatoriu" });
-      if (mEmail && !/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(mEmail)) return jsonResponse({ error: "Email invalid" });
-      if (typeof mSource !== "string" || !MANUAL_SOURCES.includes(mSource)) return jsonResponse({ error: "Sursă invalidă" });
-      if (typeof mCohort !== "string" || !mCohort) return jsonResponse({ error: "Alege grupa" });
+      if (mEmail && !/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(mEmail))
+        return jsonResponse({ error: "Email invalid" });
+      if (typeof mSource !== "string" || !MANUAL_SOURCES.includes(mSource))
+        return jsonResponse({ error: "Sursă invalidă" });
+      if (typeof mCohort !== "string" || !mCohort)
+        return jsonResponse({ error: "Alege grupa" });
       const isPaid = paid === true;
-      if (isPaid && (typeof method !== "string" || !PAY_METHODS.includes(method))) {
+      if (
+        isPaid &&
+        (typeof method !== "string" || !PAY_METHODS.includes(method))
+      ) {
         return jsonResponse({ error: "Alege cum a plătit" });
       }
       const { data: cohort } = await supabase
@@ -934,13 +1213,25 @@ Deno.serve(async (req) => {
       if (!["group", "kids"].includes(form_type)) {
         return jsonResponse({ error: "Tip invalid (group/kids)" });
       }
-      if (form_type === "group" && cFormat != null && cFormat !== "fizic" && cFormat !== "online") {
+      if (
+        form_type === "group" &&
+        cFormat != null &&
+        cFormat !== "fizic" &&
+        cFormat !== "online"
+      ) {
         return jsonResponse({ error: "Format invalid (fizic/online)" });
       }
-      if (teaching_language != null && teaching_language !== "ro" && teaching_language !== "en") {
+      if (
+        teaching_language != null &&
+        teaching_language !== "ro" &&
+        teaching_language !== "en"
+      ) {
         return jsonResponse({ error: "Limbă de predare invalidă (ro/en)" });
       }
-      if (typeof start_date !== "string" || !/^\d{4}-\d{2}-\d{2}$/.test(start_date)) {
+      if (
+        typeof start_date !== "string" ||
+        !/^\d{4}-\d{2}-\d{2}$/.test(start_date)
+      ) {
         return jsonResponse({ error: "Data invalidă (YYYY-MM-DD)" });
       }
       const max = Number(max_seats);
@@ -957,18 +1248,29 @@ Deno.serve(async (req) => {
         return jsonResponse({ error: "Grupele fizice au maximum 8 locuri" });
       }
       const ALLOWED_COHORT_STATUSES = [
-        "draft","forming","minimum_reached","confirmed","full","in_progress","completed","cancelled",
+        "draft",
+        "forming",
+        "minimum_reached",
+        "confirmed",
+        "full",
+        "in_progress",
+        "completed",
+        "cancelled",
       ];
       const intOrNull = (v: unknown) =>
-        v === "" || v === null || v === undefined || !Number.isInteger(Number(v)) || Number(v) < 0
+        v === "" ||
+        v === null ||
+        v === undefined ||
+        !Number.isInteger(Number(v)) ||
+        Number(v) < 0
           ? null
           : Number(v);
       const trimOrNull = (v: unknown) =>
         typeof v === "string" && v.trim() ? v.trim() : null;
       const payload: Record<string, unknown> = {
         form_type,
-        level: form_type === "kids" ? null : (cLevel || null),
-        format: form_type === "kids" ? null : (cFormat || null),
+        level: form_type === "kids" ? null : cLevel || null,
+        format: form_type === "kids" ? null : cFormat || null,
         // Which language the class is explained in. Students are only offered
         // cohorts matching registrations.language, so an unset value must fall
         // back to 'ro' — every cohort so far is Romanian-taught, and a null
@@ -981,27 +1283,42 @@ Deno.serve(async (req) => {
         break_note_en: trimOrNull(break_note_en),
         end_date_is_estimate: end_date_is_estimate === true,
         start_date,
-        schedule_label_ro: typeof schedule_label_ro === "string" ? schedule_label_ro : "",
-        schedule_label_en: typeof schedule_label_en === "string" ? schedule_label_en : "",
+        schedule_label_ro:
+          typeof schedule_label_ro === "string" ? schedule_label_ro : "",
+        schedule_label_en:
+          typeof schedule_label_en === "string" ? schedule_label_en : "",
         max_seats: max,
         is_active: is_active !== false,
-        sort_order: Number.isInteger(Number(sort_order)) ? Number(sort_order) : 0,
+        sort_order: Number.isInteger(Number(sort_order))
+          ? Number(sort_order)
+          : 0,
         // Course model (Phase 1 extension)
         age_category: ["adulti", "adolescenti", "copii"].includes(age_category)
           ? age_category
-          : (form_type === "kids" ? "copii" : "adulti"),
+          : form_type === "kids"
+            ? "copii"
+            : "adulti",
         course_type: course_type === "privat" ? "privat" : "grup",
         slug: trimOrNull(slug),
         title_ro: trimOrNull(title_ro),
         title_en: trimOrNull(title_en),
         price_lei: intOrNull(price_lei),
-        end_date: typeof end_date === "string" && /^\d{4}-\d{2}-\d{2}$/.test(end_date) ? end_date : null,
+        end_date:
+          typeof end_date === "string" && /^\d{4}-\d{2}-\d{2}$/.test(end_date)
+            ? end_date
+            : null,
         session_count: intOrNull(session_count),
         total_hours: intOrNull(total_hours),
         image_url: trimOrNull(image_url),
-        content: content && typeof content === "object" && !Array.isArray(content) ? content : {},
+        content:
+          content && typeof content === "object" && !Array.isArray(content)
+            ? content
+            : {},
       };
-      if (typeof status === "string" && ALLOWED_COHORT_STATUSES.includes(status)) {
+      if (
+        typeof status === "string" &&
+        ALLOWED_COHORT_STATUSES.includes(status)
+      ) {
         payload.status = status;
       }
       if (manual_offset !== undefined) {
@@ -1013,9 +1330,16 @@ Deno.serve(async (req) => {
       }
       if (typeof cId === "string" && cId) {
         const { data: before } = await supabase
-          .from("group_cohorts").select("status").eq("id", cId).maybeSingle();
+          .from("group_cohorts")
+          .select("status")
+          .eq("id", cId)
+          .maybeSingle();
         const { data, error } = await supabase
-          .from("group_cohorts").update(payload).eq("id", cId).select().single();
+          .from("group_cohorts")
+          .update(payload)
+          .eq("id", cId)
+          .select()
+          .single();
         if (error) throw error;
 
         // "Minim atins": tell this group's students it starts for sure, the
@@ -1024,7 +1348,11 @@ Deno.serve(async (req) => {
         // itself, and each student once (idempotency key per cohort+student),
         // so saving the group again sends nothing.
         let notified = 0;
-        if (data && data.status === "minimum_reached" && before?.status !== "minimum_reached") {
+        if (
+          data &&
+          data.status === "minimum_reached" &&
+          before?.status !== "minimum_reached"
+        ) {
           const { data: regs } = await supabase
             .from("registrations")
             .select("id, name, email, language, teaching_language")
@@ -1035,10 +1363,15 @@ Deno.serve(async (req) => {
             .in("lead_status", ["qualified", "converted"])
             .is("refunded_at", null);
           for (const r of regs ?? []) {
-            const lang = (r.teaching_language || r.language) === "en" ? "en" : "ro";
+            const lang =
+              (r.teaching_language || r.language) === "en" ? "en" : "ro";
             const startDateLabel = data.start_date
               ? new Intl.DateTimeFormat(lang === "en" ? "en-GB" : "ro-RO", {
-                  weekday: "long", day: "numeric", month: "long", year: "numeric", timeZone: "Europe/Bucharest",
+                  weekday: "long",
+                  day: "numeric",
+                  month: "long",
+                  year: "numeric",
+                  timeZone: "Europe/Bucharest",
                 }).format(new Date(`${data.start_date}T12:00:00Z`))
               : undefined;
             try {
@@ -1050,26 +1383,38 @@ Deno.serve(async (req) => {
                   level: data.level,
                   format: data.format,
                   startDateLabel,
-                  scheduleLabel: lang === "en" ? data.schedule_label_en : data.schedule_label_ro,
+                  scheduleLabel:
+                    lang === "en"
+                      ? data.schedule_label_en
+                      : data.schedule_label_ro,
                 },
               });
               if (res.sent) notified++;
             } catch (e) {
-              console.error(`[admin-registrations] group-confirmed email failed for ${r.id}`, e);
+              console.error(
+                `[admin-registrations] group-confirmed email failed for ${r.id}`,
+                e,
+              );
             }
           }
         }
         return jsonResponse({ success: true, data, notified });
       }
       const { data, error } = await supabase
-        .from("group_cohorts").insert(payload).select().single();
+        .from("group_cohorts")
+        .insert(payload)
+        .select()
+        .single();
       if (error) throw error;
       return jsonResponse({ success: true, data });
     }
 
     if (action === "delete_cohort") {
       if (typeof id !== "string") return jsonResponse({ error: "ID invalid" });
-      const { error } = await supabase.from("group_cohorts").delete().eq("id", id);
+      const { error } = await supabase
+        .from("group_cohorts")
+        .delete()
+        .eq("id", id);
       if (error) throw error;
       return jsonResponse({ success: true });
     }
@@ -1078,7 +1423,9 @@ Deno.serve(async (req) => {
     if (action === "list_kids_slots") {
       const { data, error } = await supabase
         .from("kids_class_slots")
-        .select("id, weekday, start_time, duration_min, format, location, max_seats, is_active, sort_order")
+        .select(
+          "id, weekday, start_time, duration_min, format, location, max_seats, is_active, sort_order",
+        )
         .order("weekday", { ascending: true })
         .order("start_time", { ascending: true });
       if (error) throw error;
@@ -1101,7 +1448,10 @@ Deno.serve(async (req) => {
       if (!Number.isInteger(wd) || wd < 1 || wd > 7) {
         return jsonResponse({ error: "Zi invalidă (1-7)" });
       }
-      if (typeof start_time !== "string" || !/^\d{2}:\d{2}(:\d{2})?$/.test(start_time)) {
+      if (
+        typeof start_time !== "string" ||
+        !/^\d{2}:\d{2}(:\d{2})?$/.test(start_time)
+      ) {
         return jsonResponse({ error: "Oră invalidă" });
       }
       if (!["online", "physical"].includes(kFormat)) {
@@ -1109,7 +1459,12 @@ Deno.serve(async (req) => {
       }
       const max = Number(max_seats);
       const dur = Number(duration_min);
-      if (!Number.isInteger(max) || max < 1 || !Number.isInteger(dur) || dur < 15) {
+      if (
+        !Number.isInteger(max) ||
+        max < 1 ||
+        !Number.isInteger(dur) ||
+        dur < 15
+      ) {
         return jsonResponse({ error: "Locuri/durată invalide" });
       }
       const payload = {
@@ -1120,23 +1475,35 @@ Deno.serve(async (req) => {
         location: typeof location === "string" ? location.trim() || null : null,
         max_seats: max,
         is_active: is_active !== false,
-        sort_order: Number.isInteger(Number(sort_order)) ? Number(sort_order) : 0,
+        sort_order: Number.isInteger(Number(sort_order))
+          ? Number(sort_order)
+          : 0,
       };
       if (typeof sId === "string" && sId) {
         const { data, error } = await supabase
-          .from("kids_class_slots").update(payload).eq("id", sId).select().single();
+          .from("kids_class_slots")
+          .update(payload)
+          .eq("id", sId)
+          .select()
+          .single();
         if (error) throw error;
         return jsonResponse({ success: true, data });
       }
       const { data, error } = await supabase
-        .from("kids_class_slots").insert(payload).select().single();
+        .from("kids_class_slots")
+        .insert(payload)
+        .select()
+        .single();
       if (error) throw error;
       return jsonResponse({ success: true, data });
     }
 
     if (action === "delete_kids_slot") {
       if (typeof id !== "string") return jsonResponse({ error: "ID invalid" });
-      const { error } = await supabase.from("kids_class_slots").delete().eq("id", id);
+      const { error } = await supabase
+        .from("kids_class_slots")
+        .delete()
+        .eq("id", id);
       if (error) throw error;
       return jsonResponse({ success: true });
     }
@@ -1152,9 +1519,19 @@ Deno.serve(async (req) => {
     }
 
     if (action === "upsert_availability_rule") {
-      const { id: ruleId, weekday, start_time, end_time, is_active, event_type_slug } = body;
+      const {
+        id: ruleId,
+        weekday,
+        start_time,
+        end_time,
+        is_active,
+        event_type_slug,
+      } = body;
       // null / "" = general hours; a slug = hours for that lesson type only.
-      const ruleSlug = typeof event_type_slug === "string" && event_type_slug ? event_type_slug : null;
+      const ruleSlug =
+        typeof event_type_slug === "string" && event_type_slug
+          ? event_type_slug
+          : null;
       const wd = Number(weekday);
       if (!Number.isInteger(wd) || wd < 0 || wd > 6) {
         return jsonResponse({ error: "Weekday invalid" });
@@ -1163,7 +1540,9 @@ Deno.serve(async (req) => {
         return jsonResponse({ error: "Ore invalide" });
       }
       if (start_time >= end_time) {
-        return jsonResponse({ error: "Ora de început trebuie să fie înainte de ora de final" });
+        return jsonResponse({
+          error: "Ora de început trebuie să fie înainte de ora de final",
+        });
       }
       const payload = {
         weekday: wd,
@@ -1195,16 +1574,25 @@ Deno.serve(async (req) => {
     // The rest of Disponibilitate (owner's request, 13 October 2026): each
     // lesson type's booking limits and in-person days, and days off.
     if (action === "list_booking_settings") {
-      const [{ data: types, error: tErr }, { data: daysOff, error: bErr }] = await Promise.all([
-        supabase.from("booking_event_types")
-          .select("slug, name_ro, duration_min, buffer_before_min, buffer_after_min, min_notice_hours, max_advance_days, physical_weekdays, is_active")
-          .order("slug", { ascending: true }),
-        supabase.from("availability_blackouts").select("id, start_date, end_date, note")
-          .gte("end_date", new Date().toISOString().slice(0, 10)).order("start_date", { ascending: true }),
-      ]);
+      const [{ data: types, error: tErr }, { data: daysOff, error: bErr }] =
+        await Promise.all([
+          supabase
+            .from("booking_event_types")
+            .select(
+              "slug, name_ro, duration_min, buffer_before_min, buffer_after_min, min_notice_hours, max_advance_days, physical_weekdays, is_active",
+            )
+            .order("slug", { ascending: true }),
+          supabase
+            .from("availability_blackouts")
+            .select("id, start_date, end_date, note")
+            .gte("end_date", new Date().toISOString().slice(0, 10))
+            .order("start_date", { ascending: true }),
+        ]);
       if (tErr) throw tErr;
       if (bErr) throw bErr;
-      return jsonResponse({ data: { event_types: types ?? [], blackouts: daysOff ?? [] } });
+      return jsonResponse({
+        data: { event_types: types ?? [], blackouts: daysOff ?? [] },
+      });
     }
 
     if (action === "update_event_type_rules") {
@@ -1217,58 +1605,154 @@ Deno.serve(async (req) => {
       const maxAdvance = int(body.max_advance_days, 1, 365);
       const before = int(body.buffer_before_min, 0, 120);
       const after = int(body.buffer_after_min, 0, 120);
-      const days = body.physical_weekdays === null
-        ? null
-        : Array.isArray(body.physical_weekdays)
-          ? Array.from(new Set((body.physical_weekdays as unknown[]).map(Number).filter((d) => Number.isInteger(d) && d >= 0 && d <= 6))).sort()
-          : undefined;
-      if (!slug || minNotice === null || maxAdvance === null || before === null || after === null || days === undefined) {
+      const days =
+        body.physical_weekdays === null
+          ? null
+          : Array.isArray(body.physical_weekdays)
+            ? Array.from(
+                new Set(
+                  (body.physical_weekdays as unknown[])
+                    .map(Number)
+                    .filter((d) => Number.isInteger(d) && d >= 0 && d <= 6),
+                ),
+              ).sort()
+            : undefined;
+      if (
+        !slug ||
+        minNotice === null ||
+        maxAdvance === null ||
+        before === null ||
+        after === null ||
+        days === undefined
+      ) {
         return jsonResponse({ error: "Valori invalide." }, 400);
       }
-      if (days && days.length === 0) return jsonResponse({ error: "Alege cel puțin o zi pentru lecțiile la centru." }, 400);
-      const { data, error } = await supabase.from("booking_event_types")
-        .update({ min_notice_hours: minNotice, max_advance_days: maxAdvance, buffer_before_min: before, buffer_after_min: after, physical_weekdays: days, updated_at: new Date().toISOString() })
-        .eq("slug", slug).select("slug");
+      if (days && days.length === 0)
+        return jsonResponse(
+          { error: "Alege cel puțin o zi pentru lecțiile la centru." },
+          400,
+        );
+      const { data, error } = await supabase
+        .from("booking_event_types")
+        .update({
+          min_notice_hours: minNotice,
+          max_advance_days: maxAdvance,
+          buffer_before_min: before,
+          buffer_after_min: after,
+          physical_weekdays: days,
+          updated_at: new Date().toISOString(),
+        })
+        .eq("slug", slug)
+        .select("slug");
       if (error) throw error;
-      if (!data?.length) return jsonResponse({ error: "Tipul de lecție nu există." }, 404);
-      await supabase.from("audit_logs").insert({ actor: callerEmail!, action: "update_event_type_rules", details: { slug, min_notice_hours: minNotice, max_advance_days: maxAdvance, buffer_before_min: before, buffer_after_min: after, physical_weekdays: days } });
+      if (!data?.length)
+        return jsonResponse({ error: "Tipul de lecție nu există." }, 404);
+      await supabase.from("audit_logs").insert({
+        actor: callerEmail!,
+        action: "update_event_type_rules",
+        details: {
+          slug,
+          min_notice_hours: minNotice,
+          max_advance_days: maxAdvance,
+          buffer_before_min: before,
+          buffer_after_min: after,
+          physical_weekdays: days,
+        },
+      });
       return jsonResponse({ success: true });
     }
 
     if (action === "add_blackout") {
       const start = typeof body.start_date === "string" ? body.start_date : "";
-      const end = typeof body.end_date === "string" && body.end_date ? body.end_date : start;
-      const note = typeof body.note === "string" ? body.note.trim().slice(0, 200) || null : null;
-      const valid = (d: string) => /^\d{4}-\d{2}-\d{2}$/.test(d) && Number.isFinite(Date.parse(`${d}T00:00:00Z`));
-      if (!valid(start) || !valid(end) || end < start) return jsonResponse({ error: "Alege data de început și de sfârșit." }, 400);
-      const { data, error } = await supabase.from("availability_blackouts").insert({ start_date: start, end_date: end, note }).select("id, start_date, end_date, note").single();
+      const end =
+        typeof body.end_date === "string" && body.end_date
+          ? body.end_date
+          : start;
+      const note =
+        typeof body.note === "string"
+          ? body.note.trim().slice(0, 200) || null
+          : null;
+      const valid = (d: string) =>
+        /^\d{4}-\d{2}-\d{2}$/.test(d) &&
+        Number.isFinite(Date.parse(`${d}T00:00:00Z`));
+      if (!valid(start) || !valid(end) || end < start)
+        return jsonResponse(
+          { error: "Alege data de început și de sfârșit." },
+          400,
+        );
+      const { data, error } = await supabase
+        .from("availability_blackouts")
+        .insert({ start_date: start, end_date: end, note })
+        .select("id, start_date, end_date, note")
+        .single();
       if (error) throw error;
-      await supabase.from("audit_logs").insert({ actor: callerEmail!, action: "add_blackout", details: { start, end, note } });
+      await supabase.from("audit_logs").insert({
+        actor: callerEmail!,
+        action: "add_blackout",
+        details: { start, end, note },
+      });
       return jsonResponse({ success: true, data });
     }
 
     if (action === "delete_blackout") {
-      if (typeof id !== "string") return jsonResponse({ error: "ID invalid" }, 400);
-      const { error } = await supabase.from("availability_blackouts").delete().eq("id", id);
+      if (typeof id !== "string")
+        return jsonResponse({ error: "ID invalid" }, 400);
+      const { error } = await supabase
+        .from("availability_blackouts")
+        .delete()
+        .eq("id", id);
       if (error) throw error;
-      await supabase.from("audit_logs").insert({ actor: callerEmail!, action: "delete_blackout", details: { id } });
+      await supabase.from("audit_logs").insert({
+        actor: callerEmail!,
+        action: "delete_blackout",
+        details: { id },
+      });
       return jsonResponse({ success: true });
     }
 
     if (action === "delete_availability_rule") {
       if (typeof id !== "string") return jsonResponse({ error: "ID invalid" });
-      const { error } = await supabase.from("availability_rules").delete().eq("id", id);
+      const { error } = await supabase
+        .from("availability_rules")
+        .delete()
+        .eq("id", id);
       if (error) throw error;
       return jsonResponse({ success: true });
     }
 
     if (action === "repair_booking_calendar") {
-      if (typeof id !== "string") return jsonResponse({ error: "ID invalid" }, 400);
-      const { data: booking, error } = await supabase.from("bookings").select("*").eq("id", id).maybeSingle();
-      if (error || !booking || booking.status !== "confirmed" || Date.parse(booking.start_at) < Date.now()) return jsonResponse({ error: "Lecția nu este disponibilă pentru reparare." }, 400);
-      if (booking.google_event_id && booking.google_sync_error !== "calendar_create_pending") return jsonResponse({ success: true });
-      const result = await repairBookingCalendar(supabase, booking, { lovableKey: Deno.env.get("LOVABLE_API_KEY"), calendarKey: Deno.env.get("GOOGLE_CALENDAR_API_KEY") });
-      await supabase.from("audit_logs").insert({ actor: callerEmail, action: "repair_booking_calendar", registration_id: booking.registration_id, details: { booking_id: id, event_id: result.event_id } });
+      if (typeof id !== "string")
+        return jsonResponse({ error: "ID invalid" }, 400);
+      const { data: booking, error } = await supabase
+        .from("bookings")
+        .select("*")
+        .eq("id", id)
+        .maybeSingle();
+      if (
+        error ||
+        !booking ||
+        booking.status !== "confirmed" ||
+        Date.parse(booking.start_at) < Date.now()
+      )
+        return jsonResponse(
+          { error: "Lecția nu este disponibilă pentru reparare." },
+          400,
+        );
+      if (
+        booking.google_event_id &&
+        booking.google_sync_error !== "calendar_create_pending"
+      )
+        return jsonResponse({ success: true });
+      const result = await repairBookingCalendar(supabase, booking, {
+        lovableKey: Deno.env.get("LOVABLE_API_KEY"),
+        calendarKey: Deno.env.get("GOOGLE_CALENDAR_API_KEY"),
+      });
+      await supabase.from("audit_logs").insert({
+        actor: callerEmail,
+        action: "repair_booking_calendar",
+        registration_id: booking.registration_id,
+        details: { booking_id: id, event_id: result.event_id },
+      });
       return jsonResponse({ success: true });
     }
 
@@ -1278,31 +1762,94 @@ Deno.serve(async (req) => {
     if (action === "import_calendar_event") {
       const b = body as Record<string, unknown>;
       const eventId = typeof b.event_id === "string" ? b.event_id.trim() : "";
-      const name = typeof b.student_name === "string" ? b.student_name.trim() : "";
-      const email = typeof b.student_email === "string" ? b.student_email.trim().toLowerCase() : "";
-      const phone = typeof b.student_phone === "string" && b.student_phone.trim() ? b.student_phone.trim() : null;
-      const quantity = Math.max(1, Math.min(60, Number.parseInt(String(b.quantity ?? 1), 10) || 1));
-      if (!eventId || eventId.length > 1024) return jsonResponse({ error: "Eveniment invalid." }, 400);
-      if (name.length < 2 || name.length > 160) return jsonResponse({ error: "Numele este obligatoriu." }, 400);
-      if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email) || email.length > 254) return jsonResponse({ error: "Emailul nu este valid." }, 400);
-      if (phone && phone.length > 40) return jsonResponse({ error: "Telefonul nu este valid." }, 400);
+      const name =
+        typeof b.student_name === "string" ? b.student_name.trim() : "";
+      const email =
+        typeof b.student_email === "string"
+          ? b.student_email.trim().toLowerCase()
+          : "";
+      const phone =
+        typeof b.student_phone === "string" && b.student_phone.trim()
+          ? b.student_phone.trim()
+          : null;
+      const quantity = Math.max(
+        1,
+        Math.min(60, Number.parseInt(String(b.quantity ?? 1), 10) || 1),
+      );
+      if (!eventId || eventId.length > 1024)
+        return jsonResponse({ error: "Eveniment invalid." }, 400);
+      if (name.length < 2 || name.length > 160)
+        return jsonResponse({ error: "Numele este obligatoriu." }, 400);
+      if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email) || email.length > 254)
+        return jsonResponse({ error: "Emailul nu este valid." }, 400);
+      if (phone && phone.length > 40)
+        return jsonResponse({ error: "Telefonul nu este valid." }, 400);
       try {
-        const out = await importCalendarEvent(supabase, { lovableKey: Deno.env.get("LOVABLE_API_KEY"), calendarKey: Deno.env.get("GOOGLE_CALENDAR_API_KEY") }, {
-          eventId, name, email, phone, quantity, paid: b.paid === true, format: b.format === "physical" ? "physical" : "online",
+        const out = await importCalendarEvent(
+          supabase,
+          {
+            lovableKey: Deno.env.get("LOVABLE_API_KEY"),
+            calendarKey: Deno.env.get("GOOGLE_CALENDAR_API_KEY"),
+          },
+          {
+            eventId,
+            name,
+            email,
+            phone,
+            quantity,
+            paid: b.paid === true,
+            format: b.format === "physical" ? "physical" : "online",
+          },
+        );
+        await supabase.from("audit_logs").insert({
+          actor: callerEmail,
+          action: "import_calendar_event",
+          registration_id: out.registration_id,
+          details: {
+            event_id: eventId,
+            at: out.start_at,
+            quantity,
+            paid: b.paid === true,
+          },
         });
-        await supabase.from("audit_logs").insert({ actor: callerEmail, action: "import_calendar_event", registration_id: out.registration_id, details: { event_id: eventId, at: out.start_at, quantity, paid: b.paid === true } });
         return jsonResponse({ success: true, ...out });
       } catch (failure) {
-        return jsonResponse({ error: failure instanceof Error ? failure.message : "Importul a eșuat." }, 400);
+        return jsonResponse(
+          {
+            error:
+              failure instanceof Error ? failure.message : "Importul a eșuat.",
+          },
+          400,
+        );
       }
     }
 
     if (action === "sync_calendar") {
-      const from = typeof body.from === "string" ? body.from : new Date(Date.now() - 7 * 86400000).toISOString();
-      const to = typeof body.to === "string" ? body.to : new Date(Date.now() + 400 * 86400000).toISOString();
-      if (!Number.isFinite(Date.parse(from)) || !Number.isFinite(Date.parse(to)) || Date.parse(to) <= Date.parse(from) || Date.parse(to) - Date.parse(from) > 410 * 86400000) return jsonResponse({ error: "Interval invalid." }, 400);
-      const result = await reconcileCalendar(supabase, { lovableKey: Deno.env.get("LOVABLE_API_KEY"), calendarKey: Deno.env.get("GOOGLE_CALENDAR_API_KEY"), from, to });
-      return jsonResponse({ success: result.errors.length === 0, data: result });
+      const from =
+        typeof body.from === "string"
+          ? body.from
+          : new Date(Date.now() - 7 * 86400000).toISOString();
+      const to =
+        typeof body.to === "string"
+          ? body.to
+          : new Date(Date.now() + 400 * 86400000).toISOString();
+      if (
+        !Number.isFinite(Date.parse(from)) ||
+        !Number.isFinite(Date.parse(to)) ||
+        Date.parse(to) <= Date.parse(from) ||
+        Date.parse(to) - Date.parse(from) > 410 * 86400000
+      )
+        return jsonResponse({ error: "Interval invalid." }, 400);
+      const result = await reconcileCalendar(supabase, {
+        lovableKey: Deno.env.get("LOVABLE_API_KEY"),
+        calendarKey: Deno.env.get("GOOGLE_CALENDAR_API_KEY"),
+        from,
+        to,
+      });
+      return jsonResponse({
+        success: result.errors.length === 0,
+        data: result,
+      });
     }
 
     // The owner's word on a free trial: came (done), excused (the trial stays
@@ -1310,25 +1857,53 @@ Deno.serve(async (req) => {
     // automatic rule (done 24h after the lesson). Only for trial bookings
     // that already took place or were cancelled.
     if (action === "set_trial_outcome") {
-      const outcome = body.outcome === null ? null : typeof body.outcome === "string" ? body.outcome : undefined;
-      if (typeof id !== "string" || (outcome !== null && !["done", "excused", "lost"].includes(outcome ?? ""))) {
+      const outcome =
+        body.outcome === null
+          ? null
+          : typeof body.outcome === "string"
+            ? body.outcome
+            : undefined;
+      if (
+        typeof id !== "string" ||
+        (outcome !== null &&
+          !["done", "excused", "lost"].includes(outcome ?? ""))
+      ) {
         return jsonResponse({ error: "Rezultat invalid." }, 400);
       }
       const { data: booking, error: bErr } = await supabase
-        .from("bookings").select("id, registration_id, event_type_slug, status, start_at, trial_outcome").eq("id", id).maybeSingle();
-      if (bErr || !booking || booking.event_type_slug !== "trial") return jsonResponse({ error: "Proba nu a fost găsită." }, 400);
+        .from("bookings")
+        .select(
+          "id, registration_id, event_type_slug, status, start_at, trial_outcome",
+        )
+        .eq("id", id)
+        .maybeSingle();
+      if (bErr || !booking || booking.event_type_slug !== "trial")
+        return jsonResponse({ error: "Proba nu a fost găsită." }, 400);
       const started = Date.parse(booking.start_at) <= Date.now();
       if (outcome === "done" && (!started || booking.status === "cancelled")) {
-        return jsonResponse({ error: "O probă se poate marca făcută doar după ce a avut loc." }, 400);
+        return jsonResponse(
+          { error: "O probă se poate marca făcută doar după ce a avut loc." },
+          400,
+        );
       }
       if (outcome !== null && !started && booking.status !== "cancelled") {
         return jsonResponse({ error: "Proba nu a avut loc încă." }, 400);
       }
-      const { error: uErr } = await supabase.from("bookings").update({
-        trial_outcome: outcome, trial_outcome_at: outcome ? new Date().toISOString() : null, trial_outcome_by: outcome ? callerEmail : null,
-      }).eq("id", id);
+      const { error: uErr } = await supabase
+        .from("bookings")
+        .update({
+          trial_outcome: outcome,
+          trial_outcome_at: outcome ? new Date().toISOString() : null,
+          trial_outcome_by: outcome ? callerEmail : null,
+        })
+        .eq("id", id);
       if (uErr) throw uErr;
-      await supabase.from("audit_logs").insert({ actor: callerEmail, action: "set_trial_outcome", registration_id: booking.registration_id, details: { booking_id: id, from: booking.trial_outcome, to: outcome } });
+      await supabase.from("audit_logs").insert({
+        actor: callerEmail,
+        action: "set_trial_outcome",
+        registration_id: booking.registration_id,
+        details: { booking_id: id, from: booking.trial_outcome, to: outcome },
+      });
       return jsonResponse({ success: true, trial_outcome: outcome });
     }
 
@@ -1378,8 +1953,12 @@ Deno.serve(async (req) => {
           ...diag,
           bookings: {
             total: rows.length,
-            synced: rows.filter((r) => r.google_event_id && !r.google_sync_error).length,
-            failed: rows.filter((r) => !r.google_event_id || !!r.google_sync_error).length,
+            synced: rows.filter(
+              (r) => r.google_event_id && !r.google_sync_error,
+            ).length,
+            failed: rows.filter(
+              (r) => !r.google_event_id || !!r.google_sync_error,
+            ).length,
             // The six-month totals answer "what happened", and they were the
             // only thing this screen said. That made a run of failures last
             // August read as a fault happening now, months after the sync
@@ -1396,7 +1975,9 @@ Deno.serve(async (req) => {
               );
               return {
                 total: madeLately.length,
-                synced: madeLately.filter((r) => r.google_event_id && !r.google_sync_error).length,
+                synced: madeLately.filter(
+                  (r) => r.google_event_id && !r.google_sync_error,
+                ).length,
               };
             })(),
             unsynced: rows
@@ -1419,7 +2000,9 @@ Deno.serve(async (req) => {
     if (action === "list_course_requests") {
       const { data, error } = await supabase
         .from("course_requests")
-        .select("id, created_at, name, phone, email, level, format, preferred_language, lesson_type, status, notes")
+        .select(
+          "id, created_at, name, phone, email, level, format, preferred_language, lesson_type, status, notes",
+        )
         .order("created_at", { ascending: false })
         .limit(500);
       if (error) throw error;
@@ -1444,7 +2027,9 @@ Deno.serve(async (req) => {
       if (ids.length > 0) {
         const { data: bookings, error: bErr } = await supabase
           .from("bookings")
-          .select("id, registration_id, event_type_slug, start_at, end_at, status, format, meet_link, manage_token")
+          .select(
+            "id, registration_id, event_type_slug, start_at, end_at, status, format, meet_link, manage_token",
+          )
           .in("registration_id", ids)
           .order("start_at", { ascending: true });
         if (bErr) throw bErr;
@@ -1460,9 +2045,13 @@ Deno.serve(async (req) => {
       const enriched = (regs || []).map((r) => {
         const bookings = bookingsByReg.get(r.id) ?? [];
         const active = bookings.filter((b) => b.status === "confirmed");
-        const nextBooking = active.find((b) => Date.parse(b.start_at as string) >= now) ?? null;
+        const nextBooking =
+          active.find((b) => Date.parse(b.start_at as string) >= now) ?? null;
         const lastBooking = active.length ? active[active.length - 1] : null;
-        const completed = active.some((b) => Date.parse((b.end_at as string) ?? (b.start_at as string)) < now);
+        const completed = active.some(
+          (b) =>
+            Date.parse((b.end_at as string) ?? (b.start_at as string)) < now,
+        );
         return {
           ...r,
           bookings_count: bookings.length,
@@ -1499,7 +2088,9 @@ Deno.serve(async (req) => {
     if (action === "list_cohort_calendar") {
       const { data: groups, error: gErr } = await supabase
         .from("group_cohorts")
-        .select("id, form_type, age_category, level, format, start_date, status, title_ro, schedule_label_ro, session_count")
+        .select(
+          "id, form_type, age_category, level, format, start_date, status, title_ro, schedule_label_ro, session_count",
+        )
         .eq("is_active", true)
         .in("form_type", ["group", "kids"])
         .not("status", "in", '("completed","cancelled")')
@@ -1512,17 +2103,31 @@ Deno.serve(async (req) => {
       return jsonResponse({
         data: (groups ?? []).map((g: { id: string }) => ({
           ...g,
-          link: (links ?? []).find((l: { cohort_id: string }) => l.cohort_id === g.id) ?? null,
+          link:
+            (links ?? []).find(
+              (l: { cohort_id: string }) => l.cohort_id === g.id,
+            ) ?? null,
         })),
       });
     }
 
     if (action === "upsert_cohort_calendar") {
       const cohortId = typeof body.cohort_id === "string" ? body.cohort_id : "";
-      const title = typeof body.calendar_title === "string" ? body.calendar_title.trim().slice(0, 120) : "";
+      const title =
+        typeof body.calendar_title === "string"
+          ? body.calendar_title.trim().slice(0, 120)
+          : "";
       const total = Number(body.total_lessons);
-      if (!cohortId || !title || !Number.isInteger(total) || total < 1 || total > 300) {
-        return jsonResponse({ error: "Numele din calendar și numărul de lecții sunt obligatorii." });
+      if (
+        !cohortId ||
+        !title ||
+        !Number.isInteger(total) ||
+        total < 1 ||
+        total > 300
+      ) {
+        return jsonResponse({
+          error: "Numele din calendar și numărul de lecții sunt obligatorii.",
+        });
       }
       // The group's own students, invited to every lesson added for it.
       const members = Array.isArray(body.members)
@@ -1530,17 +2135,28 @@ Deno.serve(async (req) => {
             new Set(
               (body.members as unknown[])
                 .filter((e): e is string => typeof e === "string")
-                .map((e) => e.replace(/^mailto:/i, "").trim().toLowerCase())
-                .filter((e) => /^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(e) && e.length <= 254),
+                .map((e) =>
+                  e
+                    .replace(/^mailto:/i, "")
+                    .trim()
+                    .toLowerCase(),
+                )
+                .filter(
+                  (e) =>
+                    /^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(e) && e.length <= 254,
+                ),
             ),
           ).slice(0, 60)
         : undefined;
-      const { error: upErr } = await supabase
-        .from("cohort_calendar")
-        .upsert(
-          { cohort_id: cohortId, calendar_title: title, total_lessons: total, ...(members ? { members } : {}) },
-          { onConflict: "cohort_id" },
-        );
+      const { error: upErr } = await supabase.from("cohort_calendar").upsert(
+        {
+          cohort_id: cohortId,
+          calendar_title: title,
+          total_lessons: total,
+          ...(members ? { members } : {}),
+        },
+        { onConflict: "cohort_id" },
+      );
       if (upErr) throw upErr;
       return jsonResponse({ success: true });
     }
@@ -1551,11 +2167,16 @@ Deno.serve(async (req) => {
     // under the old name, so every lesson of the group is known here.
     if (action === "rename_cohort_events") {
       const cohortId = typeof body.cohort_id === "string" ? body.cohort_id : "";
-      const title = typeof body.calendar_title === "string" ? body.calendar_title.trim().slice(0, 120) : "";
-      if (!cohortId || !title) return jsonResponse({ error: "Lipsește grupa sau numele." });
+      const title =
+        typeof body.calendar_title === "string"
+          ? body.calendar_title.trim().slice(0, 120)
+          : "";
+      if (!cohortId || !title)
+        return jsonResponse({ error: "Lipsește grupa sau numele." });
       const lovableKey = Deno.env.get("LOVABLE_API_KEY");
       const gcalKey = Deno.env.get("GOOGLE_CALENDAR_API_KEY");
-      if (!lovableKey || !gcalKey) return jsonResponse({ error: "Google Calendar nu e conectat." });
+      if (!lovableKey || !gcalKey)
+        return jsonResponse({ error: "Google Calendar nu e conectat." });
       const { data: sessions, error: sErr } = await supabase
         .from("cohort_sessions")
         .select("google_event_id, lesson_number")
@@ -1574,13 +2195,19 @@ Deno.serve(async (req) => {
               "X-Connection-Api-Key": gcalKey,
               "Content-Type": "application/json",
             },
-            body: JSON.stringify({ summary: `${title} - L${ses.lesson_number}` }),
+            body: JSON.stringify({
+              summary: `${title} - L${ses.lesson_number}`,
+            }),
           },
         );
         if (res.ok) renamed += 1;
         else {
           failed.push(ses.lesson_number);
-          console.error("[rename_cohort_events] patch failed", res.status, await res.text());
+          console.error(
+            "[rename_cohort_events] patch failed",
+            res.status,
+            await res.text(),
+          );
         }
       }
       // Keep the old name if nothing could be renamed, so the next sync still finds them.
@@ -1598,48 +2225,108 @@ Deno.serve(async (req) => {
     // 13 October 2026: the calendar works both ways). Google is changed first,
     // with the group's guests notified as for any moved or cancelled lesson;
     // the site follows only once Google accepted it, so the two never disagree.
-    if (action === "move_cohort_session" || action === "delete_cohort_session") {
+    if (
+      action === "move_cohort_session" ||
+      action === "delete_cohort_session"
+    ) {
       const sessionId = typeof body.id === "string" ? body.id : "";
       const lovableKey = Deno.env.get("LOVABLE_API_KEY");
       const gcalKey = Deno.env.get("GOOGLE_CALENDAR_API_KEY");
       if (!sessionId) return jsonResponse({ error: "Lipsește lecția." }, 400);
-      if (!lovableKey || !gcalKey) return jsonResponse({ error: "Google Calendar nu e conectat." });
+      if (!lovableKey || !gcalKey)
+        return jsonResponse({ error: "Google Calendar nu e conectat." });
       const { data: ses, error: sErr } = await supabase
-        .from("cohort_sessions").select("id, cohort_id, lesson_number, starts_at, google_event_id").eq("id", sessionId).maybeSingle();
+        .from("cohort_sessions")
+        .select("id, cohort_id, lesson_number, starts_at, google_event_id")
+        .eq("id", sessionId)
+        .maybeSingle();
       if (sErr) throw sErr;
       if (!ses) return jsonResponse({ error: "Lecția nu mai există." }, 404);
       const url = `${GCAL_GATEWAY}/calendars/primary/events/${encodeURIComponent(ses.google_event_id)}?sendUpdates=all`;
-      const gHeaders = { Authorization: `Bearer ${lovableKey}`, "X-Connection-Api-Key": gcalKey, "Content-Type": "application/json" };
+      const gHeaders = {
+        Authorization: `Bearer ${lovableKey}`,
+        "X-Connection-Api-Key": gcalKey,
+        "Content-Type": "application/json",
+      };
       if (action === "delete_cohort_session") {
         const res = await fetch(url, { method: "DELETE", headers: gHeaders });
         if (!res.ok && res.status !== 404 && res.status !== 410) {
-          console.error("[delete_cohort_session] google", res.status, await res.text());
-          return jsonResponse({ error: `Google Calendar a refuzat ștergerea (${res.status}). Nimic nu s-a schimbat.` });
+          console.error(
+            "[delete_cohort_session] google",
+            res.status,
+            await res.text(),
+          );
+          return jsonResponse({
+            error: `Google Calendar a refuzat ștergerea (${res.status}). Nimic nu s-a schimbat.`,
+          });
         }
-        const { error: dErr } = await supabase.from("cohort_sessions").delete().eq("id", ses.id);
+        const { error: dErr } = await supabase
+          .from("cohort_sessions")
+          .delete()
+          .eq("id", ses.id);
         if (dErr) throw dErr;
-        await supabase.from("audit_logs").insert({ actor: callerEmail!, action: "delete_cohort_session", details: { cohort_id: ses.cohort_id, lesson: ses.lesson_number, at: ses.starts_at } });
+        await supabase.from("audit_logs").insert({
+          actor: callerEmail!,
+          action: "delete_cohort_session",
+          details: {
+            cohort_id: ses.cohort_id,
+            lesson: ses.lesson_number,
+            at: ses.starts_at,
+          },
+        });
         return jsonResponse({ success: true });
       }
       const startsAt = typeof body.starts_at === "string" ? body.starts_at : "";
       const endsAt = typeof body.ends_at === "string" ? body.ends_at : "";
-      const startMs = Date.parse(startsAt), endMs = Date.parse(endsAt);
-      if (!Number.isFinite(startMs) || !Number.isFinite(endMs) || endMs <= startMs || endMs - startMs > 8 * 3_600_000) {
+      const startMs = Date.parse(startsAt),
+        endMs = Date.parse(endsAt);
+      if (
+        !Number.isFinite(startMs) ||
+        !Number.isFinite(endMs) ||
+        endMs <= startMs ||
+        endMs - startMs > 8 * 3_600_000
+      ) {
         return jsonResponse({ error: "Ora nu este validă." }, 400);
       }
-      const start = new Date(startMs).toISOString(), end = new Date(endMs).toISOString();
+      const start = new Date(startMs).toISOString(),
+        end = new Date(endMs).toISOString();
       const res = await fetch(url, {
         method: "PATCH",
         headers: gHeaders,
-        body: JSON.stringify({ start: { dateTime: start, timeZone: "Europe/Bucharest" }, end: { dateTime: end, timeZone: "Europe/Bucharest" } }),
+        body: JSON.stringify({
+          start: { dateTime: start, timeZone: "Europe/Bucharest" },
+          end: { dateTime: end, timeZone: "Europe/Bucharest" },
+        }),
       });
       if (!res.ok) {
-        console.error("[move_cohort_session] google", res.status, await res.text());
-        return jsonResponse({ error: `Google Calendar a refuzat mutarea (${res.status}). Nimic nu s-a schimbat.` });
+        console.error(
+          "[move_cohort_session] google",
+          res.status,
+          await res.text(),
+        );
+        return jsonResponse({
+          error: `Google Calendar a refuzat mutarea (${res.status}). Nimic nu s-a schimbat.`,
+        });
       }
-      const { error: uErr } = await supabase.from("cohort_sessions").update({ starts_at: start, ends_at: end, synced_at: new Date().toISOString() }).eq("id", ses.id);
+      const { error: uErr } = await supabase
+        .from("cohort_sessions")
+        .update({
+          starts_at: start,
+          ends_at: end,
+          synced_at: new Date().toISOString(),
+        })
+        .eq("id", ses.id);
       if (uErr) throw uErr;
-      await supabase.from("audit_logs").insert({ actor: callerEmail!, action: "move_cohort_session", details: { cohort_id: ses.cohort_id, lesson: ses.lesson_number, from: ses.starts_at, to: start } });
+      await supabase.from("audit_logs").insert({
+        actor: callerEmail!,
+        action: "move_cohort_session",
+        details: {
+          cohort_id: ses.cohort_id,
+          lesson: ses.lesson_number,
+          from: ses.starts_at,
+          to: start,
+        },
+      });
       return jsonResponse({ success: true, starts_at: start, ends_at: end });
     }
 
@@ -1649,7 +2336,10 @@ Deno.serve(async (req) => {
       // Only the link and the lessons read from the calendar here; the
       // calendar itself is never touched.
       await supabase.from("cohort_sessions").delete().eq("cohort_id", cohortId);
-      const { error: delErr } = await supabase.from("cohort_calendar").delete().eq("cohort_id", cohortId);
+      const { error: delErr } = await supabase
+        .from("cohort_calendar")
+        .delete()
+        .eq("cohort_id", cohortId);
       if (delErr) throw delErr;
       return jsonResponse({ success: true });
     }
@@ -1671,24 +2361,35 @@ Deno.serve(async (req) => {
      */
     if (action === "sync_cohort_sessions") {
       const addRemaining = body.add_remaining === true;
-      const onlyCohort = typeof body.cohort_id === "string" ? body.cohort_id : null;
+      const onlyCohort =
+        typeof body.cohort_id === "string" ? body.cohort_id : null;
       // Extra people to invite to the new lessons (a student who just joined),
       // on top of the guests already on the group's latest lesson.
       // Add only some of the missing lessons: these numbers, or the next N.
       const lessonNumbers: number[] = Array.isArray(body.lesson_numbers)
-        ? (body.lesson_numbers as unknown[]).filter((n): n is number => Number.isInteger(n) && (n as number) > 0).slice(0, 300)
+        ? (body.lesson_numbers as unknown[])
+            .filter(
+              (n): n is number => Number.isInteger(n) && (n as number) > 0,
+            )
+            .slice(0, 300)
         : [];
-      const lessonLimit = Number.isInteger(body.lesson_limit) && body.lesson_limit > 0 ? (body.lesson_limit as number) : 0;
+      const lessonLimit =
+        Number.isInteger(body.lesson_limit) && body.lesson_limit > 0
+          ? (body.lesson_limit as number)
+          : 0;
       const extraGuests: string[] = Array.isArray(body.extra_guests)
         ? (body.extra_guests as unknown[])
             .filter((e): e is string => typeof e === "string")
             .map((e) => e.trim().toLowerCase())
-            .filter((e) => /^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(e) && e.length <= 254)
+            .filter(
+              (e) => /^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(e) && e.length <= 254,
+            )
             .slice(0, 30)
         : [];
       const lovableKey = Deno.env.get("LOVABLE_API_KEY");
       const gcalKey = Deno.env.get("GOOGLE_CALENDAR_API_KEY");
-      if (!lovableKey || !gcalKey) return jsonResponse({ error: "Google Calendar nu e conectat." });
+      if (!lovableKey || !gcalKey)
+        return jsonResponse({ error: "Google Calendar nu e conectat." });
       const gHeaders = {
         Authorization: `Bearer ${lovableKey}`,
         "X-Connection-Api-Key": gcalKey,
@@ -1697,14 +2398,21 @@ Deno.serve(async (req) => {
 
       // Active groups that have a calendar name (cohort_calendar): running
       // ones, and future ones whose lessons can be created ahead of time.
-      let lq = supabase.from("cohort_calendar").select("cohort_id, calendar_title, total_lessons, members");
+      let lq = supabase
+        .from("cohort_calendar")
+        .select("cohort_id, calendar_title, total_lessons, members");
       if (onlyCohort) lq = lq.eq("cohort_id", onlyCohort);
       const { data: links, error: lErr } = await lq;
       if (lErr) throw lErr;
       const { data: running, error: cErr } = await supabase
         .from("group_cohorts")
-        .select("id, start_date, status, format, days_of_week, start_time, end_time")
-        .in("id", (links ?? []).map((l: { cohort_id: string }) => l.cohort_id))
+        .select(
+          "id, start_date, status, format, days_of_week, start_time, end_time",
+        )
+        .in(
+          "id",
+          (links ?? []).map((l: { cohort_id: string }) => l.cohort_id),
+        )
         .eq("is_active", true)
         .not("status", "in", '("completed","cancelled")');
       if (cErr) throw cErr;
@@ -1717,20 +2425,33 @@ Deno.serve(async (req) => {
           start_time: string | null;
           end_time: string | null;
         }) => {
-          const l = (links ?? []).find((x: { cohort_id: string }) => x.cohort_id === g.id)!;
-          return { ...g, calendar_title: l.calendar_title, total_lessons: l.total_lessons, members: (l.members ?? []) as string[] };
+          const l = (links ?? []).find(
+            (x: { cohort_id: string }) => x.cohort_id === g.id,
+          )!;
+          return {
+            ...g,
+            calendar_title: l.calendar_title,
+            total_lessons: l.total_lessons,
+            members: (l.members ?? []) as string[],
+          };
         },
       );
 
       const localDate = (iso: string) =>
-        new Intl.DateTimeFormat("en-CA", { timeZone: "Europe/Bucharest" }).format(new Date(iso));
+        new Intl.DateTimeFormat("en-CA", {
+          timeZone: "Europe/Bucharest",
+        }).format(new Date(iso));
 
       const results = [];
       for (const c of cohorts ?? []) {
         const prefix = c.calendar_title as string;
         // Every event of this group, one instance per lesson, oldest first.
-        const timeMin = new Date(Date.parse(`${c.start_date}T00:00:00Z`) - 14 * 86_400_000).toISOString();
-        const timeMax = new Date(Date.parse(`${c.start_date}T00:00:00Z`) + 2 * 365 * 86_400_000).toISOString();
+        const timeMin = new Date(
+          Date.parse(`${c.start_date}T00:00:00Z`) - 14 * 86_400_000,
+        ).toISOString();
+        const timeMax = new Date(
+          Date.parse(`${c.start_date}T00:00:00Z`) + 2 * 365 * 86_400_000,
+        ).toISOString();
         const events: Array<{
           id: string;
           summary?: string;
@@ -1739,7 +2460,11 @@ Deno.serve(async (req) => {
           location?: string;
           description?: string;
           conferenceData?: unknown;
-          attendees?: Array<{ email?: string; self?: boolean; resource?: boolean }>;
+          attendees?: Array<{
+            email?: string;
+            self?: boolean;
+            resource?: boolean;
+          }>;
         }> = [];
         let pageToken: string | undefined;
         // Google's search matches words; the plain words of the name find
@@ -1755,11 +2480,20 @@ Deno.serve(async (req) => {
             maxResults: "250",
           });
           if (pageToken) qs.set("pageToken", pageToken);
-          const res = await fetch(`${GCAL_GATEWAY}/calendars/primary/events?${qs}`, { headers: gHeaders });
+          const res = await fetch(
+            `${GCAL_GATEWAY}/calendars/primary/events?${qs}`,
+            { headers: gHeaders },
+          );
           const page = await res.json();
           if (!res.ok) {
-            console.error("[sync_cohort_sessions] list failed", res.status, page);
-            return jsonResponse({ error: `Google Calendar a refuzat citirea (${res.status}).` });
+            console.error(
+              "[sync_cohort_sessions] list failed",
+              res.status,
+              page,
+            );
+            return jsonResponse({
+              error: `Google Calendar a refuzat citirea (${res.status}).`,
+            });
           }
           events.push(...(page.items ?? []));
           pageToken = page.nextPageToken;
@@ -1767,8 +2501,9 @@ Deno.serve(async (req) => {
 
         const lessons = events
           .map((e) => ({ e, n: lessonNumber(e.summary, prefix) }))
-          .filter((x): x is { e: (typeof events)[number]; n: number } =>
-            x.n !== null && !!x.e.start?.dateTime && !!x.e.end?.dateTime,
+          .filter(
+            (x): x is { e: (typeof events)[number]; n: number } =>
+              x.n !== null && !!x.e.start?.dateTime && !!x.e.end?.dateTime,
           );
 
         const rows = lessons.map(({ e, n }) => ({
@@ -1787,13 +2522,26 @@ Deno.serve(async (req) => {
         }
         // Lessons removed from the calendar (a break, a cancellation) leave here too.
         const keep = rows.map((r) => r.google_event_id);
-        let del = supabase.from("cohort_sessions").delete().eq("cohort_id", c.id);
-        if (keep.length) del = del.not("google_event_id", "in", `(${keep.map((k) => `"${k}"`).join(",")})`);
+        let del = supabase
+          .from("cohort_sessions")
+          .delete()
+          .eq("cohort_id", c.id);
+        if (keep.length)
+          del = del.not(
+            "google_event_id",
+            "in",
+            `(${keep.map((k) => `"${k}"`).join(",")})`,
+          );
         const { error: delErr } = await del;
         if (delErr) throw delErr;
 
         const last = lessons.reduce<(typeof lessons)[number] | null>(
-          (a, b) => (!a || b.n > a.n || (b.n === a.n && b.e.start!.dateTime! > a.e.start!.dateTime!) ? b : a),
+          (a, b) =>
+            !a ||
+            b.n > a.n ||
+            (b.n === a.n && b.e.start!.dateTime! > a.e.start!.dateTime!)
+              ? b
+              : a,
           null,
         );
         const { data: meetingRows } = await supabase
@@ -1824,7 +2572,10 @@ Deno.serve(async (req) => {
         const nowMs = Date.now();
         const fullPlan = canPlan
           ? planMissing({
-              lessons: lessons.map(({ e, n }) => ({ n, date: localDate(e.start!.dateTime!) })),
+              lessons: lessons.map(({ e, n }) => ({
+                n,
+                date: localDate(e.start!.dateTime!),
+              })),
               pastMax: lessons
                 .filter(({ e }) => Date.parse(e.start!.dateTime!) < nowMs)
                 .reduce((m, { n }) => Math.max(m, n), 0),
@@ -1843,11 +2594,17 @@ Deno.serve(async (req) => {
 
         const created: number[] = [];
         // The owner (organizer) stays on the invitation, as on hand-made lessons.
-        let ownerEmail = (last?.e.attendees ?? []).find((a) => a.self && a.email)?.email?.toLowerCase() ?? null;
+        let ownerEmail =
+          (last?.e.attendees ?? [])
+            .find((a) => a.self && a.email)
+            ?.email?.toLowerCase() ?? null;
         if (!ownerEmail) {
-          const calRes = await fetch(`${GCAL_GATEWAY}/calendars/primary`, { headers: gHeaders });
+          const calRes = await fetch(`${GCAL_GATEWAY}/calendars/primary`, {
+            headers: gHeaders,
+          });
           const cal = await calRes.json().catch(() => ({}));
-          if (calRes.ok && typeof cal.id === "string") ownerEmail = cal.id.toLowerCase();
+          if (calRes.ok && typeof cal.id === "string")
+            ownerEmail = cal.id.toLowerCase();
         }
         // Who is invited: the group's own students (permanent, from the
         // admin), everyone already on its latest lesson, and the extra guests
@@ -1862,7 +2619,15 @@ Deno.serve(async (req) => {
           ]),
         ).filter((e) => e !== ownerEmail);
         const attendeeList = [
-          ...(ownerEmail ? [{ email: ownerEmail, organizer: true, responseStatus: "accepted" }] : []),
+          ...(ownerEmail
+            ? [
+                {
+                  email: ownerEmail,
+                  organizer: true,
+                  responseStatus: "accepted",
+                },
+              ]
+            : []),
           ...guests.map((email) => ({ email })),
         ];
         // Online lessons always carry the Zoom link; no Google Meet is added.
@@ -1873,7 +2638,8 @@ Deno.serve(async (req) => {
           isOnline && zoomUrl && !baseDesc.includes(zoomUrl)
             ? `${baseDesc ? baseDesc + "\n\n" : ""}Link Zoom: ${zoomUrl}`
             : baseDesc || undefined;
-        const location = last?.e.location || (isOnline && zoomUrl ? zoomUrl : undefined);
+        const location =
+          last?.e.location || (isOnline && zoomUrl ? zoomUrl : undefined);
         if (addRemaining && plan.length) {
           for (const p of plan) {
             const [y, mo, d] = p.date.split("-").map(Number);
@@ -1892,7 +2658,11 @@ Deno.serve(async (req) => {
                   // Written like the group's latest lesson; for a new group,
                   // "<name> - L<N>" with the name chosen in the admin.
                   summary: last
-                    ? titleForLesson(last.e.summary ?? prefix, last.n, p.lesson_number)
+                    ? titleForLesson(
+                        last.e.summary ?? prefix,
+                        last.n,
+                        p.lesson_number,
+                      )
                     : `${prefix} - L${p.lesson_number}`,
                   location,
                   description,
@@ -1904,17 +2674,23 @@ Deno.serve(async (req) => {
             );
             const ev = await res.json();
             if (!res.ok) {
-              console.error("[sync_cohort_sessions] create failed", res.status, ev);
+              console.error(
+                "[sync_cohort_sessions] create failed",
+                res.status,
+                ev,
+              );
               break;
             }
-            const { error: insErr } = await supabase.from("cohort_sessions").insert({
-              cohort_id: c.id,
-              lesson_number: p.lesson_number,
-              starts_at: startISO,
-              ends_at: endISO,
-              google_event_id: ev.id,
-              source: "generated",
-            });
+            const { error: insErr } = await supabase
+              .from("cohort_sessions")
+              .insert({
+                cohort_id: c.id,
+                lesson_number: p.lesson_number,
+                starts_at: startISO,
+                ends_at: endISO,
+                google_event_id: ev.id,
+                source: "generated",
+              });
             if (insErr) throw insErr;
             created.push(p.lesson_number);
           }
@@ -1933,7 +2709,13 @@ Deno.serve(async (req) => {
             const ev = events.find((e) => e.id === g.google_event_id);
             if (!ev) continue;
             const keepGuests = (ev.attendees ?? [])
-              .filter((a) => a.email && !a.self && !a.resource && a.email.toLowerCase() !== ownerEmail)
+              .filter(
+                (a) =>
+                  a.email &&
+                  !a.self &&
+                  !a.resource &&
+                  a.email.toLowerCase() !== ownerEmail,
+              )
               .map((a) => ({ email: a.email!.toLowerCase() }));
             const evDesc = ev.description ?? "";
             const res = await fetch(
@@ -1946,17 +2728,31 @@ Deno.serve(async (req) => {
                     isOnline && zoomUrl && !evDesc.includes(zoomUrl)
                       ? `${evDesc ? evDesc + "\n\n" : ""}Link Zoom: ${zoomUrl}`
                       : evDesc,
-                  location: ev.location || (isOnline && zoomUrl ? zoomUrl : undefined),
+                  location:
+                    ev.location || (isOnline && zoomUrl ? zoomUrl : undefined),
                   ...(isOnline && zoomUrl ? { conferenceData: null } : {}),
                   attendees: [
-                    ...(ownerEmail ? [{ email: ownerEmail, organizer: true, responseStatus: "accepted" }] : []),
+                    ...(ownerEmail
+                      ? [
+                          {
+                            email: ownerEmail,
+                            organizer: true,
+                            responseStatus: "accepted",
+                          },
+                        ]
+                      : []),
                     ...keepGuests,
                   ],
                 }),
               },
             );
             if (res.ok) repaired.push(g.lesson_number);
-            else console.error("[sync_cohort_sessions] repair failed", res.status, await res.text());
+            else
+              console.error(
+                "[sync_cohort_sessions] repair failed",
+                res.status,
+                await res.text(),
+              );
           }
         }
 
@@ -1965,7 +2761,9 @@ Deno.serve(async (req) => {
           calendar_title: prefix,
           total_lessons: total || null,
           found: rows.length,
-          last_lesson: last ? { number: last.n, starts_at: last.e.start!.dateTime } : null,
+          last_lesson: last
+            ? { number: last.n, starts_at: last.e.start!.dateTime }
+            : null,
           missing_meetings: meetings.length === 0,
           // Started, yet no lesson matched the name: the name needs checking.
           name_not_found: !last && c.start_date < todayLocal,
@@ -1978,8 +2776,17 @@ Deno.serve(async (req) => {
         });
       }
 
-      console.log("[sync_cohort_sessions]", callerEmail, addRemaining ? "add_remaining" : "read",
-        results.map((r) => `${r.calendar_title}: ${r.found} found, ${r.created.length} created`).join("; "));
+      console.log(
+        "[sync_cohort_sessions]",
+        callerEmail,
+        addRemaining ? "add_remaining" : "read",
+        results
+          .map(
+            (r) =>
+              `${r.calendar_title}: ${r.found} found, ${r.created.length} created`,
+          )
+          .join("; "),
+      );
 
       return jsonResponse({ data: results });
     }
@@ -2042,12 +2849,16 @@ Deno.serve(async (req) => {
         // the course types that carry money.
         supabase
           .from("registrations")
-          .select("id, created_at, name, phone, email, form_type, level, format, payment_status")
+          .select(
+            "id, created_at, name, phone, email, form_type, level, format, payment_status",
+          )
           .in("form_type", ["group", "private", "kids"])
           .not("payment_status", "in", '("paid","refunded")')
           .is("anonymized_at", null)
           // Put aside with "Am vorbit cu el" until this date.
-          .or(`followup_snoozed_until.is.null,followup_snoozed_until.lt."${new Date(now).toISOString()}"`)
+          .or(
+            `followup_snoozed_until.is.null,followup_snoozed_until.lt."${new Date(now).toISOString()}"`,
+          )
           .gte("created_at", staleAfter)
           .order("created_at", { ascending: true })
           .limit(50),
@@ -2057,10 +2868,15 @@ Deno.serve(async (req) => {
         // with the first about the same cohort.
         supabase
           .from("group_cohorts")
-          .select("id, title_ro, title_en, level, format, start_date, status, teaching_language")
+          .select(
+            "id, title_ro, title_en, level, format, start_date, status, teaching_language",
+          )
           .eq("is_active", true)
           .gte("start_date", new Date(now).toISOString().slice(0, 10))
-          .lte("start_date", new Date(now + 14 * 86_400_000).toISOString().slice(0, 10))
+          .lte(
+            "start_date",
+            new Date(now + 14 * 86_400_000).toISOString().slice(0, 10),
+          )
           .order("start_date", { ascending: true }),
         // Lessons already past that never reached the calendar. They are not
         // work any more — nobody can attend August retroactively — so they do
@@ -2091,7 +2907,8 @@ Deno.serve(async (req) => {
       if (unpaidErr) throw unpaidErr;
       if (cohortErr) throw cohortErr;
 
-      const days = (iso: string) => Math.floor((now - Date.parse(iso)) / 86_400_000);
+      const days = (iso: string) =>
+        Math.floor((now - Date.parse(iso)) / 86_400_000);
 
       // Anything the system itself is unhappy about. A calendar event that
       // failed to sync is the one that bites: the lesson exists here and not
@@ -2130,7 +2947,9 @@ Deno.serve(async (req) => {
       // which "Nu a venit" still needs a click.
       const { data: trialsToMark, error: trialsErr } = await supabase
         .from("bookings")
-        .select("id, start_at, end_at, student_name, student_email, student_phone, format, trial_outcome")
+        .select(
+          "id, start_at, end_at, student_name, student_email, student_phone, format, trial_outcome",
+        )
         .eq("event_type_slug", "trial")
         .eq("status", "confirmed")
         .is("trial_outcome", null)
@@ -2153,7 +2972,9 @@ Deno.serve(async (req) => {
       if (refundedIds.length) {
         const { data: rows, error: rowsErr } = await supabase
           .from("bookings")
-          .select("id, registration_id, start_at, end_at, student_name, student_email, format")
+          .select(
+            "id, registration_id, start_at, end_at, student_name, student_email, format",
+          )
           .in("registration_id", refundedIds)
           .eq("status", "confirmed")
           .gte("start_at", new Date(now).toISOString())
@@ -2169,8 +2990,14 @@ Deno.serve(async (req) => {
           lessons: lessons ?? [],
           trialsToMark: trialsToMark ?? [],
           refundedLessons,
-          uncontacted: (uncontacted ?? []).map((r) => ({ ...r, waitingDays: days(r.created_at as string) })),
-          unpaid: (unpaid ?? []).map((r) => ({ ...r, waitingDays: days(r.created_at as string) })),
+          uncontacted: (uncontacted ?? []).map((r) => ({
+            ...r,
+            waitingDays: days(r.created_at as string),
+          })),
+          unpaid: (unpaid ?? []).map((r) => ({
+            ...r,
+            waitingDays: days(r.created_at as string),
+          })),
           cohortsStartingSoon: cohorts ?? [],
           problems,
           olderUnsyncedLessons: olderUnsynced ?? 0,
@@ -2204,21 +3031,24 @@ Deno.serve(async (req) => {
       const fromMs = Date.now() - days * 86_400_000;
       const fromISO = new Date(fromMs).toISOString();
 
-      const [{ data: regs, error: regErr }, { data: books, error: bookErr }] = await Promise.all([
-        supabase
-          .from("registrations")
-          .select(
-            "id, created_at, form_type, format, level, language, source, referral_code, payment_status, paid_at, lead_status, refunded_amount, refunded_at",
-          )
-          .gte("created_at", fromISO)
-          .is("anonymized_at", null),
-        // Bookings are windowed on the lesson date, not the created date: the
-        // question is how the lessons in this period went.
-        supabase
-          .from("bookings")
-          .select("id, created_at, start_at, status, event_type_slug, format, cancelled_at, original_booking_id")
-          .gte("start_at", fromISO),
-      ]);
+      const [{ data: regs, error: regErr }, { data: books, error: bookErr }] =
+        await Promise.all([
+          supabase
+            .from("registrations")
+            .select(
+              "id, created_at, form_type, format, level, language, source, referral_code, payment_status, paid_at, lead_status, refunded_amount, refunded_at",
+            )
+            .gte("created_at", fromISO)
+            .is("anonymized_at", null),
+          // Bookings are windowed on the lesson date, not the created date: the
+          // question is how the lessons in this period went.
+          supabase
+            .from("bookings")
+            .select(
+              "id, created_at, start_at, status, event_type_slug, format, cancelled_at, original_booking_id",
+            )
+            .gte("start_at", fromISO),
+        ]);
       if (regErr) throw regErr;
       if (bookErr) throw bookErr;
 
@@ -2262,7 +3092,12 @@ Deno.serve(async (req) => {
       // paid four months later would drag an average into fiction.
       const payLags = registrations
         .filter((r) => r.paid_at && r.created_at)
-        .map((r) => (Date.parse(r.paid_at as string) - Date.parse(r.created_at as string)) / 86_400_000)
+        .map(
+          (r) =>
+            (Date.parse(r.paid_at as string) -
+              Date.parse(r.created_at as string)) /
+            86_400_000,
+        )
         .filter((d) => Number.isFinite(d) && d >= 0)
         .sort((a, b) => a - b);
       const median = (xs: number[]) =>
@@ -2272,7 +3107,9 @@ Deno.serve(async (req) => {
             ? xs[(xs.length - 1) / 2]
             : (xs[xs.length / 2 - 1] + xs[xs.length / 2]) / 2;
 
-      const paid = registrations.filter((r) => r.payment_status === "paid").length;
+      const paid = registrations.filter(
+        (r) => r.payment_status === "paid",
+      ).length;
       const refunds = registrations.filter((r) => r.refunded_at);
 
       // A cancellation inside the 24-hour window, which booking-manage now
@@ -2282,11 +3119,15 @@ Deno.serve(async (req) => {
         (b) =>
           b.status === "cancelled" &&
           b.cancelled_at &&
-          Date.parse(b.start_at as string) - Date.parse(b.cancelled_at as string) < 86_400_000,
+          Date.parse(b.start_at as string) -
+            Date.parse(b.cancelled_at as string) <
+            86_400_000,
       ).length;
 
       const byStatus = tally(bookings, "status");
-      const trialBookings = bookings.filter((b) => b.event_type_slug === "trial");
+      const trialBookings = bookings.filter(
+        (b) => b.event_type_slug === "trial",
+      );
 
       return jsonResponse({
         data: {
@@ -2307,7 +3148,9 @@ Deno.serve(async (req) => {
           conversion: {
             registrations: registrations.length,
             paid,
-            paidPercent: registrations.length ? Math.round((paid / registrations.length) * 100) : 0,
+            paidPercent: registrations.length
+              ? Math.round((paid / registrations.length) * 100)
+              : 0,
             byPaymentStatus: tally(registrations, "payment_status"),
             byLeadStatus: tally(registrations, "lead_status"),
             medianDaysToPay: median(payLags),
@@ -2317,7 +3160,10 @@ Deno.serve(async (req) => {
             // refunded_amount is stored in the smallest currency unit by Stripe
             // convention; the page divides, this does not, so the raw figure
             // stays inspectable.
-            totalMinorUnits: refunds.reduce((sum, r) => sum + (Number(r.refunded_amount) || 0), 0),
+            totalMinorUnits: refunds.reduce(
+              (sum, r) => sum + (Number(r.refunded_amount) || 0),
+              0,
+            ),
           },
           lessons: {
             total: bookings.length,
@@ -2349,7 +3195,10 @@ Deno.serve(async (req) => {
         .filter(Boolean);
 
       // 2) Bookings tied to those trial registrations
-      const bookingsByReg = new Map<string, { start_at: string; end_at: string; status: string }>();
+      const bookingsByReg = new Map<
+        string,
+        { start_at: string; end_at: string; status: string }
+      >();
       if (trialIds.length > 0) {
         const { data: bookings, error: bErr } = await supabase
           .from("bookings")
@@ -2367,7 +3216,10 @@ Deno.serve(async (req) => {
 
       // 3) Conversions = paid registrations (non-trial) with same email made
       //    AFTER the trial registration.
-      const convertedEmails = new Map<string, { form_type: string; created_at: string }>();
+      const convertedEmails = new Map<
+        string,
+        { form_type: string; created_at: string }
+      >();
       if (trialEmails.length > 0) {
         const { data: laterRegs, error: lErr } = await supabase
           .from("registrations")
@@ -2394,12 +3246,12 @@ Deno.serve(async (req) => {
         const emailKey = (t.email ?? "").toLowerCase();
         const conversion = emailKey ? convertedEmails.get(emailKey) : undefined;
         const validConversion =
-          conversion && Date.parse(conversion.created_at) > Date.parse(t.created_at)
+          conversion &&
+          Date.parse(conversion.created_at) > Date.parse(t.created_at)
             ? conversion
             : null;
         const attended =
-          booking?.status === "confirmed" &&
-          Date.parse(booking.end_at) < now;
+          booking?.status === "confirmed" && Date.parse(booking.end_at) < now;
         return {
           ...t,
           booked: !!booking && booking.status === "confirmed",
@@ -2428,7 +3280,8 @@ Deno.serve(async (req) => {
         .select("manage_token")
         .eq("id", id)
         .single();
-      if (bErr || !booking) return jsonResponse({ error: "Programare negăsită" });
+      if (bErr || !booking)
+        return jsonResponse({ error: "Programare negăsită" });
       const resp = await fetch(
         `${Deno.env.get("SUPABASE_URL")}/functions/v1/booking-manage/${booking.manage_token}`,
         {
@@ -2439,8 +3292,12 @@ Deno.serve(async (req) => {
         },
       );
       const out = await resp.json().catch(() => ({}));
-      if (!resp.ok || out?.error) return jsonResponse({ error: out?.error || "Anulare eșuată" });
-      return jsonResponse({ success: true, sync_pending: out?.sync_pending === true });
+      if (!resp.ok || out?.error)
+        return jsonResponse({ error: out?.error || "Anulare eșuată" });
+      return jsonResponse({
+        success: true,
+        sync_pending: out?.sync_pending === true,
+      });
     }
 
     /**
@@ -2464,7 +3321,10 @@ Deno.serve(async (req) => {
     if (action === "reschedule_booking") {
       if (typeof id !== "string") return jsonResponse({ error: "ID invalid" });
       const newStart = (body as { start_at?: unknown }).start_at;
-      if (typeof newStart !== "string" || !Number.isFinite(Date.parse(newStart))) {
+      if (
+        typeof newStart !== "string" ||
+        !Number.isFinite(Date.parse(newStart))
+      ) {
         return jsonResponse({ error: "Ora nouă este invalidă." });
       }
       const force = (body as { force?: unknown }).force === true;
@@ -2473,7 +3333,8 @@ Deno.serve(async (req) => {
         .select("manage_token, status, registration_id")
         .eq("id", id)
         .single();
-      if (bErr || !booking) return jsonResponse({ error: "Programare negăsită" });
+      if (bErr || !booking)
+        return jsonResponse({ error: "Programare negăsită" });
       if (booking.status !== "confirmed") {
         return jsonResponse({ error: "Programarea nu este activă." });
       }
@@ -2510,7 +3371,11 @@ Deno.serve(async (req) => {
         registration_id: regIdForBooking,
         details: { to: newStart, forced: force },
       });
-      return jsonResponse({ success: true, start_at: out?.start_at ?? newStart, sync_pending: out?.sync_pending === true });
+      return jsonResponse({
+        success: true,
+        start_at: out?.start_at ?? newStart,
+        sync_pending: out?.sync_pending === true,
+      });
     }
 
     /**
@@ -2538,15 +3403,30 @@ Deno.serve(async (req) => {
     // earlier hand-made bookings alike. Read-only; lessons_used counts the same
     // bookings booking-create counts against the package.
     if (action === "private_students") {
-      const { data: regs } = await readAll("registrations", "id,name,email,contact_email,phone,quantity,payment_status,lead_status,source,created_at,anonymized_at,form_type", "created_at", false);
-      const students = regs.filter((r) => r.form_type === "private" && !r.anonymized_at);
+      const { data: regs } = await readAll(
+        "registrations",
+        "id,name,email,contact_email,phone,quantity,payment_status,lead_status,source,created_at,anonymized_at,form_type",
+        "created_at",
+        false,
+      );
+      const students = regs.filter(
+        (r) => r.form_type === "private" && !r.anonymized_at,
+      );
       const used = new Map<string, number>();
       for (let offset = 0; offset < students.length; offset += 100) {
         const ids = students.slice(offset, offset + 100).map((r) => r.id);
-        const result = await supabase.from("bookings").select("registration_id")
-          .in("registration_id", ids).neq("event_type_slug", "trial").in("status", ["confirmed", "completed"]);
+        const result = await supabase
+          .from("bookings")
+          .select("registration_id")
+          .in("registration_id", ids)
+          .neq("event_type_slug", "trial")
+          .in("status", ["confirmed", "completed"]);
         if (result.error) throw result.error;
-        for (const row of result.data ?? []) used.set(row.registration_id, (used.get(row.registration_id) ?? 0) + 1);
+        for (const row of result.data ?? [])
+          used.set(
+            row.registration_id,
+            (used.get(row.registration_id) ?? 0) + 1,
+          );
       }
       return jsonResponse({
         data: students.map((r) => ({
@@ -2554,7 +3434,10 @@ Deno.serve(async (req) => {
           name: r.name,
           email: r.contact_email || r.email,
           phone: r.phone,
-          quantity: Math.max(1, Number.parseInt(String(r.quantity ?? 1), 10) || 1),
+          quantity: Math.max(
+            1,
+            Number.parseInt(String(r.quantity ?? 1), 10) || 1,
+          ),
           lessons_used: used.get(r.id) ?? 0,
           payment_status: r.payment_status,
           lead_status: r.lead_status,
@@ -2579,13 +3462,19 @@ Deno.serve(async (req) => {
         language?: unknown;
         extra?: unknown;
       };
-      const name = typeof b.student_name === "string" ? b.student_name.trim() : "";
-      const email = typeof b.student_email === "string" ? b.student_email.trim() : "";
-      const phone = typeof b.student_phone === "string" ? b.student_phone.trim() : "";
+      const name =
+        typeof b.student_name === "string" ? b.student_name.trim() : "";
+      const email =
+        typeof b.student_email === "string" ? b.student_email.trim() : "";
+      const phone =
+        typeof b.student_phone === "string" ? b.student_phone.trim() : "";
       const startAt = typeof b.start_at === "string" ? b.start_at : "";
       const format = b.format === "physical" ? "physical" : "online";
       const language = b.language === "en" ? "en" : "ro";
-      const quantity = Math.max(1, Math.min(60, Number.parseInt(String(b.quantity ?? 1), 10) || 1));
+      const quantity = Math.max(
+        1,
+        Math.min(60, Number.parseInt(String(b.quantity ?? 1), 10) || 1),
+      );
       const paid = b.paid === true;
       const force = b.force === true;
 
@@ -2599,24 +3488,49 @@ Deno.serve(async (req) => {
       // the lesson is outside it), so nothing is retyped and the package stays
       // exactly what was bought.
       const extra = b.extra === true;
-      let existing: { id: string; name: string; email: string; accountEmail: string; contactEmail: string | null; phone: string | null } | null = null;
-      if (b.registration_id !== undefined && b.registration_id !== null && b.registration_id !== "") {
-        if (typeof b.registration_id !== "string") return jsonResponse({ error: "Cursant invalid." });
+      let existing: {
+        id: string;
+        name: string;
+        email: string;
+        accountEmail: string;
+        contactEmail: string | null;
+        phone: string | null;
+      } | null = null;
+      if (
+        b.registration_id !== undefined &&
+        b.registration_id !== null &&
+        b.registration_id !== ""
+      ) {
+        if (typeof b.registration_id !== "string")
+          return jsonResponse({ error: "Cursant invalid." });
         const { data: reg, error: lookupErr } = await supabase
           .from("registrations")
           .select("id,name,email,contact_email,phone,form_type,anonymized_at")
           .eq("id", b.registration_id)
           .maybeSingle();
-        if (lookupErr || !reg || reg.form_type !== "private" || reg.anonymized_at) {
+        if (
+          lookupErr ||
+          !reg ||
+          reg.form_type !== "private" ||
+          reg.anonymized_at
+        ) {
           return jsonResponse({ error: "Cursantul nu a fost găsit." });
         }
-        existing = { id: reg.id, name: reg.name ?? "", email: reg.contact_email || reg.email || "", accountEmail: reg.email || reg.contact_email || "", contactEmail: reg.contact_email || null, phone: reg.phone ?? null };
+        existing = {
+          id: reg.id,
+          name: reg.name ?? "",
+          email: reg.contact_email || reg.email || "",
+          accountEmail: reg.email || reg.contact_email || "",
+          contactEmail: reg.contact_email || null,
+          phone: reg.phone ?? null,
+        };
       }
       const studentName = existing ? existing.name.trim() : name;
       const studentEmail = existing ? existing.email.trim() : email;
       const studentPhone = existing ? (existing.phone ?? "").trim() : phone;
 
-      if (studentName.length < 2) return jsonResponse({ error: "Numele este obligatoriu." });
+      if (studentName.length < 2)
+        return jsonResponse({ error: "Numele este obligatoriu." });
       if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(studentEmail)) {
         return jsonResponse({ error: "Emailul nu este valid." });
       }
@@ -2626,62 +3540,77 @@ Deno.serve(async (req) => {
 
       const onExisting = existing !== null && !extra;
       const registrationId = onExisting ? existing!.id : crypto.randomUUID();
-      const { error: regErr } = onExisting ? { error: null } : await supabase.from("registrations").insert({
-        id: registrationId,
-        form_type: "private",
-        source: "admin",
-        name: studentName,
-        // An extra lesson keeps the same account email as the student's other
-        // registration, so ownership checks treat them as the same person.
-        email: existing ? existing.accountEmail : email,
-        ...(existing?.contactEmail ? { contact_email: existing.contactEmail } : {}),
-        phone: studentPhone || null,
-        language,
-        format: format === "physical" ? "fizic" : "online",
-        quantity,
-        // unpaid is "no payment has been attempted", which is exactly true of
-        // a lesson agreed by hand and not yet paid for. Never pending: there
-        // is no payment in flight.
-        payment_status: paid ? "paid" : "unpaid",
-        // Not a lead to chase: the owner has already spoken to them.
-        lead_status: "contacted",
-      });
+      const { error: regErr } = onExisting
+        ? { error: null }
+        : await supabase.from("registrations").insert({
+            id: registrationId,
+            form_type: "private",
+            source: "admin",
+            name: studentName,
+            // An extra lesson keeps the same account email as the student's other
+            // registration, so ownership checks treat them as the same person.
+            email: existing ? existing.accountEmail : email,
+            ...(existing?.contactEmail
+              ? { contact_email: existing.contactEmail }
+              : {}),
+            phone: studentPhone || null,
+            language,
+            format: format === "physical" ? "fizic" : "online",
+            quantity,
+            // unpaid is "no payment has been attempted", which is exactly true of
+            // a lesson agreed by hand and not yet paid for. Never pending: there
+            // is no payment in flight.
+            payment_status: paid ? "paid" : "unpaid",
+            // Not a lead to chase: the owner has already spoken to them.
+            lead_status: "contacted",
+          });
       if (regErr) {
         console.error("[book_for_student] registration insert failed", regErr);
         return jsonResponse({ error: "Nu am putut salva cursantul." });
       }
 
-      const resp = await fetch(`${Deno.env.get("SUPABASE_URL")}/functions/v1/booking-create`, {
-        method: "POST",
-        headers: {
-          Authorization: `Bearer ${Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")}`,
-          "Content-Type": "application/json",
+      const resp = await fetch(
+        `${Deno.env.get("SUPABASE_URL")}/functions/v1/booking-create`,
+        {
+          method: "POST",
+          headers: {
+            Authorization: `Bearer ${Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")}`,
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            // "paid" is the private 60-minute lesson in booking_event_types.
+            event_type: "paid",
+            registration_id: registrationId,
+            start_at: startAt,
+            format,
+            student_name: studentName,
+            student_email: studentEmail,
+            student_phone: studentPhone || undefined,
+            notes:
+              typeof b.notes === "string" && b.notes.trim()
+                ? b.notes.trim()
+                : undefined,
+            language,
+            gdpr_consent: true,
+            force,
+          }),
         },
-        body: JSON.stringify({
-          // "paid" is the private 60-minute lesson in booking_event_types.
-          event_type: "paid",
-          registration_id: registrationId,
-          start_at: startAt,
-          format,
-          student_name: studentName,
-          student_email: studentEmail,
-          student_phone: studentPhone || undefined,
-          notes: typeof b.notes === "string" && b.notes.trim() ? b.notes.trim() : undefined,
-          language,
-          gdpr_consent: true,
-          force,
-        }),
-      });
+      );
       const out = await resp.json().catch(() => ({}));
       if (!resp.ok || out?.error) {
         // The registration was written a moment ago and has no booking, so it
         // would otherwise sit in Înscrieri as a lesson that never happened.
         // An existing student's registration is theirs and stays untouched.
-        if (!onExisting) await supabase.from("registrations").delete().eq("id", registrationId);
+        if (!onExisting)
+          await supabase
+            .from("registrations")
+            .delete()
+            .eq("id", registrationId);
         return jsonResponse({
-          error: out?.code === "lessons_used_up"
-            ? "Toate lecțiile din pachetul acestui cursant sunt deja programate. Bifează „Lecție în plus” ca să o programezi separat, cu aceleași date."
-            : out?.error || "Programarea a eșuat.",
+          error:
+            out?.code === "lessons_used_up"
+              ? "Toate lecțiile din pachetul acestui cursant sunt deja programate. Bifează „Lecție în plus” ca să o programezi separat, cu aceleași date."
+              : out?.error || "Programarea a eșuat.",
           code: out?.code,
           clashes: out?.clashes ?? [],
         });
@@ -2693,15 +3622,28 @@ Deno.serve(async (req) => {
         registration_id: registrationId,
         details: onExisting
           ? { at: startAt, format, forced: force, existing_registration: true }
-          : { at: startAt, format, quantity, paid, forced: force, ...(existing ? { extra_for: existing.id } : {}) },
+          : {
+              at: startAt,
+              format,
+              quantity,
+              paid,
+              forced: force,
+              ...(existing ? { extra_for: existing.id } : {}),
+            },
       });
-      return jsonResponse({ success: true, registration_id: registrationId, sync_pending: out?.sync_pending === true });
+      return jsonResponse({
+        success: true,
+        registration_id: registrationId,
+        sync_pending: out?.sync_pending === true,
+      });
     }
 
     if (action === "list_notifications") {
       const { data: regs, error: regsError } = await supabase
         .from("registrations")
-        .select("id, created_at, name, phone, email, form_type, format, center, whatsapp_sent_at, lead_status")
+        .select(
+          "id, created_at, name, phone, email, form_type, format, center, whatsapp_sent_at, lead_status",
+        )
         .order("created_at", { ascending: false });
       if (regsError) throw regsError;
 
@@ -2727,7 +3669,9 @@ Deno.serve(async (req) => {
       if (emails.length > 0) {
         const { data: logData, error: logError } = await supabase
           .from("email_send_log")
-          .select("recipient_email, template_name, status, created_at, message_id")
+          .select(
+            "recipient_email, template_name, status, created_at, message_id",
+          )
           .in("template_name", templates)
           .in("recipient_email", emails)
           .order("created_at", { ascending: false });
@@ -2736,11 +3680,17 @@ Deno.serve(async (req) => {
       }
 
       // Latest status per (email, template)
-      const latestByKey = new Map<string, { status: string; created_at: string }>();
+      const latestByKey = new Map<
+        string,
+        { status: string; created_at: string }
+      >();
       for (const log of logs) {
         const key = `${log.recipient_email.toLowerCase()}|${log.template_name}`;
         if (!latestByKey.has(key)) {
-          latestByKey.set(key, { status: log.status, created_at: log.created_at });
+          latestByKey.set(key, {
+            status: log.status,
+            created_at: log.created_at,
+          });
         }
       }
 
@@ -2795,7 +3745,8 @@ Deno.serve(async (req) => {
         kids: "kids-registration-confirmation",
       };
       const templateName = templateByForm[reg.form_type];
-      if (!templateName) return jsonResponse({ error: "Tip înscriere necunoscut" });
+      if (!templateName)
+        return jsonResponse({ error: "Tip înscriere necunoscut" });
 
       try {
         const result = await sendTemplateEmail(templateName, reg.email, {
@@ -2813,16 +3764,18 @@ Deno.serve(async (req) => {
     }
 
     if (action === "send_test_email") {
-      const recipient = typeof body.recipient_email === "string"
-        ? body.recipient_email.trim().toLowerCase()
-        : "";
+      const recipient =
+        typeof body.recipient_email === "string"
+          ? body.recipient_email.trim().toLowerCase()
+          : "";
       if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(recipient)) {
         return jsonResponse({ error: "Email destinatar invalid" });
       }
-      const statusUrl = typeof body.status_url === "string" &&
-          /^https?:\/\//.test(body.status_url)
-        ? body.status_url
-        : "https://centruldearabalibaneza.com/private-status/exemplu";
+      const statusUrl =
+        typeof body.status_url === "string" &&
+        /^https?:\/\//.test(body.status_url)
+          ? body.status_url
+          : "https://centruldearabalibaneza.com/private-status/exemplu";
       try {
         const result = await sendTemplateEmail(
           "private-registration-confirmation",
@@ -2848,18 +3801,30 @@ Deno.serve(async (req) => {
       return jsonResponse({ success: true });
     }
 
-
     if (action === "update_email_settings") {
-      const senderName = typeof sender_name === "string" ? sender_name.trim() : "";
-      const senderEmail = typeof sender_email === "string" ? sender_email.trim().toLowerCase() : "";
+      const senderName =
+        typeof sender_name === "string" ? sender_name.trim() : "";
+      const senderEmail =
+        typeof sender_email === "string"
+          ? sender_email.trim().toLowerCase()
+          : "";
 
-      if (senderName.length < 2 || senderName.length > 80 || !isAllowedSenderEmail(senderEmail)) {
-        return jsonResponse({ error: "Numele sau emailul expeditorului este invalid" });
+      if (
+        senderName.length < 2 ||
+        senderName.length > 80 ||
+        !isAllowedSenderEmail(senderEmail)
+      ) {
+        return jsonResponse({
+          error: "Numele sau emailul expeditorului este invalid",
+        });
       }
 
       const { data, error } = await supabase
         .from("email_confirmation_settings")
-        .upsert({ id: 1, sender_name: senderName, sender_email: senderEmail }, { onConflict: "id" })
+        .upsert(
+          { id: 1, sender_name: senderName, sender_email: senderEmail },
+          { onConflict: "id" },
+        )
         .select("sender_name, sender_email")
         .single();
 
@@ -2874,7 +3839,9 @@ Deno.serve(async (req) => {
     if (action === "delete" && Array.isArray(ids) && ids.length > 0) {
       const { data: rows, error: rowsErr } = await supabase
         .from("registrations")
-        .select("id, payment_status, paid_at, refunded_at, refunded_amount, stripe_subscription_id")
+        .select(
+          "id, payment_status, paid_at, refunded_at, refunded_amount, stripe_subscription_id",
+        )
         .in("id", ids);
       if (rowsErr) throw rowsErr;
 
@@ -2894,7 +3861,9 @@ Deno.serve(async (req) => {
       // force=true: admin explicitly confirmed (typed confirmation in the UI)
       // that these are test rows; payment traces are deleted too.
       const force = body?.force === true;
-      const blocked = force ? [] : (rows ?? []).filter(hasMoney).map((r) => r.id);
+      const blocked = force
+        ? []
+        : (rows ?? []).filter(hasMoney).map((r) => r.id);
       const deletable = force
         ? (rows ?? []).map((r) => r.id)
         : (rows ?? []).filter((r) => !hasMoney(r)).map((r) => r.id);
@@ -2909,22 +3878,40 @@ Deno.serve(async (req) => {
         const lovableKey = Deno.env.get("LOVABLE_API_KEY");
         const gcalKey = Deno.env.get("GOOGLE_CALENDAR_API_KEY");
         const { data: linkedLessons, error: lErr } = await supabase
-          .from("bookings").select("id, google_event_id").in("registration_id", deletable).eq("status", "confirmed").not("google_event_id", "is", null);
+          .from("bookings")
+          .select("id, google_event_id")
+          .in("registration_id", deletable)
+          .eq("status", "confirmed")
+          .not("google_event_id", "is", null);
         if (lErr) throw lErr;
         if ((linkedLessons ?? []).length && (!lovableKey || !gcalKey)) {
-          return jsonResponse({ error: "Google Calendar nu e conectat; lecțiile din calendar nu pot fi șterse. Nimic nu s-a șters." });
+          return jsonResponse({
+            error:
+              "Google Calendar nu e conectat; lecțiile din calendar nu pot fi șterse. Nimic nu s-a șters.",
+          });
         }
         for (const lesson of linkedLessons ?? []) {
-          const res = await fetch(`${GCAL_GATEWAY}/calendars/primary/events/${encodeURIComponent(lesson.google_event_id as string)}?sendUpdates=none`, {
-            method: "DELETE",
-            headers: { Authorization: `Bearer ${lovableKey}`, "X-Connection-Api-Key": gcalKey! },
-          });
+          const res = await fetch(
+            `${GCAL_GATEWAY}/calendars/primary/events/${encodeURIComponent(lesson.google_event_id as string)}?sendUpdates=none`,
+            {
+              method: "DELETE",
+              headers: {
+                Authorization: `Bearer ${lovableKey}`,
+                "X-Connection-Api-Key": gcalKey!,
+              },
+            },
+          );
           if (!res.ok && res.status !== 404 && res.status !== 410) {
             console.error("[delete] google", res.status, await res.text());
-            return jsonResponse({ error: `Google Calendar a refuzat ștergerea unei lecții (${res.status}). Nimic nu s-a șters.` });
+            return jsonResponse({
+              error: `Google Calendar a refuzat ștergerea unei lecții (${res.status}). Nimic nu s-a șters.`,
+            });
           }
         }
-        const { error } = await supabase.from("registrations").delete().in("id", deletable);
+        const { error } = await supabase
+          .from("registrations")
+          .delete()
+          .in("id", deletable);
         if (error) throw error;
         await supabase.from("audit_logs").insert(
           deletable.map((rid) => ({
@@ -2935,7 +3922,11 @@ Deno.serve(async (req) => {
         );
       }
 
-      return jsonResponse({ success: true, deleted: deletable.length, blocked: blocked.length });
+      return jsonResponse({
+        success: true,
+        deleted: deletable.length,
+        blocked: blocked.length,
+      });
     }
 
     // Anonymize action (GDPR / rows with payments): strips personal data,
@@ -2984,13 +3975,27 @@ Deno.serve(async (req) => {
     // put aside for a few days after the owner talked to them, then comes back
     // to the list if they still have not paid. Changes nothing about the money.
     if (action === "snooze_followup") {
-      const days = Math.max(1, Math.min(30, Number.parseInt(String(body.days ?? 7), 10) || 7));
-      if (typeof id !== "string") return jsonResponse({ error: "Înscriere invalidă." }, 400);
+      const days = Math.max(
+        1,
+        Math.min(30, Number.parseInt(String(body.days ?? 7), 10) || 7),
+      );
+      if (typeof id !== "string")
+        return jsonResponse({ error: "Înscriere invalidă." }, 400);
       const until = new Date(Date.now() + days * 86_400_000).toISOString();
-      const { data, error } = await supabase.from("registrations").update({ followup_snoozed_until: until }).eq("id", id).select("id");
+      const { data, error } = await supabase
+        .from("registrations")
+        .update({ followup_snoozed_until: until })
+        .eq("id", id)
+        .select("id");
       if (error) throw error;
-      if (!data?.length) return jsonResponse({ error: "Înscrierea nu există." }, 404);
-      await supabase.from("audit_logs").insert({ actor: callerEmail!, action: "snooze_followup", registration_id: id, details: { until, days } });
+      if (!data?.length)
+        return jsonResponse({ error: "Înscrierea nu există." }, 404);
+      await supabase.from("audit_logs").insert({
+        actor: callerEmail!,
+        action: "snooze_followup",
+        registration_id: id,
+        details: { until, days },
+      });
       return jsonResponse({ success: true, until });
     }
 
@@ -2999,19 +4004,38 @@ Deno.serve(async (req) => {
     // arrived, so it becomes "paid", with how it was paid. Never over a
     // registration already paid or refunded.
     if (action === "mark_paid_offline") {
-      const method = body.method === "cash" || body.method === "transfer" ? body.method : null;
-      if (typeof id !== "string" || !method) return jsonResponse({ error: "Alege cash sau transfer." }, 400);
+      const method =
+        body.method === "cash" || body.method === "transfer"
+          ? body.method
+          : null;
+      if (typeof id !== "string" || !method)
+        return jsonResponse({ error: "Alege cash sau transfer." }, 400);
       const paidAt = new Date().toISOString();
       const { data, error } = await supabase
         .from("registrations")
-        .update({ payment_status: "paid", paid_at: paidAt, payment_method: method, lead_status: "converted", followup_snoozed_until: null })
+        .update({
+          payment_status: "paid",
+          paid_at: paidAt,
+          payment_method: method,
+          lead_status: "converted",
+          followup_snoozed_until: null,
+        })
         .eq("id", id)
         .is("anonymized_at", null)
         .not("payment_status", "in", '("paid","refunded")')
         .select("id");
       if (error) throw error;
-      if (!data?.length) return jsonResponse({ error: "Înscrierea e deja plătită sau nu mai există." }, 409);
-      await supabase.from("audit_logs").insert({ actor: callerEmail!, action: "mark_paid_offline", registration_id: id, details: { method, at: paidAt } });
+      if (!data?.length)
+        return jsonResponse(
+          { error: "Înscrierea e deja plătită sau nu mai există." },
+          409,
+        );
+      await supabase.from("audit_logs").insert({
+        actor: callerEmail!,
+        action: "mark_paid_offline",
+        registration_id: id,
+        details: { method, at: paidAt },
+      });
       return jsonResponse({ success: true });
     }
 
@@ -3025,7 +4049,10 @@ Deno.serve(async (req) => {
         "spam",
         "converted",
       ];
-      if (typeof id !== "string" || !ALLOWED_LEAD_STATUSES.includes(lead_status)) {
+      if (
+        typeof id !== "string" ||
+        !ALLOWED_LEAD_STATUSES.includes(lead_status)
+      ) {
         return jsonResponse({ error: "Status invalid" });
       }
 
@@ -3080,14 +4107,18 @@ Deno.serve(async (req) => {
 
       const { data: reg, error: regError } = await supabase
         .from("registrations")
-        .select("id, form_type, level, quantity, cohort_id, payment_status, stripe_session_id, refunded_at")
+        .select(
+          "id, form_type, level, quantity, cohort_id, payment_status, stripe_session_id, refunded_at",
+        )
         .eq("id", id)
         .maybeSingle();
       if (regError) throw regError;
       if (!reg) return jsonResponse({ error: "Înscrierea nu a fost găsită" });
       if (reg.refunded_at) return jsonResponse({ error: "Deja rambursat" });
       if (reg.payment_status !== "paid" || !reg.stripe_session_id) {
-        return jsonResponse({ error: "Doar înscrierile plătite pot fi rambursate" });
+        return jsonResponse({
+          error: "Doar înscrierile plătite pot fi rambursate",
+        });
       }
 
       const stripe = new Stripe(Deno.env.get("STRIPE_SECRET_KEY") || "", {
@@ -3097,7 +4128,10 @@ Deno.serve(async (req) => {
       if ("error" in inputs) return jsonResponse({ error: inputs.error });
       return jsonResponse({
         success: true,
-        data: { ...inputs.breakdown, refund_label: formatBani(inputs.breakdown.refundBani) },
+        data: {
+          ...inputs.breakdown,
+          refund_label: formatBani(inputs.breakdown.refundBani),
+        },
       });
     }
 
@@ -3105,7 +4139,10 @@ Deno.serve(async (req) => {
       if (typeof id !== "string") {
         return jsonResponse({ error: "ID invalid" });
       }
-      if (refund_reason != null && (typeof refund_reason !== "string" || refund_reason.length > 500)) {
+      if (
+        refund_reason != null &&
+        (typeof refund_reason !== "string" || refund_reason.length > 500)
+      ) {
         return jsonResponse({ error: "Motiv invalid" });
       }
       const lessonsTaken = Number(body.lessons_taken ?? 0);
@@ -3115,7 +4152,9 @@ Deno.serve(async (req) => {
 
       const { data: reg, error: regError } = await supabase
         .from("registrations")
-        .select("id, form_type, level, quantity, cohort_id, payment_status, stripe_session_id, refunded_at")
+        .select(
+          "id, form_type, level, quantity, cohort_id, payment_status, stripe_session_id, refunded_at",
+        )
         .eq("id", id)
         .maybeSingle();
 
@@ -3123,7 +4162,9 @@ Deno.serve(async (req) => {
       if (!reg) return jsonResponse({ error: "Înscrierea nu a fost găsită" });
       if (reg.refunded_at) return jsonResponse({ error: "Deja rambursat" });
       if (reg.payment_status !== "paid" || !reg.stripe_session_id) {
-        return jsonResponse({ error: "Doar înscrierile plătite pot fi rambursate" });
+        return jsonResponse({
+          error: "Doar înscrierile plătite pot fi rambursate",
+        });
       }
 
       const stripe = new Stripe(Deno.env.get("STRIPE_SECRET_KEY") || "", {
@@ -3153,7 +4194,8 @@ Deno.serve(async (req) => {
         });
       } catch (stripeErr) {
         console.error("[admin-registrations] stripe refund failed", stripeErr);
-        const msg = stripeErr instanceof Error ? stripeErr.message : "Eroare Stripe";
+        const msg =
+          stripeErr instanceof Error ? stripeErr.message : "Eroare Stripe";
         return jsonResponse({ error: `Rambursare eșuată: ${msg}` });
       }
 
@@ -3179,7 +4221,8 @@ Deno.serve(async (req) => {
           { registrationId: id, stripeRefundId: refund.id, updateError },
         );
         return jsonResponse({
-          error: "Rambursarea a fost procesată în Stripe, dar salvarea a eșuat. Contactează suportul tehnic.",
+          error:
+            "Rambursarea a fost procesată în Stripe, dar salvarea a eșuat. Contactează suportul tehnic.",
         });
       }
 
@@ -3210,18 +4253,28 @@ Deno.serve(async (req) => {
     // already-paid month is refunded (prorated by unused days) ONLY if the
     // cancellation lands within the first GRACE_DAYS of the current billing
     // period; otherwise it is kept. All amounts computed server-side.
-    if (action === "cancel_subscription" || action === "preview_cancel_subscription") {
+    if (
+      action === "cancel_subscription" ||
+      action === "preview_cancel_subscription"
+    ) {
       if (typeof id !== "string") return jsonResponse({ error: "ID invalid" });
 
       const { data: reg, error: regError } = await supabase
         .from("registrations")
-        .select("id, form_type, stripe_subscription_id, subscription_status, canceled_at")
+        .select(
+          "id, form_type, stripe_subscription_id, subscription_status, canceled_at",
+        )
         .eq("id", id)
         .maybeSingle();
       if (regError) throw regError;
       if (!reg) return jsonResponse({ error: "Înscrierea nu a fost găsită" });
-      if (!reg.stripe_subscription_id || !String(reg.stripe_subscription_id).startsWith("sub_")) {
-        return jsonResponse({ error: "Nu există un abonament activ pentru această înscriere" });
+      if (
+        !reg.stripe_subscription_id ||
+        !String(reg.stripe_subscription_id).startsWith("sub_")
+      ) {
+        return jsonResponse({
+          error: "Nu există un abonament activ pentru această înscriere",
+        });
       }
       if (reg.subscription_status === "canceled" || reg.canceled_at) {
         return jsonResponse({ error: "Abonamentul este deja anulat" });
@@ -3234,11 +4287,16 @@ Deno.serve(async (req) => {
       const GRACE_DAYS = 5;
       const DAY = 86400;
 
-      const sub = await stripe.subscriptions.retrieve(reg.stripe_subscription_id);
+      const sub = await stripe.subscriptions.retrieve(
+        reg.stripe_subscription_id,
+      );
       const now = Math.floor(Date.now() / 1000);
       const periodStart = sub.current_period_start ?? now;
       const periodEnd = sub.current_period_end ?? now + 30 * DAY;
-      const daysInPeriod = Math.max(1, Math.round((periodEnd - periodStart) / DAY));
+      const daysInPeriod = Math.max(
+        1,
+        Math.round((periodEnd - periodStart) / DAY),
+      );
       const daysElapsed = Math.max(0, Math.floor((now - periodStart) / DAY));
 
       // Latest paid invoice = the charge for the period they're currently in.
@@ -3249,12 +4307,17 @@ Deno.serve(async (req) => {
       });
       const latest = paidInvoices.data[0];
       const amountPaid = latest?.amount_paid ?? 0;
-      const chargeId = typeof latest?.charge === "string" ? latest.charge : latest?.charge?.id ?? "";
+      const chargeId =
+        typeof latest?.charge === "string"
+          ? latest.charge
+          : (latest?.charge?.id ?? "");
 
       const withinGrace = daysElapsed < GRACE_DAYS;
       const remainingDays = daysInPeriod - daysElapsed;
       const refundAmount =
-        withinGrace && chargeId ? Math.round((amountPaid * remainingDays) / daysInPeriod) : 0;
+        withinGrace && chargeId
+          ? Math.round((amountPaid * remainingDays) / daysInPeriod)
+          : 0;
 
       // Read-only preview for the admin confirm dialog — no side effects.
       if (action === "preview_cancel_subscription") {
@@ -3275,20 +4338,30 @@ Deno.serve(async (req) => {
       try {
         await stripe.subscriptions.cancel(reg.stripe_subscription_id);
       } catch (cancelErr) {
-        console.error("[admin-registrations] subscription cancel failed", cancelErr);
-        const msg = cancelErr instanceof Error ? cancelErr.message : "Eroare Stripe";
+        console.error(
+          "[admin-registrations] subscription cancel failed",
+          cancelErr,
+        );
+        const msg =
+          cancelErr instanceof Error ? cancelErr.message : "Eroare Stripe";
         return jsonResponse({ error: `Anulare eșuată: ${msg}` });
       }
 
       let refundId: string | null = null;
       if (refundAmount > 0 && chargeId) {
         try {
-          const refund = await stripe.refunds.create({ charge: chargeId, amount: refundAmount });
+          const refund = await stripe.refunds.create({
+            charge: chargeId,
+            amount: refundAmount,
+          });
           refundId = refund.id;
         } catch (refundErr) {
           // Subscription is already cancelled; log so the refund can be issued
           // by hand rather than silently dropped.
-          console.error("[admin-registrations] grace refund failed after cancel", refundErr);
+          console.error(
+            "[admin-registrations] grace refund failed after cancel",
+            refundErr,
+          );
         }
       }
 
@@ -3303,13 +4376,17 @@ Deno.serve(async (req) => {
         .select("*")
         .single();
       if (updateError) {
-        console.error("[admin-registrations] cancel saved in Stripe but DB update failed", {
-          registrationId: id,
-          refundId,
-          updateError,
-        });
+        console.error(
+          "[admin-registrations] cancel saved in Stripe but DB update failed",
+          {
+            registrationId: id,
+            refundId,
+            updateError,
+          },
+        );
         return jsonResponse({
-          error: "Abonamentul a fost anulat în Stripe, dar salvarea a eșuat. Contactează suportul tehnic.",
+          error:
+            "Abonamentul a fost anulat în Stripe, dar salvarea a eșuat. Contactează suportul tehnic.",
         });
       }
 
@@ -3317,7 +4394,10 @@ Deno.serve(async (req) => {
         actor: callerEmail!,
         action: "cancel_subscription",
         registration_id: id,
-        details: { refund_id: refundId, refund_amount: refundId ? refundAmount : 0 },
+        details: {
+          refund_id: refundId,
+          refund_amount: refundId ? refundAmount : 0,
+        },
       });
       return jsonResponse({
         success: true,
@@ -3355,7 +4435,10 @@ Deno.serve(async (req) => {
     // The existing dashboard sends an unnamed list request. A named action
     // that reached here was not handled; never disguise it as a successful read.
     if (action !== undefined) {
-      return jsonResponse({ error: "Acțiune necunoscută", code: "unknown_action" }, 400);
+      return jsonResponse(
+        { error: "Acțiune necunoscută", code: "unknown_action" },
+        400,
+      );
     }
 
     // Default: list all. cohort_id has no FK in the current schema, so resolve
@@ -3368,12 +4451,17 @@ Deno.serve(async (req) => {
       registration.email = registration.contact_email || registration.email;
     }
     if (data.length) {
-      const cohortIds = [...new Set(data.map((r) => r.cohort_id).filter(Boolean))];
+      const cohortIds = [
+        ...new Set(data.map((r) => r.cohort_id).filter(Boolean)),
+      ];
       if (cohortIds.length) {
         const cohorts: Array<Record<string, any>> = [];
         for (let offset = 0; offset < cohortIds.length; offset += 100) {
-          const result = await supabase.from("group_cohorts")
-            .select("id,title_ro,level,format,age_category,teaching_language,start_date,end_date,schedule_label_ro,status")
+          const result = await supabase
+            .from("group_cohorts")
+            .select(
+              "id,title_ro,level,format,age_category,teaching_language,start_date,end_date,schedule_label_ro,status",
+            )
             .in("id", cohortIds.slice(offset, offset + 100));
           if (result.error) throw result.error;
           cohorts.push(...(result.data ?? []));
@@ -3385,12 +4473,17 @@ Deno.serve(async (req) => {
       }
       // Older manual private bookings used the default source='form'. Their
       // existing audit record proves the origin without changing stored rows.
-      const privateIds = data.filter((r) => r.form_type === "private").map((r) => r.id);
+      const privateIds = data
+        .filter((r) => r.form_type === "private")
+        .map((r) => r.id);
       if (privateIds.length) {
         const manualIds = new Set<string>();
         for (let offset = 0; offset < privateIds.length; offset += 100) {
-          const result = await supabase.from("audit_logs").select("registration_id")
-            .eq("action", "book_for_student").in("registration_id", privateIds.slice(offset, offset + 100));
+          const result = await supabase
+            .from("audit_logs")
+            .select("registration_id")
+            .eq("action", "book_for_student")
+            .in("registration_id", privateIds.slice(offset, offset + 100));
           if (result.error) throw result.error;
           for (const r of result.data ?? []) manualIds.add(r.registration_id);
         }
@@ -3402,19 +4495,41 @@ Deno.serve(async (req) => {
       const trialRegs = data.filter((r) => r.form_type === "trial");
       if (trialRegs.length) {
         const { data: trialBookings, error: tbErr } = await supabase
-          .from("bookings").select("registration_id, status, trial_outcome").eq("event_type_slug", "trial");
+          .from("bookings")
+          .select("registration_id, status, trial_outcome")
+          .eq("event_type_slug", "trial");
         if (tbErr) throw tbErr;
         const counts = (b: { status: string; trial_outcome: string | null }) =>
-          (["confirmed", "completed"].includes(b.status) && b.trial_outcome !== "excused") || b.trial_outcome === "lost";
-        const usedIds = new Set((trialBookings ?? []).filter(counts).map((b) => b.registration_id));
+          (["confirmed", "completed"].includes(b.status) &&
+            b.trial_outcome !== "excused") ||
+          b.trial_outcome === "lost";
+        const usedIds = new Set(
+          (trialBookings ?? []).filter(counts).map((b) => b.registration_id),
+        );
         const used = data.filter((r) => usedIds.has(r.id));
-        const nameKey = (v: unknown) => String(v ?? "").normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase().replace(/\s+/g, " ").trim();
-        const phoneKey = (v: unknown) => { const d = String(v ?? "").replace(/\D/g, ""); return d.length >= 9 ? d.slice(-9) : ""; };
-        const mail = (r: Record<string, any>) => String(r.account_email ?? r.email ?? "").toLowerCase();
+        const nameKey = (v: unknown) =>
+          String(v ?? "")
+            .normalize("NFD")
+            .replace(/[\u0300-\u036f]/g, "")
+            .toLowerCase()
+            .replace(/\s+/g, " ")
+            .trim();
+        const phoneKey = (v: unknown) => {
+          const d = String(v ?? "").replace(/\D/g, "");
+          return d.length >= 9 ? d.slice(-9) : "";
+        };
+        const mail = (r: Record<string, any>) =>
+          String(r.account_email ?? r.email ?? "").toLowerCase();
         for (const r of trialRegs) {
-          const match = used.find((o) => o.id !== r.id && mail(o) !== mail(r)
-            && ((nameKey(o.name) && nameKey(o.name) === nameKey(r.name)) || (phoneKey(o.phone) && phoneKey(o.phone) === phoneKey(r.phone))));
-          if (match) r.trial_duplicate_hint = `Posibil duplicat — a mai avut o probă: ${match.name ?? ""} (${match.email ?? ""})`;
+          const match = used.find(
+            (o) =>
+              o.id !== r.id &&
+              mail(o) !== mail(r) &&
+              ((nameKey(o.name) && nameKey(o.name) === nameKey(r.name)) ||
+                (phoneKey(o.phone) && phoneKey(o.phone) === phoneKey(r.phone))),
+          );
+          if (match)
+            r.trial_duplicate_hint = `Posibil duplicat — a mai avut o probă: ${match.name ?? ""} (${match.email ?? ""})`;
         }
       }
     }
@@ -3429,7 +4544,9 @@ Deno.serve(async (req) => {
       }
       for (const r of data) {
         const e = (r.email || "").trim().toLowerCase();
-        (r as Record<string, unknown>).email_dup_count = e ? emailCounts.get(e) ?? 1 : 1;
+        (r as Record<string, unknown>).email_dup_count = e
+          ? (emailCounts.get(e) ?? 1)
+          : 1;
       }
     }
 
@@ -3441,7 +4558,13 @@ Deno.serve(async (req) => {
 
     if (settingsError) throw settingsError;
 
-    return jsonResponse({ data, settings: settings || { sender_name: "Arabă Libaneză cu Ibra", sender_email: "noreply@centruldearabalibaneza.com" } });
+    return jsonResponse({
+      data,
+      settings: settings || {
+        sender_name: "Arabă Libaneză cu Ibra",
+        sender_email: "noreply@centruldearabalibaneza.com",
+      },
+    });
   } catch (err) {
     console.error("[admin-registrations] error", err);
     // Database check constraints (e.g. online cohorts capped at 6 seats) are a
@@ -3456,6 +4579,5 @@ Deno.serve(async (req) => {
       return jsonResponse({ error: msg });
     }
     return jsonResponse({ error: "Internal server error" }, 500);
-
   }
 });

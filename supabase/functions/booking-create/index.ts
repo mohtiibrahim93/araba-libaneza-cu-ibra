@@ -9,10 +9,21 @@ import {
   candidateSlotsForDays,
   utcToZonedParts,
 } from "../_shared/booking.ts";
-import { fmtBookingLocal, manageUrl, sendBookingEmail, sendAdminBookingEmail } from "../_shared/booking-emails.ts";
+import {
+  fmtBookingLocal,
+  manageUrl,
+  sendBookingEmail,
+  sendAdminBookingEmail,
+} from "../_shared/booking-emails.ts";
 // The free level check with Ibra (oral, and written in arabizi), booked
 // without a card — unlike the trial, it is not a lesson.
-import { LEVEL_CHECK_RULES, LEVEL_CHECK_SLUG, inBlackout, physicalDayAllowed, rulesForEventType } from "../_shared/schedule-rules.ts";
+import {
+  LEVEL_CHECK_RULES,
+  LEVEL_CHECK_SLUG,
+  inBlackout,
+  physicalDayAllowed,
+  rulesForEventType,
+} from "../_shared/schedule-rules.ts";
 import { buildCorsHeaders } from "../_shared/cors.ts";
 import { checkRateLimit, getClientIp } from "../_shared/rate-limit.ts";
 import { verifiedRegistrationOwner } from "../_shared/verified-registration-owner.ts";
@@ -59,15 +70,24 @@ Deno.serve(async (req) => {
     for (const [k, v] of Object.entries(corsHeaders)) res.headers.set(k, v);
     return res;
   };
-  if (req.method === "OPTIONS") return new Response(null, { headers: corsHeaders });
+  if (req.method === "OPTIONS")
+    return new Response(null, { headers: corsHeaders });
   if (req.method !== "POST") return json({ error: "POST required" }, 405);
 
   try {
     const body = (await req.json()) as CreateBody;
-    if (!body?.event_type || !body?.start_at || !body?.student_name || !body?.student_email) {
+    if (
+      !body?.event_type ||
+      !body?.start_at ||
+      !body?.student_name ||
+      !body?.student_email
+    ) {
       return json({ error: "missing fields" }, 400);
     }
-    if (!body.registration_id || !/^[0-9a-f-]{36}$/i.test(body.registration_id)) {
+    if (
+      !body.registration_id ||
+      !/^[0-9a-f-]{36}$/i.test(body.registration_id)
+    ) {
       return json({ error: "registration_id required" }, 400);
     }
     if (!body.gdpr_consent) {
@@ -79,13 +99,23 @@ Deno.serve(async (req) => {
     if (body.student_email.length > 254) {
       return json({ error: "invalid email" }, 400);
     }
-    if (typeof body.student_name !== "string" || body.student_name.trim().length === 0 || body.student_name.length > 200) {
+    if (
+      typeof body.student_name !== "string" ||
+      body.student_name.trim().length === 0 ||
+      body.student_name.length > 200
+    ) {
       return json({ error: "invalid student_name" }, 400);
     }
-    if (body.student_phone != null && (typeof body.student_phone !== "string" || body.student_phone.length > 40)) {
+    if (
+      body.student_phone != null &&
+      (typeof body.student_phone !== "string" || body.student_phone.length > 40)
+    ) {
       return json({ error: "invalid student_phone" }, 400);
     }
-    if (body.notes != null && (typeof body.notes !== "string" || body.notes.length > 2000)) {
+    if (
+      body.notes != null &&
+      (typeof body.notes !== "string" || body.notes.length > 2000)
+    ) {
       return json({ error: "invalid notes" }, 400);
     }
 
@@ -107,14 +137,25 @@ Deno.serve(async (req) => {
     // The webhook has its own gate: Stripe verifies the event signature before
     // it runs at all.
     const serviceRoleKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY") ?? "";
-    const bearer = (req.headers.get("Authorization") ?? "").replace(/^Bearer\s+/i, "");
+    const bearer = (req.headers.get("Authorization") ?? "").replace(
+      /^Bearer\s+/i,
+      "",
+    );
     const internalCall = serviceRoleKey.length > 0 && bearer === serviceRoleKey;
 
     const clientIp = getClientIp(req);
     if (clientIp && !internalCall) {
-      const allowed = await checkRateLimit(supabase, `booking_create:${clientIp}`, 5, 3600);
+      const allowed = await checkRateLimit(
+        supabase,
+        `booking_create:${clientIp}`,
+        5,
+        3600,
+      );
       if (!allowed) {
-        return json({ error: "Too many booking attempts. Please try again later." }, 429);
+        return json(
+          { error: "Too many booking attempts. Please try again later." },
+          429,
+        );
       }
     }
 
@@ -126,8 +167,14 @@ Deno.serve(async (req) => {
       .maybeSingle();
     // Preserve only the existing trusted webhook booking path. Unknown and
     // not-owned registrations get the same answer so IDs cannot be probed.
-    if (!internalCall && (!reg || !(await verifiedRegistrationOwner(req, reg, supabase.auth)))) {
-      return json({ error: "Sign in with your verified registration email to continue" }, 403);
+    if (
+      !internalCall &&
+      (!reg || !(await verifiedRegistrationOwner(req, reg, supabase.auth)))
+    ) {
+      return json(
+        { error: "Sign in with your verified registration email to continue" },
+        403,
+      );
     }
     if (!reg) return json({ error: "registration not found" }, 404);
 
@@ -155,7 +202,10 @@ Deno.serve(async (req) => {
     // Applied to internal calls too, so the webhook can never book more than
     // the package either (a redelivered event lands here as well).
     if (!isFree) {
-      const bought = Math.max(1, Number.parseInt(String(reg.quantity ?? 1), 10) || 1);
+      const bought = Math.max(
+        1,
+        Number.parseInt(String(reg.quantity ?? 1), 10) || 1,
+      );
       const { count: used, error: countErr } = await supabase
         .from("bookings")
         .select("id", { count: "exact", head: true })
@@ -167,7 +217,10 @@ Deno.serve(async (req) => {
         return json({ error: "Internal server error" }, 500);
       }
       if ((used ?? 0) >= bought) {
-        return json({ error: "all paid lessons already booked", code: "lessons_used_up" }, 409);
+        return json(
+          { error: "all paid lessons already booked", code: "lessons_used_up" },
+          409,
+        );
       }
     }
 
@@ -178,33 +231,47 @@ Deno.serve(async (req) => {
       // One trial per person: by email, and — when the webhook passes the
       // saved card's fingerprint — by card, so a second email with the same
       // card is refused. Only trusted internal calls may supply a fingerprint.
-      const cardFingerprint = internalCall && typeof body.card_fingerprint === "string" && body.card_fingerprint
-        ? body.card_fingerprint
-        : null;
-      const { data: usedBy, error: usedErr } = await supabase.rpc("trial_already_used", {
-        p_email: body.student_email,
-        p_card_fingerprint: cardFingerprint,
-      });
+      const cardFingerprint =
+        internalCall &&
+        typeof body.card_fingerprint === "string" &&
+        body.card_fingerprint
+          ? body.card_fingerprint
+          : null;
+      const { data: usedBy, error: usedErr } = await supabase.rpc(
+        "trial_already_used",
+        {
+          p_email: body.student_email,
+          p_card_fingerprint: cardFingerprint,
+        },
+      );
       if (usedErr) {
         console.error("[booking-create] trial check failed", usedErr);
         return json({ error: "Internal server error" }, 500);
       }
       if (usedBy === "card") {
         return json(
-          { error: "Cardul a mai fost folosit pentru o probă gratuită, cu alt email.", code: "trial_card_used" },
+          {
+            error:
+              "Cardul a mai fost folosit pentru o probă gratuită, cu alt email.",
+            code: "trial_card_used",
+          },
           409,
         );
       }
       if (usedBy) {
         return json(
-          { error: "Proba gratuită a fost deja folosită pentru acest email.", code: "trial_used" },
+          {
+            error: "Proba gratuită a fost deja folosită pentru acest email.",
+            code: "trial_used",
+          },
           409,
         );
       }
     }
 
     const startMs = Date.parse(body.start_at);
-    if (!Number.isFinite(startMs)) return json({ error: "invalid start_at" }, 400);
+    if (!Number.isFinite(startMs))
+      return json({ error: "invalid start_at" }, 400);
     const endMs = startMs + et.duration_min * 60_000;
     const startISO = new Date(startMs).toISOString();
     const endISO = new Date(endMs).toISOString();
@@ -215,7 +282,10 @@ Deno.serve(async (req) => {
     // minutes. It cannot apply to Ibra: "I am with him now, put the lesson in
     // for this afternoon" is the normal reason to book someone from the panel.
     // A time in the past is still refused, for everyone.
-    if (!internalCall && startMs < now + (et.min_notice_hours ?? 0) * 3_600_000) {
+    if (
+      !internalCall &&
+      startMs < now + (et.min_notice_hours ?? 0) * 3_600_000
+    ) {
       return json({ error: "slot too soon" }, 409);
     }
     if (startMs < now - 60_000) {
@@ -223,13 +293,20 @@ Deno.serve(async (req) => {
     }
     // The weekly private series books every lesson of the package at once, so
     // its later weeks run past the 30-day window. Only the webhook can do that.
-    if (!internalCall && startMs > now + (et.max_advance_days ?? 30) * 86_400_000) {
+    if (
+      !internalCall &&
+      startMs > now + (et.max_advance_days ?? 30) * 86_400_000
+    ) {
       return json({ error: "slot too far in advance" }, 409);
     }
 
     // Re-check availability against DB & GCal (with buffers)
-    const checkStart = new Date(startMs - et.buffer_before_min * 60_000).toISOString();
-    const checkEnd = new Date(endMs + et.buffer_after_min * 60_000).toISOString();
+    const checkStart = new Date(
+      startMs - et.buffer_before_min * 60_000,
+    ).toISOString();
+    const checkEnd = new Date(
+      endMs + et.buffer_after_min * 60_000,
+    ).toISOString();
 
     const [busy, { data: clashes }] = await Promise.all([
       gcalFreebusy(checkStart, checkEnd),
@@ -259,7 +336,10 @@ Deno.serve(async (req) => {
     // the reasons and goes through on a second call carrying force, so
     // double-booking himself is a decision rather than an accident.
     if (found.length > 0 && (!internalCall || body.force !== true)) {
-      return json({ error: "slot just taken", code: "conflict", clashes: found }, 409);
+      return json(
+        { error: "slot just taken", code: "conflict", clashes: found },
+        409,
+      );
     }
 
     const format = body.format ?? "online";
@@ -269,24 +349,47 @@ Deno.serve(async (req) => {
     const zp = utcToZonedParts(new Date(startMs));
     const dayKey = `${zp.year}-${String(zp.month).padStart(2, "0")}-${String(zp.day).padStart(2, "0")}`;
     const [{ data: scheduleRules }, { data: daysOff }] = await Promise.all([
-      supabase.from("availability_rules").select("weekday,start_time,end_time,event_type_slug").eq("is_active", true),
-      supabase.from("availability_blackouts").select("start_date,end_date").lte("start_date", dayKey).gte("end_date", dayKey),
+      supabase
+        .from("availability_rules")
+        .select("weekday,start_time,end_time,event_type_slug")
+        .eq("is_active", true),
+      supabase
+        .from("availability_blackouts")
+        .select("start_date,end_date")
+        .lte("start_date", dayKey)
+        .gte("end_date", dayKey),
     ]);
     // A lesson type with hours of its own (the level check) may only be
     // booked inside them, by anyone.
-    const ownHours = (scheduleRules ?? []).some((rule) => rule.event_type_slug === et.slug);
+    const ownHours = (scheduleRules ?? []).some(
+      (rule) => rule.event_type_slug === et.slug,
+    );
     if (ownHours || et.slug === LEVEL_CHECK_SLUG) {
       const offered = candidateSlotsForDays(
         [{ y: zp.year, m: zp.month, d: zp.day }],
-        rulesForEventType(scheduleRules ?? [], et.slug, et.slug === LEVEL_CHECK_SLUG ? LEVEL_CHECK_RULES : undefined),
+        rulesForEventType(
+          scheduleRules ?? [],
+          et.slug,
+          et.slug === LEVEL_CHECK_SLUG ? LEVEL_CHECK_RULES : undefined,
+        ),
         et.duration_min,
       );
-      if (!offered.includes(startISO)) return json({ error: "slot not offered", code: "level_check_hours" }, 409);
+      if (!offered.includes(startISO))
+        return json(
+          { error: "slot not offered", code: "level_check_hours" },
+          409,
+        );
     }
     // A day off closes the site's booking; the owner booking from the panel
     // is not bound by it.
     if (!internalCall && inBlackout(startISO, daysOff ?? [])) {
-      return json({ error: "Ziua nu este disponibilă pentru programări.", code: "day_off" }, 409);
+      return json(
+        {
+          error: "Ziua nu este disponibilă pentru programări.",
+          code: "day_off",
+        },
+        409,
+      );
     }
     if (!physicalDayAllowed(et, format, startISO)) {
       return json(
@@ -340,14 +443,16 @@ Deno.serve(async (req) => {
         .update({ lead_status: "new", notes: null })
         .eq("id", body.registration_id)
         .eq("lead_status", "incomplete");
-      if (clearErr) console.error("[booking-create] promote lead failed", clearErr);
+      if (clearErr)
+        console.error("[booking-create] promote lead failed", clearErr);
 
       const { error: legacyErr } = await supabase
         .from("registrations")
         .update({ notes: null })
         .eq("id", body.registration_id)
         .like("notes", "%NEALES%");
-      if (legacyErr) console.error("[booking-create] clear legacy marker failed", legacyErr);
+      if (legacyErr)
+        console.error("[booking-create] clear legacy marker failed", legacyErr);
     }
 
     // Create GCal event (best-effort)
@@ -384,50 +489,56 @@ Deno.serve(async (req) => {
       .from("bookings")
       .update({
         google_event_id: gcal.ok && gcal.id ? gcal.id : null,
-        google_sync_error: gcal.ok && gcal.id ? null : (gcal.error ?? "unknown"),
+        google_sync_error:
+          gcal.ok && gcal.id ? null : (gcal.error ?? "unknown"),
         meet_link: onlineLink,
       })
       .eq("id", inserted.id);
 
-    if (syncSaveError) console.error("[booking-create] calendar link could not be saved", syncSaveError);
+    if (syncSaveError)
+      console.error(
+        "[booking-create] calendar link could not be saved",
+        syncSaveError,
+      );
 
     const quiet = internalCall && body.quiet === true;
 
     // Send confirmation email (best-effort, async)
-    if (!quiet) sendBookingEmail(
-      "booking-confirmation",
-      body.student_email,
-      {
-        name: body.student_name,
-        whenLabel: fmtLocal(startISO, language),
-        durationMin: et.duration_min,
-        format,
-        meetLink: onlineLink,
-        manageUrl: manageUrl(inserted.manage_token),
-        lang: language,
-      },
-      `booking-confirm-${inserted.id}`,
-    );
+    if (!quiet)
+      sendBookingEmail(
+        "booking-confirmation",
+        body.student_email,
+        {
+          name: body.student_name,
+          whenLabel: fmtLocal(startISO, language),
+          durationMin: et.duration_min,
+          format,
+          meetLink: onlineLink,
+          manageUrl: manageUrl(inserted.manage_token),
+          lang: language,
+        },
+        `booking-confirm-${inserted.id}`,
+      );
 
     // Admin notification (best-effort)
-    if (!quiet) sendAdminBookingEmail(
-      "new",
-      {
-        eventName: et.name_ro,
-        studentName: body.student_name,
-        studentEmail: body.student_email,
-        studentPhone: body.student_phone ?? null,
-        format: format === "online" ? "online" : "fizic",
-        whenLabel: fmtLocal(startISO, language),
-        notes: body.notes ?? null,
-        // The owner's own copy is the only place they would notice that the
-        // lesson is not in their Google Calendar, so say so explicitly.
-        calendarSyncError: gcal.ok && gcal.id ? null : (gcal.error ?? "unknown"),
-      },
-      `admin-booking-new-${inserted.id}`,
-    );
-
-
+    if (!quiet)
+      sendAdminBookingEmail(
+        "new",
+        {
+          eventName: et.name_ro,
+          studentName: body.student_name,
+          studentEmail: body.student_email,
+          studentPhone: body.student_phone ?? null,
+          format: format === "online" ? "online" : "fizic",
+          whenLabel: fmtLocal(startISO, language),
+          notes: body.notes ?? null,
+          // The owner's own copy is the only place they would notice that the
+          // lesson is not in their Google Calendar, so say so explicitly.
+          calendarSyncError:
+            gcal.ok && gcal.id ? null : (gcal.error ?? "unknown"),
+        },
+        `admin-booking-new-${inserted.id}`,
+      );
 
     return json({
       ok: true,

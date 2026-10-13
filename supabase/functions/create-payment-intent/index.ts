@@ -24,7 +24,8 @@ serve(async (req) => {
   }
 
   try {
-    const { courseType, email, name, registrationId, booking } = await req.json();
+    const { courseType, email, name, registrationId, booking } =
+      await req.json();
 
     if (!courseType || !COURSE_TYPES.includes(courseType)) {
       return new Response(JSON.stringify({ error: "Invalid course type" }), {
@@ -33,10 +34,13 @@ serve(async (req) => {
       });
     }
     if (!registrationId || typeof registrationId !== "string") {
-      return new Response(JSON.stringify({ error: "registrationId is required" }), {
-        headers: { ...corsHeaders, "Content-Type": "application/json" },
-        status: 400,
-      });
+      return new Response(
+        JSON.stringify({ error: "registrationId is required" }),
+        {
+          headers: { ...corsHeaders, "Content-Type": "application/json" },
+          status: 400,
+        },
+      );
     }
 
     // Validate the registration exists and is not already paid / in flight.
@@ -48,19 +52,29 @@ serve(async (req) => {
     );
     const { data: regRow, error: regErr } = await supabaseAdmin
       .from("registrations")
-      .select("id, created_at, form_type, payment_status, stripe_session_id, email, quantity, level, cohort_id, format, lead_status")
+      .select(
+        "id, created_at, form_type, payment_status, stripe_session_id, email, quantity, level, cohort_id, format, lead_status",
+      )
       .eq("id", registrationId)
       .maybeSingle();
 
     // Only the registrant (matching email) may create/read a payment intent.
-    if (regErr || !regRow || !(await verifiedRegistrationOwner(req, regRow, supabaseAdmin.auth))) {
+    if (
+      regErr ||
+      !regRow ||
+      !(await verifiedRegistrationOwner(req, regRow, supabaseAdmin.auth))
+    ) {
       return new Response(JSON.stringify({ error: "Registration not found" }), {
         status: 404,
         headers: { ...corsHeaders, "Content-Type": "application/json" },
       });
     }
     const groupError = await groupEnrolmentError(supabaseAdmin, regRow);
-    if (groupError) return new Response(JSON.stringify({ error: groupError }), { status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" } });
+    if (groupError)
+      return new Response(JSON.stringify({ error: groupError }), {
+        status: 400,
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+      });
     // A "trial" registration paying for a private lesson is the natural
     // conversion path (the free trial is once per person; after that the
     // same lead pays) — allow it instead of hard-matching form_type.
@@ -74,24 +88,31 @@ serve(async (req) => {
       });
     }
     if (regRow.payment_status === "paid") {
-      return new Response(JSON.stringify({ error: "Registration already paid" }), {
-        status: 409,
-        headers: { ...corsHeaders, "Content-Type": "application/json" },
-      });
+      return new Response(
+        JSON.stringify({ error: "Registration already paid" }),
+        {
+          status: 409,
+          headers: { ...corsHeaders, "Content-Type": "application/json" },
+        },
+      );
     }
 
     // Trust only the quantity persisted on the registration at submission
     // time (server-side, immutable post-insert) — never a client-supplied
     // value, which would let the amount charged be manipulated directly.
-    const quantity = Math.max(1, Math.min(100, Number.parseInt(String(regRow.quantity ?? 1), 10) || 1));
+    const quantity = Math.max(
+      1,
+      Math.min(100, Number.parseInt(String(regRow.quantity ?? 1), 10) || 1),
+    );
     // Group + kids reaching this function are the PAY-IN-FULL path (monthly
     // subscriptions live in create-subscription): the whole course billed at
     // once with the 15% upfront discount. Private: 15% off from 20 lessons.
-    const groupMonths = courseType === "group"
-      ? groupMonthsFor(regRow.level)
-      : courseType === "kids"
-        ? KIDS_GROUP_MONTHS
-        : 1;
+    const groupMonths =
+      courseType === "group"
+        ? groupMonthsFor(regRow.level)
+        : courseType === "kids"
+          ? KIDS_GROUP_MONTHS
+          : 1;
     const discountApplied =
       (courseType === "private" && privateDiscountFor(quantity) > 0) ||
       courseType === "group" ||
@@ -104,7 +125,8 @@ serve(async (req) => {
     const bookingMeta: Record<string, string> = {};
     if (courseType === "private" && booking && typeof booking === "object") {
       const put = (k: string, v: unknown, max = 450) => {
-        if (typeof v === "string" && v.trim()) bookingMeta[k] = v.trim().slice(0, max);
+        if (typeof v === "string" && v.trim())
+          bookingMeta[k] = v.trim().slice(0, max);
       };
       put("booking_start_at", booking.start_at, 40);
       put("booking_event_type", booking.event_type, 40);
@@ -117,7 +139,9 @@ serve(async (req) => {
 
     const stripePublishableKey = Deno.env.get("STRIPE_PUBLISHABLE_KEY") || "";
     if (!stripePublishableKey.startsWith("pk_")) {
-      throw new Error("Stripe publishable key is invalid. Use a key that starts with pk_test_ or pk_live_.");
+      throw new Error(
+        "Stripe publishable key is invalid. Use a key that starts with pk_test_ or pk_live_.",
+      );
     }
 
     const stripe = new Stripe(Deno.env.get("STRIPE_SECRET_KEY") || "", {
@@ -143,7 +167,10 @@ serve(async (req) => {
       if (customers.data.length > 0) {
         customerId = customers.data[0].id;
       } else {
-        const customer = await stripe.customers.create({ email, name: name || undefined });
+        const customer = await stripe.customers.create({
+          email,
+          name: name || undefined,
+        });
         customerId = customer.id;
       }
     }
@@ -156,7 +183,9 @@ serve(async (req) => {
         ? groupFullCourseUnitAmount(regRow.level, regRow.format)
         : courseType === "kids"
           ? kidsGroupFullCourseUnitAmount(regRow.format)
-          : Math.round(unitAmount * quantity * (1 - privateDiscountFor(quantity)));
+          : Math.round(
+              unitAmount * quantity * (1 - privateDiscountFor(quantity)),
+            );
 
     // If a PaymentIntent already exists for this registration, reuse it when
     // the amount still matches. Otherwise (e.g. price was updated after the
@@ -164,15 +193,24 @@ serve(async (req) => {
     // and create a fresh one with a distinct idempotency key so Stripe
     // doesn't reject the create with an idempotency-mismatch error.
     let idempotencySuffix = "";
-    if (regRow.stripe_session_id && regRow.stripe_session_id.startsWith("pi_")) {
+    if (
+      regRow.stripe_session_id &&
+      regRow.stripe_session_id.startsWith("pi_")
+    ) {
       try {
-        const existing = await stripe.paymentIntents.retrieve(regRow.stripe_session_id);
+        const existing = await stripe.paymentIntents.retrieve(
+          regRow.stripe_session_id,
+        );
         if (
           existing &&
           existing.client_secret &&
           !["succeeded", "canceled"].includes(existing.status)
         ) {
-          if (!hasBooking && existing.amount === finalAmount && existing.currency === currency) {
+          if (
+            !hasBooking &&
+            existing.amount === finalAmount &&
+            existing.currency === currency
+          ) {
             return new Response(
               JSON.stringify({
                 clientSecret: existing.client_secret,
@@ -201,13 +239,21 @@ serve(async (req) => {
                 course_type: courseType,
                 student_name: name || "",
                 registration_id: registrationId,
-                quantity: String(courseType === "group" ? groupMonths : quantity),
+                quantity: String(
+                  courseType === "group" ? groupMonths : quantity,
+                ),
                 level: regRow.level || "",
                 format: regRow.format || "",
-                discount_applied: discountApplied ? (courseType === "private" ? "15" : "10") : "0",
+                discount_applied: discountApplied
+                  ? courseType === "private"
+                    ? "15"
+                    : "10"
+                  : "0",
                 // A new pick replaces the old one; "" clears a key in Stripe,
                 // so switching weekly off really switches it off.
-                ...(hasBooking ? { booking_weekly: "", booking_notes: "", ...bookingMeta } : {}),
+                ...(hasBooking
+                  ? { booking_weekly: "", booking_notes: "", ...bookingMeta }
+                  : {}),
               },
             });
             return new Response(
@@ -227,11 +273,17 @@ serve(async (req) => {
               },
             );
           } catch (updateErr) {
-            console.warn("intent update failed, will cancel and recreate:", updateErr);
+            console.warn(
+              "intent update failed, will cancel and recreate:",
+              updateErr,
+            );
             try {
               await stripe.paymentIntents.cancel(existing.id);
             } catch (cancelErr) {
-              console.warn("intent cancel failed, proceeding anyway:", cancelErr);
+              console.warn(
+                "intent cancel failed, proceeding anyway:",
+                cancelErr,
+              );
             }
             // Salt the idempotency key so the new create doesn't collide
             // with the previous one.
@@ -239,7 +291,10 @@ serve(async (req) => {
           }
         }
       } catch (retrieveErr) {
-        console.warn("existing intent retrieve failed, will create new:", retrieveErr);
+        console.warn(
+          "existing intent retrieve failed, will create new:",
+          retrieveErr,
+        );
       }
     }
 
@@ -272,7 +327,9 @@ serve(async (req) => {
         // The slot is part of the key, so a different pick is a new intent
         // rather than an idempotency mismatch against the old one.
         idempotencyKey: `pi_${registrationId}${idempotencySuffix}${
-          hasBooking ? `_${bookingMeta.booking_start_at}${bookingMeta.booking_weekly ? "_w" : ""}` : ""
+          hasBooking
+            ? `_${bookingMeta.booking_start_at}${bookingMeta.booking_weekly ? "_w" : ""}`
+            : ""
         }`,
       },
     );

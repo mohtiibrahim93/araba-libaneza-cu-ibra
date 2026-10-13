@@ -1,4 +1,12 @@
-import { Ear, MapPin, MessagesSquare, Mic, Sparkles, TrendingUp, type LucideIcon } from "lucide-react";
+import {
+  Ear,
+  MapPin,
+  MessagesSquare,
+  Mic,
+  Sparkles,
+  TrendingUp,
+  type LucideIcon,
+} from "lucide-react";
 import { useI18n } from "@/lib/i18n";
 import { Link } from "@/components/LocalizedLink";
 
@@ -87,11 +95,16 @@ const WhySection = () => {
   const cards = en ? EN : RO;
 
   return (
-    <section id="why" className="py-section px-gutter bg-background scroll-mt-20">
+    <section
+      id="why"
+      className="py-section px-gutter bg-background scroll-mt-20"
+    >
       <div className="w-full max-w-content mx-auto">
         <div className="mb-10 max-w-3xl">
           <span className="mb-2 block text-sm font-bold uppercase tracking-[0.1em] text-foreground">
-            {en ? "Why the Lebanese Arabic Centre" : "De ce Centrul de Arabă Libaneză"}
+            {en
+              ? "Why the Lebanese Arabic Centre"
+              : "De ce Centrul de Arabă Libaneză"}
           </span>
           <h2 className="font-display text-display-lg font-bold tracking-tight text-foreground">
             {en ? "Why learn with Ibra?" : "De ce să înveți cu Ibra?"}
@@ -112,15 +125,21 @@ const WhySection = () => {
                   {String(i + 1).padStart(2, "0")}
                 </span>
               </div>
-              <h3 className="font-display text-xl font-bold leading-snug text-foreground">{title}</h3>
-              <p className="text-[15px] leading-relaxed text-foreground/80">{text}</p>
+              <h3 className="font-display text-xl font-bold leading-snug text-foreground">
+                {title}
+              </h3>
+              <p className="text-[15px] leading-relaxed text-foreground/80">
+                {text}
+              </p>
             </li>
           ))}
         </ol>
 
         <div className="mt-8 flex flex-col gap-5 rounded-3xl bg-brand-green px-6 py-6 text-white sm:px-8 md:flex-row md:items-center md:justify-between">
           <p className="max-w-3xl text-base leading-relaxed text-white/90">
-            <strong className="text-white">{en ? "Who is it for? " : "Pentru cine? "}</strong>
+            <strong className="text-white">
+              {en ? "Who is it for? " : "Pentru cine? "}
+            </strong>
             {en
               ? "Lebanese roots, a Lebanese partner or family, or work: official papers are in Standard Arabic, but daily life happens in dialect."
               : "Rădăcini libaneze, partener sau familie din Liban, ori carieră: actele oficiale sunt în araba standard, dar viața de zi cu zi e în dialect."}

@@ -16,7 +16,10 @@ export const OPEN_CONSENT_EVENT = "cookie-consent:open";
 
 export type ConsentChoice = "all" | "essential";
 
-type GtagWindow = Window & { gtag?: (...args: unknown[]) => void; __loadGtag?: () => void };
+type GtagWindow = Window & {
+  gtag?: (...args: unknown[]) => void;
+  __loadGtag?: () => void;
+};
 
 export function readConsent(): ConsentChoice | null {
   try {

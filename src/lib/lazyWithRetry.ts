@@ -44,7 +44,10 @@ export function lazyWithRetry<T extends ComponentType<any>>(
         store.removeItem(RELOAD_FLAG);
         return mod;
       } catch (err2) {
-        if (typeof window !== "undefined" && store.getItem(RELOAD_FLAG) !== "1") {
+        if (
+          typeof window !== "undefined" &&
+          store.getItem(RELOAD_FLAG) !== "1"
+        ) {
           store.setItem(RELOAD_FLAG, "1");
           window.location.reload();
           // Never resolves; the page is going away.

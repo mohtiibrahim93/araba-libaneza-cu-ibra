@@ -18,7 +18,9 @@ import { useCallback, useEffect, useRef, useState } from "react";
  * rather than sitting over the last column forever and reading as a gradient
  * someone designed on purpose.
  */
-export function useHorizontalOverflow<T extends HTMLElement = HTMLDivElement>() {
+export function useHorizontalOverflow<
+  T extends HTMLElement = HTMLDivElement,
+>() {
   const ref = useRef<T>(null);
   const [overflows, setOverflows] = useState(false);
   const [atEnd, setAtEnd] = useState(true);
@@ -65,6 +67,8 @@ export function scrollRegionProps(overflows: boolean, label?: string) {
   return {
     role: "region",
     tabIndex: 0,
-    "aria-label": label ? `${label} (derulează lateral)` : "Tabel, derulează lateral",
+    "aria-label": label
+      ? `${label} (derulează lateral)`
+      : "Tabel, derulează lateral",
   } as const;
 }

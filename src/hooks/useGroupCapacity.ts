@@ -37,14 +37,24 @@ async function fetchAll(): Promise<Record<string, CapacityRow>> {
   // signups (§ manual_signups). Anon clients have no direct SELECT on
   // registrations or manual_signups, so we must NOT query those here.
   const [{ data: caps }, { data: counts }] = await Promise.all([
-    supabase.from("group_capacities").select("form_type, level, format, max_seats, min_seats"),
+    supabase
+      .from("group_capacities")
+      .select("form_type, level, format, max_seats, min_seats"),
     supabase.rpc("get_group_capacity_counts"),
   ]);
 
   const countMap = new Map<string, number>();
   (counts || []).forEach(
-    (c: { form_type: string; level: string | null; format: string | null; taken: number }) => {
-      countMap.set(buildKey(c.form_type, c.level ?? null, c.format ?? null), Number(c.taken) || 0);
+    (c: {
+      form_type: string;
+      level: string | null;
+      format: string | null;
+      taken: number;
+    }) => {
+      countMap.set(
+        buildKey(c.form_type, c.level ?? null, c.format ?? null),
+        Number(c.taken) || 0,
+      );
     },
   );
 
@@ -56,7 +66,11 @@ async function fetchAll(): Promise<Record<string, CapacityRow>> {
   return out;
 }
 
-function toInfo(max: number, min: number, rawTaken: number): CapacityInfo | null {
+function toInfo(
+  max: number,
+  min: number,
+  rawTaken: number,
+): CapacityInfo | null {
   // Guard against missing/invalid capacity rows so the UI never renders
   // impossible values like "10 / 0 locuri ocupate".
   if (!max || max <= 0) return null;
@@ -94,9 +108,21 @@ export function useGroupCapacities() {
 
     const channel = supabase
       .channel(`capacity-updates-${Math.random().toString(36).slice(2)}`)
-      .on("postgres_changes", { event: "*", schema: "public", table: "registrations" }, load)
-      .on("postgres_changes", { event: "*", schema: "public", table: "group_capacities" }, load)
-      .on("postgres_changes", { event: "*", schema: "public", table: "manual_signups" }, load)
+      .on(
+        "postgres_changes",
+        { event: "*", schema: "public", table: "registrations" },
+        load,
+      )
+      .on(
+        "postgres_changes",
+        { event: "*", schema: "public", table: "group_capacities" },
+        load,
+      )
+      .on(
+        "postgres_changes",
+        { event: "*", schema: "public", table: "manual_signups" },
+        load,
+      )
       .subscribe();
 
     return () => {

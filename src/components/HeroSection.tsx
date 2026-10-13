@@ -6,7 +6,9 @@ import { Link } from "@/components/LocalizedLink";
 
 const WHATSAPP_URL =
   "https://wa.me/40763124514?text=" +
-  encodeURIComponent("Salut! Sunt interesat(ă) de cursurile de arabă libaneză.");
+  encodeURIComponent(
+    "Salut! Sunt interesat(ă) de cursurile de arabă libaneză.",
+  );
 
 const HeroSection = () => {
   const { t } = useI18n();
@@ -60,11 +62,9 @@ const HeroSection = () => {
             <MessageCircle className="w-4 h-4 text-[#25D366]" />
             {t.heroExplore}
           </a>
-
         </div>
 
         <HeroConversation className="order-2 w-full max-w-md mx-auto lg:max-w-none" />
-
       </div>
     </section>
   );

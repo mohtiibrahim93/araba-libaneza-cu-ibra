@@ -5,43 +5,74 @@ import { verifyRegistrationSignature } from "../_shared/registration-access.ts";
 const SITE_URL = "https://centruldearabalibaneza.com";
 const TZ_OFFSET_HINT = "Europe/Bucharest";
 
-function pad(n: number) { return String(n).padStart(2, "0"); }
+function pad(n: number) {
+  return String(n).padStart(2, "0");
+}
 function toIcsUtc(d: Date): string {
   return (
     d.getUTCFullYear().toString() +
-    pad(d.getUTCMonth() + 1) + pad(d.getUTCDate()) + "T" +
-    pad(d.getUTCHours()) + pad(d.getUTCMinutes()) + pad(d.getUTCSeconds()) + "Z"
+    pad(d.getUTCMonth() + 1) +
+    pad(d.getUTCDate()) +
+    "T" +
+    pad(d.getUTCHours()) +
+    pad(d.getUTCMinutes()) +
+    pad(d.getUTCSeconds()) +
+    "Z"
   );
 }
 function esc(s: string) {
-  return s.replace(/\\/g, "\\\\").replace(/\n/g, "\\n").replace(/,/g, "\\,").replace(/;/g, "\\;");
+  return s
+    .replace(/\\/g, "\\\\")
+    .replace(/\n/g, "\\n")
+    .replace(/,/g, "\\,")
+    .replace(/;/g, "\\;");
 }
 
 // Build a UTC Date from a local Bucharest wall-clock time.
 // Bucharest is UTC+2 (EET) / UTC+3 (EEST). We approximate via Intl.
-function bucharestWallToUtc(year: number, month: number, day: number, hour: number, minute: number): Date {
+function bucharestWallToUtc(
+  year: number,
+  month: number,
+  day: number,
+  hour: number,
+  minute: number,
+): Date {
   // Construct as UTC first, then adjust by the offset Bucharest has at that instant.
   const asUtc = new Date(Date.UTC(year, month - 1, day, hour, minute));
   const fmt = new Intl.DateTimeFormat("en-US", {
     timeZone: "Europe/Bucharest",
-    year: "numeric", month: "2-digit", day: "2-digit",
-    hour: "2-digit", minute: "2-digit", hour12: false,
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+    hour: "2-digit",
+    minute: "2-digit",
+    hour12: false,
   });
-  const parts = fmt.formatToParts(asUtc).reduce<Record<string, string>>((acc, p) => {
-    if (p.type !== "literal") acc[p.type] = p.value;
-    return acc;
-  }, {});
+  const parts = fmt
+    .formatToParts(asUtc)
+    .reduce<Record<string, string>>((acc, p) => {
+      if (p.type !== "literal") acc[p.type] = p.value;
+      return acc;
+    }, {});
   const bucharestAsUtc = Date.UTC(
-    Number(parts.year), Number(parts.month) - 1, Number(parts.day),
-    Number(parts.hour), Number(parts.minute),
+    Number(parts.year),
+    Number(parts.month) - 1,
+    Number(parts.day),
+    Number(parts.hour),
+    Number(parts.minute),
   );
   const offsetMs = bucharestAsUtc - asUtc.getTime();
   return new Date(asUtc.getTime() - offsetMs);
 }
 
 function buildIcs(opts: {
-  uid: string; title: string; description: string; location: string;
-  start: Date; end: Date; url?: string;
+  uid: string;
+  title: string;
+  description: string;
+  location: string;
+  start: Date;
+  end: Date;
+  url?: string;
 }) {
   const now = toIcsUtc(new Date());
   return [
@@ -62,12 +93,15 @@ function buildIcs(opts: {
     `X-WR-TIMEZONE:${TZ_OFFSET_HINT}`,
     "END:VEVENT",
     "END:VCALENDAR",
-  ].filter(Boolean).join("\r\n");
+  ]
+    .filter(Boolean)
+    .join("\r\n");
 }
 
 Deno.serve(async (req) => {
   const corsHeaders = buildCorsHeaders(req);
-  if (req.method === "OPTIONS") return new Response(null, { headers: corsHeaders });
+  if (req.method === "OPTIONS")
+    return new Response(null, { headers: corsHeaders });
   try {
     const url = new URL(req.url);
     const id = url.searchParams.get("id");
@@ -88,11 +122,13 @@ Deno.serve(async (req) => {
       .select("id, form_type, name, format, cohort_id, kids_slot_id, level")
       .eq("id", id)
       .maybeSingle();
-    if (!reg) return new Response("not found", { status: 404, headers: corsHeaders });
+    if (!reg)
+      return new Response("not found", { status: 404, headers: corsHeaders });
 
     const zoomUrl = Deno.env.get("ZOOM_MEETING_URL") ?? "";
     const physicalLoc = "Raduga Creative Center, Strada Icoanei 80, București";
-    const location = reg.format === "online" ? (zoomUrl || "Online (Zoom)") : physicalLoc;
+    const location =
+      reg.format === "online" ? zoomUrl || "Online (Zoom)" : physicalLoc;
 
     let start: Date | null = null;
     let end: Date | null = null;
@@ -100,8 +136,13 @@ Deno.serve(async (req) => {
     let description = `Lecția ta de arabă libaneză.\n${zoomUrl ? `Zoom: ${zoomUrl}\n` : ""}Gestionează: ${SITE_URL}`;
 
     if (reg.form_type === "group" && reg.cohort_id) {
-      const { data: c } = await supabase.from("group_cohorts")
-        .select("start_date, schedule_label_ro, level, start_time, end_time, duration_minutes").eq("id", reg.cohort_id).maybeSingle();
+      const { data: c } = await supabase
+        .from("group_cohorts")
+        .select(
+          "start_date, schedule_label_ro, level, start_time, end_time, duration_minutes",
+        )
+        .eq("id", reg.cohort_id)
+        .maybeSingle();
       if (c?.start_date) {
         const [y, m, d] = String(c.start_date).split("-").map(Number);
         const [sh, sm] = c.start_time
@@ -111,7 +152,7 @@ Deno.serve(async (req) => {
         let durationMin = c.duration_minutes ?? null;
         if (!durationMin && c.end_time) {
           const [eh, em] = String(c.end_time).split(":").map(Number);
-          durationMin = (eh * 60 + (em ?? 0)) - (sh * 60 + (sm ?? 0));
+          durationMin = eh * 60 + (em ?? 0) - (sh * 60 + (sm ?? 0));
           if (durationMin <= 0) durationMin = null;
         }
         end = new Date(start.getTime() + (durationMin ?? 90) * 60_000);
@@ -119,8 +160,11 @@ Deno.serve(async (req) => {
         description = `${c.schedule_label_ro || "marți și joi, 19:00–20:30"}\n${zoomUrl ? `Zoom: ${zoomUrl}\n` : ""}Gestionează: ${SITE_URL}`;
       }
     } else if (reg.form_type === "kids" && reg.kids_slot_id) {
-      const { data: s } = await supabase.from("kids_class_slots")
-        .select("weekday, start_time, duration_min, format, location").eq("id", reg.kids_slot_id).maybeSingle();
+      const { data: s } = await supabase
+        .from("kids_class_slots")
+        .select("weekday, start_time, duration_min, format, location")
+        .eq("id", reg.kids_slot_id)
+        .maybeSingle();
       if (s) {
         // find next occurrence of weekday (1=Mon..7=Sun)
         const now = new Date();
@@ -128,7 +172,13 @@ Deno.serve(async (req) => {
         const delta = (s.weekday - todayDow + 7) % 7 || 7;
         const target = new Date(now.getTime() + delta * 86_400_000);
         const [hh, mm] = String(s.start_time).split(":").map(Number);
-        start = bucharestWallToUtc(target.getUTCFullYear(), target.getUTCMonth() + 1, target.getUTCDate(), hh, mm);
+        start = bucharestWallToUtc(
+          target.getUTCFullYear(),
+          target.getUTCMonth() + 1,
+          target.getUTCDate(),
+          hh,
+          mm,
+        );
         end = new Date(start.getTime() + (s.duration_min ?? 60) * 60_000);
         title = "Curs copii — arabă libaneză";
         description = `Lecție pentru copii.\nFormat: ${s.format}\n${s.location ? `Loc: ${s.location}\n` : ""}Gestionează: ${SITE_URL}`;
@@ -136,13 +186,19 @@ Deno.serve(async (req) => {
     }
 
     if (!start || !end) {
-      return new Response("schedule not available", { status: 404, headers: corsHeaders });
+      return new Response("schedule not available", {
+        status: 404,
+        headers: corsHeaders,
+      });
     }
 
     const ics = buildIcs({
       uid: `${reg.id}@centruldearabalibaneza.com`,
-      title, description, location,
-      start, end,
+      title,
+      description,
+      location,
+      start,
+      end,
       url: SITE_URL,
     });
 

@@ -16,10 +16,11 @@
  * an older row with no language at all must not produce an English email for a
  * Romanian reader — Romanian is the site's primary language.
  */
-export type EmailLanguage = 'ro' | 'en'
+export type EmailLanguage = "ro" | "en";
 
 export const emailLanguage = (value: unknown): EmailLanguage =>
-  String(value ?? '').toLowerCase() === 'en' ? 'en' : 'ro'
+  String(value ?? "").toLowerCase() === "en" ? "en" : "ro";
 
 /** `t(lang)('Salut', 'Hello')` — Romanian first, matching the site's T() helper. */
-export const translator = (lang: EmailLanguage) => (ro: string, en: string) => (lang === 'en' ? en : ro)
+export const translator = (lang: EmailLanguage) => (ro: string, en: string) =>
+  lang === "en" ? en : ro;

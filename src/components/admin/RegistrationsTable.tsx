@@ -43,7 +43,9 @@ import {
   studentLabel,
 } from "./types";
 import type { LeadStatus, Registration } from "./types";
-import RegistrationCourse, { registrationFormatLabel } from "./RegistrationCourse";
+import RegistrationCourse, {
+  registrationFormatLabel,
+} from "./RegistrationCourse";
 
 interface CancelPreview {
   within_grace: boolean;
@@ -82,30 +84,52 @@ interface Props {
 }
 
 const badge = (cls: string, label: string) => (
-  <span className={`inline-flex px-2 py-0.5 rounded-full text-xs font-medium ${cls}`}>{label}</span>
+  <span
+    className={`inline-flex px-2 py-0.5 rounded-full text-xs font-medium ${cls}`}
+  >
+    {label}
+  </span>
 );
 
 const paymentBadge = (r: Registration) => {
   const partial = partialRefundNote(r);
   if (!partial) return paymentStatusBadge(r);
-  return <span className="inline-flex flex-wrap items-center gap-1">{paymentStatusBadge(r)}{badge("bg-muted text-muted-foreground", partial)}</span>;
+  return (
+    <span className="inline-flex flex-wrap items-center gap-1">
+      {paymentStatusBadge(r)}
+      {badge("bg-muted text-muted-foreground", partial)}
+    </span>
+  );
 };
 
 const paymentStatusBadge = (r: Registration) => {
-  if (r.payment_status === "refunded") return badge("bg-muted text-muted-foreground", "Rambursat");
+  if (r.payment_status === "refunded")
+    return badge("bg-muted text-muted-foreground", "Rambursat");
   switch (r.payment_status) {
     case "paid":
-      return badge("bg-emerald-500/10 text-emerald-700 dark:text-emerald-400", "Plătit");
+      return badge(
+        "bg-emerald-500/10 text-emerald-700 dark:text-emerald-400",
+        "Plătit",
+      );
     case "pending":
-      return badge("bg-amber-500/10 text-amber-700 dark:text-amber-400", "În așteptare");
+      return badge(
+        "bg-amber-500/10 text-amber-700 dark:text-amber-400",
+        "În așteptare",
+      );
     case "past_due":
       return badge("bg-red-500/10 text-red-700 dark:text-red-400", "Restanță");
     case "failed":
-      return badge("bg-red-500/10 text-red-700 dark:text-red-400", "Plată eșuată");
+      return badge(
+        "bg-red-500/10 text-red-700 dark:text-red-400",
+        "Plată eșuată",
+      );
     case "expired":
       return badge("bg-muted text-muted-foreground", "Expirat");
     case "card_saved":
-      return badge("bg-blue-500/10 text-blue-700 dark:text-blue-400", "Card salvat · trial");
+      return badge(
+        "bg-blue-500/10 text-blue-700 dark:text-blue-400",
+        "Card salvat · trial",
+      );
     default:
       return badge("bg-muted text-muted-foreground", "Neplătit");
   }
@@ -156,7 +180,10 @@ const RefundControl = ({
 
   if (registration.refunded_at) {
     return (
-      <p className="text-xs text-muted-foreground" title={registration.refund_reason || undefined}>
+      <p
+        className="text-xs text-muted-foreground"
+        title={registration.refund_reason || undefined}
+      >
         {new Date(registration.refunded_at).toLocaleDateString("ro-RO")}
       </p>
     );
@@ -166,22 +193,35 @@ const RefundControl = ({
   return (
     <AlertDialog open={open} onOpenChange={setOpen}>
       <AlertDialogTrigger asChild>
-        <Button variant="ghost" size="sm" disabled={refunding} className="h-7 px-2 text-xs text-destructive hover:text-destructive hover:bg-destructive/10">
-          {refunding ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <Undo2 className="h-3.5 w-3.5" />}
+        <Button
+          variant="ghost"
+          size="sm"
+          disabled={refunding}
+          className="h-7 px-2 text-xs text-destructive hover:text-destructive hover:bg-destructive/10"
+        >
+          {refunding ? (
+            <Loader2 className="h-3.5 w-3.5 animate-spin" />
+          ) : (
+            <Undo2 className="h-3.5 w-3.5" />
+          )}
           Rambursează
         </Button>
       </AlertDialogTrigger>
       <AlertDialogContent>
         <AlertDialogHeader>
-          <AlertDialogTitle>Rambursezi plata pentru {registration.name}?</AlertDialogTitle>
+          <AlertDialogTitle>
+            Rambursezi plata pentru {registration.name}?
+          </AlertDialogTitle>
           <AlertDialogDescription asChild>
             <div className="space-y-1">
               <p>
-                Suma se calculează după politica publicată (Termeni, secțiunea 4). Acțiunea nu
-                poate fi anulată.
+                Suma se calculează după politica publicată (Termeni, secțiunea
+                4). Acțiunea nu poate fi anulată.
               </p>
               {loadingPreview ? (
-                <p className="text-muted-foreground">Se calculează rambursarea…</p>
+                <p className="text-muted-foreground">
+                  Se calculează rambursarea…
+                </p>
               ) : preview ? (
                 <>
                   <p className="text-foreground font-medium">
@@ -192,20 +232,29 @@ const RefundControl = ({
                   </p>
                   {preview.tier === "pro-rata" && (
                     <p className="text-xs text-muted-foreground">
-                      Nerambursabil (lecții făcute): {(preview.nonRefundableBani / 100).toLocaleString("ro-RO")} lei ·
-                      taxă 10%: {(preview.feeBani / 100).toLocaleString("ro-RO")} lei ·
+                      Nerambursabil (lecții făcute):{" "}
+                      {(preview.nonRefundableBani / 100).toLocaleString(
+                        "ro-RO",
+                      )}{" "}
+                      lei · taxă 10%:{" "}
+                      {(preview.feeBani / 100).toLocaleString("ro-RO")} lei ·
                       lecții rămase: {preview.lessonsRemaining}
                     </p>
                   )}
                 </>
               ) : (
-                <p className="text-muted-foreground">Nu am putut calcula suma.</p>
+                <p className="text-muted-foreground">
+                  Nu am putut calcula suma.
+                </p>
               )}
             </div>
           </AlertDialogDescription>
         </AlertDialogHeader>
         <div className="space-y-1">
-          <label htmlFor={`lessons-taken-${registration.id}`} className="text-xs font-medium">
+          <label
+            htmlFor={`lessons-taken-${registration.id}`}
+            className="text-xs font-medium"
+          >
             Lecții deja făcute
           </label>
           <Input
@@ -213,7 +262,9 @@ const RefundControl = ({
             type="number"
             min={0}
             value={lessonsTaken}
-            onChange={(e) => setLessonsTaken(Math.max(0, Number(e.target.value) || 0))}
+            onChange={(e) =>
+              setLessonsTaken(Math.max(0, Number(e.target.value) || 0))
+            }
             className="h-9"
           />
           <p className="text-[11px] text-muted-foreground">
@@ -238,7 +289,9 @@ const RefundControl = ({
             disabled={loadingPreview || !preview || preview.refundBani <= 0}
             className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
           >
-            {preview ? `Rambursează ${preview.refund_label}` : "Rambursează definitiv"}
+            {preview
+              ? `Rambursează ${preview.refund_label}`
+              : "Rambursează definitiv"}
           </AlertDialogAction>
         </AlertDialogFooter>
       </AlertDialogContent>
@@ -246,11 +299,11 @@ const RefundControl = ({
   );
 };
 
-
 const REFUND_TIER_LABEL: Record<RefundPreview["tier"], string> = {
   full: "Anulare cu 7+ zile înainte de start — rambursare integrală",
   "fee-only": "Anulare sub 7 zile, cursul nu a început — se reține taxa de 10%",
-  "pro-rata": "Cursul a început — lecțiile făcute nu se rambursează, din rest se reține 10%",
+  "pro-rata":
+    "Cursul a început — lecțiile făcute nu se rambursează, din rest se reține 10%",
 };
 
 const CancelSubscriptionControl = ({
@@ -270,11 +323,15 @@ const CancelSubscriptionControl = ({
 
   // Only group registrations with a live subscription can be cancelled.
   if (!registration.stripe_subscription_id) return null;
-  if (registration.subscription_status === "canceled" || registration.canceled_at) {
+  if (
+    registration.subscription_status === "canceled" ||
+    registration.canceled_at
+  ) {
     return (
       <p className="text-xs text-muted-foreground">
         Abonament anulat
-        {typeof registration.refunded_amount === "number" && registration.refunded_amount > 0
+        {typeof registration.refunded_amount === "number" &&
+        registration.refunded_amount > 0
           ? ` · rambursat ${(registration.refunded_amount / 100).toLocaleString("ro-RO")}`
           : ""}
       </p>
@@ -310,18 +367,28 @@ const CancelSubscriptionControl = ({
           disabled={canceling}
           className="h-7 px-2 text-xs text-destructive hover:text-destructive hover:bg-destructive/10"
         >
-          {canceling ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <Undo2 className="h-3.5 w-3.5" />}
+          {canceling ? (
+            <Loader2 className="h-3.5 w-3.5 animate-spin" />
+          ) : (
+            <Undo2 className="h-3.5 w-3.5" />
+          )}
           Anulează abonament
         </Button>
       </AlertDialogTrigger>
       <AlertDialogContent>
         <AlertDialogHeader>
-          <AlertDialogTitle>Anulezi abonamentul pentru {registration.name}?</AlertDialogTitle>
+          <AlertDialogTitle>
+            Anulezi abonamentul pentru {registration.name}?
+          </AlertDialogTitle>
           <AlertDialogDescription asChild>
             <div className="space-y-1">
-              <p>Se opresc toate lunile viitoare. Acțiunea nu poate fi anulată.</p>
+              <p>
+                Se opresc toate lunile viitoare. Acțiunea nu poate fi anulată.
+              </p>
               {loadingPreview ? (
-                <p className="text-muted-foreground">Se calculează rambursarea…</p>
+                <p className="text-muted-foreground">
+                  Se calculează rambursarea…
+                </p>
               ) : refundLabel ? (
                 <p className="text-foreground font-medium">
                   Se rambursează {refundLabel} din luna curentă (în fereastra de{" "}
@@ -329,7 +396,8 @@ const CancelSubscriptionControl = ({
                 </p>
               ) : (
                 <p className="text-muted-foreground">
-                  Fără rambursare pentru luna curentă (în afara ferestrei de 5 zile).
+                  Fără rambursare pentru luna curentă (în afara ferestrei de 5
+                  zile).
                 </p>
               )}
             </div>
@@ -382,12 +450,15 @@ const RegistrationsTable = ({
     let active = true;
     (async () => {
       try {
-        const { data } = await invokeAdmin<{ data?: { registration_id: string | null; status: string }[] }>({
+        const { data } = await invokeAdmin<{
+          data?: { registration_id: string | null; status: string }[];
+        }>({
           action: "list_bookings",
         });
         const ids = new Set<string>();
         (data?.data || []).forEach((b) => {
-          if (b.registration_id && b.status !== "cancelled") ids.add(b.registration_id);
+          if (b.registration_id && b.status !== "cancelled")
+            ids.add(b.registration_id);
         });
         if (active) {
           setBookedRegIds(ids);
@@ -403,208 +474,232 @@ const RegistrationsTable = ({
   }, []);
 
   return (
-  <div className="border border-border rounded-lg overflow-hidden">
-    <Table aria-label="Înscrieri">
-      <TableHeader>
-        <TableRow className="bg-muted/50">
-          <TableHead className="w-10">
-            <Checkbox
-              checked={rows.length > 0 && rows.every((r) => selected.has(r.id))}
-              onCheckedChange={onToggleAll}
-            />
-          </TableHead>
-          <TableHead className="min-w-[200px]">Înscris</TableHead>
-          <TableHead className="min-w-[150px]">Curs</TableHead>
-          <TableHead className="w-[170px]">Status lead</TableHead>
-          <TableHead className="min-w-[170px]">Plată</TableHead>
-          <TableHead className="min-w-[160px]">Note</TableHead>
-          <TableHead className="w-[90px]">Detalii</TableHead>
-        </TableRow>
-      </TableHeader>
-      <TableBody>
-        {rows.map((r) => (
-          <TableRow key={r.id} data-state={selected.has(r.id) ? "selected" : undefined}>
-            <TableCell className="align-top pt-4">
+    <div className="border border-border rounded-lg overflow-hidden">
+      <Table aria-label="Înscrieri">
+        <TableHeader>
+          <TableRow className="bg-muted/50">
+            <TableHead className="w-10">
               <Checkbox
-                checked={selected.has(r.id)}
-                onCheckedChange={() => onToggleSelect(r.id)}
+                checked={
+                  rows.length > 0 && rows.every((r) => selected.has(r.id))
+                }
+                onCheckedChange={onToggleAll}
               />
-            </TableCell>
-            {/* Cine: nume + contact + data, într-o singură celulă scanabilă */}
-            <TableCell className="align-top">
-              <p className="font-semibold text-foreground leading-tight">
-                {onOpen ? (
-                  <button
-                    type="button"
-                    onClick={() => onOpen(r.id)}
-                    className="text-left font-semibold text-brand-green underline-offset-2 hover:underline dark:text-primary"
-                  >
-                    {r.name}
-                  </button>
-                ) : (
-                  r.name
-                )}
-                {leadSegment(r) === "students" && (
-                  <span className="ml-1.5 inline-flex shrink-0 px-1.5 py-0.5 rounded-full text-[10px] font-semibold bg-emerald-500/10 text-emerald-700 dark:text-emerald-400 align-middle">
-                    {studentLabel(r)}
-                  </span>
-                )}
-                {r.trial_duplicate_hint && (
-                  <span
-                    title={r.trial_duplicate_hint}
-                    className="ml-1.5 inline-flex shrink-0 px-1.5 py-0.5 rounded-full text-[10px] font-semibold bg-amber-100 text-amber-900 align-middle"
-                  >
-                    Posibil duplicat
-                  </span>
-                )}
-                {/* Anyone who registered in English needs an English-taught
-                    cohort, and there is none yet — so it is flagged rather than
-                    left to be discovered on the first day of class. */}
-                {r.language === "en" && (
-                  <span
-                    title="S-a înscris în engleză — are nevoie de o grupă predată în engleză"
-                    className="ml-1.5 inline-flex shrink-0 px-1.5 py-0.5 rounded-full text-[10px] font-semibold bg-sky-100 text-sky-800 align-middle"
-                  >
-                    EN
-                  </span>
-                )}
-              </p>
-              {r.email && (
-                <span className="flex items-center gap-1.5 max-w-[220px]">
-                  <a href={`mailto:${r.email}`} className="block text-xs text-muted-foreground hover:text-primary truncate min-w-0">
-                    {r.email}
-                  </a>
-                  {(r.email_dup_count ?? 1) > 1 && (
-                    <span
-                      title={`Acest email apare în ${r.email_dup_count} înscrieri`}
-                      className="inline-flex shrink-0 px-1.5 py-0.5 rounded-full text-[10px] font-semibold bg-amber-100 text-amber-800"
+            </TableHead>
+            <TableHead className="min-w-[200px]">Înscris</TableHead>
+            <TableHead className="min-w-[150px]">Curs</TableHead>
+            <TableHead className="w-[170px]">Status lead</TableHead>
+            <TableHead className="min-w-[170px]">Plată</TableHead>
+            <TableHead className="min-w-[160px]">Note</TableHead>
+            <TableHead className="w-[90px]">Detalii</TableHead>
+          </TableRow>
+        </TableHeader>
+        <TableBody>
+          {rows.map((r) => (
+            <TableRow
+              key={r.id}
+              data-state={selected.has(r.id) ? "selected" : undefined}
+            >
+              <TableCell className="align-top pt-4">
+                <Checkbox
+                  checked={selected.has(r.id)}
+                  onCheckedChange={() => onToggleSelect(r.id)}
+                />
+              </TableCell>
+              {/* Cine: nume + contact + data, într-o singură celulă scanabilă */}
+              <TableCell className="align-top">
+                <p className="font-semibold text-foreground leading-tight">
+                  {onOpen ? (
+                    <button
+                      type="button"
+                      onClick={() => onOpen(r.id)}
+                      className="text-left font-semibold text-brand-green underline-offset-2 hover:underline dark:text-primary"
                     >
-                      ×{r.email_dup_count}
+                      {r.name}
+                    </button>
+                  ) : (
+                    r.name
+                  )}
+                  {leadSegment(r) === "students" && (
+                    <span className="ml-1.5 inline-flex shrink-0 px-1.5 py-0.5 rounded-full text-[10px] font-semibold bg-emerald-500/10 text-emerald-700 dark:text-emerald-400 align-middle">
+                      {studentLabel(r)}
                     </span>
                   )}
-                </span>
-              )}
-              {r.anonymized_at && (
-                <span className="inline-flex px-1.5 py-0.5 rounded-full text-[10px] font-medium bg-muted text-muted-foreground">
-                  Anonimizat
-                </span>
-              )}
-              {r.phone && (
-                <a href={`tel:${r.phone}`} className="block text-xs text-muted-foreground hover:text-primary">
-                  {r.phone}
-                </a>
-              )}
-              <p className="text-[11px] text-muted-foreground mt-1">
-                {new Date(r.created_at).toLocaleDateString("ro-RO", {
-                  day: "2-digit",
-                  month: "short",
-                  year: "numeric",
-                  hour: "2-digit",
-                  minute: "2-digit",
-                })}
-              </p>
-            </TableCell>
-            {/* Ce: tip curs + format/centru/vârstă */}
-            <TableCell className="align-top">
-              <span className="inline-flex px-2 py-0.5 rounded-full text-xs font-medium bg-primary/10 text-primary">
-                {formTypeLabels[r.form_type] || r.form_type}
-              </span>
-              {r.form_type === "trial" && bookingsKnown && !bookedRegIds.has(r.id) && (
-                <span className="ml-1 inline-flex px-2 py-0.5 rounded-full text-xs font-medium bg-amber-500/10 text-amber-700 dark:text-amber-400" title="Probă rezervată, dar fără interval orar ales — necesită contactare">
-                  Fără interval
-                </span>
-              )}
-              <p className="text-xs text-muted-foreground mt-1.5 space-x-1">
-                {[
-                  registrationFormatLabel(r),
-                  r.center,
-                  r.child_age ? `copil ${r.child_age} ani` : null,
-                ]
-                  .filter(Boolean)
-                  .join(" · ") || "—"}
-              </p>
-              <RegistrationCourse registration={r} />
-            </TableCell>
-            <TableCell className="align-top">
-              <Select
-                value={r.lead_status || "new"}
-                onValueChange={(value) => onStatusChange(r.id, value as LeadStatus)}
-                disabled={updatingStatus?.id === r.id}
-              >
-                <SelectTrigger
-                  className="h-8 w-[150px]"
-                  aria-busy={updatingStatus?.id === r.id}
-                >
-                  {updatingStatus?.id === r.id ? (
-                    <Loader2 className="h-3.5 w-3.5 animate-spin" />
-                  ) : (
-                    <SelectValue />
+                  {r.trial_duplicate_hint && (
+                    <span
+                      title={r.trial_duplicate_hint}
+                      className="ml-1.5 inline-flex shrink-0 px-1.5 py-0.5 rounded-full text-[10px] font-semibold bg-amber-100 text-amber-900 align-middle"
+                    >
+                      Posibil duplicat
+                    </span>
                   )}
-                </SelectTrigger>
-                <SelectContent>
-                  {LEAD_STATUSES.map((status) => (
-                    <SelectItem key={status} value={status}>
-                      {leadStatusLabels[status]}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-            </TableCell>
-            <TableCell className="align-top space-y-1">
-              {paymentBadge(r)}
-              {r.stripe_subscription_id && typeof r.months_total === "number" && (
-                <p className="text-xs text-muted-foreground">
-                  Abonament: {r.months_paid ?? 0}/{r.months_total} luni
+                  {/* Anyone who registered in English needs an English-taught
+                    cohort, and there is none yet — so it is flagged rather than
+                    left to be discovered on the first day of class. */}
+                  {r.language === "en" && (
+                    <span
+                      title="S-a înscris în engleză — are nevoie de o grupă predată în engleză"
+                      className="ml-1.5 inline-flex shrink-0 px-1.5 py-0.5 rounded-full text-[10px] font-semibold bg-sky-100 text-sky-800 align-middle"
+                    >
+                      EN
+                    </span>
+                  )}
                 </p>
-              )}
-              {r.stripe_subscription_id ? (
-                <CancelSubscriptionControl
-                  registration={r}
-                  canceling={cancelingId === r.id}
-                  onPreviewCancel={onPreviewCancel}
-                  onCancelSubscription={onCancelSubscription}
-                />
-              ) : (
-                <RefundControl
-                  registration={r}
-                  refunding={refundingId === r.id}
-                  onRefund={onRefund}
-                  onPreviewRefund={onPreviewRefund}
-                />
-              )}
-            </TableCell>
-            <TableCell className="align-top">
-              {(r.source || r.track_preference) && (
-                <p className="text-[11px] text-muted-foreground">
+                {r.email && (
+                  <span className="flex items-center gap-1.5 max-w-[220px]">
+                    <a
+                      href={`mailto:${r.email}`}
+                      className="block text-xs text-muted-foreground hover:text-primary truncate min-w-0"
+                    >
+                      {r.email}
+                    </a>
+                    {(r.email_dup_count ?? 1) > 1 && (
+                      <span
+                        title={`Acest email apare în ${r.email_dup_count} înscrieri`}
+                        className="inline-flex shrink-0 px-1.5 py-0.5 rounded-full text-[10px] font-semibold bg-amber-100 text-amber-800"
+                      >
+                        ×{r.email_dup_count}
+                      </span>
+                    )}
+                  </span>
+                )}
+                {r.anonymized_at && (
+                  <span className="inline-flex px-1.5 py-0.5 rounded-full text-[10px] font-medium bg-muted text-muted-foreground">
+                    Anonimizat
+                  </span>
+                )}
+                {r.phone && (
+                  <a
+                    href={`tel:${r.phone}`}
+                    className="block text-xs text-muted-foreground hover:text-primary"
+                  >
+                    {r.phone}
+                  </a>
+                )}
+                <p className="text-[11px] text-muted-foreground mt-1">
+                  {new Date(r.created_at).toLocaleDateString("ro-RO", {
+                    day: "2-digit",
+                    month: "short",
+                    year: "numeric",
+                    hour: "2-digit",
+                    minute: "2-digit",
+                  })}
+                </p>
+              </TableCell>
+              {/* Ce: tip curs + format/centru/vârstă */}
+              <TableCell className="align-top">
+                <span className="inline-flex px-2 py-0.5 rounded-full text-xs font-medium bg-primary/10 text-primary">
+                  {formTypeLabels[r.form_type] || r.form_type}
+                </span>
+                {r.form_type === "trial" &&
+                  bookingsKnown &&
+                  !bookedRegIds.has(r.id) && (
+                    <span
+                      className="ml-1 inline-flex px-2 py-0.5 rounded-full text-xs font-medium bg-amber-500/10 text-amber-700 dark:text-amber-400"
+                      title="Probă rezervată, dar fără interval orar ales — necesită contactare"
+                    >
+                      Fără interval
+                    </span>
+                  )}
+                <p className="text-xs text-muted-foreground mt-1.5 space-x-1">
                   {[
-                    r.source ? leadSourceLabels[r.source] : null,
-                    r.track_preference ? trackPreferenceLabels[r.track_preference] : null,
+                    registrationFormatLabel(r),
+                    r.center,
+                    r.child_age ? `copil ${r.child_age} ani` : null,
                   ]
                     .filter(Boolean)
-                    .join(" · ")}
+                    .join(" · ") || "—"}
                 </p>
-              )}
-              <p className="text-xs text-muted-foreground max-w-[220px] line-clamp-3" title={r.notes || undefined}>
-                {r.notes || "—"}
-              </p>
-            </TableCell>
-            <TableCell className="align-top">
-              {r.form_type === "private" ? (
-                <Button asChild variant="outline" size="sm">
-                  <Link to={`/admin/private-leads/${r.id}`}>
-                    <ExternalLink className="h-4 w-4" />
-                    Detalii
-                  </Link>
-                </Button>
-              ) : (
-                <span className="text-muted-foreground text-xs">—</span>
-              )}
-            </TableCell>
-          </TableRow>
-        ))}
-      </TableBody>
-    </Table>
-  </div>
+                <RegistrationCourse registration={r} />
+              </TableCell>
+              <TableCell className="align-top">
+                <Select
+                  value={r.lead_status || "new"}
+                  onValueChange={(value) =>
+                    onStatusChange(r.id, value as LeadStatus)
+                  }
+                  disabled={updatingStatus?.id === r.id}
+                >
+                  <SelectTrigger
+                    className="h-8 w-[150px]"
+                    aria-busy={updatingStatus?.id === r.id}
+                  >
+                    {updatingStatus?.id === r.id ? (
+                      <Loader2 className="h-3.5 w-3.5 animate-spin" />
+                    ) : (
+                      <SelectValue />
+                    )}
+                  </SelectTrigger>
+                  <SelectContent>
+                    {LEAD_STATUSES.map((status) => (
+                      <SelectItem key={status} value={status}>
+                        {leadStatusLabels[status]}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </TableCell>
+              <TableCell className="align-top space-y-1">
+                {paymentBadge(r)}
+                {r.stripe_subscription_id &&
+                  typeof r.months_total === "number" && (
+                    <p className="text-xs text-muted-foreground">
+                      Abonament: {r.months_paid ?? 0}/{r.months_total} luni
+                    </p>
+                  )}
+                {r.stripe_subscription_id ? (
+                  <CancelSubscriptionControl
+                    registration={r}
+                    canceling={cancelingId === r.id}
+                    onPreviewCancel={onPreviewCancel}
+                    onCancelSubscription={onCancelSubscription}
+                  />
+                ) : (
+                  <RefundControl
+                    registration={r}
+                    refunding={refundingId === r.id}
+                    onRefund={onRefund}
+                    onPreviewRefund={onPreviewRefund}
+                  />
+                )}
+              </TableCell>
+              <TableCell className="align-top">
+                {(r.source || r.track_preference) && (
+                  <p className="text-[11px] text-muted-foreground">
+                    {[
+                      r.source ? leadSourceLabels[r.source] : null,
+                      r.track_preference
+                        ? trackPreferenceLabels[r.track_preference]
+                        : null,
+                    ]
+                      .filter(Boolean)
+                      .join(" · ")}
+                  </p>
+                )}
+                <p
+                  className="text-xs text-muted-foreground max-w-[220px] line-clamp-3"
+                  title={r.notes || undefined}
+                >
+                  {r.notes || "—"}
+                </p>
+              </TableCell>
+              <TableCell className="align-top">
+                {r.form_type === "private" ? (
+                  <Button asChild variant="outline" size="sm">
+                    <Link to={`/admin/private-leads/${r.id}`}>
+                      <ExternalLink className="h-4 w-4" />
+                      Detalii
+                    </Link>
+                  </Button>
+                ) : (
+                  <span className="text-muted-foreground text-xs">—</span>
+                )}
+              </TableCell>
+            </TableRow>
+          ))}
+        </TableBody>
+      </Table>
+    </div>
   );
 };
 

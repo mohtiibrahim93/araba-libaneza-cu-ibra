@@ -1,6 +1,14 @@
 import { useEffect, useRef, useState } from "react";
 import { Link, useSearchParams } from "@/lib/router-compat";
-import { CheckCircle2, Mail, Video, Calendar, Share2, Loader2, ArrowLeft } from "lucide-react";
+import {
+  CheckCircle2,
+  Mail,
+  Video,
+  Calendar,
+  Share2,
+  Loader2,
+  ArrowLeft,
+} from "lucide-react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import WhatsAppButton from "@/components/WhatsAppButton";
@@ -164,7 +172,8 @@ const ThankYou = () => {
     details.customerEmail ? [t.thankYouEmail, details.customerEmail] : null,
   ].filter((r): r is [string, string] => r !== null);
 
-  const card = "rounded-2xl border border-[#E7E1D6] bg-card p-6 dark:border-border";
+  const card =
+    "rounded-2xl border border-[#E7E1D6] bg-card p-6 dark:border-border";
 
   return (
     <div className="min-h-screen bg-background flex flex-col">
@@ -175,10 +184,15 @@ const ThankYou = () => {
             <div className="relative mb-6">
               <div className="absolute inset-0 rounded-full bg-brand-green/20 animate-ping" />
               <div className="relative flex h-20 w-20 items-center justify-center rounded-full bg-brand-green animate-in zoom-in-50 duration-500">
-                <CheckCircle2 className="h-11 w-11 text-white" strokeWidth={2.5} />
+                <CheckCircle2
+                  className="h-11 w-11 text-white"
+                  strokeWidth={2.5}
+                />
               </div>
             </div>
-            <h1 className="font-display text-display-lg font-bold tracking-tight text-foreground">{t.thankYouTitle}</h1>
+            <h1 className="font-display text-display-lg font-bold tracking-tight text-foreground">
+              {t.thankYouTitle}
+            </h1>
             <p className="mt-3 max-w-md text-lg text-muted-foreground">
               {paid ? t.thankYouSubtitle : t.thankYouSubtitleUnconfirmed}
             </p>
@@ -189,18 +203,35 @@ const ThankYou = () => {
           {loading ? (
             <div className="py-6 text-center">
               <Loader2 className="mx-auto h-6 w-6 animate-spin text-muted-foreground" />
-              <p className="mt-3 text-sm text-muted-foreground">{t.thankYouLoading}</p>
+              <p className="mt-3 text-sm text-muted-foreground">
+                {t.thankYouLoading}
+              </p>
             </div>
           ) : (
             (summaryRows.length > 0 || errored) && (
               <section className={card}>
-                <h2 className="mb-4 font-display text-xl font-bold text-foreground">{t.thankYouOrderSummary}</h2>
-                {errored && <p className="mb-4 text-sm text-muted-foreground">{t.thankYouError}</p>}
+                <h2 className="mb-4 font-display text-xl font-bold text-foreground">
+                  {t.thankYouOrderSummary}
+                </h2>
+                {errored && (
+                  <p className="mb-4 text-sm text-muted-foreground">
+                    {t.thankYouError}
+                  </p>
+                )}
                 <dl className="space-y-3 text-sm">
                   {summaryRows.map(([k, v], i) => (
-                    <div key={k} className={cn("flex justify-between gap-4", i < summaryRows.length - 1 && "border-b border-[#E7E1D6] pb-3 dark:border-border")}>
+                    <div
+                      key={k}
+                      className={cn(
+                        "flex justify-between gap-4",
+                        i < summaryRows.length - 1 &&
+                          "border-b border-[#E7E1D6] pb-3 dark:border-border",
+                      )}
+                    >
                       <dt className="text-muted-foreground">{k}</dt>
-                      <dd className="break-all text-right font-semibold text-foreground">{v}</dd>
+                      <dd className="break-all text-right font-semibold text-foreground">
+                        {v}
+                      </dd>
                     </div>
                   ))}
                 </dl>
@@ -220,12 +251,26 @@ const ThankYou = () => {
           )}
 
           <section className={card}>
-            <h2 className="mb-5 font-display text-xl font-bold text-foreground">{t.thankYouNextStepsTitle}</h2>
+            <h2 className="mb-5 font-display text-xl font-bold text-foreground">
+              {t.thankYouNextStepsTitle}
+            </h2>
             <ol className="space-y-5">
               {[
-                { icon: Mail, title: t.thankYouStep1Title, desc: t.thankYouStep1Desc },
-                { icon: Video, title: t.thankYouStep2Title, desc: t.thankYouStep2Desc },
-                { icon: Calendar, title: t.thankYouStep3Title, desc: t.thankYouStep3Desc },
+                {
+                  icon: Mail,
+                  title: t.thankYouStep1Title,
+                  desc: t.thankYouStep1Desc,
+                },
+                {
+                  icon: Video,
+                  title: t.thankYouStep2Title,
+                  desc: t.thankYouStep2Desc,
+                },
+                {
+                  icon: Calendar,
+                  title: t.thankYouStep3Title,
+                  desc: t.thankYouStep3Desc,
+                },
               ].map((step, i) => (
                 <li key={i} className="flex gap-4">
                   <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-brand-green text-sm font-bold text-white">
@@ -233,10 +278,15 @@ const ThankYou = () => {
                   </span>
                   <div>
                     <p className="flex items-center gap-2 font-semibold text-foreground">
-                      <step.icon className="h-4 w-4 text-brand-green" aria-hidden />
+                      <step.icon
+                        className="h-4 w-4 text-brand-green"
+                        aria-hidden
+                      />
                       {step.title}
                     </p>
-                    <p className="mt-1 text-sm leading-relaxed text-muted-foreground">{step.desc}</p>
+                    <p className="mt-1 text-sm leading-relaxed text-muted-foreground">
+                      {step.desc}
+                    </p>
                   </div>
                 </li>
               ))}
@@ -244,8 +294,12 @@ const ThankYou = () => {
           </section>
 
           <section className="rounded-2xl bg-cream p-6 text-center">
-            <h2 className="font-display text-xl font-bold text-foreground">{t.thankYouInviteTitle}</h2>
-            <p className="mx-auto mt-2 max-w-md text-sm text-muted-foreground">{t.thankYouInviteDesc}</p>
+            <h2 className="font-display text-xl font-bold text-foreground">
+              {t.thankYouInviteTitle}
+            </h2>
+            <p className="mx-auto mt-2 max-w-md text-sm text-muted-foreground">
+              {t.thankYouInviteDesc}
+            </p>
             <button
               type="button"
               onClick={handleShare}
@@ -257,7 +311,10 @@ const ThankYou = () => {
           </section>
 
           <div className="pt-2 text-center">
-            <Link to="/" className="inline-flex items-center gap-2 text-sm font-semibold text-muted-foreground hover:text-foreground">
+            <Link
+              to="/"
+              className="inline-flex items-center gap-2 text-sm font-semibold text-muted-foreground hover:text-foreground"
+            >
               <ArrowLeft className="h-4 w-4" />
               {t.thankYouBackHome}
             </Link>

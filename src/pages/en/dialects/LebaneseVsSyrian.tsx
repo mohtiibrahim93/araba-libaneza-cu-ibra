@@ -42,60 +42,127 @@ const LebaneseVsSyrian = () => (
   >
     <h2>Short answer</h2>
     <p>
-      All four are <strong>Levantine (shami)</strong> dialects and they understand each other
-      effortlessly. They split into <strong>North Levantine</strong> — Lebanese and Syrian — and{" "}
-      <strong>South Levantine</strong> — Palestinian and Jordanian. The grammar is shared: the same{" "}
-      <em>b-</em> present prefix, the same <em>ʿam</em> for an action in progress, the same{" "}
-      <em>baddi</em> for "want". What changes is the accent, the shape of negation, and a few dozen
-      everyday words. Learn one and you follow all four.
+      All four are <strong>Levantine (shami)</strong> dialects and they
+      understand each other effortlessly. They split into{" "}
+      <strong>North Levantine</strong> — Lebanese and Syrian — and{" "}
+      <strong>South Levantine</strong> — Palestinian and Jordanian. The grammar
+      is shared: the same <em>b-</em> present prefix, the same <em>ʿam</em> for
+      an action in progress, the same <em>baddi</em> for "want". What changes is
+      the accent, the shape of negation, and a few dozen everyday words. Learn
+      one and you follow all four.
     </p>
 
     <h2>Side by side</h2>
     <ComparisonTable
       caption="Lebanese compared with Syrian, Palestinian and Jordanian Arabic"
-      columns={["Feature", "Lebanese", "Syrian (Damascus)", "Palestinian / Jordanian"]}
+      columns={[
+        "Feature",
+        "Lebanese",
+        "Syrian (Damascus)",
+        "Palestinian / Jordanian",
+      ]}
       rows={[
         ["Group", "North Levantine", "North Levantine", "South Levantine"],
-        ["The letter ق", "Glottal stop: ʾāl.", "Glottal stop: ʾāl.", "Glottal stop in cities; hard g in rural and Bedouin speech: galb."],
-        ["The vowel ā", "Raised towards ē (imāla): kēn.", "Stays open: kān.", "Stays open: kān."],
-        ["Negation", "Usually just ma: ma baʿrif.", "Usually just ma: ma baʿrif.", "Often adds -sh: ma baʿrafsh."],
+        [
+          "The letter ق",
+          "Glottal stop: ʾāl.",
+          "Glottal stop: ʾāl.",
+          "Glottal stop in cities; hard g in rural and Bedouin speech: galb.",
+        ],
+        [
+          "The vowel ā",
+          "Raised towards ē (imāla): kēn.",
+          "Stays open: kān.",
+          "Stays open: kān.",
+        ],
+        [
+          "Negation",
+          "Usually just ma: ma baʿrif.",
+          "Usually just ma: ma baʿrif.",
+          "Often adds -sh: ma baʿrafsh.",
+        ],
         ["'I want'", "baddi", "baddi", "biddi / baddi"],
-        ["Loanwords", "Heavy French, plus English.", "Less French, some Turkish.", "More English."],
-        ["Intonation", "Rising, sing-song, recognised instantly.", "Flatter than Lebanese.", "Flatter, with its own Amman and Jerusalem accents."],
-        ["Mutual intelligibility", "—", "Near complete.", "Very high; a few words to adjust."],
+        [
+          "Loanwords",
+          "Heavy French, plus English.",
+          "Less French, some Turkish.",
+          "More English.",
+        ],
+        [
+          "Intonation",
+          "Rising, sing-song, recognised instantly.",
+          "Flatter than Lebanese.",
+          "Flatter, with its own Amman and Jerusalem accents.",
+        ],
+        [
+          "Mutual intelligibility",
+          "—",
+          "Near complete.",
+          "Very high; a few words to adjust.",
+        ],
       ]}
     />
 
     <h2>The same sentence in all four</h2>
-    <p><em>"I don't know what he wants."</em></p>
+    <p>
+      <em>"I don't know what he wants."</em>
+    </p>
     <ul>
-      <li><strong>Lebanese:</strong> <em>ma baʿrif shu baddo</em></li>
-      <li><strong>Syrian:</strong> <em>ma baʿrif shu baddo</em></li>
-      <li><strong>Palestinian:</strong> <em>ma baʿrafsh shu biddo</em></li>
-      <li><strong>Jordanian:</strong> <em>ma baʿrafsh shu biddo</em></li>
+      <li>
+        <strong>Lebanese:</strong> <em>ma baʿrif shu baddo</em>
+      </li>
+      <li>
+        <strong>Syrian:</strong> <em>ma baʿrif shu baddo</em>
+      </li>
+      <li>
+        <strong>Palestinian:</strong> <em>ma baʿrafsh shu biddo</em>
+      </li>
+      <li>
+        <strong>Jordanian:</strong> <em>ma baʿrafsh shu biddo</em>
+      </li>
     </ul>
     <p>
-      Four varieties, one sentence. The difference is a suffix and a vowel — the distance between
-      British and American English, not between two languages.
+      Four varieties, one sentence. The difference is a suffix and a vowel — the
+      distance between British and American English, not between two languages.
     </p>
 
     <h2>Where the lines blur</h2>
     <p>
-      Contact zones mix features in both directions. Tripoli, in northern Lebanon, already sounds
-      partly Syrian; southern Lebanon shares features with Palestine; the Bekaa valley leans
-      towards the Syrian desert. The detailed map of the Levantine zones, with its sources, is in
-      the <Link to="/en/arabic-dialects-guide">Arabic dialects guide</Link>.
+      Contact zones mix features in both directions. Tripoli, in northern
+      Lebanon, already sounds partly Syrian; southern Lebanon shares features
+      with Palestine; the Bekaa valley leans towards the Syrian desert. The
+      detailed map of the Levantine zones, with its sources, is in the{" "}
+      <Link to="/en/arabic-dialects-guide">Arabic dialects guide</Link>.
     </p>
 
     <h2>What this means for you</h2>
     <ul>
-      <li><strong>Learn Lebanese</strong> → you speak in Damascus, Amman and Ramallah too.</li>
-      <li><strong>Syrian or Palestinian family</strong> → a Lebanese course is directly useful; the handful of local words come from conversation.</li>
-      <li><strong>You want one specific accent</strong> → that is what <Link to="/en/arabic-tutor">1-on-1 lessons</Link> are for; the teacher tunes the pronunciation to your target.</li>
-      <li><strong>You want the wider picture</strong> → see <Link to="/en/arabic-dialects-guide/levantine-vs-gulf-arabic">Levantine vs Gulf Arabic</Link> and <Link to="/en/arabic-dialects-guide/levantine-vs-iraqi-arabic">Levantine vs Iraqi Arabic</Link>.</li>
+      <li>
+        <strong>Learn Lebanese</strong> → you speak in Damascus, Amman and
+        Ramallah too.
+      </li>
+      <li>
+        <strong>Syrian or Palestinian family</strong> → a Lebanese course is
+        directly useful; the handful of local words come from conversation.
+      </li>
+      <li>
+        <strong>You want one specific accent</strong> → that is what{" "}
+        <Link to="/en/arabic-tutor">1-on-1 lessons</Link> are for; the teacher
+        tunes the pronunciation to your target.
+      </li>
+      <li>
+        <strong>You want the wider picture</strong> → see{" "}
+        <Link to="/en/arabic-dialects-guide/levantine-vs-gulf-arabic">
+          Levantine vs Gulf Arabic
+        </Link>{" "}
+        and{" "}
+        <Link to="/en/arabic-dialects-guide/levantine-vs-iraqi-arabic">
+          Levantine vs Iraqi Arabic
+        </Link>
+        .
+      </li>
     </ul>
     <DialectSiblings current="/en/arabic-dialects-guide/lebanese-vs-syrian-arabic" />
-
   </EnLandingLayout>
 );
 

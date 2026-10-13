@@ -37,5 +37,7 @@ export function getClientIp(req: Request): string | null {
     const first = fwd.split(",")[0]?.trim();
     if (first) return first;
   }
-  return req.headers.get("cf-connecting-ip") || req.headers.get("x-real-ip") || null;
+  return (
+    req.headers.get("cf-connecting-ip") || req.headers.get("x-real-ip") || null
+  );
 }

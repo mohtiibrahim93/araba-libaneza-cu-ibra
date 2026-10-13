@@ -9,9 +9,14 @@ export {
   physicalTrialAllowed,
 } from "./schedule-rules.ts";
 // TZ is also used internally below (slot generation, GCal payloads).
-import { TZ, weekdayInTz as weekdayInTzLocal, physicalDayAllowed } from "./schedule-rules.ts";
+import {
+  TZ,
+  weekdayInTz as weekdayInTzLocal,
+  physicalDayAllowed,
+} from "./schedule-rules.ts";
 
-export const GCAL_GATEWAY = "https://connector-gateway.lovable.dev/google_calendar/calendar/v3";
+export const GCAL_GATEWAY =
+  "https://connector-gateway.lovable.dev/google_calendar/calendar/v3";
 export const SITE_URL = "https://centruldearabalibaneza.com";
 
 export const corsHeaders = {
@@ -54,7 +59,13 @@ export function zonedToUtc(
   const get = (t: string) => Number(parts.find((p) => p.type === t)!.value);
   let h = get("hour");
   if (h === 24) h = 0;
-  const asLocal = Date.UTC(get("year"), get("month") - 1, get("day"), h, get("minute"));
+  const asLocal = Date.UTC(
+    get("year"),
+    get("month") - 1,
+    get("day"),
+    h,
+    get("minute"),
+  );
   const offset = guess - asLocal; // ms diff between intended local and what UTC produced
   return new Date(guess + offset);
 }
@@ -139,12 +150,23 @@ export async function gcalCreateEvent(input: GCalEventInput): Promise<{
 
   const body: Record<string, unknown> = {
     ...(input.eventId ? { id: input.eventId } : {}),
-    ...(input.bookingId ? { extendedProperties: { private: { booking_id: input.bookingId, student_contact_email: input.attendeeEmail } } } : {}),
+    ...(input.bookingId
+      ? {
+          extendedProperties: {
+            private: {
+              booking_id: input.bookingId,
+              student_contact_email: input.attendeeEmail,
+            },
+          },
+        }
+      : {}),
     summary: input.summary,
     description: input.description,
     start: { dateTime: input.startISO, timeZone: TZ },
     end: { dateTime: input.endISO, timeZone: TZ },
-    attendees: [{ email: input.attendeeEmail, displayName: input.attendeeName }],
+    attendees: [
+      { email: input.attendeeEmail, displayName: input.attendeeName },
+    ],
     reminders: { useDefault: true },
   };
   if (input.withMeet) {
@@ -168,9 +190,25 @@ export async function gcalCreateEvent(input: GCalEventInput): Promise<{
       body: JSON.stringify(body),
     });
     if (res.status === 409 && input.eventId && input.bookingId) {
-      res = await fetch(`${GCAL_GATEWAY}/calendars/primary/events/${encodeURIComponent(input.eventId)}`, { headers: { Authorization: `Bearer ${lovableKey}`, "X-Connection-Api-Key": gcalKey } });
-      const existing = await res.clone().json().catch(() => null);
-      if (!res.ok || existing?.extendedProperties?.private?.booking_id !== input.bookingId || existing?.status === "cancelled") return { ok: false, error: "event-identity-mismatch" };
+      res = await fetch(
+        `${GCAL_GATEWAY}/calendars/primary/events/${encodeURIComponent(input.eventId)}`,
+        {
+          headers: {
+            Authorization: `Bearer ${lovableKey}`,
+            "X-Connection-Api-Key": gcalKey,
+          },
+        },
+      );
+      const existing = await res
+        .clone()
+        .json()
+        .catch(() => null);
+      if (
+        !res.ok ||
+        existing?.extendedProperties?.private?.booking_id !== input.bookingId ||
+        existing?.status === "cancelled"
+      )
+        return { ok: false, error: "event-identity-mismatch" };
     }
     const data = await res.json();
     if (!res.ok) {
@@ -179,7 +217,10 @@ export async function gcalCreateEvent(input: GCalEventInput): Promise<{
     }
     const meetLink: string | undefined =
       data?.hangoutLink ??
-      data?.conferenceData?.entryPoints?.find((e: { entryPointType?: string; uri?: string }) => e.entryPointType === "video")?.uri;
+      data?.conferenceData?.entryPoints?.find(
+        (e: { entryPointType?: string; uri?: string }) =>
+          e.entryPointType === "video",
+      )?.uri;
     return { ok: true, id: data?.id, meetLink };
   } catch (err) {
     console.error("[booking] gcal create error", err);
@@ -215,7 +256,11 @@ export async function gcalPatchEvent(
       },
     );
     if (!res.ok) {
-      console.error("[booking] gcal patch failed", res.status, await res.text());
+      console.error(
+        "[booking] gcal patch failed",
+        res.status,
+        await res.text(),
+      );
       return false;
     }
     return true;
@@ -251,7 +296,12 @@ export async function gcalDeleteEvent(eventId: string): Promise<boolean> {
 }
 
 /** Returns true if [aStart,aEnd) overlaps [bStart,bEnd). All Date or ISO. */
-export function overlaps(aStart: number, aEnd: number, bStart: number, bEnd: number) {
+export function overlaps(
+  aStart: number,
+  aEnd: number,
+  bStart: number,
+  bEnd: number,
+) {
   return aStart < bEnd && bStart < aEnd;
 }
 
@@ -270,7 +320,11 @@ export function generateSlotsForDate(
     const [eh, em] = parseHM(w.end_time);
     const startUtc = zonedToUtc(year, month, day, sh, sm).getTime();
     const endUtc = zonedToUtc(year, month, day, eh, em).getTime();
-    for (let t = startUtc; t + durationMin * 60_000 <= endUtc; t += stepMin * 60_000) {
+    for (
+      let t = startUtc;
+      t + durationMin * 60_000 <= endUtc;
+      t += stepMin * 60_000
+    ) {
       out.push(new Date(t).toISOString());
     }
   }
@@ -290,7 +344,9 @@ export interface GCalDiagnostics {
  * anyone book a lesson to find out. Everything the booking functions do
  * silently and best-effort, this does loudly and reports back.
  */
-export async function gcalDiagnose(probeWrite = false): Promise<GCalDiagnostics> {
+export async function gcalDiagnose(
+  probeWrite = false,
+): Promise<GCalDiagnostics> {
   const lovableKey = Deno.env.get("LOVABLE_API_KEY");
   const gcalKey = Deno.env.get("GOOGLE_CALENDAR_API_KEY");
   const keys = { lovable: !!lovableKey, googleCalendar: !!gcalKey };
@@ -298,7 +354,10 @@ export async function gcalDiagnose(probeWrite = false): Promise<GCalDiagnostics>
   if (!lovableKey || !gcalKey) {
     const detail =
       "Secretele conectorului lipsesc: " +
-      [!lovableKey ? "LOVABLE_API_KEY" : null, !gcalKey ? "GOOGLE_CALENDAR_API_KEY" : null]
+      [
+        !lovableKey ? "LOVABLE_API_KEY" : null,
+        !gcalKey ? "GOOGLE_CALENDAR_API_KEY" : null,
+      ]
         .filter(Boolean)
         .join(" și ");
     return { keys, read: { ok: false, status: null, detail }, write: null };
@@ -340,24 +399,32 @@ export async function gcalDiagnose(probeWrite = false): Promise<GCalDiagnostics>
   const startISO = new Date(now + 400 * 86_400_000).toISOString();
   const endISO = new Date(now + 400 * 86_400_000 + 900_000).toISOString();
   try {
-    const res = await fetch(`${GCAL_GATEWAY}/calendars/primary/events?sendUpdates=none`, {
-      method: "POST",
-      headers,
-      body: JSON.stringify({
-        summary: "Test conexiune — se șterge automat",
-        description: "Verificare automată a sincronizării cu Google Calendar.",
-        start: { dateTime: startISO, timeZone: TZ },
-        end: { dateTime: endISO, timeZone: TZ },
-        reminders: { useDefault: false },
-      }),
-    });
+    const res = await fetch(
+      `${GCAL_GATEWAY}/calendars/primary/events?sendUpdates=none`,
+      {
+        method: "POST",
+        headers,
+        body: JSON.stringify({
+          summary: "Test conexiune — se șterge automat",
+          description:
+            "Verificare automată a sincronizării cu Google Calendar.",
+          start: { dateTime: startISO, timeZone: TZ },
+          end: { dateTime: endISO, timeZone: TZ },
+          reminders: { useDefault: false },
+        }),
+      },
+    );
     const text = await res.text();
     if (!res.ok) {
       write = { ok: false, status: res.status, detail: trim(text) };
     } else {
       const id = (JSON.parse(text) as { id?: string })?.id;
       if (id) await gcalDeleteEvent(id);
-      write = { ok: true, status: res.status, detail: id ? null : "Evenimentul creat nu a returnat un id." };
+      write = {
+        ok: true,
+        status: res.status,
+        detail: id ? null : "Evenimentul creat nu a returnat un id.",
+      };
     }
   } catch (err) {
     write = { ok: false, status: null, detail: trim(String(err)) };
@@ -365,8 +432,6 @@ export async function gcalDiagnose(probeWrite = false): Promise<GCalDiagnostics>
 
   return { keys, read, write };
 }
-
-
 
 // ---------------------------------------------------------------------------
 // Bookable-slot rules, shared by booking-availability (which lists slots) and
@@ -382,11 +447,20 @@ export interface SlotEventType {
   physical_weekdays?: number[] | null;
 }
 export type LocalDay = { y: number; m: number; d: number };
-export type AvailabilityRule = { weekday: number; start_time: string; end_time: string };
+export type AvailabilityRule = {
+  weekday: number;
+  start_time: string;
+  end_time: string;
+};
 
 export const ACTIVE_COHORT_SELECT =
   "id,days_of_week,start_time,end_time,start_date,end_date,cohort_meetings(weekday,start_time,end_time)";
-export const ACTIVE_COHORT_STATUSES = ["forming", "minimum_reached", "confirmed", "in_progress"];
+export const ACTIVE_COHORT_STATUSES = [
+  "forming",
+  "minimum_reached",
+  "confirmed",
+  "in_progress",
+];
 
 /** Candidate slot starts (UTC ISO) from the availability rules for the given local days. */
 export function candidateSlotsForDays(
@@ -394,7 +468,10 @@ export function candidateSlotsForDays(
   rules: AvailabilityRule[],
   durationMin: number,
 ): string[] {
-  const rulesByDay = new Map<number, Array<{ start_time: string; end_time: string }>>();
+  const rulesByDay = new Map<
+    number,
+    Array<{ start_time: string; end_time: string }>
+  >();
   for (const r of rules) {
     const arr = rulesByDay.get(r.weekday) ?? [];
     arr.push({ start_time: r.start_time, end_time: r.end_time });
@@ -405,7 +482,9 @@ export function candidateSlotsForDays(
     const probe = new Date(Date.UTC(day.y, day.m - 1, day.d, 12, 0));
     const windows = rulesByDay.get(weekdayInTzLocal(probe));
     if (!windows) continue;
-    out.push(...generateSlotsForDate(day.y, day.m, day.d, windows, durationMin, 30));
+    out.push(
+      ...generateSlotsForDate(day.y, day.m, day.d, windows, durationMin, 30),
+    );
   }
   return out;
 }
@@ -425,17 +504,23 @@ export function passesTimingRules(
 }
 
 // deno-lint-ignore no-explicit-any
-export function cohortBusyForDays(cohorts: any[], days: LocalDay[]): Array<{ start: number; end: number }> {
+export function cohortBusyForDays(
+  cohorts: any[],
+  days: LocalDay[],
+): Array<{ start: number; end: number }> {
   const out: Array<{ start: number; end: number }> = [];
   for (const c of cohorts ?? []) {
-    const meetings: Array<{ weekday: number; start_time: string; end_time: string }> =
-      c.cohort_meetings?.length
-        ? c.cohort_meetings
-        : (c.days_of_week ?? []).map((wd: number) => ({
-            weekday: wd,
-            start_time: c.start_time,
-            end_time: c.end_time,
-          }));
+    const meetings: Array<{
+      weekday: number;
+      start_time: string;
+      end_time: string;
+    }> = c.cohort_meetings?.length
+      ? c.cohort_meetings
+      : (c.days_of_week ?? []).map((wd: number) => ({
+          weekday: wd,
+          start_time: c.start_time,
+          end_time: c.end_time,
+        }));
     for (const m of meetings) {
       if (!m.start_time || !m.end_time) continue;
       const [csh, csm] = parseHM(m.start_time);

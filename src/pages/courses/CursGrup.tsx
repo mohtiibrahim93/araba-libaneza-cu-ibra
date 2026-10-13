@@ -52,7 +52,12 @@ const CursGrup = () => {
       h1={t.courseGrupH1}
       intro={t.courseGrupIntro}
       priceLine={t.courseGrupPriceLine}
-      features={[t.courseGrupFeat1, t.courseGrupFeat2, t.courseGrupFeat3, t.courseGrupFeat4]}
+      features={[
+        t.courseGrupFeat1,
+        t.courseGrupFeat2,
+        t.courseGrupFeat3,
+        t.courseGrupFeat4,
+      ]}
       primaryCtaLabel={t.grupChooseLevelTitle}
       primaryCtaHref="#choose-level"
       otherCourses={[
@@ -62,8 +67,12 @@ const CursGrup = () => {
     >
       {/* Level grid */}
       <section id="choose-level" className="scroll-mt-24 mt-4">
-        <h2 className="font-display text-display-lg font-bold tracking-tight text-foreground mb-2">{t.grupChooseLevelTitle}</h2>
-        <p className="text-base text-muted-foreground mb-2 max-w-2xl">{t.grupChooseLevelDesc}</p>
+        <h2 className="font-display text-display-lg font-bold tracking-tight text-foreground mb-2">
+          {t.grupChooseLevelTitle}
+        </h2>
+        <p className="text-base text-muted-foreground mb-2 max-w-2xl">
+          {t.grupChooseLevelDesc}
+        </p>
         <CohortEnrollmentNote className="text-sm font-medium text-primary mb-6 max-w-2xl" />
         <GroupStartRule className="mb-6 max-w-3xl" />
 
@@ -72,9 +81,41 @@ const CursGrup = () => {
             it, with the anchor those searches actually use. */}
         <p className="text-sm text-muted-foreground mb-6 max-w-2xl">
           {lang === "en" ? (
-            <>Under 18? See <Link to="/cursuri-araba-adolescenti" className="text-primary hover:underline underline-offset-4">Arabic courses for teenagers (12–17)</Link> or <Link to="/cursuri/copii" className="text-primary hover:underline underline-offset-4">courses for children (6–11)</Link>.</>
+            <>
+              Under 18? See{" "}
+              <Link
+                to="/cursuri-araba-adolescenti"
+                className="text-primary hover:underline underline-offset-4"
+              >
+                Arabic courses for teenagers (12–17)
+              </Link>{" "}
+              or{" "}
+              <Link
+                to="/cursuri/copii"
+                className="text-primary hover:underline underline-offset-4"
+              >
+                courses for children (6–11)
+              </Link>
+              .
+            </>
           ) : (
-            <>Ai sub 18 ani? Vezi <Link to="/cursuri-araba-adolescenti" className="text-primary hover:underline underline-offset-4">cursurile de arabă pentru adolescenți (12–17 ani)</Link> sau <Link to="/cursuri/copii" className="text-primary hover:underline underline-offset-4">cursul pentru copii (6–11 ani)</Link>.</>
+            <>
+              Ai sub 18 ani? Vezi{" "}
+              <Link
+                to="/cursuri-araba-adolescenti"
+                className="text-primary hover:underline underline-offset-4"
+              >
+                cursurile de arabă pentru adolescenți (12–17 ani)
+              </Link>{" "}
+              sau{" "}
+              <Link
+                to="/cursuri/copii"
+                className="text-primary hover:underline underline-offset-4"
+              >
+                cursul pentru copii (6–11 ani)
+              </Link>
+              .
+            </>
           )}
         </p>
 
@@ -95,51 +136,101 @@ const CursGrup = () => {
             </caption>
             <thead>
               <tr className="border-b border-border bg-muted/40 text-left text-muted-foreground">
-                <th scope="col" className="py-2.5 px-3 font-semibold">{lang === "en" ? "Level" : "Nivel"}</th>
-                <th scope="col" className="py-2.5 px-3 font-semibold">{lang === "en" ? "Lessons" : "Lecții"}</th>
-                <th scope="col" className="py-2.5 px-3 font-semibold">{lang === "en" ? "Length" : "Durată"}</th>
-                <th scope="col" className="py-2.5 px-3 font-semibold">{lang === "en" ? "Per month" : "Pe lună"}</th>
                 <th scope="col" className="py-2.5 px-3 font-semibold">
-                  {lang === "en" ? `Whole level, paid upfront (${discountLabel(GROUP_FULL_COURSE_DISCOUNT)})` : `Tot nivelul, plătit integral (${discountLabel(GROUP_FULL_COURSE_DISCOUNT)})`}
+                  {lang === "en" ? "Level" : "Nivel"}
                 </th>
-                <th scope="col" className="py-2.5 px-3 font-semibold">{lang === "en" ? "Enrolment" : "Înscrieri"}</th>
+                <th scope="col" className="py-2.5 px-3 font-semibold">
+                  {lang === "en" ? "Lessons" : "Lecții"}
+                </th>
+                <th scope="col" className="py-2.5 px-3 font-semibold">
+                  {lang === "en" ? "Length" : "Durată"}
+                </th>
+                <th scope="col" className="py-2.5 px-3 font-semibold">
+                  {lang === "en" ? "Per month" : "Pe lună"}
+                </th>
+                <th scope="col" className="py-2.5 px-3 font-semibold">
+                  {lang === "en"
+                    ? `Whole level, paid upfront (${discountLabel(GROUP_FULL_COURSE_DISCOUNT)})`
+                    : `Tot nivelul, plătit integral (${discountLabel(GROUP_FULL_COURSE_DISCOUNT)})`}
+                </th>
+                <th scope="col" className="py-2.5 px-3 font-semibold">
+                  {lang === "en" ? "Enrolment" : "Înscrieri"}
+                </th>
               </tr>
             </thead>
             <tbody>
               {LEVELS.map((lvl) => {
-                const data = curriculum.find((c) => c.id === lvl.toLowerCase())!;
+                const data = curriculum.find(
+                  (c) => c.id === lvl.toLowerCase(),
+                )!;
                 const online = ONLINE_PRICES.groupMonthly[lvl];
                 const fizic = physicalPrice(online);
                 const months = GROUP_COURSE_MONTHS[lvl];
                 // The pay-in-full price the checkout actually charges:
                 // monthly x months, less the upfront discount.
-                const fullOnline = Math.round(online * months * (1 - GROUP_FULL_COURSE_DISCOUNT));
-                const fullFizic = Math.round(fizic * months * (1 - GROUP_FULL_COURSE_DISCOUNT));
+                const fullOnline = Math.round(
+                  online * months * (1 - GROUP_FULL_COURSE_DISCOUNT),
+                );
+                const fullFizic = Math.round(
+                  fizic * months * (1 - GROUP_FULL_COURSE_DISCOUNT),
+                );
                 const available = isAvailable(lvl);
                 return (
-                  <tr key={lvl} className="border-b border-border/60 last:border-0 align-top">
-                    <th scope="row" className="py-2.5 px-3 text-left font-bold text-foreground whitespace-nowrap">
-                      <Link to={`${lang === "en" ? "/en/courses/group" : "/cursuri/grup"}/${lvl.toLowerCase()}`} className="text-primary hover:underline underline-offset-4">
+                  <tr
+                    key={lvl}
+                    className="border-b border-border/60 last:border-0 align-top"
+                  >
+                    <th
+                      scope="row"
+                      className="py-2.5 px-3 text-left font-bold text-foreground whitespace-nowrap"
+                    >
+                      <Link
+                        to={`${lang === "en" ? "/en/courses/group" : "/cursuri/grup"}/${lvl.toLowerCase()}`}
+                        className="text-primary hover:underline underline-offset-4"
+                      >
                         {lvl}
                       </Link>
                     </th>
-                    <td className="py-2.5 px-3 whitespace-nowrap">{data.lessons}</td>
                     <td className="py-2.5 px-3 whitespace-nowrap">
-                      {months} {lang === "en" ? (months === 1 ? "month" : "months") : "luni"}
+                      {data.lessons}
                     </td>
                     <td className="py-2.5 px-3 whitespace-nowrap">
-                      <span className="font-semibold text-foreground">{formatLei(online)}</span>{" "}
-                      <span className="text-muted-foreground">{t.priceOnlineShort}</span>
-                      {" · "}
-                      <span className="font-semibold text-foreground">{formatLei(fizic)}</span>{" "}
-                      <span className="text-muted-foreground">{t.priceFizicShort}</span>
+                      {months}{" "}
+                      {lang === "en"
+                        ? months === 1
+                          ? "month"
+                          : "months"
+                        : "luni"}
                     </td>
                     <td className="py-2.5 px-3 whitespace-nowrap">
-                      <span className="font-semibold text-foreground">{formatLei(fullOnline)}</span>{" "}
-                      <span className="text-muted-foreground">{t.priceOnlineShort}</span>
+                      <span className="font-semibold text-foreground">
+                        {formatLei(online)}
+                      </span>{" "}
+                      <span className="text-muted-foreground">
+                        {t.priceOnlineShort}
+                      </span>
                       {" · "}
-                      <span className="font-semibold text-foreground">{formatLei(fullFizic)}</span>{" "}
-                      <span className="text-muted-foreground">{t.priceFizicShort}</span>
+                      <span className="font-semibold text-foreground">
+                        {formatLei(fizic)}
+                      </span>{" "}
+                      <span className="text-muted-foreground">
+                        {t.priceFizicShort}
+                      </span>
+                    </td>
+                    <td className="py-2.5 px-3 whitespace-nowrap">
+                      <span className="font-semibold text-foreground">
+                        {formatLei(fullOnline)}
+                      </span>{" "}
+                      <span className="text-muted-foreground">
+                        {t.priceOnlineShort}
+                      </span>
+                      {" · "}
+                      <span className="font-semibold text-foreground">
+                        {formatLei(fullFizic)}
+                      </span>{" "}
+                      <span className="text-muted-foreground">
+                        {t.priceFizicShort}
+                      </span>
                     </td>
                     <td className="py-2.5 px-3">
                       {available ? (
@@ -148,7 +239,9 @@ const CursGrup = () => {
                         </span>
                       ) : (
                         <span className="text-muted-foreground">
-                          {lang === "en" ? "After the previous level" : "După nivelul anterior"}
+                          {lang === "en"
+                            ? "After the previous level"
+                            : "După nivelul anterior"}
                         </span>
                       )}
                     </td>
@@ -177,7 +270,9 @@ const CursGrup = () => {
                 className="group rounded-3xl border border-[#E7E1D6] bg-card p-6 hover:border-brand-green/50 transition-colors flex flex-col dark:border-border"
               >
                 <div className="flex items-center justify-between mb-2">
-                  <span className="font-display text-3xl font-bold text-foreground">{lvl}</span>
+                  <span className="font-display text-3xl font-bold text-foreground">
+                    {lvl}
+                  </span>
                   {available ? (
                     <span className="rounded-full bg-brand-green/10 px-2.5 py-0.5 text-[11px] font-bold text-brand-green">
                       {lang === "en" ? "Open" : "Înscrieri deschise"}
@@ -188,22 +283,43 @@ const CursGrup = () => {
                     </span>
                   )}
                 </div>
-                <p className="font-semibold text-foreground mb-2 line-clamp-2">{data.title.replace(/^Nivel \w+ — /, "").replace(/^Level \w+ — /, "")}</p>
-                <p className="text-sm leading-relaxed text-foreground/75 mb-4 line-clamp-3 flex-1">{data.objective}</p>
+                <p className="font-semibold text-foreground mb-2 line-clamp-2">
+                  {data.title
+                    .replace(/^Nivel \w+ — /, "")
+                    .replace(/^Level \w+ — /, "")}
+                </p>
+                <p className="text-sm leading-relaxed text-foreground/75 mb-4 line-clamp-3 flex-1">
+                  {data.objective}
+                </p>
                 <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-xs text-muted-foreground mb-3">
-                  <span><strong className="text-foreground">{data.lessons}</strong> {t.grupLevelCardLessons}</span>
+                  <span>
+                    <strong className="text-foreground">{data.lessons}</strong>{" "}
+                    {t.grupLevelCardLessons}
+                  </span>
                   <span>·</span>
-                  <span><strong className="text-foreground">{data.hours}</strong> {t.grupLevelCardHours}</span>
+                  <span>
+                    <strong className="text-foreground">{data.hours}</strong>{" "}
+                    {t.grupLevelCardHours}
+                  </span>
                 </div>
                 {data.schedule && (
                   <div className="mb-3 space-y-0.5">
                     {data.schedule.map((line, i) => (
-                      <p key={i} className="text-xs text-muted-foreground">{line}</p>
+                      <p key={i} className="text-xs text-muted-foreground">
+                        {line}
+                      </p>
                     ))}
                   </div>
                 )}
                 <div className="text-xs text-muted-foreground mb-3">
-                  <span className="font-semibold text-foreground">{formatLei(online)}</span> {t.priceOnlineShort} · <span className="font-semibold text-foreground">{formatLei(fizic)}</span> {t.priceFizicShort} {t.priceLeiPerMonth}
+                  <span className="font-semibold text-foreground">
+                    {formatLei(online)}
+                  </span>{" "}
+                  {t.priceOnlineShort} ·{" "}
+                  <span className="font-semibold text-foreground">
+                    {formatLei(fizic)}
+                  </span>{" "}
+                  {t.priceFizicShort} {t.priceLeiPerMonth}
                 </div>
                 <span className="inline-flex items-center gap-1 text-sm font-semibold text-brand-green group-hover:underline underline-offset-4">
                   {t.grupLevelCardViewFull}
@@ -227,29 +343,56 @@ const CursGrup = () => {
 
       {/* Don't know your level? */}
       <section className="mt-section rounded-3xl bg-cream p-6 sm:p-10">
-        <h2 className="font-display text-display-md font-bold text-foreground mb-2">{t.dontKnowLevelTitle}</h2>
-        <p className="text-sm text-muted-foreground mb-6 max-w-2xl">{t.dontKnowLevelDesc}</p>
+        <h2 className="font-display text-display-md font-bold text-foreground mb-2">
+          {t.dontKnowLevelTitle}
+        </h2>
+        <p className="text-sm text-muted-foreground mb-6 max-w-2xl">
+          {t.dontKnowLevelDesc}
+        </p>
         <div className="grid sm:grid-cols-3 gap-4">
-          <Link to="/quiz" className="rounded-2xl border border-[#E7E1D6] bg-card p-5 hover:border-brand-green/50 transition-colors dark:border-border">
+          <Link
+            to="/quiz"
+            className="rounded-2xl border border-[#E7E1D6] bg-card p-5 hover:border-brand-green/50 transition-colors dark:border-border"
+          >
             <Sparkles className="w-5 h-5 text-primary mb-2" />
-            <h3 className="text-sm font-bold text-foreground mb-1">{t.dontKnowOptQuizTitle}</h3>
-            <p className="text-xs text-muted-foreground mb-3">{t.dontKnowOptQuizDesc}</p>
+            <h3 className="text-sm font-bold text-foreground mb-1">
+              {t.dontKnowOptQuizTitle}
+            </h3>
+            <p className="text-xs text-muted-foreground mb-3">
+              {t.dontKnowOptQuizDesc}
+            </p>
             <span className="text-xs font-medium text-primary inline-flex items-center gap-1">
               {t.dontKnowOptQuizTitle} <ChevronRight className="w-3.5 h-3.5" />
             </span>
           </Link>
-          <Link to="/trial" className="rounded-2xl border border-[#E7E1D6] bg-card p-5 hover:border-brand-green/50 transition-colors dark:border-border">
+          <Link
+            to="/trial"
+            className="rounded-2xl border border-[#E7E1D6] bg-card p-5 hover:border-brand-green/50 transition-colors dark:border-border"
+          >
             <Building2 className="w-5 h-5 text-primary mb-2" />
-            <h3 className="text-sm font-bold text-foreground mb-1">{t.dontKnowOptTestTitle}</h3>
-            <p className="text-xs text-muted-foreground mb-3">{t.dontKnowOptTestDesc}</p>
+            <h3 className="text-sm font-bold text-foreground mb-1">
+              {t.dontKnowOptTestTitle}
+            </h3>
+            <p className="text-xs text-muted-foreground mb-3">
+              {t.dontKnowOptTestDesc}
+            </p>
             <span className="text-xs font-medium text-primary inline-flex items-center gap-1">
               {t.dontKnowOptTestTitle} <ChevronRight className="w-3.5 h-3.5" />
             </span>
           </Link>
-          <a href={WHATSAPP_URL} target="_blank" rel="noopener noreferrer" className="rounded-2xl border border-[#E7E1D6] bg-card p-5 hover:border-brand-green/50 transition-colors dark:border-border">
+          <a
+            href={WHATSAPP_URL}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="rounded-2xl border border-[#E7E1D6] bg-card p-5 hover:border-brand-green/50 transition-colors dark:border-border"
+          >
             <MessageCircle className="w-5 h-5 text-primary mb-2" />
-            <h3 className="text-sm font-bold text-foreground mb-1">{t.dontKnowOptWhatsAppTitle}</h3>
-            <p className="text-xs text-muted-foreground mb-3">{t.dontKnowOptWhatsAppDesc}</p>
+            <h3 className="text-sm font-bold text-foreground mb-1">
+              {t.dontKnowOptWhatsAppTitle}
+            </h3>
+            <p className="text-xs text-muted-foreground mb-3">
+              {t.dontKnowOptWhatsAppDesc}
+            </p>
             <span className="text-xs font-medium text-primary inline-flex items-center gap-1">
               WhatsApp <ChevronRight className="w-3.5 h-3.5" />
             </span>

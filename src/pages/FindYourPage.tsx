@@ -31,8 +31,12 @@ const FindYourPage = ({ lang }: { lang: "ro" | "en" }) => (
     <main>
       <div className="bg-cream pt-36 pb-12">
         <div className="mx-auto max-w-5xl px-gutter">
-          <h1 className="font-display text-display-lg font-bold tracking-tight text-foreground">{COPY[lang].h1}</h1>
-          <p className="mt-4 max-w-2xl text-lg text-muted-foreground">{COPY[lang].lead}</p>
+          <h1 className="font-display text-display-lg font-bold tracking-tight text-foreground">
+            {COPY[lang].h1}
+          </h1>
+          <p className="mt-4 max-w-2xl text-lg text-muted-foreground">
+            {COPY[lang].lead}
+          </p>
         </div>
       </div>
       <div className="mx-auto max-w-5xl px-gutter py-12">

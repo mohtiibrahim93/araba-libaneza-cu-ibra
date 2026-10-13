@@ -30,7 +30,15 @@ export function utcToZonedParts(d: Date, tz = TZ) {
 /** 0 = Sunday … 6 = Saturday for a UTC instant as observed in tz. */
 export function weekdayInTz(d: Date, tz = TZ): number {
   const wd = utcToZonedParts(d, tz).weekday;
-  const map: Record<string, number> = { Sun: 0, Mon: 1, Tue: 2, Wed: 3, Thu: 4, Fri: 5, Sat: 6 };
+  const map: Record<string, number> = {
+    Sun: 0,
+    Mon: 1,
+    Tue: 2,
+    Wed: 3,
+    Thu: 4,
+    Fri: 5,
+    Sat: 6,
+  };
   return map[wd] ?? 0;
 }
 
@@ -62,11 +70,20 @@ export const LEVEL_CHECK_RULES = [1, 2, 3, 4, 5].map((weekday) => ({
 }));
 
 /** A level-check start that fits inside its weekday 12:00–13:00 hour. */
-export function levelCheckTimeAllowed(startISO: string, durationMin: number, tz = TZ): boolean {
+export function levelCheckTimeAllowed(
+  startISO: string,
+  durationMin: number,
+  tz = TZ,
+): boolean {
   const d = new Date(startISO);
   const wd = weekdayInTz(d, tz);
   if (wd < 1 || wd > 5) return false;
-  const parts = new Intl.DateTimeFormat("en-GB", { timeZone: tz, hour: "2-digit", minute: "2-digit", hour12: false }).formatToParts(d);
+  const parts = new Intl.DateTimeFormat("en-GB", {
+    timeZone: tz,
+    hour: "2-digit",
+    minute: "2-digit",
+    hour12: false,
+  }).formatToParts(d);
   const h = Number(parts.find((p) => p.type === "hour")?.value);
   const m = Number(parts.find((p) => p.type === "minute")?.value);
   const startMin = h * 60 + m;
@@ -87,17 +104,27 @@ export function physicalTrialAllowed(
 // Rules the owner edits in Admin › Program › Disponibilitate (13 October 2026).
 // ---------------------------------------------------------------------------
 
-export type ScopedRule = { weekday: number; start_time: string; end_time: string; event_type_slug?: string | null };
+export type ScopedRule = {
+  weekday: number;
+  start_time: string;
+  end_time: string;
+  event_type_slug?: string | null;
+};
 
 /**
  * The weekly hours for one lesson type: its own rules when it has any,
  * otherwise the general ones (no event_type_slug). `fallback` keeps a type's
  * built-in hours for a database that predates per-type rules.
  */
-export function rulesForEventType<T extends ScopedRule>(rules: T[], slug: string, fallback?: ScopedRule[]): ScopedRule[] {
+export function rulesForEventType<T extends ScopedRule>(
+  rules: T[],
+  slug: string,
+  fallback?: ScopedRule[],
+): ScopedRule[] {
   const own = rules.filter((r) => r.event_type_slug === slug);
   if (own.length) return own;
-  if (fallback && !rules.some((r) => r.event_type_slug != null)) return fallback;
+  if (fallback && !rules.some((r) => r.event_type_slug != null))
+    return fallback;
   return rules.filter((r) => !r.event_type_slug);
 }
 
@@ -113,7 +140,8 @@ export function physicalDayAllowed(
   tz = TZ,
 ): boolean {
   if (format !== "physical") return true;
-  if (et.physical_weekdays === undefined) return physicalTrialAllowed(et.slug, format, startISO, tz);
+  if (et.physical_weekdays === undefined)
+    return physicalTrialAllowed(et.slug, format, startISO, tz);
   if (et.physical_weekdays === null) return true;
   return et.physical_weekdays.includes(weekdayInTz(new Date(startISO), tz));
 }
@@ -125,7 +153,11 @@ export function localDateKey(iso: string, tz = TZ): string {
 }
 
 /** True when the instant falls on a day off (inclusive date range). */
-export function inBlackout(iso: string, blackouts: Array<{ start_date: string; end_date: string }>, tz = TZ): boolean {
+export function inBlackout(
+  iso: string,
+  blackouts: Array<{ start_date: string; end_date: string }>,
+  tz = TZ,
+): boolean {
   const day = localDateKey(iso, tz);
   return blackouts.some((b) => day >= b.start_date && day <= b.end_date);
 }

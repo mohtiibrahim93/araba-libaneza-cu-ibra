@@ -24,21 +24,35 @@ export interface EventTypeOption {
 
 const WD = ["Dum", "Lun", "Mar", "Mie", "Joi", "Vin", "Sâm"];
 
-const AvailabilityAdmin = ({ eventTypes = [] }: { eventTypes?: EventTypeOption[] }) => {
+const AvailabilityAdmin = ({
+  eventTypes = [],
+}: {
+  eventTypes?: EventTypeOption[];
+}) => {
   const [rules, setRules] = useState<Rule[]>([]);
   const [loading, setLoading] = useState(true);
   const [savingId, setSavingId] = useState<string | null>(null);
-  const [newRule, setNewRule] = useState({ weekday: 1, start_time: "10:00", end_time: "18:00", event_type_slug: "" });
+  const [newRule, setNewRule] = useState({
+    weekday: 1,
+    start_time: "10:00",
+    end_time: "18:00",
+    event_type_slug: "",
+  });
 
   const load = useCallback(async () => {
     setLoading(true);
     try {
-      const { data, error } = await invokeAdmin({ action: "list_availability_rules" });
+      const { data, error } = await invokeAdmin({
+        action: "list_availability_rules",
+      });
       if (error) throw error;
       if (data?.error) throw new Error(data.error);
       setRules(data.data);
     } catch {
-      toast({ title: "Nu am putut încărca disponibilitatea", variant: "destructive" });
+      toast({
+        title: "Nu am putut încărca disponibilitatea",
+        variant: "destructive",
+      });
     } finally {
       setLoading(false);
     }
@@ -79,7 +93,10 @@ const AvailabilityAdmin = ({ eventTypes = [] }: { eventTypes?: EventTypeOption[]
   const remove = async (id: string) => {
     if (!confirm("Ștergi această regulă?")) return;
     try {
-      const { data, error } = await invokeAdmin({ action: "delete_availability_rule", id });
+      const { data, error } = await invokeAdmin({
+        action: "delete_availability_rule",
+        id,
+      });
       if (error) throw error;
       if (data?.error) throw new Error(data.error);
       setRules((prev) => prev.filter((r) => r.id !== id));
@@ -113,10 +130,14 @@ const AvailabilityAdmin = ({ eventTypes = [] }: { eventTypes?: EventTypeOption[]
   return (
     <section className="mb-6 rounded-lg border border-border bg-card p-4">
       <div className="mb-4">
-        <h2 className="text-base font-semibold text-foreground">Disponibilitate săptămânală</h2>
+        <h2 className="text-base font-semibold text-foreground">
+          Disponibilitate săptămânală
+        </h2>
         <p className="text-sm text-muted-foreground">
-          Intervalele orare în care studenții pot rezerva. Programările existente în Google Calendar blochează automat sloturile.
-          Un tip de lecție care are intervale „Doar: …” folosește numai acele intervale (de exemplu verificarea de nivel).
+          Intervalele orare în care studenții pot rezerva. Programările
+          existente în Google Calendar blochează automat sloturile. Un tip de
+          lecție care are intervale „Doar: …” folosește numai acele intervale
+          (de exemplu verificarea de nivel).
         </p>
       </div>
       {loading ? (
@@ -135,7 +156,9 @@ const AvailabilityAdmin = ({ eventTypes = [] }: { eventTypes?: EventTypeOption[]
                 <select
                   className="h-9 rounded-md border border-input bg-background px-2 text-sm"
                   value={r.weekday}
-                  onChange={(e) => update(r.id, { weekday: Number(e.target.value) })}
+                  onChange={(e) =>
+                    update(r.id, { weekday: Number(e.target.value) })
+                  }
                 >
                   {WD.map((d, i) => (
                     <option key={i} value={i}>
@@ -150,7 +173,9 @@ const AvailabilityAdmin = ({ eventTypes = [] }: { eventTypes?: EventTypeOption[]
                   aria-label="Pentru ce lecții"
                   className="h-9 rounded-md border border-input bg-background px-2 text-sm"
                   value={r.event_type_slug ?? ""}
-                  onChange={(e) => update(r.id, { event_type_slug: e.target.value || null })}
+                  onChange={(e) =>
+                    update(r.id, { event_type_slug: e.target.value || null })
+                  }
                 >
                   <option value="">Toate lecțiile</option>
                   {eventTypes.map((t) => (
@@ -165,7 +190,9 @@ const AvailabilityAdmin = ({ eventTypes = [] }: { eventTypes?: EventTypeOption[]
                 <TimeField
                   label={`Start ${WD[r.weekday] ?? ""}`}
                   value={r.start_time}
-                  onChange={(hhmm) => update(r.id, { start_time: hhmm + ":00" })}
+                  onChange={(hhmm) =>
+                    update(r.id, { start_time: hhmm + ":00" })
+                  }
                 />
               </div>
               <div className="space-y-1">
@@ -180,13 +207,23 @@ const AvailabilityAdmin = ({ eventTypes = [] }: { eventTypes?: EventTypeOption[]
                 <input
                   type="checkbox"
                   checked={r.is_active}
-                  onChange={(e) => update(r.id, { is_active: e.target.checked })}
+                  onChange={(e) =>
+                    update(r.id, { is_active: e.target.checked })
+                  }
                 />
                 Activ
               </label>
               <div className="ml-auto flex gap-1">
-                <Button size="sm" onClick={() => save(r)} disabled={savingId === r.id}>
-                  {savingId === r.id ? <Loader2 className="h-4 w-4 animate-spin" /> : "Salvează"}
+                <Button
+                  size="sm"
+                  onClick={() => save(r)}
+                  disabled={savingId === r.id}
+                >
+                  {savingId === r.id ? (
+                    <Loader2 className="h-4 w-4 animate-spin" />
+                  ) : (
+                    "Salvează"
+                  )}
                 </Button>
                 <Button size="sm" variant="ghost" onClick={() => remove(r.id)}>
                   <Trash2 className="h-4 w-4" />
@@ -201,7 +238,9 @@ const AvailabilityAdmin = ({ eventTypes = [] }: { eventTypes?: EventTypeOption[]
               <select
                 className="h-9 rounded-md border border-input bg-background px-2 text-sm"
                 value={newRule.weekday}
-                onChange={(e) => setNewRule({ ...newRule, weekday: Number(e.target.value) })}
+                onChange={(e) =>
+                  setNewRule({ ...newRule, weekday: Number(e.target.value) })
+                }
               >
                 {WD.map((d, i) => (
                   <option key={i} value={i}>
@@ -210,28 +249,32 @@ const AvailabilityAdmin = ({ eventTypes = [] }: { eventTypes?: EventTypeOption[]
                 ))}
               </select>
             </div>
-              <div className="space-y-1">
-                <Label className="text-xs">Pentru</Label>
-                <select
-                  aria-label="Pentru ce lecții, interval nou"
-                  className="h-9 rounded-md border border-input bg-background px-2 text-sm"
-                  value={newRule.event_type_slug}
-                  onChange={(e) => setNewRule({ ...newRule, event_type_slug: e.target.value })}
-                >
-                  <option value="">Toate lecțiile</option>
-                  {eventTypes.map((t) => (
-                    <option key={t.slug} value={t.slug}>
-                      Doar: {t.name_ro}
-                    </option>
-                  ))}
-                </select>
-              </div>
+            <div className="space-y-1">
+              <Label className="text-xs">Pentru</Label>
+              <select
+                aria-label="Pentru ce lecții, interval nou"
+                className="h-9 rounded-md border border-input bg-background px-2 text-sm"
+                value={newRule.event_type_slug}
+                onChange={(e) =>
+                  setNewRule({ ...newRule, event_type_slug: e.target.value })
+                }
+              >
+                <option value="">Toate lecțiile</option>
+                {eventTypes.map((t) => (
+                  <option key={t.slug} value={t.slug}>
+                    Doar: {t.name_ro}
+                  </option>
+                ))}
+              </select>
+            </div>
             <div className="space-y-1">
               <Label className="text-xs">Start</Label>
               <TimeField
                 label="Start, interval nou"
                 value={newRule.start_time}
-                onChange={(hhmm) => setNewRule({ ...newRule, start_time: hhmm })}
+                onChange={(hhmm) =>
+                  setNewRule({ ...newRule, start_time: hhmm })
+                }
               />
             </div>
             <div className="space-y-1">

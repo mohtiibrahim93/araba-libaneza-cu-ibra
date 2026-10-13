@@ -1,29 +1,32 @@
-import * as React from 'npm:react@19.3.0'
-import { render } from 'npm:@react-email/components@1.0.12'
+import * as React from "npm:react@19.3.0";
+import { render } from "npm:@react-email/components@1.0.12";
 import {
   EmailAPIError,
   parseEmailWebhookPayload,
   sendLovableEmail,
-} from 'npm:@lovable.dev/email-js'
+} from "npm:@lovable.dev/email-js";
 
-import { WebhookError, verifyWebhookRequest } from 'npm:@lovable.dev/webhooks-js'
-import { createClient } from 'npm:@supabase/supabase-js@2'
-import { SignupEmail } from '../_shared/email-templates/signup.tsx'
-import { InviteEmail } from '../_shared/email-templates/invite.tsx'
-import { MagicLinkEmail } from '../_shared/email-templates/magic-link.tsx'
-import { RecoveryEmail } from '../_shared/email-templates/recovery.tsx'
-import { EmailChangeEmail } from '../_shared/email-templates/email-change.tsx'
-import { ReauthenticationEmail } from '../_shared/email-templates/reauthentication.tsx'
-import { buildCorsHeaders } from '../_shared/cors.ts'
+import {
+  WebhookError,
+  verifyWebhookRequest,
+} from "npm:@lovable.dev/webhooks-js";
+import { createClient } from "npm:@supabase/supabase-js@2";
+import { SignupEmail } from "../_shared/email-templates/signup.tsx";
+import { InviteEmail } from "../_shared/email-templates/invite.tsx";
+import { MagicLinkEmail } from "../_shared/email-templates/magic-link.tsx";
+import { RecoveryEmail } from "../_shared/email-templates/recovery.tsx";
+import { EmailChangeEmail } from "../_shared/email-templates/email-change.tsx";
+import { ReauthenticationEmail } from "../_shared/email-templates/reauthentication.tsx";
+import { buildCorsHeaders } from "../_shared/cors.ts";
 
 // Module-scope default used by handlePreview/handleWebkook internals below;
 // Deno.serve() overwrites the actual response headers per-request via
 // withCors() so real callers never see this wildcard.
 const corsHeaders = {
-  'Access-Control-Allow-Origin': '*',
-  'Access-Control-Allow-Headers':
-    'authorization, x-client-info, apikey, content-type, x-lovable-signature, x-lovable-timestamp, x-supabase-client-platform, x-supabase-client-platform-version, x-supabase-client-runtime, x-supabase-client-runtime-version',
-}
+  "Access-Control-Allow-Origin": "*",
+  "Access-Control-Allow-Headers":
+    "authorization, x-client-info, apikey, content-type, x-lovable-signature, x-lovable-timestamp, x-supabase-client-platform, x-supabase-client-platform-version, x-supabase-client-runtime, x-supabase-client-runtime-version",
+};
 
 const EMAIL_SUBJECTS: Record<string, string> = {
   // signup and magiclink now lead with a six-digit code in the body, and the
@@ -31,13 +34,13 @@ const EMAIL_SUBJECTS: Record<string, string> = {
   // at src/routes/lovable/email/auth/webhook.ts sends the same two emails and
   // must keep the same subjects: only one of the two hooks is configured in
   // Supabase, and which one it is should not change what the reader sees.
-  signup: 'Your confirmation code',
+  signup: "Your confirmation code",
   invite: "You've been invited",
-  magiclink: 'Your login code',
-  recovery: 'Reset your password',
-  email_change: 'Confirm your new email',
-  reauthentication: 'Your verification code',
-}
+  magiclink: "Your login code",
+  recovery: "Reset your password",
+  email_change: "Confirm your new email",
+  reauthentication: "Your verification code",
+};
 
 // Template mapping
 const EMAIL_TEMPLATES: Record<string, React.ComponentType<any>> = {
@@ -47,21 +50,21 @@ const EMAIL_TEMPLATES: Record<string, React.ComponentType<any>> = {
   recovery: RecoveryEmail,
   email_change: EmailChangeEmail,
   reauthentication: ReauthenticationEmail,
-}
+};
 
 // Configuration
-const SITE_NAME = "araba-libaneza-cu-ibra"
-const SENDER_DOMAIN = "notify.centruldearabalibaneza.com"
-const ROOT_DOMAIN = "centruldearabalibaneza.com"
-const FROM_DOMAIN = "notify.centruldearabalibaneza.com" // Domain shown in From address (may be root or sender subdomain)
+const SITE_NAME = "araba-libaneza-cu-ibra";
+const SENDER_DOMAIN = "notify.centruldearabalibaneza.com";
+const ROOT_DOMAIN = "centruldearabalibaneza.com";
+const FROM_DOMAIN = "notify.centruldearabalibaneza.com"; // Domain shown in From address (may be root or sender subdomain)
 
 // Sample data for preview mode ONLY (not used in actual email sending).
 // URLs are baked in at scaffold time from the project's real data.
 // The sample email uses a fixed placeholder (RFC 6761 .test TLD) so the Go backend
 // can always find-and-replace it with the actual recipient when sending test emails,
 // even if the project's domain has changed since the template was scaffolded.
-const SAMPLE_PROJECT_URL = "https://araba-libaneza-cu-ibra.lovable.app"
-const SAMPLE_EMAIL = "user@example.test"
+const SAMPLE_PROJECT_URL = "https://araba-libaneza-cu-ibra.lovable.app";
+const SAMPLE_EMAIL = "user@example.test";
 const SAMPLE_DATA: Record<string, object> = {
   signup: {
     siteName: SITE_NAME,
@@ -90,147 +93,173 @@ const SAMPLE_DATA: Record<string, object> = {
     confirmationUrl: SAMPLE_PROJECT_URL,
   },
   reauthentication: {
-    token: '123456',
+    token: "123456",
   },
-}
+};
 
 // Preview endpoint handler - returns rendered HTML without sending email
 async function handlePreview(req: Request): Promise<Response> {
   const previewCorsHeaders = {
-    'Access-Control-Allow-Origin': '*',
-    'Access-Control-Allow-Headers': 'authorization, content-type',
+    "Access-Control-Allow-Origin": "*",
+    "Access-Control-Allow-Headers": "authorization, content-type",
+  };
+
+  if (req.method === "OPTIONS") {
+    return new Response(null, { headers: previewCorsHeaders });
   }
 
-  if (req.method === 'OPTIONS') {
-    return new Response(null, { headers: previewCorsHeaders })
-  }
-
-  const apiKey = Deno.env.get('LOVABLE_API_KEY')
-  const authHeader = req.headers.get('Authorization')
+  const apiKey = Deno.env.get("LOVABLE_API_KEY");
+  const authHeader = req.headers.get("Authorization");
 
   if (!apiKey || authHeader !== `Bearer ${apiKey}`) {
-    return new Response(JSON.stringify({ error: 'Unauthorized' }), {
+    return new Response(JSON.stringify({ error: "Unauthorized" }), {
       status: 401,
-      headers: { ...previewCorsHeaders, 'Content-Type': 'application/json' },
-    })
+      headers: { ...previewCorsHeaders, "Content-Type": "application/json" },
+    });
   }
 
-  let type: string
+  let type: string;
   try {
-    const body = await req.json()
-    type = body.type
+    const body = await req.json();
+    type = body.type;
   } catch (error) {
-    return new Response(JSON.stringify({ error: 'Invalid JSON in request body' }), {
-      status: 400,
-      headers: { ...previewCorsHeaders, 'Content-Type': 'application/json' },
-    })
+    return new Response(
+      JSON.stringify({ error: "Invalid JSON in request body" }),
+      {
+        status: 400,
+        headers: { ...previewCorsHeaders, "Content-Type": "application/json" },
+      },
+    );
   }
 
-  const EmailTemplate = EMAIL_TEMPLATES[type]
+  const EmailTemplate = EMAIL_TEMPLATES[type];
 
   if (!EmailTemplate) {
-    return new Response(JSON.stringify({ error: `Unknown email type: ${type}` }), {
-      status: 400,
-      headers: { ...previewCorsHeaders, 'Content-Type': 'application/json' },
-    })
+    return new Response(
+      JSON.stringify({ error: `Unknown email type: ${type}` }),
+      {
+        status: 400,
+        headers: { ...previewCorsHeaders, "Content-Type": "application/json" },
+      },
+    );
   }
 
-  const sampleData = SAMPLE_DATA[type] || {}
+  const sampleData = SAMPLE_DATA[type] || {};
   // deno-lint-ignore no-explicit-any -- @types/react 18.3.1 wrongly requires children on ReactElement
-  const html = await render(React.createElement(EmailTemplate, sampleData) as any)
+  const html = await render(
+    React.createElement(EmailTemplate, sampleData) as any,
+  );
 
   return new Response(html, {
     status: 200,
-    headers: { ...previewCorsHeaders, 'Content-Type': 'text/html; charset=utf-8' },
-  })
+    headers: {
+      ...previewCorsHeaders,
+      "Content-Type": "text/html; charset=utf-8",
+    },
+  });
 }
 
 // Webhook handler - verifies signature and sends email
 async function handleWebhook(req: Request): Promise<Response> {
-  const apiKey = Deno.env.get('LOVABLE_API_KEY')
+  const apiKey = Deno.env.get("LOVABLE_API_KEY");
 
   if (!apiKey) {
-    console.error('LOVABLE_API_KEY not configured')
+    console.error("LOVABLE_API_KEY not configured");
     return new Response(
-      JSON.stringify({ error: 'Server configuration error' }),
-      { status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
-    )
+      JSON.stringify({ error: "Server configuration error" }),
+      {
+        status: 500,
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+      },
+    );
   }
 
   // Verify signature + timestamp, then parse payload.
-  let payload: any
-  let run_id = ''
+  let payload: any;
+  let run_id = "";
   try {
     const verified = await verifyWebhookRequest({
       req,
       secret: apiKey,
       parser: parseEmailWebhookPayload,
-    })
-    payload = verified.payload
-    run_id = payload.run_id
+    });
+    payload = verified.payload;
+    run_id = payload.run_id;
   } catch (error) {
     if (error instanceof WebhookError) {
       switch (error.code) {
-        case 'invalid_signature':
-        case 'missing_timestamp':
-        case 'invalid_timestamp':
-        case 'stale_timestamp':
-          console.error('Invalid webhook signature', { error: error.message })
-          return new Response(JSON.stringify({ error: 'Invalid signature' }), {
+        case "invalid_signature":
+        case "missing_timestamp":
+        case "invalid_timestamp":
+        case "stale_timestamp":
+          console.error("Invalid webhook signature", { error: error.message });
+          return new Response(JSON.stringify({ error: "Invalid signature" }), {
             status: 401,
-            headers: { ...corsHeaders, 'Content-Type': 'application/json' },
-          })
-        case 'invalid_payload':
-        case 'invalid_json':
-          console.error('Invalid webhook payload', { error: error.message })
+            headers: { ...corsHeaders, "Content-Type": "application/json" },
+          });
+        case "invalid_payload":
+        case "invalid_json":
+          console.error("Invalid webhook payload", { error: error.message });
           return new Response(
-            JSON.stringify({ error: 'Invalid webhook payload' }),
-            { status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
-          )
+            JSON.stringify({ error: "Invalid webhook payload" }),
+            {
+              status: 400,
+              headers: { ...corsHeaders, "Content-Type": "application/json" },
+            },
+          );
       }
     }
 
-    console.error('Webhook verification failed', { error })
-    return new Response(
-      JSON.stringify({ error: 'Invalid webhook payload' }),
-      { status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
-    )
+    console.error("Webhook verification failed", { error });
+    return new Response(JSON.stringify({ error: "Invalid webhook payload" }), {
+      status: 400,
+      headers: { ...corsHeaders, "Content-Type": "application/json" },
+    });
   }
 
   if (!run_id) {
-    console.error('Webhook payload missing run_id')
-    return new Response(
-      JSON.stringify({ error: 'Invalid webhook payload' }),
-      {
-        status: 400,
-        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
-      }
-    )
+    console.error("Webhook payload missing run_id");
+    return new Response(JSON.stringify({ error: "Invalid webhook payload" }), {
+      status: 400,
+      headers: { ...corsHeaders, "Content-Type": "application/json" },
+    });
   }
 
-  if (payload.version !== '1') {
-    console.error('Unsupported payload version', { version: payload.version, run_id })
+  if (payload.version !== "1") {
+    console.error("Unsupported payload version", {
+      version: payload.version,
+      run_id,
+    });
     return new Response(
-      JSON.stringify({ error: `Unsupported payload version: ${payload.version}` }),
+      JSON.stringify({
+        error: `Unsupported payload version: ${payload.version}`,
+      }),
       {
         status: 400,
-        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
-      }
-    )
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+      },
+    );
   }
 
   // The email action type is in payload.data.action_type (e.g., "signup", "recovery")
   // payload.type is the hook event type ("auth")
-  const emailType = payload.data.action_type
-  console.log('Received auth event', { emailType, email: payload.data.email, run_id })
+  const emailType = payload.data.action_type;
+  console.log("Received auth event", {
+    emailType,
+    email: payload.data.email,
+    run_id,
+  });
 
-  const EmailTemplate = EMAIL_TEMPLATES[emailType]
+  const EmailTemplate = EMAIL_TEMPLATES[emailType];
   if (!EmailTemplate) {
-    console.error('Unknown email type', { emailType, run_id })
+    console.error("Unknown email type", { emailType, run_id });
     return new Response(
       JSON.stringify({ error: `Unknown email type: ${emailType}` }),
-      { status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
-    )
+      {
+        status: 400,
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+      },
+    );
   }
 
   // Build template props from payload.data (HookData structure)
@@ -243,43 +272,48 @@ async function handleWebhook(req: Request): Promise<Response> {
     email: payload.data.email,
     oldEmail: payload.data.old_email,
     newEmail: payload.data.new_email,
-  }
+  };
 
   // Render React Email to HTML and plain text
   // deno-lint-ignore no-explicit-any -- @types/react 18.3.1 wrongly requires children on ReactElement
-  const html = await render(React.createElement(EmailTemplate, templateProps) as any)
-  const text = await render(React.createElement(EmailTemplate, templateProps) as any, {
-    plainText: true,
-  })
+  const html = await render(
+    React.createElement(EmailTemplate, templateProps) as any,
+  );
+  const text = await render(
+    React.createElement(EmailTemplate, templateProps) as any,
+    {
+      plainText: true,
+    },
+  );
 
   // Send synchronously through Lovable's managed email API — delivery, retries,
   // rate limits, suppression and unsubscribe are handled on Lovable's side.
   const supabase = createClient(
-    Deno.env.get('SUPABASE_URL')!,
-    Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!
-  )
+    Deno.env.get("SUPABASE_URL")!,
+    Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!,
+  );
 
-  const messageId = crypto.randomUUID()
+  const messageId = crypto.randomUUID();
 
   const logSend = async (
-    status: 'sent' | 'suppressed' | 'failed',
+    status: "sent" | "suppressed" | "failed",
     errorMessage?: string,
   ) => {
-    const { error } = await supabase.from('email_send_log').insert({
+    const { error } = await supabase.from("email_send_log").insert({
       message_id: messageId,
       template_name: emailType,
       recipient_email: payload.data.email,
       status,
       error_message: errorMessage,
-    })
+    });
     if (error) {
-      console.error('Failed to write email_send_log', {
+      console.error("Failed to write email_send_log", {
         status,
         code: error.code,
         message: error.message,
-      })
+      });
     }
-  }
+  };
 
   try {
     await sendLovableEmail(
@@ -289,70 +323,77 @@ async function handleWebhook(req: Request): Promise<Response> {
         to: payload.data.email,
         from: `${SITE_NAME} <noreply@${FROM_DOMAIN}>`,
         sender_domain: SENDER_DOMAIN,
-        subject: EMAIL_SUBJECTS[emailType] || 'Notification',
+        subject: EMAIL_SUBJECTS[emailType] || "Notification",
         html,
         text,
-        purpose: 'transactional',
+        purpose: "transactional",
         label: emailType,
         idempotency_key: `auth-${emailType}-${run_id}`,
       },
-      { apiKey: Deno.env.get('LOVABLE_API_KEY')!, sendUrl: Deno.env.get('LOVABLE_SEND_URL') },
-    )
-    await logSend('sent')
+      {
+        apiKey: Deno.env.get("LOVABLE_API_KEY")!,
+        sendUrl: Deno.env.get("LOVABLE_SEND_URL"),
+      },
+    );
+    await logSend("sent");
   } catch (error) {
-    if (error instanceof EmailAPIError && error.code === 'recipient_suppressed') {
-      await logSend('suppressed')
-      console.log('Auth email suppressed', { emailType, run_id })
-      return new Response(
-        JSON.stringify({ success: true, suppressed: true }),
-        { status: 200, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
-      )
+    if (
+      error instanceof EmailAPIError &&
+      error.code === "recipient_suppressed"
+    ) {
+      await logSend("suppressed");
+      console.log("Auth email suppressed", { emailType, run_id });
+      return new Response(JSON.stringify({ success: true, suppressed: true }), {
+        status: 200,
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+      });
     }
-    const message = error instanceof Error ? error.message : String(error)
-    console.error('Failed to send auth email', { run_id, emailType, message })
-    await logSend('failed', message.slice(0, 1000))
-    return new Response(JSON.stringify({ error: 'Failed to send email' }), {
+    const message = error instanceof Error ? error.message : String(error);
+    console.error("Failed to send auth email", { run_id, emailType, message });
+    await logSend("failed", message.slice(0, 1000));
+    return new Response(JSON.stringify({ error: "Failed to send email" }), {
       status: 500,
-      headers: { ...corsHeaders, 'Content-Type': 'application/json' },
-    })
+      headers: { ...corsHeaders, "Content-Type": "application/json" },
+    });
   }
 
-  console.log('Auth email sent', { emailType, run_id })
+  console.log("Auth email sent", { emailType, run_id });
 
-  return new Response(
-    JSON.stringify({ success: true, sent: true }),
-    { status: 200, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
-  )
+  return new Response(JSON.stringify({ success: true, sent: true }), {
+    status: 200,
+    headers: { ...corsHeaders, "Content-Type": "application/json" },
+  });
 }
 
-
 Deno.serve(async (req) => {
-  const url = new URL(req.url)
-  const realCorsHeaders = buildCorsHeaders(req)
+  const url = new URL(req.url);
+  const realCorsHeaders = buildCorsHeaders(req);
   const withCors = (res: Response) => {
-    for (const [k, v] of Object.entries(realCorsHeaders)) res.headers.set(k, v)
-    return res
-  }
+    for (const [k, v] of Object.entries(realCorsHeaders)) res.headers.set(k, v);
+    return res;
+  };
 
   // Handle CORS preflight for main endpoint
-  if (req.method === 'OPTIONS') {
-    return new Response(null, { headers: realCorsHeaders })
+  if (req.method === "OPTIONS") {
+    return new Response(null, { headers: realCorsHeaders });
   }
 
   // Route to preview handler for /preview path
-  if (url.pathname.endsWith('/preview')) {
-    return withCors(await handlePreview(req))
+  if (url.pathname.endsWith("/preview")) {
+    return withCors(await handlePreview(req));
   }
 
   // Main webhook handler
   try {
-    return withCors(await handleWebhook(req))
+    return withCors(await handleWebhook(req));
   } catch (error) {
-    console.error('Webhook handler error:', error)
-    const message = error instanceof Error ? error.message : 'Unknown error'
-    return withCors(new Response(JSON.stringify({ error: message }), {
-      status: 500,
-      headers: { 'Content-Type': 'application/json' },
-    }))
+    console.error("Webhook handler error:", error);
+    const message = error instanceof Error ? error.message : "Unknown error";
+    return withCors(
+      new Response(JSON.stringify({ error: message }), {
+        status: 500,
+        headers: { "Content-Type": "application/json" },
+      }),
+    );
   }
-})
+});

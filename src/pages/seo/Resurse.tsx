@@ -33,8 +33,9 @@ const Resurse = () => (
     faq={FAQ}
   >
     <p>
-      Materialele sunt făcute pentru <strong>araba libaneză vorbită</strong> și scrise în{" "}
-      <Link to="/arabizi">arabizi</Link>, ca să le poți citi din prima zi, fără alfabetul arab.
+      Materialele sunt făcute pentru <strong>araba libaneză vorbită</strong> și
+      scrise în <Link to="/arabizi">arabizi</Link>, ca să le poți citi din prima
+      zi, fără alfabetul arab.
     </p>
 
     <h2>Cele 3 PDF-uri gratuite</h2>
@@ -45,19 +46,22 @@ const Resurse = () => (
           resource: "arabizi-cheat-sheet",
           fileHref: "/arabizi-cheat-sheet.pdf",
           title: "Cheat-sheet Arabizi",
-          description: "Tabelul cifrelor, 20 de expresii libaneze și un mesaj real de WhatsApp decodat.",
+          description:
+            "Tabelul cifrelor, 20 de expresii libaneze și un mesaj real de WhatsApp decodat.",
         },
         {
           resource: "100-expresii-libaneze",
           fileHref: "/100-expresii-libaneze.pdf",
           title: "100 de expresii libaneze",
-          description: "Șapte situații de zi cu zi, cu pronunție în arabizi și traducere în română.",
+          description:
+            "Șapte situații de zi cu zi, cu pronunție în arabizi și traducere în română.",
         },
         {
           resource: "plan-30-zile",
           fileHref: "/plan-30-zile-araba-libaneza.pdf",
           title: "Plan de 30 de zile",
-          description: "15–20 de minute pe zi, cu obiective săptămânale și resurse gratuite recomandate.",
+          description:
+            "15–20 de minute pe zi, cu obiective săptămânale și resurse gratuite recomandate.",
         },
       ]}
     />
@@ -65,39 +69,72 @@ const Resurse = () => (
     <h2>Ce conține fiecare</h2>
     <ul>
       <li>
-        <strong>Cheat-sheet Arabizi</strong> — o pagină cu tabelul cifrelor (2, 3, 5, 7, 8) și literele
-        arabe pe care le înlocuiesc, 20 de expresii esențiale și un mesaj real de WhatsApp decodat cuvânt
-        cu cuvânt. Ghidul complet stă pe <Link to="/arabizi">pagina Arabizi</Link>.
+        <strong>Cheat-sheet Arabizi</strong> — o pagină cu tabelul cifrelor (2,
+        3, 5, 7, 8) și literele arabe pe care le înlocuiesc, 20 de expresii
+        esențiale și un mesaj real de WhatsApp decodat cuvânt cu cuvânt. Ghidul
+        complet stă pe <Link to="/arabizi">pagina Arabizi</Link>.
       </li>
       <li>
-        <strong>100 de expresii libaneze</strong> — expresiile de care ai nevoie în primele luni, grupate
-        pe situații: salut și prezentare, restaurant, taxi, cumpărături, familie, urări și politețe.
+        <strong>100 de expresii libaneze</strong> — expresiile de care ai nevoie
+        în primele luni, grupate pe situații: salut și prezentare, restaurant,
+        taxi, cumpărături, familie, urări și politețe.
       </li>
       <li>
-        <strong>Plan de 30 de zile</strong> — ce faci în fiecare zi, folosind doar resurse gratuite, cu
-        verificări la final de săptămână. Vezi și{" "}
-        <Link to="/invata-araba-gratis">ghidul complet de învățare gratuită</Link>.
+        <strong>Plan de 30 de zile</strong> — ce faci în fiecare zi, folosind
+        doar resurse gratuite, cu verificări la final de săptămână. Vezi și{" "}
+        <Link to="/invata-araba-gratis">
+          ghidul complet de învățare gratuită
+        </Link>
+        .
       </li>
     </ul>
 
     <h2>Resurse gratuite direct pe site</h2>
     <ul>
-      <li><Link to="/joc">Jocul Yalla</Link> — peste 4.300 de expresii libaneze, cu recapitulări programate. Gratuit, fără cont.</li>
-      <li><Link to="/test-de-nivel">Test de nivel</Link> — ~15 minute, îți spune de unde pornești.</li>
+      <li>
+        <Link to="/joc">Jocul Yalla</Link> — peste 4.300 de expresii libaneze,
+        cu recapitulări programate. Gratuit, fără cont.
+      </li>
+      <li>
+        <Link to="/test-de-nivel">Test de nivel</Link> — ~15 minute, îți spune
+        de unde pornești.
+      </li>
 
-      <li><Link to="/fara-alfabet-arab">Cum înveți fără alfabetul arab</Link>.</li>
-      <li><Link to="/blog/primele-20-de-expresii-libaneze">Primele 20 de expresii libaneze</Link>.</li>
-      <li><Link to="/blog/numere-in-araba-libaneza">Numerele în araba libaneză</Link>.</li>
-      <li><Link to="/blog/gramatica-arabei-libaneze">Gramatica libaneză pe înțelesul tuturor</Link>.</li>
-      <li><Link to="/trial">Lecția de probă gratuită</Link> — 30 min cu profesor nativ.</li>
+      <li>
+        <Link to="/fara-alfabet-arab">Cum înveți fără alfabetul arab</Link>.
+      </li>
+      <li>
+        <Link to="/blog/primele-20-de-expresii-libaneze">
+          Primele 20 de expresii libaneze
+        </Link>
+        .
+      </li>
+      <li>
+        <Link to="/blog/numere-in-araba-libaneza">
+          Numerele în araba libaneză
+        </Link>
+        .
+      </li>
+      <li>
+        <Link to="/blog/gramatica-arabei-libaneze">
+          Gramatica libaneză pe înțelesul tuturor
+        </Link>
+        .
+      </li>
+      <li>
+        <Link to="/trial">Lecția de probă gratuită</Link> — 30 min cu profesor
+        nativ.
+      </li>
     </ul>
 
     <h2>Când resursele gratuite nu mai sunt suficiente</h2>
     <p>
-      PDF-urile te duc până la primele conversații simple. Dacă vrei corectare pe pronunție și
-      progres constant, continuă cu un <Link to="/cursuri-limba-araba">curs de arabă libaneză</Link> —
-      grupe mici A1–C2 <Link to="/cursuri-araba-bucuresti">în București</Link> sau online, ori{" "}
-      <Link to="/meditatii-araba">meditații de arabă 1:1</Link> adaptate obiectivului tău.
+      PDF-urile te duc până la primele conversații simple. Dacă vrei corectare
+      pe pronunție și progres constant, continuă cu un{" "}
+      <Link to="/cursuri-limba-araba">curs de arabă libaneză</Link> — grupe mici
+      A1–C2 <Link to="/cursuri-araba-bucuresti">în București</Link> sau online,
+      ori <Link to="/meditatii-araba">meditații de arabă 1:1</Link> adaptate
+      obiectivului tău.
     </p>
   </LandingLayout>
 );

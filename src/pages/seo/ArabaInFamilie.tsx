@@ -36,46 +36,88 @@ const ArabaInFamilie = () => (
     faq={FAQ}
   >
     <p>
-      Limba nu se transmite automat. În familiile mixte, araba dispare de obicei într-o singură
-      generație — nu din lipsă de dorință, ci din lipsă de <strong>rutină</strong>. Câteva obiceiuri
-      mici, ținute constant, fac mai mult decât o oră intensivă pe lună.
+      Limba nu se transmite automat. În familiile mixte, araba dispare de obicei
+      într-o singură generație — nu din lipsă de dorință, ci din lipsă de{" "}
+      <strong>rutină</strong>. Câteva obiceiuri mici, ținute constant, fac mai
+      mult decât o oră intensivă pe lună.
     </p>
 
     <h2>Rutine care funcționează acasă</h2>
     <ul>
-      <li><strong>Dimineața și seara</strong> — salut și noapte bună mereu în arabă: <em>saba7 el kheir</em> / <em>tesba7 3a kheir</em>.</li>
-      <li><strong>La masă</strong> — numele mâncărurilor și <em>sa77tein</em>; mesele libaneze sunt cel mai natural context de vocabular.</li>
-      <li><strong>Numărat zilnic</strong> — trepte, jucării, fructe (vezi <Link to="/blog/numere-in-araba-libaneza">numerele în libaneză</Link>).</li>
-      <li><strong>Un cântec pe săptămână</strong> — muzica fixează pronunția mai bine decât listele de cuvinte.</li>
-      <li><strong>Apel video cu bunicii</strong> — 10 minute, doar în arabă; e cea mai puternică motivație pentru un copil.</li>
+      <li>
+        <strong>Dimineața și seara</strong> — salut și noapte bună mereu în
+        arabă: <em>saba7 el kheir</em> / <em>tesba7 3a kheir</em>.
+      </li>
+      <li>
+        <strong>La masă</strong> — numele mâncărurilor și <em>sa77tein</em>;
+        mesele libaneze sunt cel mai natural context de vocabular.
+      </li>
+      <li>
+        <strong>Numărat zilnic</strong> — trepte, jucării, fructe (vezi{" "}
+        <Link to="/blog/numere-in-araba-libaneza">numerele în libaneză</Link>).
+      </li>
+      <li>
+        <strong>Un cântec pe săptămână</strong> — muzica fixează pronunția mai
+        bine decât listele de cuvinte.
+      </li>
+      <li>
+        <strong>Apel video cu bunicii</strong> — 10 minute, doar în arabă; e cea
+        mai puternică motivație pentru un copil.
+      </li>
     </ul>
 
     <h2>Regula „o persoană, o limbă”</h2>
     <p>
-      Fiecare părinte vorbește constant o singură limbă cu copilul. Creierul copilului asociază limba
-      cu persoana și trece între ele fără efort. Amestecul ocazional nu strică nimic; lipsa
-      constanței, da. Vocabularul de bază pentru relațiile de familie e aici:{" "}
-      <Link to="/blog/lebanese-family-vocabulary">cuvintele familiei în libaneză</Link>.
+      Fiecare părinte vorbește constant o singură limbă cu copilul. Creierul
+      copilului asociază limba cu persoana și trece între ele fără efort.
+      Amestecul ocazional nu strică nimic; lipsa constanței, da. Vocabularul de
+      bază pentru relațiile de familie e aici:{" "}
+      <Link to="/blog/lebanese-family-vocabulary">
+        cuvintele familiei în libaneză
+      </Link>
+      .
     </p>
 
     <h2>De unde începe fiecare</h2>
     <ul>
-      <li><strong>Copii 6–11 ani</strong> — <Link to="/curs-araba-copii">curs prin joc, fizic în București</Link>, cântece, povești, jocuri de rol (momentan nu avem cursuri pentru copii — lasă-ți datele și te anunțăm).</li>
-      <li><strong>Copii 12–17 ani</strong> — <Link to="/cursuri-araba-adolescenti">cursuri de arabă pentru adolescenți</Link>, cu accent pe conversație și cultură.</li>
-      <li><strong>Părinți</strong> — <Link to="/cursuri/grup">grupa A1 de adulți</Link> sau <Link to="/meditatii-araba">meditații de arabă 1:1</Link>; dacă e vorba de socri și relație, vezi <Link to="/araba-pentru-partener">araba pentru partener</Link>.</li>
-      <li><strong>Familii în afara Bucureștiului</strong> — <Link to="/cursuri-limba-araba">varianta online</Link>, live pe Zoom.</li>
+      <li>
+        <strong>Copii 6–11 ani</strong> —{" "}
+        <Link to="/curs-araba-copii">curs prin joc, fizic în București</Link>,
+        cântece, povești, jocuri de rol (momentan nu avem cursuri pentru copii —
+        lasă-ți datele și te anunțăm).
+      </li>
+      <li>
+        <strong>Copii 12–17 ani</strong> —{" "}
+        <Link to="/cursuri-araba-adolescenti">
+          cursuri de arabă pentru adolescenți
+        </Link>
+        , cu accent pe conversație și cultură.
+      </li>
+      <li>
+        <strong>Părinți</strong> —{" "}
+        <Link to="/cursuri/grup">grupa A1 de adulți</Link> sau{" "}
+        <Link to="/meditatii-araba">meditații de arabă 1:1</Link>; dacă e vorba
+        de socri și relație, vezi{" "}
+        <Link to="/araba-pentru-partener">araba pentru partener</Link>.
+      </li>
+      <li>
+        <strong>Familii în afara Bucureștiului</strong> —{" "}
+        <Link to="/cursuri-limba-araba">varianta online</Link>, live pe Zoom.
+      </li>
     </ul>
 
     <h2>Materiale gratuite pentru acasă</h2>
     <p>
-      Descarcă <Link to="/resurse">cele trei PDF-uri gratuite</Link> (cheat-sheet arabizi, 100 de
-      expresii, plan de 30 de zile) și folosește-le ca „temă comună” pentru toată familia. Ghidul
-      complet al resurselor gratuite e la{" "}
-      <Link to="/invata-araba-gratis">învață araba gratis</Link>, iar dacă nu știi ce variantă de
-      arabă vă trebuie, citește <Link to="/ce-araba-sa-inveti">ce arabă să înveți</Link>.
+      Descarcă <Link to="/resurse">cele trei PDF-uri gratuite</Link>{" "}
+      (cheat-sheet arabizi, 100 de expresii, plan de 30 de zile) și folosește-le
+      ca „temă comună” pentru toată familia. Ghidul complet al resurselor
+      gratuite e la <Link to="/invata-araba-gratis">învață araba gratis</Link>,
+      iar dacă nu știi ce variantă de arabă vă trebuie, citește{" "}
+      <Link to="/ce-araba-sa-inveti">ce arabă să înveți</Link>.
     </p>
     <p>
-      Prima lecție de probă e <Link to="/trial">gratuită</Link>, pentru copil sau pentru părinte.
+      Prima lecție de probă e <Link to="/trial">gratuită</Link>, pentru copil
+      sau pentru părinte.
     </p>
   </LandingLayout>
 );

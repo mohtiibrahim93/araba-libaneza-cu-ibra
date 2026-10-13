@@ -31,7 +31,8 @@ async function readInvokeError(err: unknown): Promise<string | null> {
   if (ctx && typeof ctx.json === "function") {
     try {
       const body = await ctx.json();
-      if (body && typeof body.error === "string" && body.error) return body.error;
+      if (body && typeof body.error === "string" && body.error)
+        return body.error;
     } catch {
       /* not json */
     }
@@ -66,7 +67,8 @@ const PaymentForm = ({
     returnUrl.searchParams.set("courseType", courseType);
     returnUrl.searchParams.set("amount", String(amount));
     returnUrl.searchParams.set("currency", currency);
-    if (registrationId) returnUrl.searchParams.set("registration_id", registrationId);
+    if (registrationId)
+      returnUrl.searchParams.set("registration_id", registrationId);
     if (email) returnUrl.searchParams.set("email", email);
     const { error } = await stripe.confirmPayment({
       elements,
@@ -75,7 +77,9 @@ const PaymentForm = ({
       },
     });
     if (error) {
-      toast.error(error.message || "Plata a eșuat. Te rugăm să încerci din nou.");
+      toast.error(
+        error.message || "Plata a eșuat. Te rugăm să încerci din nou.",
+      );
       setSubmitting(false);
     }
   };
@@ -87,7 +91,8 @@ const PaymentForm = ({
       minimumFractionDigits: 0,
     }).format(bani / 100);
   const formatted = fmt(amount);
-  const isSubscription = (courseType === "group" || courseType === "kids") && monthsTotal > 1;
+  const isSubscription =
+    (courseType === "group" || courseType === "kids") && monthsTotal > 1;
 
   return (
     <form onSubmit={handleSubmit} className="space-y-6">
@@ -97,25 +102,34 @@ const PaymentForm = ({
             Abonament lunar · {monthsTotal} luni
           </p>
           <p className="text-muted-foreground mt-1">
-            {fmt(amount)} / lună, facturat lunar timp de {monthsTotal} luni (total{" "}
-            {fmt(amount * monthsTotal)}). Se oprește automat după ultima lună. Achiți prima
-            lună acum.
+            {fmt(amount)} / lună, facturat lunar timp de {monthsTotal} luni
+            (total {fmt(amount * monthsTotal)}). Se oprește automat după ultima
+            lună. Achiți prima lună acum.
           </p>
         </div>
       )}
       <PaymentElement />
-      <Button type="submit" className="w-full" disabled={!stripe || submitting} size="lg">
+      <Button
+        type="submit"
+        className="w-full"
+        disabled={!stripe || submitting}
+        size="lg"
+      >
         {submitting ? (
           <>
             <Loader2 className="w-4 h-4 mr-2 animate-spin" />
             Se procesează...
           </>
         ) : (
-          <>Plătește {formatted}{isSubscription ? " / lună" : ""}</>
+          <>
+            Plătește {formatted}
+            {isSubscription ? " / lună" : ""}
+          </>
         )}
       </Button>
       <p className="text-xs text-muted-foreground text-center">
-        Plată securizată procesată de Stripe. Datele cardului tău nu sunt stocate pe acest site.
+        Plată securizată procesată de Stripe. Datele cardului tău nu sunt
+        stocate pe acest site.
       </p>
     </form>
   );
@@ -129,7 +143,10 @@ const Checkout = () => {
   const email = params.get("email") || "";
   const name = params.get("name") || "";
   const registrationId = params.get("registrationId") || "";
-  const quantity = Math.max(1, Math.min(100, Number.parseInt(params.get("quantity") || "1", 10) || 1));
+  const quantity = Math.max(
+    1,
+    Math.min(100, Number.parseInt(params.get("quantity") || "1", 10) || 1),
+  );
   // Group only: "monthly" (subscription, default) vs "full" (pay the whole
   // course upfront as one charge). Private ignores this.
   const groupPlan = params.get("plan") === "full" ? "full" : "monthly";
@@ -148,17 +165,22 @@ const Checkout = () => {
   const onEmailVerified = useCallback(() => {
     setVerifiedEmail(email);
     if (registrationId) {
-      void supabase.functions.invoke("notify-registration", { body: { registrationId } });
+      void supabase.functions.invoke("notify-registration", {
+        body: { registrationId },
+      });
     }
   }, [email, registrationId]);
 
   const [clientSecret, setClientSecret] = useState<string | null>(null);
-  const [stripePromise, setStripePromise] = useState<Promise<Stripe | null> | null>(null);
+  const [stripePromise, setStripePromise] =
+    useState<Promise<Stripe | null> | null>(null);
   const [amount, setAmount] = useState(0);
   const [monthsTotal, setMonthsTotal] = useState(0);
   const [currency, setCurrency] = useState("ron");
   const [error, setError] = useState<string | null>(null);
-  const [phase, setPhase] = useState<"initializing" | "ready" | "error">("initializing");
+  const [phase, setPhase] = useState<"initializing" | "ready" | "error">(
+    "initializing",
+  );
   const [stripeLoadFailed, setStripeLoadFailed] = useState(false);
   const [hostedLoading, setHostedLoading] = useState(false);
   // Set when the automatic redirect to Stripe's hosted page failed too —
@@ -206,7 +228,8 @@ const Checkout = () => {
         // Group / kids monthly → subscription. Pay-in-full and private → a
         // one-time PaymentIntent (the edge function derives the amount).
         const useSubscription =
-          (courseType === "group" || courseType === "kids") && groupPlan === "monthly";
+          (courseType === "group" || courseType === "kids") &&
+          groupPlan === "monthly";
         const { data, error: invokeError } = useSubscription
           ? await supabase.functions.invoke("create-subscription", {
               body: { email, name, registrationId },
@@ -216,19 +239,26 @@ const Checkout = () => {
             });
         if (invokeError) {
           const serverMsg = await readInvokeError(invokeError);
-          throw new Error(serverMsg ?? invokeError.message ?? "Eroare la inițializarea plății");
+          throw new Error(
+            serverMsg ??
+              invokeError.message ??
+              "Eroare la inițializarea plății",
+          );
         }
         // Safe diagnostic log: never print full clientSecret or full key.
         console.info("[checkout] payment-intent response", {
           amount: data?.amount,
           currency: data?.currency,
           hasClientSecret: Boolean(data?.clientSecret),
-          publishableKeyPrefix: typeof data?.publishableKey === "string"
-            ? data.publishableKey.slice(0, 8) + "…"
-            : null,
+          publishableKeyPrefix:
+            typeof data?.publishableKey === "string"
+              ? data.publishableKey.slice(0, 8) + "…"
+              : null,
         });
         if (!data?.clientSecret || !data?.publishableKey) {
-          throw new Error("Răspuns invalid de la server (lipsă clientSecret / publishableKey)");
+          throw new Error(
+            "Răspuns invalid de la server (lipsă clientSecret / publishableKey)",
+          );
         }
         if (typeof data.amount !== "number" || data.amount <= 0) {
           throw new Error("Sumă invalidă returnată de server");
@@ -245,12 +275,15 @@ const Checkout = () => {
             if (!cancelled) setStripeLoadFailed(true);
           });
         setAmount(data.amount);
-        setMonthsTotal(typeof data.monthsTotal === "number" ? data.monthsTotal : 0);
+        setMonthsTotal(
+          typeof data.monthsTotal === "number" ? data.monthsTotal : 0,
+        );
         setCurrency(data.currency);
         setPhase("ready");
       } catch (err) {
         console.error(err);
-        const msg = err instanceof Error ? err.message : "Eroare la inițializarea plății";
+        const msg =
+          err instanceof Error ? err.message : "Eroare la inițializarea plății";
         setError(msg);
         setPhase("error");
       }
@@ -258,7 +291,16 @@ const Checkout = () => {
     return () => {
       cancelled = true;
     };
-  }, [courseType, email, name, registrationId, quantity, groupPlan, forceFallback, emailVerified]);
+  }, [
+    courseType,
+    email,
+    name,
+    registrationId,
+    quantity,
+    groupPlan,
+    forceFallback,
+    emailVerified,
+  ]);
 
   // Watchdog: some blockers never reject the js.stripe.com fetch, they just
   // hang. If Stripe.js hasn't resolved after 6 s while we're supposedly
@@ -267,11 +309,13 @@ const Checkout = () => {
   useEffect(() => {
     if (phase !== "ready" || !stripePromise || stripeLoadFailed) return;
     let resolved = false;
-    stripePromise.then(() => {
-      resolved = true;
-    }).catch(() => {
-      resolved = true;
-    });
+    stripePromise
+      .then(() => {
+        resolved = true;
+      })
+      .catch(() => {
+        resolved = true;
+      });
     const t = window.setTimeout(() => {
       if (!resolved) {
         console.warn("[checkout] Stripe.js load watchdog fired", {
@@ -298,7 +342,11 @@ const Checkout = () => {
           body: {
             registrationId,
             email,
-            plan: (courseType === "group" || courseType === "kids") && groupPlan === "full" ? "full" : "monthly",
+            plan:
+              (courseType === "group" || courseType === "kids") &&
+              groupPlan === "full"
+                ? "full"
+                : "monthly",
           },
         },
       );
@@ -311,7 +359,9 @@ const Checkout = () => {
     } catch (err) {
       console.error(err);
       toast.error(
-        err instanceof Error ? err.message : "Nu am putut deschide pagina Stripe.",
+        err instanceof Error
+          ? err.message
+          : "Nu am putut deschide pagina Stripe.",
       );
       setHostedLoading(false);
       setHostedAutoFailed(true);
@@ -323,7 +373,13 @@ const Checkout = () => {
   // backup if the automatic redirect itself fails.
   const autoRedirectRef = useRef(false);
   useEffect(() => {
-    if (!emailVerified || !showFallback || autoRedirectRef.current || !registrationId) return;
+    if (
+      !emailVerified ||
+      !showFallback ||
+      autoRedirectRef.current ||
+      !registrationId
+    )
+      return;
     autoRedirectRef.current = true;
     void startHostedCheckout();
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -338,7 +394,12 @@ const Checkout = () => {
   );
 
   const canRenderElements =
-    !showFallback && phase === "ready" && !!clientSecret && !!stripePromise && !!options && amount > 0;
+    !showFallback &&
+    phase === "ready" &&
+    !!clientSecret &&
+    !!stripePromise &&
+    !!options &&
+    amount > 0;
 
   return (
     <div className="min-h-screen bg-muted/30 py-12 px-gutter">
@@ -353,14 +414,22 @@ const Checkout = () => {
 
         <div className="bg-background rounded-2xl border border-border shadow-xs p-6 sm:p-8">
           <div className="mb-6">
-            <h1 className="text-2xl font-bold text-foreground">Finalizează plata</h1>
+            <h1 className="text-2xl font-bold text-foreground">
+              Finalizează plata
+            </h1>
             <p className="text-sm text-muted-foreground mt-1">
               {COURSE_LABEL[courseType as CourseType] || courseType}
               {name && ` • ${name}`}
             </p>
           </div>
 
-          {!emailVerified ? <CheckoutEmailGate email={email} english={lang === "en"} onVerified={onEmailVerified} /> : showFallback && !hostedAutoFailed ? (
+          {!emailVerified ? (
+            <CheckoutEmailGate
+              email={email}
+              english={lang === "en"}
+              onVerified={onEmailVerified}
+            />
+          ) : showFallback && !hostedAutoFailed ? (
             /* Seamless path: the embedded form can't load here, so we're
                already redirecting to Stripe's hosted page — no error screen,
                no extra click. */
@@ -394,7 +463,9 @@ const Checkout = () => {
               </Button>
               <p className="text-xs text-muted-foreground">
                 Dacă nici asta nu funcționează, scrie-ne pe WhatsApp la{" "}
-                <a href="https://wa.me/40763124514" className="underline">0763 124 514</a>{" "}
+                <a href="https://wa.me/40763124514" className="underline">
+                  0763 124 514
+                </a>{" "}
                 și trimitem un link de plată direct.
               </p>
             </div>
@@ -407,7 +478,10 @@ const Checkout = () => {
               <p className="text-xs text-muted-foreground">
                 Reîncearcă sau contactează-ne pe WhatsApp la 0763 124 514.
               </p>
-              <Button variant="outline" onClick={() => window.location.reload()}>
+              <Button
+                variant="outline"
+                onClick={() => window.location.reload()}
+              >
                 Reîncearcă
               </Button>
             </div>

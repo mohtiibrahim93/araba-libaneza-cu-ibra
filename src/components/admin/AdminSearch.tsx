@@ -1,7 +1,12 @@
 import { useMemo, useState } from "react";
 import * as DialogPrimitive from "@radix-ui/react-dialog";
 import { Search, X } from "lucide-react";
-import { formTypeLabels, leadStatusLabels, type LeadStatus, type Registration } from "./types";
+import {
+  formTypeLabels,
+  leadStatusLabels,
+  type LeadStatus,
+  type Registration,
+} from "./types";
 
 /**
  * Ctrl K: find a person by name, email or phone, and open their page.
@@ -10,10 +15,7 @@ import { formTypeLabels, leadStatusLabels, type LeadStatus, type Registration } 
  * and asks the server nothing.
  */
 const norm = (s: string) =>
-  s
-    .toLocaleLowerCase("ro-RO")
-    .normalize("NFD")
-    .replace(/[̀-ͯ]/g, "");
+  s.toLocaleLowerCase("ro-RO").normalize("NFD").replace(/[̀-ͯ]/g, "");
 
 const AdminSearch = ({
   open,
@@ -36,7 +38,8 @@ const AdminSearch = ({
       .filter((r) => !r.anonymized_at)
       .filter((r) => {
         const hay = norm(`${r.name} ${r.email ?? ""}`);
-        const phoneHit = digits.length >= 4 && r.phone.replace(/[^\d]/g, "").includes(digits);
+        const phoneHit =
+          digits.length >= 4 && r.phone.replace(/[^\d]/g, "").includes(digits);
         return phoneHit || terms.every((t) => hay.includes(t));
       })
       .slice(0, 20);
@@ -53,12 +56,17 @@ const AdminSearch = ({
       <DialogPrimitive.Portal>
         <DialogPrimitive.Overlay className="fixed inset-0 z-50 bg-black/40" />
         <DialogPrimitive.Content className="admin-theme fixed inset-x-3 top-3 z-50 mx-auto flex max-h-[80vh] max-w-xl flex-col overflow-hidden rounded-2xl border border-border bg-card text-foreground shadow-2xl focus:outline-none sm:top-[12vh]">
-          <DialogPrimitive.Title className="sr-only">Caută un cursant</DialogPrimitive.Title>
+          <DialogPrimitive.Title className="sr-only">
+            Caută un cursant
+          </DialogPrimitive.Title>
           <DialogPrimitive.Description className="sr-only">
             Caută după nume, email sau telefon și deschide fișa cursantului.
           </DialogPrimitive.Description>
           <div className="flex items-center gap-2 border-b border-border px-3">
-            <Search className="h-5 w-5 shrink-0 text-muted-foreground" aria-hidden />
+            <Search
+              className="h-5 w-5 shrink-0 text-muted-foreground"
+              aria-hidden
+            />
             <input
               autoFocus
               type="text"
@@ -78,10 +86,15 @@ const AdminSearch = ({
           </div>
           <ul className="overflow-y-auto">
             {q.trim() && results.length === 0 && (
-              <li className="px-4 py-6 text-center text-sm text-muted-foreground">Nimeni cu „{q.trim()}”.</li>
+              <li className="px-4 py-6 text-center text-sm text-muted-foreground">
+                Nimeni cu „{q.trim()}”.
+              </li>
             )}
             {results.map((r) => (
-              <li key={r.id} className="border-b border-border/60 last:border-0">
+              <li
+                key={r.id}
+                className="border-b border-border/60 last:border-0"
+              >
                 <button
                   type="button"
                   onClick={() => {
@@ -92,7 +105,9 @@ const AdminSearch = ({
                   className="flex min-h-14 w-full items-center gap-3 px-4 py-2 text-left hover:bg-muted"
                 >
                   <span className="min-w-0 flex-1">
-                    <span className="block truncate font-semibold">{r.name}</span>
+                    <span className="block truncate font-semibold">
+                      {r.name}
+                    </span>
                     <span className="block truncate text-sm text-muted-foreground">
                       {formTypeLabels[r.form_type] ?? r.form_type}
                       {r.email ? ` · ${r.email}` : ""}

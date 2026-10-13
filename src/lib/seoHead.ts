@@ -24,10 +24,28 @@
 import { BLOG_POSTS } from "@/lib/blogPosts";
 import { getBlogCover } from "@/lib/blogCovers";
 import { getCurriculum } from "@/data/curriculum";
-import { LEVEL_TITLE_RO, LEVEL_TITLE_EN, LEVEL_A1_DESCRIPTION } from "@/lib/levelMeta";
-import { LEARN_CLUSTER, LEARN_X_DEFAULT, isLearnClusterPath } from "@/lib/hreflangCluster";
+import {
+  LEVEL_TITLE_RO,
+  LEVEL_TITLE_EN,
+  LEVEL_A1_DESCRIPTION,
+} from "@/lib/levelMeta";
+import {
+  LEARN_CLUSTER,
+  LEARN_X_DEFAULT,
+  isLearnClusterPath,
+} from "@/lib/hreflangCluster";
 import { allFaqs, faqJsonLd, featuredFaqs } from "@/data/faq";
-import { CURSURI_ARABA_META, EN_LEVEL_TEST_META, EN_PLAY_META, EN_PLAY_SCORE_META, HOME_META, JOACA_META, JOC_SCOR_META, QUIZ_META, TEST_NIVEL_META } from "@/lib/pageMeta";
+import {
+  CURSURI_ARABA_META,
+  EN_LEVEL_TEST_META,
+  EN_PLAY_META,
+  EN_PLAY_SCORE_META,
+  HOME_META,
+  JOACA_META,
+  JOC_SCOR_META,
+  QUIZ_META,
+  TEST_NIVEL_META,
+} from "@/lib/pageMeta";
 
 const BASE = "https://centruldearabalibaneza.com";
 
@@ -51,135 +69,590 @@ const STATIC_ROUTES: SeoRoute[] = [
   // Head from src/lib/pageMeta.ts, shared with the component so the static and
   // runtime <title> cannot drift apart. Brand-first: the transactional "cursuri
   // de arabă libaneză" query belongs to /cursuri-araba, not here.
-  { path: "/", title: HOME_META.ro.title, description: HOME_META.ro.description },
+  {
+    path: "/",
+    title: HOME_META.ro.title,
+    description: HOME_META.ro.description,
+  },
   // The English homepage: same bilingual component as /, at its own URL, so
   // the English nav's home link and the hreflang pair have somewhere to go.
-  { path: "/en", title: HOME_META.en.title, description: HOME_META.en.description, lang: "en" },
+  {
+    path: "/en",
+    title: HOME_META.en.title,
+    description: HOME_META.en.description,
+    lang: "en",
+  },
   // The placement test on its own page. /quiz used to carry this query in its
   // title while being a course chooser; this page is the test, so the two stop
   // competing. Twinned at /en/level-test: the placement bank is bilingual.
-  { path: "/test-de-nivel", title: TEST_NIVEL_META.title, description: TEST_NIVEL_META.description },
-  { path: "/en/level-test", title: EN_LEVEL_TEST_META.title, description: EN_LEVEL_TEST_META.description },
+  {
+    path: "/test-de-nivel",
+    title: TEST_NIVEL_META.title,
+    description: TEST_NIVEL_META.description,
+  },
+  {
+    path: "/en/level-test",
+    title: EN_LEVEL_TEST_META.title,
+    description: EN_LEVEL_TEST_META.description,
+  },
   // Where a visitor who arrived at a dead address is sent: search plus the
   // courses, resources and articles. The 404 page shows a shortlist of the same
   // recommendations, but a 404 has no URL anyone can link to — this does.
   // The free level check with Ibra: a call or a meeting, booked three ways.
-  { path: "/verificare-nivel", title: "Verificare de nivel gratuită cu Ibra | Arabă libaneză", description: "Află gratuit ce nivel ai la araba libaneză: până la 30 de minute cu Ibra, pe Zoom sau la centru. Scrie pe WhatsApp, cere să te sune sau alege o oră." },
-  { path: "/preturi", title: "Prețuri cursuri arabă libaneză | Grup, private, probă", description: "Toate prețurile: grup A1–C2 de la 500 lei/lună online, lecții private 150 lei, −15% la plata integrală sau la 20 de lecții. Prima lecție e gratuită." },
-  { path: "/te-ajutam", title: "Te ajutăm să găsești pagina potrivită | Arabă libaneză", description: "Caută în site, vezi cursurile de arabă libaneză, resursele gratuite, jocul Yalla și articolele din blog — toate într-un singur loc." },
-  { path: "/en/find-your-page", title: "Find the right page | Lebanese Arabic with Ibra", description: "Search the site and browse every Lebanese Arabic course, free resource, the Yalla game and the blog — all in one place.", lang: "en" },
+  {
+    path: "/verificare-nivel",
+    title: "Verificare de nivel gratuită cu Ibra | Arabă libaneză",
+    description:
+      "Află gratuit ce nivel ai la araba libaneză: până la 30 de minute cu Ibra, pe Zoom sau la centru. Scrie pe WhatsApp, cere să te sune sau alege o oră.",
+  },
+  {
+    path: "/preturi",
+    title: "Prețuri cursuri arabă libaneză | Grup, private, probă",
+    description:
+      "Toate prețurile: grup A1–C2 de la 500 lei/lună online, lecții private 150 lei, −15% la plata integrală sau la 20 de lecții. Prima lecție e gratuită.",
+  },
+  {
+    path: "/te-ajutam",
+    title: "Te ajutăm să găsești pagina potrivită | Arabă libaneză",
+    description:
+      "Caută în site, vezi cursurile de arabă libaneză, resursele gratuite, jocul Yalla și articolele din blog — toate într-un singur loc.",
+  },
+  {
+    path: "/en/find-your-page",
+    title: "Find the right page | Lebanese Arabic with Ibra",
+    description:
+      "Search the site and browse every Lebanese Arabic course, free resource, the Yalla game and the blog — all in one place.",
+    lang: "en",
+  },
   // Contact: a written message form next to the WhatsApp/email/address details,
   // for visitors who would rather not start on a phone number.
-  { path: "/contact", title: "Contact — Arabă libaneză cu Ibra | București", description: "Scrie-ne despre cursurile de arabă libaneză: orare, niveluri, grupe pentru copii. Formular, WhatsApp, email și adresa centrului din București." },
-  { path: "/en/contact", title: "Contact — Lebanese Arabic with Ibra | Bucharest", description: "Message us about Lebanese Arabic courses: schedules, levels, children's groups. Contact form, WhatsApp, email and our Bucharest address.", lang: "en" },
-  { path: "/rezervari", title: "Rezervările mele — Arabă Libaneză cu Ibra", description: "Primește pe email un link privat pentru a vedea, anula sau reprograma lecțiile tale de arabă libaneză, online sau în București." },
-  { path: "/en/my-bookings", title: "My bookings — Lebanese Arabic with Ibra", description: "Receive a private email link to view, cancel or reschedule your Lebanese Arabic lessons, online or in Bucharest.", lang: "en" },
+  {
+    path: "/contact",
+    title: "Contact — Arabă libaneză cu Ibra | București",
+    description:
+      "Scrie-ne despre cursurile de arabă libaneză: orare, niveluri, grupe pentru copii. Formular, WhatsApp, email și adresa centrului din București.",
+  },
+  {
+    path: "/en/contact",
+    title: "Contact — Lebanese Arabic with Ibra | Bucharest",
+    description:
+      "Message us about Lebanese Arabic courses: schedules, levels, children's groups. Contact form, WhatsApp, email and our Bucharest address.",
+    lang: "en",
+  },
+  {
+    path: "/rezervari",
+    title: "Rezervările mele — Arabă Libaneză cu Ibra",
+    description:
+      "Primește pe email un link privat pentru a vedea, anula sau reprograma lecțiile tale de arabă libaneză, online sau în București.",
+  },
+  {
+    path: "/en/my-bookings",
+    title: "My bookings — Lebanese Arabic with Ibra",
+    description:
+      "Receive a private email link to view, cancel or reschedule your Lebanese Arabic lessons, online or in Bucharest.",
+    lang: "en",
+  },
   // Not a listing — a three-step chooser (who it is for, how to attend, group
   // or private) ending on the courses that match. Titled as the tool it is, so
   // it stops reading like a second copy of /cursuri-limba-araba, which is the
   // guide that covers the same ground in prose.
-  { path: "/cursuri", title: "Găsește cursul de arabă potrivit pentru tine", description: "Răspunde la trei întrebări scurte — pentru cine, online sau fizic, grup sau privat — și îți arătăm cursurile de arabă libaneză care ți se potrivesc." },
-  { path: "/cursuri/grup", title: "Curs de Grup de Arabă Libaneză (A1–C2) — București & online", description: "Curs de grup de arabă libaneză cu profesor nativ. Niveluri A1–C2, grupe mici (max. 6 online, 8 fizic), fizic în București sau online. De la 500 LEI / lună." },
-  { path: "/cursuri/private", title: "Lecții Private de Arabă Libaneză 1:1 — București & online", description: "Lecții 1:1 de arabă libaneză cu profesor nativ. Program flexibil, curriculum adaptat ție, fizic în București sau online. 150 LEI / lecție online, 210 LEI fizic." },
-  { path: "/cursuri/copii", title: "Cursuri de Arabă Libaneză pentru Copii — București", description: "Cursuri de arabă libaneză pentru copii 6–11 ani, în București. Învățare prin jocuri, activități și povești, cu profesor nativ libanez." },
-  { path: "/cursuri/adulti", title: "Cursuri Arabă Libaneză — Adulți (18+)", description: "Cursuri de arabă libaneză pentru adulți (18+): grupe mici A1–C2 de la 500 lei/lună sau lecții private 1:1, online sau fizic în București." },
-  { path: "/cursuri/tineri", title: "Curs de Arabă pentru Adolescenți | Pagina Actualizată", description: "Pagina cursului pentru adolescenți s-a mutat. Vezi programul actual, opțiunile din București și online și rezervă o lecție de probă.", canonical: "/cursuri-araba-adolescenti" },
-  { path: "/cursuri-araba", title: "Cursuri de arabă: pagina s-a mutat | Ibra", description: "Adresa /cursuri-araba s-a mutat. Vezi pagina actualizată cu niveluri A1–C2, prețuri, grupe și lecții private de arabă libaneză.", canonical: "/cursuri-limba-araba" },
-  { path: "/cursuri-limba-araba", title: CURSURI_ARABA_META.title, description: CURSURI_ARABA_META.description },
+  {
+    path: "/cursuri",
+    title: "Găsește cursul de arabă potrivit pentru tine",
+    description:
+      "Răspunde la trei întrebări scurte — pentru cine, online sau fizic, grup sau privat — și îți arătăm cursurile de arabă libaneză care ți se potrivesc.",
+  },
+  {
+    path: "/cursuri/grup",
+    title: "Curs de Grup de Arabă Libaneză (A1–C2) — București & online",
+    description:
+      "Curs de grup de arabă libaneză cu profesor nativ. Niveluri A1–C2, grupe mici (max. 6 online, 8 fizic), fizic în București sau online. De la 500 LEI / lună.",
+  },
+  {
+    path: "/cursuri/private",
+    title: "Lecții Private de Arabă Libaneză 1:1 — București & online",
+    description:
+      "Lecții 1:1 de arabă libaneză cu profesor nativ. Program flexibil, curriculum adaptat ție, fizic în București sau online. 150 LEI / lecție online, 210 LEI fizic.",
+  },
+  {
+    path: "/cursuri/copii",
+    title: "Cursuri de Arabă Libaneză pentru Copii — București",
+    description:
+      "Cursuri de arabă libaneză pentru copii 6–11 ani, în București. Învățare prin jocuri, activități și povești, cu profesor nativ libanez.",
+  },
+  {
+    path: "/cursuri/adulti",
+    title: "Cursuri Arabă Libaneză — Adulți (18+)",
+    description:
+      "Cursuri de arabă libaneză pentru adulți (18+): grupe mici A1–C2 de la 500 lei/lună sau lecții private 1:1, online sau fizic în București.",
+  },
+  {
+    path: "/cursuri/tineri",
+    title: "Curs de Arabă pentru Adolescenți | Pagina Actualizată",
+    description:
+      "Pagina cursului pentru adolescenți s-a mutat. Vezi programul actual, opțiunile din București și online și rezervă o lecție de probă.",
+    canonical: "/cursuri-araba-adolescenti",
+  },
+  {
+    path: "/cursuri-araba",
+    title: "Cursuri de arabă: pagina s-a mutat | Ibra",
+    description:
+      "Adresa /cursuri-araba s-a mutat. Vezi pagina actualizată cu niveluri A1–C2, prețuri, grupe și lecții private de arabă libaneză.",
+    canonical: "/cursuri-limba-araba",
+  },
+  {
+    path: "/cursuri-limba-araba",
+    title: CURSURI_ARABA_META.title,
+    description: CURSURI_ARABA_META.description,
+  },
   // Free practice, not a sixth course page. Twinned at /en/play now that the
   // card bank, the drills and the level test all follow the site language.
-  { path: "/joc", title: JOACA_META.title, description: JOACA_META.description },
-  { path: "/en/play", title: EN_PLAY_META.title, description: EN_PLAY_META.description },
+  {
+    path: "/joc",
+    title: JOACA_META.title,
+    description: JOACA_META.description,
+  },
+  {
+    path: "/en/play",
+    title: EN_PLAY_META.title,
+    description: EN_PLAY_META.description,
+  },
   // The game score read from the visitor's own browser, with the A1/A2/B1 it
   // suggests.
-  { path: "/joc/scor", title: JOC_SCOR_META.title, description: JOC_SCOR_META.description },
-  { path: "/en/play/score", title: EN_PLAY_SCORE_META.title, description: EN_PLAY_SCORE_META.description },
-  { path: "/araba-pentru-incepatori", title: "Arabă Libaneză pentru Începători | Curs de la Zero", description: "Învață arabă libaneză de la zero cu profesor nativ. Cursuri pentru începători, în București sau online. Vorbești din primele lecții.", canonical: "/cursuri-limba-araba" },
-  { path: "/araba-online", title: "Cursuri de Arabă Libaneză Online | Profesor Nativ", description: "Cursuri live de arabă libaneză online cu profesor nativ. Grupe A1–C2 și lecții private 1:1. Vorbești din primele lecții. Probă gratuită.", canonical: "/cursuri-limba-araba" },
-  { path: "/meditatii-araba", title: "Meditații Arabă 1:1 București & Online | de la 150 lei/oră", description: "Meditații de arabă libaneză 1:1 cu profesor nativ, în București sau online: 150 lei/lecție online, 210 lei fizic (60 min). Prima lecție de probă e gratuită." },
-  { path: "/intrebari-frecvente", title: "Întrebări frecvente — cursuri de arabă libaneză | Ibra", description: "Răspunsuri despre araba libaneză: preț, orar, format online sau fizic, cât durează până vorbești, ce dialect să înveți și cum arată gramatica." },
-  { path: "/invata-araba", title: "Învață Arabă Libaneză de la Zero | Ghid și Cursuri", description: "Ghid pas cu pas pentru a învăța araba libaneză de la zero: ce dialect alegi, cât durează, ce metodă folosești. Plus cursuri cu profesor nativ, online sau fizic.", canonical: "/cursuri-limba-araba" },
-  { path: "/cursuri-araba-bucuresti", title: "Cursuri Arabă București 2026 | Prima Lecție Gratuită", description: "Cursuri de arabă în București, str. Icoanei 80: grupe mici A1–C2 de la 700 lei/lună, meditații 1:1 și curs pentru copii. Prima lecție de probă e gratuită." },
-  { path: "/curs-araba-copii", title: "Curs de Arabă pentru Copii în București | 6–11 ani", description: "Curs de arabă libaneză pentru copii de 6–11 ani în București. Lecții prin joc, cântece și povești, în grupă mică, cu profesor nativ libanez." },
-  { path: "/arabizi", title: "Arabizi: ce înseamnă 2, 3, 5 și 7 în arabă", description: "Învață ce înseamnă cifrele 2, 3, 5, 7 și 8 în Arabizi, cu tabel complet, exemple din mesaje și cheat-sheet PDF gratuit." },
-  { path: "/invata-araba-gratis", title: "Învață Arabă Libaneză Gratis: PDF-uri și Lecții", description: "Învață arabă libaneză gratuit cu PDF-uri, 100 de expresii utile, un plan de 30 de zile și o mini-lecție de pronunție pentru începători." },
-  { path: "/resurse", title: "Resurse Gratuite Arabă Libaneză | PDF-uri de Descărcat", description: "Descarcă gratuit fișe Arabizi, 100 de expresii libaneze și un plan de 30 de zile. Primești PDF-urile pe email, fără costuri ascunse." },
-  { path: "/fara-alfabet-arab", title: "Pot Învăța Araba Fără Alfabet? Ghid Practic", description: "Învață araba libaneză fără alfabet: vorbești din prima lecție cu arabizi. Vezi ce înveți în 4 săptămâni și când merită alfabetul." },
-  { path: "/dialecte-arabe", title: "Dialecte Arabe: Levantin, Egiptean, Golf și Maghreb", description: "Ghid clar al dialectelor arabe: levantin, egiptean, din Golf, maghrebin și irakian. Vezi cine pe cine înțelege și ce dialect merită învățat." },
+  {
+    path: "/joc/scor",
+    title: JOC_SCOR_META.title,
+    description: JOC_SCOR_META.description,
+  },
+  {
+    path: "/en/play/score",
+    title: EN_PLAY_SCORE_META.title,
+    description: EN_PLAY_SCORE_META.description,
+  },
+  {
+    path: "/araba-pentru-incepatori",
+    title: "Arabă Libaneză pentru Începători | Curs de la Zero",
+    description:
+      "Învață arabă libaneză de la zero cu profesor nativ. Cursuri pentru începători, în București sau online. Vorbești din primele lecții.",
+    canonical: "/cursuri-limba-araba",
+  },
+  {
+    path: "/araba-online",
+    title: "Cursuri de Arabă Libaneză Online | Profesor Nativ",
+    description:
+      "Cursuri live de arabă libaneză online cu profesor nativ. Grupe A1–C2 și lecții private 1:1. Vorbești din primele lecții. Probă gratuită.",
+    canonical: "/cursuri-limba-araba",
+  },
+  {
+    path: "/meditatii-araba",
+    title: "Meditații Arabă 1:1 București & Online | de la 150 lei/oră",
+    description:
+      "Meditații de arabă libaneză 1:1 cu profesor nativ, în București sau online: 150 lei/lecție online, 210 lei fizic (60 min). Prima lecție de probă e gratuită.",
+  },
+  {
+    path: "/intrebari-frecvente",
+    title: "Întrebări frecvente — cursuri de arabă libaneză | Ibra",
+    description:
+      "Răspunsuri despre araba libaneză: preț, orar, format online sau fizic, cât durează până vorbești, ce dialect să înveți și cum arată gramatica.",
+  },
+  {
+    path: "/invata-araba",
+    title: "Învață Arabă Libaneză de la Zero | Ghid și Cursuri",
+    description:
+      "Ghid pas cu pas pentru a învăța araba libaneză de la zero: ce dialect alegi, cât durează, ce metodă folosești. Plus cursuri cu profesor nativ, online sau fizic.",
+    canonical: "/cursuri-limba-araba",
+  },
+  {
+    path: "/cursuri-araba-bucuresti",
+    title: "Cursuri Arabă București 2026 | Prima Lecție Gratuită",
+    description:
+      "Cursuri de arabă în București, str. Icoanei 80: grupe mici A1–C2 de la 700 lei/lună, meditații 1:1 și curs pentru copii. Prima lecție de probă e gratuită.",
+  },
+  {
+    path: "/curs-araba-copii",
+    title: "Curs de Arabă pentru Copii în București | 6–11 ani",
+    description:
+      "Curs de arabă libaneză pentru copii de 6–11 ani în București. Lecții prin joc, cântece și povești, în grupă mică, cu profesor nativ libanez.",
+  },
+  {
+    path: "/arabizi",
+    title: "Arabizi: ce înseamnă 2, 3, 5 și 7 în arabă",
+    description:
+      "Învață ce înseamnă cifrele 2, 3, 5, 7 și 8 în Arabizi, cu tabel complet, exemple din mesaje și cheat-sheet PDF gratuit.",
+  },
+  {
+    path: "/invata-araba-gratis",
+    title: "Învață Arabă Libaneză Gratis: PDF-uri și Lecții",
+    description:
+      "Învață arabă libaneză gratuit cu PDF-uri, 100 de expresii utile, un plan de 30 de zile și o mini-lecție de pronunție pentru începători.",
+  },
+  {
+    path: "/resurse",
+    title: "Resurse Gratuite Arabă Libaneză | PDF-uri de Descărcat",
+    description:
+      "Descarcă gratuit fișe Arabizi, 100 de expresii libaneze și un plan de 30 de zile. Primești PDF-urile pe email, fără costuri ascunse.",
+  },
+  {
+    path: "/fara-alfabet-arab",
+    title: "Pot Învăța Araba Fără Alfabet? Ghid Practic",
+    description:
+      "Învață araba libaneză fără alfabet: vorbești din prima lecție cu arabizi. Vezi ce înveți în 4 săptămâni și când merită alfabetul.",
+  },
+  {
+    path: "/dialecte-arabe",
+    title: "Dialecte Arabe: Levantin, Egiptean, Golf și Maghreb",
+    description:
+      "Ghid clar al dialectelor arabe: levantin, egiptean, din Golf, maghrebin și irakian. Vezi cine pe cine înțelege și ce dialect merită învățat.",
+  },
   // The six dialect comparisons, one level below /dialecte-arabe. Nested in the
   // URL because the hierarchy is real: /ce-araba-sa-inveti decides, the survey
   // maps the families, each comparison takes one pair in depth.
-  { path: "/dialecte-arabe/libaneza-vs-egipteana", title: "Araba Libaneză vs Egipteană: Toate Diferențele", description: "Libaneză sau egipteană? Comparație pe pronunție, gramatică și vocabular, cu aceeași propoziție în ambele și un răspuns clar la „pe care s-o învăț”." },
-  { path: "/dialecte-arabe/libaneza-vs-siriana", title: "Araba Libaneză vs Siriană, Palestiniană, Iordaniană", description: "Cât de diferită e libaneza de siriană, palestiniană și iordaniană? Pronunție, negație, vocabular și ce înțelegi dacă înveți una dintre ele." },
-  { path: "/dialecte-arabe/levantina-vs-golf", title: "Araba Levantină vs Araba din Golf (Khaliji)", description: "Levantină sau khaliji? Compară pronunția, verbele și vocabularul, vezi cine pe cine înțelege și ce dialect îți folosește dacă lucrezi în Golf." },
-  { path: "/dialecte-arabe/levantina-vs-irakiana", title: "Araba Levantină vs Araba Irakiană (Mesopotamiană)", description: "Cât de diferită e araba irakiană de cea levantină? Pronunție, prefixe verbale, împrumuturi turcești și persane și cât se înțeleg vorbitorii între ei." },
-  { path: "/dialecte-arabe/levantina-vs-maghrebina", title: "Araba Levantină vs Araba Maghrebină (Darija)", description: "De ce nu se înțeleg un libanez și un marocan? Vocale, conjugări, împrumuturi berbere și franceze — și ce dialect îți trebuie pentru Maroc sau Tunisia." },
-  { path: "/dialecte-arabe/levantina-vs-peninsulara", title: "Araba Levantină vs Araba din Peninsula Arabică", description: "Hijazi, najdi, yemenită: ce se vorbește în Arabia Saudită și Yemen, prin ce diferă de levantină și cât te ajută libaneza dacă ajungi acolo." },
-  { path: "/ce-araba-sa-inveti", title: "Ce Arabă Să Înveți în 2026: Libaneză, Standard sau Egipteană", description: "Compară araba libaneză, standard și egipteană. Vezi ce se vorbește în familie, la muncă sau în călătorii și alege varianta potrivită în 5 minute." },
-  { path: "/araba-pentru-partener", title: "Arabă Libaneză pentru Partener și Familie | Curs 1:1", description: "Învață expresii libaneze pentru partener și familie, de la alintări la urări la masă. Curs 1:1 cu profesor nativ, online sau în București." },
-  { path: "/araba-in-familie", title: "Arabă Libaneză în Familie — Copii Bilingvi și Părinți | Ghid", description: "Cum crești un copil bilingv româno-libanez: rutine zilnice, expresii de acasă și cursuri pentru copii și părinți, în București sau online." },
+  {
+    path: "/dialecte-arabe/libaneza-vs-egipteana",
+    title: "Araba Libaneză vs Egipteană: Toate Diferențele",
+    description:
+      "Libaneză sau egipteană? Comparație pe pronunție, gramatică și vocabular, cu aceeași propoziție în ambele și un răspuns clar la „pe care s-o învăț”.",
+  },
+  {
+    path: "/dialecte-arabe/libaneza-vs-siriana",
+    title: "Araba Libaneză vs Siriană, Palestiniană, Iordaniană",
+    description:
+      "Cât de diferită e libaneza de siriană, palestiniană și iordaniană? Pronunție, negație, vocabular și ce înțelegi dacă înveți una dintre ele.",
+  },
+  {
+    path: "/dialecte-arabe/levantina-vs-golf",
+    title: "Araba Levantină vs Araba din Golf (Khaliji)",
+    description:
+      "Levantină sau khaliji? Compară pronunția, verbele și vocabularul, vezi cine pe cine înțelege și ce dialect îți folosește dacă lucrezi în Golf.",
+  },
+  {
+    path: "/dialecte-arabe/levantina-vs-irakiana",
+    title: "Araba Levantină vs Araba Irakiană (Mesopotamiană)",
+    description:
+      "Cât de diferită e araba irakiană de cea levantină? Pronunție, prefixe verbale, împrumuturi turcești și persane și cât se înțeleg vorbitorii între ei.",
+  },
+  {
+    path: "/dialecte-arabe/levantina-vs-maghrebina",
+    title: "Araba Levantină vs Araba Maghrebină (Darija)",
+    description:
+      "De ce nu se înțeleg un libanez și un marocan? Vocale, conjugări, împrumuturi berbere și franceze — și ce dialect îți trebuie pentru Maroc sau Tunisia.",
+  },
+  {
+    path: "/dialecte-arabe/levantina-vs-peninsulara",
+    title: "Araba Levantină vs Araba din Peninsula Arabică",
+    description:
+      "Hijazi, najdi, yemenită: ce se vorbește în Arabia Saudită și Yemen, prin ce diferă de levantină și cât te ajută libaneza dacă ajungi acolo.",
+  },
+  {
+    path: "/ce-araba-sa-inveti",
+    title: "Ce Arabă Să Înveți în 2026: Libaneză, Standard sau Egipteană",
+    description:
+      "Compară araba libaneză, standard și egipteană. Vezi ce se vorbește în familie, la muncă sau în călătorii și alege varianta potrivită în 5 minute.",
+  },
+  {
+    path: "/araba-pentru-partener",
+    title: "Arabă Libaneză pentru Partener și Familie | Curs 1:1",
+    description:
+      "Învață expresii libaneze pentru partener și familie, de la alintări la urări la masă. Curs 1:1 cu profesor nativ, online sau în București.",
+  },
+  {
+    path: "/araba-in-familie",
+    title: "Arabă Libaneză în Familie — Copii Bilingvi și Părinți | Ghid",
+    description:
+      "Cum crești un copil bilingv româno-libanez: rutine zilnice, expresii de acasă și cursuri pentru copii și părinți, în București sau online.",
+  },
   // Self-canonical, unlike the retired aliases above. This is a comparison
   // guide ("which course should I pick"), not another way to say "Arabic
   // courses": it carries its own tables, competitor price ranges and criteria,
   // and it is the reciprocal half of /en/best-arabic-course. Canonicalising it
   // into the hub meant it could never rank for the comparison queries it was
   // written for, while still costing a crawl.
-  { path: "/cel-mai-bun-curs-de-araba", title: "Cel mai bun curs de arabă în 2026 | Ghid de alegere", description: "Compară cursurile de arabă: libaneză sau standard, grup, privat, online ori aplicații. Vezi prețuri, criterii și greșeli de evitat înainte să alegi." },
-  { path: "/cursuri-araba-adolescenti", title: "Arabă Libaneză pentru Adolescenți | Curs 12–17 ani", description: "Adolescenții de 12–17 ani învață arabă libaneză prin conversație, muzică și social media, online sau în București. Lecție de probă gratuită." },
-  { path: "/blog", title: "Blog — ghiduri și articole despre araba libaneză", description: "Articole despre învățarea arabei libaneze: alfabet, expresii uzuale, cultură, cât durează să înveți și cum alegi un profesor de arabă." },
+  {
+    path: "/cel-mai-bun-curs-de-araba",
+    title: "Cel mai bun curs de arabă în 2026 | Ghid de alegere",
+    description:
+      "Compară cursurile de arabă: libaneză sau standard, grup, privat, online ori aplicații. Vezi prețuri, criterii și greșeli de evitat înainte să alegi.",
+  },
+  {
+    path: "/cursuri-araba-adolescenti",
+    title: "Arabă Libaneză pentru Adolescenți | Curs 12–17 ani",
+    description:
+      "Adolescenții de 12–17 ani învață arabă libaneză prin conversație, muzică și social media, online sau în București. Lecție de probă gratuită.",
+  },
+  {
+    path: "/blog",
+    title: "Blog — ghiduri și articole despre araba libaneză",
+    description:
+      "Articole despre învățarea arabei libaneze: alfabet, expresii uzuale, cultură, cât durează să înveți și cum alegi un profesor de arabă.",
+  },
   // English twins of the course pages. The components are the same bilingual
   // ones the Romanian URLs render; only the URL and this head differ.
   // English twins of the remaining bilingual pages. The components already
   // carry both languages; these give the English side an address.
   // English twins of the six dialect comparisons, nested under the guide the
   // same way the Romanian ones are nested under /dialecte-arabe.
-  { path: "/en/arabic-dialects-guide/lebanese-vs-egyptian-arabic", title: "Lebanese vs Egyptian Arabic: Every Difference", description: "Lebanese or Egyptian Arabic? Compare pronunciation, grammar and vocabulary, see the same sentence in both, and get a straight answer on which to learn.", lang: "en" },
-  { path: "/en/arabic-dialects-guide/lebanese-vs-syrian-arabic", title: "Lebanese vs Syrian, Palestinian and Jordanian Arabic", description: "How different is Lebanese from Syrian, Palestinian and Jordanian Arabic? Pronunciation, negation, vocabulary, and what learning one gets you in the others.", lang: "en" },
-  { path: "/en/arabic-dialects-guide/levantine-vs-gulf-arabic", title: "Levantine vs Gulf Arabic (Khaliji): The Differences", description: "Levantine or khaliji? Compare pronunciation, verbs and vocabulary, see who understands whom, and find out which dialect helps if you work in the Gulf.", lang: "en" },
-  { path: "/en/arabic-dialects-guide/levantine-vs-iraqi-arabic", title: "Levantine vs Iraqi (Mesopotamian) Arabic", description: "How different is Iraqi Arabic from Levantine? Pronunciation, verb prefixes, Turkish and Persian loanwords, and how much speakers actually understand.", lang: "en" },
-  { path: "/en/arabic-dialects-guide/levantine-vs-maghrebi-arabic", title: "Levantine vs Maghrebi Arabic (Darija)", description: "Why can't a Lebanese and a Moroccan understand each other? Vowels, conjugation, Berber and French loanwords, and which Arabic you need for Morocco or Tunisia.", lang: "en" },
-  { path: "/en/arabic-dialects-guide/levantine-vs-peninsular-arabic", title: "Levantine vs Peninsular Arabic: Hijazi and Najdi", description: "Hijazi, Najdi, Yemeni: what is spoken in Saudi Arabia and Yemen, how it differs from Levantine, and how far Lebanese Arabic gets you if you go there.", lang: "en" },
-  { path: "/en/trial", title: "Free Lebanese Arabic Trial Lesson | Ibra", description: "Book a free Lebanese Arabic trial lesson with a native teacher — online or in person in Bucharest. 30 minutes, 0 lei; a card confirms the spot.", lang: "en" },
-  { path: "/en/booking", title: "Book a Lesson — Lebanese Arabic with Ibra", description: "Book a free 30-minute trial lesson or enrol on a Lebanese Arabic course with a native teacher — online, or in person in Bucharest. The trial remains free.", lang: "en" },
-  { path: "/en/quiz", title: QUIZ_META.en.title, description: QUIZ_META.en.description, lang: "en" },
-  { path: "/en/privacy", title: "Privacy Policy — Lebanese Arabic with Ibra", description: "How the Lebanese Arabic Center collects, uses, stores and protects your personal data, in line with GDPR — and how to ask for a copy or its deletion.", lang: "en" },
-  { path: "/en/data-deletion", title: "Data deletion (GDPR) — Lebanese Arabic with Ibra", description: "Ask for your personal data to be deleted from the Lebanese Arabic Center's records, under GDPR. We confirm by email within 30 days at the latest.", lang: "en", noindex: true },
-  { path: "/en/terms", title: "Terms and Conditions — Lebanese Arabic with Ibra", description: "The terms for enrolling on a Lebanese Arabic course with Ibra: bookings, payment, rescheduling, cancellations and refunds, and how the lessons run.", lang: "en" },
-  { path: "/en/courses", title: "Lebanese Arabic Courses — Group, 1-on-1 & Kids", description: "Lebanese Arabic courses with a native teacher: small groups A1–C2, private 1-on-1 lessons and a children's course. Online or in person in Bucharest.", lang: "en" },
-  { path: "/en/courses/group", title: "Lebanese Arabic Group Course (A1–C2) — Online & Bucharest", description: "Small-group Lebanese Arabic classes with a native teacher. Levels A1 to C2, max 6 online, 8 in person, from 500 LEI a month. Free trial lesson.", lang: "en" },
-  { path: "/en/courses/private", title: "Private 1-on-1 Lebanese Arabic Lessons — Online & Bucharest", description: "One-to-one Lebanese Arabic lessons with a native teacher. Flexible schedule, a curriculum built around you, online or in Bucharest. 150 LEI per lesson.", lang: "en" },
-  { path: "/en/courses/children", title: "Lebanese Arabic for Children (6–11) — Bucharest", description: "Lebanese Arabic classes for children aged 6 to 11 in Bucharest. Learning through games, songs and stories with a native Lebanese teacher.", lang: "en" },
-  { path: "/en/courses/adults", title: "Lebanese Arabic Courses for Adults (18+)", description: "Lebanese Arabic for adults: A1–C2 group classes or private 1-on-1 lessons, online or in person in Bucharest, with a native teacher.", lang: "en" },
-  { path: "/en/blog", title: "Blog — guides and articles about Lebanese Arabic", description: "Articles about learning Lebanese Arabic: the alphabet, everyday phrases, culture, how long it takes and how to choose an Arabic teacher.", lang: "en" },
-  { path: "/en/learn-lebanese-arabic", title: "Learn Lebanese Arabic Online | Native Teacher & Free Trial", description: "Learn Lebanese (Levantine) Arabic online with a native teacher. Live 1-on-1 and small-group lessons from A1 to C2. Speak from lesson one—book a free trial." },
-  { path: "/en/learn-levantine-arabic", title: "Learn Levantine Arabic Online | Native Lebanese Teacher", description: "Learn Levantine Arabic online with native Lebanese teacher Ibra. Join live private or small-group lessons and start speaking from lesson one.", lang: "en", canonical: "/en/learn-lebanese-arabic" },
-  { path: "/en/arabic-tutor", title: "Arabic Tutor Online — 1-on-1 Lessons | Native Teacher", description: "Private Lebanese Arabic tutor — 1-on-1 lessons with a native teacher, 5+ years experience. CEFR A1–C2, free trial. 150 LEI online / 210 LEI in person, 60 min." },
-  { path: "/en/faq", title: "Lebanese Arabic Course FAQ | Price, Schedule, Levels", description: "Answers about learning Lebanese Arabic: price, schedule, online or in person, how long until you can hold a conversation, and which dialect to learn." },
-  { path: "/en/arabic-dialects-guide", title: "Arabic Dialects & Map: Levantine, Egyptian, Gulf & More", description: "Explore Arabic dialects with a clear map of Levantine, Egyptian, Gulf, Maghrebi and Iraqi Arabic, plus MSA, explained by a native Lebanese teacher." },
-  { path: "/en/levantine-arabic-dialects-map", title: "Arabic Dialects & Map: Levantine, Egyptian, Gulf & More", description: "Explore Arabic dialects with a clear map of Levantine, Egyptian, Gulf, Maghrebi and Iraqi Arabic, plus MSA, explained by a native Lebanese teacher.", lang: "en", canonical: "/en/arabic-dialects-guide" },
-  { path: "/en/arabic-classes-near-me", title: "Arabic Classes Near Me — Bucharest & Online | Native Teacher", description: "Arabic classes in Bucharest or live online with a native Lebanese teacher. Small groups, CEFR A1–C2, practical conversation, free trial. From €100/month." },
-  { path: "/en/lebanese-arabic-vs-msa-vs-egyptian", title: "Lebanese vs MSA vs Egyptian Arabic — Full Comparison (2026)", description: "Compare Lebanese Arabic, MSA/Fusha, and Egyptian Arabic by pronunciation, grammar, reach, and learning goals. A practical guide from a native teacher." },
-  { path: "/en/how-to-learn-lebanese-arabic", title: "How to Learn Lebanese Arabic — Step-by-Step Guide (2026)", description: "Learn Lebanese Arabic step by step in 2026 with a weekly routine, level-by-level timeline, and practical guidance from native Lebanese teacher Ibra." },
-  { path: "/en/best-arabic-course", title: "Best Arabic Course 2026 — How to Choose | Lebanese vs MSA", description: "Compare Lebanese Arabic, MSA, group, private and online courses. See prices, common mistakes and choose the best Arabic course for your goals." },
-  { path: "/en/arabic-for-teenagers", title: "Lebanese Arabic Classes for Teenagers | Bucharest & Online", description: "Lebanese Arabic classes for ages 12–17 with a native teacher, online or in Bucharest. Build real conversation skills from the first lesson. Free trial." },
-  { path: "/de/arabisch-lernen", lang: "de", title: "Arabisch lernen online — Libanesisch mit Muttersprachler", description: "Arabisch lernen online — libanesischer Dialekt mit Muttersprachler. Sprich ab Lektion eins. Einzel- & Gruppenkurse, A1–C2. Kostenlose Probestunde." },
+  {
+    path: "/en/arabic-dialects-guide/lebanese-vs-egyptian-arabic",
+    title: "Lebanese vs Egyptian Arabic: Every Difference",
+    description:
+      "Lebanese or Egyptian Arabic? Compare pronunciation, grammar and vocabulary, see the same sentence in both, and get a straight answer on which to learn.",
+    lang: "en",
+  },
+  {
+    path: "/en/arabic-dialects-guide/lebanese-vs-syrian-arabic",
+    title: "Lebanese vs Syrian, Palestinian and Jordanian Arabic",
+    description:
+      "How different is Lebanese from Syrian, Palestinian and Jordanian Arabic? Pronunciation, negation, vocabulary, and what learning one gets you in the others.",
+    lang: "en",
+  },
+  {
+    path: "/en/arabic-dialects-guide/levantine-vs-gulf-arabic",
+    title: "Levantine vs Gulf Arabic (Khaliji): The Differences",
+    description:
+      "Levantine or khaliji? Compare pronunciation, verbs and vocabulary, see who understands whom, and find out which dialect helps if you work in the Gulf.",
+    lang: "en",
+  },
+  {
+    path: "/en/arabic-dialects-guide/levantine-vs-iraqi-arabic",
+    title: "Levantine vs Iraqi (Mesopotamian) Arabic",
+    description:
+      "How different is Iraqi Arabic from Levantine? Pronunciation, verb prefixes, Turkish and Persian loanwords, and how much speakers actually understand.",
+    lang: "en",
+  },
+  {
+    path: "/en/arabic-dialects-guide/levantine-vs-maghrebi-arabic",
+    title: "Levantine vs Maghrebi Arabic (Darija)",
+    description:
+      "Why can't a Lebanese and a Moroccan understand each other? Vowels, conjugation, Berber and French loanwords, and which Arabic you need for Morocco or Tunisia.",
+    lang: "en",
+  },
+  {
+    path: "/en/arabic-dialects-guide/levantine-vs-peninsular-arabic",
+    title: "Levantine vs Peninsular Arabic: Hijazi and Najdi",
+    description:
+      "Hijazi, Najdi, Yemeni: what is spoken in Saudi Arabia and Yemen, how it differs from Levantine, and how far Lebanese Arabic gets you if you go there.",
+    lang: "en",
+  },
+  {
+    path: "/en/trial",
+    title: "Free Lebanese Arabic Trial Lesson | Ibra",
+    description:
+      "Book a free Lebanese Arabic trial lesson with a native teacher — online or in person in Bucharest. 30 minutes, 0 lei; a card confirms the spot.",
+    lang: "en",
+  },
+  {
+    path: "/en/booking",
+    title: "Book a Lesson — Lebanese Arabic with Ibra",
+    description:
+      "Book a free 30-minute trial lesson or enrol on a Lebanese Arabic course with a native teacher — online, or in person in Bucharest. The trial remains free.",
+    lang: "en",
+  },
+  {
+    path: "/en/quiz",
+    title: QUIZ_META.en.title,
+    description: QUIZ_META.en.description,
+    lang: "en",
+  },
+  {
+    path: "/en/privacy",
+    title: "Privacy Policy — Lebanese Arabic with Ibra",
+    description:
+      "How the Lebanese Arabic Center collects, uses, stores and protects your personal data, in line with GDPR — and how to ask for a copy or its deletion.",
+    lang: "en",
+  },
+  {
+    path: "/en/data-deletion",
+    title: "Data deletion (GDPR) — Lebanese Arabic with Ibra",
+    description:
+      "Ask for your personal data to be deleted from the Lebanese Arabic Center's records, under GDPR. We confirm by email within 30 days at the latest.",
+    lang: "en",
+    noindex: true,
+  },
+  {
+    path: "/en/terms",
+    title: "Terms and Conditions — Lebanese Arabic with Ibra",
+    description:
+      "The terms for enrolling on a Lebanese Arabic course with Ibra: bookings, payment, rescheduling, cancellations and refunds, and how the lessons run.",
+    lang: "en",
+  },
+  {
+    path: "/en/courses",
+    title: "Lebanese Arabic Courses — Group, 1-on-1 & Kids",
+    description:
+      "Lebanese Arabic courses with a native teacher: small groups A1–C2, private 1-on-1 lessons and a children's course. Online or in person in Bucharest.",
+    lang: "en",
+  },
+  {
+    path: "/en/courses/group",
+    title: "Lebanese Arabic Group Course (A1–C2) — Online & Bucharest",
+    description:
+      "Small-group Lebanese Arabic classes with a native teacher. Levels A1 to C2, max 6 online, 8 in person, from 500 LEI a month. Free trial lesson.",
+    lang: "en",
+  },
+  {
+    path: "/en/courses/private",
+    title: "Private 1-on-1 Lebanese Arabic Lessons — Online & Bucharest",
+    description:
+      "One-to-one Lebanese Arabic lessons with a native teacher. Flexible schedule, a curriculum built around you, online or in Bucharest. 150 LEI per lesson.",
+    lang: "en",
+  },
+  {
+    path: "/en/courses/children",
+    title: "Lebanese Arabic for Children (6–11) — Bucharest",
+    description:
+      "Lebanese Arabic classes for children aged 6 to 11 in Bucharest. Learning through games, songs and stories with a native Lebanese teacher.",
+    lang: "en",
+  },
+  {
+    path: "/en/courses/adults",
+    title: "Lebanese Arabic Courses for Adults (18+)",
+    description:
+      "Lebanese Arabic for adults: A1–C2 group classes or private 1-on-1 lessons, online or in person in Bucharest, with a native teacher.",
+    lang: "en",
+  },
+  {
+    path: "/en/blog",
+    title: "Blog — guides and articles about Lebanese Arabic",
+    description:
+      "Articles about learning Lebanese Arabic: the alphabet, everyday phrases, culture, how long it takes and how to choose an Arabic teacher.",
+    lang: "en",
+  },
+  {
+    path: "/en/learn-lebanese-arabic",
+    title: "Learn Lebanese Arabic Online | Native Teacher & Free Trial",
+    description:
+      "Learn Lebanese (Levantine) Arabic online with a native teacher. Live 1-on-1 and small-group lessons from A1 to C2. Speak from lesson one—book a free trial.",
+  },
+  {
+    path: "/en/learn-levantine-arabic",
+    title: "Learn Levantine Arabic Online | Native Lebanese Teacher",
+    description:
+      "Learn Levantine Arabic online with native Lebanese teacher Ibra. Join live private or small-group lessons and start speaking from lesson one.",
+    lang: "en",
+    canonical: "/en/learn-lebanese-arabic",
+  },
+  {
+    path: "/en/arabic-tutor",
+    title: "Arabic Tutor Online — 1-on-1 Lessons | Native Teacher",
+    description:
+      "Private Lebanese Arabic tutor — 1-on-1 lessons with a native teacher, 5+ years experience. CEFR A1–C2, free trial. 150 LEI online / 210 LEI in person, 60 min.",
+  },
+  {
+    path: "/en/faq",
+    title: "Lebanese Arabic Course FAQ | Price, Schedule, Levels",
+    description:
+      "Answers about learning Lebanese Arabic: price, schedule, online or in person, how long until you can hold a conversation, and which dialect to learn.",
+  },
+  {
+    path: "/en/arabic-dialects-guide",
+    title: "Arabic Dialects & Map: Levantine, Egyptian, Gulf & More",
+    description:
+      "Explore Arabic dialects with a clear map of Levantine, Egyptian, Gulf, Maghrebi and Iraqi Arabic, plus MSA, explained by a native Lebanese teacher.",
+  },
+  {
+    path: "/en/levantine-arabic-dialects-map",
+    title: "Arabic Dialects & Map: Levantine, Egyptian, Gulf & More",
+    description:
+      "Explore Arabic dialects with a clear map of Levantine, Egyptian, Gulf, Maghrebi and Iraqi Arabic, plus MSA, explained by a native Lebanese teacher.",
+    lang: "en",
+    canonical: "/en/arabic-dialects-guide",
+  },
+  {
+    path: "/en/arabic-classes-near-me",
+    title: "Arabic Classes Near Me — Bucharest & Online | Native Teacher",
+    description:
+      "Arabic classes in Bucharest or live online with a native Lebanese teacher. Small groups, CEFR A1–C2, practical conversation, free trial. From €100/month.",
+  },
+  {
+    path: "/en/lebanese-arabic-vs-msa-vs-egyptian",
+    title: "Lebanese vs MSA vs Egyptian Arabic — Full Comparison (2026)",
+    description:
+      "Compare Lebanese Arabic, MSA/Fusha, and Egyptian Arabic by pronunciation, grammar, reach, and learning goals. A practical guide from a native teacher.",
+  },
+  {
+    path: "/en/how-to-learn-lebanese-arabic",
+    title: "How to Learn Lebanese Arabic — Step-by-Step Guide (2026)",
+    description:
+      "Learn Lebanese Arabic step by step in 2026 with a weekly routine, level-by-level timeline, and practical guidance from native Lebanese teacher Ibra.",
+  },
+  {
+    path: "/en/best-arabic-course",
+    title: "Best Arabic Course 2026 — How to Choose | Lebanese vs MSA",
+    description:
+      "Compare Lebanese Arabic, MSA, group, private and online courses. See prices, common mistakes and choose the best Arabic course for your goals.",
+  },
+  {
+    path: "/en/arabic-for-teenagers",
+    title: "Lebanese Arabic Classes for Teenagers | Bucharest & Online",
+    description:
+      "Lebanese Arabic classes for ages 12–17 with a native teacher, online or in Bucharest. Build real conversation skills from the first lesson. Free trial.",
+  },
+  {
+    path: "/de/arabisch-lernen",
+    lang: "de",
+    title: "Arabisch lernen online — Libanesisch mit Muttersprachler",
+    description:
+      "Arabisch lernen online — libanesischer Dialekt mit Muttersprachler. Sprich ab Lektion eins. Einzel- & Gruppenkurse, A1–C2. Kostenlose Probestunde.",
+  },
   // Retired alias, like the four below it. It was the only one without
   // noindex, which also made it the only indexable page missing from the
   // sitemap — an inconsistency, not a decision.
-  { path: "/cursuri/privat", title: "Lecții Private de Arabă Libaneză 1:1 — București & online", description: "Lecții 1:1 de arabă libaneză cu profesor nativ. Program flexibil, curriculum adaptat ție, fizic în București sau online. 150 LEI / lecție online, 210 LEI fizic.", canonical: "/cursuri/private" },
-  { path: "/trial", title: "Lecție gratuită de arabă libaneză | Ibra", description: "Rezervă o lecție de probă gratuită de arabă libaneză cu profesor nativ — online sau fizic în București. Fără nicio obligație." },
-  { path: "/booking", title: "Rezervă o lecție — Arabă Libaneză cu Ibra", description: "Rezervă o lecție de probă gratuită de 30 de minute sau înscrie-te la un curs de arabă libaneză cu profesor nativ — online sau fizic în București." },
-  { path: "/quiz", title: QUIZ_META.ro.title, description: QUIZ_META.ro.description },
-  { path: "/privacy", title: "Politica de confidențialitate — Arabă Libaneză cu Ibra", description: "Cum colectează, folosește, stochează și protejează Centrul de Arabă Libaneză datele tale personale, conform GDPR — și cum ceri o copie sau ștergerea lor." },
+  {
+    path: "/cursuri/privat",
+    title: "Lecții Private de Arabă Libaneză 1:1 — București & online",
+    description:
+      "Lecții 1:1 de arabă libaneză cu profesor nativ. Program flexibil, curriculum adaptat ție, fizic în București sau online. 150 LEI / lecție online, 210 LEI fizic.",
+    canonical: "/cursuri/private",
+  },
+  {
+    path: "/trial",
+    title: "Lecție gratuită de arabă libaneză | Ibra",
+    description:
+      "Rezervă o lecție de probă gratuită de arabă libaneză cu profesor nativ — online sau fizic în București. Fără nicio obligație.",
+  },
+  {
+    path: "/booking",
+    title: "Rezervă o lecție — Arabă Libaneză cu Ibra",
+    description:
+      "Rezervă o lecție de probă gratuită de 30 de minute sau înscrie-te la un curs de arabă libaneză cu profesor nativ — online sau fizic în București.",
+  },
+  {
+    path: "/quiz",
+    title: QUIZ_META.ro.title,
+    description: QUIZ_META.ro.description,
+  },
+  {
+    path: "/privacy",
+    title: "Politica de confidențialitate — Arabă Libaneză cu Ibra",
+    description:
+      "Cum colectează, folosește, stochează și protejează Centrul de Arabă Libaneză datele tale personale, conform GDPR — și cum ceri o copie sau ștergerea lor.",
+  },
   // Both of these are app routes that had no prerendered page. Anything not
   // prerendered falls back to the SPA shell, which is the homepage's HTML —
   // so a crawler asking for them got the homepage's <head>, canonical and
   // body under a different URL. /stergere-date is the worse of the two: it is
   // linked from the footer of all 62 pages, so it was guaranteed to be
   // crawled. Neither is an SEO target, hence noindex.
-  { path: "/stergere-date", title: "Ștergerea datelor (GDPR) — Arabă Libaneză cu Ibra", description: "Cere ștergerea datelor tale personale din evidențele Centrului de Arabă Libaneză, conform GDPR. Îți confirmăm pe email în cel mult 30 de zile.", noindex: true },
-  { path: "/cursuri/online", title: "Cursuri de Arabă Libaneză Online — Arabă Libaneză cu Ibra", description: "Pagina cursurilor online s-a mutat. Vezi toate cursurile de arabă libaneză — grup A1–C2, lecții private și curs pentru copii, online sau în București.", canonical: "/cursuri" },
-  { path: "/terms", title: "Termeni și condiții — Arabă Libaneză cu Ibra", description: "Termenii înscrierii la cursurile de arabă libaneză cu Ibra: rezervări, plată, reprogramare, anulare și politica de rambursare, plus cum se desfășoară lecțiile." },
+  {
+    path: "/stergere-date",
+    title: "Ștergerea datelor (GDPR) — Arabă Libaneză cu Ibra",
+    description:
+      "Cere ștergerea datelor tale personale din evidențele Centrului de Arabă Libaneză, conform GDPR. Îți confirmăm pe email în cel mult 30 de zile.",
+    noindex: true,
+  },
+  {
+    path: "/cursuri/online",
+    title: "Cursuri de Arabă Libaneză Online — Arabă Libaneză cu Ibra",
+    description:
+      "Pagina cursurilor online s-a mutat. Vezi toate cursurile de arabă libaneză — grup A1–C2, lecții private și curs pentru copii, online sau în București.",
+    canonical: "/cursuri",
+  },
+  {
+    path: "/terms",
+    title: "Termeni și condiții — Arabă Libaneză cu Ibra",
+    description:
+      "Termenii înscrierii la cursurile de arabă libaneză cu Ibra: rezervări, plată, reprogramare, anulare și politica de rambursare, plus cum se desfășoară lecțiile.",
+  },
 ];
 
 function levelRoutes(): SeoRoute[] {
@@ -223,7 +696,8 @@ function levelRoutesEn(): SeoRoute[] {
         title: LEVEL_TITLE_EN[id],
         // A1 carries the same commercial copy its Romanian twin does; the rest
         // fall back to the CEFR objective.
-        description: id === "a1" ? LEVEL_A1_DESCRIPTION.en : lvl.objective.slice(0, 155),
+        description:
+          id === "a1" ? LEVEL_A1_DESCRIPTION.en : lvl.objective.slice(0, 155),
         lang: "en" as const,
       };
     })
@@ -257,19 +731,26 @@ export function allSeoRoutes(): SeoRoute[] {
     lang: "en" as const,
     ...(p.canonicalTo ? { canonical: `/en/blog/${p.canonicalTo}` } : {}),
   }));
-  return [...STATIC_ROUTES, ...levelRoutes(), ...levelRoutesEn(), ...blog, ...blogEn]
-    .map((route) =>
-      route.path === "/cursuri/grup/b2"
-        ? { ...route, title: "Curs B2 de Arabă Libaneză — Grup, București & Online" }
-        : route,
-    )
-    // Everything under /en/ is English whether or not the entry says so — only
-    // two of the ten did. Deriving it here means the body prerender picks the
-    // right UI language too, instead of wrapping English copy in Romanian
-    // navigation.
-    .map((route) =>
-      route.lang ? route : { ...route, lang: route.path.startsWith("/en/") ? "en" : "ro" },
-    );
+  return (
+    [...STATIC_ROUTES, ...levelRoutes(), ...levelRoutesEn(), ...blog, ...blogEn]
+      .map((route) =>
+        route.path === "/cursuri/grup/b2"
+          ? {
+              ...route,
+              title: "Curs B2 de Arabă Libaneză — Grup, București & Online",
+            }
+          : route,
+      )
+      // Everything under /en/ is English whether or not the entry says so — only
+      // two of the ten did. Deriving it here means the body prerender picks the
+      // right UI language too, instead of wrapping English copy in Romanian
+      // navigation.
+      .map((route) =>
+        route.lang
+          ? route
+          : { ...route, lang: route.path.startsWith("/en/") ? "en" : "ro" },
+      )
+  );
 }
 
 /**
@@ -289,12 +770,30 @@ const LANDING_PAIRS: Array<[string, string]> = [
   ["/cursuri-araba-adolescenti", "/en/arabic-for-teenagers"],
   ["/cursuri-araba-bucuresti", "/en/arabic-classes-near-me"],
   ["/dialecte-arabe", "/en/arabic-dialects-guide"],
-  ["/dialecte-arabe/libaneza-vs-egipteana", "/en/arabic-dialects-guide/lebanese-vs-egyptian-arabic"],
-  ["/dialecte-arabe/libaneza-vs-siriana", "/en/arabic-dialects-guide/lebanese-vs-syrian-arabic"],
-  ["/dialecte-arabe/levantina-vs-golf", "/en/arabic-dialects-guide/levantine-vs-gulf-arabic"],
-  ["/dialecte-arabe/levantina-vs-irakiana", "/en/arabic-dialects-guide/levantine-vs-iraqi-arabic"],
-  ["/dialecte-arabe/levantina-vs-maghrebina", "/en/arabic-dialects-guide/levantine-vs-maghrebi-arabic"],
-  ["/dialecte-arabe/levantina-vs-peninsulara", "/en/arabic-dialects-guide/levantine-vs-peninsular-arabic"],
+  [
+    "/dialecte-arabe/libaneza-vs-egipteana",
+    "/en/arabic-dialects-guide/lebanese-vs-egyptian-arabic",
+  ],
+  [
+    "/dialecte-arabe/libaneza-vs-siriana",
+    "/en/arabic-dialects-guide/lebanese-vs-syrian-arabic",
+  ],
+  [
+    "/dialecte-arabe/levantina-vs-golf",
+    "/en/arabic-dialects-guide/levantine-vs-gulf-arabic",
+  ],
+  [
+    "/dialecte-arabe/levantina-vs-irakiana",
+    "/en/arabic-dialects-guide/levantine-vs-iraqi-arabic",
+  ],
+  [
+    "/dialecte-arabe/levantina-vs-maghrebina",
+    "/en/arabic-dialects-guide/levantine-vs-maghrebi-arabic",
+  ],
+  [
+    "/dialecte-arabe/levantina-vs-peninsulara",
+    "/en/arabic-dialects-guide/levantine-vs-peninsular-arabic",
+  ],
   ["/intrebari-frecvente", "/en/faq"],
   ["/joc", "/en/play"],
   ["/joc/scor", "/en/play/score"],
@@ -319,7 +818,8 @@ const COURSE_PAIRS: Array<[string, string]> = [
   ["/cursuri/copii", "/en/courses/children"],
   ["/cursuri/adulti", "/en/courses/adults"],
   ...(["a1", "a2", "b1", "b2", "c1", "c2"] as const).map(
-    (id) => [`/cursuri/grup/${id}`, `/en/courses/group/${id}`] as [string, string],
+    (id) =>
+      [`/cursuri/grup/${id}`, `/en/courses/group/${id}`] as [string, string],
   ),
 ];
 
@@ -397,7 +897,9 @@ interface HeadResult {
  * holds inside the truncation limits — a component-local string is checked by
  * nothing.
  */
-export function seoMeta(path: string): { title: string; description: string } | undefined {
+export function seoMeta(
+  path: string,
+): { title: string; description: string } | undefined {
   const r = seoRouteFor(path);
   return r ? { title: r.title, description: r.description } : undefined;
 }
@@ -423,7 +925,8 @@ export function seoHead(path: string, opts?: SeoHeadOptions): HeadResult {
   const { title, description } = route;
   // Canonical (and og:url) point at the consolidation target when set.
   const canonicalHref =
-    (route.canonical ? BASE + route.canonical : url) + (opts?.canonicalSearch ?? "");
+    (route.canonical ? BASE + route.canonical : url) +
+    (opts?.canonicalSearch ?? "");
 
   // A blog article's own cover photo is its link-preview image, and it has to
   // be served from here. The site-wide card in src/routes/__root.tsx is emitted
@@ -451,18 +954,26 @@ export function seoHead(path: string, opts?: SeoHeadOptions): HeadResult {
   ];
   if (cover) {
     meta.push({ ...RH, property: "og:image", content: socialImage });
-    meta.push({ ...RH, property: "og:image:alt", content: lang === "en" ? cover.alt.en : cover.alt.ro });
+    meta.push({
+      ...RH,
+      property: "og:image:alt",
+      content: lang === "en" ? cover.alt.en : cover.alt.ro,
+    });
     meta.push({ ...RH, name: "twitter:image", content: socialImage });
   }
-  if (route.noindex) meta.push({ ...RH, name: "robots", content: "noindex,follow" });
+  if (route.noindex)
+    meta.push({ ...RH, name: "robots", content: "noindex,follow" });
 
-  const links: Record<string, string>[] = [{ ...RH, rel: "canonical", href: canonicalHref }];
+  const links: Record<string, string>[] = [
+    { ...RH, rel: "canonical", href: canonicalHref },
+  ];
 
   // hreflang for reciprocal RO/EN twins only, matching what the layouts render
   // at runtime tag for tag. Romanian is x-default: it is the site's primary
   // language, and the RO page is the right landing spot for unmatched locales.
   const pair = hreflangPairs().get(route.path);
-  const alt = (hreflang: string, href: string) => links.push({ ...RH, rel: "alternate", hreflang, href });
+  const alt = (hreflang: string, href: string) =>
+    links.push({ ...RH, rel: "alternate", hreflang, href });
   if (pair && !route.canonical) {
     alt("ro", BASE + pair.ro);
     alt("en", BASE + pair.en);
@@ -481,14 +992,25 @@ export function seoHead(path: string, opts?: SeoHeadOptions): HeadResult {
   const scripts: { type: string; children: string }[] = [];
   const faq = FAQ_ROUTES[route.path];
   if (faq) {
-    scripts.push({ type: "application/ld+json", children: JSON.stringify(faqJsonLd(faq())) });
+    scripts.push({
+      type: "application/ld+json",
+      children: JSON.stringify(faqJsonLd(faq())),
+    });
   }
 
   if (route.type === "article") {
     if (route.published) {
-      meta.push({ ...RH, property: "article:published_time", content: route.published });
+      meta.push({
+        ...RH,
+        property: "article:published_time",
+        content: route.published,
+      });
     }
-    meta.push({ ...RH, property: "article:author", content: "Ibra — Centrul de Arabă Libaneză" });
+    meta.push({
+      ...RH,
+      property: "article:author",
+      content: "Ibra — Centrul de Arabă Libaneză",
+    });
     scripts.push({
       type: "application/ld+json",
       children: JSON.stringify({

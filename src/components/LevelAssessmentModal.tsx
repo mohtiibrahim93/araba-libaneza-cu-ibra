@@ -18,8 +18,7 @@ interface LevelAssessmentModalProps {
 }
 
 type QuizStep =
-  | { type: "question"; index: number }
-  | { type: "result"; level: LevelType };
+  { type: "question"; index: number } | { type: "result"; level: LevelType };
 
 const LevelAssessmentModal = ({
   open,
@@ -52,7 +51,7 @@ const LevelAssessmentModal = ({
         setStep({ type: "result", level: "B2" });
       }
     },
-    [step, questions]
+    [step, questions],
   );
 
   const handleReset = useCallback(() => {
