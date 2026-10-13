@@ -41,10 +41,35 @@ export type Database = {
         }
         Relationships: []
       }
+      availability_blackouts: {
+        Row: {
+          created_at: string
+          end_date: string
+          id: string
+          note: string | null
+          start_date: string
+        }
+        Insert: {
+          created_at?: string
+          end_date: string
+          id?: string
+          note?: string | null
+          start_date: string
+        }
+        Update: {
+          created_at?: string
+          end_date?: string
+          id?: string
+          note?: string | null
+          start_date?: string
+        }
+        Relationships: []
+      }
       availability_rules: {
         Row: {
           created_at: string
           end_time: string
+          event_type_slug: string | null
           id: string
           is_active: boolean
           start_time: string
@@ -54,6 +79,7 @@ export type Database = {
         Insert: {
           created_at?: string
           end_time: string
+          event_type_slug?: string | null
           id?: string
           is_active?: boolean
           start_time: string
@@ -63,13 +89,22 @@ export type Database = {
         Update: {
           created_at?: string
           end_time?: string
+          event_type_slug?: string | null
           id?: string
           is_active?: boolean
           start_time?: string
           updated_at?: string
           weekday?: number
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "availability_rules_event_type_slug_fkey"
+            columns: ["event_type_slug"]
+            isOneToOne: false
+            referencedRelation: "booking_event_types"
+            referencedColumns: ["slug"]
+          },
+        ]
       }
       backlink_fetch_attempts: {
         Row: {
@@ -220,6 +255,7 @@ export type Database = {
           min_notice_hours: number
           name_en: string
           name_ro: string
+          physical_weekdays: number[] | null
           price_cents: number
           requires_payment: boolean
           slug: string
@@ -238,6 +274,7 @@ export type Database = {
           min_notice_hours?: number
           name_en: string
           name_ro: string
+          physical_weekdays?: number[] | null
           price_cents?: number
           requires_payment?: boolean
           slug: string
@@ -256,6 +293,7 @@ export type Database = {
           min_notice_hours?: number
           name_en?: string
           name_ro?: string
+          physical_weekdays?: number[] | null
           price_cents?: number
           requires_payment?: boolean
           slug?: string
