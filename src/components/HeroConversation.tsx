@@ -43,11 +43,11 @@ const CINEMA: Bubble[] = [
     text: "baddak teje ma3e ne7dar shi?",
     tone: "green",
     side: "right",
-    gloss: { ro: "Vrei să vii cu mine să vedem ceva?", en: "Want to come with me and watch something?" },
+    gloss: { ro: "Vrei tu (m.) să vii cu mine să vedem ceva?", en: "Do you (m.) want to come with me and watch something?" },
   },
   { text: "shu?", tone: "gold", side: "left", gloss: { ro: "Ce anume?", en: "What?" } },
   {
-    text: "Nezel filem spiderman L-jdeed, kent 3am fakker e7daro",
+    text: "Nezel filem spiderman L-jdeed, kenet 3am fakker e7daro",
     tone: "green",
     side: "right",
     gloss: { ro: "A ieșit noul Spiderman, mă gândeam să-l văd.", en: "The new Spiderman is out, I was thinking of watching it." },
@@ -77,8 +77,8 @@ const COFFEE: Bubble[] = [
 ];
 
 const Phone = ({ bubbles, lang }: { bubbles: Bubble[]; lang: "ro" | "en" }) => (
-  <div className="w-full max-w-[11.5rem] rounded-[1.9rem] bg-[#1A1A1A] p-2 shadow-[0_12px_28px_rgba(26,26,26,0.16)]">
-    <div className="relative flex h-full flex-col gap-1.5 overflow-hidden rounded-[1.45rem] bg-[#FFFDF8] px-2 pb-3 pt-8 text-[#1A1A1A]">
+  <div className="w-full max-w-[19rem] rounded-[1.9rem] bg-[#1A1A1A] p-2 shadow-[0_12px_28px_rgba(26,26,26,0.16)] sm:min-w-0 sm:max-w-[16rem] sm:flex-1">
+    <div className="relative flex flex-col gap-1.5 overflow-hidden rounded-[1.45rem] bg-[#FFFDF8] px-2 pb-3 pt-8 text-[#1A1A1A]">
       <span aria-hidden="true" className="absolute left-1/2 top-2 h-4 w-14 -translate-x-1/2 rounded-full bg-[#1A1A1A]" />
       <div className="mb-0.5 flex items-center gap-1.5 border-b border-[#EFEAE0] pb-1.5">
         <BrandMark className="h-6 w-6 shrink-0" />
@@ -134,7 +134,9 @@ const HeroConversation = ({ className }: { className?: string }) => {
             : "În Arabizi, din prima lecție — fără alfabet de învățat înainte."}
         </span>
       </figcaption>
-      <div className="flex items-stretch justify-center gap-3">
+      {/* Phones stack on a narrow screen, so each is wide enough for the
+          bubbles not to wrap word by word; side by side from sm up. */}
+      <div className="flex flex-col items-center gap-3 sm:flex-row sm:items-start sm:justify-center">
         <Phone bubbles={CINEMA} lang={l} />
         <Phone bubbles={COFFEE} lang={l} />
       </div>
