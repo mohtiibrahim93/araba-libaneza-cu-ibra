@@ -1,6 +1,7 @@
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 import { json as _json } from "../_shared/booking.ts";
-import { fmtBookingLocal, manageUrl, sendBookingEmail } from "../_shared/booking-emails.ts";
+import { fmtBookingLocal, manageUrl } from "../_shared/booking-emails.ts";
+import { sendTemplateEmail } from "../_shared/managed-email.ts";
 import { buildCorsHeaders } from "../_shared/cors.ts";
 
 /**
@@ -126,29 +127,37 @@ Deno.serve(async (req) => {
     const rowsTyped = (rows ?? []) as unknown as ReminderRow[];
 
     let sent = 0;
+    let failed = 0;
     for (const r of rowsTyped) {
       const lang = (r.language as "ro" | "en") ?? "ro";
-      sendBookingEmail(
-        "booking-reminder",
-        r.student_email,
-        {
-          name: r.student_name,
-          whenLabel: fmtBookingLocal(r.start_at, lang),
-          inLabel: lang === "en" ? stage.inLabelEn : stage.inLabelRo,
-          format: r.format,
-          meetLink: r.meet_link,
-          manageUrl: manageUrl(r.manage_token),
-          lang,
-        },
-        `booking-reminder-${stage.key}-${r.id}`,
-      );
+      // Stamp the reminder only once the send went through (or the recipient
+      // is suppressed), so a failed send is retried on the next run while the
+      // stage window is still open. The idempotency key stops a double send.
+      try {
+        await sendTemplateEmail("booking-reminder", r.student_email, {
+          templateData: {
+            name: r.student_name,
+            whenLabel: fmtBookingLocal(r.start_at, lang),
+            inLabel: lang === "en" ? stage.inLabelEn : stage.inLabelRo,
+            format: r.format,
+            meetLink: r.meet_link,
+            manageUrl: manageUrl(r.manage_token),
+            lang,
+          },
+          idempotencyKey: `booking-reminder-${stage.key}-${r.id}`,
+        });
+      } catch (err) {
+        console.error("[reminders] send failed; will retry", stage.key, r.id, err);
+        failed++;
+        continue;
+      }
       await supabase
         .from("bookings")
         .update({ [stage.flag]: new Date().toISOString() })
         .eq("id", r.id);
       sent++;
     }
-    return { stage: stage.key, sent };
+    return { stage: stage.key, sent, failed };
   }
 
   const results = await Promise.all(stages.map(runStage));

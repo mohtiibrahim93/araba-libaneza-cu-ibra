@@ -547,6 +547,34 @@ serve(async (req) => {
         break;
       }
 
+      case "customer.subscription.updated": {
+        // A subscription can lapse (past_due, or Stripe's "unpaid" after the
+        // retries run out) without an invoice.payment_failed reaching us.
+        // Read it from Stripe as it is now, since events can arrive out of
+        // order. subscription_status keeps Stripe's own word; payment_status
+        // only moves to past_due (Stripe's "unpaid" is a lapsed renewal, not
+        // our "unpaid", which means no payment was ever attempted).
+        const subscription = event.data.object as Stripe.Subscription;
+        let status: string = subscription.status;
+        try {
+          status = (await stripe.subscriptions.retrieve(subscription.id)).status;
+        } catch (e) {
+          console.warn(`Subscription ${subscription.id}: could not re-check status, using the event's`, e);
+        }
+        await supabase
+          .from("registrations")
+          .update({ subscription_status: status })
+          .eq("stripe_subscription_id", subscription.id);
+        if (status === "past_due" || status === "unpaid") {
+          await supabase
+            .from("registrations")
+            .update({ payment_status: "past_due" })
+            .eq("stripe_subscription_id", subscription.id)
+            .neq("payment_status", "refunded");
+        }
+        break;
+      }
+
       case "customer.subscription.deleted": {
         // Fires when the subscription ends — either naturally at cancel_at after
         // the final month, or from an admin cancellation.

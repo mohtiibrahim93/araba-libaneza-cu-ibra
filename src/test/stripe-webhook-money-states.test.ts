@@ -43,6 +43,7 @@ function run(event: Record<string, unknown>, stripeApi: Record<string, unknown> 
     paymentIntents = (stripeApi["paymentIntents"] as object) ?? {};
     checkout = { sessions: (stripeApi["sessions"] as object) ?? { list: async () => ({ data: [] }) } };
     setupIntents = {};
+    subscriptions = (stripeApi["subscriptions"] as object) ?? {};
   }
   let handler!: (req: Request) => Promise<Response>;
   loadEdgeHandler("supabase/functions/stripe-webhook/index.ts", {
@@ -117,5 +118,23 @@ describe("refunds made in Stripe", () => {
       { registrations: [{ id: "reg-by-intent" }] },
     );
     expect(out.writes.find((x) => x.table === "registrations")!.filters).toContain("id=reg-by-intent");
+  });
+});
+
+describe("customer.subscription.updated records a lapse without a failed invoice", () => {
+  const updated = (status: string) => ({ id: `evt-sub-${status}`, type: "customer.subscription.updated", data: { object: { id: "sub_1", status } } });
+
+  it("marks past_due from Stripe's current status, never over a refund", async () => {
+    const out = await run(updated("active"), { subscriptions: { retrieve: async () => ({ id: "sub_1", status: "unpaid" }) } });
+    const regs = out.writes.filter((x) => x.table === "registrations");
+    expect(regs[0]!.patch).toEqual({ subscription_status: "unpaid" });
+    expect(regs[1]!.patch).toEqual({ payment_status: "past_due" });
+    expect(regs[1]!.filters).toContain("payment_status!=refunded");
+  });
+
+  it("leaves payment_status alone while the subscription is active", async () => {
+    const out = await run(updated("active"), { subscriptions: { retrieve: async () => ({ id: "sub_1", status: "active" }) } });
+    const regs = out.writes.filter((x) => x.table === "registrations");
+    expect(regs.map((w) => w.patch)).toEqual([{ subscription_status: "active" }]);
   });
 });
