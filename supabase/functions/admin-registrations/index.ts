@@ -2022,11 +2022,36 @@ Deno.serve(async (req) => {
         .order("start_at", { ascending: true });
       if (trialsErr) throw trialsErr;
 
+      // A refund records the money but leaves the lesson booked: lessons still
+      // ahead for a fully refunded registration, for the owner to cancel
+      // (never cancelled automatically).
+      const { data: refundedRegs, error: refundedErr } = await supabase
+        .from("registrations")
+        .select("id")
+        .eq("payment_status", "refunded")
+        .limit(500);
+      if (refundedErr) throw refundedErr;
+      const refundedIds = (refundedRegs ?? []).map((r) => r.id as string);
+      let refundedLessons: unknown[] = [];
+      if (refundedIds.length) {
+        const { data: rows, error: rowsErr } = await supabase
+          .from("bookings")
+          .select("id, registration_id, start_at, end_at, student_name, student_email, format")
+          .in("registration_id", refundedIds)
+          .eq("status", "confirmed")
+          .gte("start_at", new Date(now).toISOString())
+          .order("start_at", { ascending: true })
+          .limit(50);
+        if (rowsErr) throw rowsErr;
+        refundedLessons = rows ?? [];
+      }
+
       return jsonResponse({
         data: {
           now: new Date(now).toISOString(),
           lessons: lessons ?? [],
           trialsToMark: trialsToMark ?? [],
+          refundedLessons,
           uncontacted: (uncontacted ?? []).map((r) => ({ ...r, waitingDays: days(r.created_at as string) })),
           unpaid: (unpaid ?? []).map((r) => ({ ...r, waitingDays: days(r.created_at as string) })),
           cohortsStartingSoon: cohorts ?? [],

@@ -85,6 +85,8 @@ interface Today {
   olderUnsyncedLessons?: number;
   /** Free trials that ended in the last 24h with no outcome yet; after 24h they count as done. */
   trialsToMark?: Array<{ id: string; start_at: string; end_at: string; student_name: string; student_email: string; student_phone: string | null; format: string; trial_outcome: null }>;
+  /** Lessons still booked for a registration whose payment was fully refunded; the owner decides whether to cancel. */
+  refundedLessons?: Array<{ id: string; registration_id: string; start_at: string; end_at: string; student_name: string; student_email: string; format: string }>;
 }
 
 const TZ = "Europe/Bucharest";
@@ -341,6 +343,18 @@ const TodayAdmin = ({ onGoToLeads, onOpenPerson, onGo, newLast7, onLoaded }: Pro
                     />
                   </div>
                 ))}
+              </div>
+            )}
+
+            {!!data.refundedLessons?.length && (filter === "all" || filter === "problems") && (
+              <div className="space-y-2 rounded-2xl border border-admin-warn-line bg-admin-warn-bg p-4 text-admin-warn-fg">
+                <p className="text-sm font-semibold">Plată rambursată, dar lecția e încă programată</p>
+                <p className="text-xs">Banii au fost returnați. Dacă lecția nu mai are loc, anuleaz-o din Toate lecțiile; nu se anulează automat.</p>
+                <ul className="space-y-1 text-sm">
+                  {data.refundedLessons.map((b) => (
+                    <li key={b.id}>{b.student_name} · {new Intl.DateTimeFormat("ro-RO", { timeZone: TZ, dateStyle: "short", timeStyle: "short" }).format(new Date(b.start_at))}</li>
+                  ))}
+                </ul>
               </div>
             )}
 
