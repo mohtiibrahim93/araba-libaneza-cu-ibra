@@ -166,6 +166,10 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
           "Cursuri de arabă libaneză în București și online, pentru toate nivelurile, cu Ibra, profesor nativ din Liban. Vorbești din primele lecții.",
       },
       { name: "author", content: "Centrul de Arabă Libaneză" },
+      // Google Search Console ownership (re-added by the owner on 13 October
+      // 2026). The domain is also verified by DNS; keep this unless he says
+      // otherwise, since Search Console re-checks it.
+      { name: "google-site-verification", content: "O4lPkW4s-d2rF0NNhpyeNU-6yhLxvox4c73Hz2lcoKU" },
       { "data-rh": "true", property: "og:type", content: "website" },
       { "data-rh": "true", property: "og:url", content: "https://centruldearabalibaneza.com/" },
       { "data-rh": "true", property: "og:title", content: "Cursuri de arabă în București și online — Arabă libaneză cu Ibra" },
