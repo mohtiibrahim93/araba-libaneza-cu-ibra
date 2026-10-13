@@ -4,7 +4,7 @@ import { Input } from "@/components/ui/input";
 import { describeRegistrationCourse, emptyCourseFilters, matchesCourseFilters } from "@/lib/adminCourseFilters";
 import CourseFilters from "./CourseFilters";
 import RegistrationCourse, { registrationFormatLabel } from "./RegistrationCourse";
-import { leadStatusLabels, leadSourceLabels, paymentStatusLabels, type Registration } from "./types";
+import { leadStatusLabels, leadSourceLabels, partialRefundNote, paymentStatusLabels, type Registration } from "./types";
 
 export default function PrivateLessonsAdmin({ registrations, onOpen, onChanged }: {
   registrations: Registration[]; onOpen: (id: string) => void; onChanged: () => void;
@@ -29,7 +29,7 @@ export default function PrivateLessonsAdmin({ registrations, onOpen, onChanged }
             <td className="p-2 align-top"><button className="font-semibold text-primary underline-offset-2 hover:underline" onClick={() => onOpen(r.id)}>{r.name}</button><p className="text-xs text-muted-foreground">{r.email}</p><p className="text-xs text-muted-foreground">{r.phone}</p></td>
             <td className="p-2 align-top">{registrationFormatLabel(r)}<RegistrationCourse registration={r} /></td>
             <td className="p-2 align-top">{leadStatusLabels[r.lead_status] ?? r.lead_status ?? "Nespecificat"}</td>
-            <td className="p-2 align-top">{r.refunded_at ? "Rambursat" : paymentStatusLabels[r.payment_status ?? ""] ?? r.payment_status ?? "Nespecificat"}</td>
+            <td className="p-2 align-top">{paymentStatusLabels[r.payment_status ?? ""] ?? r.payment_status ?? "Nespecificat"}{partialRefundNote(r) ? ` · ${partialRefundNote(r)}` : ""}</td>
             <td className="p-2 align-top">{r.source ? leadSourceLabels[r.source] ?? r.source : "Nespecificată"}</td>
           </tr>)}</tbody>
         </table></div>}
