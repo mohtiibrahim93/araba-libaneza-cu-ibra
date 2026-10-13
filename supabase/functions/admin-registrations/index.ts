@@ -2855,6 +2855,27 @@ Deno.serve(async (req) => {
       return jsonResponse({ success: true, until });
     }
 
+    // Money received outside Stripe (cash or bank transfer), marked by the
+    // owner from Acasă. payment_status tracks the money, and the money has
+    // arrived, so it becomes "paid", with how it was paid. Never over a
+    // registration already paid or refunded.
+    if (action === "mark_paid_offline") {
+      const method = body.method === "cash" || body.method === "transfer" ? body.method : null;
+      if (typeof id !== "string" || !method) return jsonResponse({ error: "Alege cash sau transfer." }, 400);
+      const paidAt = new Date().toISOString();
+      const { data, error } = await supabase
+        .from("registrations")
+        .update({ payment_status: "paid", paid_at: paidAt, payment_method: method, lead_status: "converted", followup_snoozed_until: null })
+        .eq("id", id)
+        .is("anonymized_at", null)
+        .not("payment_status", "in", '("paid","refunded")')
+        .select("id");
+      if (error) throw error;
+      if (!data?.length) return jsonResponse({ error: "Înscrierea e deja plătită sau nu mai există." }, 409);
+      await supabase.from("audit_logs").insert({ actor: callerEmail!, action: "mark_paid_offline", registration_id: id, details: { method, at: paidAt } });
+      return jsonResponse({ success: true });
+    }
+
     if (action === "update_status") {
       const ALLOWED_LEAD_STATUSES = [
         "new",

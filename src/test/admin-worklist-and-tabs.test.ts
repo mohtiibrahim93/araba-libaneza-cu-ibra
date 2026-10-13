@@ -37,10 +37,26 @@ describe("Acasă quick actions", () => {
   });
   it("puts an unpaid person aside for 7 days, without touching the money", () => {
     expect(today).toContain('{ action: "snooze_followup", days: 7 }');
-    const action = admin.slice(admin.indexOf('if (action === "snooze_followup")'), admin.indexOf('if (action === "update_status")'));
+    const action = admin.slice(admin.indexOf('if (action === "snooze_followup")'), admin.indexOf("// Money received outside Stripe"));
     expect(action).toContain(".update({ followup_snoozed_until: until })");
     expect(action).not.toContain("payment_status");
     expect(admin).toContain("followup_snoozed_until.is.null,followup_snoozed_until.lt.");
     expect(read("supabase/migrations/20261013120000_registration_followup_snooze.sql")).toContain("ADD COLUMN IF NOT EXISTS followup_snoozed_until timestamptz");
+  });
+});
+
+describe("marking money received outside Stripe", () => {
+  const admin = read("supabase/functions/admin-registrations/index.ts");
+  const action = admin.slice(admin.indexOf('if (action === "mark_paid_offline")'), admin.indexOf('if (action === "update_status")'));
+  it("records paid with cash or transfer, never over paid or refunded, and logs it", () => {
+    expect(action).toContain('body.method === "cash" || body.method === "transfer"');
+    expect(action).toContain('payment_status: "paid", paid_at: paidAt, payment_method: method');
+    expect(action).toContain(`.not("payment_status", "in", '("paid","refunded")')`);
+    expect(action).toContain('action: "mark_paid_offline"');
+  });
+  it("asks for confirmation on Acasă before saving", () => {
+    const today = read("src/components/admin/TodayAdmin.tsx");
+    expect(today).toContain("window.confirm(`Marchezi ${r.name} ca plătit ${how}?");
+    expect(today).toContain('{ action: "mark_paid_offline", method }');
   });
 });

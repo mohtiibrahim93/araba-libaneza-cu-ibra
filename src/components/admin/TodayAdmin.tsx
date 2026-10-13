@@ -460,6 +460,22 @@ const TodayAdmin = ({ onGoToLeads, onOpenPerson, onGo, newLast7, onLoaded }: Pro
                           ))}
                         </div>
                       )}
+                      {unpaid && (["cash", "transfer"] as const).map((method) => (
+                        <button
+                          key={method}
+                          type="button"
+                          disabled={busyRow === r.id}
+                          onClick={() => {
+                            const how = method === "cash" ? "cash" : "prin transfer bancar";
+                            if (window.confirm(`Marchezi ${r.name} ca plătit ${how}? Folosește doar dacă banii au ajuns la tine.`)) {
+                              void act(r.id, "unpaid", { action: "mark_paid_offline", method });
+                            }
+                          }}
+                          className={cn(rowBtn, "border border-border hover:border-brand-green/60 disabled:opacity-50")}
+                        >
+                          {method === "cash" ? "Plătit cash" : "Plătit prin transfer"}
+                        </button>
+                      ))}
                       {unpaid && (
                         <button
                           type="button"
