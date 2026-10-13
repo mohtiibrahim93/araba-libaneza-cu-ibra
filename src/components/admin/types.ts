@@ -132,6 +132,10 @@ export const leadStatusLabels: Record<LeadStatus, string> = {
  *   paid        The money arrived.
  *   failed      An attempt was made and declined. Not the same as unpaid: one
  *               tried and was refused, the other never tried.
+ *   expired     An attempt was opened and abandoned: the Stripe payment page
+ *               was left until Stripe closed it (24h). No money moved and
+ *               nothing was declined. Worth a follow-up: they got as far as
+ *               paying. (Owner's decision, 13 October 2026.)
  *   past_due    A subscription renewal lapsed. The relationship continues.
  *   refunded    The money arrived and was given back.
  *
@@ -155,6 +159,7 @@ export const paymentStatusLabels: Record<string, string> = {
   pending: "În așteptare",
   card_saved: "Card salvat",
   failed: "Eșuat",
+  expired: "Expirat",
   refunded: "Rambursat",
   past_due: "Restant",
 };
