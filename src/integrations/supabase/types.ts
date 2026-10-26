@@ -304,7 +304,10 @@ export type Database = {
       bookings: {
         Row: {
           cancelled_at: string | null
+          completed_at: string | null
+          completed_by: string | null
           created_at: string
+          done_check_sent_at: string | null
           end_at: string
           event_type_slug: string
           format: string
@@ -340,7 +343,10 @@ export type Database = {
         }
         Insert: {
           cancelled_at?: string | null
+          completed_at?: string | null
+          completed_by?: string | null
           created_at?: string
+          done_check_sent_at?: string | null
           end_at: string
           event_type_slug: string
           format?: string
@@ -376,7 +382,10 @@ export type Database = {
         }
         Update: {
           cancelled_at?: string | null
+          completed_at?: string | null
+          completed_by?: string | null
           created_at?: string
+          done_check_sent_at?: string | null
           end_at?: string
           event_type_slug?: string
           format?: string
