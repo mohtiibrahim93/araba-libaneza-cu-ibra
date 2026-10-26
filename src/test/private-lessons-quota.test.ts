@@ -12,11 +12,16 @@ const read = (p: string) => readFileSync(resolve(process.cwd(), p), "utf8");
 describe("paid lessons are capped at the quantity bought", () => {
   const src = read("supabase/functions/booking-create/index.ts");
 
-  it("counts confirmed and completed non-trial bookings against registrations.quantity", () => {
-    expect(src).toContain('.select("id, email, payment_status, quantity")');
-    expect(src).toContain('.neq("event_type_slug", "trial")');
-    expect(src).toContain('.in("status", ["confirmed", "completed"])');
-    expect(src).toContain("(used ?? 0) >= bought");
+  // Since 26 October 2026 by the owner's package rule (package-lessons.ts,
+  // tested in package-lessons.test.ts): kept, taken and lost lessons count.
+  it("counts the package's lessons by the owner's rule against registrations.quantity", () => {
+    expect(src).toContain(
+      '.select("id, email, payment_status, quantity, form_type")',
+    );
+    expect(src).toContain(
+      '.select("id, start_at, status, event_type_slug, trial_outcome")',
+    );
+    expect(src).toContain("if (lessonsUsed(packageRows) >= bought) {");
     expect(src).toContain('code: "lessons_used_up"');
   });
 

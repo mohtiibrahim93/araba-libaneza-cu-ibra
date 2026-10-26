@@ -28,6 +28,11 @@ import {
 import { GROUP_MONTHS, KIDS_GROUP_MONTHS } from "../_shared/prices.ts";
 import { sendTemplateEmail } from "../_shared/managed-email.ts";
 import { verifyRegistrationSignature } from "../_shared/registration-access.ts";
+import {
+  countsAgainstPackage,
+  packageNumbers,
+} from "../_shared/package-lessons.ts";
+import { syncPackageTitles } from "../_shared/package-titles.ts";
 
 function jsonResponseWith(cors: Record<string, string>) {
   return (body: unknown, status = 200) =>
@@ -398,6 +403,59 @@ Deno.serve(async (req) => {
         data.push(...page);
         if (page.length < 1000) return { data };
       }
+    };
+
+    // "L3/10": each private-package lesson's number in its package, by the
+    // owner's rule (_shared/package-lessons.ts). Adds lesson_number and
+    // package_total to the rows given (null when not a package lesson).
+    const withPackageNumbers = async <
+      T extends { id: string; registration_id?: string | null },
+    >(
+      rows: T[],
+    ): Promise<
+      Array<T & { lesson_number: number | null; package_total: number | null }>
+    > => {
+      const regIds = [
+        ...new Set(
+          rows.map((r) => r.registration_id).filter((x): x is string => !!x),
+        ),
+      ];
+      const numbers = new Map<string, { n: number; total: number }>();
+      for (let offset = 0; offset < regIds.length; offset += 100) {
+        const ids = regIds.slice(offset, offset + 100);
+        const [regRes, bookingRes] = await Promise.all([
+          supabase
+            .from("registrations")
+            .select("id, quantity")
+            .in("id", ids)
+            .eq("form_type", "private"),
+          supabase
+            .from("bookings")
+            .select(
+              "id, registration_id, start_at, status, event_type_slug, trial_outcome",
+            )
+            .in("registration_id", ids),
+        ]);
+        if (regRes.error) throw regRes.error;
+        if (bookingRes.error) throw bookingRes.error;
+        for (const reg of regRes.data ?? []) {
+          const own = (bookingRes.data ?? []).filter(
+            (b) => b.registration_id === reg.id,
+          );
+          const nums = packageNumbers(own);
+          const total = Math.max(
+            Number.parseInt(String(reg.quantity ?? 1), 10) || 1,
+            nums.size,
+          );
+          for (const [bookingId, n] of nums)
+            numbers.set(bookingId, { n, total });
+        }
+      }
+      return rows.map((r) => ({
+        ...r,
+        lesson_number: numbers.get(r.id)?.n ?? null,
+        package_total: numbers.get(r.id)?.total ?? null,
+      }));
     };
 
     // Lets the site tell an admin from a signed-in student (students have
@@ -1909,6 +1967,66 @@ Deno.serve(async (req) => {
       return jsonResponse({ success: true, trial_outcome: outcome });
     }
 
+    // The owner's word on a package lesson (owner's rules, 26 October 2026):
+    // excused ("scuzat") does not count against the package, lost
+    // ("pierdută": no-show, late cancellation) does; null goes back to the
+    // automatic rule (kept or taken counts, cancelled in time does not). Only
+    // for lessons that already started, or were cancelled. Trials keep their
+    // own action above.
+    if (action === "set_lesson_outcome") {
+      const outcome =
+        body.outcome === null
+          ? null
+          : typeof body.outcome === "string"
+            ? body.outcome
+            : undefined;
+      if (
+        typeof id !== "string" ||
+        (outcome !== null && !["excused", "lost"].includes(outcome ?? ""))
+      ) {
+        return jsonResponse({ error: "Rezultat invalid." }, 400);
+      }
+      const { data: booking, error: bErr } = await supabase
+        .from("bookings")
+        .select(
+          "id, registration_id, event_type_slug, status, start_at, trial_outcome",
+        )
+        .eq("id", id)
+        .maybeSingle();
+      if (bErr || !booking || booking.event_type_slug === "trial")
+        return jsonResponse({ error: "Lecția nu a fost găsită." }, 400);
+      if (booking.status === "rescheduled")
+        return jsonResponse(
+          { error: "Lecția a fost mutată; marchează lecția nouă." },
+          400,
+        );
+      const started = Date.parse(booking.start_at) <= Date.now();
+      if (outcome !== null && !started && booking.status !== "cancelled") {
+        return jsonResponse({ error: "Lecția nu a avut loc încă." }, 400);
+      }
+      const { error: uErr } = await supabase
+        .from("bookings")
+        .update({
+          trial_outcome: outcome,
+          trial_outcome_at: outcome ? new Date().toISOString() : null,
+          trial_outcome_by: outcome ? callerEmail : null,
+        })
+        .eq("id", id);
+      if (uErr) throw uErr;
+      await supabase.from("audit_logs").insert({
+        actor: callerEmail,
+        action: "set_lesson_outcome",
+        registration_id: booking.registration_id,
+        details: { booking_id: id, from: booking.trial_outcome, to: outcome },
+      });
+      await syncPackageTitles(supabase, booking.registration_id);
+      return jsonResponse({
+        success: true,
+        outcome,
+        counts: countsAgainstPackage({ ...booking, trial_outcome: outcome }),
+      });
+    }
+
     if (action === "list_bookings") {
       const { status_filter } = body;
       let q = supabase
@@ -1923,7 +2041,7 @@ Deno.serve(async (req) => {
       }
       const { data, error } = await q;
       if (error) throw error;
-      return jsonResponse({ data });
+      return jsonResponse({ data: await withPackageNumbers(data ?? []) });
     }
 
     // ============ Google Calendar sync health ============
@@ -2814,7 +2932,7 @@ Deno.serve(async (req) => {
         supabase
           .from("bookings")
           .select(
-            "id, start_at, end_at, status, event_type_slug, format, student_name, student_email, student_phone, meet_link, notes, google_event_id, google_sync_error, manage_token",
+            "id, registration_id, start_at, end_at, status, event_type_slug, format, student_name, student_email, student_phone, meet_link, notes, google_event_id, google_sync_error, manage_token",
           )
           .eq("status", "confirmed")
           .gte("start_at", dayStart)
@@ -2998,7 +3116,7 @@ Deno.serve(async (req) => {
       return jsonResponse({
         data: {
           now: new Date(now).toISOString(),
-          lessons: lessons ?? [],
+          lessons: await withPackageNumbers(lessons ?? []),
           trialsToMark: trialsToMark ?? [],
           refundedLessons,
           uncontacted: (uncontacted ?? []).map((r) => ({
@@ -3399,8 +3517,12 @@ Deno.serve(async (req) => {
       return jsonResponse({ success: true });
     }
 
+    // late_by_student: the owner cancels inside the 24 hours at the student's
+    // late request -- the lesson counts as lost against the package.
     if (action === "cancel_booking") {
       if (typeof id !== "string") return jsonResponse({ error: "ID invalid" });
+      const lateByStudent =
+        (body as { late_by_student?: unknown }).late_by_student === true;
       const { data: booking, error: bErr } = await supabase
         .from("bookings")
         .select("manage_token")
@@ -3414,7 +3536,12 @@ Deno.serve(async (req) => {
           method: "DELETE",
           headers: {
             Authorization: `Bearer ${Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")}`,
+            "Content-Type": "application/json",
           },
+          body: JSON.stringify({
+            late_by_student: lateByStudent,
+            by: callerEmail,
+          }),
         },
       );
       const out = await resp.json().catch(() => ({}));
@@ -3526,8 +3653,8 @@ Deno.serve(async (req) => {
      * `payment_status` records whether it has been paid for.
      */
     // Private students the owner can book a lesson for: website purchases and
-    // earlier hand-made bookings alike. Read-only; lessons_used counts the same
-    // bookings booking-create counts against the package.
+    // earlier hand-made bookings alike. Read-only; lessons_used counts by the
+    // owner's rule (_shared/package-lessons.ts), the one booking-create caps by.
     if (action === "private_students") {
       const { data: regs } = await readAll(
         "registrations",
@@ -3543,16 +3670,17 @@ Deno.serve(async (req) => {
         const ids = students.slice(offset, offset + 100).map((r) => r.id);
         const result = await supabase
           .from("bookings")
-          .select("registration_id")
-          .in("registration_id", ids)
-          .neq("event_type_slug", "trial")
-          .in("status", ["confirmed", "completed"]);
+          .select(
+            "id, registration_id, start_at, status, event_type_slug, trial_outcome",
+          )
+          .in("registration_id", ids);
         if (result.error) throw result.error;
         for (const row of result.data ?? [])
-          used.set(
-            row.registration_id,
-            (used.get(row.registration_id) ?? 0) + 1,
-          );
+          if (countsAgainstPackage(row))
+            used.set(
+              row.registration_id,
+              (used.get(row.registration_id) ?? 0) + 1,
+            );
       }
       return jsonResponse({
         data: students.map((r) => ({

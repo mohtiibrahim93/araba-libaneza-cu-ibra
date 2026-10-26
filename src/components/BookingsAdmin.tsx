@@ -25,6 +25,11 @@ import {
   TrialOutcomeControl,
   type TrialOutcome,
 } from "@/components/admin/TrialOutcome";
+import {
+  askCancelLesson,
+  LessonOutcomeControl,
+  PackageLessonBadge,
+} from "@/components/admin/LessonOutcome";
 
 interface Booking {
   id: string;
@@ -44,6 +49,8 @@ interface Booking {
   google_sync_error: string | null;
   trial_outcome?: TrialOutcome;
   completed_by?: string | null;
+  lesson_number?: number | null;
+  package_total?: number | null;
 }
 
 /**
@@ -252,15 +259,14 @@ const BookingsAdmin = ({
   };
 
   const cancel = async (b: Booking) => {
-    if (
-      !confirm(`Anulezi programarea cu ${b.student_name} (${fmt(b.start_at)})?`)
-    )
-      return;
+    const choice = askCancelLesson(b, fmt(b.start_at));
+    if (!choice) return;
     setCancellingId(b.id);
     try {
       const { data, error } = await invokeAdmin({
         action: "cancel_booking",
         id: b.id,
+        ...choice,
       });
       if (error) throw error;
       if (data?.error) throw new Error(data.error);
@@ -383,6 +389,11 @@ const BookingsAdmin = ({
                   </td>
                   <td className="py-2 pr-2">
                     {EVENT_LABEL[b.event_type_slug] ?? b.event_type_slug}
+                    <PackageLessonBadge lesson={b} />
+                    <LessonOutcomeControl
+                      lesson={b}
+                      onChanged={() => void load(true)}
+                    />
                     {b.event_type_slug === "trial" && (
                       <TrialOutcomeControl
                         booking={b}

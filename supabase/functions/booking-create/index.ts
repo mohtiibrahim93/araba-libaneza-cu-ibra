@@ -27,6 +27,14 @@ import {
 import { buildCorsHeaders } from "../_shared/cors.ts";
 import { checkRateLimit, getClientIp } from "../_shared/rate-limit.ts";
 import { verifiedRegistrationOwner } from "../_shared/verified-registration-owner.ts";
+import {
+  countsAgainstPackage,
+  lessonsUsed,
+  packageNumbers,
+  packageTitle,
+  type PackageLessonRow,
+} from "../_shared/package-lessons.ts";
+import { syncPackageTitles } from "../_shared/package-titles.ts";
 
 interface CreateBody {
   event_type: string;
@@ -162,7 +170,7 @@ Deno.serve(async (req) => {
     // Verify the registration exists (FK will catch it too, but fail early with a clearer error).
     const { data: reg } = await supabase
       .from("registrations")
-      .select("id, email, payment_status, quantity")
+      .select("id, email, payment_status, quantity, form_type")
       .eq("id", body.registration_id)
       .maybeSingle();
     // Preserve only the existing trusted webhook booking path. Unknown and
@@ -206,24 +214,25 @@ Deno.serve(async (req) => {
     }
 
     // A paid registration books at most the number of lessons it bought.
+    let packageRows: PackageLessonRow[] = [];
+    let bought = 1;
     // Applied to internal calls too, so the webhook can never book more than
     // the package either (a redelivered event lands here as well).
     if (!isFree) {
-      const bought = Math.max(
-        1,
-        Number.parseInt(String(reg.quantity ?? 1), 10) || 1,
-      );
-      const { count: used, error: countErr } = await supabase
+      bought = Math.max(1, Number.parseInt(String(reg.quantity ?? 1), 10) || 1);
+      // The owner's rule (_shared/package-lessons.ts): a lesson booked or
+      // taken counts, so does one marked lost (no-show, late cancellation);
+      // one excused or cancelled in good time does not.
+      const { data: rows, error: countErr } = await supabase
         .from("bookings")
-        .select("id", { count: "exact", head: true })
-        .eq("registration_id", body.registration_id)
-        .neq("event_type_slug", "trial")
-        .in("status", ["confirmed", "completed"]);
+        .select("id, start_at, status, event_type_slug, trial_outcome")
+        .eq("registration_id", body.registration_id);
       if (countErr) {
         console.error("[booking-create] lesson count failed", countErr);
         return json({ error: "Internal server error" }, 500);
       }
-      if ((used ?? 0) >= bought) {
+      packageRows = rows ?? [];
+      if (lessonsUsed(packageRows) >= bought) {
         return json(
           { error: "all paid lessons already booked", code: "lessons_used_up" },
           409,
@@ -463,7 +472,16 @@ Deno.serve(async (req) => {
     }
 
     // Create GCal event (best-effort)
-    const summary = `${et.name_ro} — ${body.student_name}`;
+    // A lesson of a private package carries its number in the title, as the
+    // owner writes it: "Ioan - Araba libaneza- L3/10" (numbers follow the date).
+    const inPackage = !isFree && reg.form_type === "private";
+    const lessonNumber = inPackage
+      ? packageNumbers([...packageRows, inserted]).get(inserted.id)
+      : undefined;
+    const packageTotal = Math.max(bought, lessonsUsed(packageRows) + 1);
+    const summary = lessonNumber
+      ? packageTitle(body.student_name, lessonNumber, packageTotal)
+      : `${et.name_ro} — ${body.student_name}`;
     const description = [
       `Student: ${body.student_name}`,
       `Email: ${body.student_email}`,
@@ -507,6 +525,16 @@ Deno.serve(async (req) => {
         "[booking-create] calendar link could not be saved",
         syncSaveError,
       );
+
+    // Booked before lessons already in the calendar: the later ones move up a
+    // number, so their titles are renamed too.
+    if (
+      lessonNumber &&
+      packageRows.some(
+        (r) => countsAgainstPackage(r) && Date.parse(r.start_at) > startMs,
+      )
+    )
+      await syncPackageTitles(supabase, body.registration_id);
 
     const quiet = internalCall && body.quiet === true;
 

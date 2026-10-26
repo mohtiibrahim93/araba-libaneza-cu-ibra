@@ -17,6 +17,7 @@ import { formTypeLabels, paymentStatusLabels, meetingLabel } from "./types";
 import { Empty, ErrorNote, Loading } from "./ui";
 import { TrialOutcomeControl } from "@/components/admin/TrialOutcome";
 import LessonEditDialog from "./LessonEditDialog";
+import { PackageLessonBadge } from "./LessonOutcome";
 
 /**
  * The screen the panel opens on.
@@ -50,6 +51,8 @@ interface Lesson {
   google_event_id?: string | null;
   google_sync_error: string | null;
   manage_token: string;
+  lesson_number?: number | null;
+  package_total?: number | null;
 }
 interface Lead {
   id: string;
@@ -842,6 +845,7 @@ const TodayAdmin = ({
                         <div className="min-w-0 flex-1">
                           <p className="truncate font-semibold">
                             {l.student_name}
+                            <PackageLessonBadge lesson={l} />
                             {(l.event_type_slug === "trial" ||
                               l.event_type_slug === "verificare-nivel") && (
                               <span className="ml-1.5 rounded-md bg-card px-1.5 py-0.5 text-xs font-semibold text-brand-green dark:text-primary">

@@ -26,6 +26,7 @@ import {
   inBlackout,
   rulesForEventType,
 } from "../_shared/schedule-rules.ts";
+import { syncPackageTitles } from "../_shared/package-titles.ts";
 
 /**
  * Free changes stop 24 hours before the lesson — the rule the trial notice,
@@ -183,6 +184,16 @@ Deno.serve(async (req) => {
     const supabase = client();
 
     if (req.method === "DELETE") {
+      // The owner, cancelling inside the 24 hours because the student asked
+      // late, says so: the lesson then counts as lost ("pierdută") against the
+      // package, the owner's rule. Only the service-role call may say it.
+      const cancelBody = internalCall(req)
+        ? ((await req.json().catch(() => ({}))) as {
+            late_by_student?: unknown;
+            by?: unknown;
+          })
+        : {};
+      const lateByStudent = cancelBody.late_by_student === true;
       // Write first, conditional on the row still being the confirmed booking
       // we loaded, so a failed or duplicate write never deletes the calendar
       // event or tells the student it is cancelled.
@@ -194,6 +205,14 @@ Deno.serve(async (req) => {
           google_sync_error: booking.google_event_id
             ? "cancel_update_pending"
             : null,
+          ...(lateByStudent
+            ? {
+                trial_outcome: "lost",
+                trial_outcome_at: new Date().toISOString(),
+                trial_outcome_by:
+                  typeof cancelBody.by === "string" ? cancelBody.by : null,
+              }
+            : {}),
         })
         .eq("id", booking.id)
         .eq("status", "confirmed");
@@ -225,6 +244,9 @@ Deno.serve(async (req) => {
             error,
           );
       }
+      // The package's later lessons move down a number (unless this one still
+      // counts, as a late cancellation).
+      await syncPackageTitles(supabase, booking.registration_id);
       sendBookingEmail(
         "booking-cancelled",
         booking.student_email,
@@ -470,6 +492,9 @@ Deno.serve(async (req) => {
             error,
           );
       }
+
+      // Numbers follow the date, so a move can reorder the package.
+      await syncPackageTitles(supabase, booking.registration_id);
 
       sendBookingEmail(
         "booking-rescheduled",
