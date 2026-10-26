@@ -15,6 +15,7 @@ import {
 import { TimeField } from "@/components/admin/TimeField";
 import { BUCHAREST_TZ, bucharestCivilToUtc } from "@/lib/timezone";
 import { meetingLabel } from "./types";
+import { askCancelLesson } from "./LessonOutcome";
 
 /**
  * "Modifică lecția" (owner's request, 14 October 2026): one window for a
@@ -36,6 +37,7 @@ export interface EditableLesson {
   notes?: string | null;
   status: string;
   meet_link?: string | null;
+  event_type_slug?: string;
 }
 
 export const CLASH_LABEL: Record<string, string> = {
@@ -222,19 +224,18 @@ export default function LessonEditDialog({
   };
 
   const cancelLesson = async () => {
-    if (
-      !confirm(
-        `Anulezi lecția cu ${lesson.student_name} (${fmt(lesson.start_at)})?`,
-      )
-    )
-      return;
+    const choice = askCancelLesson(
+      { ...lesson, event_type_slug: lesson.event_type_slug ?? "" },
+      fmt(lesson.start_at),
+    );
+    if (!choice) return;
     setBusy(true);
     try {
       const { data, error } = await invokeAdmin<{
         success?: boolean;
         sync_pending?: boolean;
         error?: string;
-      }>({ action: "cancel_booking", id: lesson.id });
+      }>({ action: "cancel_booking", id: lesson.id, ...choice });
       if (error) throw error;
       if (data?.error) throw new Error(data.error);
       if (data?.success !== true)

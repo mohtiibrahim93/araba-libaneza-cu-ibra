@@ -138,11 +138,13 @@ describe("manual booking confirmation", () => {
             name: "Modifică lecția cu Synthetic Student",
           }),
         );
-        // A new date: the save button becomes "Mută lecția".
+        // A new date: the save button becomes "Mută lecția". Two UTC days
+        // on, so it differs from the lesson's Bucharest date at any hour (late
+        // in the UTC evening Bucharest is already on the next day).
         const dateInput = document.querySelector(
           'input[type="date"]',
         ) as HTMLInputElement;
-        const next = new Date(Date.parse(row.start_at) + 86400000)
+        const next = new Date(Date.parse(row.start_at) + 2 * 86400000)
           .toISOString()
           .slice(0, 10);
         fireEvent.change(dateInput, { target: { value: next } });
