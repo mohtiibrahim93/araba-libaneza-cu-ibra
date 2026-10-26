@@ -71,7 +71,12 @@ export interface PrivateStudent {
 
 /** "Name — email · 2/5 lecții · plătit" — enough to tell two students apart. */
 export function studentOptionLabel(s: PrivateStudent): string {
-  const paid = s.payment_status === "paid" ? "plătit" : "neplătit";
+  const paid =
+    s.payment_status === "paid"
+      ? "plătit"
+      : s.payment_status === "free"
+        ? "gratuit"
+        : "neplătit";
   return `${s.name || "Fără nume"} — ${s.email || "fără email"} · ${s.lessons_used}/${s.quantity} lecții · ${paid}`;
 }
 
@@ -159,6 +164,8 @@ const BookingsAdmin = ({
   const [bkFormat, setBkFormat] = useState<"online" | "physical">("online");
   const [bkQuantity, setBkQuantity] = useState(1);
   const [bkPaid, setBkPaid] = useState(false);
+  // "Gratuită (recuperare)": a lesson given for free. Excludes "A plătit deja".
+  const [bkFree, setBkFree] = useState(false);
   const [bkNotes, setBkNotes] = useState("");
   const [bkBusy, setBkBusy] = useState(false);
   const [bkWarn, setBkWarn] = useState<string[] | null>(null);
@@ -394,6 +401,7 @@ const BookingsAdmin = ({
     setBkFormat("online");
     setBkQuantity(1);
     setBkPaid(false);
+    setBkFree(false);
     setBkNotes("");
     setBkWarn(null);
     setBkStudentId("");
@@ -456,7 +464,8 @@ const BookingsAdmin = ({
         start_at: startAt,
         format: bkFormat,
         quantity: bkQuantity,
-        paid: bkPaid,
+        paid: bkPaid && !bkFree,
+        ...(bkFree ? { free: true } : {}),
         notes: bkNotes.trim() || undefined,
         force,
       });
@@ -1020,9 +1029,23 @@ const BookingsAdmin = ({
                   <input
                     type="checkbox"
                     checked={bkPaid}
-                    onChange={(e) => setBkPaid(e.target.checked)}
+                    onChange={(e) => {
+                      setBkPaid(e.target.checked);
+                      if (e.target.checked) setBkFree(false);
+                    }}
                   />
                   A plătit deja
+                </label>
+                <label className="flex items-center gap-2 text-sm sm:col-span-2">
+                  <input
+                    type="checkbox"
+                    checked={bkFree}
+                    onChange={(e) => {
+                      setBkFree(e.target.checked);
+                      if (e.target.checked) setBkPaid(false);
+                    }}
+                  />
+                  Gratuită (recuperare) — nu datorează nimic
                 </label>
               </>
             )}

@@ -201,7 +201,8 @@ Deno.serve(async (req) => {
      * payment, which step 3 of the same email promises, is where the joining
      * details belong.
      */
-    const paid = reg.payment_status === "paid";
+    // A lesson the owner gave for free owes nothing: same access as paid.
+    const paid = reg.payment_status === "paid" || reg.payment_status === "free";
 
     // 1) Confirmation to the registrant (only if they provided an email)
     if (sendStudent && reg.email) {

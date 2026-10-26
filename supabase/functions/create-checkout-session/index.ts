@@ -86,7 +86,8 @@ serve(async (req) => {
         status: 400,
         headers: { ...corsHeaders, "Content-Type": "application/json" },
       });
-    if (reg.payment_status === "paid") {
+    // "free": the owner gave it for free, so there is nothing to charge.
+    if (reg.payment_status === "paid" || reg.payment_status === "free") {
       return new Response(
         JSON.stringify({ error: "Registration already paid" }),
         {

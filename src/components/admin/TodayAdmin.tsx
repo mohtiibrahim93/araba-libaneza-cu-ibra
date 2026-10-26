@@ -703,6 +703,47 @@ const TodayAdmin = ({
                           Am vorbit cu el · 7 zile
                         </button>
                       )}
+                      {unpaid && (
+                        <button
+                          type="button"
+                          disabled={busyRow === r.id}
+                          onClick={() =>
+                            void act(r.id, "unpaid", {
+                              action: "update_status",
+                              lead_status: "no_response",
+                            })
+                          }
+                          title="Marchează „Fără răspuns” și scoate-l din listă. Înscrierea rămâne; dacă revine, cererea nouă apare separat."
+                          className={cn(
+                            rowBtn,
+                            "border border-border hover:border-brand-green/60 disabled:opacity-50",
+                          )}
+                        >
+                          Nu mai răspunde
+                        </button>
+                      )}
+                      {unpaid && r.payment_status === "unpaid" && (
+                        <button
+                          type="button"
+                          disabled={busyRow === r.id}
+                          onClick={() => {
+                            if (
+                              window.confirm(
+                                `Marchezi lecția lui ${r.name} ca gratuită (de ex. recuperare)? Nu va mai apărea ca neplătită.`,
+                              )
+                            ) {
+                              void act(r.id, "unpaid", { action: "mark_free" });
+                            }
+                          }}
+                          title="Lecție dată gratuit (recuperare): nu datorează nimic"
+                          className={cn(
+                            rowBtn,
+                            "border border-border hover:border-brand-green/60 disabled:opacity-50",
+                          )}
+                        >
+                          Gratuit
+                        </button>
+                      )}
                       {rowError?.id === r.id && (
                         <p
                           role="alert"

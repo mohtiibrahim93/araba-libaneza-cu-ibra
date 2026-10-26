@@ -97,7 +97,11 @@ serve(async (req) => {
           status: 400,
           headers: { ...corsHeaders, "Content-Type": "application/json" },
         });
-      if (regRow.payment_status === "paid") {
+      // "free": the owner gave it for free, so there is nothing to charge.
+      if (
+        regRow.payment_status === "paid" ||
+        regRow.payment_status === "free"
+      ) {
         return new Response(JSON.stringify({ error: "Already paid" }), {
           headers: { ...corsHeaders, "Content-Type": "application/json" },
           status: 409,
