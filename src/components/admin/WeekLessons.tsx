@@ -17,6 +17,8 @@ import LessonEditDialog from "./LessonEditDialog";
 import BookLessonDialog from "./BookLessonDialog";
 import { bucharestCivilToUtc } from "@/lib/timezone";
 import { ErrorNote } from "./ui";
+import { PackageLessonBadge } from "./LessonOutcome";
+import { packageLessonLabel } from "../../../supabase/functions/_shared/package-lessons";
 
 /**
  * Program › Săptămâna (October 2026 redesign): the booked lessons laid out on
@@ -39,6 +41,8 @@ interface Booking {
   google_sync_error: string | null;
   google_event_id: string | null;
   notes?: string | null;
+  lesson_number?: number | null;
+  package_total?: number | null;
 }
 
 interface GroupLesson {
@@ -592,6 +596,10 @@ const WeekLessons = () => {
                           {warn
                             ? "lipsă din calendar"
                             : label(b.event_type_slug)}
+                          {!warn &&
+                            b.lesson_number &&
+                            b.package_total &&
+                            ` · ${packageLessonLabel(b.lesson_number, b.package_total)}`}
                         </span>
                       </button>
                     );
@@ -660,7 +668,10 @@ const AgendaRow = ({ b, onEdit }: { b: Booking; onEdit: () => void }) => {
         )}
       >
         <div className="min-w-0 flex-1">
-          <p className="truncate font-bold">{b.student_name}</p>
+          <p className="truncate font-bold">
+            {b.student_name}
+            <PackageLessonBadge lesson={b} />
+          </p>
           <p
             className={cn(
               "flex items-center gap-1 text-[0.8125rem]",
