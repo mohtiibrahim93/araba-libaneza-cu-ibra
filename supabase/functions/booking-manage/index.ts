@@ -84,7 +84,7 @@ Deno.serve(async (req) => {
   // PATCH (reschedule) and DELETE (cancel) are not CORS-safelisted methods:
   // without an explicit Allow-Methods the browser preflight rejects them.
   const corsHeaders = buildCorsHeaders(req, {
-    "Access-Control-Allow-Methods": "GET, PATCH, DELETE, OPTIONS",
+    "Access-Control-Allow-Methods": "GET, POST, PATCH, DELETE, OPTIONS",
   });
   const json = (body: unknown, status = 200) => {
     const res = _json(body, status);
@@ -128,9 +128,42 @@ Deno.serve(async (req) => {
           changes_allowed:
             booking.status === "confirmed" &&
             !tooLateToChange(booking.start_at),
+          // Once it has ended, the student can confirm it took place.
+          can_confirm_done:
+            booking.status === "confirmed" &&
+            Date.parse(booking.end_at) <= Date.now(),
         },
         tz: TZ,
       });
+    }
+
+    // The student confirms the lesson took place (owner's request, 14
+    // October 2026; the after-lesson email links here). Without it the
+    // lesson counts as done 48 hours after it ended (booking-reminders).
+    if (req.method === "POST") {
+      const body = (await req.json().catch(() => ({}))) as { action?: string };
+      if (body?.action !== "confirm_done")
+        return json({ error: "unknown action" }, 400);
+      if (booking.status === "completed")
+        return json({ ok: true, already: true });
+      if (booking.status !== "confirmed")
+        return json({ error: "booking is not active" }, 409);
+      if (Date.parse(booking.end_at) > Date.now())
+        return json({ error: "lesson not over", code: "not_over" }, 409);
+      const { error: doneError } = await client()
+        .from("bookings")
+        .update({
+          status: "completed",
+          completed_at: new Date().toISOString(),
+          completed_by: "student",
+        })
+        .eq("id", booking.id)
+        .eq("status", "confirmed");
+      if (doneError) {
+        console.error("[booking-manage] confirm_done failed", doneError);
+        return json({ error: "confirm failed" }, 500);
+      }
+      return json({ ok: true });
     }
 
     if (booking.status !== "confirmed") {

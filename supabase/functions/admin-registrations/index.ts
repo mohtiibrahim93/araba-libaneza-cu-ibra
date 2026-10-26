@@ -1914,7 +1914,7 @@ Deno.serve(async (req) => {
       let q = supabase
         .from("bookings")
         .select(
-          "id, registration_id, event_type_slug, start_at, end_at, student_name, student_email, student_phone, format, notes, status, meet_link, manage_token, created_at, cancelled_at, google_event_id, google_sync_error, trial_outcome, trial_outcome_at, trial_outcome_by",
+          "id, registration_id, event_type_slug, start_at, end_at, student_name, student_email, student_phone, format, notes, status, meet_link, manage_token, created_at, cancelled_at, google_event_id, google_sync_error, trial_outcome, trial_outcome_at, trial_outcome_by, completed_by",
         )
         .order("start_at", { ascending: false })
         .limit(500);

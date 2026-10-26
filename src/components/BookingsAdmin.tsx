@@ -43,6 +43,7 @@ interface Booking {
   google_event_id: string | null;
   google_sync_error: string | null;
   trial_outcome?: TrialOutcome;
+  completed_by?: string | null;
 }
 
 /**
@@ -92,6 +93,15 @@ const STATUS_LABEL: Record<string, string> = {
   confirmed: "Confirmată",
   cancelled: "Anulată",
   pending: "În așteptare",
+  completed: "Făcută",
+  rescheduled: "Mutată",
+};
+
+/** Who marked a lesson done (after-lesson email, 14 October 2026). */
+const COMPLETED_BY_LABEL: Record<string, string> = {
+  student: "confirmată de cursant",
+  auto: "automat, după 48h",
+  admin: "de tine",
 };
 
 const BookingsAdmin = ({
@@ -420,6 +430,11 @@ const BookingsAdmin = ({
                   </td>
                   <td className="py-2 pr-2">
                     {STATUS_LABEL[b.status] ?? b.status}
+                    {b.status === "completed" && b.completed_by && (
+                      <span className="block text-xs text-muted-foreground">
+                        {COMPLETED_BY_LABEL[b.completed_by] ?? b.completed_by}
+                      </span>
+                    )}
                     {b.status === "confirmed" &&
                       (!b.google_event_id || !!b.google_sync_error) && (
                         <span
