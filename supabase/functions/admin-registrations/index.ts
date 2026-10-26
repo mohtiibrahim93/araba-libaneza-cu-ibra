@@ -3113,12 +3113,79 @@ Deno.serve(async (req) => {
         refundedLessons = rows ?? [];
       }
 
+      // Packages about to run out (owner's request, 26 October 2026): one
+      // lesson left, or none, for a student who is still coming -- a lesson
+      // ahead or one in the last 30 days -- so the owner offers the next
+      // package in time. Counted by the owner's rule (package-lessons.ts).
+      const { data: packageRegs, error: packageErr } = await supabase
+        .from("registrations")
+        .select("id, name, phone, quantity")
+        .eq("form_type", "private")
+        .in("payment_status", ["paid", "free"])
+        .is("anonymized_at", null)
+        .limit(1000);
+      if (packageErr) throw packageErr;
+      const lowPackages: Array<{
+        id: string;
+        name: string | null;
+        phone: string | null;
+        quantity: number;
+        used: number;
+        left: number;
+        next_lesson_at: string | null;
+      }> = [];
+      const recent = now - 30 * 86_400_000;
+      for (let offset = 0; offset < (packageRegs ?? []).length; offset += 100) {
+        const chunk = (packageRegs ?? []).slice(offset, offset + 100);
+        const { data: rows, error: rowsErr } = await supabase
+          .from("bookings")
+          .select(
+            "id, registration_id, start_at, status, event_type_slug, trial_outcome",
+          )
+          .in(
+            "registration_id",
+            chunk.map((r) => r.id),
+          );
+        if (rowsErr) throw rowsErr;
+        for (const reg of chunk) {
+          const own = (rows ?? []).filter((b) => b.registration_id === reg.id);
+          const counted = own.filter((b) => countsAgainstPackage(b));
+          const quantity = Math.max(
+            1,
+            Number.parseInt(String(reg.quantity ?? 1), 10) || 1,
+          );
+          // A single hand-booked lesson is not a package to renew.
+          if (quantity < 2) continue;
+          const left = quantity - counted.length;
+          if (left > 1) continue;
+          const upcoming = own
+            .filter(
+              (b) => b.status === "confirmed" && Date.parse(b.start_at) >= now,
+            )
+            .sort((a, b) => Date.parse(a.start_at) - Date.parse(b.start_at));
+          const stillComing =
+            upcoming.length > 0 ||
+            counted.some((b) => Date.parse(b.start_at) >= recent);
+          if (!stillComing) continue;
+          lowPackages.push({
+            id: reg.id,
+            name: reg.name,
+            phone: reg.phone,
+            quantity,
+            used: counted.length,
+            left: Math.max(0, left),
+            next_lesson_at: upcoming[0]?.start_at ?? null,
+          });
+        }
+      }
+
       return jsonResponse({
         data: {
           now: new Date(now).toISOString(),
           lessons: await withPackageNumbers(lessons ?? []),
           trialsToMark: trialsToMark ?? [],
           refundedLessons,
+          lowPackages,
           uncontacted: (uncontacted ?? []).map((r) => ({
             ...r,
             waitingDays: days(r.created_at as string),
@@ -3701,6 +3768,46 @@ Deno.serve(async (req) => {
       });
     }
 
+    // A private student's package, for the card in their sheet: what was
+    // bought, what is used by the owner's rule, and every lesson numbered.
+    if (action === "package_lessons") {
+      const regId = (body as { registration_id?: unknown }).registration_id;
+      if (typeof regId !== "string")
+        return jsonResponse({ error: "Cursant invalid." }, 400);
+      const { data: reg, error: regErr } = await supabase
+        .from("registrations")
+        .select("id, name, quantity, form_type, payment_status, format")
+        .eq("id", regId)
+        .maybeSingle();
+      if (regErr) throw regErr;
+      if (!reg || reg.form_type !== "private")
+        return jsonResponse({ error: "Nu este un cursant privat." }, 400);
+      const { data: rows, error: rowsErr } = await supabase
+        .from("bookings")
+        .select(
+          "id, registration_id, start_at, end_at, status, event_type_slug, format, student_name, notes, meet_link, trial_outcome, completed_by",
+        )
+        .eq("registration_id", regId)
+        .neq("status", "rescheduled")
+        .order("start_at", { ascending: true });
+      if (rowsErr) throw rowsErr;
+      const lessons = await withPackageNumbers(rows ?? []);
+      const quantity = Math.max(
+        1,
+        Number.parseInt(String(reg.quantity ?? 1), 10) || 1,
+      );
+      return jsonResponse({
+        data: {
+          registration_id: reg.id,
+          name: reg.name,
+          quantity,
+          payment_status: reg.payment_status,
+          used: lessons.filter((l) => countsAgainstPackage(l)).length,
+          lessons,
+        },
+      });
+    }
+
     if (action === "book_for_student") {
       const b = body as {
         registration_id?: unknown;
@@ -3715,6 +3822,8 @@ Deno.serve(async (req) => {
         force?: unknown;
         language?: unknown;
         extra?: unknown;
+        free?: unknown;
+        quiet?: unknown;
       };
       const name =
         typeof b.student_name === "string" ? b.student_name.trim() : "";
@@ -3849,6 +3958,9 @@ Deno.serve(async (req) => {
             language,
             gdpr_consent: true,
             force,
+            // The later lessons of a series booked at once: no email each;
+            // the student has the Google invitations and the first email.
+            quiet: b.quiet === true,
           }),
         },
       );

@@ -101,6 +101,16 @@ interface Today {
     format: string;
     trial_outcome: null;
   }>;
+  /** Private packages with one lesson left (or none) for a student still coming. */
+  lowPackages?: Array<{
+    id: string;
+    name: string | null;
+    phone: string | null;
+    quantity: number;
+    used: number;
+    left: number;
+    next_lesson_at: string | null;
+  }>;
   /** Lessons still booked for a registration whose payment was fully refunded; the owner decides whether to cancel. */
   refundedLessons?: Array<{
     id: string;
@@ -503,6 +513,42 @@ const TodayAdmin = ({
                     />
                   </div>
                 ))}
+              </div>
+            )}
+
+            {!!data.lowPackages?.length && filter === "all" && (
+              <div className="space-y-2 rounded-2xl border border-border bg-card p-4">
+                <p className="text-sm font-semibold">
+                  Pachete aproape terminate
+                </p>
+                <ul className="space-y-1 text-sm">
+                  {data.lowPackages.map((p) => (
+                    <li
+                      key={p.id}
+                      className="flex flex-wrap items-center gap-2"
+                    >
+                      <span className="min-w-0 flex-1">
+                        <b>{p.name || "Fără nume"}</b> ·{" "}
+                        {p.left === 1
+                          ? `mai are 1 lecție din ${p.quantity}`
+                          : `a folosit toate cele ${p.quantity} lecții`}
+                        {p.next_lesson_at &&
+                          ` · următoarea: ${new Intl.DateTimeFormat("ro-RO", {
+                            timeZone: TZ,
+                            dateStyle: "short",
+                            timeStyle: "short",
+                          }).format(new Date(p.next_lesson_at))}`}
+                      </span>
+                      <button
+                        type="button"
+                        className={cn(rowBtn, "border border-border")}
+                        onClick={() => onOpenPerson?.(p.id)}
+                      >
+                        Fișa
+                      </button>
+                    </li>
+                  ))}
+                </ul>
               </div>
             )}
 

@@ -6,6 +6,7 @@ import { cn } from "@/lib/utils";
 import { buildWhatsAppUrl } from "@/lib/whatsapp";
 import ContactEditor from "./ContactEditor";
 import RegistrationCourse from "./RegistrationCourse";
+import PackageCard from "./PackageCard";
 import {
   formTypeLabels,
   LEAD_STATUSES,
@@ -179,6 +180,9 @@ const PersonSheet = ({
 
               <div className="flex flex-col gap-5 px-4 py-5 sm:px-6">
                 <RegistrationCourse registration={person} />
+                {person.form_type === "private" && (
+                  <PackageCard registrationId={person.id} />
+                )}
                 <ContactEditor person={person} onChanged={onChanged} />
                 <div className="flex items-center gap-4">
                   <span className="flex h-14 w-14 shrink-0 items-center justify-center rounded-full bg-brand-green font-display text-xl font-bold text-white">
