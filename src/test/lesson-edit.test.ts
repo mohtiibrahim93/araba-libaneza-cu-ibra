@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
 import { readFileSync } from "node:fs";
 import { resolve } from "node:path";
+import { code } from "./helpers/sourceText";
 
 /** "Modifică lecția" (owner's request, 14 October 2026). */
 const read = (p: string) => readFileSync(resolve(process.cwd(), p), "utf8");
@@ -26,8 +27,10 @@ describe("changing a lesson's length, place or notes", () => {
     );
   });
   it("keeps the Zoom room for online and drops it for the centre", () => {
-    expect(action).toContain(
-      'const meetLink = format === "online" ? lesson.meet_link ?? zoomUrl : null;',
+    expect(code(action)).toContain(
+      code(
+        'const meetLink = format === "online" ? (lesson.meet_link ?? zoomUrl) : null;',
+      ),
     );
   });
 });
@@ -35,8 +38,10 @@ describe("changing a lesson's length, place or notes", () => {
 describe("moving a lesson", () => {
   it("keeps the lesson's own length, not the lesson type's default", () => {
     const manage = read("supabase/functions/booking-manage/index.ts");
-    expect(manage).toContain(
-      "const ownLengthMs = Date.parse(booking.end_at) - Date.parse(booking.start_at);",
+    expect(code(manage)).toContain(
+      code(
+        "const ownLengthMs = Date.parse(booking.end_at) - Date.parse(booking.start_at);",
+      ),
     );
   });
 });

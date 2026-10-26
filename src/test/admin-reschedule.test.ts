@@ -139,8 +139,10 @@ describe("the panel", () => {
   it("asks a second time before overriding", () => {
     // force is sent only once a warning is showing, and the button says so.
     expect(ui).toContain("await move(moveWarn !== null)");
-    expect(ui).toContain(
-      'moveWarn ? "Mută oricum" : timeChanged ? "Mută lecția" : "Salvează"',
+    expect(code(ui)).toContain(
+      code(
+        'moveWarn ? "Mută oricum" : timeChanged ? "Mută lecția" : "Salvează"',
+      ),
     );
   });
 
