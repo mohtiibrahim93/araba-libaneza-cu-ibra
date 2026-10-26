@@ -109,3 +109,30 @@ describe("the rule is applied everywhere", () => {
     );
   });
 });
+
+describe("the package card and the low-package alert", () => {
+  const admin = read("supabase/functions/admin-registrations/index.ts");
+  const card = read("src/components/admin/PackageCard.tsx");
+  const sheet = read("src/components/admin/PersonSheet.tsx");
+  const today = read("src/components/admin/TodayAdmin.tsx");
+
+  it("shows the package in a private student's sheet", () => {
+    expect(admin).toContain(code('if (action === "package_lessons") {'));
+    expect(sheet).toContain(code('{person.form_type === "private" && ('));
+    expect(card).toContain(code('action: "package_lessons"'));
+  });
+
+  it("books the next lesson for the same student, and the next N weekly", () => {
+    expect(card).toContain(code("studentId: pkg.registration_id"));
+    expect(card).toContain(code('action: "book_for_student"'));
+    // Only the first lesson of a series emails the student.
+    expect(card).toContain(code("await bookRow(r, false, !first)"));
+    expect(admin).toContain(code("quiet: b.quiet === true"));
+  });
+
+  it("warns on Acasă when a package is about to run out", () => {
+    expect(admin).toContain(code("if (left > 1) continue;"));
+    expect(admin).toContain(code("lowPackages,"));
+    expect(today).toContain(code("Pachete aproape terminate"));
+  });
+});

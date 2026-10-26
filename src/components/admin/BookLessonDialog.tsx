@@ -50,8 +50,17 @@ export default function BookLessonDialog({
   onBooked,
 }: {
   open: boolean;
-  /** Date (YYYY-MM-DD) and time (HH:MM, Romania) to start from. */
-  initial?: { date: string; time: string } | null;
+  /**
+   * Date (YYYY-MM-DD) and time (HH:MM, Romania) to start from; with
+   * studentId, that private student is already chosen ("Programează
+   * următoarea" in their package card).
+   */
+  initial?: {
+    date: string;
+    time: string;
+    studentId?: string;
+    format?: "online" | "physical";
+  } | null;
   onClose: () => void;
   onBooked: () => void;
 }) {
@@ -84,7 +93,12 @@ export default function BookLessonDialog({
   const [bkExtra, setBkExtra] = useState(false);
   const [bkStudents, setBkStudents] = useState<PrivateStudent[] | null>(null);
 
-  const reset = (initial?: { date: string; time: string }) => {
+  const reset = (initial?: {
+    date: string;
+    time: string;
+    studentId?: string;
+    format?: "online" | "physical";
+  }) => {
     const now = new Date();
     const f = bucharestFields(
       new Date(now.getTime() + 24 * 3600_000).toISOString(),
@@ -94,7 +108,7 @@ export default function BookLessonDialog({
     setBkPhone("");
     setBkDate(initial?.date ?? f.date);
     setBkTime(initial?.time ?? "18:00");
-    setBkFormat("online");
+    setBkFormat(initial?.format ?? "online");
     setBkQuantity(1);
     setBkPaid(false);
     setBkFree(false);
@@ -106,9 +120,19 @@ export default function BookLessonDialog({
     void invokeAdmin<{ data?: PrivateStudent[]; error?: string }>({
       action: "private_students",
     })
-      .then(({ data }) =>
-        setBkStudents(Array.isArray(data?.data) ? data.data : []),
-      )
+      .then(({ data }) => {
+        const list = Array.isArray(data?.data) ? data.data : [];
+        setBkStudents(list);
+        const s = initial?.studentId
+          ? list.find((x) => x.id === initial.studentId)
+          : undefined;
+        if (s) {
+          setBkStudentId(s.id);
+          setBkName(s.name ?? "");
+          setBkEmail(s.email ?? "");
+          setBkPhone(s.phone ?? "");
+        }
+      })
       .catch(() => setBkStudents([]));
   };
 
