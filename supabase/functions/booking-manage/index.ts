@@ -237,7 +237,15 @@ Deno.serve(async (req) => {
       if (!Number.isFinite(startMs))
         return json({ error: "invalid start_at" }, 400);
       const et = booking.booking_event_types;
-      const endMs = startMs + et.duration_min * 60_000;
+      // A moved lesson keeps its own length (a 90-minute lesson stays 90),
+      // not the lesson type's default; the type's length only when unknown.
+      const ownLengthMs =
+        Date.parse(booking.end_at) - Date.parse(booking.start_at);
+      const endMs =
+        startMs +
+        (Number.isFinite(ownLengthMs) && ownLengthMs > 0
+          ? ownLengthMs
+          : et.duration_min * 60_000);
       const startISO = new Date(startMs).toISOString();
       const endISO = new Date(endMs).toISOString();
 

@@ -135,9 +135,17 @@ describe("manual booking confirmation", () => {
       if (action === "reschedule_booking") {
         fireEvent.click(
           screen.getByRole("button", {
-            name: "Mută lecția cu Synthetic Student",
+            name: "Modifică lecția cu Synthetic Student",
           }),
         );
+        // A new date: the save button becomes "Mută lecția".
+        const dateInput = document.querySelector(
+          'input[type="date"]',
+        ) as HTMLInputElement;
+        const next = new Date(Date.parse(row.start_at) + 86400000)
+          .toISOString()
+          .slice(0, 10);
+        fireEvent.change(dateInput, { target: { value: next } });
         await act(async () => {
           fireEvent.click(screen.getByRole("button", { name: "Mută lecția" }));
         });

@@ -16,6 +16,7 @@ import {
   Video,
 } from "lucide-react";
 import { meetingLabel } from "./admin/types";
+import LessonEditDialog, { CLASH_LABEL } from "./admin/LessonEditDialog";
 import {
   Dialog,
   DialogContent,
@@ -135,14 +136,7 @@ const BookingsAdmin = ({
    * what the new time clashes with; `warn` holds that, and the second call
    * carries force.
    */
-  const [moving, setMoving] = useState<Booking | null>(null);
-  const [moveDate, setMoveDate] = useState("");
-  const [moveTime, setMoveTime] = useState("10:00");
-  const [moveBusy, setMoveBusy] = useState(false);
-  const [moveWarn, setMoveWarn] = useState<{
-    clashes: string[];
-    outside: boolean;
-  } | null>(null);
+  const [editing, setEditing] = useState<Booking | null>(null);
   /**
    * Booking a private lesson for someone by hand.
    *
@@ -288,98 +282,6 @@ const BookingsAdmin = ({
       date: `${g("year")}-${g("month")}-${g("day")}`,
       time: `${hh}:${g("minute")}`,
     };
-  };
-
-  const openMove = (b: Booking) => {
-    const f = bucharestFields(b.start_at);
-    setMoving(b);
-    setMoveDate(f.date);
-    setMoveTime(f.time);
-    setMoveWarn(null);
-  };
-
-  const CLASH_LABEL: Record<string, string> = {
-    another_booking: "altă programare",
-    calendar: "ceva din Google Calendar",
-    group_lesson: "o lecție de grup",
-  };
-
-  const submitMove = async (force: boolean) => {
-    if (!moving) return;
-    const [y, m, d] = moveDate.split("-").map(Number) as (number | undefined)[];
-    const [hh, mm] = moveTime.split(":").map(Number) as (number | undefined)[];
-    if (
-      y === undefined ||
-      m === undefined ||
-      d === undefined ||
-      hh === undefined ||
-      mm === undefined
-    ) {
-      toast({ title: "Data sau ora nu sunt valide", variant: "destructive" });
-      return;
-    }
-    if (
-      !Number.isFinite(y) ||
-      !Number.isFinite(m) ||
-      !Number.isFinite(d) ||
-      !Number.isFinite(hh) ||
-      !Number.isFinite(mm)
-    ) {
-      toast({ title: "Data sau ora nu sunt valide", variant: "destructive" });
-      return;
-    }
-    setMoveBusy(true);
-    try {
-      // Bucharest civil time to the instant, DST included — the same helper
-      // the rest of the site uses, because an hour out here books the wrong
-      // hour for a real student.
-      const startAt = bucharestCivilToUtc(y, m, d, hh, mm).toISOString();
-      const { data, error } = await invokeAdmin<{
-        success?: boolean;
-        sync_pending?: boolean;
-        error?: string;
-        code?: string;
-        clashes?: string[];
-        outside_availability?: boolean;
-      }>({
-        action: "reschedule_booking",
-        id: moving.id,
-        start_at: startAt,
-        force,
-      });
-      if (error) throw error;
-      if (data?.code === "conflict" || data?.code === "outside_availability") {
-        setMoveWarn({
-          clashes: data.clashes ?? [],
-          outside: data.outside_availability === true,
-        });
-        return;
-      }
-      if (data?.error) throw new Error(data.error);
-      if (data?.success !== true)
-        throw new Error(
-          "Mutarea nu a fost confirmată. Reîncarcă programările înainte de a încerca din nou.",
-        );
-      toast({
-        title: data.sync_pending
-          ? "Lecție mutată în admin; sincronizarea Google este în așteptare"
-          : "Lecție mutată",
-        description: data.sync_pending
-          ? "Reîncearcă sincronizarea din Program."
-          : "Confirmarea cu ora nouă a fost solicitată prin email.",
-        ...(data.sync_pending ? { variant: "destructive" as const } : {}),
-      });
-      setMoving(null);
-      setMoveWarn(null);
-      void load(true);
-    } catch (err) {
-      toast({
-        title: err instanceof Error ? err.message : "Mutare eșuată",
-        variant: "destructive",
-      });
-    } finally {
-      setMoveBusy(false);
-    }
   };
 
   const openBooking = () => {
@@ -727,17 +629,16 @@ const BookingsAdmin = ({
                       )}
                   </td>
                   <td className="py-2 text-right whitespace-nowrap">
-                    {b.status === "confirmed" && (
-                      <Button
-                        size="sm"
-                        variant="ghost"
-                        onClick={() => openMove(b)}
-                        aria-label={`Mută lecția cu ${b.student_name}`}
-                        title="Mută lecția"
-                      >
-                        <CalendarClock className="h-4 w-4" />
-                      </Button>
-                    )}
+                    <Button
+                      size="sm"
+                      variant="ghost"
+                      onClick={() => setEditing(b)}
+                      aria-label={`Modifică lecția cu ${b.student_name}`}
+                      title="Modifică lecția"
+                    >
+                      <CalendarClock className="h-4 w-4" />
+                      <span className="ml-1 hidden sm:inline">Modifică</span>
+                    </Button>
                     {b.status === "confirmed" && (
                       <Button
                         size="sm"
@@ -762,101 +663,11 @@ const BookingsAdmin = ({
         </div>
       )}
 
-      <Dialog
-        open={moving !== null}
-        onOpenChange={(open) => {
-          if (!open) {
-            setMoving(null);
-            setMoveWarn(null);
-          }
-        }}
-      >
-        <DialogContent className="sm:max-w-md">
-          <DialogHeader>
-            <DialogTitle>Mută lecția</DialogTitle>
-            <DialogDescription>
-              {moving
-                ? `${moving.student_name} — acum ${fmt(moving.start_at)}. Cursantul primește un email cu ora nouă, iar evenimentul din Google Calendar se mută cu tot cu linkul de Meet.`
-                : ""}
-            </DialogDescription>
-          </DialogHeader>
-
-          <div className="flex flex-wrap items-end gap-3">
-            <div className="space-y-1.5">
-              <Label className="text-xs">Data</Label>
-              <Input
-                type="date"
-                className="h-9 w-40"
-                value={moveDate}
-                onChange={(e) => {
-                  setMoveDate(e.target.value);
-                  setMoveWarn(null);
-                }}
-              />
-            </div>
-            <div className="space-y-1.5">
-              <Label className="text-xs">Ora (ora României)</Label>
-              <TimeField
-                label="Ora nouă"
-                value={moveTime}
-                onChange={(hhmm) => {
-                  setMoveTime(hhmm);
-                  setMoveWarn(null);
-                }}
-              />
-            </div>
-          </div>
-
-          {/* The first attempt reports rather than refuses: the owner is not
-              bound by his own opening hours, but he should not double-book
-              himself without being told. */}
-          {moveWarn && (
-            <div
-              role="alert"
-              className="flex gap-2 rounded-xl border border-amber-300/70 bg-amber-50 px-4 py-3 text-sm text-amber-900 dark:border-amber-500/30 dark:bg-amber-500/10 dark:text-amber-200"
-            >
-              <TriangleAlert className="mt-0.5 h-4 w-4 shrink-0" aria-hidden />
-              <div className="space-y-1">
-                {moveWarn.clashes.length > 0 && (
-                  <p>
-                    Ora asta se suprapune cu{" "}
-                    {moveWarn.clashes
-                      .map((c) => CLASH_LABEL[c] ?? c)
-                      .join(" și ")}
-                    .
-                  </p>
-                )}
-                {moveWarn.outside && (
-                  <p>E în afara orelor tale din Disponibilitate.</p>
-                )}
-                <p className="font-medium">
-                  Poți muta oricum, dacă așa ai stabilit cu cursantul.
-                </p>
-              </div>
-            </div>
-          )}
-
-          <div className="flex justify-end gap-2">
-            <Button
-              variant="ghost"
-              onClick={() => {
-                setMoving(null);
-                setMoveWarn(null);
-              }}
-              disabled={moveBusy}
-            >
-              Renunță
-            </Button>
-            <Button
-              onClick={() => void submitMove(moveWarn !== null)}
-              disabled={moveBusy}
-            >
-              {moveBusy && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-              {moveWarn ? "Mută oricum" : "Mută lecția"}
-            </Button>
-          </div>
-        </DialogContent>
-      </Dialog>
+      <LessonEditDialog
+        lesson={editing}
+        onClose={() => setEditing(null)}
+        onChanged={() => void load(true)}
+      />
 
       <Dialog
         open={booking}

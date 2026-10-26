@@ -2814,7 +2814,7 @@ Deno.serve(async (req) => {
         supabase
           .from("bookings")
           .select(
-            "id, start_at, end_at, status, event_type_slug, format, student_name, student_email, student_phone, meet_link, google_event_id, google_sync_error, manage_token",
+            "id, start_at, end_at, status, event_type_slug, format, student_name, student_email, student_phone, meet_link, notes, google_event_id, google_sync_error, manage_token",
           )
           .eq("status", "confirmed")
           .gte("start_at", dayStart)
@@ -3273,6 +3273,121 @@ Deno.serve(async (req) => {
       };
 
       return jsonResponse({ data: enriched, counts });
+    }
+
+    /**
+     * Change a lesson's length, format or notes from "Modifică lecția"
+     * (owner's request, 14 October 2026). The time itself moves through
+     * reschedule_booking, which the panel calls after this one. Google
+     * Calendar is changed first (the student gets Google's update when the
+     * length or the place changes); the site follows only once Google
+     * accepted it. Notes are the owner's own and never leave the site.
+     */
+    if (action === "update_booking_details") {
+      if (typeof id !== "string")
+        return jsonResponse({ error: "ID invalid" }, 400);
+      const { data: lesson, error: lErr } = await supabase
+        .from("bookings")
+        .select(
+          "id, status, start_at, end_at, format, notes, meet_link, google_event_id",
+        )
+        .eq("id", id)
+        .maybeSingle();
+      if (lErr) throw lErr;
+      if (!lesson) return jsonResponse({ error: "Programare negăsită" }, 404);
+      const duration = Number(body.duration_min);
+      const format =
+        body.format === "physical"
+          ? "physical"
+          : body.format === "online"
+            ? "online"
+            : null;
+      const notes =
+        typeof body.notes === "string"
+          ? body.notes.trim().slice(0, 2000) || null
+          : null;
+      if (
+        !Number.isInteger(duration) ||
+        duration < 15 ||
+        duration > 240 ||
+        !format
+      ) {
+        return jsonResponse(
+          { error: "Durata (15–240 min) sau formatul nu sunt valide." },
+          400,
+        );
+      }
+      const endAt = new Date(
+        Date.parse(lesson.start_at) + duration * 60_000,
+      ).toISOString();
+      const lengthChanged = Date.parse(endAt) !== Date.parse(lesson.end_at);
+      const formatChanged = format !== lesson.format;
+      if ((lengthChanged || formatChanged) && lesson.status !== "confirmed") {
+        return jsonResponse(
+          {
+            error:
+              "Doar o lecție programată își poate schimba durata sau formatul.",
+          },
+          409,
+        );
+      }
+      const zoomUrl = Deno.env.get("ZOOM_MEETING_URL") ?? null;
+      const meetLink =
+        format === "online" ? (lesson.meet_link ?? zoomUrl) : null;
+      if ((lengthChanged || formatChanged) && lesson.google_event_id) {
+        const lovableKey = Deno.env.get("LOVABLE_API_KEY");
+        const gcalKey = Deno.env.get("GOOGLE_CALENDAR_API_KEY");
+        if (!lovableKey || !gcalKey)
+          return jsonResponse({
+            error: "Google Calendar nu e conectat. Nimic nu s-a schimbat.",
+          });
+        const patch: Record<string, unknown> = {};
+        if (lengthChanged)
+          patch.end = { dateTime: endAt, timeZone: "Europe/Bucharest" };
+        if (formatChanged)
+          patch.location =
+            format === "online"
+              ? (meetLink ?? "")
+              : "Strada Icoanei 80, București";
+        const res = await fetch(
+          `${GCAL_GATEWAY}/calendars/primary/events/${encodeURIComponent(lesson.google_event_id)}?sendUpdates=all`,
+          {
+            method: "PATCH",
+            headers: {
+              Authorization: `Bearer ${lovableKey}`,
+              "X-Connection-Api-Key": gcalKey,
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(patch),
+          },
+        );
+        if (!res.ok) {
+          console.error(
+            "[update_booking_details] google",
+            res.status,
+            await res.text(),
+          );
+          return jsonResponse({
+            error: `Google Calendar a refuzat schimbarea (${res.status}). Nimic nu s-a schimbat.`,
+          });
+        }
+      }
+      const { error: uErr } = await supabase
+        .from("bookings")
+        .update({ end_at: endAt, format, meet_link: meetLink, notes })
+        .eq("id", lesson.id);
+      if (uErr) throw uErr;
+      await supabase.from("audit_logs").insert({
+        actor: callerEmail!,
+        action: "update_booking_details",
+        details: {
+          booking_id: lesson.id,
+          duration_min: duration,
+          format,
+          notes_changed: notes !== lesson.notes,
+        },
+      });
+      return jsonResponse({ success: true });
     }
 
     if (action === "cancel_booking") {

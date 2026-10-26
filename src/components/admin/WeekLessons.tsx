@@ -13,6 +13,7 @@ import { invokeAdmin } from "@/lib/adminAuth";
 import { supabase } from "@/integrations/supabase/client";
 import { cn } from "@/lib/utils";
 import { meetingLabel } from "./types";
+import LessonEditDialog from "./LessonEditDialog";
 import { ErrorNote } from "./ui";
 
 /**
@@ -35,6 +36,7 @@ interface Booking {
   meet_link: string | null;
   google_sync_error: string | null;
   google_event_id: string | null;
+  notes?: string | null;
 }
 
 interface GroupLesson {
@@ -148,6 +150,8 @@ const WeekLessons = () => {
   const [loading, setLoading] = useState(false);
   const [offset, setOffset] = useState(0);
   const [sessionRefresh, setSessionRefresh] = useState(0);
+  // The lesson open in "Modifică lecția" (a click on it, in the grid or the list).
+  const [editing, setEditing] = useState<Booking | null>(null);
   const [groupLessons, setGroupLessons] = useState<GroupLesson[]>([]);
 
   const load = useCallback(async () => {
@@ -359,7 +363,11 @@ const WeekLessons = () => {
                         </div>
                       ))}
                       {list.map((b) => (
-                        <AgendaRow key={b.id} b={b} />
+                        <AgendaRow
+                          key={b.id}
+                          b={b}
+                          onEdit={() => setEditing(b)}
+                        />
                       ))}
                     </>
                   )}
@@ -466,14 +474,13 @@ const WeekLessons = () => {
                     );
                     const warn = notInCalendar(b);
                     return (
-                      <a
+                      <button
+                        type="button"
                         key={b.id}
-                        href={b.meet_link ?? undefined}
-                        target={b.meet_link ? "_blank" : undefined}
-                        rel="noopener noreferrer"
-                        title={`${time(b.start_at)} ${b.student_name} · ${label(b.event_type_slug)}`}
+                        onClick={() => setEditing(b)}
+                        title={`${time(b.start_at)} ${b.student_name} · ${label(b.event_type_slug)} — click pentru a modifica`}
                         className={cn(
-                          "absolute inset-x-0 flex flex-col overflow-hidden rounded-[10px] px-2 py-1 text-[0.8125rem] leading-tight",
+                          "absolute inset-x-0 flex flex-col overflow-hidden rounded-[10px] px-2 py-1 text-left text-[0.8125rem] leading-tight hover:ring-2 hover:ring-primary/40",
                           warn
                             ? "border border-dashed border-amber-600 bg-admin-warn-bg text-admin-warn-fg"
                             : isFree(b.event_type_slug)
@@ -493,7 +500,7 @@ const WeekLessons = () => {
                             ? "lipsă din calendar"
                             : label(b.event_type_slug)}
                         </span>
-                      </a>
+                      </button>
                     );
                   })}
                 </div>
@@ -523,11 +530,16 @@ const WeekLessons = () => {
           </section>
         </>
       )}
+      <LessonEditDialog
+        lesson={editing}
+        onClose={() => setEditing(null)}
+        onChanged={() => void load()}
+      />
     </div>
   );
 };
 
-const AgendaRow = ({ b }: { b: Booking }) => {
+const AgendaRow = ({ b, onEdit }: { b: Booking; onEdit: () => void }) => {
   const warn = notInCalendar(b);
   return (
     <div className="flex gap-3">
@@ -562,6 +574,14 @@ const AgendaRow = ({ b }: { b: Booking }) => {
             {warn ? " · lipsă din calendar" : ""}
           </p>
         </div>
+        <button
+          type="button"
+          onClick={onEdit}
+          aria-label={`Modifică lecția cu ${b.student_name}`}
+          className="flex min-h-11 items-center rounded-xl border border-border px-3 font-semibold hover:border-brand-green/60"
+        >
+          Modifică
+        </button>
         {b.meet_link && (
           <a
             href={b.meet_link}
