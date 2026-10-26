@@ -55,8 +55,8 @@ describe("the window is reachable wherever a lesson is shown", () => {
     ]) {
       expect(read(f), f).toContain("<LessonEditDialog");
     }
-    expect(read("src/components/admin/WeekLessons.tsx")).toContain(
-      "onClick={() => setEditing(b)}",
+    expect(code(read("src/components/admin/WeekLessons.tsx"))).toContain(
+      code("setMoveTo(null); setEditing(b);"),
     );
   });
 });

@@ -74,10 +74,13 @@ const fmt = (iso: string) =>
 
 export default function LessonEditDialog({
   lesson,
+  moveTo,
   onClose,
   onChanged,
 }: {
   lesson: EditableLesson | null;
+  /** A new date and time to start from (a lesson dropped on the week grid). */
+  moveTo?: { date: string; time: string } | null;
   onClose: () => void;
   onChanged: () => void;
 }) {
@@ -94,7 +97,7 @@ export default function LessonEditDialog({
 
   useEffect(() => {
     if (!lesson) return;
-    const f = bucharestFields(lesson.start_at);
+    const f = moveTo ?? bucharestFields(lesson.start_at);
     setDate(f.date);
     setTime(f.time);
     setDuration(
@@ -108,7 +111,7 @@ export default function LessonEditDialog({
     setFormat(lesson.format === "physical" ? "physical" : "online");
     setNotes(lesson.notes ?? "");
     setMoveWarn(null);
-  }, [lesson]);
+  }, [lesson, moveTo]);
 
   if (!lesson) return null;
   const active = lesson.status === "confirmed";

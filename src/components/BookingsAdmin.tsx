@@ -11,26 +11,20 @@ import {
   Phone,
   RefreshCw,
   CalendarClock,
-  TriangleAlert,
   CalendarPlus,
   Video,
 } from "lucide-react";
 import { meetingLabel } from "./admin/types";
-import LessonEditDialog, { CLASH_LABEL } from "./admin/LessonEditDialog";
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-  DialogDescription,
-} from "@/components/ui/dialog";
+import LessonEditDialog from "./admin/LessonEditDialog";
+import BookLessonDialog from "./admin/BookLessonDialog";
+export {
+  studentOptionLabel,
+  type PrivateStudent,
+} from "./admin/BookLessonDialog";
 import {
   TrialOutcomeControl,
   type TrialOutcome,
 } from "@/components/admin/TrialOutcome";
-import { Label } from "@/components/ui/label";
-import { TimeField } from "@/components/admin/TimeField";
-import { BUCHAREST_TZ, bucharestCivilToUtc } from "@/lib/timezone";
 
 interface Booking {
   id: string;
@@ -60,23 +54,6 @@ interface Booking {
  * tomorrow's one. So the view is now time-based: upcoming first, ascending
  * (soonest at the top), with past and cancelled as separate lenses.
  */
-export interface PrivateStudent {
-  id: string;
-  name: string | null;
-  email: string | null;
-  phone: string | null;
-  quantity: number;
-  lessons_used: number;
-  payment_status: string | null;
-  source: string | null;
-}
-
-/** "Name — email · 2/5 lecții · plătit" — enough to tell two students apart. */
-export function studentOptionLabel(s: PrivateStudent): string {
-  const paid = s.payment_status === "paid" ? "plătit" : "neplătit";
-  return `${s.name || "Fără nume"} — ${s.email || "fără email"} · ${s.lessons_used}/${s.quantity} lecții · ${paid}`;
-}
-
 type View = "upcoming" | "past" | "cancelled" | "all";
 
 const VIEWS: { key: View; label: string }[] = [
@@ -137,33 +114,8 @@ const BookingsAdmin = ({
    * carries force.
    */
   const [editing, setEditing] = useState<Booking | null>(null);
-  /**
-   * Booking a private lesson for someone by hand.
-   *
-   * A group signup could be added from the panel; a private lesson has a time,
-   * so it could not be added at all. The owner agrees an hour on WhatsApp and
-   * had nowhere to record it, which is how a lesson ends up in Google Calendar
-   * and nowhere else.
-   */
+  /** Booking a private lesson by hand (BookLessonDialog). */
   const [booking, setBooking] = useState(false);
-  const [bkName, setBkName] = useState("");
-  const [bkEmail, setBkEmail] = useState("");
-  const [bkPhone, setBkPhone] = useState("");
-  const [bkDate, setBkDate] = useState("");
-  const [bkTime, setBkTime] = useState("18:00");
-  const [bkFormat, setBkFormat] = useState<"online" | "physical">("online");
-  const [bkQuantity, setBkQuantity] = useState(1);
-  const [bkPaid, setBkPaid] = useState(false);
-  const [bkNotes, setBkNotes] = useState("");
-  const [bkBusy, setBkBusy] = useState(false);
-  const [bkWarn, setBkWarn] = useState<string[] | null>(null);
-  // An existing private student (website purchase or an earlier hand booking).
-  // When one is chosen the lesson goes on their registration and their stored
-  // details are used; empty means a new student, as before.
-  const [bkStudentId, setBkStudentId] = useState("");
-  // "Lecție în plus": same student, but a registration of its own (package used up).
-  const [bkExtra, setBkExtra] = useState(false);
-  const [bkStudents, setBkStudents] = useState<PrivateStudent[] | null>(null);
   const [lastSync, setLastSync] = useState<Date | null>(null);
   // Guards the very first load only: a background poll must not blank the
   // table into a spinner under the admin's cursor.
@@ -265,135 +217,6 @@ const BookingsAdmin = ({
   }, [scopedRows]);
 
   /** The booking's own date and time, as Bucharest shows them. */
-  const bucharestFields = (iso: string) => {
-    const parts = new Intl.DateTimeFormat("en-CA", {
-      timeZone: BUCHAREST_TZ,
-      year: "numeric",
-      month: "2-digit",
-      day: "2-digit",
-      hour: "2-digit",
-      minute: "2-digit",
-      hour12: false,
-    }).formatToParts(new Date(iso));
-    const g = (t: string) => parts.find((x) => x.type === t)?.value ?? "00";
-    // Some engines render midnight as hour 24 with hour12:false.
-    const hh = g("hour") === "24" ? "00" : g("hour");
-    return {
-      date: `${g("year")}-${g("month")}-${g("day")}`,
-      time: `${hh}:${g("minute")}`,
-    };
-  };
-
-  const openBooking = () => {
-    const now = new Date();
-    const f = bucharestFields(
-      new Date(now.getTime() + 24 * 3600_000).toISOString(),
-    );
-    setBkName("");
-    setBkEmail("");
-    setBkPhone("");
-    setBkDate(f.date);
-    setBkTime("18:00");
-    setBkFormat("online");
-    setBkQuantity(1);
-    setBkPaid(false);
-    setBkNotes("");
-    setBkWarn(null);
-    setBkStudentId("");
-    setBkExtra(false);
-    setBooking(true);
-    setBkStudents(null);
-    void invokeAdmin<{ data?: PrivateStudent[]; error?: string }>({
-      action: "private_students",
-    })
-      .then(({ data }) =>
-        setBkStudents(Array.isArray(data?.data) ? data.data : []),
-      )
-      .catch(() => setBkStudents([]));
-  };
-
-  const chooseStudent = (id: string) => {
-    setBkStudentId(id);
-    setBkWarn(null);
-    const s = bkStudents?.find((x) => x.id === id);
-    if (!s) return;
-    setBkName(s.name ?? "");
-    setBkEmail(s.email ?? "");
-    setBkPhone(s.phone ?? "");
-  };
-
-  const submitBooking = async (force: boolean) => {
-    const [y, m, d] = bkDate.split("-").map(Number) as (number | undefined)[];
-    const [hh, mm] = bkTime.split(":").map(Number) as (number | undefined)[];
-    if (
-      y === undefined ||
-      m === undefined ||
-      d === undefined ||
-      hh === undefined ||
-      mm === undefined ||
-      ![y, m, d, hh, mm].every((n) => Number.isFinite(n))
-    ) {
-      toast({ title: "Data sau ora nu sunt valide", variant: "destructive" });
-      return;
-    }
-    setBkBusy(true);
-    try {
-      const startAt = bucharestCivilToUtc(y, m, d, hh, mm).toISOString();
-      const { data, error } = await invokeAdmin<{
-        success?: boolean;
-        sync_pending?: boolean;
-        error?: string;
-        code?: string;
-        clashes?: string[];
-      }>({
-        action: "book_for_student",
-        ...(bkStudentId
-          ? {
-              registration_id: bkStudentId,
-              ...(bkExtra ? { extra: true } : {}),
-            }
-          : {}),
-        student_name: bkName.trim(),
-        student_email: bkEmail.trim(),
-        student_phone: bkPhone.trim(),
-        start_at: startAt,
-        format: bkFormat,
-        quantity: bkQuantity,
-        paid: bkPaid,
-        notes: bkNotes.trim() || undefined,
-        force,
-      });
-      if (error) throw error;
-      if (data?.code === "conflict") {
-        setBkWarn(data.clashes ?? []);
-        return;
-      }
-      if (data?.error) throw new Error(data.error);
-      if (data?.success !== true)
-        throw new Error(
-          "Programarea nu a fost confirmată. Reîncarcă programările înainte de a încerca din nou.",
-        );
-      toast({
-        title: data.sync_pending
-          ? "Lecție salvată; Google Calendar este în așteptare"
-          : "Lecție programată",
-        description:
-          "Confirmarea prin email a fost solicitată, cu linkul lecției.",
-      });
-      setBooking(false);
-      setBkWarn(null);
-      void load(true);
-      onChanged?.();
-    } catch (err) {
-      toast({
-        title: err instanceof Error ? err.message : "Programarea a eșuat",
-        variant: "destructive",
-      });
-    } finally {
-      setBkBusy(false);
-    }
-  };
-
   const repairCalendar = async (booking: Booking) => {
     if (
       !confirm(
@@ -469,7 +292,7 @@ const BookingsAdmin = ({
           </p>
         </div>
         <div className="flex items-center gap-2">
-          <Button size="sm" onClick={openBooking}>
+          <Button size="sm" onClick={() => setBooking(true)}>
             <CalendarPlus className="mr-2 h-4 w-4" />
             Programează o lecție privată
           </Button>
@@ -669,227 +492,14 @@ const BookingsAdmin = ({
         onChanged={() => void load(true)}
       />
 
-      <Dialog
+      <BookLessonDialog
         open={booking}
-        onOpenChange={(open) => {
-          if (!open) {
-            setBooking(false);
-            setBkWarn(null);
-          }
+        onClose={() => setBooking(false)}
+        onBooked={() => {
+          void load(true);
+          onChanged?.();
         }}
-      >
-        <DialogContent className="sm:max-w-lg">
-          <DialogHeader>
-            <DialogTitle>Programează o lecție privată</DialogTitle>
-            <DialogDescription>
-              Pentru cineva cu care ai stabilit deja ora. Primește confirmarea
-              pe email, cu linkul lecției și cu linkul de reprogramare, iar
-              evenimentul intră în Google Calendar.
-            </DialogDescription>
-          </DialogHeader>
-
-          <div className="grid gap-3 sm:grid-cols-2">
-            <div className="space-y-1.5 sm:col-span-2">
-              <Label className="text-xs" htmlFor="bk-existing-student">
-                Cursant existent (opțional)
-              </Label>
-              <select
-                id="bk-existing-student"
-                className="h-9 w-full rounded-md border border-input bg-background px-2 text-sm"
-                value={bkStudentId}
-                disabled={bkStudents === null}
-                onChange={(e) => {
-                  if (e.target.value) chooseStudent(e.target.value);
-                  else {
-                    setBkStudentId("");
-                    setBkExtra(false);
-                    setBkName("");
-                    setBkEmail("");
-                    setBkPhone("");
-                  }
-                }}
-              >
-                <option value="">
-                  {bkStudents === null
-                    ? "Se încarcă cursanții…"
-                    : "Cursant nou"}
-                </option>
-                {(bkStudents ?? []).map((s) => (
-                  <option key={s.id} value={s.id}>
-                    {studentOptionLabel(s)}
-                  </option>
-                ))}
-              </select>
-              {bkStudentId && (
-                <label className="flex items-center gap-2 text-sm">
-                  <input
-                    type="checkbox"
-                    checked={bkExtra}
-                    onChange={(e) => {
-                      setBkExtra(e.target.checked);
-                      setBkWarn(null);
-                    }}
-                  />
-                  Lecție în plus (separat de pachetul lui, cu aceleași date)
-                </label>
-              )}
-              <p className="text-[11px] text-muted-foreground">
-                {bkStudentId && bkExtra
-                  ? "Se creează o înscriere nouă pentru această lecție, cu datele lui salvate. Pachetul lui rămâne neatins."
-                  : bkStudentId
-                    ? "Lecția se adaugă la înscrierea lui. Datele de mai jos sunt cele salvate; emailul contului și al plății nu se schimbă."
-                    : "Alege un cursant înscris pe site sau programat deja de tine, ca lecția să intre la el, nu ca înscriere nouă."}
-              </p>
-            </div>
-            <div className="space-y-1.5 sm:col-span-2">
-              <Label className="text-xs">Nume</Label>
-              <Input
-                className="h-9"
-                value={bkName}
-                disabled={!!bkStudentId}
-                onChange={(e) => setBkName(e.target.value)}
-              />
-            </div>
-            <div className="space-y-1.5">
-              <Label className="text-xs">Email</Label>
-              <Input
-                className="h-9"
-                type="email"
-                value={bkEmail}
-                disabled={!!bkStudentId}
-                onChange={(e) => setBkEmail(e.target.value)}
-              />
-            </div>
-            <div className="space-y-1.5">
-              <Label className="text-xs">Telefon (opțional)</Label>
-              <Input
-                className="h-9"
-                value={bkPhone}
-                disabled={!!bkStudentId}
-                onChange={(e) => setBkPhone(e.target.value)}
-              />
-            </div>
-            <div className="space-y-1.5">
-              <Label className="text-xs">Data</Label>
-              <Input
-                className="h-9"
-                type="date"
-                value={bkDate}
-                onChange={(e) => {
-                  setBkDate(e.target.value);
-                  setBkWarn(null);
-                }}
-              />
-            </div>
-            <div className="space-y-1.5">
-              <Label className="text-xs">Ora (ora României)</Label>
-              <TimeField
-                label="Ora lecției"
-                value={bkTime}
-                onChange={(hhmm) => {
-                  setBkTime(hhmm);
-                  setBkWarn(null);
-                }}
-              />
-            </div>
-            <div className="space-y-1.5">
-              <Label className="text-xs">Format</Label>
-              <select
-                className="h-9 w-full rounded-md border border-input bg-background px-2 text-sm"
-                value={bkFormat}
-                onChange={(e) =>
-                  setBkFormat(
-                    e.target.value === "physical" ? "physical" : "online",
-                  )
-                }
-              >
-                <option value="online">Online</option>
-                <option value="physical">La centru</option>
-              </select>
-            </div>
-            {(!bkStudentId || bkExtra) && (
-              <>
-                <div className="space-y-1.5">
-                  <Label className="text-xs">Câte lecții a luat</Label>
-                  <Input
-                    className="h-9"
-                    type="number"
-                    min={1}
-                    max={60}
-                    value={bkQuantity}
-                    onChange={(e) =>
-                      setBkQuantity(Math.max(1, Number(e.target.value) || 1))
-                    }
-                  />
-                  {/* Only the first lesson is booked now. The number is what the
-                  package allows, so the rest can be booked later without the
-                  quota refusing them. */}
-                  <p className="text-[11px] text-muted-foreground">
-                    Se programează doar prima. Restul le poți programa mai
-                    târziu.
-                  </p>
-                </div>
-                <label className="flex items-center gap-2 text-sm sm:col-span-2">
-                  <input
-                    type="checkbox"
-                    checked={bkPaid}
-                    onChange={(e) => setBkPaid(e.target.checked)}
-                  />
-                  A plătit deja
-                </label>
-              </>
-            )}
-            <div className="space-y-1.5 sm:col-span-2">
-              <Label className="text-xs">Notițe (opțional)</Label>
-              <Input
-                className="h-9"
-                value={bkNotes}
-                onChange={(e) => setBkNotes(e.target.value)}
-              />
-            </div>
-          </div>
-
-          {bkWarn && (
-            <div
-              role="alert"
-              className="flex gap-2 rounded-xl border border-amber-300/70 bg-amber-50 px-4 py-3 text-sm text-amber-900 dark:border-amber-500/30 dark:bg-amber-500/10 dark:text-amber-200"
-            >
-              <TriangleAlert className="mt-0.5 h-4 w-4 shrink-0" aria-hidden />
-              <div className="space-y-1">
-                <p>
-                  Ora asta se suprapune cu{" "}
-                  {bkWarn.map((c) => CLASH_LABEL[c] ?? c).join(" și ")}.
-                </p>
-                <p className="font-medium">
-                  Poți programa oricum, dacă așa ai stabilit.
-                </p>
-              </div>
-            </div>
-          )}
-
-          <div className="flex justify-end gap-2">
-            <Button
-              variant="ghost"
-              onClick={() => {
-                setBooking(false);
-                setBkWarn(null);
-              }}
-              disabled={bkBusy}
-            >
-              Renunță
-            </Button>
-            <Button
-              onClick={() => void submitBooking(bkWarn !== null)}
-              disabled={
-                bkBusy || bkName.trim().length < 2 || !bkEmail.includes("@")
-              }
-            >
-              {bkBusy && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-              {bkWarn ? "Programează oricum" : "Programează lecția"}
-            </Button>
-          </div>
-        </DialogContent>
-      </Dialog>
+      />
     </section>
   );
 };

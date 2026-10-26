@@ -14,6 +14,8 @@ import { supabase } from "@/integrations/supabase/client";
 import { cn } from "@/lib/utils";
 import { meetingLabel } from "./types";
 import LessonEditDialog from "./LessonEditDialog";
+import BookLessonDialog from "./BookLessonDialog";
+import { bucharestCivilToUtc } from "@/lib/timezone";
 import { ErrorNote } from "./ui";
 
 /**
@@ -152,6 +154,15 @@ const WeekLessons = () => {
   const [sessionRefresh, setSessionRefresh] = useState(0);
   // The lesson open in "Modifică lecția" (a click on it, in the grid or the list).
   const [editing, setEditing] = useState<Booking | null>(null);
+  // A lesson dropped on another time: the window opens with that time filled in.
+  const [moveTo, setMoveTo] = useState<{ date: string; time: string } | null>(
+    null,
+  );
+  // An empty time clicked: the booking form opens with it filled in.
+  const [bookingAt, setBookingAt] = useState<{
+    date: string;
+    time: string;
+  } | null>(null);
   const [groupLessons, setGroupLessons] = useState<GroupLesson[]>([]);
 
   const load = useCallback(async () => {
@@ -240,6 +251,64 @@ const WeekLessons = () => {
   );
 
   const dayNum = (k: string) => Number(k.slice(8));
+
+  /** The quarter hour under the pointer in a day column (Romania's time). */
+  const slotAt = (e: React.MouseEvent<HTMLDivElement>) => {
+    const y = e.clientY - e.currentTarget.getBoundingClientRect().top;
+    const minutes = Math.max(
+      0,
+      Math.min(
+        23 * 60 + 45,
+        startHour * 60 + Math.round(((y / HOUR_PX) * 60) / 15) * 15,
+      ),
+    );
+    return `${String(Math.floor(minutes / 60)).padStart(2, "0")}:${String(minutes % 60).padStart(2, "0")}`;
+  };
+
+  /** A lesson or group lesson dropped on a day column. */
+  const drop = async (e: React.DragEvent<HTMLDivElement>, day: string) => {
+    e.preventDefault();
+    const [kind, id] = e.dataTransfer.getData("text/plain").split(":");
+    const at = slotAt(e);
+    if (kind === "lesson") {
+      const b = (rows ?? []).find((x) => x.id === id);
+      if (b) {
+        setMoveTo({ date: day, time: at });
+        setEditing(b);
+      }
+      return;
+    }
+    if (kind === "session") {
+      const g = groupLessons.find((x) => x.id === id);
+      if (!g) return;
+      if (
+        !window.confirm(
+          `Muți lecția ${g.lesson_number} a grupei ${groupName(g)} pe ${day} la ${at}? Cursanții grupei primesc anunțul de la Google.`,
+        )
+      )
+        return;
+      const [y, mo, d] = day.split("-").map(Number) as [number, number, number];
+      const [hh, mm] = at.split(":").map(Number) as [number, number];
+      const start = bucharestCivilToUtc(y, mo, d, hh, mm);
+      const length = Date.parse(g.ends_at) - Date.parse(g.starts_at);
+      const { data, error: failure } = await invokeAdmin<{
+        success?: boolean;
+        error?: string;
+      }>({
+        action: "move_cohort_session",
+        id: g.id,
+        starts_at: start.toISOString(),
+        ends_at: new Date(start.getTime() + length).toISOString(),
+      });
+      if (failure || data?.error || data?.success !== true) {
+        window.alert(
+          data?.error || failure?.message || "Lecția grupei nu a fost mutată.",
+        );
+        return;
+      }
+      setSessionRefresh((value) => value + 1);
+    }
+  };
   const monthName = (k: string) =>
     new Date(`${k}T12:00:00Z`).toLocaleDateString("ro-RO", {
       month: "long",
@@ -366,7 +435,10 @@ const WeekLessons = () => {
                         <AgendaRow
                           key={b.id}
                           b={b}
-                          onEdit={() => setEditing(b)}
+                          onEdit={() => {
+                            setMoveTo(null);
+                            setEditing(b);
+                          }}
                         />
                       ))}
                     </>
@@ -419,7 +491,14 @@ const WeekLessons = () => {
               {days.map((k, di) => (
                 <div
                   key={k}
-                  className="relative border-t border-border/70"
+                  className="relative cursor-pointer border-t border-border/70"
+                  title="Click pe o oră liberă ca să programezi o lecție; trage o lecție aici ca s-o muți."
+                  onClick={(e) => {
+                    if (e.target === e.currentTarget)
+                      setBookingAt({ date: k, time: slotAt(e) });
+                  }}
+                  onDragOver={(e) => e.preventDefault()}
+                  onDrop={(e) => void drop(e, k)}
                   style={{
                     height: hours.length * HOUR_PX,
                     backgroundImage: `repeating-linear-gradient(to bottom, transparent 0, transparent ${HOUR_PX - 1}px, hsl(var(--border) / 0.7) ${HOUR_PX - 1}px, hsl(var(--border) / 0.7) ${HOUR_PX}px)`,
@@ -429,7 +508,7 @@ const WeekLessons = () => {
                   {di < 5 && (
                     <div
                       aria-hidden
-                      className="absolute inset-x-0 rounded-lg border border-dashed border-border bg-muted/60"
+                      className="pointer-events-none absolute inset-x-0 rounded-lg border border-dashed border-border bg-muted/60"
                       style={{
                         top: (12 - startHour) * HOUR_PX + 2,
                         height: HOUR_PX - 4,
@@ -447,8 +526,15 @@ const WeekLessons = () => {
                     return (
                       <div
                         key={g.id}
-                        title={`${time(g.starts_at)} Grupa ${groupName(g)} · Lecția ${g.lesson_number}`}
-                        className="absolute inset-x-0 flex flex-col overflow-hidden rounded-[10px] bg-admin-info-fg px-2 py-1 text-[0.8125rem] leading-tight text-white dark:bg-admin-info-bg dark:text-admin-info-fg"
+                        draggable
+                        onDragStart={(e) =>
+                          e.dataTransfer.setData(
+                            "text/plain",
+                            `session:${g.id}`,
+                          )
+                        }
+                        title={`${time(g.starts_at)} Grupa ${groupName(g)} · Lecția ${g.lesson_number} — trage ca s-o muți`}
+                        className="absolute inset-x-0 flex cursor-grab flex-col overflow-hidden rounded-[10px] bg-admin-info-fg px-2 py-1 text-[0.8125rem] leading-tight text-white dark:bg-admin-info-bg dark:text-admin-info-fg"
                         style={{
                           top: top + 2,
                           height: (mins / 60) * HOUR_PX - 4,
@@ -477,7 +563,14 @@ const WeekLessons = () => {
                       <button
                         type="button"
                         key={b.id}
-                        onClick={() => setEditing(b)}
+                        draggable={b.status === "confirmed"}
+                        onDragStart={(e) =>
+                          e.dataTransfer.setData("text/plain", `lesson:${b.id}`)
+                        }
+                        onClick={() => {
+                          setMoveTo(null);
+                          setEditing(b);
+                        }}
                         title={`${time(b.start_at)} ${b.student_name} · ${label(b.event_type_slug)} — click pentru a modifica`}
                         className={cn(
                           "absolute inset-x-0 flex flex-col overflow-hidden rounded-[10px] px-2 py-1 text-left text-[0.8125rem] leading-tight hover:ring-2 hover:ring-primary/40",
@@ -532,8 +625,18 @@ const WeekLessons = () => {
       )}
       <LessonEditDialog
         lesson={editing}
-        onClose={() => setEditing(null)}
+        moveTo={moveTo}
+        onClose={() => {
+          setEditing(null);
+          setMoveTo(null);
+        }}
         onChanged={() => void load()}
+      />
+      <BookLessonDialog
+        open={bookingAt !== null}
+        initial={bookingAt}
+        onClose={() => setBookingAt(null)}
+        onBooked={() => void load()}
       />
     </div>
   );

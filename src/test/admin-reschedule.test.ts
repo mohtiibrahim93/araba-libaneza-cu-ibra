@@ -25,7 +25,8 @@ const admin = read("supabase/functions/admin-registrations/index.ts");
 // The move lives in the shared "Modifică lecția" window since 14 Oct 2026.
 const ui =
   read("src/components/BookingsAdmin.tsx") +
-  read("src/components/admin/LessonEditDialog.tsx");
+  read("src/components/admin/LessonEditDialog.tsx") +
+  read("src/components/admin/BookLessonDialog.tsx");
 
 describe("the availability exemption", () => {
   it("is earned by the service-role key, not assumed", () => {
