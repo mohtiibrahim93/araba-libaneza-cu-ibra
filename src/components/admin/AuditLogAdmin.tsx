@@ -48,6 +48,7 @@ const ACTION_LABELS: Record<string, string> = {
   cancel_subscription: "Anulare abonament",
   update_status: "Schimbare status",
   reschedule_booking: "Mutare lecție",
+  update_booking_details: "Lecție modificată",
   book_for_student: "Programare manuală",
   import_calendar_event: "Lecție importată din Google",
   set_trial_outcome: "Rezultat probă",

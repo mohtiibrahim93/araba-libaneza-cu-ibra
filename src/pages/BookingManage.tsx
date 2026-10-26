@@ -61,6 +61,8 @@ interface BookingInfo {
   language?: "ro" | "en";
   /** False once the lesson is inside the 24-hour window, computed server-side. */
   changes_allowed?: boolean;
+  /** True once the lesson has ended and is not yet marked done. */
+  can_confirm_done?: boolean;
 }
 
 const BookingManageInner = () => {
@@ -113,6 +115,35 @@ const BookingManageInner = () => {
       ? !booking.changes_allowed
       : !!booking &&
         Date.parse(booking.start_at) - Date.now() < 24 * 60 * 60 * 1000;
+
+  // After the lesson: the student confirms it took place (the after-lesson
+  // email links here with ?done=1). Otherwise it is marked done after 48h.
+  const [justConfirmed, setJustConfirmed] = useState(false);
+  const handleConfirmDone = async () => {
+    setBusy(true);
+    try {
+      const res = await fetch(baseUrl, {
+        method: "POST",
+        headers: {
+          apikey: import.meta.env["VITE_SUPABASE_PUBLISHABLE_KEY"],
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ action: "confirm_done" }),
+      });
+      const json = await res.json().catch(() => ({}));
+      if (!res.ok) throw new Error(json?.error ?? "failed");
+      setJustConfirmed(true);
+      await load();
+    } catch {
+      toast.error(
+        lang === "en"
+          ? "Could not confirm. Please try again."
+          : "Nu am putut confirma. Te rog încearcă din nou.",
+      );
+    } finally {
+      setBusy(false);
+    }
+  };
 
   const handleCancel = async () => {
     if (!confirm(t.manageConfirmCancel)) return;
@@ -324,29 +355,68 @@ const BookingManageInner = () => {
             {/* Inside the last 24 hours the two buttons are gone, so this has to
                 say why, and where a real emergency goes instead — a dead end
                 here is what turns a genuine problem into a no-show. */}
-            {booking.status === "confirmed" && tooLate && (
-              <div className="rounded-lg border border-amber-500/40 bg-amber-500/10 p-4 text-sm text-amber-700 dark:text-amber-400">
-                <p className="font-semibold inline-flex items-center gap-2">
-                  <Clock className="w-4 h-4" />
-                  {t.manageTooLateTitle}
+            {booking.can_confirm_done && (
+              <div className="rounded-lg border border-green-600/30 bg-green-500/10 p-4 text-sm">
+                <p className="font-semibold">
+                  {lang === "en"
+                    ? "Your lesson has ended."
+                    : "Lecția ta s-a încheiat."}
                 </p>
-                <p className="mt-2 text-xs leading-relaxed">
-                  {t.manageTooLateBody}
+                <p className="mt-1 text-xs text-muted-foreground">
+                  {lang === "en"
+                    ? "Please confirm that it took place. If you don't, it counts as done after 48 hours."
+                    : "Te rog confirmă că a avut loc. Dacă nu confirmi, o considerăm făcută după 48 de ore."}
                 </p>
-                <p className="mt-2 text-xs leading-relaxed">
-                  {t.manageTooLateEmergency}
-                </p>
-                <a
-                  href={WHATSAPP_CONTACT_URL}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="mt-3 inline-flex items-center justify-center gap-2 px-gutter py-2 rounded-md bg-amber-600 text-white text-sm font-medium hover:bg-amber-700"
+                <button
+                  onClick={() => void handleConfirmDone()}
+                  disabled={busy}
+                  className="mt-3 inline-flex items-center justify-center gap-2 px-gutter py-2 rounded-md bg-green-700 text-white text-sm font-medium hover:bg-green-800 disabled:opacity-50"
                 >
-                  <MessageCircle className="w-4 h-4" />
-                  {t.manageWhatsAppCta}
-                </a>
+                  <CheckCircle2 className="w-4 h-4" />
+                  {lang === "en"
+                    ? "Confirm the lesson took place"
+                    : "Confirm că lecția a avut loc"}
+                </button>
               </div>
             )}
+
+            {booking.status === "completed" && justConfirmed && (
+              <p
+                role="status"
+                className="text-sm text-green-700 inline-flex items-center gap-2"
+              >
+                <CheckCircle2 className="w-4 h-4" />
+                {lang === "en"
+                  ? "Thank you! The lesson is marked as done."
+                  : "Mulțumesc! Lecția este marcată ca făcută."}
+              </p>
+            )}
+
+            {booking.status === "confirmed" &&
+              tooLate &&
+              !booking.can_confirm_done && (
+                <div className="rounded-lg border border-amber-500/40 bg-amber-500/10 p-4 text-sm text-amber-700 dark:text-amber-400">
+                  <p className="font-semibold inline-flex items-center gap-2">
+                    <Clock className="w-4 h-4" />
+                    {t.manageTooLateTitle}
+                  </p>
+                  <p className="mt-2 text-xs leading-relaxed">
+                    {t.manageTooLateBody}
+                  </p>
+                  <p className="mt-2 text-xs leading-relaxed">
+                    {t.manageTooLateEmergency}
+                  </p>
+                  <a
+                    href={WHATSAPP_CONTACT_URL}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="mt-3 inline-flex items-center justify-center gap-2 px-gutter py-2 rounded-md bg-amber-600 text-white text-sm font-medium hover:bg-amber-700"
+                  >
+                    <MessageCircle className="w-4 h-4" />
+                    {t.manageWhatsAppCta}
+                  </a>
+                </div>
+              )}
 
             {booking.status === "cancelled" && (
               <p className="text-sm text-muted-foreground inline-flex items-center gap-2">

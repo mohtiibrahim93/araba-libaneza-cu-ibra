@@ -13,9 +13,10 @@ import {
 import { invokeAdmin } from "@/lib/adminAuth";
 import { cn } from "@/lib/utils";
 import { buildWhatsAppUrl } from "@/lib/whatsapp";
-import { formTypeLabels, paymentStatusLabels } from "./types";
+import { formTypeLabels, paymentStatusLabels, meetingLabel } from "./types";
 import { Empty, ErrorNote, Loading } from "./ui";
 import { TrialOutcomeControl } from "@/components/admin/TrialOutcome";
+import LessonEditDialog from "./LessonEditDialog";
 
 /**
  * The screen the panel opens on.
@@ -37,6 +38,9 @@ import { TrialOutcomeControl } from "@/components/admin/TrialOutcome";
 interface Lesson {
   id: string;
   start_at: string;
+  end_at: string;
+  status: string;
+  notes?: string | null;
   event_type_slug: string;
   format: string;
   student_name: string;
@@ -189,6 +193,7 @@ const TodayAdmin = ({
   const [error, setError] = useState("");
   const [filter, setFilter] = useState<Filter>("all");
   const [busyRow, setBusyRow] = useState<string | null>(null);
+  const [editing, setEditing] = useState<Lesson | null>(null);
   const [rowError, setRowError] = useState<{
     id: string;
     message: string;
@@ -863,6 +868,17 @@ const TodayAdmin = ({
                             {missing ? " · nu e în Google Calendar" : ""}
                           </p>
                         </div>
+                        <button
+                          type="button"
+                          onClick={() => setEditing(l)}
+                          aria-label={`Modifică lecția cu ${l.student_name}`}
+                          className={cn(
+                            rowBtn,
+                            "border border-border hover:border-brand-green/60",
+                          )}
+                        >
+                          Modifică
+                        </button>
                         {l.meet_link && (
                           <a
                             href={l.meet_link}
@@ -875,7 +891,7 @@ const TodayAdmin = ({
                                 : "border border-border hover:border-brand-green/60",
                             )}
                           >
-                            Intră
+                            {meetingLabel(l.meet_link)}
                           </a>
                         )}
                       </div>
@@ -937,6 +953,11 @@ const TodayAdmin = ({
           </div>
         </div>
       )}
+      <LessonEditDialog
+        lesson={editing}
+        onClose={() => setEditing(null)}
+        onChanged={() => void load()}
+      />
     </div>
   );
 };

@@ -191,5 +191,77 @@ Deno.serve(async (req) => {
   }
 
   const results = await Promise.all(stages.map(runStage));
-  return json({ ok: true, results });
+
+  // After the lesson (owner's request, 14 October 2026): ask the student to
+  // confirm it took place, once, stamped only when the email went out.
+  // Lessons that had already ended when this started were stamped by the
+  // migration, so nobody gets an email about an old lesson.
+  const nowISO = new Date(now).toISOString();
+  let doneChecks = 0;
+  let doneCheckFailed = 0;
+  const { data: ended, error: endedErr } = await supabase
+    .from("bookings")
+    .select("id,start_at,student_name,student_email,manage_token,language")
+    .eq("status", "confirmed")
+    .lte("end_at", nowISO)
+    .is("done_check_sent_at", null)
+    .limit(50);
+  if (endedErr) console.error("[reminders] done-check query failed", endedErr);
+  for (const r of (ended ?? []) as Array<{
+    id: string;
+    start_at: string;
+    student_name: string;
+    student_email: string | null;
+    manage_token: string;
+    language: string | null;
+  }>) {
+    if (!r.student_email) {
+      await supabase
+        .from("bookings")
+        .update({ done_check_sent_at: nowISO })
+        .eq("id", r.id);
+      continue;
+    }
+    const lang = r.language === "en" ? "en" : "ro";
+    try {
+      await sendTemplateEmail("lesson-done-check", r.student_email, {
+        templateData: {
+          name: r.student_name,
+          whenLabel: fmtBookingLocal(r.start_at, lang),
+          confirmUrl: `${manageUrl(r.manage_token)}?done=1`,
+          lang,
+        },
+        idempotencyKey: `lesson-done-check-${r.id}`,
+      });
+    } catch (err) {
+      console.error(
+        "[reminders] done-check send failed; will retry",
+        r.id,
+        err,
+      );
+      doneCheckFailed++;
+      continue;
+    }
+    await supabase
+      .from("bookings")
+      .update({ done_check_sent_at: nowISO })
+      .eq("id", r.id);
+    doneChecks++;
+  }
+
+  // 48 hours after a lesson nobody confirmed, it counts as done by itself.
+  const { data: autoDone, error: autoErr } = await supabase
+    .from("bookings")
+    .update({ status: "completed", completed_at: nowISO, completed_by: "auto" })
+    .eq("status", "confirmed")
+    .lte("end_at", new Date(now - 48 * 3_600_000).toISOString())
+    .select("id");
+  if (autoErr) console.error("[reminders] auto-complete failed", autoErr);
+
+  return json({
+    ok: true,
+    results,
+    done_checks: { sent: doneChecks, failed: doneCheckFailed },
+    auto_completed: autoDone?.length ?? 0,
+  });
 });

@@ -39,7 +39,8 @@ describe("a lesson given for free", () => {
     expect(code(admin)).toContain(
       code('payment_status: free ? "free" : paid ? "paid" : "unpaid",'),
     );
-    const ui = read("src/components/BookingsAdmin.tsx");
+    // The booking form lives in BookLessonDialog since 26 Oct 2026.
+    const ui = read("src/components/admin/BookLessonDialog.tsx");
     expect(code(ui)).toContain(code("...(bkFree ? { free: true } : {}),"));
     expect(code(ui)).toContain(code("paid: bkPaid && !bkFree,"));
   });

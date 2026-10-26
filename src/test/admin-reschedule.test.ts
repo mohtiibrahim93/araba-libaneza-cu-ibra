@@ -22,7 +22,11 @@ import { code } from "./helpers/sourceText";
 const read = (p: string) => readFileSync(resolve(process.cwd(), p), "utf8");
 const manage = read("supabase/functions/booking-manage/index.ts");
 const admin = read("supabase/functions/admin-registrations/index.ts");
-const ui = read("src/components/BookingsAdmin.tsx");
+// The move lives in the shared "Modifică lecția" window since 14 Oct 2026.
+const ui =
+  read("src/components/BookingsAdmin.tsx") +
+  read("src/components/admin/LessonEditDialog.tsx") +
+  read("src/components/admin/BookLessonDialog.tsx");
 
 describe("the availability exemption", () => {
   it("is earned by the service-role key, not assumed", () => {
@@ -116,7 +120,8 @@ describe("the admin action", () => {
 describe("the panel", () => {
   it("offers the move beside the cancel it already had", () => {
     expect(ui).toContain('action: "reschedule_booking"');
-    expect(ui).toContain("openMove(b)");
+    expect(ui).toContain("setEditing(b)");
+    expect(ui).toContain("Modifică lecția");
     expect(ui).toContain("Mută lecția");
   });
 
@@ -134,8 +139,12 @@ describe("the panel", () => {
 
   it("asks a second time before overriding", () => {
     // force is sent only once a warning is showing, and the button says so.
-    expect(ui).toContain("void submitMove(moveWarn !== null)");
-    expect(ui).toContain('moveWarn ? "Mută oricum" : "Mută lecția"');
+    expect(ui).toContain("await move(moveWarn !== null)");
+    expect(code(ui)).toContain(
+      code(
+        'moveWarn ? "Mută oricum" : timeChanged ? "Mută lecția" : "Salvează"',
+      ),
+    );
   });
 
   it("tells the owner what he is overriding, in words", () => {
