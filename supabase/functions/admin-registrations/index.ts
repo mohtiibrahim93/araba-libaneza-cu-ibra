@@ -1790,6 +1790,7 @@ Deno.serve(async (req) => {
           {
             lovableKey: Deno.env.get("LOVABLE_API_KEY"),
             calendarKey: Deno.env.get("GOOGLE_CALENDAR_API_KEY"),
+            zoomUrl: Deno.env.get("ZOOM_MEETING_URL"),
           },
           {
             eventId,
@@ -1843,6 +1844,7 @@ Deno.serve(async (req) => {
       const result = await reconcileCalendar(supabase, {
         lovableKey: Deno.env.get("LOVABLE_API_KEY"),
         calendarKey: Deno.env.get("GOOGLE_CALENDAR_API_KEY"),
+        zoomUrl: Deno.env.get("ZOOM_MEETING_URL"),
         from,
         to,
       });

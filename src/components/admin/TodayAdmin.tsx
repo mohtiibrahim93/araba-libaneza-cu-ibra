@@ -13,7 +13,7 @@ import {
 import { invokeAdmin } from "@/lib/adminAuth";
 import { cn } from "@/lib/utils";
 import { buildWhatsAppUrl } from "@/lib/whatsapp";
-import { formTypeLabels, paymentStatusLabels } from "./types";
+import { formTypeLabels, paymentStatusLabels, meetingLabel } from "./types";
 import { Empty, ErrorNote, Loading } from "./ui";
 import { TrialOutcomeControl } from "@/components/admin/TrialOutcome";
 
@@ -834,7 +834,7 @@ const TodayAdmin = ({
                                 : "border border-border hover:border-brand-green/60",
                             )}
                           >
-                            Intră
+                            {meetingLabel(l.meet_link)}
                           </a>
                         )}
                       </div>

@@ -7,14 +7,15 @@ import { toast } from "@/hooks/use-toast";
 import {
   Loader2,
   X,
-  ExternalLink,
   CalendarX2,
   Phone,
   RefreshCw,
   CalendarClock,
   TriangleAlert,
   CalendarPlus,
+  Video,
 } from "lucide-react";
+import { meetingLabel } from "./admin/types";
 import {
   Dialog,
   DialogContent,
@@ -684,10 +685,11 @@ const BookingsAdmin = ({
                         href={b.meet_link}
                         target="_blank"
                         rel="noreferrer"
-                        className="ml-1 inline-flex items-center text-primary"
-                        aria-label="Deschide linkul întâlnirii"
+                        className="ml-2 inline-flex items-center gap-1 rounded-md bg-brand-green px-2 py-1 text-xs font-semibold text-white hover:opacity-90"
+                        aria-label={`Deschide ${meetingLabel(b.meet_link)} pentru lecția cu ${b.student_name}`}
                       >
-                        <ExternalLink className="h-3 w-3" />
+                        <Video className="h-3 w-3" aria-hidden />
+                        {meetingLabel(b.meet_link)}
                       </a>
                     )}
                   </td>

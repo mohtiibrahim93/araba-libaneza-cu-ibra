@@ -4,6 +4,8 @@ const GATEWAY =
 type Config = {
   lovableKey?: string | undefined;
   calendarKey?: string | undefined;
+  /** The owner's Zoom personal room, the default link of an online lesson. */
+  zoomUrl?: string | undefined;
   from: string;
   to: string;
 };
@@ -17,11 +19,31 @@ type GoogleEvent = {
   start?: { dateTime?: string };
   end?: { dateTime?: string };
   hangoutLink?: string;
+  location?: string;
   extendedProperties?: {
     private?: Record<string, string>;
     shared?: Record<string, string>;
   };
 };
+/**
+ * The video link of an imported lesson (owner, 14 October 2026: every online
+ * lesson uses his Zoom personal room). A Google Meet link on the event wins,
+ * then a Zoom link written in its location or description, then his room.
+ * An in-person lesson gets no default link.
+ */
+export function lessonMeetingLink(
+  event: { hangoutLink?: string; location?: string; description?: string },
+  online: boolean,
+  zoomUrl?: string | null,
+): string | null {
+  if (event.hangoutLink) return event.hangoutLink;
+  const written = `${event.location ?? ""}\n${event.description ?? ""}`.match(
+    /https:\/\/[a-z0-9.-]*zoom\.us\/[^\s"'<>)\]]+/i,
+  );
+  if (written) return written[0];
+  return online && zoomUrl ? zoomUrl : null;
+}
+
 /** Synchronize exact existing links. A missing event is an error, never a deletion. */
 export async function reconcileCalendar(
   db: any,
@@ -460,6 +482,7 @@ export async function reconcileCalendar(
             start,
             end,
             registrationFor,
+            config.zoomUrl,
           )
         ) {
           result.imported++;
@@ -569,6 +592,7 @@ async function autoImportLesson(
     string,
     { id: string; name: string; phone: string | null; format: string | null }
   >,
+  zoomUrl?: string,
 ) {
   const summary = event.summary ?? "";
   let registration = registrationFor.get(guest.email);
@@ -624,7 +648,7 @@ async function autoImportLesson(
       language: "ro",
       google_event_id: event.id,
       google_contact_email: guest.email,
-      meet_link: event.hangoutLink ?? null,
+      meet_link: lessonMeetingLink(event, registration.format !== "fizic", zoomUrl),
       reminder_2d_sent_at: now,
       reminder_day_of_sent_at: now,
       reminder_3h_sent_at: now,
@@ -682,7 +706,11 @@ const toInstant = (value: unknown) =>
  */
 export async function importCalendarEvent(
   db: any,
-  config: { lovableKey?: string | undefined; calendarKey?: string | undefined },
+  config: {
+    lovableKey?: string | undefined;
+    calendarKey?: string | undefined;
+    zoomUrl?: string | undefined;
+  },
   input: {
     eventId: string;
     name: string;
@@ -754,7 +782,7 @@ export async function importCalendarEvent(
       language: "ro",
       google_event_id: input.eventId,
       google_contact_email: input.email,
-      meet_link: event.hangoutLink ?? null,
+      meet_link: lessonMeetingLink(event, input.format === "online", config.zoomUrl),
     })
     .select("id")
     .single();

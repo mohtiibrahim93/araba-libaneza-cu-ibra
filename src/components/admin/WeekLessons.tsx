@@ -12,6 +12,7 @@ import {
 import { invokeAdmin } from "@/lib/adminAuth";
 import { supabase } from "@/integrations/supabase/client";
 import { cn } from "@/lib/utils";
+import { meetingLabel } from "./types";
 import { ErrorNote } from "./ui";
 
 /**
@@ -568,7 +569,7 @@ const AgendaRow = ({ b }: { b: Booking }) => {
             rel="noopener noreferrer"
             className="flex min-h-11 items-center rounded-xl bg-brand-green px-4 font-semibold text-white"
           >
-            Intră
+            {meetingLabel(b.meet_link)}
           </a>
         )}
       </div>

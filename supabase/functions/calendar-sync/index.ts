@@ -24,6 +24,7 @@ Deno.serve(async (req) => {
     const result = await reconcileCalendar(db, {
       lovableKey: Deno.env.get("LOVABLE_API_KEY"),
       calendarKey: Deno.env.get("GOOGLE_CALENDAR_API_KEY"),
+      zoomUrl: Deno.env.get("ZOOM_MEETING_URL"),
       from: new Date(Date.now() - 7 * 86400000).toISOString(),
       to: new Date(Date.now() + 400 * 86400000).toISOString(),
     });
