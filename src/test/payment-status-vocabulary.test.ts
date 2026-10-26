@@ -7,7 +7,7 @@ import { code } from "./helpers/sourceText";
  * `registrations.payment_status` has no database constraint, so any string at
  * all will insert cleanly and be wrong only later.
  *
- * Eight values are in use, and two of them look like synonyms but are not:
+ * Nine values are in use, and two of them look like synonyms but are not:
  *
  *   unpaid     Nobody has tried to pay. The first payment has not happened and
  *              may never happen, in which case the student is charged the full
@@ -19,13 +19,15 @@ import { code } from "./helpers/sourceText";
  *   card_saved A card is on file but not yet charged.
  *   paid / failed / past_due / refunded  What Stripe reports afterwards.
  *   expired    A Stripe payment page opened and abandoned until Stripe closed it.
+ *   free       Nothing is owed: the owner gave the lesson for free (a make-up
+ *              lesson). Set by the admin, never by Stripe (26 October 2026).
  *
  * This file once claimed the two were one state and that "unpaid" had been
  * caught before any row could carry it. Both claims were wrong: production is
  * mostly "unpaid", and merging it into "pending" would report money as on its
  * way when nobody has tried to pay.
  *
- * The real risk is a ninth value, not the eighth: the column takes anything,
+ * The real risk is a tenth value, not the ninth: the column takes anything,
  * the badge falls through to its default and looks plausible, and a breakdown
  * grows a bucket nobody labelled.
  */
@@ -38,9 +40,10 @@ const ALLOWED = [
   "expired",
   "past_due",
   "refunded",
+  "free",
 ];
 
-/** Everything a reader has to be able to name. Same list: all eight are real. */
+/** Everything a reader has to be able to name. Same list: all nine are real. */
 const IN_THE_DATA = ALLOWED;
 
 /** Every .ts/.tsx under a root, so a new function cannot slip past. */
@@ -60,7 +63,7 @@ const files = [
   ...walk(resolve(process.cwd(), "src")),
 ].filter((f) => !f.includes("/test/"));
 
-describe("payment_status stays to its eight values", () => {
+describe("payment_status stays to its nine values", () => {
   it("has files to check", () => {
     expect(files.length).toBeGreaterThan(50);
   });
@@ -78,7 +81,7 @@ describe("payment_status stays to its eight values", () => {
     );
   });
 
-  it("writes no ninth value", () => {
+  it("writes no tenth value", () => {
     const bad: string[] = [];
     for (const f of files) {
       const src = readFileSync(f, "utf8");
@@ -94,7 +97,7 @@ describe("payment_status stays to its eight values", () => {
     }
     expect(
       bad,
-      `payment_status values outside the eight:\n${bad.join("\n")}`,
+      `payment_status values outside the nine:\n${bad.join("\n")}`,
     ).toEqual([]);
   });
 
@@ -188,14 +191,15 @@ describe("payment_status stays to its eight values", () => {
   });
 
   it("counts anything-but-paid as owing, so a new value is never missed silently", () => {
-    // The worklist asks what is NOT paid rather than listing what is unpaid:
-    // a ninth value would show up there rather than disappear from it.
+    // The worklist asks what is NOT settled rather than listing what is unpaid:
+    // a tenth value would show up there rather than disappear from it. The
+    // three left out are exactly the ones where nothing is owed.
     const fn = readFileSync(
       resolve(process.cwd(), "supabase/functions/admin-registrations/index.ts"),
       "utf8",
     );
     expect(fn).toContain(
-      '.not("payment_status", "in", \'("paid","refunded")\')',
+      '.not("payment_status", "in", \'("paid","refunded","free")\')',
     );
   });
 });

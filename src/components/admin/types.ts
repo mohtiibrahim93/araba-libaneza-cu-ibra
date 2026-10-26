@@ -139,6 +139,12 @@ export const leadStatusLabels: Record<LeadStatus, string> = {
  *               paying. (Owner's decision, 13 October 2026.)
  *   past_due    A subscription renewal lapsed. The relationship continues.
  *   refunded    The money arrived and was given back.
+ *   free        Nothing is owed: the owner gave the lesson for free, e.g. a
+ *               make-up lesson ("recuperare"). Not unpaid (no debt to chase)
+ *               and not paid (no money arrived, so it is not revenue). Set by
+ *               "Gratuită (recuperare)" when booking or "Gratuit" on an unpaid
+ *               registration, never by Stripe. Gets the same access as paid.
+ *               (Owner's decision, 26 October 2026.)
  *
  * Two things that are NOT payment states, and must not be folded in here:
  *
@@ -163,6 +169,7 @@ export const paymentStatusLabels: Record<string, string> = {
   expired: "Expirat",
   refunded: "Rambursat",
   past_due: "Restant",
+  free: "Gratuit",
 };
 
 /**
@@ -199,7 +206,8 @@ export function leadSegment(r: {
   if (
     r.lead_status === "converted" ||
     r.payment_status === "paid" ||
-    r.payment_status === "past_due"
+    r.payment_status === "past_due" ||
+    r.payment_status === "free"
   )
     return "students";
   if (r.lead_status === "not_suitable" || r.lead_status === "spam")

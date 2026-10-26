@@ -193,7 +193,10 @@ describe("booking a private lesson from the panel", () => {
   it("records unpaid rather than pending when it is not paid for", () => {
     // AGENTS.md: unpaid means no payment was attempted, which is exactly a
     // lesson agreed by hand. pending would claim money is in flight.
-    expect(head).toContain('payment_status: paid ? "paid" : "unpaid"');
+    // free: a lesson the owner gives for free (26 October 2026).
+    expect(head).toContain(
+      'payment_status: free ? "free" : paid ? "paid" : "unpaid"',
+    );
     expect(head).not.toContain('"pending"');
   });
 

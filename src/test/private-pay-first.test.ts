@@ -51,8 +51,11 @@ describe("a private lesson is booked only once paid", () => {
     expect(read("supabase/functions/_shared/schedule-rules.ts")).toContain(
       'export const LEVEL_CHECK_SLUG = "verificare-nivel";',
     );
-    expect(src).toContain(
-      'if (!isFree && !internalCall && reg.payment_status !== "paid")',
+    // Paid, or made free by the owner (a make-up lesson): nothing else books.
+    expect(code(src)).toContain(
+      code(
+        'if (!isFree && !internalCall && reg.payment_status !== "paid" && reg.payment_status !== "free")',
+      ),
     );
     expect(src).toContain('code: "payment_required"');
   });

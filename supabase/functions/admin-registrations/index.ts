@@ -2852,10 +2852,11 @@ Deno.serve(async (req) => {
         supabase
           .from("registrations")
           .select(
-            "id, created_at, name, phone, email, form_type, level, format, payment_status",
+            "id, created_at, name, phone, email, form_type, level, format, payment_status, lead_status",
           )
           .in("form_type", ["group", "private", "kids"])
-          .not("payment_status", "in", '("paid","refunded")')
+          // free: nothing is owed (a lesson given for free).
+          .not("payment_status", "in", '("paid","refunded","free")')
           .is("anonymized_at", null)
           // Put aside with "Am vorbit cu el" until this date.
           .or(
@@ -2907,6 +2908,14 @@ Deno.serve(async (req) => {
       if (lessonErr) throw lessonErr;
       if (uncErr) throw uncErr;
       if (unpaidErr) throw unpaidErr;
+      // Someone the owner has given up on ("Nu mai răspunde", "Nepotrivit",
+      // spam) is not chased for money either. Their registration stays where it
+      // is, so a later request from them can be read against it. Filtered here
+      // rather than in SQL: lead_status may be NULL, and NOT IN drops NULLs.
+      const DROPPED_LEADS = ["no_response", "not_suitable", "spam"];
+      const owing = (unpaid ?? []).filter(
+        (r) => !DROPPED_LEADS.includes(r.lead_status as string),
+      );
       if (cohortErr) throw cohortErr;
 
       const days = (iso: string) =>
@@ -2934,7 +2943,7 @@ Deno.serve(async (req) => {
           });
         }
       }
-      for (const r of unpaid ?? []) {
+      for (const r of owing) {
         if (r.payment_status === "failed" || r.payment_status === "past_due") {
           problems.push({
             kind: "payment",
@@ -2996,7 +3005,7 @@ Deno.serve(async (req) => {
             ...r,
             waitingDays: days(r.created_at as string),
           })),
-          unpaid: (unpaid ?? []).map((r) => ({
+          unpaid: owing.map((r) => ({
             ...r,
             waitingDays: days(r.created_at as string),
           })),
@@ -3593,6 +3602,8 @@ Deno.serve(async (req) => {
         Math.min(60, Number.parseInt(String(b.quantity ?? 1), 10) || 1),
       );
       const paid = b.paid === true;
+      // A lesson the owner gives for free (a make-up lesson): nothing is owed.
+      const free = b.free === true;
       const force = b.force === true;
 
       // An existing private student (a website purchase or an earlier
@@ -3676,8 +3687,8 @@ Deno.serve(async (req) => {
             quantity,
             // unpaid is "no payment has been attempted", which is exactly true of
             // a lesson agreed by hand and not yet paid for. Never pending: there
-            // is no payment in flight.
-            payment_status: paid ? "paid" : "unpaid",
+            // is no payment in flight. free when the owner gives it for free.
+            payment_status: free ? "free" : paid ? "paid" : "unpaid",
             // Not a lead to chase: the owner has already spoken to them.
             lead_status: "contacted",
           });
@@ -4152,6 +4163,37 @@ Deno.serve(async (req) => {
         action: "mark_paid_offline",
         registration_id: id,
         details: { method, at: paidAt },
+      });
+      return jsonResponse({ success: true });
+    }
+
+    // "Gratuit": a lesson the owner gave for free, e.g. a make-up lesson that
+    // was booked as unpaid. Only from unpaid: once a payment has been attempted
+    // (pending, failed, expired, card on file) or made, Stripe's record decides.
+    if (action === "mark_free") {
+      if (typeof id !== "string")
+        return jsonResponse({ error: "Înscriere invalidă." }, 400);
+      const { data, error } = await supabase
+        .from("registrations")
+        .update({ payment_status: "free", followup_snoozed_until: null })
+        .eq("id", id)
+        .is("anonymized_at", null)
+        .eq("payment_status", "unpaid")
+        .select("id");
+      if (error) throw error;
+      if (!data?.length)
+        return jsonResponse(
+          {
+            error:
+              "Doar o înscriere neplătită, fără nicio plată începută, poate fi marcată gratuită.",
+          },
+          409,
+        );
+      await supabase.from("audit_logs").insert({
+        actor: callerEmail!,
+        action: "mark_free",
+        registration_id: id,
+        details: { at: new Date().toISOString() },
       });
       return jsonResponse({ success: true });
     }

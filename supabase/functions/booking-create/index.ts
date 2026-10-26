@@ -192,9 +192,16 @@ Deno.serve(async (req) => {
     // purchases are booked by stripe-webhook (an internal call) after the
     // payment clears; a returning student who has already paid books the rest
     // of their lessons here.
-    // Free bookings: the trial lesson and the level check with Ibra.
+    // Free bookings: the trial lesson and the level check with Ibra. A
+    // registration the owner made free (payment_status "free", e.g. a make-up
+    // lesson) owes nothing, so it books like a paid one.
     const isFree = et.slug === "trial" || et.slug === LEVEL_CHECK_SLUG;
-    if (!isFree && !internalCall && reg.payment_status !== "paid") {
+    if (
+      !isFree &&
+      !internalCall &&
+      reg.payment_status !== "paid" &&
+      reg.payment_status !== "free"
+    ) {
       return json({ error: "payment required", code: "payment_required" }, 402);
     }
 

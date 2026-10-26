@@ -130,6 +130,11 @@ const paymentStatusBadge = (r: Registration) => {
         "bg-blue-500/10 text-blue-700 dark:text-blue-400",
         "Card salvat · trial",
       );
+    case "free":
+      return badge(
+        "bg-emerald-500/10 text-emerald-700 dark:text-emerald-400",
+        "Gratuit",
+      );
     default:
       return badge("bg-muted text-muted-foreground", "Neplătit");
   }

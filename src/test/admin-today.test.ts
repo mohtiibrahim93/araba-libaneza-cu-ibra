@@ -65,10 +65,11 @@ describe("the Azi worklist", () => {
   });
 
   it("does not bill anyone for a free trial", () => {
-    // Only the course types that carry money can be "unpaid".
+    // Only the course types that carry money can be "unpaid"; "free" (a lesson
+    // given for free) owes nothing either.
     expect(action).toContain('.in("form_type", ["group", "private", "kids"])');
     expect(action).toContain(
-      '.not("payment_status", "in", \'("paid","refunded")\')',
+      '.not("payment_status", "in", \'("paid","refunded","free")\')',
     );
   });
 
