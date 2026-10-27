@@ -136,3 +136,56 @@ describe("the package card and the low-package alert", () => {
     expect(today).toContain(code("Pachete aproape terminate"));
   });
 });
+
+describe("a student can appeal a lesson counted as lost", () => {
+  const manage = read("supabase/functions/booking-manage/index.ts");
+  const admin = read("supabase/functions/admin-registrations/index.ts");
+  const page = read("src/pages/BookingManage.tsx");
+  const today = read("src/components/admin/TodayAdmin.tsx");
+  const registry = read(
+    "supabase/functions/_shared/transactional-email-templates/registry.ts",
+  );
+
+  it("once, for a lost package lesson, and the owner is emailed", () => {
+    expect(manage).toContain(
+      code('if (b.trial_outcome !== "lost" || b.appeal_at) return false;'),
+    );
+    expect(manage).toContain(code('.is("appeal_at", null)'));
+    expect(manage).toContain(code('"lesson-appeal-owner",'));
+    expect(manage).toContain(
+      code("whatsappUrl: whatsappUrl(booking.student_phone)"),
+    );
+    expect(page).toContain(
+      code('JSON.stringify({ action: "appeal", text: appealText.trim() })'),
+    );
+  });
+
+  it("the owner answers from Acasă and the student hears by email", () => {
+    expect(admin).toContain(code('.not("appeal_at", "is", null)'));
+    expect(admin).toContain(code('"lesson-appeal-decision",'));
+    expect(today).toContain(code('decideAppeal(a.id, "excused")'));
+    expect(registry).toContain(
+      code('"lesson-appeal-owner": lessonAppealOwner'),
+    );
+    expect(registry).toContain(
+      code('"lesson-appeal-decision": lessonAppealDecision'),
+    );
+  });
+
+  it("stores the appeal in its own columns", () => {
+    const sql = readFileSync(
+      resolve(
+        process.cwd(),
+        "supabase/migrations/20261027090000_lesson_appeals.sql",
+      ),
+      "utf8",
+    );
+    for (const col of [
+      "appeal_text",
+      "appeal_at",
+      "appeal_decided_at",
+      "appeal_decision",
+    ])
+      expect(sql).toContain(col);
+  });
+});

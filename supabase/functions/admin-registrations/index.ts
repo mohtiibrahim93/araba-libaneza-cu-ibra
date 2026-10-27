@@ -1989,7 +1989,7 @@ Deno.serve(async (req) => {
       const { data: booking, error: bErr } = await supabase
         .from("bookings")
         .select(
-          "id, registration_id, event_type_slug, status, start_at, trial_outcome",
+          "id, registration_id, event_type_slug, status, start_at, trial_outcome, student_name, student_email, language, appeal_at, appeal_decided_at",
         )
         .eq("id", id)
         .maybeSingle();
@@ -2020,6 +2020,72 @@ Deno.serve(async (req) => {
         details: { booking_id: id, from: booking.trial_outcome, to: outcome },
       });
       await syncPackageTitles(supabase, booking.registration_id);
+
+      // An open appeal is answered by this decision (owner's rule: within 24
+      // hours), and the student hears it by email with what is left.
+      if (booking.appeal_at && !booking.appeal_decided_at && outcome !== null) {
+        const { data: decided } = await supabase
+          .from("bookings")
+          .update({
+            appeal_decided_at: new Date().toISOString(),
+            appeal_decision: outcome,
+          })
+          .eq("id", id)
+          .is("appeal_decided_at", null)
+          .select("id");
+        if (decided?.length && booking.student_email) {
+          let lessonsLeft: number | null = null;
+          if (booking.registration_id) {
+            const [{ data: reg }, { data: own }] = await Promise.all([
+              supabase
+                .from("registrations")
+                .select("quantity")
+                .eq("id", booking.registration_id)
+                .maybeSingle(),
+              supabase
+                .from("bookings")
+                .select("id, start_at, status, event_type_slug, trial_outcome")
+                .eq("registration_id", booking.registration_id),
+            ]);
+            if (reg)
+              lessonsLeft = Math.max(
+                0,
+                (Number.parseInt(String(reg.quantity ?? 1), 10) || 1) -
+                  (own ?? []).filter((b) => countsAgainstPackage(b)).length,
+              );
+          }
+          const lang = booking.language === "en" ? "en" : "ro";
+          try {
+            await sendTemplateEmail(
+              "lesson-appeal-decision",
+              booking.student_email,
+              {
+                templateData: {
+                  name: booking.student_name,
+                  whenLabel: new Intl.DateTimeFormat(
+                    lang === "en" ? "en-GB" : "ro-RO",
+                    {
+                      timeZone: "Europe/Bucharest",
+                      dateStyle: "medium",
+                      timeStyle: "short",
+                    },
+                  ).format(new Date(booking.start_at)),
+                  accepted: outcome === "excused",
+                  lessonsLeft,
+                  lang,
+                },
+                idempotencyKey: `lesson-appeal-decision-${id}`,
+              },
+            );
+          } catch (mailErr) {
+            console.error(
+              "[set_lesson_outcome] decision email failed",
+              mailErr,
+            );
+          }
+        }
+      }
+
       return jsonResponse({
         success: true,
         outcome,
@@ -3179,9 +3245,23 @@ Deno.serve(async (req) => {
         }
       }
 
+      // Students asking to reconsider a lesson counted as lost; the owner
+      // answers within 24 hours (Scuzat / Pierdută).
+      const { data: openAppeals, error: appealsErr } = await supabase
+        .from("bookings")
+        .select(
+          "id, registration_id, start_at, end_at, status, event_type_slug, trial_outcome, student_name, student_phone, appeal_text, appeal_at",
+        )
+        .not("appeal_at", "is", null)
+        .is("appeal_decided_at", null)
+        .order("appeal_at", { ascending: true })
+        .limit(50);
+      if (appealsErr) throw appealsErr;
+
       return jsonResponse({
         data: {
           now: new Date(now).toISOString(),
+          openAppeals: openAppeals ?? [],
           lessons: await withPackageNumbers(lessons ?? []),
           trialsToMark: trialsToMark ?? [],
           refundedLessons,

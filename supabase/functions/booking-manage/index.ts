@@ -14,6 +14,7 @@ import {
   ACTIVE_COHORT_STATUSES,
 } from "../_shared/booking.ts";
 import {
+  ADMIN_RECIPIENT,
   fmtBookingLocal,
   manageUrl,
   sendBookingEmail,
@@ -43,6 +44,29 @@ import { syncPackageTitles } from "../_shared/package-titles.ts";
  * free, and that is what the rule is protecting against.
  */
 const CHANGE_CUTOFF_MS = 24 * 60 * 60 * 1000;
+
+/**
+ * A package lesson counted as lost (no-show, late cancellation) can be
+ * contested once, within two weeks of being marked, from the lesson page
+ * (owner's rule, 26 October 2026). The owner answers within 24 hours.
+ */
+const APPEAL_WINDOW_MS = 14 * 24 * 60 * 60 * 1000;
+
+// deno-lint-ignore no-explicit-any
+function canAppeal(b: any) {
+  if (b.event_type_slug === "trial" || b.event_type_slug === "verificare-nivel")
+    return false;
+  if (b.trial_outcome !== "lost" || b.appeal_at) return false;
+  const markedAt = Date.parse(b.trial_outcome_at ?? b.start_at);
+  return Date.now() - markedAt < APPEAL_WINDOW_MS;
+}
+
+function whatsappUrl(phone: string | null | undefined) {
+  const digits = (phone ?? "").replace(/[^0-9]/g, "");
+  if (digits.length < 8) return null;
+  // A Romanian number written 07…: wa.me needs the country code.
+  return `https://wa.me/${digits.startsWith("0") ? `4${digits}` : digits}`;
+}
 
 function tooLateToChange(startAt: string) {
   return Date.parse(startAt) - Date.now() < CHANGE_CUTOFF_MS;
@@ -132,7 +156,18 @@ Deno.serve(async (req) => {
           // Once it has ended, the student can confirm it took place.
           can_confirm_done:
             booking.status === "confirmed" &&
+            !booking.trial_outcome &&
             Date.parse(booking.end_at) <= Date.now(),
+          // Counted as lost: the student may ask the owner to reconsider.
+          counted_as_lost: booking.trial_outcome === "lost",
+          can_appeal: canAppeal(booking),
+          appeal: booking.appeal_at
+            ? {
+                at: booking.appeal_at,
+                decided_at: booking.appeal_decided_at ?? null,
+                decision: booking.appeal_decision ?? null,
+              }
+            : null,
         },
         tz: TZ,
       });
@@ -142,7 +177,44 @@ Deno.serve(async (req) => {
     // October 2026; the after-lesson email links here). Without it the
     // lesson counts as done 48 hours after it ended (booking-reminders).
     if (req.method === "POST") {
-      const body = (await req.json().catch(() => ({}))) as { action?: string };
+      const body = (await req.json().catch(() => ({}))) as {
+        action?: string;
+        text?: unknown;
+      };
+      if (body?.action === "appeal") {
+        const text = typeof body.text === "string" ? body.text.trim() : "";
+        if (text.length < 5 || text.length > 2000)
+          return json({ error: "invalid text", code: "invalid_text" }, 400);
+        if (!canAppeal(booking))
+          return json({ error: "cannot appeal", code: "cannot_appeal" }, 409);
+        const nowISO = new Date().toISOString();
+        const { data: saved, error: appealErr } = await client()
+          .from("bookings")
+          .update({ appeal_text: text, appeal_at: nowISO })
+          .eq("id", booking.id)
+          .is("appeal_at", null)
+          .select("id");
+        if (appealErr) {
+          console.error("[booking-manage] appeal failed", appealErr);
+          return json({ error: "appeal failed" }, 500);
+        }
+        if (!saved?.length) return json({ ok: true, already: true });
+        await sendBookingEmail(
+          "lesson-appeal-owner",
+          ADMIN_RECIPIENT,
+          {
+            studentName: booking.student_name,
+            studentEmail: booking.student_email,
+            studentPhone: booking.student_phone,
+            whenLabel: fmtBookingLocal(booking.start_at, "ro"),
+            appealText: text,
+            whatsappUrl: whatsappUrl(booking.student_phone),
+            adminUrl: "https://centruldearabalibaneza.com/admin",
+          },
+          `lesson-appeal-${booking.id}`,
+        );
+        return json({ ok: true });
+      }
       if (body?.action !== "confirm_done")
         return json({ error: "unknown action" }, 400);
       if (booking.status === "completed")
