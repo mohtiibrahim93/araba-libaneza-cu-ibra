@@ -47,11 +47,61 @@ import RegistrationCourse, {
   registrationFormatLabel,
 } from "./RegistrationCourse";
 
-interface CancelPreview {
-  within_grace: boolean;
-  grace_days: number;
+/** What supabase/functions/_shared/group-refund.ts works out for one cancellation. */
+export interface CancelPreview {
+  case:
+    | "before_start_full"
+    | "before_start_fee"
+    | "current_month"
+    | "outside_window"
+    | "nothing_paid";
+  cancelDate: string;
+  daysBeforeStart: number | null;
+  daysSinceCharge: number | null;
+  lessonsInMonth: number;
+  lessonsHeld: number;
+  lessonsNotHeld: number;
+  chargedBani: number;
+  eligibleBani: number;
+  feeBani: number;
+  refundBani: number;
+  needs_lessons: boolean;
   refund_amount: number;
+  refund_label: string;
   currency: string;
+}
+
+const lei = (bani: number) =>
+  `${(bani / 100).toLocaleString("ro-RO", { minimumFractionDigits: 2, maximumFractionDigits: 2 })} lei`;
+
+/** The breakdown, in the owner's words, line by line. */
+export function cancelPreviewLines(p: CancelPreview): string[] {
+  switch (p.case) {
+    case "before_start_full":
+      return [
+        `Cursul nu a început: anulare cu ${p.daysBeforeStart} zile înainte de start (7+ zile).`,
+        `Plătit: ${lei(p.chargedBani)} → se rambursează integral.`,
+      ];
+    case "before_start_fee":
+      return [
+        `Cursul nu a început: anulare cu ${p.daysBeforeStart} ${p.daysBeforeStart === 1 ? "zi" : "zile"} înainte de start (sub 7 zile).`,
+        `Plătit: ${lei(p.chargedBani)} − taxa de 10% (${lei(p.feeBani)}).`,
+      ];
+    case "current_month":
+      return [
+        `Luna curentă: plătită acum ${p.daysSinceCharge} ${p.daysSinceCharge === 1 ? "zi" : "zile"} (în fereastra de 7 zile).`,
+        `Lecții în luna asta: ${p.lessonsInMonth} · ținute: ${p.lessonsHeld} · rămase: ${p.lessonsNotHeld}.`,
+        `${lei(p.chargedBani)} × ${p.lessonsNotHeld}/${p.lessonsInMonth} = ${lei(p.eligibleBani)} − taxa de 10% (${lei(p.feeBani)}).`,
+        "Lunile anterioare nu se rambursează.",
+      ];
+    case "outside_window":
+      return [
+        `Luna curentă a fost plătită acum ${p.daysSinceCharge} zile (peste 7 zile): nu se rambursează.`,
+        "Lunile anterioare nu se rambursează.",
+      ];
+    case "nothing_paid":
+      return ["Nu există nicio lună plătită."];
+  }
 }
 
 /** What supabase/functions/_shared/refund.ts works out for one cancellation. */
@@ -325,6 +375,7 @@ const CancelSubscriptionControl = ({
   const [open, setOpen] = useState(false);
   const [preview, setPreview] = useState<CancelPreview | null>(null);
   const [loadingPreview, setLoadingPreview] = useState(false);
+  const [previewError, setPreviewError] = useState("");
 
   // Only group registrations with a live subscription can be cancelled.
   if (!registration.stripe_subscription_id) return null;
@@ -348,20 +399,21 @@ const CancelSubscriptionControl = ({
     if (next) {
       setLoadingPreview(true);
       setPreview(null);
+      setPreviewError("");
       try {
         setPreview(await onPreviewCancel(registration.id));
-      } catch {
+      } catch (err) {
         setPreview(null);
+        setPreviewError(
+          err instanceof Error
+            ? err.message
+            : "Rambursarea nu a putut fi calculată.",
+        );
       } finally {
         setLoadingPreview(false);
       }
     }
   };
-
-  const refundLabel =
-    preview && preview.refund_amount > 0
-      ? `${(preview.refund_amount / 100).toLocaleString("ro-RO")} ${preview.currency}`
-      : null;
 
   return (
     <AlertDialog open={open} onOpenChange={onOpenChange}>
@@ -394,23 +446,38 @@ const CancelSubscriptionControl = ({
                 <p className="text-muted-foreground">
                   Se calculează rambursarea…
                 </p>
-              ) : refundLabel ? (
-                <p className="text-foreground font-medium">
-                  Se rambursează {refundLabel} din luna curentă (în fereastra de{" "}
-                  {preview?.grace_days} zile).
-                </p>
-              ) : (
-                <p className="text-muted-foreground">
-                  Fără rambursare pentru luna curentă (în afara ferestrei de 5
-                  zile).
-                </p>
-              )}
+              ) : previewError ? (
+                <p className="text-destructive">{previewError}</p>
+              ) : preview ? (
+                <>
+                  <ul className="list-disc pl-5 text-muted-foreground">
+                    {cancelPreviewLines(preview).map((line) => (
+                      <li key={line}>{line}</li>
+                    ))}
+                  </ul>
+                  <p className="text-foreground font-medium">
+                    {preview.refundBani > 0
+                      ? `Se rambursează: ${preview.refund_label}`
+                      : "Fără rambursare."}
+                  </p>
+                  {preview.needs_lessons && (
+                    <p className="text-destructive">
+                      Lecțiile grupei din luna curentă nu sunt sincronizate.
+                      Sincronizează lecțiile grupei înainte să anulezi.
+                    </p>
+                  )}
+                </>
+              ) : null}
             </div>
           </AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>
           <AlertDialogCancel>Înapoi</AlertDialogCancel>
           <AlertDialogAction
+            // The amount is shown before the money moves; no confirming blind.
+            disabled={
+              loadingPreview || !preview || !!previewError || preview.needs_lessons
+            }
             onClick={(e) => {
               e.preventDefault();
               onCancelSubscription(registration.id);

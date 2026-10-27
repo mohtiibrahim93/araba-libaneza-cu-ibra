@@ -25,6 +25,10 @@ import {
   formatBani,
   type RefundBreakdown,
 } from "../_shared/refund.ts";
+import {
+  computeGroupCancelRefund,
+  type GroupCharge,
+} from "../_shared/group-refund.ts";
 import { GROUP_MONTHS, KIDS_GROUP_MONTHS } from "../_shared/prices.ts";
 import { sendTemplateEmail } from "../_shared/managed-email.ts";
 import { verifyRegistrationSignature } from "../_shared/registration-access.ts";
@@ -4727,11 +4731,15 @@ Deno.serve(async (req) => {
       });
     }
 
-    // ============ Group subscription cancel + grace refund ============
-    // Cancelling stops all not-yet-billed months automatically. The current
-    // already-paid month is refunded (prorated by unused days) ONLY if the
-    // cancellation lands within the first GRACE_DAYS of the current billing
-    // period; otherwise it is kept. All amounts computed server-side.
+    // ============ Group subscription cancel + refund ============
+    // Owner's rule (27 October 2026), applied by _shared/group-refund.ts and
+    // published in the Terms, section 4. Cancelling always stops every future
+    // monthly charge. Before the start date the month(s) paid come back, in
+    // full 7+ days ahead and minus 10% after that; once the course has
+    // started, only the current month comes back, for its lessons not yet
+    // held, minus 10%, and only within 7 days of that month's charge. The
+    // lessons are the cohort's real ones (cohort_sessions). Everything is
+    // computed here, never taken from the browser.
     if (
       action === "cancel_subscription" ||
       action === "preview_cancel_subscription"
@@ -4741,7 +4749,7 @@ Deno.serve(async (req) => {
       const { data: reg, error: regError } = await supabase
         .from("registrations")
         .select(
-          "id, form_type, stripe_subscription_id, subscription_status, canceled_at",
+          "id, form_type, cohort_id, stripe_subscription_id, subscription_status, canceled_at",
         )
         .eq("id", id)
         .maybeSingle();
@@ -4763,57 +4771,108 @@ Deno.serve(async (req) => {
         apiVersion: "2025-08-27.basil",
       });
 
-      const GRACE_DAYS = 5;
-      const DAY = 86400;
-
       const sub = await stripe.subscriptions.retrieve(
         reg.stripe_subscription_id,
       );
-      const now = Math.floor(Date.now() / 1000);
-      const periodStart = sub.current_period_start ?? now;
-      const periodEnd = sub.current_period_end ?? now + 30 * DAY;
-      const daysInPeriod = Math.max(
-        1,
-        Math.round((periodEnd - periodStart) / DAY),
-      );
-      const daysElapsed = Math.max(0, Math.floor((now - periodStart) / DAY));
+      // Since the basil API the billing period lives on the subscription item.
+      // deno-lint-ignore no-explicit-any
+      const subAny = sub as any;
+      const periodEndUnix: number | undefined =
+        subAny.items?.data?.[0]?.current_period_end ??
+        subAny.current_period_end;
 
-      // Latest paid invoice = the charge for the period they're currently in.
+      // Every paid month, with the payment intent a refund goes against.
+      // (invoice.charge no longer exists in this API version; the payment is
+      // on invoice.payments.)
       const paidInvoices = await stripe.invoices.list({
         subscription: reg.stripe_subscription_id,
         status: "paid",
-        limit: 1,
+        limit: 100,
+        expand: ["data.payments"],
       });
-      const latest = paidInvoices.data[0];
-      const amountPaid = latest?.amount_paid ?? 0;
-      const chargeId =
-        typeof latest?.charge === "string"
-          ? latest.charge
-          : (latest?.charge?.id ?? "");
+      const charges: GroupCharge[] = [];
+      for (const inv of paidInvoices.data) {
+        // deno-lint-ignore no-explicit-any
+        const payments = ((inv as any).payments?.data ?? []) as any[];
+        const pi = payments
+          .map((p) => p?.payment?.payment_intent)
+          .find(Boolean);
+        const paymentId = typeof pi === "string" ? pi : (pi?.id ?? "");
+        if (!paymentId || !inv.amount_paid) continue;
+        let refundedBani = 0;
+        try {
+          const intent = await stripe.paymentIntents.retrieve(paymentId);
+          refundedBani = Number(intent.amount_refunded ?? 0);
+        } catch (e) {
+          console.error("[cancel_subscription] payment read failed", e);
+        }
+        const paidAtUnix =
+          // deno-lint-ignore no-explicit-any
+          (inv as any).status_transitions?.paid_at ?? inv.created;
+        charges.push({
+          paymentId,
+          amountBani: inv.amount_paid,
+          refundedBani,
+          chargedAt: new Date(paidAtUnix * 1000).toISOString(),
+        });
+      }
 
-      const withinGrace = daysElapsed < GRACE_DAYS;
-      const remainingDays = daysInPeriod - daysElapsed;
-      const refundAmount =
-        withinGrace && chargeId
-          ? Math.round((amountPaid * remainingDays) / daysInPeriod)
-          : 0;
+      let courseStartDate: string | null = null;
+      let sessionStarts: string[] = [];
+      if (reg.cohort_id) {
+        const { data: cohort } = await supabase
+          .from("group_cohorts")
+          .select("start_date")
+          .eq("id", reg.cohort_id)
+          .maybeSingle();
+        courseStartDate =
+          (cohort as { start_date: string | null } | null)?.start_date ?? null;
+        const { data: sessions, error: sessErr } = await supabase
+          .from("cohort_sessions")
+          .select("starts_at")
+          .eq("cohort_id", reg.cohort_id)
+          .order("starts_at");
+        if (sessErr) throw sessErr;
+        sessionStarts = (sessions ?? []).map(
+          (s: { starts_at: string }) => s.starts_at,
+        );
+      }
+
+      const breakdown = computeGroupCancelRefund({
+        charges,
+        courseStartDate,
+        sessionStarts,
+        currentPeriodEnd: periodEndUnix
+          ? new Date(periodEndUnix * 1000).toISOString()
+          : null,
+      });
+      // After the start the month's lessons decide the amount; with no
+      // lessons known (the calendar not synced) the refund would read 0
+      // without anyone noticing. Say so instead.
+      const needsLessons =
+        breakdown.case === "current_month" && breakdown.lessonsInMonth === 0;
+      const currency = (paidInvoices.data[0]?.currency || "ron").toUpperCase();
 
       // Read-only preview for the admin confirm dialog — no side effects.
       if (action === "preview_cancel_subscription") {
         return jsonResponse({
           data: {
-            within_grace: withinGrace,
-            grace_days: GRACE_DAYS,
-            days_elapsed: daysElapsed,
-            days_in_period: daysInPeriod,
-            refund_amount: refundAmount,
-            currency: (latest?.currency || "ron").toUpperCase(),
+            ...breakdown,
+            needs_lessons: needsLessons,
+            refund_amount: breakdown.refundBani,
+            refund_label: formatBani(breakdown.refundBani),
+            currency,
           },
         });
       }
+      if (needsLessons) {
+        return jsonResponse({
+          error:
+            "Lecțiile grupei din luna curentă nu sunt sincronizate din Google Calendar. Sincronizează lecțiile grupei, apoi anulează.",
+        });
+      }
 
-      // Cancel first (stops future invoices), then refund the current month if
-      // within the grace window.
+      // Cancel first (stops future invoices), then refund what the rule gives.
       try {
         await stripe.subscriptions.cancel(reg.stripe_subscription_id);
       } catch (cancelErr) {
@@ -4826,30 +4885,34 @@ Deno.serve(async (req) => {
         return jsonResponse({ error: `Anulare eșuată: ${msg}` });
       }
 
-      let refundId: string | null = null;
-      if (refundAmount > 0 && chargeId) {
+      const refundIds: string[] = [];
+      let refundedTotal = 0;
+      for (const line of breakdown.refunds) {
+        if (line.amountBani <= 0) continue;
         try {
-          const refund = await stripe.refunds.create({
-            charge: chargeId,
-            amount: refundAmount,
-          });
-          refundId = refund.id;
+          const refund = await stripe.refunds.create(
+            { payment_intent: line.paymentId, amount: line.amountBani },
+            { idempotencyKey: `sub_cancel_${id}_${line.paymentId}` },
+          );
+          refundIds.push(refund.id);
+          refundedTotal += line.amountBani;
         } catch (refundErr) {
-          // Subscription is already cancelled; log so the refund can be issued
-          // by hand rather than silently dropped.
+          // The subscription is already cancelled; log so the refund can be
+          // issued by hand rather than silently dropped.
           console.error(
-            "[admin-registrations] grace refund failed after cancel",
-            refundErr,
+            "[admin-registrations] cancel refund failed after cancel",
+            { registrationId: id, line, refundErr },
           );
         }
       }
+      const refundFailed = refundedTotal < breakdown.refundBani;
 
       const { data: updated, error: updateError } = await supabase
         .from("registrations")
         .update({
           subscription_status: "canceled",
           canceled_at: new Date().toISOString(),
-          refunded_amount: refundId ? refundAmount : 0,
+          refunded_amount: refundedTotal,
         })
         .eq("id", id)
         .select("*")
@@ -4859,7 +4922,7 @@ Deno.serve(async (req) => {
           "[admin-registrations] cancel saved in Stripe but DB update failed",
           {
             registrationId: id,
-            refundId,
+            refundIds,
             updateError,
           },
         );
@@ -4874,15 +4937,19 @@ Deno.serve(async (req) => {
         action: "cancel_subscription",
         registration_id: id,
         details: {
-          refund_id: refundId,
-          refund_amount: refundId ? refundAmount : 0,
+          refund_ids: refundIds,
+          refund_amount: refundedTotal,
+          refund_failed: refundFailed,
+          ...breakdown,
         },
       });
       return jsonResponse({
         success: true,
         data: updated,
-        refund_id: refundId,
-        refund_amount: refundId ? refundAmount : 0,
+        refund_ids: refundIds,
+        refund_amount: refundedTotal,
+        refund_failed: refundFailed,
+        breakdown,
       });
     }
 
