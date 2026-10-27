@@ -406,6 +406,30 @@ serve(async (req) => {
           break;
         }
 
+        // The kids seat deposit is not the course: it gets its own marker and
+        // payment_status (the course's money) is left as it was, so the course
+        // stays payable. Owner's decision, 27 October 2026.
+        if (session.metadata?.course_type === "kids_deposit") {
+          const depositMatch = registrationId
+            ? { column: "id", value: registrationId }
+            : { column: "deposit_session_id", value: sessionId };
+          const { error: depositErr } = await supabase
+            .from("registrations")
+            .update({
+              deposit_paid_at: new Date().toISOString(),
+              deposit_amount: session.amount_total ?? null,
+              deposit_session_id: sessionId,
+            })
+            .eq(depositMatch.column, depositMatch.value)
+            .is("deposit_paid_at", null);
+          if (depositErr) {
+            console.error("Failed to record the kids deposit:", depositErr);
+            throw depositErr;
+          }
+          console.log(`Kids deposit recorded for session ${sessionId}`);
+          break;
+        }
+
         // Match by registration_id from metadata first, fallback to session_id
         const matchColumn = registrationId ? "id" : "stripe_session_id";
         const matchValue = registrationId || sessionId;

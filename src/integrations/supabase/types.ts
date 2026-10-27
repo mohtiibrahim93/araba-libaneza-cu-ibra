@@ -1175,6 +1175,9 @@ export type Database = {
       }
       registrations: {
         Row: {
+          deposit_amount: number | null
+          deposit_paid_at: string | null
+          deposit_session_id: string | null
           anonymized_at: string | null
           canceled_at: string | null
           card_fingerprint: string | null
@@ -1218,6 +1221,9 @@ export type Database = {
           whatsapp_sent_at: string | null
         }
         Insert: {
+          deposit_amount?: number | null
+          deposit_paid_at?: string | null
+          deposit_session_id?: string | null
           anonymized_at?: string | null
           canceled_at?: string | null
           card_fingerprint?: string | null
@@ -1261,6 +1267,9 @@ export type Database = {
           whatsapp_sent_at?: string | null
         }
         Update: {
+          deposit_amount?: number | null
+          deposit_paid_at?: string | null
+          deposit_session_id?: string | null
           anonymized_at?: string | null
           canceled_at?: string | null
           card_fingerprint?: string | null

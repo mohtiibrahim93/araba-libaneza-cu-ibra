@@ -143,11 +143,20 @@ const badge = (cls: string, label: string) => (
 
 const paymentBadge = (r: Registration) => {
   const partial = partialRefundNote(r);
-  if (!partial) return paymentStatusBadge(r);
+  // The kids deposit has its own marker: the course itself is still payable.
+  const deposit = r.deposit_paid_at
+    ? `avans plătit${r.deposit_amount ? `: ${(r.deposit_amount / 100).toLocaleString("ro-RO")} lei` : ""}`
+    : null;
+  if (!partial && !deposit) return paymentStatusBadge(r);
   return (
     <span className="inline-flex flex-wrap items-center gap-1">
       {paymentStatusBadge(r)}
-      {badge("bg-muted text-muted-foreground", partial)}
+      {partial && badge("bg-muted text-muted-foreground", partial)}
+      {deposit &&
+        badge(
+          "bg-emerald-500/10 text-emerald-700 dark:text-emerald-400",
+          deposit,
+        )}
     </span>
   );
 };

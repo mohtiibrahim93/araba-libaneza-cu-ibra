@@ -76,6 +76,9 @@ export interface Registration {
   months_paid?: number | null;
   canceled_at?: string | null;
   refunded_amount?: number | null;
+  /** Kids seat deposit, kept apart from payment_status (the course's money). */
+  deposit_paid_at?: string | null;
+  deposit_amount?: number | null;
   anonymized_at?: string | null;
   /**
    * Language the student needs the class explained in, from the site language
