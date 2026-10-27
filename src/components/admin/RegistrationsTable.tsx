@@ -89,14 +89,14 @@ export function cancelPreviewLines(p: CancelPreview): string[] {
       ];
     case "current_month":
       return [
-        `Luna curentă: plătită acum ${p.daysSinceCharge} ${p.daysSinceCharge === 1 ? "zi" : "zile"} (în fereastra de 7 zile).`,
+        `Luna curentă: ${p.daysSinceCharge} ${p.daysSinceCharge === 1 ? "zi" : "zile"} de la plată sau de la începerea cursului (în fereastra de 7 zile).`,
         `Lecții în luna asta: ${p.lessonsInMonth} · ținute: ${p.lessonsHeld} · rămase: ${p.lessonsNotHeld}.`,
         `${lei(p.chargedBani)} × ${p.lessonsNotHeld}/${p.lessonsInMonth} = ${lei(p.eligibleBani)} − taxa de 10% (${lei(p.feeBani)}).`,
         "Lunile anterioare nu se rambursează.",
       ];
     case "outside_window":
       return [
-        `Luna curentă a fost plătită acum ${p.daysSinceCharge} zile (peste 7 zile): nu se rambursează.`,
+        `Luna curentă: ${p.daysSinceCharge} zile de la plată sau de la începerea cursului (peste 7 zile): nu se rambursează.`,
         "Lunile anterioare nu se rambursează.",
       ];
     case "nothing_paid":

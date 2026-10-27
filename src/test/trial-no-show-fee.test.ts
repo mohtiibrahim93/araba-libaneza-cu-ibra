@@ -32,7 +32,11 @@ describe("trial no-show fee", () => {
     expect(block).toContain("confirm: true");
     expect(block).toContain("payment_method: paymentMethodId");
     expect(block).toContain(
-      "{ idempotencyKey: `trial_no_show_fee_${booking.id}` }",
+      "idempotencyKey: `trial_no_show_fee_${booking.id}_${Number(reg.no_show_fee_attempts ?? 0)}`",
+    );
+    // A decline moves to the next attempt; a success does not.
+    expect(block).toContain(
+      "no_show_fee_attempts: Number(reg.no_show_fee_attempts ?? 0) + 1",
     );
     expect(block).toContain('purpose: "trial_no_show_fee"');
   });

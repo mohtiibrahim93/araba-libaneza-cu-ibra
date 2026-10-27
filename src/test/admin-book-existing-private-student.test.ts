@@ -200,12 +200,31 @@ describe("book a lesson for an existing private student", () => {
       action: "book_for_student",
       student_name: "Nou Student",
       student_email: "nou@example.test",
+      student_phone: "+40700000000",
       start_at: slot.start_at,
     });
     const regWrites = h.writes
       .filter((w) => w.table === "registrations")
       .map((w) => w.op);
     expect(regWrites).toEqual(["insert", "delete"]);
+  });
+
+  it("refuses a new student without a phone (owner's rule, 27 October 2026)", async () => {
+    const h = harness(
+      { registrations: [] },
+      { status: 200, body: { ok: true } },
+    );
+    const res = await (
+      await h.call({
+        action: "book_for_student",
+        student_name: "Fara Telefon",
+        student_email: "fara@example.test",
+        start_at: slot.start_at,
+      })
+    ).json();
+    expect(res.error).toBe("Telefonul este obligatoriu.");
+    expect(h.writes.filter((w) => w.table === "registrations")).toEqual([]);
+    expect(h.fetchMock).not.toHaveBeenCalled();
   });
 });
 

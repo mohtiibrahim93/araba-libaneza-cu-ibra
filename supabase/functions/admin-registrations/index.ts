@@ -1230,7 +1230,10 @@ Deno.serve(async (req) => {
       const mEmail = clean(email, 320);
       if (!mName) return jsonResponse({ error: "Numele e obligatoriu" });
       if (!mPhone) return jsonResponse({ error: "Telefonul e obligatoriu" });
-      if (mEmail && !/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(mEmail))
+      // Name, email, phone, course type and format on every registration,
+      // the owner's tools included (owner's rule, 27 October 2026).
+      if (!mEmail) return jsonResponse({ error: "Emailul e obligatoriu" });
+      if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(mEmail))
         return jsonResponse({ error: "Email invalid" });
       if (typeof mSource !== "string" || !MANUAL_SOURCES.includes(mSource))
         return jsonResponse({ error: "Sursă invalidă" });
@@ -1886,8 +1889,11 @@ Deno.serve(async (req) => {
         return jsonResponse({ error: "Numele este obligatoriu." }, 400);
       if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email) || email.length > 254)
         return jsonResponse({ error: "Emailul nu este valid." }, 400);
-      if (phone && phone.length > 40)
-        return jsonResponse({ error: "Telefonul nu este valid." }, 400);
+      // Required: the import creates a registration (owner's rule, 27 October
+      // 2026). Only the automatic import by the calendar sync has no phone to
+      // give, since a Google event carries none.
+      if (!phone || phone.length < 3 || phone.length > 40)
+        return jsonResponse({ error: "Telefonul este obligatoriu." }, 400);
       try {
         const out = await importCalendarEvent(
           supabase,
@@ -2049,7 +2055,7 @@ Deno.serve(async (req) => {
       const { data: reg, error: rErr } = await supabase
         .from("registrations")
         .select(
-          "id, email, stripe_session_id, no_show_fee_status, no_show_fee_booking_id, no_show_fee_intent_id, no_show_fee_error",
+          "id, email, stripe_session_id, no_show_fee_status, no_show_fee_booking_id, no_show_fee_intent_id, no_show_fee_error, no_show_fee_attempts",
         )
         .eq("id", booking.registration_id)
         .maybeSingle();
@@ -2140,7 +2146,11 @@ Deno.serve(async (req) => {
               purpose: "trial_no_show_fee",
             },
           },
-          { idempotencyKey: `trial_no_show_fee_${booking.id}` },
+          // Per booking and per attempt: the same attempt can never charge
+          // twice, and a new attempt is only possible after a recorded decline.
+          {
+            idempotencyKey: `trial_no_show_fee_${booking.id}_${Number(reg.no_show_fee_attempts ?? 0)}`,
+          },
         );
       } catch (e) {
         // A declined card, or one that needs the cardholder (3-D Secure),
@@ -2167,6 +2177,7 @@ Deno.serve(async (req) => {
             : {
                 no_show_fee_status: "failed",
                 no_show_fee_booking_id: booking.id,
+                no_show_fee_attempts: Number(reg.no_show_fee_attempts ?? 0) + 1,
                 no_show_fee_intent_id: intent?.id ?? null,
                 no_show_fee_at: nowIso,
                 no_show_fee_error: failure.slice(0, 500),
@@ -4220,6 +4231,15 @@ Deno.serve(async (req) => {
         return jsonResponse({ error: "Numele este obligatoriu." });
       if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(studentEmail)) {
         return jsonResponse({ error: "Emailul nu este valid." });
+      }
+      // A new registration needs a phone too (owner's rule, 27 October 2026).
+      // Booking onto an existing registration creates none, so it is not asked.
+      if ((!existing || extra) && studentPhone.length < 3) {
+        return jsonResponse({
+          error: existing
+            ? "Cursantul nu are telefon salvat. Adaugă-l din fișa lui, apoi programează."
+            : "Telefonul este obligatoriu.",
+        });
       }
       if (!Number.isFinite(Date.parse(startAt))) {
         return jsonResponse({ error: "Data sau ora nu sunt valide." });

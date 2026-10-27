@@ -1184,6 +1184,7 @@ export type Database = {
       }
       registrations: {
         Row: {
+          no_show_fee_attempts: number
           no_show_fee_amount: number | null
           no_show_fee_at: string | null
           no_show_fee_booking_id: string | null
@@ -1237,6 +1238,7 @@ export type Database = {
           whatsapp_sent_at: string | null
         }
         Insert: {
+          no_show_fee_attempts?: number
           no_show_fee_amount?: number | null
           no_show_fee_at?: string | null
           no_show_fee_booking_id?: string | null
@@ -1290,6 +1292,7 @@ export type Database = {
           whatsapp_sent_at?: string | null
         }
         Update: {
+          no_show_fee_attempts?: number
           no_show_fee_amount?: number | null
           no_show_fee_at?: string | null
           no_show_fee_booking_id?: string | null

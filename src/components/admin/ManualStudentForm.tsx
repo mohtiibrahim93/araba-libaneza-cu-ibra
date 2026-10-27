@@ -146,13 +146,14 @@ const ManualStudentForm = ({ onAdded }: { onAdded?: () => void }) => {
           />
         </div>
         <div className="space-y-1.5">
-          <Label htmlFor="ms-email">Email</Label>
+          <Label htmlFor="ms-email">Email *</Label>
           <Input
             id="ms-email"
             type="email"
             value={f.email}
             onChange={(e) => setF({ ...f, email: e.target.value })}
             maxLength={320}
+            required
           />
         </div>
         <div className="space-y-1.5 sm:col-span-2">
@@ -228,7 +229,13 @@ const ManualStudentForm = ({ onAdded }: { onAdded?: () => void }) => {
       <Button
         className="mt-4"
         onClick={save}
-        disabled={saving || !f.name.trim() || !f.phone.trim() || !f.cohort_id}
+        disabled={
+          saving ||
+          !f.name.trim() ||
+          !f.phone.trim() ||
+          !f.email.trim() ||
+          !f.cohort_id
+        }
       >
         {saving ? (
           <Loader2 className="mr-2 h-4 w-4 animate-spin" />

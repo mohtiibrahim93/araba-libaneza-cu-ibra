@@ -12,7 +12,8 @@
 //   After the course has started:
 //     - the month now being paid for is refunded for the lessons of that month
 //       not yet held, minus 10% — only if the cancellation comes within 7 days
-//       of that month's charge; later than that, nothing for that month;
+//       (day 7 included) of that month's charge, or of the start date when
+//       that month was paid before the course began; later, nothing for it;
 //     - months before the current one are never refunded.
 //
 // "The lessons of that month" are the cohort's real lessons (cohort_sessions,
@@ -205,10 +206,16 @@ export function computeGroupCancelRefund(
     .filter((t) => Number.isFinite(t) && t >= startMs && t < endMs);
   const held = inMonth.filter((t) => t <= cancelMs).length;
   const notHeld = inMonth.length - held;
-  const daysSinceCharge = calendarDaysBetween(
-    bucharestDate(periodStart),
-    cancelDate,
-  );
+  // The 7 days run from the month's charge. A month paid before the course
+  // started counts from the start date instead (owner, 27 October 2026):
+  // otherwise someone who paid three weeks early could not get anything back
+  // even on the first day of lessons.
+  const chargeDate = bucharestDate(periodStart);
+  const windowFrom =
+    input.courseStartDate && input.courseStartDate > chargeDate
+      ? input.courseStartDate
+      : chargeDate;
+  const daysSinceCharge = calendarDaysBetween(windowFrom, cancelDate);
   const amount = remaining(current);
 
   const base = {

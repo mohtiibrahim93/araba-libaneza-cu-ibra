@@ -133,6 +133,7 @@ describe("exact enrolment group lookup", () => {
             action: "book_for_student",
             student_name: "Synthetic Student",
             student_email: "synthetic@example.test",
+            student_phone: "+40700000000",
             start_at: "2026-11-04T12:00:00Z",
           })
         ).json(),

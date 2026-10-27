@@ -11,8 +11,13 @@
 --
 -- no_show_fee_status   'paid' (charged), 'failed' (the card was declined or
 --                      needed the cardholder; nothing was charged), 'refunded'
--- no_show_fee_booking_id  the trial booking it was charged for; the Stripe
---                      idempotency key is per booking
+-- no_show_fee_booking_id  the trial booking it was charged for
+-- no_show_fee_attempts    declined attempts so far. The Stripe idempotency
+--                      key is per booking and per attempt: a double click or
+--                      a resend of the same attempt can never charge twice,
+--                      and after a decline the owner can try again (the card
+--                      may have been topped up) without Stripe replaying the
+--                      cached decline for 24 hours.
 -- no_show_fee_intent_id   the Stripe PaymentIntent (what a refund goes against)
 
 alter table public.registrations
@@ -24,4 +29,6 @@ alter table public.registrations
     check (no_show_fee_amount is null or no_show_fee_amount > 0),
   add column if not exists no_show_fee_at timestamptz,
   add column if not exists no_show_fee_error text,
-  add column if not exists no_show_fee_refunded_amount integer;
+  add column if not exists no_show_fee_refunded_amount integer,
+  add column if not exists no_show_fee_attempts integer not null default 0
+    check (no_show_fee_attempts >= 0);
