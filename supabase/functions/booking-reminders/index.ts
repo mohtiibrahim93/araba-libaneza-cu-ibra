@@ -3,16 +3,22 @@ import { json as _json } from "../_shared/booking.ts";
 import { fmtBookingLocal, manageUrl } from "../_shared/booking-emails.ts";
 import { sendTemplateEmail } from "../_shared/managed-email.ts";
 import { buildCorsHeaders } from "../_shared/cors.ts";
+import {
+  reminderDue,
+  reminderInLabel,
+  type ReminderBooking,
+} from "../_shared/reminder-schedule.ts";
 
 /**
- * Cron-driven (every 15 min). Sends multi-stage reminders for each confirmed booking:
- *   - 2 days before        → reminder_2d_sent_at
- *   - Day-of (>= 08:00)    → reminder_day_of_sent_at
- *   - 3 hours before       → reminder_3h_sent_at
- *   - 1 hour before        → reminder_1h_sent_at
- *   - 30 minutes before    → reminder_30m_sent_at
- * Each stage uses a ±7.5 min window around its target so a 15-min cron tick
- * catches each booking exactly once. The dedupe flag is stamped on send.
+ * Cron-driven (every 15 min). Lesson reminders on the owner's schedule
+ * (27 October 2026), decided per booking by _shared/reminder-schedule.ts:
+ *   - every morning at 08:00 Bucharest time, from the day after the booking
+ *     (or the last move) up to and including the lesson day;
+ *   - on the lesson day, also 1 hour before.
+ * The stamp (morning_reminder_on / reminder_1h_sent_at) is written only once
+ * the email went out, and the idempotency key names the lesson time, so a
+ * retry never sends twice and a moved lesson is a new key. A move resets the
+ * stamps in the database (trigger in 20261027130000_lesson_reminder_schedule).
  */
 Deno.serve(async (req) => {
   const corsHeaders = buildCorsHeaders(req);
@@ -36,167 +42,82 @@ Deno.serve(async (req) => {
   );
 
   const now = Date.now();
-  const HALF_WINDOW_MS = 7.5 * 60_000; // ±7.5 min around each target offset
+  const nowISO = new Date(now).toISOString();
 
-  type Stage = {
-    key: "2d" | "day_of" | "3h" | "1h" | "30m";
-    flag:
-      | "reminder_2d_sent_at"
-      | "reminder_day_of_sent_at"
-      | "reminder_3h_sent_at"
-      | "reminder_1h_sent_at"
-      | "reminder_30m_sent_at";
-    lo: string;
-    hi: string;
-    inLabelRo: string;
-    inLabelEn: string;
+  type ReminderRow = ReminderBooking & {
+    id: string;
+    student_name: string;
+    student_email: string | null;
+    format: string;
+    meet_link: string | null;
+    manage_token: string;
+    language: string | null;
   };
 
-  function offsetStage(
-    key: Stage["key"],
-    flag: Stage["flag"],
-    targetMsAhead: number,
-    inLabelRo: string,
-    inLabelEn: string,
-  ): Stage {
-    return {
-      key,
-      flag,
-      lo: new Date(now + targetMsAhead - HALF_WINDOW_MS).toISOString(),
-      hi: new Date(now + targetMsAhead + HALF_WINDOW_MS).toISOString(),
-      inLabelRo,
-      inLabelEn,
-    };
-  }
+  // Every lesson still to come gets a reminder each morning until its day, so
+  // all upcoming confirmed lessons are read; the rule decides per lesson.
+  const { data: upcoming, error: upcomingErr } = await supabase
+    .from("bookings")
+    .select(
+      "id,start_at,student_name,student_email,format,meet_link,manage_token,language,reminders_from,morning_reminder_on,reminder_1h_sent_at,reminders_enabled",
+    )
+    .eq("status", "confirmed")
+    .gt("start_at", nowISO)
+    .eq("reminders_enabled", true)
+    .order("start_at")
+    .limit(1000);
+  if (upcomingErr) console.error("[reminders] query failed", upcomingErr);
 
-  // Day-of stage: any confirmed booking whose start_at is later today (>= now)
-  // and within the next 24h. Gated by server local time >= 08:00 so we don't
-  // wake people up. The dedupe flag ensures only one tick wins per booking.
-  const dayOfWindow = (): Stage => {
-    const todayStart = new Date(now);
-    todayStart.setHours(0, 0, 0, 0);
-    const todayEnd = new Date(todayStart.getTime() + 24 * 3_600_000);
-    return {
-      key: "day_of",
-      flag: "reminder_day_of_sent_at",
-      lo: new Date(now).toISOString(),
-      hi: todayEnd.toISOString(),
-      inLabelRo: "astăzi",
-      inLabelEn: "today",
-    };
-  };
-
-  const stages: Stage[] = [
-    offsetStage(
-      "2d",
-      "reminder_2d_sent_at",
-      48 * 3_600_000,
-      "în 2 zile",
-      "in 2 days",
-    ),
-    offsetStage(
-      "3h",
-      "reminder_3h_sent_at",
-      3 * 3_600_000,
-      "în 3 ore",
-      "in 3 hours",
-    ),
-    offsetStage(
-      "1h",
-      "reminder_1h_sent_at",
-      1 * 3_600_000,
-      "în 1 oră",
-      "in 1 hour",
-    ),
-    offsetStage(
-      "30m",
-      "reminder_30m_sent_at",
-      30 * 60_000,
-      "în 30 de minute",
-      "in 30 minutes",
-    ),
-  ];
-
-  // Only run the day-of stage after 08:00 server-local time.
-  if (new Date(now).getHours() >= 8) {
-    stages.push(dayOfWindow());
-  }
-
-  async function runStage(stage: Stage) {
-    const { data: rows, error } = await supabase
+  let sent = 0;
+  let failed = 0;
+  for (const r of (upcoming ?? []) as unknown as ReminderRow[]) {
+    const due = reminderDue(r, nowISO);
+    if (!due || !r.student_email) continue;
+    const lang = r.language === "en" ? "en" : "ro";
+    const startMs = Date.parse(r.start_at);
+    // Stamp the reminder only once the send went through (or the recipient
+    // is suppressed), so a failed send is retried on the next run. The
+    // idempotency key stops a double send.
+    try {
+      await sendTemplateEmail("booking-reminder", r.student_email, {
+        templateData: {
+          name: r.student_name,
+          whenLabel: fmtBookingLocal(r.start_at, lang),
+          inLabel: reminderInLabel(due, lang),
+          format: r.format,
+          meetLink: r.meet_link,
+          manageUrl: manageUrl(r.manage_token),
+          lang,
+        },
+        idempotencyKey:
+          due.kind === "morning"
+            ? `booking-reminder-morning-${r.id}-${due.day}-${startMs}`
+            : `booking-reminder-1h-${r.id}-${startMs}`,
+      });
+    } catch (err) {
+      console.error("[reminders] send failed; will retry", due.kind, r.id, err);
+      failed++;
+      continue;
+    }
+    // Only if the lesson was not moved meanwhile: a move resets the stamps,
+    // and this must not write an old stamp over the reset.
+    await supabase
       .from("bookings")
-      .select(
-        "id,start_at,student_name,student_email,format,meet_link,manage_token,language," +
-          stage.flag,
+      .update(
+        due.kind === "morning"
+          ? { morning_reminder_on: due.day }
+          : { reminder_1h_sent_at: new Date().toISOString() },
       )
-      .eq("status", "confirmed")
-      .gte("start_at", stage.lo)
-      .lte("start_at", stage.hi)
-      .is(stage.flag, null);
-
-    if (error) {
-      console.error("[reminders] query failed", stage.key, error);
-      return { stage: stage.key, sent: 0, error: error.message };
-    }
-
-    type ReminderRow = {
-      id: string;
-      start_at: string;
-      student_name: string;
-      student_email: string;
-      format: string;
-      meet_link: string | null;
-      manage_token: string;
-      language: string | null;
-    };
-    const rowsTyped = (rows ?? []) as unknown as ReminderRow[];
-
-    let sent = 0;
-    let failed = 0;
-    for (const r of rowsTyped) {
-      const lang = (r.language as "ro" | "en") ?? "ro";
-      // Stamp the reminder only once the send went through (or the recipient
-      // is suppressed), so a failed send is retried on the next run while the
-      // stage window is still open. The idempotency key stops a double send.
-      try {
-        await sendTemplateEmail("booking-reminder", r.student_email, {
-          templateData: {
-            name: r.student_name,
-            whenLabel: fmtBookingLocal(r.start_at, lang),
-            inLabel: lang === "en" ? stage.inLabelEn : stage.inLabelRo,
-            format: r.format,
-            meetLink: r.meet_link,
-            manageUrl: manageUrl(r.manage_token),
-            lang,
-          },
-          idempotencyKey: `booking-reminder-${stage.key}-${r.id}`,
-        });
-      } catch (err) {
-        console.error(
-          "[reminders] send failed; will retry",
-          stage.key,
-          r.id,
-          err,
-        );
-        failed++;
-        continue;
-      }
-      await supabase
-        .from("bookings")
-        .update({ [stage.flag]: new Date().toISOString() })
-        .eq("id", r.id);
-      sent++;
-    }
-    return { stage: stage.key, sent, failed };
+      .eq("id", r.id)
+      .eq("start_at", r.start_at);
+    sent++;
   }
-
-  const results = await Promise.all(stages.map(runStage));
+  const results = { sent, failed };
 
   // After the lesson (owner's request, 14 October 2026): ask the student to
   // confirm it took place, once, stamped only when the email went out.
   // Lessons that had already ended when this started were stamped by the
   // migration, so nobody gets an email about an old lesson.
-  const nowISO = new Date(now).toISOString();
   let doneChecks = 0;
   let doneCheckFailed = 0;
   const { data: ended, error: endedErr } = await supabase

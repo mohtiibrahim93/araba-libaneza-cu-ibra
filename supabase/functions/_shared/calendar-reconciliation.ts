@@ -648,12 +648,19 @@ async function autoImportLesson(
       language: "ro",
       google_event_id: event.id,
       google_contact_email: guest.email,
-      meet_link: lessonMeetingLink(event, registration.format !== "fizic", zoomUrl),
+      meet_link: lessonMeetingLink(
+        event,
+        registration.format !== "fizic",
+        zoomUrl,
+      ),
       reminder_2d_sent_at: now,
       reminder_day_of_sent_at: now,
       reminder_3h_sent_at: now,
       reminder_1h_sent_at: now,
       reminder_30m_sent_at: now,
+      // The owner arranged these himself: no reminder emails
+      // (_shared/reminder-schedule.ts reads this).
+      reminders_enabled: false,
     })
     .select("id")
     .single();
@@ -782,7 +789,11 @@ export async function importCalendarEvent(
       language: "ro",
       google_event_id: input.eventId,
       google_contact_email: input.email,
-      meet_link: lessonMeetingLink(event, input.format === "online", config.zoomUrl),
+      meet_link: lessonMeetingLink(
+        event,
+        input.format === "online",
+        config.zoomUrl,
+      ),
     })
     .select("id")
     .single();

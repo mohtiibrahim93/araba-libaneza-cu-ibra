@@ -303,6 +303,9 @@ export type Database = {
       }
       bookings: {
         Row: {
+          morning_reminder_on: string | null
+          reminders_enabled: boolean
+          reminders_from: string
           appeal_at: string | null
           appeal_decided_at: string | null
           appeal_decision: string | null
@@ -346,6 +349,9 @@ export type Database = {
           updated_at: string
         }
         Insert: {
+          morning_reminder_on?: string | null
+          reminders_enabled?: boolean
+          reminders_from?: string
           appeal_at?: string | null
           appeal_decided_at?: string | null
           appeal_decision?: string | null
@@ -389,6 +395,9 @@ export type Database = {
           updated_at?: string
         }
         Update: {
+          morning_reminder_on?: string | null
+          reminders_enabled?: boolean
+          reminders_from?: string
           appeal_at?: string | null
           appeal_decided_at?: string | null
           appeal_decision?: string | null
