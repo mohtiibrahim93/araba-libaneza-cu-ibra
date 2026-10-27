@@ -61,6 +61,10 @@ export function loadEdgeHandler(
   new Function("require", "exports", "Deno", compiled)(
     (name: string) => {
       if (name in imports) return imports[name];
+      // Emails about lessons deleted in Google: a service boundary that only
+      // the calendar sync's own tests need to see, so a no-op by default.
+      if (name === "../_shared/calendar-cancel-emails.ts")
+        return { notifyGoogleCancellations: async () => {} };
       // The package-lesson helpers (`../_shared/package-lessons.ts`,
       // `../_shared/package-titles.ts`) are shared code, not a service
       // boundary: load them as they are, with the same stubs and environment.

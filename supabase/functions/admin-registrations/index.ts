@@ -31,6 +31,7 @@ import {
 } from "../_shared/group-refund.ts";
 import { GROUP_MONTHS, KIDS_GROUP_MONTHS } from "../_shared/prices.ts";
 import { sendTemplateEmail } from "../_shared/managed-email.ts";
+import { notifyGoogleCancellations } from "../_shared/calendar-cancel-emails.ts";
 import { verifyRegistrationSignature } from "../_shared/registration-access.ts";
 import {
   countsAgainstPackage,
@@ -1910,6 +1911,9 @@ Deno.serve(async (req) => {
         from,
         to,
       });
+      // Lessons deleted in Google: the student and the owner are told, the
+      // same as when the scheduled sync finds them. No refund is made.
+      await notifyGoogleCancellations(result.cancelledInGoogle);
       return jsonResponse({
         success: result.errors.length === 0,
         data: result,

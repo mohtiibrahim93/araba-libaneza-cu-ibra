@@ -45,6 +45,18 @@ export function lessonMeetingLink(
 }
 
 /** Synchronize exact existing links. A missing event is an error, never a deletion. */
+/** A lesson deleted in the owner's Google Calendar and cancelled here. */
+export interface CancelledInGoogle {
+  id: string;
+  event_type_slug: string | null;
+  start_at: string;
+  student_name: string | null;
+  student_email: string | null;
+  student_phone: string | null;
+  format: string | null;
+  language: string | null;
+}
+
 export async function reconcileCalendar(
   db: any,
   config: Config,
@@ -55,6 +67,10 @@ export async function reconcileCalendar(
     pushed: 0,
     imported: 0,
     errors: [] as string[],
+    // Upcoming lessons this run found deleted in Google and cancelled here.
+    // The callers email the student and the owner (calendar-cancel-emails.ts);
+    // nothing is refunded automatically.
+    cancelledInGoogle: [] as CancelledInGoogle[],
     unmatched: [] as Array<{
       id: string;
       summary: string;
@@ -85,7 +101,7 @@ export async function reconcileCalendar(
   };
   const bookings = await all(
     "bookings",
-    "id,registration_id,event_type_slug,start_at,end_at,status,google_event_id,google_sync_error,google_contact_email,student_name,student_email,student_phone,meet_link",
+    "id,registration_id,event_type_slug,start_at,end_at,status,google_event_id,google_sync_error,google_contact_email,student_name,student_email,student_phone,meet_link,format,language",
   );
   const sessions = await all(
     "cohort_sessions",
@@ -321,6 +337,19 @@ export async function reconcileCalendar(
           google_sync_error: null,
         });
         result.updated++;
+        // Only a lesson still to come: one deleted after it took place is
+        // tidying, not a cancellation anybody needs to hear about.
+        if (Date.parse(booking.start_at) > Date.now())
+          result.cancelledInGoogle.push({
+            id: booking.id,
+            event_type_slug: booking.event_type_slug ?? null,
+            start_at: booking.start_at,
+            student_name: booking.student_name ?? null,
+            student_email: booking.student_email ?? null,
+            student_phone: booking.student_phone ?? null,
+            format: booking.format ?? null,
+            language: booking.language ?? null,
+          });
         continue;
       }
       const start = instant(event.start?.dateTime),
