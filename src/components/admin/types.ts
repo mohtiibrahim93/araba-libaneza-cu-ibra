@@ -245,4 +245,9 @@ export const trackPreferenceLabels: Record<TrackPreference, string> = {
 };
 
 /** The video button's label: every online lesson uses the owner's Zoom room; a Google Meet link reads "Meet". */
-export const meetingLabel = (link: string) => (/zoom\.us/i.test(link) ? "Zoom" : /meet\.google/i.test(link) ? "Meet" : "Intră");
+export const meetingLabel = (link: string) =>
+  /zoom\.us/i.test(link)
+    ? "Zoom"
+    : /meet\.google/i.test(link)
+      ? "Meet"
+      : "Intră";

@@ -13,7 +13,7 @@ const content = {
       ],
       [
         "2. Servicii oferite",
-        "Oferim cursuri de arabă libaneză pentru adulți și adolescenți (grup și privat), fizic la Raduga Creative Center din București și online. Cursurile pentru copii, când pornesc, sunt fizice, la centru, iar varianta online se va adăuga mai târziu ca opțiune (momentan nu avem cursuri pentru copii). Cursurile acoperă toate nivelurile CEFR (A1–C2).",
+        "Oferim cursuri de arabă libaneză pentru adulți și adolescenți (grup și privat), fizic la Raduga Creative Center din București și online. Cursurile pentru copii nu sunt încă deschise (momentan se poate lăsa doar o cerere „Anunță-mă”); când pornesc, sunt fizice, la centru, în grupe de maximum 6 copii, cu lecții de 60 de minute și maximum 8 lecții pe lună, iar varianta online se va adăuga mai târziu ca opțiune. Cursurile acoperă toate nivelurile CEFR (A1–C2).",
       ],
       [
         "3. Înscriere și plăți",
@@ -69,7 +69,7 @@ const content = {
       ],
       [
         "2. Services",
-        "We offer Lebanese Arabic courses for adults and teenagers (group and private), in person at Raduga Creative Center in Bucharest and online. Kids' courses, when they run, are online, with an in-person option to be added later (there are none at the moment). Courses cover all CEFR levels (A1–C2).",
+        "We offer Lebanese Arabic courses for adults and teenagers (group and private), in person at Raduga Creative Center in Bucharest and online. Kids' courses are not open yet (for now you can only ask to be notified); when they start, they are in person at the centre, in groups of up to 6 children, with 60-minute lessons and up to 8 lessons a month, and an online option will be added later. Courses cover all CEFR levels (A1–C2).",
       ],
       [
         "3. Registration and payments",

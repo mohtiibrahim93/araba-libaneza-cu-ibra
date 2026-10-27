@@ -65,7 +65,13 @@ export function loadEdgeHandler(
       // `../_shared/package-titles.ts`) are shared code, not a service
       // boundary: load them as they are, with the same stubs and environment.
       // Their Google calls need keys a test does not set, so they do nothing.
-      if (/^\.\.\/_shared\/package-(lessons|titles)\.ts$/.test(name))
+      // The group refund rule (`../_shared/group-refund.ts`) is plain
+      // arithmetic and loads the same way.
+      if (
+        /^\.\.\/_shared\/(package-(lessons|titles)|group-refund)\.ts$/.test(
+          name,
+        )
+      )
         return loadEdgeModule(
           relative(process.cwd(), resolve(process.cwd(), dirname(path), name)),
           imports,

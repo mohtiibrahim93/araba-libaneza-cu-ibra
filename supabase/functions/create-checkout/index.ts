@@ -102,12 +102,17 @@ serve(async (req) => {
       // those, never against the course's payment_status.
       const isDeposit = courseType === "kids_deposit";
       // "free": the owner gave it for free, so there is nothing to charge.
+      // (A course already paid needs no seat deposit either.)
       if (
-        (isDeposit && regRow.deposit_paid_at) ||
-        (!isDeposit &&
-          (regRow.payment_status === "paid" ||
-            regRow.payment_status === "free"))
+        regRow.payment_status === "paid" ||
+        regRow.payment_status === "free"
       ) {
+        return new Response(JSON.stringify({ error: "Already paid" }), {
+          headers: { ...corsHeaders, "Content-Type": "application/json" },
+          status: 409,
+        });
+      }
+      if (isDeposit && regRow.deposit_paid_at) {
         return new Response(JSON.stringify({ error: "Already paid" }), {
           headers: { ...corsHeaders, "Content-Type": "application/json" },
           status: 409,

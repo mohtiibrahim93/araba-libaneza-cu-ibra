@@ -127,6 +127,7 @@ export function trackRegistrationStep(
  */
 export function trackRegistrationValidationFailed(
   field:
+    | "name"
     | "cohort"
     | "course_type"
     | "format"

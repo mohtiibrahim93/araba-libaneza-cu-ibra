@@ -2,7 +2,10 @@ import { describe, expect, it } from "vitest";
 import { readFileSync } from "node:fs";
 import { resolve } from "node:path";
 
-const terms = readFileSync(resolve(process.cwd(), "src/pages/Terms.tsx"), "utf8");
+const terms = readFileSync(
+  resolve(process.cwd(), "src/pages/Terms.tsx"),
+  "utf8",
+);
 
 describe("Terms: company details (owner's text, 27 October 2026)", () => {
   it("states them exactly in Romanian", () => {
@@ -33,13 +36,22 @@ describe("Terms: monthly group refunds", () => {
     // src/test/group-refund.test.ts asserts the same numbers.
     for (const figure of ["500 lei/lun", "8 lec", "337,50 lei", "450 lei"])
       expect(terms).toContain(figure);
-    for (const figure of ["500 lei/month", "8 lessons", "337.50 lei", "450 lei"])
+    for (const figure of [
+      "500 lei/month",
+      "8 lessons",
+      "337.50 lei",
+      "450 lei",
+    ])
       expect(terms).toContain(figure);
   });
 
   it("says cancelling stops every future charge, in both languages", () => {
-    expect(terms).toContain("anularea oprește întotdeauna toate plățile lunare viitoare");
-    expect(terms).toContain("cancelling always stops all future monthly charges");
+    expect(terms).toContain(
+      "anularea oprește întotdeauna toate plățile lunare viitoare",
+    );
+    expect(terms).toContain(
+      "cancelling always stops all future monthly charges",
+    );
   });
 });
 

@@ -25,14 +25,14 @@ Limba predată: arabă libaneză (dialect levantin), vorbită din primele lecți
 FORMATE
 - Curs de grup (online sau fizic), pe niveluri CEFR, 2 ședințe/săptămână, 1h30 fiecare.
 - Lecții private 1:1 (online sau fizic), programare flexibilă.
-- Curs pentru copii (grup de minimum 4 copii, sau privat).
+- Curs pentru copii: NU este încă deschis — nici grupe, nici lecții private. Se poate lăsa doar o cerere „Anunță-mă” pe /curs-araba-copii, iar vizitatorul e anunțat când pornește. Când va porni: grupe de maximum 6 copii, lecții de 60 de minute, maximum 8 lecții pe lună.
 - Lecție de probă gratuită, online în orice zi disponibilă sau fizic la centru sâmbăta și duminica.
 
 PREȚURI (LEI; prețul fizic e cu 40% peste cel online)
 Grup, abonament lunar:
 ${(["A1", "A2", "B1", "B2", "C1", "C2"] as const).map((l) => `- ${groupLine(l)}`).join("\n")}
 Lecție privată: online ${ONLINE_PRICES.privateLesson} LEI, fizic ${physicalPrice(ONLINE_PRICES.privateLesson)} LEI per lecție. Reducere la pachet: -15% de la 20 de lecții (singura reducere la lecțiile private). Grup: -15% la plata integrală a cursului (online sau fizic).
-Copii: lecție privată online ${ONLINE_PRICES.kidsPrivateLesson} LEI, fizic ${physicalPrice(ONLINE_PRICES.kidsPrivateLesson)} LEI; grup online ${ONLINE_PRICES.kidsGroupMonthly} LEI/lună/copil, fizic ${physicalPrice(ONLINE_PRICES.kidsGroupMonthly)} LEI/lună/copil (minimum 4 copii).
+Copii (cursul nu este încă deschis; prețurile de mai jos sunt cele anunțate pentru când pornește, nu se poate plăti sau înscrie acum): lecție privată online ${ONLINE_PRICES.kidsPrivateLesson} LEI, fizic ${physicalPrice(ONLINE_PRICES.kidsPrivateLesson)} LEI; grup online ${ONLINE_PRICES.kidsGroupMonthly} LEI/lună/copil, fizic ${physicalPrice(ONLINE_PRICES.kidsGroupMonthly)} LEI/lună/copil (grupe de maximum 6 copii, lecții de 60 de minute, maximum 8 lecții pe lună).
 
 NIVELURI (CEFR)
 A1 — 32 lecții, 48 h, vorbit. A2 — 56 lecții, 84 h. B1 — 72 lecții, 108 h. B2 — 72 lecții, 108 h. C1 — 72 lecții, 108 h, vorbit + scris. C2 — 72 lecții, 108 h, module tematice.
@@ -42,7 +42,7 @@ PAGINI UTILE (folosește exact aceste adrese când recomanzi o pagină)
 /cursuri-limba-araba — toate cursurile și prețurile
 /cursuri/grup — cursul de grup pe niveluri
 /cursuri/private — lecții private 1:1
-/curs-araba-copii — cursul pentru copii
+/curs-araba-copii — cursul pentru copii (încă nedeschis; formular „Anunță-mă”)
 /trial — programarea lecției de probă gratuită
 /test-de-nivel — test scurt care sugerează nivelul
 /joc — Jocul Yalla, exersare gratuită; /joc/scor arată scorul și nivelul sugerat

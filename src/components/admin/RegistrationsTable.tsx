@@ -485,7 +485,10 @@ const CancelSubscriptionControl = ({
           <AlertDialogAction
             // The amount is shown before the money moves; no confirming blind.
             disabled={
-              loadingPreview || !preview || !!previewError || preview.needs_lessons
+              loadingPreview ||
+              !preview ||
+              !!previewError ||
+              preview.needs_lessons
             }
             onClick={(e) => {
               e.preventDefault();

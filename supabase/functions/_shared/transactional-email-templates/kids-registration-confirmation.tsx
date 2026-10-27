@@ -108,6 +108,13 @@ const KidsRegistrationConfirmationEmail = ({
               </Text>
             )}
             <Text style={infoText}>
+              <strong>{t("Grupa:", "Group:")}</strong>{" "}
+              {t(
+                "maximum 6 copii, lecții de 60 de minute, maximum 8 lecții pe lună",
+                "up to 6 children, 60-minute lessons, up to 8 lessons a month",
+              )}
+            </Text>
+            <Text style={infoText}>
               <strong>{t("Activități:", "Activities:")}</strong>{" "}
               {t(
                 "jocuri, cântece și activități creative",

@@ -236,6 +236,7 @@ export function computeGroupCancelRefund(
     eligibleBani: eligible,
     feeBani: fee,
     refundBani: refund,
-    refunds: refund > 0 ? [{ paymentId: current.paymentId, amountBani: refund }] : [],
+    refunds:
+      refund > 0 ? [{ paymentId: current.paymentId, amountBani: refund }] : [],
   };
 }

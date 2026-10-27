@@ -26,7 +26,14 @@ export function useTrialRegistration(
   // after a clashing slot reuses the row instead of writing a second one.
   const registrationIdRef = useRef<string | null>(null);
 
-  return async (d: { name: string; email: string; phone: string }) => {
+  return async (d: {
+    name: string;
+    email: string;
+    phone: string;
+    /** "online" or "fizic", as registrations stores it. Required: no
+     *  registration is created without one (owner's rule, 27 October 2026). */
+    format?: string;
+  }) => {
     if (registrationIdRef.current) return registrationIdRef.current;
     const id = crypto.randomUUID();
     const { error } = await supabase.from("registrations").insert({
@@ -36,6 +43,7 @@ export function useTrialRegistration(
       name: d.name,
       email: d.email,
       phone: d.phone,
+      format: d.format ?? "online",
       // The language the visitor is actually reading the site in. Without it a
       // trial lead arrived with language NULL, so there was no way to tell an
       // English enquiry from a Romanian one — which is also what decides which

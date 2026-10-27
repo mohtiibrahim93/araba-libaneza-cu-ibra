@@ -6,7 +6,7 @@ import { courseInstances, GROUP_WEEKLY_WORKLOAD } from "@/lib/courseSchema";
 const FAQ = [
   {
     q: "De la ce vârstă poate un adolescent să înceapă cursul de arabă?",
-    a: "Grupele pentru adolescenți sunt pentru 12–17 ani. De la 16 ani, adolescenții pot intra direct în grupele de adulți (A1–C2), cu acordul părintelui. Pentru 6–11 ani avem cursul separat pentru copii, prin joc.",
+    a: "Grupele pentru adolescenți sunt pentru 12–17 ani. De la 16 ani, adolescenții pot intra direct în grupele de adulți (A1–C2), cu acordul părintelui. Pentru 6–11 ani există cursul separat pentru copii, prin joc (grupe de maximum 6 copii, lecții de 60 de minute, maximum 8 pe lună), dar nu este încă deschis: poți cere să fii anunțat.",
   },
   {
     q: "Ce fel de arabă învață adolescenții?",
