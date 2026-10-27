@@ -18,6 +18,8 @@ import { template as bookingReminder } from "./booking-reminder.tsx";
 import { template as bookingCancelled } from "./booking-cancelled.tsx";
 import { template as bookingRescheduled } from "./booking-rescheduled.tsx";
 import { template as lessonDoneCheck } from "./lesson-done-check.tsx";
+import { template as lessonAppealOwner } from "./lesson-appeal-owner.tsx";
+import { template as lessonAppealDecision } from "./lesson-appeal-decision.tsx";
 import { template as trialFollowup } from "./trial-followup.tsx";
 import { template as adminNewRegistration } from "./admin-new-registration.tsx";
 import { template as adminTrialBookingFailed } from "./admin-trial-booking-failed.tsx";
@@ -38,6 +40,8 @@ export const TEMPLATES: Record<string, TemplateEntry> = {
   "booking-cancelled": bookingCancelled,
   "booking-rescheduled": bookingRescheduled,
   "lesson-done-check": lessonDoneCheck,
+  "lesson-appeal-owner": lessonAppealOwner,
+  "lesson-appeal-decision": lessonAppealDecision,
   "trial-followup": trialFollowup,
   "admin-new-registration": adminNewRegistration,
   "admin-trial-booking-failed": adminTrialBookingFailed,

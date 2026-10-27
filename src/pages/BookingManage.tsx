@@ -63,6 +63,15 @@ interface BookingInfo {
   changes_allowed?: boolean;
   /** True once the lesson has ended and is not yet marked done. */
   can_confirm_done?: boolean;
+  /** The owner counted it as lost (no-show or late cancellation). */
+  counted_as_lost?: boolean;
+  /** The student may ask the owner to reconsider (once, within 2 weeks). */
+  can_appeal?: boolean;
+  appeal?: {
+    at: string;
+    decided_at: string | null;
+    decision: "excused" | "lost" | null;
+  } | null;
 }
 
 const BookingManageInner = () => {
@@ -139,6 +148,36 @@ const BookingManageInner = () => {
         lang === "en"
           ? "Could not confirm. Please try again."
           : "Nu am putut confirma. Te rog încearcă din nou.",
+      );
+    } finally {
+      setBusy(false);
+    }
+  };
+
+  // A lesson counted as lost can be contested once; the owner answers by
+  // email within 24 hours (owner's rule, 26 October 2026).
+  const [appealText, setAppealText] = useState("");
+  const handleAppeal = async () => {
+    if (appealText.trim().length < 5) return;
+    setBusy(true);
+    try {
+      const res = await fetch(baseUrl, {
+        method: "POST",
+        headers: {
+          apikey: import.meta.env["VITE_SUPABASE_PUBLISHABLE_KEY"],
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ action: "appeal", text: appealText.trim() }),
+      });
+      const json = await res.json().catch(() => ({}));
+      if (!res.ok) throw new Error(json?.error ?? "failed");
+      setAppealText("");
+      await load();
+    } catch {
+      toast.error(
+        lang === "en"
+          ? "Could not send. Please try again or write on WhatsApp."
+          : "Nu am putut trimite. Încearcă din nou sau scrie pe WhatsApp.",
       );
     } finally {
       setBusy(false);
@@ -377,6 +416,61 @@ const BookingManageInner = () => {
                     ? "Confirm the lesson took place"
                     : "Confirm că lecția a avut loc"}
                 </button>
+              </div>
+            )}
+
+            {booking.counted_as_lost && (
+              <div className="rounded-lg border border-amber-500/40 bg-amber-500/10 p-4 text-sm">
+                <p className="font-semibold">
+                  {lang === "en"
+                    ? "This lesson counts against your package (missed or cancelled late)."
+                    : "Lecția aceasta se numără din pachet (ratată sau anulată târziu)."}
+                </p>
+                {booking.appeal?.decided_at ? (
+                  <p className="mt-1 text-xs">
+                    {booking.appeal.decision === "excused"
+                      ? lang === "en"
+                        ? "Your request was accepted."
+                        : "Cererea ta a fost acceptată."
+                      : lang === "en"
+                        ? "Your request was answered by email."
+                        : "Ți-am răspuns pe email."}
+                  </p>
+                ) : booking.appeal ? (
+                  <p className="mt-1 text-xs" role="status">
+                    {lang === "en"
+                      ? "Request sent. You will get an answer by email within 24 hours."
+                      : "Cerere trimisă. Primești răspunsul pe email în 24 de ore."}
+                  </p>
+                ) : booking.can_appeal ? (
+                  <>
+                    <p className="mt-1 text-xs text-muted-foreground">
+                      {lang === "en"
+                        ? "Had a serious reason? Tell me and I will reconsider. You get an answer by email within 24 hours."
+                        : "Ai avut un motiv serios? Scrie-mi și reconsider. Primești răspunsul pe email în 24 de ore."}
+                    </p>
+                    <textarea
+                      className="mt-2 w-full rounded-md border border-input bg-background p-2 text-sm"
+                      rows={3}
+                      maxLength={2000}
+                      value={appealText}
+                      onChange={(e) => setAppealText(e.target.value)}
+                      aria-label={lang === "en" ? "Your reason" : "Motivul tău"}
+                      placeholder={
+                        lang === "en" ? "Your reason…" : "Motivul tău…"
+                      }
+                    />
+                    <button
+                      onClick={() => void handleAppeal()}
+                      disabled={busy || appealText.trim().length < 5}
+                      className="mt-2 inline-flex items-center justify-center gap-2 px-gutter py-2 rounded-md bg-amber-600 text-white text-sm font-medium hover:bg-amber-700 disabled:opacity-50"
+                    >
+                      {lang === "en"
+                        ? "Ask to reconsider"
+                        : "Cere reconsiderarea"}
+                    </button>
+                  </>
+                ) : null}
               </div>
             )}
 

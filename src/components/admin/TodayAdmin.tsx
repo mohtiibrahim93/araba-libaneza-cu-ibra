@@ -11,6 +11,7 @@ import {
   Video,
 } from "lucide-react";
 import { invokeAdmin } from "@/lib/adminAuth";
+import { toast } from "@/hooks/use-toast";
 import { cn } from "@/lib/utils";
 import { buildWhatsAppUrl } from "@/lib/whatsapp";
 import { formTypeLabels, paymentStatusLabels, meetingLabel } from "./types";
@@ -100,6 +101,16 @@ interface Today {
     student_phone: string | null;
     format: string;
     trial_outcome: null;
+  }>;
+  /** Students asking to reconsider a lesson counted as lost; answer within 24h. */
+  openAppeals?: Array<{
+    id: string;
+    registration_id: string | null;
+    start_at: string;
+    student_name: string;
+    student_phone: string | null;
+    appeal_text: string | null;
+    appeal_at: string;
   }>;
   /** Private packages with one lesson left (or none) for a student still coming. */
   lowPackages?: Array<{
@@ -242,6 +253,31 @@ const TodayAdmin = ({
     } finally {
       setBusyRow(null);
     }
+  };
+
+  // The owner's answer to a student's appeal: the student is emailed by the
+  // server, and the appeal leaves the list.
+  const decideAppeal = async (id: string, outcome: "excused" | "lost") => {
+    const { data: res, error: err } = await invokeAdmin<{
+      success?: boolean;
+      error?: string;
+    }>({ action: "set_lesson_outcome", id, outcome });
+    if (err || res?.error || res?.success !== true) {
+      toast({
+        title: res?.error || err?.message || "Nu s-a salvat.",
+        variant: "destructive",
+      });
+      return;
+    }
+    toast({ title: "Răspuns trimis cursantului" });
+    setData((d) =>
+      d
+        ? {
+            ...d,
+            openAppeals: (d.openAppeals ?? []).filter((a) => a.id !== id),
+          }
+        : d,
+    );
   };
 
   const load = useCallback(async () => {
@@ -513,6 +549,69 @@ const TodayAdmin = ({
                     />
                   </div>
                 ))}
+              </div>
+            )}
+
+            {!!data.openAppeals?.length && filter === "all" && (
+              <div className="space-y-3 rounded-2xl border border-admin-warn-line bg-admin-warn-bg p-4 text-admin-warn-fg">
+                <p className="text-sm font-semibold">
+                  Cereri de reconsiderare — răspunde în 24 de ore
+                </p>
+                <ul className="space-y-3 text-sm">
+                  {data.openAppeals.map((a) => (
+                    <li key={a.id} className="space-y-1">
+                      <p>
+                        <b>{a.student_name}</b> · lecția din{" "}
+                        {new Intl.DateTimeFormat("ro-RO", {
+                          timeZone: TZ,
+                          dateStyle: "short",
+                          timeStyle: "short",
+                        }).format(new Date(a.start_at))}{" "}
+                        (numărată pierdută)
+                      </p>
+                      <p className="rounded-lg bg-card p-2 text-foreground">
+                        „{a.appeal_text}”
+                      </p>
+                      <div className="flex flex-wrap gap-2">
+                        <button
+                          type="button"
+                          className={cn(
+                            rowBtn,
+                            "border border-admin-warn-line bg-card text-foreground",
+                          )}
+                          onClick={() => void decideAppeal(a.id, "excused")}
+                        >
+                          Scuzat — nu se numără
+                        </button>
+                        <button
+                          type="button"
+                          className={cn(
+                            rowBtn,
+                            "border border-admin-warn-line bg-card text-foreground",
+                          )}
+                          onClick={() => void decideAppeal(a.id, "lost")}
+                        >
+                          Rămâne pierdută
+                        </button>
+                        {a.registration_id && (
+                          <button
+                            type="button"
+                            className={cn(
+                              rowBtn,
+                              "border border-admin-warn-line bg-card text-foreground",
+                            )}
+                            onClick={() => onOpenPerson?.(a.registration_id!)}
+                          >
+                            Fișa
+                          </button>
+                        )}
+                      </div>
+                    </li>
+                  ))}
+                </ul>
+                <p className="text-xs">
+                  Cursantul primește răspunsul tău pe email.
+                </p>
               </div>
             )}
 
