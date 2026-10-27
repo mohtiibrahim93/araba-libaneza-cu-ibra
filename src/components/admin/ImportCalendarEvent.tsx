@@ -92,12 +92,11 @@ export default function ImportCalendarEvent({
         />
       </label>
       <label className="text-xs">
-        Telefon *
+        Telefon (opțional)
         <input
           className={field}
           value={phone}
           onChange={(e) => setPhone(e.target.value)}
-          required
         />
       </label>
       <label className="text-xs">

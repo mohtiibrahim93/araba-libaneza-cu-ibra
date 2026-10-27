@@ -1889,11 +1889,11 @@ Deno.serve(async (req) => {
         return jsonResponse({ error: "Numele este obligatoriu." }, 400);
       if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email) || email.length > 254)
         return jsonResponse({ error: "Emailul nu este valid." }, 400);
-      // Required: the import creates a registration (owner's rule, 27 October
-      // 2026). Only the automatic import by the calendar sync has no phone to
-      // give, since a Google event carries none.
-      if (!phone || phone.length < 3 || phone.length > 40)
-        return jsonResponse({ error: "Telefonul este obligatoriu." }, 400);
+      // Optional on purpose (owner, 27 October 2026): a lesson imported from
+      // Google is one he already arranged with the student himself, and a
+      // Google event carries no phone number.
+      if (phone && phone.length > 40)
+        return jsonResponse({ error: "Telefonul nu este valid." }, 400);
       try {
         const out = await importCalendarEvent(
           supabase,
