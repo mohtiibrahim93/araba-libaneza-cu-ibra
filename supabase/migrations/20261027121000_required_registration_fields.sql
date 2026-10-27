@@ -11,7 +11,8 @@
 --      required by the pattern). Other form types (the level-check call-back)
 --      keep their current rule;
 --   3. a visitor cannot write the kids deposit marker
---      (20261027120000_kids_deposit_marker) themselves, as with paid_at.
+--      (20261027120000_kids_deposit_marker) or the trial no-show fee
+--      (20261027115000_trial_no_show_fee) themselves, as with paid_at.
 --
 -- Only INSERTs from anon/authenticated are affected: rows already stored are
 -- not re-checked, and the owner's tools (service role) are unchanged.
@@ -52,5 +53,7 @@ create policy "Anyone can submit a registration"
     and whatsapp_sent_at is null
     and deposit_paid_at is null
     and deposit_session_id is null
+    and no_show_fee_status is null
+    and no_show_fee_intent_id is null
     and (quantity >= 1 and quantity <= 100)
   );

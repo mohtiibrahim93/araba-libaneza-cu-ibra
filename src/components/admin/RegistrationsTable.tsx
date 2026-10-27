@@ -106,7 +106,8 @@ export function cancelPreviewLines(p: CancelPreview): string[] {
 
 /** What supabase/functions/_shared/refund.ts works out for one cancellation. */
 export interface RefundPreview {
-  tier: "full" | "fee-only" | "pro-rata";
+  /** "no-show-fee": the trial's no-show fee, given back in full. */
+  tier: "full" | "fee-only" | "pro-rata" | "no-show-fee";
   daysBeforeStart: number | null;
   lessonsRemaining: number;
   nonRefundableBani: number;
@@ -147,7 +148,16 @@ const paymentBadge = (r: Registration) => {
   const deposit = r.deposit_paid_at
     ? `avans plătit${r.deposit_amount ? `: ${(r.deposit_amount / 100).toLocaleString("ro-RO")} lei` : ""}`
     : null;
-  if (!partial && !deposit) return paymentStatusBadge(r);
+  // The trial's no-show fee, kept apart from payment_status.
+  const noShowFee =
+    r.no_show_fee_status === "paid"
+      ? "taxă neprezentare încasată"
+      : r.no_show_fee_status === "failed"
+        ? "taxă neprezentare: card refuzat"
+        : r.no_show_fee_status === "refunded"
+          ? "taxă neprezentare rambursată"
+          : null;
+  if (!partial && !deposit && !noShowFee) return paymentStatusBadge(r);
   return (
     <span className="inline-flex flex-wrap items-center gap-1">
       {paymentStatusBadge(r)}
@@ -156,6 +166,13 @@ const paymentBadge = (r: Registration) => {
         badge(
           "bg-emerald-500/10 text-emerald-700 dark:text-emerald-400",
           deposit,
+        )}
+      {noShowFee &&
+        badge(
+          r.no_show_fee_status === "failed"
+            ? "bg-red-500/10 text-red-700 dark:text-red-400"
+            : "bg-muted text-muted-foreground",
+          noShowFee,
         )}
     </span>
   );
@@ -252,7 +269,12 @@ const RefundControl = ({
       </p>
     );
   }
-  if (registration.payment_status !== "paid") return null;
+  // The trial no-show fee is refunded by the same button (owner, 27 October
+  // 2026: case by case, on appeal).
+  const noShowFee =
+    registration.payment_status !== "paid" &&
+    registration.no_show_fee_status === "paid";
+  if (registration.payment_status !== "paid" && !noShowFee) return null;
 
   return (
     <AlertDialog open={open} onOpenChange={setOpen}>
@@ -274,7 +296,9 @@ const RefundControl = ({
       <AlertDialogContent>
         <AlertDialogHeader>
           <AlertDialogTitle>
-            Rambursezi plata pentru {registration.name}?
+            {noShowFee
+              ? `Rambursezi taxa de neprezentare pentru ${registration.name}?`
+              : `Rambursezi plata pentru ${registration.name}?`}
           </AlertDialogTitle>
           <AlertDialogDescription asChild>
             <div className="space-y-1">
@@ -314,27 +338,30 @@ const RefundControl = ({
             </div>
           </AlertDialogDescription>
         </AlertDialogHeader>
-        <div className="space-y-1">
-          <label
-            htmlFor={`lessons-taken-${registration.id}`}
-            className="text-xs font-medium"
-          >
-            Lecții deja făcute
-          </label>
-          <Input
-            id={`lessons-taken-${registration.id}`}
-            type="number"
-            min={0}
-            value={lessonsTaken}
-            onChange={(e) =>
-              setLessonsTaken(Math.max(0, Number(e.target.value) || 0))
-            }
-            className="h-9"
-          />
-          <p className="text-[11px] text-muted-foreground">
-            Lecțiile făcute nu se rambursează. Lasă 0 dacă nu a început cursul.
-          </p>
-        </div>
+        {!noShowFee && (
+          <div className="space-y-1">
+            <label
+              htmlFor={`lessons-taken-${registration.id}`}
+              className="text-xs font-medium"
+            >
+              Lecții deja făcute
+            </label>
+            <Input
+              id={`lessons-taken-${registration.id}`}
+              type="number"
+              min={0}
+              value={lessonsTaken}
+              onChange={(e) =>
+                setLessonsTaken(Math.max(0, Number(e.target.value) || 0))
+              }
+              className="h-9"
+            />
+            <p className="text-[11px] text-muted-foreground">
+              Lecțiile făcute nu se rambursează. Lasă 0 dacă nu a început
+              cursul.
+            </p>
+          </div>
+        )}
         <Textarea
           value={reason}
           onChange={(e) => setReason(e.target.value)}
@@ -368,6 +395,8 @@ const REFUND_TIER_LABEL: Record<RefundPreview["tier"], string> = {
   "fee-only": "Anulare sub 7 zile, cursul nu a început — se reține taxa de 10%",
   "pro-rata":
     "Cursul a început — lecțiile făcute nu se rambursează, din rest se reține 10%",
+  "no-show-fee":
+    "Taxa de neprezentare la proba gratuită — se rambursează integral (contestație acceptată)",
 };
 
 const CancelSubscriptionControl = ({

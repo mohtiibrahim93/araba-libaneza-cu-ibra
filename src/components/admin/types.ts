@@ -79,6 +79,9 @@ export interface Registration {
   /** Kids seat deposit, kept apart from payment_status (the course's money). */
   deposit_paid_at?: string | null;
   deposit_amount?: number | null;
+  /** The free trial's no-show fee, kept apart from payment_status. */
+  no_show_fee_status?: "paid" | "failed" | "refunded" | null;
+  no_show_fee_error?: string | null;
   anonymized_at?: string | null;
   /**
    * Language the student needs the class explained in, from the site language

@@ -527,7 +527,7 @@ export const translations = {
     trialRulesLi3:
       "Poți anula sau reprograma gratuit cu cel puțin 24 de ore înainte, din linkul primit pe email.",
     trialRulesLi4:
-      "Proba costă 0 lei; cardul se salvează în siguranță la confirmarea locului. Dacă nu te prezinți sau anulezi mai târziu de 24 de ore, se reține 150 lei, cât o lecție privată.",
+      "Proba costă 0 lei; cardul se salvează în siguranță la confirmarea locului. Dacă nu te prezinți sau anulezi mai târziu de 24 de ore, se încasează de pe card 150 lei, cât o lecție privată. Taxa poate fi rambursată dacă o contești.",
 
     trialFormSubmitting: "Se salvează…",
     trialFormCta: "Continuă spre programare",
@@ -1477,7 +1477,7 @@ export const translations = {
     trialRulesLi3:
       "You can cancel or reschedule free of charge at least 24 hours ahead, from the link in your email.",
     trialRulesLi4:
-      "The trial costs 0 lei; your card is stored securely when confirming the spot. If you do not show up, or cancel later than 24 hours, 150 lei is charged — the price of a private lesson.",
+      "The trial costs 0 lei; your card is stored securely when confirming the spot. If you do not show up, or cancel later than 24 hours, 150 lei is charged to your card — the price of a private lesson. The fee may be refunded if you appeal it.",
 
     trialFormSubmitting: "Saving…",
     trialFormCta: "Continue to scheduling",

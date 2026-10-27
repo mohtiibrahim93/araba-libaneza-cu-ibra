@@ -1,5 +1,15 @@
 import { useState } from "react";
 import { invokeAdmin } from "@/lib/adminAuth";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
 
 export type TrialOutcome = "done" | "excused" | "lost" | null;
 
@@ -119,6 +129,154 @@ export function TrialOutcomeControl({
           {error}
         </p>
       )}
+      {booking.trial_outcome === "lost" && (
+        <NoShowFeeControl bookingId={booking.id} />
+      )}
+    </div>
+  );
+}
+
+interface NoShowFeePreview {
+  status: "paid" | "failed" | "refunded" | null;
+  last_error?: string | null;
+  amount_label: string;
+  card?: string | null;
+}
+
+/**
+ * The trial's no-show fee (owner's decision, 27 October 2026): once a trial is
+ * marked lost (no-show or a cancellation under 24 h), the card saved at
+ * booking can be charged 150 lei. One confirmation, showing the amount and
+ * the card, then the charge; the result is shown, and a declined card leaves
+ * it unpaid. The refund button in Înscrieri gives it back case by case.
+ */
+export function NoShowFeeControl({ bookingId }: { bookingId: string }) {
+  const [open, setOpen] = useState(false);
+  const [preview, setPreview] = useState<NoShowFeePreview | null>(null);
+  const [busy, setBusy] = useState(false);
+  const [message, setMessage] = useState<{
+    ok: boolean;
+    text: string;
+  } | null>(null);
+
+  const openDialog = async () => {
+    setMessage(null);
+    setPreview(null);
+    setBusy(true);
+    try {
+      const { data, error: failure } = await invokeAdmin<{
+        success?: boolean;
+        error?: string;
+        data?: NoShowFeePreview;
+      }>({ action: "preview_no_show_fee", id: bookingId });
+      if (failure || data?.error || !data?.data)
+        throw new Error(
+          data?.error || failure?.message || "Nu am putut citi cardul.",
+        );
+      if (data.data.status === "paid" || data.data.status === "refunded") {
+        setMessage({
+          ok: true,
+          text:
+            data.data.status === "paid"
+              ? `Taxa de ${data.data.amount_label} a fost deja încasată.`
+              : "Taxa a fost încasată și apoi rambursată.",
+        });
+        return;
+      }
+      setPreview(data.data);
+      setOpen(true);
+    } catch (err) {
+      setMessage({
+        ok: false,
+        text: err instanceof Error ? err.message : "Nu am putut citi cardul.",
+      });
+    } finally {
+      setBusy(false);
+    }
+  };
+
+  const charge = async () => {
+    setBusy(true);
+    try {
+      const { data, error: failure } = await invokeAdmin<{
+        success?: boolean;
+        error?: string;
+        data?: { amount_label?: string };
+      }>({ action: "charge_no_show_fee", id: bookingId });
+      if (data?.success)
+        setMessage({
+          ok: true,
+          text: `Încasat: ${data.data?.amount_label ?? "150 lei"}.`,
+        });
+      else
+        setMessage({
+          ok: false,
+          text:
+            data?.error ||
+            failure?.message ||
+            "Cardul nu a putut fi debitat. Taxa rămâne neîncasată.",
+        });
+    } finally {
+      setBusy(false);
+      setOpen(false);
+    }
+  };
+
+  return (
+    <div className="space-y-1">
+      <button
+        type="button"
+        onClick={() => void openDialog()}
+        disabled={busy}
+        className="rounded border border-input px-2 py-1 text-[11px] font-medium hover:bg-muted disabled:opacity-60"
+      >
+        Încasează taxa de neprezentare (150 lei)
+      </button>
+      {message && (
+        <p
+          role={message.ok ? "status" : "alert"}
+          className={`text-[11px] ${message.ok ? "text-emerald-700 dark:text-emerald-400" : "text-destructive"}`}
+        >
+          {message.text}
+        </p>
+      )}
+      <AlertDialog open={open} onOpenChange={setOpen}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Încasezi taxa de neprezentare?</AlertDialogTitle>
+            <AlertDialogDescription asChild>
+              <div className="space-y-1">
+                <p>
+                  Se debitează <strong>{preview?.amount_label}</strong> de pe
+                  cardul salvat la programare
+                  {preview?.card ? ` (${preview.card})` : ""}.
+                </p>
+                {preview?.status === "failed" && preview.last_error && (
+                  <p className="text-destructive">
+                    Încercarea anterioară a eșuat: {preview.last_error}
+                  </p>
+                )}
+                <p className="text-muted-foreground">
+                  Se poate rambursa ulterior din Înscrieri (butonul
+                  Rambursează), dacă elevul contestă și accepți.
+                </p>
+              </div>
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel disabled={busy}>Înapoi</AlertDialogCancel>
+            <AlertDialogAction
+              disabled={busy}
+              onClick={(e) => {
+                e.preventDefault();
+                void charge();
+              }}
+            >
+              Încasează {preview?.amount_label}
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </div>
   );
 }

@@ -29,7 +29,11 @@ import {
   computeGroupCancelRefund,
   type GroupCharge,
 } from "../_shared/group-refund.ts";
-import { GROUP_MONTHS, KIDS_GROUP_MONTHS } from "../_shared/prices.ts";
+import {
+  GROUP_MONTHS,
+  KIDS_GROUP_MONTHS,
+  TRIAL_NO_SHOW_FEE_BANI,
+} from "../_shared/prices.ts";
 import { sendTemplateEmail } from "../_shared/managed-email.ts";
 import { notifyGoogleCancellations } from "../_shared/calendar-cancel-emails.ts";
 import { verifyRegistrationSignature } from "../_shared/registration-access.ts";
@@ -211,6 +215,43 @@ async function calendarDrift(
     }
   }
   return out;
+}
+
+/**
+ * The trial no-show fee, refunded with the same button as a lesson payment
+ * (owner's decision, 27 October 2026: case by case, on appeal). It is not a
+ * course, so none of the course tiers apply: what is still unrefunded on the
+ * fee's PaymentIntent goes back in full.
+ */
+async function noShowFeeRefundFor(
+  stripe: Stripe,
+  intentId: string,
+): Promise<
+  | {
+      breakdown: Omit<RefundBreakdown, "tier"> & { tier: "no-show-fee" };
+      paymentIntentId: string;
+    }
+  | { error: string }
+> {
+  const intent = await stripe.paymentIntents.retrieve(intentId);
+  const paid = Number(intent.amount_received ?? 0);
+  const remaining = paid - Number(intent.amount_refunded ?? 0);
+  if (!paid) return { error: "Taxa de neprezentare nu a fost încasată" };
+  if (remaining <= 0)
+    return { error: "Taxa de neprezentare a fost deja rambursată integral" };
+  return {
+    paymentIntentId: intentId,
+    breakdown: {
+      tier: "no-show-fee",
+      daysBeforeStart: null,
+      pricePerLessonBani: 0,
+      lessonsRemaining: 0,
+      nonRefundableBani: 0,
+      remainingValueBani: remaining,
+      feeBani: 0,
+      refundBani: remaining,
+    },
+  };
 }
 
 async function refundInputsFor(
@@ -1973,6 +2014,199 @@ Deno.serve(async (req) => {
         details: { booking_id: id, from: booking.trial_outcome, to: outcome },
       });
       return jsonResponse({ success: true, trial_outcome: outcome });
+    }
+
+    // The trial's no-show fee (owner's decision, 27 October 2026). Once the
+    // owner has marked a trial as lost (a no-show or a cancellation under
+    // 24 h), the card saved at booking can be charged 150 lei: the preview
+    // shows the amount and the card, and the charge happens only on the
+    // owner's confirmation. Off-session, on the saved payment method, with one
+    // idempotency key per booking so a double click or a retry never charges
+    // twice. A declined card is reported and nothing is marked paid. The fee
+    // is recorded on the registration (no_show_fee_*), never in
+    // payment_status, and the refund button can give it back.
+    if (action === "preview_no_show_fee" || action === "charge_no_show_fee") {
+      if (typeof id !== "string")
+        return jsonResponse({ error: "ID invalid" }, 400);
+      const { data: booking, error: bErr } = await supabase
+        .from("bookings")
+        .select(
+          "id, registration_id, event_type_slug, status, start_at, trial_outcome, student_name",
+        )
+        .eq("id", id)
+        .maybeSingle();
+      if (bErr) throw bErr;
+      if (!booking || booking.event_type_slug !== "trial")
+        return jsonResponse({ error: "Proba nu a fost găsită." }, 400);
+      if (booking.trial_outcome !== "lost")
+        return jsonResponse(
+          {
+            error:
+              "Taxa se încasează doar după ce marchezi proba „Pierdută” (nu a venit sau a anulat sub 24 de ore).",
+          },
+          400,
+        );
+      const { data: reg, error: rErr } = await supabase
+        .from("registrations")
+        .select(
+          "id, email, stripe_session_id, no_show_fee_status, no_show_fee_booking_id, no_show_fee_intent_id, no_show_fee_error",
+        )
+        .eq("id", booking.registration_id)
+        .maybeSingle();
+      if (rErr) throw rErr;
+      if (!reg)
+        return jsonResponse({ error: "Înscrierea nu a fost găsită." }, 400);
+      if (
+        reg.no_show_fee_status === "paid" ||
+        reg.no_show_fee_status === "refunded"
+      )
+        return jsonResponse({
+          success: true,
+          data: {
+            status: reg.no_show_fee_status,
+            amount: TRIAL_NO_SHOW_FEE_BANI,
+            amount_label: formatBani(TRIAL_NO_SHOW_FEE_BANI),
+          },
+        });
+
+      const stripe = new Stripe(Deno.env.get("STRIPE_SECRET_KEY") || "", {
+        apiVersion: "2025-08-27.basil",
+      });
+      // The card saved by the trial's 0-lei setup session.
+      const setupSessionId = String(reg.stripe_session_id ?? "");
+      if (!setupSessionId.startsWith("cs_"))
+        return jsonResponse(
+          { error: "Nu există un card salvat pentru această probă." },
+          400,
+        );
+      let customerId = "";
+      let paymentMethodId = "";
+      let cardLabel = "";
+      try {
+        const session = await stripe.checkout.sessions.retrieve(
+          setupSessionId,
+          { expand: ["setup_intent.payment_method"] },
+        );
+        const setup = session.setup_intent;
+        const method =
+          setup && typeof setup !== "string" ? setup.payment_method : null;
+        paymentMethodId =
+          typeof method === "string" ? method : (method?.id ?? "");
+        customerId =
+          typeof session.customer === "string"
+            ? session.customer
+            : (session.customer?.id ?? "");
+        if (method && typeof method !== "string" && method.card)
+          cardLabel = `${method.card.brand} •••• ${method.card.last4}`;
+      } catch (e) {
+        console.error("[no_show_fee] card lookup failed", e);
+      }
+      if (!paymentMethodId || !customerId)
+        return jsonResponse(
+          { error: "Nu există un card salvat pentru această probă." },
+          400,
+        );
+
+      if (action === "preview_no_show_fee") {
+        return jsonResponse({
+          success: true,
+          data: {
+            status: reg.no_show_fee_status ?? null,
+            last_error: reg.no_show_fee_error ?? null,
+            amount: TRIAL_NO_SHOW_FEE_BANI,
+            amount_label: formatBani(TRIAL_NO_SHOW_FEE_BANI),
+            card: cardLabel || null,
+            student_name: booking.student_name,
+          },
+        });
+      }
+
+      let intent: Stripe.PaymentIntent | null = null;
+      let failure = "";
+      try {
+        intent = await stripe.paymentIntents.create(
+          {
+            amount: TRIAL_NO_SHOW_FEE_BANI,
+            currency: "ron",
+            customer: customerId,
+            payment_method: paymentMethodId,
+            off_session: true,
+            confirm: true,
+            description:
+              "Taxă lecție de probă: neprezentare sau anulare sub 24 de ore",
+            metadata: {
+              registration_id: reg.id,
+              booking_id: booking.id,
+              purpose: "trial_no_show_fee",
+            },
+          },
+          { idempotencyKey: `trial_no_show_fee_${booking.id}` },
+        );
+      } catch (e) {
+        // A declined card, or one that needs the cardholder (3-D Secure),
+        // throws here; nothing was charged.
+        failure = e instanceof Error ? e.message : "Plata a fost refuzată.";
+        console.error("[no_show_fee] charge failed", booking.id, e);
+      }
+      const ok = !!intent && intent.status === "succeeded";
+      if (!ok && !failure)
+        failure = `Plata nu s-a finalizat (${intent?.status ?? "necunoscut"}).`;
+      const nowIso = new Date().toISOString();
+      const { error: saveErr } = await supabase
+        .from("registrations")
+        .update(
+          ok
+            ? {
+                no_show_fee_status: "paid",
+                no_show_fee_booking_id: booking.id,
+                no_show_fee_intent_id: intent!.id,
+                no_show_fee_amount: TRIAL_NO_SHOW_FEE_BANI,
+                no_show_fee_at: nowIso,
+                no_show_fee_error: null,
+              }
+            : {
+                no_show_fee_status: "failed",
+                no_show_fee_booking_id: booking.id,
+                no_show_fee_intent_id: intent?.id ?? null,
+                no_show_fee_at: nowIso,
+                no_show_fee_error: failure.slice(0, 500),
+              },
+        )
+        .eq("id", reg.id);
+      if (saveErr)
+        console.error("[no_show_fee] charge done but not saved", {
+          registrationId: reg.id,
+          intentId: intent?.id,
+          saveErr,
+        });
+      await supabase.from("audit_logs").insert({
+        actor: callerEmail,
+        action: "charge_no_show_fee",
+        registration_id: reg.id,
+        details: {
+          booking_id: booking.id,
+          ok,
+          intent_id: intent?.id ?? null,
+          amount: TRIAL_NO_SHOW_FEE_BANI,
+          error: ok ? null : failure,
+        },
+      });
+      return jsonResponse(
+        ok
+          ? {
+              success: true,
+              data: {
+                status: "paid",
+                amount: TRIAL_NO_SHOW_FEE_BANI,
+                amount_label: formatBani(TRIAL_NO_SHOW_FEE_BANI),
+              },
+            }
+          : {
+              success: false,
+              error: `Cardul nu a putut fi debitat: ${failure} Taxa rămâne neîncasată.`,
+              data: { status: "failed" },
+            },
+      );
     }
 
     // The owner's word on a package lesson (owner's rules, 26 October 2026):
@@ -4595,12 +4829,31 @@ Deno.serve(async (req) => {
       const { data: reg, error: regError } = await supabase
         .from("registrations")
         .select(
-          "id, form_type, level, quantity, cohort_id, payment_status, stripe_session_id, refunded_at",
+          "id, form_type, level, quantity, cohort_id, payment_status, stripe_session_id, refunded_at, no_show_fee_status, no_show_fee_intent_id",
         )
         .eq("id", id)
         .maybeSingle();
       if (regError) throw regError;
       if (!reg) return jsonResponse({ error: "Înscrierea nu a fost găsită" });
+      // A charged trial no-show fee is refunded by the same button.
+      if (
+        reg.payment_status !== "paid" &&
+        reg.no_show_fee_status === "paid" &&
+        reg.no_show_fee_intent_id
+      ) {
+        const stripe = new Stripe(Deno.env.get("STRIPE_SECRET_KEY") || "", {
+          apiVersion: "2025-08-27.basil",
+        });
+        const fee = await noShowFeeRefundFor(stripe, reg.no_show_fee_intent_id);
+        if ("error" in fee) return jsonResponse({ error: fee.error });
+        return jsonResponse({
+          success: true,
+          data: {
+            ...fee.breakdown,
+            refund_label: formatBani(fee.breakdown.refundBani),
+          },
+        });
+      }
       if (reg.refunded_at) return jsonResponse({ error: "Deja rambursat" });
       if (reg.payment_status !== "paid" || !reg.stripe_session_id) {
         return jsonResponse({
@@ -4640,13 +4893,83 @@ Deno.serve(async (req) => {
       const { data: reg, error: regError } = await supabase
         .from("registrations")
         .select(
-          "id, form_type, level, quantity, cohort_id, payment_status, stripe_session_id, refunded_at",
+          "id, form_type, level, quantity, cohort_id, payment_status, stripe_session_id, refunded_at, no_show_fee_status, no_show_fee_intent_id",
         )
         .eq("id", id)
         .maybeSingle();
 
       if (regError) throw regError;
       if (!reg) return jsonResponse({ error: "Înscrierea nu a fost găsită" });
+
+      // A charged trial no-show fee, given back on appeal (case by case, the
+      // owner's call): in full, recorded on no_show_fee_*, leaving the
+      // registration's lesson payments alone.
+      if (
+        reg.payment_status !== "paid" &&
+        reg.no_show_fee_status === "paid" &&
+        reg.no_show_fee_intent_id
+      ) {
+        const stripe = new Stripe(Deno.env.get("STRIPE_SECRET_KEY") || "", {
+          apiVersion: "2025-08-27.basil",
+        });
+        const fee = await noShowFeeRefundFor(stripe, reg.no_show_fee_intent_id);
+        if ("error" in fee) return jsonResponse({ error: fee.error });
+        let feeRefund;
+        try {
+          feeRefund = await stripe.refunds.create(
+            {
+              payment_intent: fee.paymentIntentId,
+              amount: fee.breakdown.refundBani,
+            },
+            { idempotencyKey: `refund_no_show_fee_${fee.paymentIntentId}` },
+          );
+        } catch (stripeErr) {
+          console.error(
+            "[admin-registrations] no-show refund failed",
+            stripeErr,
+          );
+          const msg =
+            stripeErr instanceof Error ? stripeErr.message : "Eroare Stripe";
+          return jsonResponse({ error: `Rambursare eșuată: ${msg}` });
+        }
+        const { data: updatedFee, error: feeSaveErr } = await supabase
+          .from("registrations")
+          .update({
+            no_show_fee_status: "refunded",
+            no_show_fee_refunded_amount: fee.breakdown.refundBani,
+            refund_reason: refund_reason || null,
+          })
+          .eq("id", id)
+          .select("*")
+          .single();
+        if (feeSaveErr) {
+          console.error(
+            "[admin-registrations] no-show refund done but not saved",
+            { registrationId: id, stripeRefundId: feeRefund.id, feeSaveErr },
+          );
+          return jsonResponse({
+            error:
+              "Rambursarea a fost procesată în Stripe, dar salvarea a eșuat. Contactează suportul tehnic.",
+          });
+        }
+        await supabase.from("audit_logs").insert({
+          actor: callerEmail!,
+          action: "refund_no_show_fee",
+          registration_id: id,
+          details: {
+            refund_id: feeRefund.id,
+            reason: refund_reason || null,
+            ...fee.breakdown,
+          },
+        });
+        return jsonResponse({
+          success: true,
+          data: updatedFee,
+          refund_id: feeRefund.id,
+          breakdown: fee.breakdown,
+        });
+      }
+
       if (reg.refunded_at) return jsonResponse({ error: "Deja rambursat" });
       if (reg.payment_status !== "paid" || !reg.stripe_session_id) {
         return jsonResponse({

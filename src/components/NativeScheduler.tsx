@@ -373,14 +373,16 @@ const NativeScheduler = ({
         {lang === "ro" ? (
           <>
             Poți anula sau reprograma gratuit cu cel puțin 24 de ore înainte.
-            Dacă nu te prezinți sau anulezi mai târziu de 24 de ore, se reține{" "}
-            <strong>150 lei</strong>, cât o lecție privată.
+            Dacă nu te prezinți sau anulezi mai târziu de 24 de ore, se
+            încasează de pe card <strong>150 lei</strong>, cât o lecție privată.
+            Taxa poate fi rambursată dacă o contești.
           </>
         ) : (
           <>
             You can cancel or reschedule free of charge at least 24 hours ahead.
             If you do not show up, or cancel later than 24 hours,{" "}
-            <strong>150 lei</strong> is charged — the price of a private lesson.
+            <strong>150 lei</strong> is charged to your card — the price of a
+            private lesson. The fee may be refunded if you appeal it.
           </>
         )}
       </div>
@@ -392,7 +394,8 @@ const NativeScheduler = ({
             final îți confirmi locul cu cardul prin Stripe (nu se încasează
             nimic acum). Poți anula sau reprograma gratuit cu cel puțin 24 de
             ore înainte. Dacă nu te prezinți sau anulezi mai târziu de 24 de
-            ore, se reține <strong>150 lei</strong>, cât o lecție privată.
+            ore, se încasează de pe card <strong>150 lei</strong>, cât o lecție
+            privată. Taxa poate fi rambursată dacă o contești.
           </>
         ) : (
           <>
@@ -400,8 +403,9 @@ const NativeScheduler = ({
             at the end you confirm your spot with your card through Stripe
             (nothing is charged now). You can cancel or reschedule free of
             charge at least 24 hours ahead. If you do not show up, or cancel
-            later than 24 hours, <strong>150 lei</strong> is charged — the price
-            of a private lesson.
+            later than 24 hours, <strong>150 lei</strong> is charged to your
+            card — the price of a private lesson. The fee may be refunded if you
+            appeal it.
           </>
         )}
       </div>

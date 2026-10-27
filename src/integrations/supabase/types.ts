@@ -1184,6 +1184,13 @@ export type Database = {
       }
       registrations: {
         Row: {
+          no_show_fee_amount: number | null
+          no_show_fee_at: string | null
+          no_show_fee_booking_id: string | null
+          no_show_fee_error: string | null
+          no_show_fee_intent_id: string | null
+          no_show_fee_refunded_amount: number | null
+          no_show_fee_status: string | null
           deposit_amount: number | null
           deposit_paid_at: string | null
           deposit_session_id: string | null
@@ -1230,6 +1237,13 @@ export type Database = {
           whatsapp_sent_at: string | null
         }
         Insert: {
+          no_show_fee_amount?: number | null
+          no_show_fee_at?: string | null
+          no_show_fee_booking_id?: string | null
+          no_show_fee_error?: string | null
+          no_show_fee_intent_id?: string | null
+          no_show_fee_refunded_amount?: number | null
+          no_show_fee_status?: string | null
           deposit_amount?: number | null
           deposit_paid_at?: string | null
           deposit_session_id?: string | null
@@ -1276,6 +1290,13 @@ export type Database = {
           whatsapp_sent_at?: string | null
         }
         Update: {
+          no_show_fee_amount?: number | null
+          no_show_fee_at?: string | null
+          no_show_fee_booking_id?: string | null
+          no_show_fee_error?: string | null
+          no_show_fee_intent_id?: string | null
+          no_show_fee_refunded_amount?: number | null
+          no_show_fee_status?: string | null
           deposit_amount?: number | null
           deposit_paid_at?: string | null
           deposit_session_id?: string | null
