@@ -74,3 +74,83 @@ Living backlog, updated across the audit passes below. Product scope: lead-gen +
 | Meta Pixel was a dead `YOUR_PIXEL_ID` placeholder | Removed entirely from `index.html`, per your instruction |
 | Test suite was 3/4 red | `Navbar.test.tsx` fixed (Router context + ResizeObserver stub + stale assertions rewritten); 3/3 passing |
 | Duplicate/orphaned migration files | Cleaned up, single canonical migration remains (`20260701121135...`) |
+
+---
+
+## Open items carried over from TODO.md and HANDOFF.md (27 October 2026)
+
+Both files were checked against the code and deleted; what was done is in git
+history (`HANDOFF.md`, `TODO.md` at `6feb0dc`). What is still true and still
+open:
+
+### Not blocked
+
+| Item | State in the code |
+|---|---|
+| Cohorte has unlabelled row controls (missing `aria-label`) | `src/components/admin/CohortsAdmin.tsx` has no `aria-label` |
+| `compatibility_date` in the generated `wrangler.json` is the build date | nitro generates it; there is no `wrangler.toml` |
+| "Măsurare" self-check for the analytics screen (gtag loaded, consent granted, events fired) | written once, never pushed; ~140 lines and one mount edit to redo |
+| Embedded no-redirect card form everywhere (the owner asked) | private lessons have it; group checkout, subscriptions and the kids deposit still redirect to Stripe (`create-checkout*`); scope it first |
+| Private-lesson paid path never run live end to end | the owner agreed to book one with his own card and refund it, then check the registration is `paid`, the booking has a `google_event_id` and shows in admin |
+| Admin cancel inside 24 h never tested in the real panel | — |
+| `cohort_calendar.members` ("Cursanții grupei") | verify once: add a lesson to A1 online, check the member is on the invite |
+| Trial no-show fee, monthly-group refunds, deposit marker | new on 27 October 2026; first live charge / refund / deposit to be watched in Stripe and in the admin |
+| SEO tasks T1–T5 | below |
+
+### Blocked on the owner
+
+- GA4 phase two: the numeric property ID and a service-account JSON (stored as
+  Supabase secrets, never in chat).
+- The confirmation email's button points at
+  `https://araba-libaneza-cu-ibra.lovable.app`: Supabase Auth Site URL and
+  redirect allow-list, a setting, not code.
+- Whether GA4 is linked to Google Ads (the privacy policy names Ads
+  measurement; drop the wording if not).
+- Google UI steps: GA4 → Admin → Events → mark `generate_lead`,
+  `trial_booking_complete`, `paid_booking_complete` as key events (until then
+  every conversion report reads 0 and T5 cannot be validated); GA4 → Product
+  links → link Search Console; GSC → check the indexing of new routes.
+- Verify the cookie banner, `/privacy` and `/terms` claims and that every
+  script honours the consent choice (owner's item 5, deliberately last).
+
+### Analytics, established by reading (not yet verified live)
+
+The root cause of the missing conversions was consent, not the tags: while
+the old Adopt banner was expired, Consent Mode stayed `denied`. The built-in
+banner (`CookieConsentBanner.tsx`, `src/lib/cookieConsent.ts`) should have
+restarted measurement; unverified. The Ads account is `AW-18482373882` and the
+bootstrap configures only `G-F167Y815JL`; check Google Ads → Conversions
+before calling it broken. Only `begin_checkout` has an Ads conversion: none
+for `generate_lead` or `purchase` (they need conversion actions created in
+the Ads account).
+
+### SEO tasks (from GSC 11 Jun → 22 Aug 2026 and GA4; figures in `docs/SEO_AUDIT.md`)
+
+- **T1 (P1)** Rewrite the teens page `src/pages/seo/CursuriArabaAdolescenti.tsx`
+  (466 impressions, 0 clicks, position 33.5): above the fold age, format,
+  price, where, how to start; "Pentru părinți" and "Pentru adolescenți"; FAQ
+  from the GSC teen queries; `/trial` CTA top and bottom. Accept: one H1,
+  ≥ 900 words, valid `Course` JSON-LD, links to `/cursuri-araba-bucuresti`
+  and `/trial`.
+- **T2 (P1)** Homepage vs `/cursuri-araba` cannibalisation: the homepage
+  becomes brand + formats, `/cursuri-araba` the commercial page for the
+  generic query, linked from the homepage as "cursuri de arabă";
+  self-canonicals, no cross-canonical. Publish on its own so the effect is
+  attributable.
+- **T3 (P1)** `/cursuri/grup` (449 impressions, CTR 0.22%): title ≤ 60 and
+  description ≤ 155 on "curs de arabă în grupă"; first paragraph answers
+  price, start and format; visible table of levels, starts and prices.
+- **T4 (P2)** End-of-article CTA to `/trial` and the course page on every
+  GSC top-10 blog post (`alfabetul-arab-pentru-incepatori` first).
+- **T5 (P3)** Form abandonment (27 `form_start` → 14 `Lead`):
+  `RegistrationFormSection.tsx`, `Trial.tsx`: completable at 390 px with no
+  horizontal scroll, every error as visible text next to its field. (The
+  required-field work of 27 October 2026 added inline errors for name and
+  email.)
+
+KPIs to compare at 14 / 30 / 60 days, equal windows: organic clicks 34 (10
+weeks), CTR ~1.1%, average position ~26, "cursuri araba bucuresti" 16.93,
+"meditatii araba bucuresti" 14.91, "cursuri adolescenti araba" 33.52,
+`/meditatii-araba` CTR 0.91%, `/cursuri/grup` CTR 0.22%, organic sessions 50,
+`Lead` 14, `form_start` 27, key events 0. Do not make `cta_click` a key event
+unless needed (volume).
