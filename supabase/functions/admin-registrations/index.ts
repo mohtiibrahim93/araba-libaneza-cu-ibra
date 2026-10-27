@@ -4232,15 +4232,6 @@ Deno.serve(async (req) => {
       if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(studentEmail)) {
         return jsonResponse({ error: "Emailul nu este valid." });
       }
-      // A new registration needs a phone too (owner's rule, 27 October 2026).
-      // Booking onto an existing registration creates none, so it is not asked.
-      if ((!existing || extra) && studentPhone.length < 3) {
-        return jsonResponse({
-          error: existing
-            ? "Cursantul nu are telefon salvat. Adaugă-l din fișa lui, apoi programează."
-            : "Telefonul este obligatoriu.",
-        });
-      }
       if (!Number.isFinite(Date.parse(startAt))) {
         return jsonResponse({ error: "Data sau ora nu sunt valide." });
       }

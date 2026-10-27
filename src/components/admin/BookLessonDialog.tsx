@@ -313,7 +313,7 @@ export default function BookLessonDialog({
             />
           </div>
           <div className="space-y-1.5">
-            <Label className="text-xs">Telefon *</Label>
+            <Label className="text-xs">Telefon (opțional)</Label>
             <Input
               className="h-9"
               value={bkPhone}
