@@ -303,6 +303,10 @@ export type Database = {
       }
       bookings: {
         Row: {
+          appeal_at: string | null
+          appeal_decided_at: string | null
+          appeal_decision: string | null
+          appeal_text: string | null
           cancelled_at: string | null
           completed_at: string | null
           completed_by: string | null
@@ -342,6 +346,10 @@ export type Database = {
           updated_at: string
         }
         Insert: {
+          appeal_at?: string | null
+          appeal_decided_at?: string | null
+          appeal_decision?: string | null
+          appeal_text?: string | null
           cancelled_at?: string | null
           completed_at?: string | null
           completed_by?: string | null
@@ -381,6 +389,10 @@ export type Database = {
           updated_at?: string
         }
         Update: {
+          appeal_at?: string | null
+          appeal_decided_at?: string | null
+          appeal_decision?: string | null
+          appeal_text?: string | null
           cancelled_at?: string | null
           completed_at?: string | null
           completed_by?: string | null
