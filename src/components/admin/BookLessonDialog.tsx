@@ -294,7 +294,7 @@ export default function BookLessonDialog({
             </p>
           </div>
           <div className="space-y-1.5 sm:col-span-2">
-            <Label className="text-xs">Nume</Label>
+            <Label className="text-xs">Nume *</Label>
             <Input
               className="h-9"
               value={bkName}
@@ -303,7 +303,7 @@ export default function BookLessonDialog({
             />
           </div>
           <div className="space-y-1.5">
-            <Label className="text-xs">Email</Label>
+            <Label className="text-xs">Email *</Label>
             <Input
               className="h-9"
               type="email"
@@ -345,7 +345,7 @@ export default function BookLessonDialog({
             />
           </div>
           <div className="space-y-1.5">
-            <Label className="text-xs">Format</Label>
+            <Label className="text-xs">Format *</Label>
             <select
               className="h-9 w-full rounded-md border border-input bg-background px-2 text-sm"
               value={bkFormat}

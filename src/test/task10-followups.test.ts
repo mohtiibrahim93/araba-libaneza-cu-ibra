@@ -8,17 +8,20 @@ const read = (p: string) => readFileSync(resolve(process.cwd(), p), "utf8");
 describe("reminders are stamped only once they went out", () => {
   const src = read("supabase/functions/booking-reminders/index.ts");
   const loop = src.slice(
-    src.indexOf("for (const r of rowsTyped)"),
-    src.lastIndexOf("return { stage: stage.key"),
+    src.indexOf("for (const r of (upcoming ?? [])"),
+    src.indexOf("const results = { sent, failed };"),
   );
   it("awaits the send and skips the stamp when it fails", () => {
     expect(loop).toContain('await sendTemplateEmail("booking-reminder"');
-    expect(loop.indexOf("continue;")).toBeLessThan(
-      loop.indexOf("[stage.flag]: new Date().toISOString()"),
+    expect(loop.indexOf("continue;", loop.indexOf("catch (err)"))).toBeLessThan(
+      loop.indexOf("morning_reminder_on: due.day"),
     );
+    // One key per lesson time, so a retry never sends twice and a moved
+    // lesson is reminded again.
     expect(loop).toContain(
-      "idempotencyKey: `booking-reminder-${stage.key}-${r.id}`",
+      "`booking-reminder-morning-${r.id}-${due.day}-${startMs}`",
     );
+    expect(loop).toContain("`booking-reminder-1h-${r.id}-${startMs}`");
   });
 });
 

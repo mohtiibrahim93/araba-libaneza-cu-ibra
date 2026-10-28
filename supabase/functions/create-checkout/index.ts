@@ -66,7 +66,7 @@ serve(async (req) => {
       const { data: regRow } = await adminClient
         .from("registrations")
         .select(
-          "id, email, created_at, payment_status, stripe_session_id, form_type, level, cohort_id, format, quantity, lead_status",
+          "id, email, created_at, payment_status, stripe_session_id, deposit_paid_at, deposit_session_id, form_type, level, cohort_id, format, quantity, lead_status",
         )
         .eq("id", registrationId)
         .maybeSingle();
@@ -97,7 +97,12 @@ serve(async (req) => {
           status: 400,
           headers: { ...corsHeaders, "Content-Type": "application/json" },
         });
+      // The kids deposit is its own payment with its own marker
+      // (deposit_paid_at / deposit_session_id), so it is checked against
+      // those, never against the course's payment_status.
+      const isDeposit = courseType === "kids_deposit";
       // "free": the owner gave it for free, so there is nothing to charge.
+      // (A course already paid needs no seat deposit either.)
       if (
         regRow.payment_status === "paid" ||
         regRow.payment_status === "free"
@@ -107,7 +112,13 @@ serve(async (req) => {
           status: 409,
         });
       }
-      if (regRow.stripe_session_id) {
+      if (isDeposit && regRow.deposit_paid_at) {
+        return new Response(JSON.stringify({ error: "Already paid" }), {
+          headers: { ...corsHeaders, "Content-Type": "application/json" },
+          status: 409,
+        });
+      }
+      if (isDeposit ? regRow.deposit_session_id : regRow.stripe_session_id) {
         return new Response(
           JSON.stringify({ error: "Checkout already initiated" }),
           {
@@ -225,15 +236,24 @@ serve(async (req) => {
         Deno.env.get("SUPABASE_URL") ?? "",
         Deno.env.get("SUPABASE_SERVICE_ROLE_KEY") ?? "",
       );
-      const { error: updateError } = await supabase
-        .from("registrations")
-        .update({
-          stripe_session_id: session.id,
-          payment_status: "pending",
-        })
-        .eq("id", registrationId)
-        .is("stripe_session_id", null)
-        .neq("payment_status", "paid");
+      // A deposit session is recorded apart and leaves payment_status alone:
+      // that column tracks the course, which is still to be paid.
+      const { error: updateError } =
+        courseType === "kids_deposit"
+          ? await supabase
+              .from("registrations")
+              .update({ deposit_session_id: session.id })
+              .eq("id", registrationId)
+              .is("deposit_session_id", null)
+          : await supabase
+              .from("registrations")
+              .update({
+                stripe_session_id: session.id,
+                payment_status: "pending",
+              })
+              .eq("id", registrationId)
+              .is("stripe_session_id", null)
+              .neq("payment_status", "paid");
       if (updateError) {
         console.error(
           "Failed to attach stripe_session_id to registration:",

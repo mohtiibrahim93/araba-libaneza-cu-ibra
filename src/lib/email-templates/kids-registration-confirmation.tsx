@@ -79,6 +79,10 @@ const KidsRegistrationConfirmationEmail = ({
             </Text>
           )}
           <Text style={infoText}>
+            <strong>Grupa:</strong> maximum 6 copii, lecții de 60 de minute,
+            maximum 8 lecții pe lună
+          </Text>
+          <Text style={infoText}>
             <strong>Activități:</strong> jocuri, cântece și activități creative
           </Text>
           {message && <Text style={infoText}>Observații: {message}</Text>}

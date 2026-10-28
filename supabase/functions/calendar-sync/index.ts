@@ -1,6 +1,11 @@
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 import { reconcileCalendar } from "../_shared/calendar-reconciliation.ts";
-/** Scheduled read-back/retry. No unauthenticated invocation and no booking emails. */
+import { notifyGoogleCancellations } from "../_shared/calendar-cancel-emails.ts";
+/**
+ * Scheduled read-back/retry. No unauthenticated invocation. The only emails
+ * are for lessons deleted in Google Calendar: the student and the owner are
+ * told (calendar-cancel-emails.ts); nothing is refunded automatically.
+ */
 Deno.serve(async (req) => {
   const json = (body: unknown, status = 200) =>
     new Response(JSON.stringify(body), {
@@ -28,6 +33,7 @@ Deno.serve(async (req) => {
       from: new Date(Date.now() - 7 * 86400000).toISOString(),
       to: new Date(Date.now() + 400 * 86400000).toISOString(),
     });
+    await notifyGoogleCancellations(result.cancelledInGoogle);
     return json(
       { success: result.errors.length === 0, data: result },
       result.errors.length ? 207 : 200,

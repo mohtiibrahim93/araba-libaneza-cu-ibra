@@ -337,6 +337,9 @@ describe("site structure", () => {
       "/auth",
       "/checkout",
       "/thank-you",
+      // Where Stripe returns a visitor after saving a trial card.
+      "/proba-confirmata",
+      "/en/trial-confirmed",
       "/payment-status",
       "/unsubscribe",
       "/stergere-date",

@@ -406,6 +406,30 @@ serve(async (req) => {
           break;
         }
 
+        // The kids seat deposit is not the course: it gets its own marker and
+        // payment_status (the course's money) is left as it was, so the course
+        // stays payable. Owner's decision, 27 October 2026.
+        if (session.metadata?.course_type === "kids_deposit") {
+          const depositMatch = registrationId
+            ? { column: "id", value: registrationId }
+            : { column: "deposit_session_id", value: sessionId };
+          const { error: depositErr } = await supabase
+            .from("registrations")
+            .update({
+              deposit_paid_at: new Date().toISOString(),
+              deposit_amount: session.amount_total ?? null,
+              deposit_session_id: sessionId,
+            })
+            .eq(depositMatch.column, depositMatch.value)
+            .is("deposit_paid_at", null);
+          if (depositErr) {
+            console.error("Failed to record the kids deposit:", depositErr);
+            throw depositErr;
+          }
+          console.log(`Kids deposit recorded for session ${sessionId}`);
+          break;
+        }
+
         // Match by registration_id from metadata first, fallback to session_id
         const matchColumn = registrationId ? "id" : "stripe_session_id";
         const matchValue = registrationId || sessionId;
@@ -528,6 +552,23 @@ serve(async (req) => {
 
       case "payment_intent.succeeded": {
         const intent = event.data.object as Stripe.PaymentIntent;
+        // The trial's no-show fee (charged from the admin) is not payment for
+        // lessons: it is recorded in no_show_fee_*, never in payment_status,
+        // and the student is not "converted".
+        if (intent.metadata?.purpose === "trial_no_show_fee") {
+          if (intent.metadata?.registration_id)
+            await supabase
+              .from("registrations")
+              .update({
+                no_show_fee_status: "paid",
+                no_show_fee_intent_id: intent.id,
+                no_show_fee_amount: intent.amount_received || intent.amount,
+                no_show_fee_error: null,
+              })
+              .eq("id", intent.metadata.registration_id)
+              .or("no_show_fee_status.is.null,no_show_fee_status.eq.failed");
+          break;
+        }
         // Subscription-invoice PaymentIntents are handled by invoice.paid (which
         // also advances months_paid); skip them here to avoid double-processing.
         if (intent.invoice) {
@@ -581,6 +622,9 @@ serve(async (req) => {
 
       case "payment_intent.payment_failed": {
         const intent = event.data.object as Stripe.PaymentIntent;
+        // A declined no-show fee is already recorded by the admin action; it
+        // says nothing about the student's payments for lessons.
+        if (intent.metadata?.purpose === "trial_no_show_fee") break;
         const registrationId = intent.metadata?.registration_id;
         const matchColumn = registrationId ? "id" : "stripe_session_id";
         const matchValue = registrationId || intent.id;
@@ -719,9 +763,11 @@ serve(async (req) => {
         // and /checkout use a PaymentIntent (registration id in its metadata,
         // stripe_session_id = the intent id); hosted Checkout uses a session.
         let registrationId: string | null = null;
+        let noShowFee = false;
         try {
           const intent = await stripe.paymentIntents.retrieve(intentId);
           registrationId = intent.metadata?.registration_id || null;
+          noShowFee = intent.metadata?.purpose === "trial_no_show_fee";
         } catch (e) {
           console.warn(`Refund: could not read PaymentIntent ${intentId}`, e);
         }
@@ -749,6 +795,22 @@ serve(async (req) => {
         }
         if (!registrationId) {
           console.warn(`Refund for ${intentId}: no registration found`);
+          break;
+        }
+        // A refunded no-show fee: recorded on its own columns, leaving the
+        // registration's lesson payments (refunded_at, payment_status) alone.
+        if (noShowFee) {
+          const { error: feeErr } = await supabase
+            .from("registrations")
+            .update({
+              no_show_fee_refunded_amount: charge.amount_refunded,
+              ...(charge.amount_refunded >= charge.amount
+                ? { no_show_fee_status: "refunded" }
+                : {}),
+            })
+            .eq("id", registrationId)
+            .eq("no_show_fee_intent_id", intentId);
+          if (feeErr) throw feeErr;
           break;
         }
         // A partial refund keeps the registration paid and records the amount;

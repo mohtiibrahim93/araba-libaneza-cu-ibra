@@ -13,7 +13,7 @@ const content = {
       ],
       [
         "2. Servicii oferite",
-        "Oferim cursuri de arabă libaneză pentru adulți și adolescenți (grup și privat), fizic la Raduga Creative Center din București și online. Cursurile pentru copii, când pornesc, sunt fizice, la centru, iar varianta online se va adăuga mai târziu ca opțiune (momentan nu avem cursuri pentru copii). Cursurile acoperă toate nivelurile CEFR (A1–C2).",
+        "Oferim cursuri de arabă libaneză pentru adulți și adolescenți (grup și privat), fizic la Raduga Creative Center din București și online. Cursurile pentru copii nu sunt încă deschise (momentan se poate lăsa doar o cerere „Anunță-mă”); când pornesc, sunt fizice, la centru, în grupe de maximum 6 copii, cu lecții de 60 de minute și maximum 8 lecții pe lună, iar varianta online se va adăuga mai târziu ca opțiune. Cursurile acoperă toate nivelurile CEFR (A1–C2).",
       ],
       [
         "3. Înscriere și plăți",
@@ -21,7 +21,14 @@ const content = {
       ],
       [
         "4. Anulare și rambursare",
-        "Anularea înscrierii se poate face cu cel puțin 7 zile înainte de începerea cursului pentru o rambursare completă. După începerea cursului, rambursările se fac proporțional cu lecțiile rămase, minus o taxă administrativă de 10%.",
+        [
+          "Cursuri plătite integral: anularea înscrierii se poate face cu cel puțin 7 zile înainte de începerea cursului pentru o rambursare completă. După începerea cursului, rambursările se fac proporțional cu lecțiile rămase, minus o taxă administrativă de 10%.",
+          "Grupe cu plată lunară (abonament): anularea oprește întotdeauna toate plățile lunare viitoare.",
+          "Înainte de data de începere a cursului: dacă anulezi cu cel puțin 7 zile înainte, prima lună se rambursează integral; dacă anulezi cu mai puțin de 7 zile înainte, prima lună se rambursează minus o taxă administrativă de 10%.",
+          "După începerea cursului: luna curentă se rambursează pentru lecțiile din acea lună care nu au avut loc încă, minus o taxă administrativă de 10%, doar dacă anulezi în cel mult 7 zile de la plata acelei luni (pentru o lună plătită înainte de începerea cursului, de la data începerii); mai târziu, luna curentă nu se mai rambursează. Lunile anterioare nu se rambursează niciodată. Lecțiile unei luni sunt lecțiile reale ale grupei din perioada plătită, iar zilele se socotesc după ora României (București).",
+          "Exemplu: abonament de 500 lei/lună, 8 lecții pe lună. Anulezi cu 10 zile înainte de începere: primești înapoi 500 lei. Anulezi cu 3 zile înainte: primești 450 lei (500 lei minus 10%). Luna a fost plătită pe 1 și anulezi pe 5, după 2 din cele 8 lecții: rămân 6 lecții, adică 500 × 6/8 = 375 lei, minus 10% (37,50 lei), deci primești 337,50 lei. Dacă anulezi abia pe 12, la 11 zile după plată, nu primești nimic pentru acea lună, dar nu se mai încasează nicio lună viitoare.",
+          "Lecția de probă gratuită: proba costă 0 lei, iar cardul se salvează la programare fără să se încaseze nimic. O poți anula sau reprograma gratuit cu cel puțin 24 de ore înainte. Dacă nu te prezinți sau anulezi cu mai puțin de 24 de ore înainte, se încasează de pe card 150 lei, cât o lecție privată. Taxa poate fi rambursată dacă o contești și explici motivul; decidem caz cu caz.",
+        ],
       ],
       [
         "5. Obligațiile cursantului",
@@ -39,12 +46,22 @@ const content = {
         "8. Contact",
         "Pentru orice întrebare, contactați-ne la marhaba@centruldearabalibaneza.com sau pe WhatsApp la +40 763 124 514.",
       ],
+      [
+        "9. Date de identificare",
+        [
+          "Firma: E-SERVICES TODAY S.R.L.",
+          "Sediu social: Str. Dantelei nr. 12-14G, Bragadiru, județul Ilfov, cod poștal 077025",
+          "CUI: 52051074",
+          "Nr. de ordine în registrul comerțului: J2025046577002",
+          "EUID: ROONRC.J2025046577002",
+        ],
+      ],
     ],
   },
   en: {
     title: "Terms & Conditions",
     updated: "Last updated:",
-    updatedValue: "September 2026",
+    updatedValue: "October 2026",
     sections: [
       [
         "1. Overview",
@@ -52,7 +69,7 @@ const content = {
       ],
       [
         "2. Services",
-        "We offer Lebanese Arabic courses for adults and teenagers (group and private), in person at Raduga Creative Center in Bucharest and online. Kids' courses, when they run, are online, with an in-person option to be added later (there are none at the moment). Courses cover all CEFR levels (A1–C2).",
+        "We offer Lebanese Arabic courses for adults and teenagers (group and private), in person at Raduga Creative Center in Bucharest and online. Kids' courses are not open yet (for now you can only ask to be notified); when they start, they are in person at the centre, in groups of up to 6 children, with 60-minute lessons and up to 8 lessons a month, and an online option will be added later. Courses cover all CEFR levels (A1–C2).",
       ],
       [
         "3. Registration and payments",
@@ -60,7 +77,14 @@ const content = {
       ],
       [
         "4. Cancellation and refund",
-        "Registration can be cancelled at least 7 days before the course start date for a full refund. After the course starts, refunds are calculated proportionally based on remaining lessons, minus a 10% administrative fee.",
+        [
+          "Courses paid in full: registration can be cancelled at least 7 days before the course start date for a full refund. After the course starts, refunds are calculated proportionally based on remaining lessons, minus a 10% administrative fee.",
+          "Groups paid monthly (subscription): cancelling always stops all future monthly charges.",
+          "Before the course start date: if you cancel at least 7 days before, the first month is refunded in full; if you cancel less than 7 days before, the first month is refunded minus a 10% administrative fee.",
+          "After the course has started: the current month is refunded for the lessons of that month not yet held, minus a 10% administrative fee, only if you cancel within 7 days of that month's charge (for a month paid before the course started, within 7 days of the start date); later than that, the current month is not refunded. Earlier months are never refunded. A month's lessons are the group's real lessons in the period paid for, and days are counted in Romanian time (Bucharest).",
+          "Example: a 500 lei/month subscription, 8 lessons a month. You cancel 10 days before the start: you get 500 lei back. You cancel 3 days before: you get 450 lei (500 lei minus 10%). The month was charged on the 1st and you cancel on the 5th, after 2 of the 8 lessons: 6 lessons remain, so 500 × 6/8 = 375 lei, minus 10% (37.50 lei), and you get 337.50 lei back. If you cancel only on the 12th, 11 days after the charge, you get nothing back for that month, but no future month is charged.",
+          "Free trial lesson: the trial costs 0 lei, and your card is saved when you book without anything being charged. You can cancel or reschedule free of charge at least 24 hours ahead. If you do not show up, or cancel less than 24 hours ahead, 150 lei is charged to the card, the price of a private lesson. The fee may be refunded if you appeal it and explain why; we decide case by case.",
+        ],
       ],
       [
         "5. Student responsibilities",
@@ -77,6 +101,16 @@ const content = {
       [
         "8. Contact",
         "For any questions, contact us at marhaba@centruldearabalibaneza.com or on WhatsApp at +40 763 124 514.",
+      ],
+      [
+        "9. Company details",
+        [
+          "Company: E-SERVICES TODAY S.R.L.",
+          "Registered office: Str. Dantelei nr. 12-14G, Bragadiru, județul Ilfov, cod poștal 077025",
+          "Tax ID (CUI): 52051074",
+          "Trade Register No.: J2025046577002",
+          "EUID: ROONRC.J2025046577002",
+        ],
       ],
     ],
   },
@@ -103,12 +137,16 @@ const TermsContent = () => {
         <div className="prose prose-sm text-muted-foreground space-y-6">
           <p>
             <strong>{page.updated}</strong>{" "}
-            {"updatedValue" in page ? page.updatedValue : "Septembrie 2026"}
+            {"updatedValue" in page ? page.updatedValue : "Octombrie 2026"}
           </p>
           {page.sections.map(([title, body]) => (
             <section key={title} className="space-y-2">
               <h2 className="text-lg font-semibold text-foreground">{title}</h2>
-              <p>{body}</p>
+              {typeof body === "string" ? (
+                <p>{body}</p>
+              ) : (
+                body.map((paragraph) => <p key={paragraph}>{paragraph}</p>)
+              )}
             </section>
           ))}
         </div>

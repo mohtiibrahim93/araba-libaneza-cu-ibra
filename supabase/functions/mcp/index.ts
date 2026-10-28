@@ -55,7 +55,7 @@ var get_pricing_default = defineTool({
       kidsGroupMonthly: {
         online: ONLINE_PRICES.kidsGroupMonthly,
         fizic: physicalPrice(ONLINE_PRICES.kidsGroupMonthly),
-        unit: "LEI/month/child (min. 4)"
+        unit: "LEI/month/child (not open yet, notify-me only; groups of max. 6, 60-minute lessons, max. 8 lessons a month)"
       }
     };
     return {

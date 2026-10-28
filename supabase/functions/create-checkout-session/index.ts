@@ -226,12 +226,32 @@ serve(async (req) => {
       // that: a free slot that nobody turns up to costs a real lesson, and five
       // of the first six trials ever booked left no card at all. (bookingMeta
       // is built above, shared with the private-lesson payment.)
+      // Back from Stripe to a confirmation screen of its own (owner's request,
+      // 27 October 2026), in the visitor's language, showing what was booked.
+      // The values only fill in the text there; the booking is still made by
+      // the webhook once the card is saved.
+      const { data: trialType } = await supabaseAdmin
+        .from("booking_event_types")
+        .select("duration_min")
+        .eq("slug", bookingMeta.booking_event_type || "trial")
+        .maybeSingle();
+      const confirmed = new URLSearchParams();
+      if (bookingMeta.booking_start_at)
+        confirmed.set("start", bookingMeta.booking_start_at);
+      if (bookingMeta.booking_format)
+        confirmed.set("format", bookingMeta.booking_format);
+      if (trialType?.duration_min)
+        confirmed.set("min", String(trialType.duration_min));
+      const confirmedPath =
+        bookingMeta.booking_language === "en"
+          ? "/en/trial-confirmed"
+          : "/proba-confirmata";
       const session = await stripe.checkout.sessions.create(
         {
           mode: "setup",
           customer: customerId,
           currency: "ron",
-          success_url: `${origin}/?trial_card=saved`,
+          success_url: `${origin}${confirmedPath}?${confirmed}`,
           cancel_url: `${origin}/?trial_card=canceled`,
           metadata: {
             registration_id: registrationId,

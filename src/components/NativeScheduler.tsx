@@ -165,6 +165,7 @@ interface Props {
     name: string;
     email: string;
     phone: string;
+    format?: string;
   }) => Promise<string | null>;
   /**
    * A new private-lesson purchase (with `registrationId` from the form). The
@@ -372,14 +373,16 @@ const NativeScheduler = ({
         {lang === "ro" ? (
           <>
             Poți anula sau reprograma gratuit cu cel puțin 24 de ore înainte.
-            Dacă nu te prezinți sau anulezi mai târziu de 24 de ore, se reține{" "}
-            <strong>150 lei</strong>, cât o lecție privată.
+            Dacă nu te prezinți sau anulezi mai târziu de 24 de ore, se
+            încasează de pe card <strong>150 lei</strong>, cât o lecție privată.
+            Taxa poate fi rambursată dacă o contești.
           </>
         ) : (
           <>
             You can cancel or reschedule free of charge at least 24 hours ahead.
             If you do not show up, or cancel later than 24 hours,{" "}
-            <strong>150 lei</strong> is charged — the price of a private lesson.
+            <strong>150 lei</strong> is charged to your card — the price of a
+            private lesson. The fee may be refunded if you appeal it.
           </>
         )}
       </div>
@@ -391,7 +394,8 @@ const NativeScheduler = ({
             final îți confirmi locul cu cardul prin Stripe (nu se încasează
             nimic acum). Poți anula sau reprograma gratuit cu cel puțin 24 de
             ore înainte. Dacă nu te prezinți sau anulezi mai târziu de 24 de
-            ore, se reține <strong>150 lei</strong>, cât o lecție privată.
+            ore, se încasează de pe card <strong>150 lei</strong>, cât o lecție
+            privată. Taxa poate fi rambursată dacă o contești.
           </>
         ) : (
           <>
@@ -399,8 +403,9 @@ const NativeScheduler = ({
             at the end you confirm your spot with your card through Stripe
             (nothing is charged now). You can cancel or reschedule free of
             charge at least 24 hours ahead. If you do not show up, or cancel
-            later than 24 hours, <strong>150 lei</strong> is charged — the price
-            of a private lesson.
+            later than 24 hours, <strong>150 lei</strong> is charged to your
+            card — the price of a private lesson. The fee may be refunded if you
+            appeal it.
           </>
         )}
       </div>
@@ -702,6 +707,7 @@ const NativeScheduler = ({
           name: name.trim(),
           email: email.trim(),
           phone: phone.trim(),
+          format: format === "physical" ? "fizic" : "online",
         })) ??
         null;
       if (mode === "create" && !resolvedRegistrationId) {
@@ -1484,35 +1490,57 @@ const NativeScheduler = ({
             </div>
           )}
         </div>
+        {/* Name, email, phone and format are required for every booking
+            (owner's rule, 27 October 2026), and marked so. */}
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-          <input
-            value={name}
-            onChange={(e) => setName(e.target.value)}
-            placeholder={t.schedulerNamePlaceholder}
-            className="w-full px-3 py-2 rounded-md border border-input text-sm"
-          />
-          <input
-            value={email}
-            type="email"
-            onChange={(e) => setEmail(e.target.value)}
-            placeholder="email@…"
-            className="w-full px-3 py-2 rounded-md border border-input text-sm"
-          />
-          <PhoneInput
-            value={phone}
-            onChange={setPhone}
-            placeholder={t.schedulerPhonePlaceholder}
-            autoComplete="tel"
-            maxLength={30}
-          />
-          <select
-            value={format}
-            onChange={(e) => setFormat(e.target.value as Format)}
-            className="w-full px-3 py-2 rounded-md border border-input text-sm bg-background"
-          >
-            <option value="online">{t.bookingFormatOnline}</option>
-            <option value="physical">{t.bookingFormatPhysical}</option>
-          </select>
+          <label className="space-y-1 text-xs font-medium text-foreground">
+            <span>{t.labelName} *</span>
+            <input
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+              placeholder={t.schedulerNamePlaceholder}
+              required
+              aria-required="true"
+              className="w-full px-3 py-2 rounded-md border border-input text-sm font-normal"
+            />
+          </label>
+          <label className="space-y-1 text-xs font-medium text-foreground">
+            <span>{t.labelEmail} *</span>
+            <input
+              value={email}
+              type="email"
+              onChange={(e) => setEmail(e.target.value)}
+              placeholder="email@…"
+              required
+              aria-required="true"
+              className="w-full px-3 py-2 rounded-md border border-input text-sm font-normal"
+            />
+          </label>
+          <label className="space-y-1 text-xs font-medium text-foreground">
+            <span>{t.labelPhone} *</span>
+            <PhoneInput
+              value={phone}
+              onChange={setPhone}
+              placeholder={t.schedulerPhonePlaceholder}
+              autoComplete="tel"
+              maxLength={30}
+              required
+              aria-required="true"
+            />
+          </label>
+          <label className="space-y-1 text-xs font-medium text-foreground">
+            <span>{t.labelFormat} *</span>
+            <select
+              value={format}
+              onChange={(e) => setFormat(e.target.value as Format)}
+              required
+              aria-required="true"
+              className="w-full px-3 py-2 rounded-md border border-input text-sm bg-background font-normal"
+            >
+              <option value="online">{t.bookingFormatOnline}</option>
+              <option value="physical">{t.bookingFormatPhysical}</option>
+            </select>
+          </label>
           {eventType === "trial" && format === "physical" && (
             // Without this the weekday slots simply disappear when you switch,
             // which reads as a bug rather than a rule.

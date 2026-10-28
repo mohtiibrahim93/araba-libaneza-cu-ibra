@@ -383,8 +383,8 @@ const PreturiPage = () => {
               </h2>
               <p className="text-foreground/80">
                 {en
-                  ? `In person in Bucharest, ${formatLei(kidsFizic)} lei a month. When a group opens, a refundable ${formatLei(kidsDeposit)} lei deposit (25%) keeps the place.`
-                  : `Fizic, în București, ${formatLei(kidsFizic)} lei pe lună. Când se deschide o grupă, un avans rambursabil de ${formatLei(kidsDeposit)} lei (25%) păstrează locul.`}
+                  ? `Not open yet. In person in Bucharest, ${formatLei(kidsFizic)} lei a month: groups of up to 6 children, 60-minute lessons, up to 8 lessons a month. When a group opens, a refundable ${formatLei(kidsDeposit)} lei deposit (25%) keeps the place.`
+                  : `Încă nedeschis. Fizic, în București, ${formatLei(kidsFizic)} lei pe lună: grupe de maximum 6 copii, lecții de 60 de minute, maximum 8 lecții pe lună. Când se deschide o grupă, un avans rambursabil de ${formatLei(kidsDeposit)} lei (25%) păstrează locul.`}
               </p>
               <Link
                 to="/cursuri/copii"

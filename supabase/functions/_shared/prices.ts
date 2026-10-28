@@ -37,6 +37,14 @@ export const GROUP_MONTHS: Record<GroupLevel, number> = {
 export const PRIVATE_LESSON = 150;
 
 /**
+ * Charged to the card saved for a free trial when the owner marks it a no-show
+ * or a late cancellation (< 24 h): the price of a private lesson, 150 lei, in
+ * bani. Owner's decision, 27 October 2026; stated on the trial page and in the
+ * Terms, section 4.
+ */
+export const TRIAL_NO_SHOW_FEE_BANI = PRIVATE_LESSON * 100;
+
+/**
  * Private-lesson volume discount. One tier only: -15% from 20 lessons.
  *
  * Mirrors PRIVATE_DISCOUNT_TIERS in src/lib/pricing.ts, which is what the site

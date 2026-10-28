@@ -19,6 +19,8 @@ interface Props {
   name?: string;
   whenLabel?: string;
   lang?: "ro" | "en";
+  /** The lesson was removed by the teacher (deleted in his Google Calendar). */
+  byTeacher?: boolean;
 }
 
 const T = {
@@ -28,6 +30,9 @@ const T = {
     body: "Confirmăm că programarea ta a fost anulată.",
     when: "Programarea anulată",
     rebook: "Poți face oricând o nouă programare de pe site-ul nostru.",
+    teacherBody: "Lecția ta a fost anulată de profesor.",
+    teacherNext:
+      "Te contactăm ca să stabilim o nouă oră. Dacă ai întrebări, scrie-ne pe WhatsApp la +40 763 124 514.",
     footer: "Mulțumim,",
   },
   en: {
@@ -36,11 +41,14 @@ const T = {
     body: "We confirm your booking has been cancelled.",
     when: "Cancelled slot",
     rebook: "You can book again anytime from our website.",
+    teacherBody: "Your lesson was cancelled by the teacher.",
+    teacherNext:
+      "We will contact you to agree on a new time. If you have any questions, message us on WhatsApp at +40 763 124 514.",
     footer: "Thanks,",
   },
 } as const;
 
-const Email = ({ name, whenLabel, lang = "ro" }: Props) => {
+const Email = ({ name, whenLabel, lang = "ro", byTeacher = false }: Props) => {
   const t = T[lang];
   return (
     <Html lang={lang} dir="ltr">
@@ -61,7 +69,7 @@ const Email = ({ name, whenLabel, lang = "ro" }: Props) => {
             </Text>
           </Section>
           <Heading style={h1}>{t.hi(name)}</Heading>
-          <Text style={text}>{t.body}</Text>
+          <Text style={text}>{byTeacher ? t.teacherBody : t.body}</Text>
           {whenLabel && (
             <Section style={detailsBox}>
               <Text style={infoText}>
@@ -69,7 +77,7 @@ const Email = ({ name, whenLabel, lang = "ro" }: Props) => {
               </Text>
             </Section>
           )}
-          <Text style={text}>{t.rebook}</Text>
+          <Text style={text}>{byTeacher ? t.teacherNext : t.rebook}</Text>
           <Hr style={hr} />
           <Text style={footer}>
             {t.footer} {SITE_NAME}
@@ -83,7 +91,13 @@ const Email = ({ name, whenLabel, lang = "ro" }: Props) => {
 export const template = {
   component: Email,
   subject: (d: Props) =>
-    d.lang === "en" ? "Booking cancelled" : "Programare anulată",
+    d.byTeacher
+      ? d.lang === "en"
+        ? "Lesson cancelled"
+        : "Lecție anulată"
+      : d.lang === "en"
+        ? "Booking cancelled"
+        : "Programare anulată",
   displayName: "Booking — anulare",
   previewData: { name: "Maria", whenLabel: "12 iun. 2026, 14:00", lang: "ro" },
 } satisfies TemplateEntry;

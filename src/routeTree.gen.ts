@@ -35,6 +35,7 @@ import { Route as MeditatiiArabaRouteImport } from './routes/meditatii-araba'
 import { Route as PaymentStatusRouteImport } from './routes/payment-status'
 import { Route as PreturiRouteImport } from './routes/preturi'
 import { Route as PrivacyRouteImport } from './routes/privacy'
+import { Route as ProbaConfirmataRouteImport } from './routes/proba-confirmata'
 import { Route as QuizRouteImport } from './routes/quiz'
 import { Route as ResurseRouteImport } from './routes/resurse'
 import { Route as RezervariRouteImport } from './routes/rezervari'
@@ -112,6 +113,7 @@ import { Route as EnPrivacyRouteImport } from './routes/en/privacy'
 import { Route as EnQuizRouteImport } from './routes/en/quiz'
 import { Route as EnTermsRouteImport } from './routes/en/terms'
 import { Route as EnTrialRouteImport } from './routes/en/trial'
+import { Route as EnTrialConfirmedRouteImport } from './routes/en/trial-confirmed'
 import { Route as JocIndexRouteImport } from './routes/joc.index'
 import { Route as JocScorRouteImport } from './routes/joc.scor'
 import { Route as PrivateStatusIdRouteImport } from './routes/private-status/$id'
@@ -273,6 +275,11 @@ const PreturiRoute = PreturiRouteImport.update({
 const PrivacyRoute = PrivacyRouteImport.update({
   id: '/privacy',
   path: '/privacy',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ProbaConfirmataRoute = ProbaConfirmataRouteImport.update({
+  id: '/proba-confirmata',
+  path: '/proba-confirmata',
   getParentRoute: () => rootRouteImport,
 } as any)
 const QuizRoute = QuizRouteImport.update({
@@ -690,6 +697,11 @@ const EnTrialRoute = EnTrialRouteImport.update({
   path: '/en/trial',
   getParentRoute: () => rootRouteImport,
 } as any)
+const EnTrialConfirmedRoute = EnTrialConfirmedRouteImport.update({
+  id: '/en/trial-confirmed',
+  path: '/en/trial-confirmed',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const JocIndexRoute = JocIndexRouteImport.update({
   id: '/',
   path: '/',
@@ -887,6 +899,7 @@ export interface FileRoutesByFullPath {
   '/payment-status': typeof PaymentStatusRoute
   '/preturi': typeof PreturiRoute
   '/privacy': typeof PrivacyRoute
+  '/proba-confirmata': typeof ProbaConfirmataRoute
   '/quiz': typeof QuizRoute
   '/resurse': typeof ResurseRoute
   '/rezervari': typeof RezervariRoute
@@ -958,6 +971,7 @@ export interface FileRoutesByFullPath {
   '/en/quiz': typeof EnQuizRoute
   '/en/terms': typeof EnTermsRoute
   '/en/trial': typeof EnTrialRoute
+  '/en/trial-confirmed': typeof EnTrialConfirmedRoute
   '/joc/scor': typeof JocScorRoute
   '/private-status/$id': typeof PrivateStatusIdRoute
   '/admin/': typeof AdminIndexRoute
@@ -1023,6 +1037,7 @@ export interface FileRoutesByTo {
   '/payment-status': typeof PaymentStatusRoute
   '/preturi': typeof PreturiRoute
   '/privacy': typeof PrivacyRoute
+  '/proba-confirmata': typeof ProbaConfirmataRoute
   '/quiz': typeof QuizRoute
   '/resurse': typeof ResurseRoute
   '/rezervari': typeof RezervariRoute
@@ -1093,6 +1108,7 @@ export interface FileRoutesByTo {
   '/en/quiz': typeof EnQuizRoute
   '/en/terms': typeof EnTermsRoute
   '/en/trial': typeof EnTrialRoute
+  '/en/trial-confirmed': typeof EnTrialConfirmedRoute
   '/joc/scor': typeof JocScorRoute
   '/private-status/$id': typeof PrivateStatusIdRoute
   '/admin': typeof AdminIndexRoute
@@ -1160,6 +1176,7 @@ export interface FileRoutesById {
   '/payment-status': typeof PaymentStatusRoute
   '/preturi': typeof PreturiRoute
   '/privacy': typeof PrivacyRoute
+  '/proba-confirmata': typeof ProbaConfirmataRoute
   '/quiz': typeof QuizRoute
   '/resurse': typeof ResurseRoute
   '/rezervari': typeof RezervariRoute
@@ -1231,6 +1248,7 @@ export interface FileRoutesById {
   '/en/quiz': typeof EnQuizRoute
   '/en/terms': typeof EnTermsRoute
   '/en/trial': typeof EnTrialRoute
+  '/en/trial-confirmed': typeof EnTrialConfirmedRoute
   '/joc/scor': typeof JocScorRoute
   '/private-status/$id': typeof PrivateStatusIdRoute
   '/admin/': typeof AdminIndexRoute
@@ -1299,6 +1317,7 @@ export interface FileRouteTypes {
     | '/payment-status'
     | '/preturi'
     | '/privacy'
+    | '/proba-confirmata'
     | '/quiz'
     | '/resurse'
     | '/rezervari'
@@ -1370,6 +1389,7 @@ export interface FileRouteTypes {
     | '/en/quiz'
     | '/en/terms'
     | '/en/trial'
+    | '/en/trial-confirmed'
     | '/joc/scor'
     | '/private-status/$id'
     | '/admin/'
@@ -1435,6 +1455,7 @@ export interface FileRouteTypes {
     | '/payment-status'
     | '/preturi'
     | '/privacy'
+    | '/proba-confirmata'
     | '/quiz'
     | '/resurse'
     | '/rezervari'
@@ -1505,6 +1526,7 @@ export interface FileRouteTypes {
     | '/en/quiz'
     | '/en/terms'
     | '/en/trial'
+    | '/en/trial-confirmed'
     | '/joc/scor'
     | '/private-status/$id'
     | '/admin'
@@ -1571,6 +1593,7 @@ export interface FileRouteTypes {
     | '/payment-status'
     | '/preturi'
     | '/privacy'
+    | '/proba-confirmata'
     | '/quiz'
     | '/resurse'
     | '/rezervari'
@@ -1642,6 +1665,7 @@ export interface FileRouteTypes {
     | '/en/quiz'
     | '/en/terms'
     | '/en/trial'
+    | '/en/trial-confirmed'
     | '/joc/scor'
     | '/private-status/$id'
     | '/admin/'
@@ -1709,6 +1733,7 @@ export interface RootRouteChildren {
   PaymentStatusRoute: typeof PaymentStatusRoute
   PreturiRoute: typeof PreturiRoute
   PrivacyRoute: typeof PrivacyRoute
+  ProbaConfirmataRoute: typeof ProbaConfirmataRoute
   QuizRoute: typeof QuizRoute
   ResurseRoute: typeof ResurseRoute
   RezervariRoute: typeof RezervariRoute
@@ -1780,6 +1805,7 @@ export interface RootRouteChildren {
   EnQuizRoute: typeof EnQuizRoute
   EnTermsRoute: typeof EnTermsRoute
   EnTrialRoute: typeof EnTrialRoute
+  EnTrialConfirmedRoute: typeof EnTrialConfirmedRoute
   PrivateStatusIdRoute: typeof PrivateStatusIdRoute
   AdminIndexRoute: typeof AdminIndexRoute
   BlogIndexRoute: typeof BlogIndexRoute
@@ -1998,6 +2024,13 @@ declare module '@tanstack/react-router' {
       path: '/privacy'
       fullPath: '/privacy'
       preLoaderRoute: typeof PrivacyRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/proba-confirmata': {
+      id: '/proba-confirmata'
+      path: '/proba-confirmata'
+      fullPath: '/proba-confirmata'
+      preLoaderRoute: typeof ProbaConfirmataRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/quiz': {
@@ -2539,6 +2572,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof EnTrialRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/en/trial-confirmed': {
+      id: '/en/trial-confirmed'
+      path: '/en/trial-confirmed'
+      fullPath: '/en/trial-confirmed'
+      preLoaderRoute: typeof EnTrialConfirmedRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/joc/': {
       id: '/joc/'
       path: '/'
@@ -2818,6 +2858,7 @@ const rootRouteChildren: RootRouteChildren = {
   PaymentStatusRoute: PaymentStatusRoute,
   PreturiRoute: PreturiRoute,
   PrivacyRoute: PrivacyRoute,
+  ProbaConfirmataRoute: ProbaConfirmataRoute,
   QuizRoute: QuizRoute,
   ResurseRoute: ResurseRoute,
   RezervariRoute: RezervariRoute,
@@ -2900,6 +2941,7 @@ const rootRouteChildren: RootRouteChildren = {
   EnQuizRoute: EnQuizRoute,
   EnTermsRoute: EnTermsRoute,
   EnTrialRoute: EnTrialRoute,
+  EnTrialConfirmedRoute: EnTrialConfirmedRoute,
   PrivateStatusIdRoute: PrivateStatusIdRoute,
   AdminIndexRoute: AdminIndexRoute,
   BlogIndexRoute: BlogIndexRoute,
@@ -2944,6 +2986,7 @@ const rootRouteChildren: RootRouteChildren = {
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
+
 
 import type { getRouter } from './router.tsx'
 import type { startInstance } from './start.ts'

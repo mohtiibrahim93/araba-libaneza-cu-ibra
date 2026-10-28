@@ -200,6 +200,7 @@ describe("book a lesson for an existing private student", () => {
       action: "book_for_student",
       student_name: "Nou Student",
       student_email: "nou@example.test",
+      student_phone: "+40700000000",
       start_at: slot.start_at,
     });
     const regWrites = h.writes

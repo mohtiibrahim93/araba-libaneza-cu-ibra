@@ -4,7 +4,7 @@ import EnLandingLayout from "./EnLandingLayout";
 const FAQ = [
   {
     q: "What age are the teen Arabic classes for?",
-    a: "Ages 12–17. From 16, teenagers can join the regular adult groups (A1–C2) with a parent's consent. For ages 6–11 there is a separate play-based kids course, online, though it isn't running at the moment.",
+    a: "Ages 12–17. From 16, teenagers can join the regular adult groups (A1–C2) with a parent's consent. For ages 6–11 there is a separate play-based kids course, in person at the centre (groups of up to 6 children, 60-minute lessons, up to 8 lessons a month), though it isn't open yet: you can ask to be notified.",
   },
   {
     q: "Which Arabic do teenagers learn here?",

@@ -31,7 +31,7 @@ Fără 0.1 rata de conversie rămâne 0 în toate rapoartele, indiferent de traf
 | 1.5 | `/cursuri/grup` (449 afișări, CTR 0,22%): titlu și introducere care răspund direct interogării „cursuri araba” | mediu | mediu |
 
 Titlurile și descrierile de la 1.1, 1.2 și 1.4 sunt deja actualizate; restul
-lucrărilor de conținut rămân în `HANDOFF.md` §6.
+lucrărilor de conținut sunt în `AUDIT_BACKLOG.md` (SEO tasks T1–T5).
 
 ---
 

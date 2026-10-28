@@ -35,6 +35,7 @@ import LeadFields, {
 } from "./RegistrationForm/LeadFields";
 import CapacityBanner from "./RegistrationForm/CapacityBanner";
 import PostSubmitView from "./RegistrationForm/PostSubmitView";
+import NotifyMeForm from "@/components/NotifyMeForm";
 import type {
   CourseType,
   FormatType,
@@ -69,6 +70,7 @@ export const STORAGE_KEY = "registration_form_draft";
 
 /** Which field rejected a submit — also the value reported to analytics. */
 type InvalidField =
+  | "name"
   | "cohort"
   | "course_type"
   | "format"
@@ -419,17 +421,18 @@ const RegistrationFormSection = ({
       fail("gdpr", t.gdprRequired, "gdpr");
       return;
     }
+    // Name, email, phone, course type and format are required on every form
+    // (owner's rule, 27 October 2026); the database refuses a registration
+    // without them too (migration 20261027121000_required_registration_fields).
+    if (!name.trim()) {
+      fail("name", t.nameRequiredError, "name");
+      return;
+    }
     if (!isValidPhone(phone)) {
       fail("phone", t.validPhoneError, "phone");
       return;
     }
-    if (email && !isValidEmail(email)) {
-      fail("email", t.validEmailError, "email");
-      return;
-    }
-    // Private lessons are paid and confirmed by email, so the address is
-    // needed: Stripe's receipt, the confirmation and the booking link go there.
-    if (courseType === "private" && !email) {
+    if (!email.trim() || !isValidEmail(email)) {
       fail("email", t.validEmailError, "email");
       return;
     }
@@ -796,297 +799,339 @@ const RegistrationFormSection = ({
             </div>
           )}
 
-          {/* Format */}
-          {courseType && (
-            <div className="space-y-2">
-              <Label htmlFor="format">{t.labelFormat} *</Label>
-              <Select
-                value={format}
-                onValueChange={(v) => {
-                  noteStart();
-                  setFormat(v as FormatType);
-                  setCohortId(null);
-                  setFormatError(false);
-                  setInvalidField(null);
-                  trackRegistrationStep(
-                    "format",
-                    (courseType || "unknown") as CourseType | "unknown",
-                    v,
-                  );
-                }}
-              >
-                <SelectTrigger
-                  id="format"
-                  aria-invalid={formatError || undefined}
-                  className={
-                    formatError
-                      ? "border-destructive focus:ring-destructive"
-                      : ""
-                  }
-                >
-                  <SelectValue placeholder={t.labelFormat} />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="fizic">
-                    {t.privateFormatPhysical}
-                  </SelectItem>
-                  {kidsOnlineAllowed && (
-                    <SelectItem value="online">
-                      {t.privateFormatOnline}
-                    </SelectItem>
-                  )}
-                </SelectContent>
-              </Select>
-              {formatError && (
-                <p className="text-xs text-destructive">
-                  {courseType === "kids"
-                    ? t.mainLeadErrorKidsFormat
-                    : t.mainLeadErrorFormat}
-                </p>
-              )}
-              {courseType === "kids" && (
-                <p className="text-xs text-muted-foreground">
-                  {t.kidsFormatNote}
-                </p>
-              )}
-            </div>
-          )}
-
-          {/* Group: level + months */}
-          {courseType === "group" && (
-            <GroupFields
-              level={level}
-              onLevelChange={(lvl) => {
-                noteStart();
-                setInvalidField(null);
-                trackRegistrationStep("level", "group", lvl);
-                setLevel(lvl);
-                setCohortId(null);
-              }}
-              levelError={invalidField === "level"}
-              format={format}
-              groupPlan={groupPlan}
-              onGroupPlanChange={setGroupPlan}
-              cohortError={invalidField === "cohort"}
-              cohortId={cohortId}
-              onCohortChange={(c) => {
-                setCohortId(c?.id ?? null);
-                setCohortLanguage(c?.teaching_language ?? null);
-              }}
-              locked={lockSelection && !!defaultLevel}
-            />
-          )}
-
-          {/* Private: quantity */}
-          {courseType === "private" && (
-            <PrivateFields
-              privateQuantity={privateQuantity}
-              onPrivateQuantityChange={setPrivateQuantity}
-              format={format || "online"}
-            />
-          )}
-
-          {/* Center for physical */}
-          {format === "fizic" && (
-            <div className="space-y-2">
-              <Label htmlFor="center">{t.mainLeadLocationLabel} *</Label>
-              <Select
-                value={center}
-                onValueChange={(v) => {
-                  setCenter(v);
-                  setCenterError(false);
-                }}
-              >
-                <SelectTrigger
-                  id="center"
-                  aria-invalid={centerError || undefined}
-                  className={
-                    centerError
-                      ? "border-destructive focus:ring-destructive"
-                      : ""
-                  }
-                >
-                  <SelectValue placeholder={t.mainLeadLocationPlaceholder} />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="Bucuresti - Centru (Raduga)">
-                    {t.mainLeadLocationBucharestCentru}
-                  </SelectItem>
-                </SelectContent>
-              </Select>
-              {centerError && (
-                <p className="text-xs text-destructive">
-                  {t.mainLeadErrorLocation}
-                </p>
-              )}
-              <p className="text-xs text-muted-foreground">
-                {t.mainLeadLocationHelp}
-              </p>
-            </div>
-          )}
-
-          {/* Online info */}
-          {format === "online" && (
-            <div className="rounded-xl border border-brand-green/25 bg-brand-green/5 px-4 py-3">
-              <p className="text-sm font-semibold text-foreground">
-                {t.mainLeadOnlineInfoTitle}
-              </p>
-              <p className="text-xs text-muted-foreground mt-1">
-                {t.mainLeadOnlineInfoDesc}
-              </p>
-            </div>
-          )}
-
-          {/* Capacity banner: kids only. A group's seats are counted per
-              cohort in the cohort picker — a level-wide total mixed the
-              running groups with the ones still open and read "full" while
-              the new groups had every seat free. */}
-          {capacity && courseType === "kids" && (
-            <CapacityBanner capacity={capacity} />
-          )}
-
-          {/* Kids: child fields + (conditional) waitlist deposit */}
-          {courseType === "kids" && (
+          {/* The kids' course is not open yet (owner, 27 October 2026): no
+              sign-up and no deposit, only "notify me" -- shown below the
+              form, since it is a form of its own. */}
+          {!kidsCourseClosed(courseType) && (
             <>
-              <KidsFields
-                childName={childName}
-                childAge={childAge}
-                payDeposit={lessonType === "private" ? false : payDeposit}
-                capacity={lessonType === "private" ? null : capacity}
-                kidsSlotId={kidsSlotId}
-                onKidsSlotChange={(s) => setKidsSlotId(s?.id ?? null)}
-                onChildNameChange={setChildName}
-                onChildAgeChange={setChildAge}
-                onPayDepositChange={setPayDeposit}
-              />
-              {lessonType === "private" && (
+              {/* Format */}
+              {courseType && (
+                <div className="space-y-2">
+                  <Label htmlFor="format">{t.labelFormat} *</Label>
+                  <Select
+                    value={format}
+                    onValueChange={(v) => {
+                      noteStart();
+                      setFormat(v as FormatType);
+                      setCohortId(null);
+                      setFormatError(false);
+                      setInvalidField(null);
+                      trackRegistrationStep(
+                        "format",
+                        (courseType || "unknown") as CourseType | "unknown",
+                        v,
+                      );
+                    }}
+                  >
+                    <SelectTrigger
+                      id="format"
+                      aria-invalid={formatError || undefined}
+                      className={
+                        formatError
+                          ? "border-destructive focus:ring-destructive"
+                          : ""
+                      }
+                    >
+                      <SelectValue placeholder={t.labelFormat} />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="fizic">
+                        {t.privateFormatPhysical}
+                      </SelectItem>
+                      {kidsOnlineAllowed && (
+                        <SelectItem value="online">
+                          {t.privateFormatOnline}
+                        </SelectItem>
+                      )}
+                    </SelectContent>
+                  </Select>
+                  {formatError && (
+                    <p className="text-xs text-destructive">
+                      {courseType === "kids"
+                        ? t.mainLeadErrorKidsFormat
+                        : t.mainLeadErrorFormat}
+                    </p>
+                  )}
+                  {courseType === "kids" && (
+                    <p className="text-xs text-muted-foreground">
+                      {t.kidsFormatNote}
+                    </p>
+                  )}
+                </div>
+              )}
+
+              {/* Group: level + months */}
+              {courseType === "group" && (
+                <GroupFields
+                  level={level}
+                  onLevelChange={(lvl) => {
+                    noteStart();
+                    setInvalidField(null);
+                    trackRegistrationStep("level", "group", lvl);
+                    setLevel(lvl);
+                    setCohortId(null);
+                  }}
+                  levelError={invalidField === "level"}
+                  format={format}
+                  groupPlan={groupPlan}
+                  onGroupPlanChange={setGroupPlan}
+                  cohortError={invalidField === "cohort"}
+                  cohortId={cohortId}
+                  onCohortChange={(c) => {
+                    setCohortId(c?.id ?? null);
+                    setCohortLanguage(c?.teaching_language ?? null);
+                  }}
+                  locked={lockSelection && !!defaultLevel}
+                />
+              )}
+
+              {/* Private: quantity */}
+              {courseType === "private" && (
                 <PrivateFields
                   privateQuantity={privateQuantity}
                   onPrivateQuantityChange={setPrivateQuantity}
-                  format="online"
-                  basePriceOnline={150}
+                  format={format || "online"}
                 />
               )}
+
+              {/* Center for physical */}
+              {format === "fizic" && (
+                <div className="space-y-2">
+                  <Label htmlFor="center">{t.mainLeadLocationLabel} *</Label>
+                  <Select
+                    value={center}
+                    onValueChange={(v) => {
+                      setCenter(v);
+                      setCenterError(false);
+                    }}
+                  >
+                    <SelectTrigger
+                      id="center"
+                      aria-invalid={centerError || undefined}
+                      className={
+                        centerError
+                          ? "border-destructive focus:ring-destructive"
+                          : ""
+                      }
+                    >
+                      <SelectValue
+                        placeholder={t.mainLeadLocationPlaceholder}
+                      />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="Bucuresti - Centru (Raduga)">
+                        {t.mainLeadLocationBucharestCentru}
+                      </SelectItem>
+                    </SelectContent>
+                  </Select>
+                  {centerError && (
+                    <p className="text-xs text-destructive">
+                      {t.mainLeadErrorLocation}
+                    </p>
+                  )}
+                  <p className="text-xs text-muted-foreground">
+                    {t.mainLeadLocationHelp}
+                  </p>
+                </div>
+              )}
+
+              {/* Online info */}
+              {format === "online" && (
+                <div className="rounded-xl border border-brand-green/25 bg-brand-green/5 px-4 py-3">
+                  <p className="text-sm font-semibold text-foreground">
+                    {t.mainLeadOnlineInfoTitle}
+                  </p>
+                  <p className="text-xs text-muted-foreground mt-1">
+                    {t.mainLeadOnlineInfoDesc}
+                  </p>
+                </div>
+              )}
+
+              {/* Capacity banner: kids only. A group's seats are counted per
+              cohort in the cohort picker — a level-wide total mixed the
+              running groups with the ones still open and read "full" while
+              the new groups had every seat free. */}
+              {capacity && courseType === "kids" && (
+                <CapacityBanner capacity={capacity} />
+              )}
+
+              {/* Kids: child fields + (conditional) waitlist deposit */}
+              {courseType === "kids" && (
+                <>
+                  <KidsFields
+                    childName={childName}
+                    childAge={childAge}
+                    payDeposit={lessonType === "private" ? false : payDeposit}
+                    capacity={lessonType === "private" ? null : capacity}
+                    kidsSlotId={kidsSlotId}
+                    onKidsSlotChange={(s) => setKidsSlotId(s?.id ?? null)}
+                    onChildNameChange={setChildName}
+                    onChildAgeChange={setChildAge}
+                    onPayDepositChange={setPayDeposit}
+                  />
+                  {lessonType === "private" && (
+                    <PrivateFields
+                      privateQuantity={privateQuantity}
+                      onPrivateQuantityChange={setPrivateQuantity}
+                      format="online"
+                      basePriceOnline={150}
+                    />
+                  )}
+                </>
+              )}
+
+              <StepHeading
+                n={2}
+                title={lang === "en" ? "Your details" : "Datele tale"}
+              />
+
+              {/* Contact + message */}
+              <LeadFields
+                showErrors={submitAttempted}
+                courseType={courseType}
+                name={name}
+                phone={phone}
+                email={email}
+                message={message}
+                onNameChange={setName}
+                onPhoneChange={setPhone}
+                onEmailChange={setEmail}
+                onMessageChange={setMessage}
+              />
+
+              <StepHeading
+                n={3}
+                title={lang === "en" ? "Confirm" : "Confirmă"}
+              />
+
+              <p className="text-xs text-muted-foreground">
+                {courseType === "private"
+                  ? lang === "en"
+                    ? "Next you choose the day and time, then you pay. The lesson is confirmed once paid, and Ibra writes to introduce himself."
+                    : "Urmează să alegi ziua și ora, apoi plătești. Lecția e confirmată după plată, iar Ibra îți scrie ca să se prezinte."
+                  : courseType === "group"
+                    ? lang === "en"
+                      ? "After sending, you pay online: the payment confirms your place in the group. Ibra then writes to you on WhatsApp to introduce himself."
+                      : "După trimitere plătești online: plata îți confirmă locul în grupă. Apoi Ibra îți scrie pe WhatsApp ca să se prezinte."
+                    : t.mainLeadCallbackNote}
+              </p>
+
+              <GdprCheckbox
+                checked={gdpr}
+                onCheckedChange={(v) => {
+                  setGdpr(v);
+                  if (v) setInvalidField(null);
+                }}
+                error={invalidField === "gdpr" ? t.gdprRequired : undefined}
+              />
+
+              {/* The referral code is for the few who have one, so it opens on
+              request instead of being a field everyone has to read past. */}
+              {showReferral || referralCode ? (
+                <div className="space-y-1.5">
+                  <Label
+                    htmlFor="referralCode"
+                    className="text-sm text-muted-foreground font-normal"
+                  >
+                    {t.referralCodeLabel}
+                  </Label>
+                  <Input
+                    id="referralCode"
+                    type="text"
+                    value={referralCode}
+                    onChange={(e) => setReferralCode(e.target.value)}
+                    placeholder={t.referralCodePlaceholder}
+                    maxLength={64}
+                    autoComplete="off"
+                  />
+                </div>
+              ) : (
+                <button
+                  type="button"
+                  onClick={() => setShowReferral(true)}
+                  className="text-sm font-medium text-brand-green hover:underline underline-offset-4"
+                >
+                  {t.referralCodePlaceholder}
+                </button>
+              )}
+
+              <Button
+                type="submit"
+                className="w-full h-12 rounded-xl text-base font-semibold"
+                disabled={submitting}
+              >
+                {submitting ? (
+                  <>
+                    <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                    {t.groupSubmitting}
+                  </>
+                ) : courseType === "private" ? (
+                  lang === "en" ? (
+                    "Continue: choose the day and time →"
+                  ) : (
+                    "Continuă: alege ziua și ora →"
+                  )
+                ) : courseType === "group" ? (
+                  lang === "en" ? (
+                    "Send and continue to payment →"
+                  ) : (
+                    "Trimite și continuă la plată →"
+                  )
+                ) : (
+                  t.mainLeadSubmit
+                )}
+              </Button>
+
+              <div className="text-center">
+                <a
+                  href={WHATSAPP_URL}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-primary transition-colors"
+                >
+                  <MessageCircle className="w-4 h-4" />
+                  {t.ctaButton}
+                </a>
+              </div>
             </>
           )}
-
-          <StepHeading
-            n={2}
-            title={lang === "en" ? "Your details" : "Datele tale"}
-          />
-
-          {/* Contact + message */}
-          <LeadFields
-            showErrors={submitAttempted}
-            courseType={courseType}
-            name={name}
-            phone={phone}
-            email={email}
-            message={message}
-            onNameChange={setName}
-            onPhoneChange={setPhone}
-            onEmailChange={setEmail}
-            onMessageChange={setMessage}
-          />
-
-          <StepHeading n={3} title={lang === "en" ? "Confirm" : "Confirmă"} />
-
-          <p className="text-xs text-muted-foreground">
-            {courseType === "private"
-              ? lang === "en"
-                ? "Next you choose the day and time, then you pay. The lesson is confirmed once paid, and Ibra writes to introduce himself."
-                : "Urmează să alegi ziua și ora, apoi plătești. Lecția e confirmată după plată, iar Ibra îți scrie ca să se prezinte."
-              : courseType === "group"
-                ? lang === "en"
-                  ? "After sending, you pay online: the payment confirms your place in the group. Ibra then writes to you on WhatsApp to introduce himself."
-                  : "După trimitere plătești online: plata îți confirmă locul în grupă. Apoi Ibra îți scrie pe WhatsApp ca să se prezinte."
-                : t.mainLeadCallbackNote}
-          </p>
-
-          <GdprCheckbox
-            checked={gdpr}
-            onCheckedChange={(v) => {
-              setGdpr(v);
-              if (v) setInvalidField(null);
-            }}
-            error={invalidField === "gdpr" ? t.gdprRequired : undefined}
-          />
-
-          {/* The referral code is for the few who have one, so it opens on
-              request instead of being a field everyone has to read past. */}
-          {showReferral || referralCode ? (
-            <div className="space-y-1.5">
-              <Label
-                htmlFor="referralCode"
-                className="text-sm text-muted-foreground font-normal"
-              >
-                {t.referralCodeLabel}
-              </Label>
-              <Input
-                id="referralCode"
-                type="text"
-                value={referralCode}
-                onChange={(e) => setReferralCode(e.target.value)}
-                placeholder={t.referralCodePlaceholder}
-                maxLength={64}
-                autoComplete="off"
-              />
-            </div>
-          ) : (
-            <button
-              type="button"
-              onClick={() => setShowReferral(true)}
-              className="text-sm font-medium text-brand-green hover:underline underline-offset-4"
-            >
-              {t.referralCodePlaceholder}
-            </button>
-          )}
-
-          <Button
-            type="submit"
-            className="w-full h-12 rounded-xl text-base font-semibold"
-            disabled={submitting}
-          >
-            {submitting ? (
-              <>
-                <Loader2 className="w-4 h-4 mr-2 animate-spin" />
-                {t.groupSubmitting}
-              </>
-            ) : courseType === "private" ? (
-              lang === "en" ? (
-                "Continue: choose the day and time →"
-              ) : (
-                "Continuă: alege ziua și ora →"
-              )
-            ) : courseType === "group" ? (
-              lang === "en" ? (
-                "Send and continue to payment →"
-              ) : (
-                "Trimite și continuă la plată →"
-              )
-            ) : (
-              t.mainLeadSubmit
-            )}
-          </Button>
-
-          <div className="text-center">
-            <a
-              href={WHATSAPP_URL}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-primary transition-colors"
-            >
-              <MessageCircle className="w-4 h-4" />
-              {t.ctaButton}
-            </a>
-          </div>
         </form>
+
+        {courseType === "kids" && (
+          <div className="mt-5 rounded-3xl border border-dashed border-border bg-muted/20 p-6 sm:p-8">
+            <h3 className="mb-2 text-lg font-bold text-foreground">
+              {lang === "en"
+                ? "Kids' courses are not open yet"
+                : "Cursurile pentru copii nu sunt încă deschise"}
+            </h3>
+            <p className="mb-4 text-sm text-muted-foreground">
+              {lang === "en"
+                ? "Groups of up to 6 children, 60-minute lessons, up to 8 lessons a month. Leave your details and we'll let you know when they start."
+                : "Grupe de maximum 6 copii, lecții de 60 de minute, maximum 8 lecții pe lună. Lasă-ne datele și te anunțăm când pornesc."}
+            </p>
+            <NotifyMeForm
+              context="kids_group"
+              label={
+                lang === "en"
+                  ? "Kids' courses (ages 6–11)"
+                  : "Cursuri pentru copii (6–11 ani)"
+              }
+            />
+          </div>
+        )}
 
         {!submitted && <TrustBand />}
       </div>
     </section>
   );
 };
+
+/**
+ * The kids' course is not open yet (owner, 27 October 2026): picking it shows
+ * "notify me" instead of the sign-up. A function rather than an inline
+ * comparison so the kids fields below stay type-checked for when it opens.
+ */
+const kidsCourseClosed = (courseType: string): boolean => courseType === "kids";
 
 /** A numbered part of the sign-up form, in the homepage's label style. */
 const StepHeading = ({ n, title }: { n: number; title: string }) => (

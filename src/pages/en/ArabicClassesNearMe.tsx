@@ -91,8 +91,9 @@ const ArabicClassesNearMe = () => (
         <Link to="/en/arabic-tutor">private Arabic tutor page</Link>.
       </li>
       <li>
-        <strong>Kids (6–11):</strong> in person at the centre, small groups,
-        playful method — not running at the moment.
+        <strong>Kids (6–11):</strong> in person at the centre, groups of up to 6
+        children, 60-minute lessons, up to 8 lessons a month, playful method —
+        not open yet (notify-me only).
       </li>
     </ul>
 

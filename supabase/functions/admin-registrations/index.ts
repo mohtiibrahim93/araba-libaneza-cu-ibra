@@ -25,8 +25,17 @@ import {
   formatBani,
   type RefundBreakdown,
 } from "../_shared/refund.ts";
-import { GROUP_MONTHS, KIDS_GROUP_MONTHS } from "../_shared/prices.ts";
+import {
+  computeGroupCancelRefund,
+  type GroupCharge,
+} from "../_shared/group-refund.ts";
+import {
+  GROUP_MONTHS,
+  KIDS_GROUP_MONTHS,
+  TRIAL_NO_SHOW_FEE_BANI,
+} from "../_shared/prices.ts";
 import { sendTemplateEmail } from "../_shared/managed-email.ts";
+import { notifyGoogleCancellations } from "../_shared/calendar-cancel-emails.ts";
 import { verifyRegistrationSignature } from "../_shared/registration-access.ts";
 import {
   countsAgainstPackage,
@@ -206,6 +215,43 @@ async function calendarDrift(
     }
   }
   return out;
+}
+
+/**
+ * The trial no-show fee, refunded with the same button as a lesson payment
+ * (owner's decision, 27 October 2026: case by case, on appeal). It is not a
+ * course, so none of the course tiers apply: what is still unrefunded on the
+ * fee's PaymentIntent goes back in full.
+ */
+async function noShowFeeRefundFor(
+  stripe: Stripe,
+  intentId: string,
+): Promise<
+  | {
+      breakdown: Omit<RefundBreakdown, "tier"> & { tier: "no-show-fee" };
+      paymentIntentId: string;
+    }
+  | { error: string }
+> {
+  const intent = await stripe.paymentIntents.retrieve(intentId);
+  const paid = Number(intent.amount_received ?? 0);
+  const remaining = paid - Number(intent.amount_refunded ?? 0);
+  if (!paid) return { error: "Taxa de neprezentare nu a fost încasată" };
+  if (remaining <= 0)
+    return { error: "Taxa de neprezentare a fost deja rambursată integral" };
+  return {
+    paymentIntentId: intentId,
+    breakdown: {
+      tier: "no-show-fee",
+      daysBeforeStart: null,
+      pricePerLessonBani: 0,
+      lessonsRemaining: 0,
+      nonRefundableBani: 0,
+      remainingValueBani: remaining,
+      feeBani: 0,
+      refundBani: remaining,
+    },
+  };
 }
 
 async function refundInputsFor(
@@ -1184,7 +1230,10 @@ Deno.serve(async (req) => {
       const mEmail = clean(email, 320);
       if (!mName) return jsonResponse({ error: "Numele e obligatoriu" });
       if (!mPhone) return jsonResponse({ error: "Telefonul e obligatoriu" });
-      if (mEmail && !/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(mEmail))
+      // Name, email, phone, course type and format on every registration,
+      // the owner's tools included (owner's rule, 27 October 2026).
+      if (!mEmail) return jsonResponse({ error: "Emailul e obligatoriu" });
+      if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(mEmail))
         return jsonResponse({ error: "Email invalid" });
       if (typeof mSource !== "string" || !MANUAL_SOURCES.includes(mSource))
         return jsonResponse({ error: "Sursă invalidă" });
@@ -1840,6 +1889,9 @@ Deno.serve(async (req) => {
         return jsonResponse({ error: "Numele este obligatoriu." }, 400);
       if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email) || email.length > 254)
         return jsonResponse({ error: "Emailul nu este valid." }, 400);
+      // Optional on purpose (owner, 27 October 2026): a lesson imported from
+      // Google is one he already arranged with the student himself, and a
+      // Google event carries no phone number.
       if (phone && phone.length > 40)
         return jsonResponse({ error: "Telefonul nu este valid." }, 400);
       try {
@@ -1906,6 +1958,9 @@ Deno.serve(async (req) => {
         from,
         to,
       });
+      // Lessons deleted in Google: the student and the owner are told, the
+      // same as when the scheduled sync finds them. No refund is made.
+      await notifyGoogleCancellations(result.cancelledInGoogle);
       return jsonResponse({
         success: result.errors.length === 0,
         data: result,
@@ -1965,6 +2020,204 @@ Deno.serve(async (req) => {
         details: { booking_id: id, from: booking.trial_outcome, to: outcome },
       });
       return jsonResponse({ success: true, trial_outcome: outcome });
+    }
+
+    // The trial's no-show fee (owner's decision, 27 October 2026). Once the
+    // owner has marked a trial as lost (a no-show or a cancellation under
+    // 24 h), the card saved at booking can be charged 150 lei: the preview
+    // shows the amount and the card, and the charge happens only on the
+    // owner's confirmation. Off-session, on the saved payment method, with one
+    // idempotency key per booking so a double click or a retry never charges
+    // twice. A declined card is reported and nothing is marked paid. The fee
+    // is recorded on the registration (no_show_fee_*), never in
+    // payment_status, and the refund button can give it back.
+    if (action === "preview_no_show_fee" || action === "charge_no_show_fee") {
+      if (typeof id !== "string")
+        return jsonResponse({ error: "ID invalid" }, 400);
+      const { data: booking, error: bErr } = await supabase
+        .from("bookings")
+        .select(
+          "id, registration_id, event_type_slug, status, start_at, trial_outcome, student_name",
+        )
+        .eq("id", id)
+        .maybeSingle();
+      if (bErr) throw bErr;
+      if (!booking || booking.event_type_slug !== "trial")
+        return jsonResponse({ error: "Proba nu a fost găsită." }, 400);
+      if (booking.trial_outcome !== "lost")
+        return jsonResponse(
+          {
+            error:
+              "Taxa se încasează doar după ce marchezi proba „Pierdută” (nu a venit sau a anulat sub 24 de ore).",
+          },
+          400,
+        );
+      const { data: reg, error: rErr } = await supabase
+        .from("registrations")
+        .select(
+          "id, email, stripe_session_id, no_show_fee_status, no_show_fee_booking_id, no_show_fee_intent_id, no_show_fee_error, no_show_fee_attempts",
+        )
+        .eq("id", booking.registration_id)
+        .maybeSingle();
+      if (rErr) throw rErr;
+      if (!reg)
+        return jsonResponse({ error: "Înscrierea nu a fost găsită." }, 400);
+      if (
+        reg.no_show_fee_status === "paid" ||
+        reg.no_show_fee_status === "refunded"
+      )
+        return jsonResponse({
+          success: true,
+          data: {
+            status: reg.no_show_fee_status,
+            amount: TRIAL_NO_SHOW_FEE_BANI,
+            amount_label: formatBani(TRIAL_NO_SHOW_FEE_BANI),
+          },
+        });
+
+      const stripe = new Stripe(Deno.env.get("STRIPE_SECRET_KEY") || "", {
+        apiVersion: "2025-08-27.basil",
+      });
+      // The card saved by the trial's 0-lei setup session.
+      const setupSessionId = String(reg.stripe_session_id ?? "");
+      if (!setupSessionId.startsWith("cs_"))
+        return jsonResponse(
+          { error: "Nu există un card salvat pentru această probă." },
+          400,
+        );
+      let customerId = "";
+      let paymentMethodId = "";
+      let cardLabel = "";
+      try {
+        const session = await stripe.checkout.sessions.retrieve(
+          setupSessionId,
+          { expand: ["setup_intent.payment_method"] },
+        );
+        const setup = session.setup_intent;
+        const method =
+          setup && typeof setup !== "string" ? setup.payment_method : null;
+        paymentMethodId =
+          typeof method === "string" ? method : (method?.id ?? "");
+        customerId =
+          typeof session.customer === "string"
+            ? session.customer
+            : (session.customer?.id ?? "");
+        if (method && typeof method !== "string" && method.card)
+          cardLabel = `${method.card.brand} •••• ${method.card.last4}`;
+      } catch (e) {
+        console.error("[no_show_fee] card lookup failed", e);
+      }
+      if (!paymentMethodId || !customerId)
+        return jsonResponse(
+          { error: "Nu există un card salvat pentru această probă." },
+          400,
+        );
+
+      if (action === "preview_no_show_fee") {
+        return jsonResponse({
+          success: true,
+          data: {
+            status: reg.no_show_fee_status ?? null,
+            last_error: reg.no_show_fee_error ?? null,
+            amount: TRIAL_NO_SHOW_FEE_BANI,
+            amount_label: formatBani(TRIAL_NO_SHOW_FEE_BANI),
+            card: cardLabel || null,
+            student_name: booking.student_name,
+          },
+        });
+      }
+
+      let intent: Stripe.PaymentIntent | null = null;
+      let failure = "";
+      try {
+        intent = await stripe.paymentIntents.create(
+          {
+            amount: TRIAL_NO_SHOW_FEE_BANI,
+            currency: "ron",
+            customer: customerId,
+            payment_method: paymentMethodId,
+            off_session: true,
+            confirm: true,
+            description:
+              "Taxă lecție de probă: neprezentare sau anulare sub 24 de ore",
+            metadata: {
+              registration_id: reg.id,
+              booking_id: booking.id,
+              purpose: "trial_no_show_fee",
+            },
+          },
+          // Per booking and per attempt: the same attempt can never charge
+          // twice, and a new attempt is only possible after a recorded decline.
+          {
+            idempotencyKey: `trial_no_show_fee_${booking.id}_${Number(reg.no_show_fee_attempts ?? 0)}`,
+          },
+        );
+      } catch (e) {
+        // A declined card, or one that needs the cardholder (3-D Secure),
+        // throws here; nothing was charged.
+        failure = e instanceof Error ? e.message : "Plata a fost refuzată.";
+        console.error("[no_show_fee] charge failed", booking.id, e);
+      }
+      const ok = !!intent && intent.status === "succeeded";
+      if (!ok && !failure)
+        failure = `Plata nu s-a finalizat (${intent?.status ?? "necunoscut"}).`;
+      const nowIso = new Date().toISOString();
+      const { error: saveErr } = await supabase
+        .from("registrations")
+        .update(
+          ok
+            ? {
+                no_show_fee_status: "paid",
+                no_show_fee_booking_id: booking.id,
+                no_show_fee_intent_id: intent!.id,
+                no_show_fee_amount: TRIAL_NO_SHOW_FEE_BANI,
+                no_show_fee_at: nowIso,
+                no_show_fee_error: null,
+              }
+            : {
+                no_show_fee_status: "failed",
+                no_show_fee_booking_id: booking.id,
+                no_show_fee_attempts: Number(reg.no_show_fee_attempts ?? 0) + 1,
+                no_show_fee_intent_id: intent?.id ?? null,
+                no_show_fee_at: nowIso,
+                no_show_fee_error: failure.slice(0, 500),
+              },
+        )
+        .eq("id", reg.id);
+      if (saveErr)
+        console.error("[no_show_fee] charge done but not saved", {
+          registrationId: reg.id,
+          intentId: intent?.id,
+          saveErr,
+        });
+      await supabase.from("audit_logs").insert({
+        actor: callerEmail,
+        action: "charge_no_show_fee",
+        registration_id: reg.id,
+        details: {
+          booking_id: booking.id,
+          ok,
+          intent_id: intent?.id ?? null,
+          amount: TRIAL_NO_SHOW_FEE_BANI,
+          error: ok ? null : failure,
+        },
+      });
+      return jsonResponse(
+        ok
+          ? {
+              success: true,
+              data: {
+                status: "paid",
+                amount: TRIAL_NO_SHOW_FEE_BANI,
+                amount_label: formatBani(TRIAL_NO_SHOW_FEE_BANI),
+              },
+            }
+          : {
+              success: false,
+              error: `Cardul nu a putut fi debitat: ${failure} Taxa rămâne neîncasată.`,
+              data: { status: "failed" },
+            },
+      );
     }
 
     // The owner's word on a package lesson (owner's rules, 26 October 2026):
@@ -4587,12 +4840,31 @@ Deno.serve(async (req) => {
       const { data: reg, error: regError } = await supabase
         .from("registrations")
         .select(
-          "id, form_type, level, quantity, cohort_id, payment_status, stripe_session_id, refunded_at",
+          "id, form_type, level, quantity, cohort_id, payment_status, stripe_session_id, refunded_at, no_show_fee_status, no_show_fee_intent_id",
         )
         .eq("id", id)
         .maybeSingle();
       if (regError) throw regError;
       if (!reg) return jsonResponse({ error: "Înscrierea nu a fost găsită" });
+      // A charged trial no-show fee is refunded by the same button.
+      if (
+        reg.payment_status !== "paid" &&
+        reg.no_show_fee_status === "paid" &&
+        reg.no_show_fee_intent_id
+      ) {
+        const stripe = new Stripe(Deno.env.get("STRIPE_SECRET_KEY") || "", {
+          apiVersion: "2025-08-27.basil",
+        });
+        const fee = await noShowFeeRefundFor(stripe, reg.no_show_fee_intent_id);
+        if ("error" in fee) return jsonResponse({ error: fee.error });
+        return jsonResponse({
+          success: true,
+          data: {
+            ...fee.breakdown,
+            refund_label: formatBani(fee.breakdown.refundBani),
+          },
+        });
+      }
       if (reg.refunded_at) return jsonResponse({ error: "Deja rambursat" });
       if (reg.payment_status !== "paid" || !reg.stripe_session_id) {
         return jsonResponse({
@@ -4632,13 +4904,83 @@ Deno.serve(async (req) => {
       const { data: reg, error: regError } = await supabase
         .from("registrations")
         .select(
-          "id, form_type, level, quantity, cohort_id, payment_status, stripe_session_id, refunded_at",
+          "id, form_type, level, quantity, cohort_id, payment_status, stripe_session_id, refunded_at, no_show_fee_status, no_show_fee_intent_id",
         )
         .eq("id", id)
         .maybeSingle();
 
       if (regError) throw regError;
       if (!reg) return jsonResponse({ error: "Înscrierea nu a fost găsită" });
+
+      // A charged trial no-show fee, given back on appeal (case by case, the
+      // owner's call): in full, recorded on no_show_fee_*, leaving the
+      // registration's lesson payments alone.
+      if (
+        reg.payment_status !== "paid" &&
+        reg.no_show_fee_status === "paid" &&
+        reg.no_show_fee_intent_id
+      ) {
+        const stripe = new Stripe(Deno.env.get("STRIPE_SECRET_KEY") || "", {
+          apiVersion: "2025-08-27.basil",
+        });
+        const fee = await noShowFeeRefundFor(stripe, reg.no_show_fee_intent_id);
+        if ("error" in fee) return jsonResponse({ error: fee.error });
+        let feeRefund;
+        try {
+          feeRefund = await stripe.refunds.create(
+            {
+              payment_intent: fee.paymentIntentId,
+              amount: fee.breakdown.refundBani,
+            },
+            { idempotencyKey: `refund_no_show_fee_${fee.paymentIntentId}` },
+          );
+        } catch (stripeErr) {
+          console.error(
+            "[admin-registrations] no-show refund failed",
+            stripeErr,
+          );
+          const msg =
+            stripeErr instanceof Error ? stripeErr.message : "Eroare Stripe";
+          return jsonResponse({ error: `Rambursare eșuată: ${msg}` });
+        }
+        const { data: updatedFee, error: feeSaveErr } = await supabase
+          .from("registrations")
+          .update({
+            no_show_fee_status: "refunded",
+            no_show_fee_refunded_amount: fee.breakdown.refundBani,
+            refund_reason: refund_reason || null,
+          })
+          .eq("id", id)
+          .select("*")
+          .single();
+        if (feeSaveErr) {
+          console.error(
+            "[admin-registrations] no-show refund done but not saved",
+            { registrationId: id, stripeRefundId: feeRefund.id, feeSaveErr },
+          );
+          return jsonResponse({
+            error:
+              "Rambursarea a fost procesată în Stripe, dar salvarea a eșuat. Contactează suportul tehnic.",
+          });
+        }
+        await supabase.from("audit_logs").insert({
+          actor: callerEmail!,
+          action: "refund_no_show_fee",
+          registration_id: id,
+          details: {
+            refund_id: feeRefund.id,
+            reason: refund_reason || null,
+            ...fee.breakdown,
+          },
+        });
+        return jsonResponse({
+          success: true,
+          data: updatedFee,
+          refund_id: feeRefund.id,
+          breakdown: fee.breakdown,
+        });
+      }
+
       if (reg.refunded_at) return jsonResponse({ error: "Deja rambursat" });
       if (reg.payment_status !== "paid" || !reg.stripe_session_id) {
         return jsonResponse({
@@ -4727,11 +5069,15 @@ Deno.serve(async (req) => {
       });
     }
 
-    // ============ Group subscription cancel + grace refund ============
-    // Cancelling stops all not-yet-billed months automatically. The current
-    // already-paid month is refunded (prorated by unused days) ONLY if the
-    // cancellation lands within the first GRACE_DAYS of the current billing
-    // period; otherwise it is kept. All amounts computed server-side.
+    // ============ Group subscription cancel + refund ============
+    // Owner's rule (27 October 2026), applied by _shared/group-refund.ts and
+    // published in the Terms, section 4. Cancelling always stops every future
+    // monthly charge. Before the start date the month(s) paid come back, in
+    // full 7+ days ahead and minus 10% after that; once the course has
+    // started, only the current month comes back, for its lessons not yet
+    // held, minus 10%, and only within 7 days of that month's charge. The
+    // lessons are the cohort's real ones (cohort_sessions). Everything is
+    // computed here, never taken from the browser.
     if (
       action === "cancel_subscription" ||
       action === "preview_cancel_subscription"
@@ -4741,7 +5087,7 @@ Deno.serve(async (req) => {
       const { data: reg, error: regError } = await supabase
         .from("registrations")
         .select(
-          "id, form_type, stripe_subscription_id, subscription_status, canceled_at",
+          "id, form_type, cohort_id, stripe_subscription_id, subscription_status, canceled_at",
         )
         .eq("id", id)
         .maybeSingle();
@@ -4763,57 +5109,108 @@ Deno.serve(async (req) => {
         apiVersion: "2025-08-27.basil",
       });
 
-      const GRACE_DAYS = 5;
-      const DAY = 86400;
-
       const sub = await stripe.subscriptions.retrieve(
         reg.stripe_subscription_id,
       );
-      const now = Math.floor(Date.now() / 1000);
-      const periodStart = sub.current_period_start ?? now;
-      const periodEnd = sub.current_period_end ?? now + 30 * DAY;
-      const daysInPeriod = Math.max(
-        1,
-        Math.round((periodEnd - periodStart) / DAY),
-      );
-      const daysElapsed = Math.max(0, Math.floor((now - periodStart) / DAY));
+      // Since the basil API the billing period lives on the subscription item.
+      // deno-lint-ignore no-explicit-any
+      const subAny = sub as any;
+      const periodEndUnix: number | undefined =
+        subAny.items?.data?.[0]?.current_period_end ??
+        subAny.current_period_end;
 
-      // Latest paid invoice = the charge for the period they're currently in.
+      // Every paid month, with the payment intent a refund goes against.
+      // (invoice.charge no longer exists in this API version; the payment is
+      // on invoice.payments.)
       const paidInvoices = await stripe.invoices.list({
         subscription: reg.stripe_subscription_id,
         status: "paid",
-        limit: 1,
+        limit: 100,
+        expand: ["data.payments"],
       });
-      const latest = paidInvoices.data[0];
-      const amountPaid = latest?.amount_paid ?? 0;
-      const chargeId =
-        typeof latest?.charge === "string"
-          ? latest.charge
-          : (latest?.charge?.id ?? "");
+      const charges: GroupCharge[] = [];
+      for (const inv of paidInvoices.data) {
+        // deno-lint-ignore no-explicit-any
+        const payments = ((inv as any).payments?.data ?? []) as any[];
+        const pi = payments
+          .map((p) => p?.payment?.payment_intent)
+          .find(Boolean);
+        const paymentId = typeof pi === "string" ? pi : (pi?.id ?? "");
+        if (!paymentId || !inv.amount_paid) continue;
+        let refundedBani = 0;
+        try {
+          const intent = await stripe.paymentIntents.retrieve(paymentId);
+          refundedBani = Number(intent.amount_refunded ?? 0);
+        } catch (e) {
+          console.error("[cancel_subscription] payment read failed", e);
+        }
+        const paidAtUnix =
+          // deno-lint-ignore no-explicit-any
+          (inv as any).status_transitions?.paid_at ?? inv.created;
+        charges.push({
+          paymentId,
+          amountBani: inv.amount_paid,
+          refundedBani,
+          chargedAt: new Date(paidAtUnix * 1000).toISOString(),
+        });
+      }
 
-      const withinGrace = daysElapsed < GRACE_DAYS;
-      const remainingDays = daysInPeriod - daysElapsed;
-      const refundAmount =
-        withinGrace && chargeId
-          ? Math.round((amountPaid * remainingDays) / daysInPeriod)
-          : 0;
+      let courseStartDate: string | null = null;
+      let sessionStarts: string[] = [];
+      if (reg.cohort_id) {
+        const { data: cohort } = await supabase
+          .from("group_cohorts")
+          .select("start_date")
+          .eq("id", reg.cohort_id)
+          .maybeSingle();
+        courseStartDate =
+          (cohort as { start_date: string | null } | null)?.start_date ?? null;
+        const { data: sessions, error: sessErr } = await supabase
+          .from("cohort_sessions")
+          .select("starts_at")
+          .eq("cohort_id", reg.cohort_id)
+          .order("starts_at");
+        if (sessErr) throw sessErr;
+        sessionStarts = (sessions ?? []).map(
+          (s: { starts_at: string }) => s.starts_at,
+        );
+      }
+
+      const breakdown = computeGroupCancelRefund({
+        charges,
+        courseStartDate,
+        sessionStarts,
+        currentPeriodEnd: periodEndUnix
+          ? new Date(periodEndUnix * 1000).toISOString()
+          : null,
+      });
+      // After the start the month's lessons decide the amount; with no
+      // lessons known (the calendar not synced) the refund would read 0
+      // without anyone noticing. Say so instead.
+      const needsLessons =
+        breakdown.case === "current_month" && breakdown.lessonsInMonth === 0;
+      const currency = (paidInvoices.data[0]?.currency || "ron").toUpperCase();
 
       // Read-only preview for the admin confirm dialog — no side effects.
       if (action === "preview_cancel_subscription") {
         return jsonResponse({
           data: {
-            within_grace: withinGrace,
-            grace_days: GRACE_DAYS,
-            days_elapsed: daysElapsed,
-            days_in_period: daysInPeriod,
-            refund_amount: refundAmount,
-            currency: (latest?.currency || "ron").toUpperCase(),
+            ...breakdown,
+            needs_lessons: needsLessons,
+            refund_amount: breakdown.refundBani,
+            refund_label: formatBani(breakdown.refundBani),
+            currency,
           },
         });
       }
+      if (needsLessons) {
+        return jsonResponse({
+          error:
+            "Lecțiile grupei din luna curentă nu sunt sincronizate din Google Calendar. Sincronizează lecțiile grupei, apoi anulează.",
+        });
+      }
 
-      // Cancel first (stops future invoices), then refund the current month if
-      // within the grace window.
+      // Cancel first (stops future invoices), then refund what the rule gives.
       try {
         await stripe.subscriptions.cancel(reg.stripe_subscription_id);
       } catch (cancelErr) {
@@ -4826,30 +5223,34 @@ Deno.serve(async (req) => {
         return jsonResponse({ error: `Anulare eșuată: ${msg}` });
       }
 
-      let refundId: string | null = null;
-      if (refundAmount > 0 && chargeId) {
+      const refundIds: string[] = [];
+      let refundedTotal = 0;
+      for (const line of breakdown.refunds) {
+        if (line.amountBani <= 0) continue;
         try {
-          const refund = await stripe.refunds.create({
-            charge: chargeId,
-            amount: refundAmount,
-          });
-          refundId = refund.id;
+          const refund = await stripe.refunds.create(
+            { payment_intent: line.paymentId, amount: line.amountBani },
+            { idempotencyKey: `sub_cancel_${id}_${line.paymentId}` },
+          );
+          refundIds.push(refund.id);
+          refundedTotal += line.amountBani;
         } catch (refundErr) {
-          // Subscription is already cancelled; log so the refund can be issued
-          // by hand rather than silently dropped.
+          // The subscription is already cancelled; log so the refund can be
+          // issued by hand rather than silently dropped.
           console.error(
-            "[admin-registrations] grace refund failed after cancel",
-            refundErr,
+            "[admin-registrations] cancel refund failed after cancel",
+            { registrationId: id, line, refundErr },
           );
         }
       }
+      const refundFailed = refundedTotal < breakdown.refundBani;
 
       const { data: updated, error: updateError } = await supabase
         .from("registrations")
         .update({
           subscription_status: "canceled",
           canceled_at: new Date().toISOString(),
-          refunded_amount: refundId ? refundAmount : 0,
+          refunded_amount: refundedTotal,
         })
         .eq("id", id)
         .select("*")
@@ -4859,7 +5260,7 @@ Deno.serve(async (req) => {
           "[admin-registrations] cancel saved in Stripe but DB update failed",
           {
             registrationId: id,
-            refundId,
+            refundIds,
             updateError,
           },
         );
@@ -4874,15 +5275,19 @@ Deno.serve(async (req) => {
         action: "cancel_subscription",
         registration_id: id,
         details: {
-          refund_id: refundId,
-          refund_amount: refundId ? refundAmount : 0,
+          refund_ids: refundIds,
+          refund_amount: refundedTotal,
+          refund_failed: refundFailed,
+          ...breakdown,
         },
       });
       return jsonResponse({
         success: true,
         data: updated,
-        refund_id: refundId,
-        refund_amount: refundId ? refundAmount : 0,
+        refund_ids: refundIds,
+        refund_amount: refundedTotal,
+        refund_failed: refundFailed,
+        breakdown,
       });
     }
 

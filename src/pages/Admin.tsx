@@ -85,6 +85,7 @@ import {
 } from "@/lib/adminCourseFilters";
 import PrivateLeadStats from "@/components/admin/PrivateLeadStats";
 import RegistrationsTable, {
+  type CancelPreview,
   type RefundPreview,
 } from "@/components/admin/RegistrationsTable";
 import {
@@ -504,12 +505,7 @@ const Admin = () => {
     });
     if (fnError) throw fnError;
     if (data?.error) throw new Error(data.error);
-    return data.data as {
-      within_grace: boolean;
-      grace_days: number;
-      refund_amount: number;
-      currency: string;
-    };
+    return data.data as CancelPreview;
   };
 
   const handleCancelSubscription = async (id: string) => {
@@ -528,10 +524,12 @@ const Admin = () => {
         typeof data.refund_amount === "number" ? data.refund_amount : 0;
       toast({
         title: "Abonament anulat",
-        description:
-          refunded > 0
-            ? `Rambursat ${(refunded / 100).toLocaleString("ro-RO")} din luna curentă.`
-            : "Fără rambursare (în afara ferestrei de 5 zile).",
+        description: data.refund_failed
+          ? `Lunile viitoare sunt oprite, dar rambursarea a eșuat${refunded > 0 ? ` (rambursat doar ${(refunded / 100).toLocaleString("ro-RO")} lei)` : ""}. Fă rambursarea manual din Stripe.`
+          : refunded > 0
+            ? `Lunile viitoare sunt oprite. Rambursat ${(refunded / 100).toLocaleString("ro-RO")} lei.`
+            : "Lunile viitoare sunt oprite. Fără rambursare.",
+        ...(data.refund_failed ? { variant: "destructive" as const } : {}),
       });
     } catch (err) {
       toast({

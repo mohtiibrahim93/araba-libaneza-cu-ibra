@@ -82,7 +82,7 @@ export default function ImportCalendarEvent({
         />
       </label>
       <label className="text-xs">
-        Email
+        Email *
         <input
           className={field}
           type="email"

@@ -129,12 +129,12 @@ export const translations = {
       "Cursuri adaptate pe grupe de vârstă, într-un mediu prietenos.",
     kidsGroupFormat: "Fizic, la centru",
     kidsGroupFormatNote: "Varianta online o vom adăuga mai târziu, ca opțiune",
-    kidsGroupDuration: "90 minute / lecție",
-    kidsGroupConditions: "Minim 4 copii per grupă",
+    kidsGroupDuration: "60 minute / lecție",
+    kidsGroupConditions: "Maximum 6 copii per grupă, maximum 8 lecții pe lună",
     kidsGroupAgeGroupsLabel: "Grupe pe vârstă",
     kidsGroupAgeGroupsValue:
       "Adaptate pe categorii de vârstă, nu pe nivel CEFR",
-    kidsGroupFeat1: "Grupe mici (minim 4 copii)",
+    kidsGroupFeat1: "Grupe mici (maximum 6 copii)",
     kidsGroupFeat2: "Cursuri adaptate pe vârstă",
     kidsGroupFeat3: "Activități ludice și interactive",
     kidsGroupFeat4: "Profesori cu experiență cu copii",
@@ -527,7 +527,7 @@ export const translations = {
     trialRulesLi3:
       "Poți anula sau reprograma gratuit cu cel puțin 24 de ore înainte, din linkul primit pe email.",
     trialRulesLi4:
-      "Proba costă 0 lei; cardul se salvează în siguranță la confirmarea locului. Dacă nu te prezinți sau anulezi mai târziu de 24 de ore, se reține 150 lei, cât o lecție privată.",
+      "Proba costă 0 lei; cardul se salvează în siguranță la confirmarea locului. Dacă nu te prezinți sau anulezi mai târziu de 24 de ore, se încasează de pe card 150 lei, cât o lecție privată. Taxa poate fi rambursată dacă o contești.",
 
     trialFormSubmitting: "Se salvează…",
     trialFormCta: "Continuă spre programare",
@@ -621,6 +621,7 @@ export const translations = {
       "Programează o lecție gratuită de 30 de minute de arabă libaneză. 0 lei; locul se confirmă cu cardul, confirmare pe email.",
     // NativeScheduler
     schedulerNameRequired: "Completează numele și emailul",
+    nameRequiredError: "Completează numele.",
     schedulerSlotTaken: "Slotul tocmai a fost rezervat. Alege altul.",
     schedulerBookingFailed: "Rezervarea a eșuat. Încearcă din nou.",
     schedulerLoadingSlots: "Se încarcă sloturile…",
@@ -749,20 +750,20 @@ export const translations = {
     compareKidsPrice: "500 LEI / copil",
     compareGroupStudents: "online max. 6 (min. 3) · fizic max. 8 (min. 4)",
     comparePrivateStudents: "1",
-    compareKidsStudents: "max. 8 (min. 4)",
+    compareKidsStudents: "max. 6",
     compareGroupFlexibility:
       "Fix: 2 lecții de 90 min pe săptămână — orele fiecărei grupe le vezi la înscriere",
     comparePrivateFlexibility: "Flexibil (tu alegi)",
-    compareKidsFlexibility: "Fix (în funcție de grupă)",
+    compareKidsFlexibility: "Fix: max. 8 lecții de 60 min pe lună",
     compareGroupFormat: "Online & Fizic",
     comparePrivateFormat: "Online & Fizic",
     compareKidsFormat: "Fizic",
     compareGroupBestFor: "Învățare socială, buget redus",
     comparePrivateBestFor: "Obiective specifice, ritm personalizat",
-    compareKidsBestFor: "Copii 5–12 ani, învățare prin joc",
+    compareKidsBestFor: "Copii 6–11 ani, învățare prin joc",
     compareGroupDiscounts: "−15% la plata integrală a cursului în avans",
     comparePrivateDiscounts: "−15% la 20 de lecții",
-    compareKidsDiscounts: "Avans rambursabil 175 LEI",
+    compareKidsDiscounts: "Curs încă nedeschis — anunță-mă",
     compareSelectGroup: "Alege Grup",
     compareSelectPrivate: "Alege Privat",
     compareSelectKids: "Alege Copii",
@@ -878,7 +879,7 @@ export const translations = {
       "Cursuri de arabă libaneză pentru copii 6–11 ani, fizic în București. Învățare prin jocuri, activități și povești, cu profesor nativ libanez.",
     courseCopiiH1: "Cursuri de Arabă Libaneză pentru Copii",
     courseCopiiIntro:
-      "Cursuri concepute special pentru copii (6–11 ani), cu activități, jocuri și povești în arabă libaneză. Fizic, la centru; varianta online o vom adăuga mai târziu.",
+      "Cursul pentru copii nu este încă deschis — lasă-ne datele și te anunțăm când pornește. Cursuri concepute special pentru copii (6–11 ani), cu activități, jocuri și povești în arabă libaneză: grupe de maximum 6 copii, lecții de 60 de minute, maximum 8 lecții pe lună. Fizic, la centru; varianta online o vom adăuga mai târziu.",
     courseCopiiFeat1: "Vârste 6–11 ani, grupe pe categorii de vârstă",
     courseCopiiFeat2: "Lecții bazate pe joc și interacțiune",
     courseCopiiFeat3: "Fizic, în București (online mai târziu)",
@@ -956,9 +957,9 @@ export const translations = {
     copiiFormatPrivateTitle: "Privat 1:1 (orice vârstă)",
     copiiFormatPrivateDesc:
       "Lecții individuale cu profesor nativ, ritm adaptat copilului. Fizic, la centru.",
-    copiiFormatGroupTitle: "Grup (4–8 copii)",
+    copiiFormatGroupTitle: "Grup (maximum 6 copii)",
     copiiFormatGroupDesc:
-      "Activități prin joc într-o grupă mică, fizic, la centru.",
+      "Activități prin joc într-o grupă mică, fizic, la centru. Lecții de 60 de minute, maximum 8 pe lună.",
 
     // /cursuri/copii — curriculum
     copiiCurriculumTitle: "Ce învață copilul tău",
@@ -1109,11 +1110,11 @@ export const translations = {
     kidsGroupCardSubtitle: "Age-adapted courses in a friendly environment.",
     kidsGroupFormat: "In person, at the centre",
     kidsGroupFormatNote: "An online option will be added later",
-    kidsGroupDuration: "90 minutes / lesson",
-    kidsGroupConditions: "Minimum 4 children per group",
+    kidsGroupDuration: "60 minutes / lesson",
+    kidsGroupConditions: "Up to 6 children per group, up to 8 lessons a month",
     kidsGroupAgeGroupsLabel: "Age groups",
     kidsGroupAgeGroupsValue: "Adapted by age categories, not by CEFR level",
-    kidsGroupFeat1: "Small groups (min. 4 children)",
+    kidsGroupFeat1: "Small groups (max. 6 children)",
     kidsGroupFeat2: "Age-adapted courses",
     kidsGroupFeat3: "Fun and interactive activities",
     kidsGroupFeat4: "Teachers experienced with children",
@@ -1476,7 +1477,7 @@ export const translations = {
     trialRulesLi3:
       "You can cancel or reschedule free of charge at least 24 hours ahead, from the link in your email.",
     trialRulesLi4:
-      "The trial costs 0 lei; your card is stored securely when confirming the spot. If you do not show up, or cancel later than 24 hours, 150 lei is charged — the price of a private lesson.",
+      "The trial costs 0 lei; your card is stored securely when confirming the spot. If you do not show up, or cancel later than 24 hours, 150 lei is charged to your card — the price of a private lesson. The fee may be refunded if you appeal it.",
 
     trialFormSubmitting: "Saving…",
     trialFormCta: "Continue to scheduling",
@@ -1567,6 +1568,7 @@ export const translations = {
       "Schedule a free 30-minute Lebanese Arabic lesson. 0 lei; your card confirms the spot, email confirmation provided.",
     // NativeScheduler
     schedulerNameRequired: "Fill in name and email",
+    nameRequiredError: "Fill in your name.",
     schedulerSlotTaken: "Slot just got taken. Pick another.",
     schedulerBookingFailed: "Booking failed. Please try again.",
     schedulerLoadingSlots: "Loading slots…",
@@ -1694,20 +1696,20 @@ export const translations = {
     compareKidsPrice: "500 LEI / child",
     compareGroupStudents: "online max. 6 (min. 3) · fizic max. 8 (min. 4)",
     comparePrivateStudents: "1",
-    compareKidsStudents: "max. 8 (min. 4)",
+    compareKidsStudents: "max. 6",
     compareGroupFlexibility:
       "Fixed: two 90-minute lessons a week — each group's times are shown when you sign up",
     comparePrivateFlexibility: "Flexible (you choose)",
-    compareKidsFlexibility: "Fixed (depends on group)",
+    compareKidsFlexibility: "Fixed: up to 8 lessons of 60 min a month",
     compareGroupFormat: "Online & In-person",
     comparePrivateFormat: "Online & In-person",
     compareKidsFormat: "In person",
     compareGroupBestFor: "Social learning, lower budget",
     comparePrivateBestFor: "Specific goals, custom pace",
-    compareKidsBestFor: "Children 5–12, learning through play",
+    compareKidsBestFor: "Children 6–11, learning through play",
     compareGroupDiscounts: "−15% when you pay the whole course in advance",
     comparePrivateDiscounts: "−15% for 20 lessons",
-    compareKidsDiscounts: "Refundable deposit 175 LEI",
+    compareKidsDiscounts: "Not open yet — notify me",
     compareSelectGroup: "Choose Group",
     compareSelectPrivate: "Choose Private",
     compareSelectKids: "Choose Kids",
@@ -1816,7 +1818,7 @@ export const translations = {
       "Interactive Lebanese Arabic courses for kids (ages 6–11), in person in Bucharest. Activities, games and stories in Lebanese Arabic.",
     courseCopiiH1: "Lebanese Arabic Courses for Kids",
     courseCopiiIntro:
-      "Courses designed specifically for kids (ages 6–11), with activities, games and stories in Lebanese Arabic. In person, at the centre; an online option will be added later.",
+      "The kids' course is not open yet — leave your details and we'll let you know when it starts. Courses designed specifically for kids (ages 6–11), with activities, games and stories in Lebanese Arabic: groups of up to 6 children, 60-minute lessons, up to 8 lessons a month. In person, at the centre; an online option will be added later.",
     courseCopiiFeat1: "Ages 6–11, grouped by age",
     courseCopiiFeat2: "Play-based, interactive lessons",
     courseCopiiFeat3: "In person, in Bucharest (online later)",
@@ -1889,9 +1891,9 @@ export const translations = {
     copiiFormatPrivateTitle: "Private 1:1 (any age)",
     copiiFormatPrivateDesc:
       "Individual lessons with a native instructor, paced to your child. In person, at the centre.",
-    copiiFormatGroupTitle: "Group (4–8 kids)",
+    copiiFormatGroupTitle: "Group (up to 6 kids)",
     copiiFormatGroupDesc:
-      "Play-based activities in a small group, in person at the centre.",
+      "Play-based activities in a small group, in person at the centre. 60-minute lessons, up to 8 a month.",
 
     // /cursuri/copii — curriculum
     copiiCurriculumTitle: "What your child will learn",

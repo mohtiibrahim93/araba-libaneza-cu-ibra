@@ -76,6 +76,12 @@ export interface Registration {
   months_paid?: number | null;
   canceled_at?: string | null;
   refunded_amount?: number | null;
+  /** Kids seat deposit, kept apart from payment_status (the course's money). */
+  deposit_paid_at?: string | null;
+  deposit_amount?: number | null;
+  /** The free trial's no-show fee, kept apart from payment_status. */
+  no_show_fee_status?: "paid" | "failed" | "refunded" | null;
+  no_show_fee_error?: string | null;
   anonymized_at?: string | null;
   /**
    * Language the student needs the class explained in, from the site language
@@ -242,4 +248,9 @@ export const trackPreferenceLabels: Record<TrackPreference, string> = {
 };
 
 /** The video button's label: every online lesson uses the owner's Zoom room; a Google Meet link reads "Meet". */
-export const meetingLabel = (link: string) => (/zoom\.us/i.test(link) ? "Zoom" : /meet\.google/i.test(link) ? "Meet" : "Intră");
+export const meetingLabel = (link: string) =>
+  /zoom\.us/i.test(link)
+    ? "Zoom"
+    : /meet\.google/i.test(link)
+      ? "Meet"
+      : "Intră";

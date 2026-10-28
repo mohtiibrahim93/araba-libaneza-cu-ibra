@@ -73,8 +73,11 @@ const LeadFields = ({
   const [phoneTouched, setPhoneTouched] = useState(false);
   const [emailTouched, setEmailTouched] = useState(false);
   const phoneError = (phoneTouched || showErrors) && !isValidPhone(phone);
+  // Email is required on every form (owner's rule, 27 October 2026): an empty
+  // field is an error too, not only a malformed one.
   const emailError =
-    (emailTouched || showErrors) && Boolean(email) && !isValidEmail(email);
+    (emailTouched || showErrors) && (!email.trim() || !isValidEmail(email));
+  const nameError = showErrors && !name.trim();
 
   return (
     <>
@@ -90,7 +93,16 @@ const LeadFields = ({
             placeholder={t.placeholderName}
             required
             maxLength={100}
+            aria-invalid={nameError || undefined}
+            className={
+              nameError
+                ? "border-destructive focus-visible:ring-destructive"
+                : ""
+            }
           />
+          {nameError && (
+            <p className="text-xs text-destructive">{t.nameRequiredError}</p>
+          )}
         </div>
         <div className="space-y-2">
           <Label htmlFor="phone">{t.labelPhone} *</Label>
@@ -110,7 +122,7 @@ const LeadFields = ({
           )}
         </div>
         <div className="space-y-2">
-          <Label htmlFor="email">{t.labelEmail}</Label>
+          <Label htmlFor="email">{t.labelEmail} *</Label>
           <Input
             id="email"
             type="email"
@@ -118,6 +130,7 @@ const LeadFields = ({
             onChange={(e) => onEmailChange(e.target.value)}
             onBlur={() => setEmailTouched(true)}
             placeholder={t.placeholderEmail}
+            required
             maxLength={255}
             aria-invalid={emailError || undefined}
             className={
