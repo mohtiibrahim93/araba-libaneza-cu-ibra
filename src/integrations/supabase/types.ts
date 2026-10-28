@@ -303,9 +303,6 @@ export type Database = {
       }
       bookings: {
         Row: {
-          morning_reminder_on: string | null
-          reminders_enabled: boolean
-          reminders_from: string
           appeal_at: string | null
           appeal_decided_at: string | null
           appeal_decision: string | null
@@ -349,9 +346,6 @@ export type Database = {
           updated_at: string
         }
         Insert: {
-          morning_reminder_on?: string | null
-          reminders_enabled?: boolean
-          reminders_from?: string
           appeal_at?: string | null
           appeal_decided_at?: string | null
           appeal_decision?: string | null
@@ -395,9 +389,6 @@ export type Database = {
           updated_at?: string
         }
         Update: {
-          morning_reminder_on?: string | null
-          reminders_enabled?: boolean
-          reminders_from?: string
           appeal_at?: string | null
           appeal_decided_at?: string | null
           appeal_decision?: string | null
@@ -1184,17 +1175,6 @@ export type Database = {
       }
       registrations: {
         Row: {
-          no_show_fee_attempts: number
-          no_show_fee_amount: number | null
-          no_show_fee_at: string | null
-          no_show_fee_booking_id: string | null
-          no_show_fee_error: string | null
-          no_show_fee_intent_id: string | null
-          no_show_fee_refunded_amount: number | null
-          no_show_fee_status: string | null
-          deposit_amount: number | null
-          deposit_paid_at: string | null
-          deposit_session_id: string | null
           anonymized_at: string | null
           canceled_at: string | null
           card_fingerprint: string | null
@@ -1238,17 +1218,6 @@ export type Database = {
           whatsapp_sent_at: string | null
         }
         Insert: {
-          no_show_fee_attempts?: number
-          no_show_fee_amount?: number | null
-          no_show_fee_at?: string | null
-          no_show_fee_booking_id?: string | null
-          no_show_fee_error?: string | null
-          no_show_fee_intent_id?: string | null
-          no_show_fee_refunded_amount?: number | null
-          no_show_fee_status?: string | null
-          deposit_amount?: number | null
-          deposit_paid_at?: string | null
-          deposit_session_id?: string | null
           anonymized_at?: string | null
           canceled_at?: string | null
           card_fingerprint?: string | null
@@ -1292,17 +1261,6 @@ export type Database = {
           whatsapp_sent_at?: string | null
         }
         Update: {
-          no_show_fee_attempts?: number
-          no_show_fee_amount?: number | null
-          no_show_fee_at?: string | null
-          no_show_fee_booking_id?: string | null
-          no_show_fee_error?: string | null
-          no_show_fee_intent_id?: string | null
-          no_show_fee_refunded_amount?: number | null
-          no_show_fee_status?: string | null
-          deposit_amount?: number | null
-          deposit_paid_at?: string | null
-          deposit_session_id?: string | null
           anonymized_at?: string | null
           canceled_at?: string | null
           card_fingerprint?: string | null
