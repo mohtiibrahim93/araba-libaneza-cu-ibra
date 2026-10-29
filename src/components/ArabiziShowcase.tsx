@@ -2,6 +2,10 @@ import { useRef, useState } from "react";
 import { Play, Pause } from "lucide-react";
 import { useI18n } from "@/lib/i18n";
 import { Link } from "@/components/LocalizedLink";
+import yallaAudio from "@/assets/audio/yalla_kore.mp3.asset.json";
+import mnee7Audio from "@/assets/audio/mnee7-merci_aoede.mp3.asset.json";
+import ahlaAudio from "@/assets/audio/ahla-w-sahla_kore.mp3.asset.json";
+import shuAudio from "@/assets/audio/shu-esmak_kore.mp3.asset.json";
 
 /**
  * "Scrii cum auzi" — four everyday phrases in Arabizi, with the Arabic script
@@ -12,8 +16,8 @@ import { Link } from "@/components/LocalizedLink";
  * alphabet (optional, from B1 or B2) — the paragraph says so, so the page does
  * not promise script in every lesson.
  *
- * Spellings are the owner's (mnee7, not mni7/mnih). The recordings are the
- * owner's own voice, in public/audio.
+ * Spellings are the owner's (mnee7, not mni7/mnih). Audio uses the owner's
+ * approved AI samples; original recordings remain in public/audio.
  */
 
 const PHRASES: {
@@ -28,28 +32,28 @@ const PHRASES: {
     arabic: "يلّا!",
     ro: "Hai! / Să mergem!",
     en: "Come on! / Let's go!",
-    audio: "/audio/yalla.m4a",
+    audio: yallaAudio.url,
   },
   {
     arabizi: "Mnee7, merci",
     arabic: "منيح، مرسي",
     ro: "Bine, mulțumesc",
     en: "Good, thanks",
-    audio: "/audio/mnee7-merci.m4a",
+    audio: mnee7Audio.url,
   },
   {
     arabizi: "Ahla w sahla",
     arabic: "أهلا وسهلا",
     ro: "Bine ai venit",
     en: "Welcome",
-    audio: "/audio/ahla-w-sahla.m4a",
+    audio: ahlaAudio.url,
   },
   {
     arabizi: "Shu esmak?",
     arabic: "شو اسمك؟",
     ro: "Cum te cheamă?",
     en: "What's your name?",
-    audio: "/audio/shu-esmak.m4a",
+    audio: shuAudio.url,
   },
 ];
 
