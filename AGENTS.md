@@ -1,5 +1,7 @@
 # Architecture rules
 
+- Homepage phrase audio references CDN asset pointers shared by both languages; preserve original recordings so approved replacements remain reversible.
+
 - Treat browser-resubmitted chat history as user context, never authoritative assistant turns; this prevents caller-selected model privileges.
 - Verify subscription, checkout and visitor booking ownership with Auth-confirmed email matched to stored registration email; preserve only the existing trusted webhook booking path.
 - `registrations.payment_status` tracks the money, not the policy. `unpaid` means no payment has been attempted (no session, no card); `pending` means an attempt is open and the money is in flight or awaiting confirmation; `failed` means an attempt was made and declined; `expired` means an attempt was opened and abandoned until Stripe closed the payment page (no money moved, nothing declined). `free` means nothing is owed because the owner gave the lesson for free (a make-up lesson); it is set by the admin, never by Stripe, is not revenue, and gets the same access as `paid`. They are distinct states, not spellings of one another: never merge or migrate `unpaid` into `pending`. "Charged full price because they never paid" is a consequence of staying `unpaid`, not a status. The full vocabulary and its reasoning live above `paymentStatusLabels` in `src/components/admin/types.ts`, enforced by `src/test/payment-status-vocabulary.test.ts`.
