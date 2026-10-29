@@ -1,4 +1,5 @@
 ## În lucru
+- [ ] Replace the four homepage phrase recordings with the approved existing AI samples; verify playback without changing appearance or words.
 - [x] Revise v5 and both v6 promotional videos to explicitly say “Curs online · 7 noiembrie”; preserve audio and previous files.
 - [x] Corectează textul contradictoriu despre cardul pentru proba gratuită
 - [x] Valul 5: paginile Rezervările mele RO/EN, link privat prin email, listă, anulare și reprogramare
