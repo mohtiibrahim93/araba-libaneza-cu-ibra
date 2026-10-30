@@ -189,3 +189,35 @@ describe("a student can appeal a lesson counted as lost", () => {
       expect(sql).toContain(col);
   });
 });
+
+describe("handoff extras (30 October 2026)", () => {
+  const create = read("supabase/functions/booking-create/index.ts");
+  const reminders = read("supabase/functions/booking-reminders/index.ts");
+  const admin = read("supabase/functions/admin-registrations/index.ts");
+  const card = read("src/components/admin/PackageCard.tsx");
+
+  it("names the lesson's number in the student emails", () => {
+    expect(create).toContain(
+      code("lessonOfPackage(lessonNumber, packageTotal, lang)"),
+    );
+    expect(reminders).toContain(
+      code("lessonOfPackage(number.n, number.total, lang)"),
+    );
+  });
+
+  it("reminds the owner once about an appeal still open after 20 hours", () => {
+    expect(reminders).toContain(code('.is("appeal_reminded_at", null)'));
+    expect(reminders).toContain(
+      code(".update({ appeal_reminded_at: new Date().toISOString() })"),
+    );
+  });
+
+  it("starts a new package from the card and renames old titles on request", () => {
+    expect(card).toContain(
+      code("newPackage: { quantity: pkg.quantity, paid: false }"),
+    );
+    expect(admin).toContain(
+      code('if (action === "sync_all_package_titles") {'),
+    );
+  });
+});

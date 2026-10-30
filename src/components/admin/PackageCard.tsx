@@ -92,6 +92,8 @@ export default function PackageCard({
 }) {
   const [pkg, setPkg] = useState<PackageData | null | undefined>(undefined);
   const [booking, setBooking] = useState(false);
+  // "Pachet nou": the same student, a new registration with its own count.
+  const [newPackage, setNewPackage] = useState(false);
   const [series, setSeries] = useState(false);
 
   const load = useCallback(async () => {
@@ -194,11 +196,20 @@ export default function PackageCard({
           </Button>
         )}
       </div>
-      {left === 0 && (
-        <p className="mt-2 text-xs text-muted-foreground">
-          Pentru un pachet nou: „Programează o lecție” → alege cursantul →
-          „Lecție în plus”, cu numărul de lecții al pachetului nou.
-        </p>
+      {left <= 1 && (
+        <div className="mt-2">
+          <Button
+            size="sm"
+            variant="outline"
+            onClick={() => setNewPackage(true)}
+          >
+            Pachet nou ({pkg.quantity} lecții)
+          </Button>
+          <p className="mt-1 text-xs text-muted-foreground">
+            Aceleași date ale cursantului; lecțiile noi se numără de la 1.
+            Bifează „A plătit deja” dacă a plătit.
+          </p>
+        </div>
       )}
 
       <BookLessonDialog
@@ -213,6 +224,21 @@ export default function PackageCard({
             : null
         }
         onClose={() => setBooking(false)}
+        onBooked={() => void load()}
+      />
+      <BookLessonDialog
+        open={newPackage}
+        initial={
+          newPackage
+            ? {
+                ...nextSlot(pkg.lessons),
+                studentId: pkg.registration_id,
+                format: lastFormat,
+                newPackage: { quantity: pkg.quantity, paid: false },
+              }
+            : null
+        }
+        onClose={() => setNewPackage(false)}
         onBooked={() => void load()}
       />
       {series && (

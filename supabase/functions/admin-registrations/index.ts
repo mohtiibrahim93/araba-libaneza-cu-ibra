@@ -1680,6 +1680,33 @@ Deno.serve(async (req) => {
 
     // The rest of Disponibilitate (owner's request, 13 October 2026): each
     // lesson type's booking limits and in-person days, and days off.
+    // Renames the Google events of every package lesson still ahead to
+    // "Name - Araba libaneza- LX/Total" (lessons booked before the numbering
+    // existed keep their old titles until their package changes). Quiet:
+    // students are not notified.
+    if (action === "sync_all_package_titles") {
+      const { data: ahead, error: aheadErr } = await supabase
+        .from("bookings")
+        .select("registration_id")
+        .eq("status", "confirmed")
+        .gt("start_at", new Date().toISOString())
+        .not("google_event_id", "is", null)
+        .not("registration_id", "is", null)
+        .limit(2000);
+      if (aheadErr) throw aheadErr;
+      const regIds = [
+        ...new Set((ahead ?? []).map((b) => b.registration_id as string)),
+      ];
+      for (const regId of regIds) await syncPackageTitles(supabase, regId);
+      await supabase.from("audit_logs").insert({
+        actor: callerEmail,
+        action: "sync_all_package_titles",
+        registration_id: null,
+        details: { registrations: regIds.length },
+      });
+      return jsonResponse({ success: true, registrations: regIds.length });
+    }
+
     if (action === "list_booking_settings") {
       const [{ data: types, error: tErr }, { data: daysOff, error: bErr }] =
         await Promise.all([

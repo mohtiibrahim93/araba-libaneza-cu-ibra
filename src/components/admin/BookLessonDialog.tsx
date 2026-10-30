@@ -60,6 +60,8 @@ export default function BookLessonDialog({
     time: string;
     studentId?: string;
     format?: "online" | "physical";
+    /** A new package for this student ("Pachet nou"): its own registration. */
+    newPackage?: { quantity: number; paid: boolean };
   } | null;
   onClose: () => void;
   onBooked: () => void;
@@ -98,6 +100,8 @@ export default function BookLessonDialog({
     time: string;
     studentId?: string;
     format?: "online" | "physical";
+    /** A new package for this student ("Pachet nou"): its own registration. */
+    newPackage?: { quantity: number; paid: boolean };
   }) => {
     const now = new Date();
     const f = bucharestFields(
@@ -127,6 +131,11 @@ export default function BookLessonDialog({
           ? list.find((x) => x.id === initial.studentId)
           : undefined;
         if (s) {
+          if (initial?.newPackage) {
+            setBkExtra(true);
+            setBkQuantity(initial.newPackage.quantity);
+            setBkPaid(initial.newPackage.paid);
+          }
           setBkStudentId(s.id);
           setBkName(s.name ?? "");
           setBkEmail(s.email ?? "");

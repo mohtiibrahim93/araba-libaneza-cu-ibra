@@ -2,6 +2,38 @@ import { GCAL_GATEWAY } from "./booking.ts";
 import { packageNumbers, packageTitle } from "./package-lessons.ts";
 
 /**
+ * A lesson's number in its private package ({ n: 3, total: 10 }), or null
+ * when it is not a counted package lesson. For the emails' "Lecția 3 din 10".
+ */
+// deno-lint-ignore no-explicit-any
+export async function packageLessonNumber(
+  db: any,
+  registrationId: string | null | undefined,
+  bookingId: string,
+): Promise<{ n: number; total: number } | null> {
+  if (!registrationId) return null;
+  try {
+    const { data: reg } = await db
+      .from("registrations")
+      .select("id, form_type, quantity")
+      .eq("id", registrationId)
+      .maybeSingle();
+    if (!reg || reg.form_type !== "private") return null;
+    const { data: rows } = await db
+      .from("bookings")
+      .select("id, start_at, status, event_type_slug, trial_outcome")
+      .eq("registration_id", registrationId);
+    const numbers = packageNumbers(rows ?? []);
+    const n = numbers.get(bookingId);
+    if (!n) return null;
+    return { n, total: Math.max(Number(reg.quantity) || 1, numbers.size) };
+  } catch (error) {
+    console.error("[package-titles] number lookup failed", bookingId, error);
+    return null;
+  }
+}
+
+/**
  * Keep the Google titles of a package's upcoming lessons in step with their
  * numbers ("Ioan - Araba libaneza- L3/10") after a lesson is booked, moved,
  * cancelled, excused or moved to another package. Only lessons still ahead

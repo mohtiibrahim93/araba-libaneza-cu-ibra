@@ -57,3 +57,12 @@ export function packageTitle(name: string, n: number, total: number): string {
 export function packageLessonLabel(n: number, total: number): string {
   return `L${n}/${total}`;
 }
+
+/** The words the student emails use: "Lecția 3 din 10" / "Lesson 3 of 10". */
+export function lessonOfPackage(
+  n: number,
+  total: number,
+  lang: "ro" | "en" = "ro",
+): string {
+  return lang === "en" ? `Lesson ${n} of ${total}` : `Lecția ${n} din ${total}`;
+}
