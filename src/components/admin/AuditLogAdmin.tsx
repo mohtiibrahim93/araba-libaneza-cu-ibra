@@ -53,6 +53,7 @@ const ACTION_LABELS: Record<string, string> = {
   import_calendar_event: "Lecție importată din Google",
   set_trial_outcome: "Rezultat probă",
   set_lesson_outcome: "Rezultat lecție (pachet)",
+  sync_all_package_titles: "Titluri pachete în Google",
   update_contact: "Contact actualizat",
   repair_booking_calendar: "Calendar reparat",
 };

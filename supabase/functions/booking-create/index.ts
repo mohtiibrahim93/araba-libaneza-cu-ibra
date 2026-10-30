@@ -29,6 +29,7 @@ import { checkRateLimit, getClientIp } from "../_shared/rate-limit.ts";
 import { verifiedRegistrationOwner } from "../_shared/verified-registration-owner.ts";
 import {
   countsAgainstPackage,
+  lessonOfPackage,
   lessonsUsed,
   packageNumbers,
   packageTitle,
@@ -537,6 +538,11 @@ Deno.serve(async (req) => {
       await syncPackageTitles(supabase, body.registration_id);
 
     const quiet = internalCall && body.quiet === true;
+    // "· Lecția 3 din 10" after the date, in the student's and the owner's email.
+    const withLessonNumber = (label: string, lang: "ro" | "en") =>
+      lessonNumber
+        ? `${label} · ${lessonOfPackage(lessonNumber, packageTotal, lang)}`
+        : label;
 
     // Send confirmation email (best-effort, async)
     if (!quiet)
@@ -545,7 +551,10 @@ Deno.serve(async (req) => {
         body.student_email,
         {
           name: body.student_name,
-          whenLabel: fmtLocal(startISO, language),
+          whenLabel: withLessonNumber(
+            fmtLocal(startISO, language),
+            language === "en" ? "en" : "ro",
+          ),
           durationMin: et.duration_min,
           format,
           meetLink: onlineLink,
@@ -565,7 +574,10 @@ Deno.serve(async (req) => {
           studentEmail: body.student_email,
           studentPhone: body.student_phone ?? null,
           format: format === "online" ? "online" : "fizic",
-          whenLabel: fmtLocal(startISO, language),
+          whenLabel: withLessonNumber(
+            fmtLocal(startISO, language),
+            language === "en" ? "en" : "ro",
+          ),
           notes: body.notes ?? null,
           // The owner's own copy is the only place they would notice that the
           // lesson is not in their Google Calendar, so say so explicitly.

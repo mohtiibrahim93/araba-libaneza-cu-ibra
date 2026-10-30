@@ -1,8 +1,14 @@
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 import { json as _json } from "../_shared/booking.ts";
-import { fmtBookingLocal, manageUrl } from "../_shared/booking-emails.ts";
+import {
+  ADMIN_RECIPIENT,
+  fmtBookingLocal,
+  manageUrl,
+} from "../_shared/booking-emails.ts";
 import { sendTemplateEmail } from "../_shared/managed-email.ts";
 import { buildCorsHeaders } from "../_shared/cors.ts";
+import { lessonOfPackage } from "../_shared/package-lessons.ts";
+import { packageLessonNumber } from "../_shared/package-titles.ts";
 import {
   reminderDue,
   reminderInLabel,
@@ -52,6 +58,7 @@ Deno.serve(async (req) => {
     meet_link: string | null;
     manage_token: string;
     language: string | null;
+    registration_id: string | null;
   };
 
   // Every lesson still to come gets a reminder each morning until its day, so
@@ -59,7 +66,7 @@ Deno.serve(async (req) => {
   const { data: upcoming, error: upcomingErr } = await supabase
     .from("bookings")
     .select(
-      "id,start_at,student_name,student_email,format,meet_link,manage_token,language,reminders_from,morning_reminder_on,reminder_1h_sent_at,reminders_enabled",
+      "id,registration_id,start_at,student_name,student_email,format,meet_link,manage_token,language,reminders_from,morning_reminder_on,reminder_1h_sent_at,reminders_enabled",
     )
     .eq("status", "confirmed")
     .gt("start_at", nowISO)
@@ -75,6 +82,11 @@ Deno.serve(async (req) => {
     if (!due || !r.student_email) continue;
     const lang = r.language === "en" ? "en" : "ro";
     const startMs = Date.parse(r.start_at);
+    // "· Lecția 3 din 10" for a lesson of a private package.
+    const number = await packageLessonNumber(supabase, r.registration_id, r.id);
+    const whenLabel = number
+      ? `${fmtBookingLocal(r.start_at, lang)} · ${lessonOfPackage(number.n, number.total, lang)}`
+      : fmtBookingLocal(r.start_at, lang);
     // Stamp the reminder only once the send went through (or the recipient
     // is suppressed), so a failed send is retried on the next run. The
     // idempotency key stops a double send.
@@ -82,7 +94,7 @@ Deno.serve(async (req) => {
       await sendTemplateEmail("booking-reminder", r.student_email, {
         templateData: {
           name: r.student_name,
-          whenLabel: fmtBookingLocal(r.start_at, lang),
+          whenLabel,
           inLabel: reminderInLabel(due, lang),
           format: r.format,
           meetLink: r.meet_link,
@@ -179,7 +191,51 @@ Deno.serve(async (req) => {
     .select("id");
   if (autoErr) console.error("[reminders] auto-complete failed", autoErr);
 
+  // An appeal still unanswered 20 hours after it was sent: one reminder to
+  // the owner, who promised an answer within 24 hours.
+  const { data: lateAppeals, error: lateErr } = await supabase
+    .from("bookings")
+    .select(
+      "id, start_at, student_name, student_email, student_phone, appeal_text",
+    )
+    .not("appeal_at", "is", null)
+    .is("appeal_decided_at", null)
+    .is("appeal_reminded_at", null)
+    .lte("appeal_at", new Date(now - 20 * 3_600_000).toISOString())
+    .limit(50);
+  if (lateErr) console.error("[reminders] appeal query failed", lateErr);
+  let appealReminders = 0;
+  for (const a of lateAppeals ?? []) {
+    try {
+      await sendTemplateEmail("lesson-appeal-owner", ADMIN_RECIPIENT, {
+        templateData: {
+          reminder: true,
+          studentName: a.student_name,
+          studentEmail: a.student_email,
+          studentPhone: a.student_phone,
+          whenLabel: fmtBookingLocal(a.start_at, "ro"),
+          appealText: a.appeal_text,
+          adminUrl: "https://centruldearabalibaneza.com/admin",
+        },
+        idempotencyKey: `lesson-appeal-reminder-${a.id}`,
+      });
+    } catch (err) {
+      console.error(
+        "[reminders] appeal reminder failed; will retry",
+        a.id,
+        err,
+      );
+      continue;
+    }
+    await supabase
+      .from("bookings")
+      .update({ appeal_reminded_at: new Date().toISOString() })
+      .eq("id", a.id);
+    appealReminders++;
+  }
+
   return json({
+    appeal_reminders: appealReminders,
     ok: true,
     results,
     done_checks: { sent: doneChecks, failed: doneCheckFailed },

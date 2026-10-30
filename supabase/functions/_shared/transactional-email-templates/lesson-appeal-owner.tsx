@@ -19,6 +19,8 @@ import type { TemplateEntry } from "./registry.ts";
  * from Acasă (Scuzat / Pierdută) or on WhatsApp.
  */
 interface Props {
+  /** Still unanswered 20 hours later: the one reminder. */
+  reminder?: boolean;
   studentName?: string;
   studentEmail?: string;
   studentPhone?: string | null;
@@ -30,6 +32,7 @@ interface Props {
 }
 
 const Email = ({
+  reminder,
   studentName,
   studentEmail,
   studentPhone,
@@ -44,7 +47,11 @@ const Email = ({
     <Preview>{`Contestație: ${studentName || "cursant"} — lecția din ${whenLabel ?? ""}`}</Preview>
     <Body style={main}>
       <Container style={container}>
-        <Heading style={h1}>✋ Cerere de reconsiderare</Heading>
+        <Heading style={h1}>
+          {reminder
+            ? "⏰ Mai ai ~4 ore să răspunzi"
+            : "✋ Cerere de reconsiderare"}
+        </Heading>
         <Text style={text}>
           Cursantul spune că lecția nu ar trebui să se numere din pachet.
           Răspunde-i în 24 de ore: Scuzat (nu se numără) sau Pierdută (se
@@ -98,7 +105,7 @@ const Email = ({
 export const template = {
   component: Email,
   subject: (d: Props) =>
-    `Contestație lecție: ${d.studentName || "cursant"} (${d.whenLabel ?? ""})`,
+    `${d.reminder ? "Reamintire — " : ""}Contestație lecție: ${d.studentName || "cursant"} (${d.whenLabel ?? ""})`,
   displayName: "Admin — student appeals a lesson counted as lost",
   previewData: {
     studentName: "Ioan",

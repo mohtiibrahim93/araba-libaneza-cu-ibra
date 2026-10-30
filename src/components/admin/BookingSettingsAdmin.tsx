@@ -471,6 +471,56 @@ export default function BookingSettingsAdmin() {
         </div>
       </section>
       <DaysOff blackouts={blackouts} onChanged={() => void load()} />
+      <PackageTitles />
     </div>
+  );
+}
+
+/**
+ * One click renames the Google events of all upcoming package lessons to
+ * "Name - Araba libaneza- L3/10". New and changed lessons are renamed by
+ * themselves; this is for lessons booked before the numbering existed.
+ */
+function PackageTitles() {
+  const [busy, setBusy] = useState(false);
+  const [result, setResult] = useState("");
+  const run = async () => {
+    setBusy(true);
+    setResult("");
+    const { data, error: failure } = await invokeAdmin<{
+      success?: boolean;
+      registrations?: number;
+      error?: string;
+    }>({ action: "sync_all_package_titles" });
+    setBusy(false);
+    setResult(
+      failure || data?.error || data?.success !== true
+        ? data?.error || failure?.message || "Nu a mers. Încearcă din nou."
+        : `Gata: ${data.registrations ?? 0} pachete actualizate în Google Calendar.`,
+    );
+  };
+  return (
+    <section className={card}>
+      <h2 className="text-base font-semibold text-foreground">
+        Titluri pachete în Google Calendar
+      </h2>
+      <p className="mb-3 text-sm text-muted-foreground">
+        Pune „Nume - Araba libaneza- L3/10” pe toate lecțiile viitoare din
+        pachete. Cursanții nu primesc nicio notificare.
+      </p>
+      <button
+        type="button"
+        onClick={() => void run()}
+        disabled={busy}
+        className="rounded-md bg-primary px-3 py-2 text-sm font-medium text-primary-foreground disabled:opacity-50"
+      >
+        {busy ? "Se actualizează…" : "Actualizează titlurile"}
+      </button>
+      {result && (
+        <p role="status" className="mt-2 text-sm">
+          {result}
+        </p>
+      )}
+    </section>
   );
 }
