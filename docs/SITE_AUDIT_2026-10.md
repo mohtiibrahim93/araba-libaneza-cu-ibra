@@ -27,6 +27,45 @@ re-checked on 26 Oct against main and the live site.
 Edge-function fixes go live only through a Lovable deploy (credits); pushing
 to main does not deploy them. Bundle fixes into one deploy.
 
+## Added 30 Oct 2026 (not in the 12 Oct audit)
+
+Re-crawl of the live site on 30 Oct (135 sitemap pages, desktop + mobile):
+all 200, no broken internal links or images, no mobile horizontal scroll, one
+H1, description and correct canonical everywhere. Still live from the list
+below: Romanian pages render in English after an /en visit (P1 broken #3), and
+`/blog?page=2` repeats page 1's title (SEO #5). The reCAPTCHA `pat` 401 and
+`requestStorageAccess` console lines are Google's own noise, not a bug.
+
+**Deploy pending (blocked: Lovable out of credits, 30 Oct).** `main` 0e7fed41:
+deploy 16 edge functions (admin-registrations, booking-create, booking-manage,
+booking-reminders, calendar-sync, create-checkout, create-checkout-session,
+create-payment-intent, create-subscription, gdpr-request, mcp,
+notify-registration, preview-transactional-email, resource-download,
+stripe-webhook, trial-followup), publish and compare the bundle hash, run
+`20261027121000_required_registration_fields.sql` and record it, send one test
+email for the sender name "Arabă Libaneză cu Ibra". Until then the P0-3 fix and
+the 30 Oct admin changes (e.g. "Actualizează titlurile") are not live.
+
+**Forming groups (owner, 30 Oct). Mock-up made, not built yet.**
+1. Admin › Grupe: the first card, "Lecțiile grupelor", lists only groups with
+   a calendar name (`sync_cohort_sessions`), so groups still forming are
+   missing. The overview that has their numbers (`CourseOverviewAdmin`) is third
+   in the tab, sorts oldest first, shows finished groups and leaves `free` /
+   `expired` out of its payment chips. Proposed: a "Grupe în formare" card on
+   top (seats, registrations by payment status, minimum to start, days to
+   start). Frontend only.
+2. Public: forming groups appear as two lines of text on `/cursuri/grup`, which
+   count free seats rather than taken ones. There is no page per group: the old
+   `/cursuri/curs/$slug` is Romanian only and both forming groups have no `slug`.
+   Proposed: a "Grupe care se formează" section with "N din M locuri ocupate",
+   plus a noindex page per group in RO and EN.
+3. [DB] The A2 online group is still a `draft` with a past start (2 Sep).
+4. Two or more ways to add a student by hand overlap in admin; the owner wants
+   to keep only the newest one (which one to be confirmed).
+
+**Still in URLs after P0-3** (no longer sent to Google): `/checkout?email=&name=`,
+`?token=`, `?sig=`. Move them out together with P0-4 / P0-5.
+
 ---
 
 ## P0: money, lost emails, privacy (fix first)
