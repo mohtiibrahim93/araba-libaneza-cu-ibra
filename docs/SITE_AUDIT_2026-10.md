@@ -10,14 +10,19 @@ re-checked on 26 Oct against main and the live site.
   student confirmation sent after checkout email verification (d86573e6).
   Confirmed live: the first group sign-up after 12 Oct produced the admin alert.
 - DONE Lint crash (ajv override): fixed by another session on 12 Oct.
-- OPEN P0-3 … P0-9 and everything below: still open as of 26 Oct.
-- OPEN One group registration from 11 Oct (A1 in person) has no group attached
-  (`cohort_id` null), so it cannot pay. It was created before the form required a
-  group. The only A1 in-person group is the 2 Sep one (in progress). Owner to
-  choose: student re-registers / attach via a one-row DB update (needs owner OK) /
-  build an "assign group" control in admin.
-- Suggested next order: P0-3 (GA receives emails, names and tokens), then P0-4 and
-  P0-5 (the group payment flow), then P0-6 to P0-9.
+- DONE P0-3 Google receives no emails, names or tokens from URLs (30 Oct):
+  every URL sent to GA goes through `src/lib/analyticsUrl.ts` (query dropped
+  except utm_*/gclid/gbraid/wbraid/page; `/booking/manage/<token>`,
+  `/private-status/<id>`, `/admin/private-leads/<id>` become `/:id`). Google Ads'
+  remarketing tag (AW-18482373882) reports the real address bar (`top=`), so on
+  those token paths the Google tag is not loaded and no event is sent. Checked
+  in a browser against captured Google requests. Still in URLs (not sent to
+  Google): `/checkout?email=&name=`, `?token=`, `?sig=`; moving them out
+  belongs with P0-4/P0-5 (same files).
+- OPEN P0-4 … P0-9 and everything below: still open as of 26 Oct.
+- DONE One group registration from 11 Oct (A1 in person) had no group attached
+  (`cohort_id` null), so it could not pay. Resolved (confirmed by the owner, 30 Oct).
+- Suggested next order: P0-4 and P0-5 (the group payment flow), then P0-6 to P0-9.
 
 Edge-function fixes go live only through a Lovable deploy (credits); pushing
 to main does not deploy them. Bundle fixes into one deploy.

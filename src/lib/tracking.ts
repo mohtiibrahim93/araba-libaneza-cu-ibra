@@ -3,12 +3,28 @@
 // banner flips it to "granted" when the visitor accepts, so we send events unconditionally and
 // let Consent Mode gate them. Meta Pixel isn't set up yet.
 
+import { safeAnalyticsUrl, URL_PARAMS } from "@/lib/analyticsUrl";
+
 export function trackEvent(
   eventName: string,
   params?: Record<string, unknown>,
 ) {
   if (typeof (window as any).gtag !== "function") return;
-  (window as any).gtag("event", eventName, params);
+  // Google Ads' tag sends the address bar itself with each event; on a page
+  // whose path holds a token or record id nothing is sent (audit P0-3).
+  const path = window.location.pathname;
+  if (safeAnalyticsUrl(path) !== path) return;
+  (window as any).gtag("event", eventName, params && withSafeUrls(params));
+}
+
+// Every URL-valued parameter goes through safeAnalyticsUrl, so no call site
+// can send an email, name or token to Google (audit P0-3).
+function withSafeUrls(params: Record<string, unknown>) {
+  const out = { ...params };
+  for (const key of URL_PARAMS) {
+    if (typeof out[key] === "string") out[key] = safeAnalyticsUrl(out[key]);
+  }
+  return out;
 }
 
 // ---------------------------------------------------------------------------

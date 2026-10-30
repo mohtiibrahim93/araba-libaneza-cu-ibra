@@ -17,6 +17,7 @@ import { I18nProvider, useI18n } from "@/lib/i18n";
 import { useRouteAnalytics } from "@/hooks/useRouteAnalytics";
 import { useLocation } from "@/lib/router-compat";
 import { initContactClickTracking } from "@/lib/tracking";
+import { SAFE_URL_INLINE_JS } from "@/lib/analyticsUrl";
 import { reportLovableError } from "@/lib/lovable-error-reporting";
 import { COURSE_INSTRUCTOR, ORGANIZATION_SAME_AS } from "@/lib/courseSchema";
 import NotFound from "@/pages/NotFound";
@@ -83,12 +84,19 @@ const gtagBootstrap = `
 window.dataLayer = window.dataLayer || [];
 function gtag(){dataLayer.push(arguments);}
 if (window.__ANALYTICS_ENABLED__) {
+  ${SAFE_URL_INLINE_JS}
   // gtag.js itself is fetched only after the visitor accepts all cookies
   // (owner's rule, October 2026): before that nothing is sent to Google, not
   // even Consent Mode's cookieless pings. Commands queue in dataLayer until
   // the script loads, so the page view still counts once consent is given.
   window.__loadGtag = function () {
     if (window.__gtagLoaded) return;
+    // Google Ads' remarketing tag, linked to this Google tag, reports the
+    // address bar itself ("top"), which no gtag setting cleans. On a page
+    // whose path holds a token or record id the script is not loaded; the
+    // next ordinary page loads it (useRouteAnalytics) and the queued commands
+    // run then (audit P0-3).
+    if (window.__gaSafeUrl(location.pathname) !== location.pathname) return;
     window.__gtagLoaded = true;
     var gt = document.createElement("script");
     gt.async = true;
@@ -105,6 +113,13 @@ if (window.__ANALYTICS_ENABLED__) {
       window.__loadGtag();
     }
   } catch (e) {}
+  // Google sees the URL without personal data or tokens (audit P0-3; see
+  // src/lib/analyticsUrl.ts). Set before config so the first page view and
+  // every automatic event use the cleaned values.
+  gtag('set', {
+    page_location: window.__gaSafeUrl(location.href),
+    page_referrer: window.__gaSafeUrl(document.referrer)
+  });
   gtag('config', '${GA_MEASUREMENT_ID}');
 }
 `;
