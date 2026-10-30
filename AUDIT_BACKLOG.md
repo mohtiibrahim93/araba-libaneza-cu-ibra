@@ -1,5 +1,7 @@
 # Audit Backlog — Centrul de Araba Libaneza
 
+> **October 2026 full audit (code + live site):** `docs/SITE_AUDIT_2026-10.md` — its status block says what is fixed and what to do next (P0-3 onwards).
+
 Living backlog, updated across the audit passes below. Product scope: lead-gen + booking site (quiz → registration → Zoom-synced booking → Stripe payment → admin manages leads). No student login/LMS features exist or are in scope.
 
 **Passes completed:** 2 full passes (this session + this morning's security-focused pass). Third pass not run — the second pass surfaced one new High finding (booking-create email relay), so per the stated stop condition ("iterate until a full pass produces no new Critical/High") one more pass would be warranted before calling this fully exhausted; noted as a gap below rather than silently stopping.
