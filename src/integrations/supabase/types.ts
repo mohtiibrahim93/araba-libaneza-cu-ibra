@@ -306,6 +306,7 @@ export type Database = {
           appeal_at: string | null
           appeal_decided_at: string | null
           appeal_decision: string | null
+          appeal_reminded_at: string | null
           appeal_text: string | null
           cancelled_at: string | null
           completed_at: string | null
@@ -323,6 +324,7 @@ export type Database = {
           language: string
           manage_token: string
           meet_link: string | null
+          morning_reminder_on: string | null
           notes: string | null
           original_booking_id: string | null
           registration_id: string
@@ -332,6 +334,8 @@ export type Database = {
           reminder_30m_sent_at: string | null
           reminder_3h_sent_at: string | null
           reminder_day_of_sent_at: string | null
+          reminders_enabled: boolean
+          reminders_from: string
           start_at: string
           status: string
           student_email: string
@@ -349,6 +353,7 @@ export type Database = {
           appeal_at?: string | null
           appeal_decided_at?: string | null
           appeal_decision?: string | null
+          appeal_reminded_at?: string | null
           appeal_text?: string | null
           cancelled_at?: string | null
           completed_at?: string | null
@@ -366,6 +371,7 @@ export type Database = {
           language?: string
           manage_token?: string
           meet_link?: string | null
+          morning_reminder_on?: string | null
           notes?: string | null
           original_booking_id?: string | null
           registration_id: string
@@ -375,6 +381,8 @@ export type Database = {
           reminder_30m_sent_at?: string | null
           reminder_3h_sent_at?: string | null
           reminder_day_of_sent_at?: string | null
+          reminders_enabled?: boolean
+          reminders_from?: string
           start_at: string
           status?: string
           student_email: string
@@ -392,6 +400,7 @@ export type Database = {
           appeal_at?: string | null
           appeal_decided_at?: string | null
           appeal_decision?: string | null
+          appeal_reminded_at?: string | null
           appeal_text?: string | null
           cancelled_at?: string | null
           completed_at?: string | null
@@ -409,6 +418,7 @@ export type Database = {
           language?: string
           manage_token?: string
           meet_link?: string | null
+          morning_reminder_on?: string | null
           notes?: string | null
           original_booking_id?: string | null
           registration_id?: string
@@ -418,6 +428,8 @@ export type Database = {
           reminder_30m_sent_at?: string | null
           reminder_3h_sent_at?: string | null
           reminder_day_of_sent_at?: string | null
+          reminders_enabled?: boolean
+          reminders_from?: string
           start_at?: string
           status?: string
           student_email?: string
@@ -1183,6 +1195,9 @@ export type Database = {
           cohort_id: string | null
           contact_email: string | null
           created_at: string
+          deposit_amount: number | null
+          deposit_paid_at: string | null
+          deposit_session_id: string | null
           email: string | null
           followup_snoozed_until: string | null
           form_type: string
@@ -1196,6 +1211,14 @@ export type Database = {
           months_paid: number
           months_total: number | null
           name: string
+          no_show_fee_amount: number | null
+          no_show_fee_at: string | null
+          no_show_fee_attempts: number
+          no_show_fee_booking_id: string | null
+          no_show_fee_error: string | null
+          no_show_fee_intent_id: string | null
+          no_show_fee_refunded_amount: number | null
+          no_show_fee_status: string | null
           notes: string | null
           paid_at: string | null
           payment_method: string | null
@@ -1226,6 +1249,9 @@ export type Database = {
           cohort_id?: string | null
           contact_email?: string | null
           created_at?: string
+          deposit_amount?: number | null
+          deposit_paid_at?: string | null
+          deposit_session_id?: string | null
           email?: string | null
           followup_snoozed_until?: string | null
           form_type: string
@@ -1239,6 +1265,14 @@ export type Database = {
           months_paid?: number
           months_total?: number | null
           name: string
+          no_show_fee_amount?: number | null
+          no_show_fee_at?: string | null
+          no_show_fee_attempts?: number
+          no_show_fee_booking_id?: string | null
+          no_show_fee_error?: string | null
+          no_show_fee_intent_id?: string | null
+          no_show_fee_refunded_amount?: number | null
+          no_show_fee_status?: string | null
           notes?: string | null
           paid_at?: string | null
           payment_method?: string | null
@@ -1269,6 +1303,9 @@ export type Database = {
           cohort_id?: string | null
           contact_email?: string | null
           created_at?: string
+          deposit_amount?: number | null
+          deposit_paid_at?: string | null
+          deposit_session_id?: string | null
           email?: string | null
           followup_snoozed_until?: string | null
           form_type?: string
@@ -1282,6 +1319,14 @@ export type Database = {
           months_paid?: number
           months_total?: number | null
           name?: string
+          no_show_fee_amount?: number | null
+          no_show_fee_at?: string | null
+          no_show_fee_attempts?: number
+          no_show_fee_booking_id?: string | null
+          no_show_fee_error?: string | null
+          no_show_fee_intent_id?: string | null
+          no_show_fee_refunded_amount?: number | null
+          no_show_fee_status?: string | null
           notes?: string | null
           paid_at?: string | null
           payment_method?: string | null
