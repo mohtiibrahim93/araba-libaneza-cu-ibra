@@ -181,6 +181,45 @@ export async function reconcileCalendar(
       }
       continue;
     }
+    // A lesson already marked done still follows its Google event when the
+    // owner moves it (owner, 1 Nov 2026): an event imported at a past date is
+    // "completed" at once, and when the owner moved it a week later minutes
+    // after the import, the lesson kept the old date and the package numbers
+    // went wrong. Moved into the future, it is a lesson to come again.
+    // Only events already read for this window are compared; a deleted event
+    // of a past lesson is tidying and leaves the lesson alone.
+    if (booking.status === "completed") {
+      const event = events.get(booking.google_event_id);
+      if (!event || event.status === "cancelled") continue;
+      const start = instant(event.start?.dateTime),
+        end = instant(event.end?.dateTime);
+      if (!start || !end || Date.parse(end) <= Date.parse(start)) continue;
+      if (
+        Date.parse(start) === Date.parse(booking.start_at) &&
+        Date.parse(end) === Date.parse(booking.end_at)
+      )
+        continue;
+      const upcoming = Date.parse(end) > Date.now();
+      const write = await db
+        .from("bookings")
+        .update({
+          start_at: start,
+          end_at: end,
+          ...(upcoming
+            ? { status: "confirmed", completed_at: null, completed_by: null }
+            : {}),
+        })
+        .eq("id", booking.id)
+        .eq("status", "completed")
+        .eq("start_at", booking.start_at)
+        .select("id");
+      if (write.error || !write.data?.length)
+        result.errors.push(
+          `${booking.id}: Lesson changed during synchronization; retry`,
+        );
+      else result.updated++;
+      continue;
+    }
     if (booking.status !== "confirmed") continue;
     if (booking.google_sync_error === "calendar_create_pending") {
       try {
