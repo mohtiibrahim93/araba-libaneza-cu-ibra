@@ -66,13 +66,80 @@ the 30 Oct admin changes (e.g. "Actualizează titlurile") are not live.
 **Queued by the owner, 1 Nov 2026**
 
 1. **A1 in-person group: Wednesday lessons move to 18:30** (were 19:00), from
-   Wednesday 4 Nov onward. Monday 2 Nov stays at 19:00. Time-sensitive: the
-   calendar events, the schedule label and the students' reminders must say
-   18:30 before 4 Nov.
+   Wednesday 4 Nov onward. Monday 2 Nov stays at 19:00. DONE 1 Nov: weekly
+   pattern (`cohort_meetings`, Wednesday) set to 18:30–20:00. OPEN: schedule
+   labels (blocked by item 2 of the Chrome list below), then the owner adds the
+   missing lessons L18–L32 from Lecțiile grupelor (none exist after L17, 28 Oct).
 2. **Calendar sync is wrong for some lessons** (owner: about 90% correct). One
    private student's lessons (named by the owner) do not match Google Calendar.
    Verify the sync lesson by lesson against the calendar, find why the rest
    drift, and fix the cause, not only these rows.
+
+**Claude in Chrome pass, 1 Nov 2026 (admin signed in, public site at ~500 px for mobile)**
+
+Admin:
+1. [high] Three ways to change a group's seats compete: "Adaugă un cursant
+   manual" (Cursanți › Înscrieri externe; a real person in a group, the one to
+   keep), "Înscrieri manuale (alte surse)" (a number per level and format), and
+   the "Înscrieri manuale" field per group in Cohorte grupe (a number, shown on
+   the cards as "Ajustare de locuri"). Keep the first; retire or relabel the two
+   number-only ones without losing the counts they hold today.
+2. [high] Editing any group row whose capacity is above the later 8/6 rule
+   fails (constraints `group_cohorts_fizic_max_seats` /
+   `group_cohorts_online_max_seats`, NOT VALID but checked on update). Hits the
+   three groups started before October with 10 places. Owner: the 10 places are
+   real.
+3. [medium] "Locuri ocupate" mixes real registrations with hand-added numbers
+   (A1 online 15 Aug: 12/10 with 0 registrations).
+4. [medium] Lecțiile grupelor: the A2 in-person group's last lesson shows
+   "3 nov, 07:00" while it runs at 19:00 (time-zone or 12-hour problem).
+5. [medium] Student sheet "Stare" shows "Incomplet — fără interval ales" while
+   the table shows Convertit/Contactat (2 students).
+6. [medium] One private student appears twice (×3 marker).
+7. [medium] Ticking a row in Înscrieri inserts the delete bar above the table
+   and shifts the rows under the cursor, next to the red Șterge.
+8. [low] Brand in the admin sidebar says "Arabă cu Ibra"; should be "Arabă
+   Libaneză cu Ibra".
+9. [low] Capacități text points to an "Înscrieri manuale" panel that is not on
+   that tab.
+10. [low] Parcurs: 0 slots booked, 0 trials held, but 3 converted (50%).
+11. [low] A2 online is still Draft with a past start (2 Sep).
+12. No control moves an existing registration into a group.
+
+Public site (each line: page — problem):
+13. [medium] /en header — Contact goes to the Romanian /#contact, not /en/contact.
+14. [medium] /en top bar — shows the Romanian 7 Nov group; the English group is 21 Nov.
+15. [medium] /en homepage "Group Classes" — no dates, unlike the Romanian card.
+16. [medium] /cursuri/grup and level pages (RO+EN) — no upcoming dates outside
+    the sign-up form (covered by the forming-groups section and group pages).
+17. [medium] /quiz — "10 locuri online" adds the RO (4) and EN (6) groups; the
+    badge also overlaps the A1 arrow.
+18. [medium] /trial — in-person offered on a weekday slot although the page
+    says weekends only.
+19. [medium] Mobile homepage — phone mock-up text 8.5–10 px; small tap targets
+    (top-bar pill and Programare ~28 px, level chips ~29 px, "Programează o
+    discuție" and "Toate grupele →" ~20 px).
+20. [low] /trial — slots take ~5 s with only a spinner.
+21. [low] Trial "0 lei" on /preturi and the homepage; the 150 lei no-show charge
+    only on /trial.
+22. [low] /preturi — "plătești la rezervare" vs "te contactăm pe WhatsApp pentru plată".
+23. [low] /cursuri/grup — B1 "fără alfabet arab" vs C1 "scrisul din B1 sau B2".
+24. [low] /quiz — "30 de secunde" vs "sub două minute"; promises motivation/time
+    questions but has 3; result says "profesori nativi" (plural).
+25. [low] /en/quiz — one level-test link goes to /test-de-nivel.
+26. [low] /en FAQ "42 questions" vs RO "44".
+27. [low] /en/courses/group/a1 — "1.700 LEI" (RO number format); British and
+    American spelling mixed.
+28. [low] /test-de-nivel — "Nu ai nevoie de cont" next to "Progresul se
+    salvează în cont" (signed in).
+29. [low] /cursuri — "Test la centru (gratuit)" described as "fizic sau online".
+30. [low] /cursuri/grup/a1 form — cohort card repeats schedule and start date.
+31. [low] /blog — images are grey boxes for 2–3 s.
+32. [low] Homepage mock-up — "yalla, I m in" lacks the apostrophe.
+33. [low] Mobile — sticky "Înscrie-te rapid" bar covers the group card's own button.
+34. [low] Mobile /cursuri/grup/a1 — unlabelled "Fizic / Online" toggle.
+35. [low] Mobile top bar — "A1 online · 7 nov" with no seats or language; no
+    "Lecție gratuită" in the header.
 
 **Still in URLs after P0-3** (no longer sent to Google): `/checkout?email=&name=`,
 `?token=`, `?sig=`. Move them out together with P0-4 / P0-5.
