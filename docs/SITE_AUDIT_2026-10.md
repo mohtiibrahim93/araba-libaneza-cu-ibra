@@ -67,9 +67,10 @@ the 30 Oct admin changes (e.g. "Actualizează titlurile") are not live.
 
 1. **A1 in-person group: Wednesday lessons move to 18:30** (were 19:00), from
    Wednesday 4 Nov onward. Monday 2 Nov stays at 19:00. DONE 1 Nov: weekly
-   pattern (`cohort_meetings`, Wednesday) set to 18:30–20:00. OPEN: schedule
-   labels (blocked by item 2 of the Chrome list below), then the owner adds the
-   missing lessons L18–L32 from Lecțiile grupelor (none exist after L17, 28 Oct).
+   pattern (`cohort_meetings`, Wednesday) set to 18:30–20:00; schedule labels
+   "Luni la 19:00 & Miercuri la 18:30" / "Monday at 7:00 pm & Wednesday at
+   6:30 pm". OPEN: the owner adds the missing lessons L18–L32 from Lecțiile
+   grupelor (none existed after L17, 28 Oct).
 2. **Calendar sync is wrong for some lessons** (owner: about 90% correct). One
    private student's lessons (named by the owner) do not match Google Calendar.
    Verify the sync lesson by lesson against the calendar, find why the rest
@@ -88,7 +89,7 @@ Admin:
    fails (constraints `group_cohorts_fizic_max_seats` /
    `group_cohorts_online_max_seats`, NOT VALID but checked on update). Hits the
    three groups started before October with 10 places. Owner: the 10 places are
-   real.
+   real. DONE 1 Nov: `20261101170000_seat_cap_exempts_existing_groups`.
 3. [medium] "Locuri ocupate" mixes real registrations with hand-added numbers
    (A1 online 15 Aug: 12/10 with 0 registrations).
 4. [medium] Lecțiile grupelor: the A2 in-person group's last lesson shows
