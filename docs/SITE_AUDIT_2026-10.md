@@ -63,6 +63,17 @@ the 30 Oct admin changes (e.g. "Actualizează titlurile") are not live.
 4. Two or more ways to add a student by hand overlap in admin; the owner wants
    to keep only the newest one (which one to be confirmed).
 
+**Queued by the owner, 1 Nov 2026**
+
+1. **A1 in-person group: Wednesday lessons move to 18:30** (were 19:00), from
+   Wednesday 4 Nov onward. Monday 2 Nov stays at 19:00. Time-sensitive: the
+   calendar events, the schedule label and the students' reminders must say
+   18:30 before 4 Nov.
+2. **Calendar sync is wrong for some lessons** (owner: about 90% correct). One
+   private student's lessons (named by the owner) do not match Google Calendar.
+   Verify the sync lesson by lesson against the calendar, find why the rest
+   drift, and fix the cause, not only these rows.
+
 **Still in URLs after P0-3** (no longer sent to Google): `/checkout?email=&name=`,
 `?token=`, `?sig=`. Move them out together with P0-4 / P0-5.
 
