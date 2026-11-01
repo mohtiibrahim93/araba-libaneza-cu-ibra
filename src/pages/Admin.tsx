@@ -56,6 +56,7 @@ import ManualSignupsAdmin from "@/components/ManualSignupsAdmin";
 import ManualStudentForm from "@/components/admin/ManualStudentForm";
 import CohortsAdmin from "@/components/admin/CohortsAdmin";
 import CourseOverviewAdmin from "@/components/admin/CourseOverviewAdmin";
+import FormingCohortsAdmin from "@/components/admin/FormingCohortsAdmin";
 import PrivateLessonsAdmin from "@/components/admin/PrivateLessonsAdmin";
 import BlogAdmin from "@/components/admin/BlogAdmin";
 import ResourcesAdmin from "@/components/admin/ResourcesAdmin";
@@ -949,6 +950,15 @@ const Admin = () => {
     ? (registrations.find((r) => r.id === personId) ?? null)
     : null;
 
+  const showGroupRegistrations = (id: string, name: string) => {
+    setSelectedGroup({ id, name });
+    setCourseTypeFilter("all");
+    setLeadStatusFilter("all");
+    setPrivateMessageSearch("");
+    setCourseDetailsFilter(emptyCourseFilters());
+    setActiveTab("leads");
+  };
+
   return (
     <AdminShell
       sections={sections}
@@ -1320,20 +1330,12 @@ const Admin = () => {
 
         {/* ── Grupe: capacitate, contoare manuale, cohorte, cereri ─────── */}
         <TabsContent value="cohorts" className="mt-0 space-y-6">
+          <FormingCohortsAdmin onShowRegistrations={showGroupRegistrations} />
           <CohortSessionsAdmin key={calendarNamesVersion} />
           <CohortCalendarNames
             onChanged={() => setCalendarNamesVersion((v) => v + 1)}
           />
-          <CourseOverviewAdmin
-            onShowRegistrations={(id, name) => {
-              setSelectedGroup({ id, name });
-              setCourseTypeFilter("all");
-              setLeadStatusFilter("all");
-              setPrivateMessageSearch("");
-              setCourseDetailsFilter(emptyCourseFilters());
-              setActiveTab("leads");
-            }}
-          />
+          <CourseOverviewAdmin onShowRegistrations={showGroupRegistrations} />
           <CohortsAdmin />
         </TabsContent>
 

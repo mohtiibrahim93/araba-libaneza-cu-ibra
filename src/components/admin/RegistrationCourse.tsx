@@ -27,6 +27,42 @@ export function registrationFormatLabel(r: Registration) {
       ? "În persoană"
       : "Format nespecificat";
 }
+/**
+ * One name for a group everywhere in admin (owner, 1 Nov 2026): two groups of
+ * the same level and format differ only by the teaching language, so the
+ * name always says it. "A1 · Online · în română", or the owner's own title
+ * followed by format and language.
+ */
+export function cohortAdminTitle(c: {
+  title_ro?: string | null;
+  title_en?: string | null;
+  level?: string | null;
+  format?: string | null;
+  teaching_language?: string | null;
+}) {
+  const base = c.title_ro || c.title_en || `Grupă ${c.level || ""}`.trim();
+  const format =
+    c.format === "online"
+      ? "Online"
+      : c.format === "fizic"
+        ? "În persoană"
+        : null;
+  const language =
+    c.teaching_language === "en"
+      ? "în engleză"
+      : c.teaching_language === "ro"
+        ? "în română"
+        : null;
+  const lower = base.toLowerCase();
+  return [
+    base,
+    format && !lower.includes(format.toLowerCase()) ? format : null,
+    language && !lower.includes(language) ? language : null,
+  ]
+    .filter(Boolean)
+    .join(" · ");
+}
+
 export function courseDate(iso: string | null | undefined) {
   if (!iso) return "Nespecificată";
   const day = iso.slice(0, 10);
@@ -47,7 +83,7 @@ export default function RegistrationCourse({
       {c ? (
         <>
           <p className="font-semibold">
-            {c.title_ro || `Grupă ${c.level || ""}`.trim()}
+            {cohortAdminTitle(c)}
           </p>
           <p>
             Start: {courseDate(c.start_date)} ·{" "}

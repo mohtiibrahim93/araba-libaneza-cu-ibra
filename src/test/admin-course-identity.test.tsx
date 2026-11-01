@@ -56,7 +56,7 @@ describe("enrolment group identity", () => {
         },
       },
     ]);
-    expect(screen.getByText("A1 noiembrie")).toBeInTheDocument();
+    expect(screen.getByText("A1 noiembrie · în engleză")).toBeInTheDocument();
     expect(screen.getByText(/02\.11\.2026/)).toBeInTheDocument();
     expect(screen.getByText(/Luni 19:00/)).toBeInTheDocument();
     expect(screen.getByText(/Predare: Engleză/)).toBeInTheDocument();

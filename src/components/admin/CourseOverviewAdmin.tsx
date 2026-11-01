@@ -10,13 +10,14 @@ import {
 import CourseFilters from "./CourseFilters";
 import {
   courseDate,
+  cohortAdminTitle,
   cohortStatusLabels,
   teachingLanguageLabels,
   ageCategoryLabels,
 } from "./RegistrationCourse";
 import { paymentStatusLabels, type RegistrationCohort } from "./types";
 
-interface CourseSummary extends RegistrationCohort {
+export interface CourseSummary extends RegistrationCohort {
   form_type: string;
   course_type: string | null;
   max_seats: number;
@@ -115,7 +116,7 @@ export default function CourseOverviewAdmin({
                 >
                   <div>
                     <h3 className="font-semibold">
-                      {c.title_ro || `Grupă ${c.level || ""}`.trim()}
+                      {cohortAdminTitle(c)}
                     </h3>
                     <p className="text-sm">
                       {c.format === "online"
@@ -201,7 +202,7 @@ export default function CourseOverviewAdmin({
                       onClick={() =>
                         onShowRegistrations(
                           c.id,
-                          c.title_ro || `Grupă ${c.level || ""}`.trim(),
+                          cohortAdminTitle(c),
                         )
                       }
                     >

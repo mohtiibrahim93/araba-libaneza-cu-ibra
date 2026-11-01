@@ -19,6 +19,7 @@ import { Empty, ErrorNote, Loading } from "./ui";
 import { TrialOutcomeControl } from "@/components/admin/TrialOutcome";
 import LessonEditDialog from "./LessonEditDialog";
 import { PackageLessonBadge } from "./LessonOutcome";
+import { cohortAdminTitle } from "./RegistrationCourse";
 
 /**
  * The screen the panel opens on.
@@ -1075,7 +1076,7 @@ const TodayAdmin = ({
                       className="flex flex-wrap items-center gap-x-3 gap-y-1 border-t border-border/70 py-3 first:border-0"
                     >
                       <span className="min-w-0 flex-1 font-semibold">
-                        {c.title_ro || c.title_en || c.level || "Grupă"}
+                        {cohortAdminTitle(c)}
                       </span>
                       <span className="text-[0.8125rem] text-muted-foreground">
                         de pe{" "}

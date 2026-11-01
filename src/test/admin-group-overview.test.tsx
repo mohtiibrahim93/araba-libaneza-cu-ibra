@@ -41,7 +41,9 @@ describe("group capacity and payment overview", () => {
       render(<CourseOverviewAdmin />);
     });
     expect(
-      screen.getByRole("heading", { name: "A2 English teens" }),
+      screen.getByRole("heading", {
+        name: "A2 English teens · Online · în engleză",
+      }),
     ).toBeInTheDocument();
     expect(screen.getByText(/Minim pentru pornire: 3/)).toBeInTheDocument();
     expect(screen.getByText(/Locuri ocupate: 4 \/ 6/)).toBeInTheDocument();
@@ -54,7 +56,9 @@ describe("group capacity and payment overview", () => {
       target: { value: "en" },
     });
     expect(
-      screen.getByRole("heading", { name: "A2 English teens" }),
+      screen.getByRole("heading", {
+        name: "A2 English teens · Online · în engleză",
+      }),
     ).toBeInTheDocument();
   });
   it("shows a retryable error instead of an empty or zero-capacity overview", async () => {
