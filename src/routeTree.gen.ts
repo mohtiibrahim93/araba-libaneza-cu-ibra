@@ -31,6 +31,7 @@ import { Route as InvataArabaRouteImport } from './routes/invata-araba'
 import { Route as InvataArabaGratisRouteImport } from './routes/invata-araba-gratis'
 import { Route as JoacaRouteImport } from './routes/joaca'
 import { Route as JocRouteImport } from './routes/joc'
+import { Route as LectieGratuitaRouteImport } from './routes/lectie-gratuita'
 import { Route as MeditatiiArabaRouteImport } from './routes/meditatii-araba'
 import { Route as PaymentStatusRouteImport } from './routes/payment-status'
 import { Route as PreturiRouteImport } from './routes/preturi'
@@ -255,6 +256,11 @@ const JoacaRoute = JoacaRouteImport.update({
 const JocRoute = JocRouteImport.update({
   id: '/joc',
   path: '/joc',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const LectieGratuitaRoute = LectieGratuitaRouteImport.update({
+  id: '/lectie-gratuita',
+  path: '/lectie-gratuita',
   getParentRoute: () => rootRouteImport,
 } as any)
 const MeditatiiArabaRoute = MeditatiiArabaRouteImport.update({
@@ -895,6 +901,7 @@ export interface FileRoutesByFullPath {
   '/invata-araba-gratis': typeof InvataArabaGratisRoute
   '/joaca': typeof JoacaRoute
   '/joc': typeof JocRouteWithChildren
+  '/lectie-gratuita': typeof LectieGratuitaRoute
   '/meditatii-araba': typeof MeditatiiArabaRoute
   '/payment-status': typeof PaymentStatusRoute
   '/preturi': typeof PreturiRoute
@@ -1033,6 +1040,7 @@ export interface FileRoutesByTo {
   '/invata-araba': typeof InvataArabaRoute
   '/invata-araba-gratis': typeof InvataArabaGratisRoute
   '/joaca': typeof JoacaRoute
+  '/lectie-gratuita': typeof LectieGratuitaRoute
   '/meditatii-araba': typeof MeditatiiArabaRoute
   '/payment-status': typeof PaymentStatusRoute
   '/preturi': typeof PreturiRoute
@@ -1172,6 +1180,7 @@ export interface FileRoutesById {
   '/invata-araba-gratis': typeof InvataArabaGratisRoute
   '/joaca': typeof JoacaRoute
   '/joc': typeof JocRouteWithChildren
+  '/lectie-gratuita': typeof LectieGratuitaRoute
   '/meditatii-araba': typeof MeditatiiArabaRoute
   '/payment-status': typeof PaymentStatusRoute
   '/preturi': typeof PreturiRoute
@@ -1313,6 +1322,7 @@ export interface FileRouteTypes {
     | '/invata-araba-gratis'
     | '/joaca'
     | '/joc'
+    | '/lectie-gratuita'
     | '/meditatii-araba'
     | '/payment-status'
     | '/preturi'
@@ -1451,6 +1461,7 @@ export interface FileRouteTypes {
     | '/invata-araba'
     | '/invata-araba-gratis'
     | '/joaca'
+    | '/lectie-gratuita'
     | '/meditatii-araba'
     | '/payment-status'
     | '/preturi'
@@ -1589,6 +1600,7 @@ export interface FileRouteTypes {
     | '/invata-araba-gratis'
     | '/joaca'
     | '/joc'
+    | '/lectie-gratuita'
     | '/meditatii-araba'
     | '/payment-status'
     | '/preturi'
@@ -1729,6 +1741,7 @@ export interface RootRouteChildren {
   InvataArabaGratisRoute: typeof InvataArabaGratisRoute
   JoacaRoute: typeof JoacaRoute
   JocRoute: typeof JocRouteWithChildren
+  LectieGratuitaRoute: typeof LectieGratuitaRoute
   MeditatiiArabaRoute: typeof MeditatiiArabaRoute
   PaymentStatusRoute: typeof PaymentStatusRoute
   PreturiRoute: typeof PreturiRoute
@@ -1996,6 +2009,13 @@ declare module '@tanstack/react-router' {
       path: '/joc'
       fullPath: '/joc'
       preLoaderRoute: typeof JocRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/lectie-gratuita': {
+      id: '/lectie-gratuita'
+      path: '/lectie-gratuita'
+      fullPath: '/lectie-gratuita'
+      preLoaderRoute: typeof LectieGratuitaRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/meditatii-araba': {
@@ -2854,6 +2874,7 @@ const rootRouteChildren: RootRouteChildren = {
   InvataArabaGratisRoute: InvataArabaGratisRoute,
   JoacaRoute: JoacaRoute,
   JocRoute: JocRouteWithChildren,
+  LectieGratuitaRoute: LectieGratuitaRoute,
   MeditatiiArabaRoute: MeditatiiArabaRoute,
   PaymentStatusRoute: PaymentStatusRoute,
   PreturiRoute: PreturiRoute,
