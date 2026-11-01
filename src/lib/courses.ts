@@ -83,6 +83,8 @@ export interface Course {
   price_lei: number | null;
   image_url: string | null;
   max_seats: number;
+  /** Language the group is taught in. */
+  teaching_language?: "ro" | "en" | null;
   status: CourseStatus;
   is_active: boolean;
   sort_order: number;

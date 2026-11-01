@@ -1,4 +1,5 @@
 import GroupStartRule from "@/components/GroupStartRule";
+import FormingGroups from "@/components/courses/FormingGroups";
 import { useMemo } from "react";
 import { Helmet } from "react-helmet-async";
 import {
@@ -401,6 +402,7 @@ const CursGrupLevel = () => {
             </div>
           </div>
           {available && <GroupStartRule className="mt-4" />}
+          <FormingGroups level={upperLevel} className="mt-6" />
           <RunningGroups
             level={upperLevel}
             defaultTotal={curriculum.lessons}

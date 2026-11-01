@@ -15,7 +15,7 @@ import Footer from "@/components/Footer";
 import WhatsAppButton from "@/components/WhatsAppButton";
 import ScrollToTop from "@/components/ScrollToTop";
 import RegistrationFormSection from "@/components/RegistrationFormSection";
-import { useCourseBySlug } from "@/hooks/useCourses";
+import { useCourseBySlug, useCourses } from "@/hooks/useCourses";
 import { useI18n } from "@/lib/i18n";
 import {
   courseStatusBadge,
@@ -29,6 +29,13 @@ import type {
   LevelType,
 } from "@/components/RegistrationForm/types";
 import { ORGANIZATION_SAME_AS } from "@/lib/courseSchema";
+import {
+  GROUP_COURSE_MONTHS,
+  ONLINE_PRICES,
+  formatLei,
+  priceFor,
+} from "@/lib/pricing";
+import { groupPagePath, levelPagePath } from "@/lib/groupPage";
 
 const BASE_URL = "https://centruldearabalibaneza.com";
 const WHATSAPP_URL = "https://wa.me/40763124514";
@@ -49,6 +56,9 @@ const CourseDetail = () => {
   const { slug } = useParams();
   const { lang } = useI18n();
   const { course, loading } = useCourseBySlug(slug);
+  // Open groups, for "the next group at this level" once this one has started
+  // or filled (owner, 1 Nov 2026: the page stays and points onward).
+  const { courses: open } = useCourses({});
 
   if (loading) {
     return (
@@ -80,7 +90,7 @@ const CourseDetail = () => {
               : "Cursul poate fi încheiat sau mutat."}
           </p>
           <Link
-            to="/cursuri"
+            to={lang === "en" ? "/en/courses/group" : "/cursuri/grup"}
             className="rounded-lg bg-primary px-5 py-2.5 text-sm font-semibold text-primary-foreground hover:bg-primary/90"
           >
             {lang === "en" ? "Browse all courses" : "Vezi toate cursurile"}
@@ -96,12 +106,50 @@ const CourseDetail = () => {
   // Fall back to the per-level curriculum (src/data/curriculum.ts) when the
   // course row hasn't been filled in yet, so nothing renders empty.
   const fb = courseFallback(c.level, lang);
+  // Without a title of its own, a group page says which group it is: the
+  // level's name plus its start date.
   const title =
     (lang === "en" ? c.title_en : c.title_ro) ||
-    fb.title ||
-    courseTitle(c, lang);
+    `${fb.title || courseTitle(c, lang)} — ${lang === "en" ? "group starting" : "grupa din"} ${fmtDate(c.start_date, lang)}`;
   const badge = courseStatusBadge(c.status, c.seatsLeft);
-  const url = `${BASE_URL}/cursuri/curs/${c.slug}`;
+  const url = `${BASE_URL}${groupPagePath(c.slug ?? slug ?? "", lang === "en" ? "en" : "ro")}`;
+  // A group page lives only until its group starts, so it is never indexed:
+  // search engines are sent to the level page, which stays (owner, 1 Nov 2026).
+  const levelPath = levelPagePath(c.level, lang === "en" ? "en" : "ro");
+  const canonical = `${BASE_URL}${levelPath}`;
+  const today = new Date().toLocaleDateString("sv-SE");
+  const started = c.status === "in_progress" || c.start_date <= today;
+  const ended = c.status === "completed" || c.status === "cancelled";
+  const closed = ended || started || !!c.full;
+  const next = closed
+    ? open
+        .filter(
+          (o) =>
+            o.id !== c.id &&
+            !o.full &&
+            o.slug &&
+            (o.level ?? "").toUpperCase() === (c.level ?? "").toUpperCase(),
+        )
+        .sort((a, b) => a.start_date.localeCompare(b.start_date))[0]
+    : undefined;
+  const taughtLabel =
+    c.teaching_language === "en"
+      ? lang === "en"
+        ? "taught in English"
+        : "predare în engleză"
+      : lang === "en"
+        ? "taught in Romanian"
+        : "predare în română";
+  const levelKey = (
+    c.level ?? "A1"
+  ).toUpperCase() as keyof typeof GROUP_COURSE_MONTHS;
+  const monthly =
+    c.price_lei == null && ONLINE_PRICES.groupMonthly[levelKey] != null
+      ? priceFor(
+          ONLINE_PRICES.groupMonthly[levelKey],
+          c.format === "fizic" ? "fizic" : "online",
+        )
+      : null;
   const sessionN = c.session_count ?? fb.sessionCount;
   const hoursN = c.total_hours ?? fb.totalHours;
   const cf = (base: string): string | undefined => {
@@ -136,6 +184,11 @@ const CourseDetail = () => {
       icon: GraduationCap,
       label: lang === "en" ? "Level" : "Nivel",
       value: c.level ? c.level.toUpperCase() : null,
+    },
+    {
+      icon: GraduationCap,
+      label: lang === "en" ? "Language of teaching" : "Limba de predare",
+      value: taughtLabel,
     },
     {
       icon: CalendarDays,
@@ -287,9 +340,16 @@ const CourseDetail = () => {
         "@type": "ListItem",
         position: 2,
         name: lang === "en" ? "Courses" : "Cursuri",
-        item: `${BASE_URL}/cursuri`,
+        item: `${BASE_URL}${lang === "en" ? "/en/courses" : "/cursuri"}`,
       },
-      { "@type": "ListItem", position: 3, name: title, item: url },
+      {
+        "@type": "ListItem",
+        position: 3,
+        name:
+          (c.level ?? "").toUpperCase() || (lang === "en" ? "Group" : "Grup"),
+        item: canonical,
+      },
+      { "@type": "ListItem", position: 4, name: title, item: url },
     ],
   };
 
@@ -298,7 +358,8 @@ const CourseDetail = () => {
       <Helmet>
         <title>{metaTitle}</title>
         <meta name="description" content={desc} />
-        <link rel="canonical" href={url} />
+        <meta name="robots" content="noindex,follow" />
+        <link rel="canonical" href={canonical} />
         <meta property="og:title" content={title} />
         <meta property="og:description" content={desc} />
         <meta property="og:url" content={url} />
@@ -323,7 +384,10 @@ const CourseDetail = () => {
           >
             <ol className="flex flex-wrap items-center gap-1">
               <li>
-                <Link to="/" className="hover:text-foreground">
+                <Link
+                  to={lang === "en" ? "/en" : "/"}
+                  className="hover:text-foreground"
+                >
                   {lang === "en" ? "Home" : "Acasă"}
                 </Link>
               </li>
@@ -331,8 +395,19 @@ const CourseDetail = () => {
                 <ChevronRight className="w-3.5 h-3.5 inline -mt-0.5" />
               </li>
               <li>
-                <Link to="/cursuri" className="hover:text-foreground">
-                  {lang === "en" ? "Courses" : "Cursuri"}
+                <Link
+                  to={lang === "en" ? "/en/courses/group" : "/cursuri/grup"}
+                  className="hover:text-foreground"
+                >
+                  {lang === "en" ? "Group courses" : "Cursuri de grup"}
+                </Link>
+              </li>
+              <li aria-hidden>
+                <ChevronRight className="w-3.5 h-3.5 inline -mt-0.5" />
+              </li>
+              <li>
+                <Link to={levelPath} className="hover:text-foreground">
+                  {(c.level ?? "").toUpperCase()}
                 </Link>
               </li>
               <li aria-hidden>
@@ -360,6 +435,43 @@ const CourseDetail = () => {
             )}
           </header>
 
+          {closed && (
+            <div
+              role="status"
+              className="mb-6 rounded-2xl border border-border bg-muted/40 p-5"
+            >
+              <p className="font-semibold text-foreground">
+                {ended
+                  ? lang === "en"
+                    ? "This group has finished."
+                    : "Această grupă s-a încheiat."
+                  : started
+                    ? lang === "en"
+                      ? `This group started on ${fmtDate(c.start_date, lang)}.`
+                      : `Această grupă a început pe ${fmtDate(c.start_date, lang)}.`
+                    : lang === "en"
+                      ? "This group is full."
+                      : "Această grupă este completă."}
+              </p>
+              <Link
+                to={
+                  next?.slug
+                    ? groupPagePath(next.slug, lang === "en" ? "en" : "ro")
+                    : levelPath
+                }
+                className="mt-3 inline-flex min-h-11 items-center rounded-lg bg-primary px-5 text-sm font-semibold text-primary-foreground hover:bg-primary/90"
+              >
+                {next
+                  ? lang === "en"
+                    ? `Next ${(c.level ?? "").toUpperCase()} group: ${fmtDate(next.start_date, lang)}`
+                    : `Următoarea grupă ${(c.level ?? "").toUpperCase()}: ${fmtDate(next.start_date, lang)}`
+                  : lang === "en"
+                    ? `See the ${(c.level ?? "").toUpperCase()} level`
+                    : `Vezi nivelul ${(c.level ?? "").toUpperCase()}`}
+              </Link>
+            </div>
+          )}
+
           {/* Facts + price */}
           <div className="mb-8 grid gap-4 lg:grid-cols-[1fr_280px]">
             <dl className="grid gap-3 rounded-2xl border border-border bg-card p-5 sm:grid-cols-2">
@@ -380,25 +492,67 @@ const CourseDetail = () => {
                 ))}
             </dl>
             <div className="flex flex-col justify-center rounded-2xl border border-border bg-primary/5 p-5 text-center">
-              {c.price_lei != null && (
+              {!closed && (
+                <div className="mb-4 text-left">
+                  <p className="text-sm text-foreground">
+                    <strong>
+                      {lang === "en"
+                        ? `${c.seatsLeft ?? c.max_seats} of ${c.max_seats}`
+                        : `${c.seatsLeft ?? c.max_seats} din ${c.max_seats}`}
+                    </strong>{" "}
+                    {lang === "en" ? "places free" : "locuri libere"}
+                  </p>
+                  <div
+                    role="img"
+                    aria-label={
+                      lang === "en"
+                        ? `${c.seatsLeft ?? c.max_seats} of ${c.max_seats} places free`
+                        : `${c.seatsLeft ?? c.max_seats} din ${c.max_seats} locuri libere`
+                    }
+                    className="mt-2 grid gap-1"
+                    style={{
+                      gridTemplateColumns: `repeat(${c.max_seats}, minmax(0, 1fr))`,
+                    }}
+                  >
+                    {Array.from({ length: c.max_seats }, (_, i) => (
+                      <span
+                        key={i}
+                        className={`h-2.5 rounded-sm ${i < (c.taken ?? 0) ? "bg-primary" : "bg-muted"}`}
+                      />
+                    ))}
+                  </div>
+                </div>
+              )}
+              {c.price_lei != null ? (
                 <p className="text-3xl font-bold text-foreground">
                   {c.price_lei}{" "}
                   <span className="text-base font-medium text-muted-foreground">
                     LEI
                   </span>
                 </p>
-              )}
+              ) : monthly != null ? (
+                <p className="text-3xl font-bold text-foreground">
+                  {formatLei(monthly)}{" "}
+                  <span className="text-base font-medium text-muted-foreground">
+                    {lang === "en"
+                      ? `LEI / month · ${GROUP_COURSE_MONTHS[levelKey]} months`
+                      : `LEI / lună · ${GROUP_COURSE_MONTHS[levelKey]} luni`}
+                  </span>
+                </p>
+              ) : null}
               {cf("payment") && (
                 <p className="mt-1 text-xs text-muted-foreground">
                   {cf("payment")}
                 </p>
               )}
-              <a
-                href="#inscriere"
-                className="mt-4 rounded-lg bg-primary px-5 py-3 text-sm font-semibold text-primary-foreground hover:bg-primary/90"
-              >
-                {lang === "en" ? "Enroll" : "Înscrie-te"}
-              </a>
+              {!closed && (
+                <a
+                  href="#inscriere"
+                  className="mt-4 rounded-lg bg-primary px-5 py-3 text-sm font-semibold text-primary-foreground hover:bg-primary/90"
+                >
+                  {lang === "en" ? "Enroll" : "Înscrie-te"}
+                </a>
+              )}
             </div>
           </div>
 
@@ -441,37 +595,45 @@ const CourseDetail = () => {
             )}
           </div>
 
-          {/* Enroll */}
-          <section
-            id="inscriere"
-            className="my-12 scroll-mt-20 rounded-2xl border border-border bg-card p-5 sm:p-8"
-          >
-            <h2 className="mb-1 text-2xl font-bold text-foreground">
-              {lang === "en"
-                ? "Enroll in this course"
-                : "Înscrie-te la acest curs"}
-            </h2>
-            <p className="mb-4 text-sm text-muted-foreground">
-              {lang === "en"
-                ? "Your course is pre-selected below."
-                : "Cursul e deja preselectat mai jos."}
-            </p>
-            <RegistrationFormSection
-              defaultCourseType="group"
-              defaultLevel={(c.level?.toUpperCase() as LevelType) ?? undefined}
-              defaultFormat={(c.format as FormatType) ?? undefined}
-              lockSelection
-              embedded
-            />
-            <a
-              href={WHATSAPP_URL}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="mt-3 inline-flex w-full items-center justify-center gap-2 rounded-lg border border-border px-gutter py-2.5 text-sm font-medium text-foreground hover:bg-muted"
+          {/* Enroll — this exact group, only while it can still be joined */}
+          {!closed && (
+            <section
+              id="inscriere"
+              className="my-12 scroll-mt-20 rounded-2xl border border-border bg-card p-5 sm:p-8"
             >
-              WhatsApp
-            </a>
-          </section>
+              <h2 className="mb-1 text-2xl font-bold text-foreground">
+                {lang === "en"
+                  ? "Enroll in this course"
+                  : "Înscrie-te la acest curs"}
+              </h2>
+              <p className="mb-4 text-sm text-muted-foreground">
+                {lang === "en"
+                  ? "Your course is pre-selected below."
+                  : "Cursul e deja preselectat mai jos."}
+              </p>
+              <RegistrationFormSection
+                defaultCourseType="group"
+                defaultLevel={
+                  (c.level?.toUpperCase() as LevelType) ?? undefined
+                }
+                defaultFormat={(c.format as FormatType) ?? undefined}
+                defaultCohort={{
+                  id: c.id,
+                  teaching_language: c.teaching_language === "en" ? "en" : "ro",
+                }}
+                lockSelection
+                embedded
+              />
+              <a
+                href={WHATSAPP_URL}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="mt-3 inline-flex w-full items-center justify-center gap-2 rounded-lg border border-border px-gutter py-2.5 text-sm font-medium text-foreground hover:bg-muted"
+              >
+                WhatsApp
+              </a>
+            </section>
+          )}
         </div>
       </main>
 

@@ -110,7 +110,8 @@ describe("the served head is the only head", () => {
       .filter((r) => !r.source.includes("head:"))
       .map((r) => r.path);
     // What is left has no indexable head to serve: the admin and auth screens,
-    // the two token-guarded private pages, the database-driven course page, and
+    // the two token-guarded private pages, the database-driven group page in both
+    // languages (noindex, set by the page), and
     // /joc with its English twin /en/play, which are layouts whose leaves carry
     // the head. (/admin has a head since the October 2026 redesign, but only
     // to load its body font; it still serves nothing indexable.)
@@ -120,6 +121,7 @@ describe("the served head is the only head", () => {
       "/auth",
       "/booking/manage/$token",
       "/cursuri/curs/$slug",
+      "/en/courses/course/$slug",
       "/en/play",
       "/joc",
       "/private-status/$id",

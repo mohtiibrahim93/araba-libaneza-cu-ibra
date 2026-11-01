@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useState } from "react";
+import { groupSeriesNumber, groupSlug } from "@/lib/groupPage";
 import { invokeAdmin } from "@/lib/adminAuth";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -155,10 +156,24 @@ const CohortsAdmin = () => {
     setRows((prev) => prev.map((r) => (r.id === id ? { ...r, ...patch } : r)));
   };
 
+  // A group gets its public page address on its first save (owner, 1 Nov
+  // 2026): level, format, language, its number in its series and the start
+  // date. Stored, so later groups never renumber a link already shared.
+  const withSlug = (row: Cohort): Cohort => {
+    if (row.slug || row.form_type !== "group" || !row.start_date) return row;
+    if (row.status === "draft" || row.status === "cancelled") return row;
+    const key = row.id || "__new__";
+    const all = [...rows.filter((r) => r.id !== row.id), { ...row, id: key }];
+    return {
+      ...row,
+      slug: groupSlug(row, groupSeriesNumber({ ...row, id: key }, all)),
+    };
+  };
+
   const save = async (row: Cohort) => {
     setSavingId(row.id);
     try {
-      const res = await call("upsert_cohort", row);
+      const res = await call("upsert_cohort", withSlug(row));
       // Setting "Minim atins" emails the group's students (once each).
       toast({
         title: res?.notified
@@ -192,7 +207,7 @@ const CohortsAdmin = () => {
 
   const create = async () => {
     try {
-      await call("upsert_cohort", draft);
+      await call("upsert_cohort", withSlug(draft));
       toast({ title: "Cohortă creată" });
       setDraft(blank());
       await load();

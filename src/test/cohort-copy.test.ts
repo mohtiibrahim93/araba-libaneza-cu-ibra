@@ -139,11 +139,17 @@ describe("the enrolment note follows the cohort data", () => {
 describe("no page states a start date in prose any more", () => {
   const read = (p: string) => readFileSync(resolve(process.cwd(), p), "utf8");
 
-  it.each([
-    "src/components/ProgramsSection.tsx",
-    "src/pages/courses/CursGrup.tsx",
-  ])("%s renders the note from the database", (file) => {
-    expect(read(file)).toContain("<CohortEnrollmentNote");
+  it("src/components/ProgramsSection.tsx renders the note from the database", () => {
+    expect(read("src/components/ProgramsSection.tsx")).toContain(
+      "<CohortEnrollmentNote",
+    );
+  });
+
+  it("src/pages/courses/CursGrup.tsx renders the forming groups from the database", () => {
+    // One card per group since 1 Nov 2026, with the same evergreen fallback.
+    expect(read("src/pages/courses/CursGrup.tsx")).toContain(
+      "<FormingGroups fallback",
+    );
   });
 
   it("no longer carries the hand-written notes at all", () => {

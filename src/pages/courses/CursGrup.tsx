@@ -14,7 +14,7 @@ import {
 } from "@/lib/pricing";
 import groupImg from "@/assets/group-course.jpg";
 import { courseInstances, GROUP_WEEKLY_WORKLOAD } from "@/lib/courseSchema";
-import CohortEnrollmentNote from "@/components/CohortEnrollmentNote";
+import FormingGroups from "@/components/courses/FormingGroups";
 
 const WHATSAPP_URL = "https://wa.me/40763124514";
 const LEVELS = ["A1", "A2", "B1", "B2", "C1", "C2"] as const;
@@ -73,7 +73,7 @@ const CursGrup = () => {
         <p className="text-base text-muted-foreground mb-2 max-w-2xl">
           {t.grupChooseLevelDesc}
         </p>
-        <CohortEnrollmentNote className="text-sm font-medium text-primary mb-6 max-w-2xl" />
+        <FormingGroups fallback className="mb-6" />
         <GroupStartRule className="mb-6 max-w-3xl" />
 
         {/* These groups are for adults. Search engines were landing teen

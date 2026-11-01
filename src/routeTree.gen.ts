@@ -142,6 +142,7 @@ import { Route as EnCoursesPrivateRouteImport } from './routes/en/courses/privat
 import { Route as EnPlayIndexRouteImport } from './routes/en/play/index'
 import { Route as EnPlayScoreRouteImport } from './routes/en/play/score'
 import { Route as LovableEmailEventsRouteImport } from './routes/lovable/email/events'
+import { Route as EnCoursesCourseSlugRouteImport } from './routes/en/courses/course/$slug'
 import { Route as EnCoursesGroupIndexRouteImport } from './routes/en/courses/group/index'
 import { Route as EnCoursesGroupLevelRouteImport } from './routes/en/courses/group/$level'
 import { Route as LovableEmailAuthPreviewRouteImport } from './routes/lovable/email/auth/preview'
@@ -851,6 +852,11 @@ const LovableEmailEventsRoute = LovableEmailEventsRouteImport.update({
   path: '/lovable/email/events',
   getParentRoute: () => rootRouteImport,
 } as any)
+const EnCoursesCourseSlugRoute = EnCoursesCourseSlugRouteImport.update({
+  id: '/en/courses/course/$slug',
+  path: '/en/courses/course/$slug',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const EnCoursesGroupIndexRoute = EnCoursesGroupIndexRouteImport.update({
   id: '/en/courses/group/',
   path: '/en/courses/group/',
@@ -1012,6 +1018,7 @@ export interface FileRoutesByFullPath {
   '/en/blog/': typeof EnBlogIndexRoute
   '/en/courses/': typeof EnCoursesIndexRoute
   '/en/play/': typeof EnPlayIndexRoute
+  '/en/courses/course/$slug': typeof EnCoursesCourseSlugRoute
   '/en/courses/group/$level': typeof EnCoursesGroupLevelRoute
   '/lovable/email/auth/preview': typeof LovableEmailAuthPreviewRoute
   '/lovable/email/auth/webhook': typeof LovableEmailAuthWebhookRoute
@@ -1150,6 +1157,7 @@ export interface FileRoutesByTo {
   '/en/blog': typeof EnBlogIndexRoute
   '/en/courses': typeof EnCoursesIndexRoute
   '/en/play': typeof EnPlayIndexRoute
+  '/en/courses/course/$slug': typeof EnCoursesCourseSlugRoute
   '/en/courses/group/$level': typeof EnCoursesGroupLevelRoute
   '/lovable/email/auth/preview': typeof LovableEmailAuthPreviewRoute
   '/lovable/email/auth/webhook': typeof LovableEmailAuthWebhookRoute
@@ -1291,6 +1299,7 @@ export interface FileRoutesById {
   '/en/blog/': typeof EnBlogIndexRoute
   '/en/courses/': typeof EnCoursesIndexRoute
   '/en/play/': typeof EnPlayIndexRoute
+  '/en/courses/course/$slug': typeof EnCoursesCourseSlugRoute
   '/en/courses/group/$level': typeof EnCoursesGroupLevelRoute
   '/lovable/email/auth/preview': typeof LovableEmailAuthPreviewRoute
   '/lovable/email/auth/webhook': typeof LovableEmailAuthWebhookRoute
@@ -1433,6 +1442,7 @@ export interface FileRouteTypes {
     | '/en/blog/'
     | '/en/courses/'
     | '/en/play/'
+    | '/en/courses/course/$slug'
     | '/en/courses/group/$level'
     | '/lovable/email/auth/preview'
     | '/lovable/email/auth/webhook'
@@ -1571,6 +1581,7 @@ export interface FileRouteTypes {
     | '/en/blog'
     | '/en/courses'
     | '/en/play'
+    | '/en/courses/course/$slug'
     | '/en/courses/group/$level'
     | '/lovable/email/auth/preview'
     | '/lovable/email/auth/webhook'
@@ -1711,6 +1722,7 @@ export interface FileRouteTypes {
     | '/en/blog/'
     | '/en/courses/'
     | '/en/play/'
+    | '/en/courses/course/$slug'
     | '/en/courses/group/$level'
     | '/lovable/email/auth/preview'
     | '/lovable/email/auth/webhook'
@@ -1848,6 +1860,7 @@ export interface RootRouteChildren {
   EnArabicDialectsGuideIndexRoute: typeof EnArabicDialectsGuideIndexRoute
   EnBlogIndexRoute: typeof EnBlogIndexRoute
   EnCoursesIndexRoute: typeof EnCoursesIndexRoute
+  EnCoursesCourseSlugRoute: typeof EnCoursesCourseSlugRoute
   EnCoursesGroupLevelRoute: typeof EnCoursesGroupLevelRoute
   LovableEmailAuthPreviewRoute: typeof LovableEmailAuthPreviewRoute
   LovableEmailAuthWebhookRoute: typeof LovableEmailAuthWebhookRoute
@@ -2788,6 +2801,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LovableEmailEventsRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/en/courses/course/$slug': {
+      id: '/en/courses/course/$slug'
+      path: '/en/courses/course/$slug'
+      fullPath: '/en/courses/course/$slug'
+      preLoaderRoute: typeof EnCoursesCourseSlugRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/en/courses/group/': {
       id: '/en/courses/group/'
       path: '/en/courses/group'
@@ -2998,6 +3018,7 @@ const rootRouteChildren: RootRouteChildren = {
   EnArabicDialectsGuideIndexRoute: EnArabicDialectsGuideIndexRoute,
   EnBlogIndexRoute: EnBlogIndexRoute,
   EnCoursesIndexRoute: EnCoursesIndexRoute,
+  EnCoursesCourseSlugRoute: EnCoursesCourseSlugRoute,
   EnCoursesGroupLevelRoute: EnCoursesGroupLevelRoute,
   LovableEmailAuthPreviewRoute: LovableEmailAuthPreviewRoute,
   LovableEmailAuthWebhookRoute: LovableEmailAuthWebhookRoute,

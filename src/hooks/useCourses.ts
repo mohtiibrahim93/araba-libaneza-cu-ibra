@@ -3,7 +3,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { type Course, PUBLIC_COURSE_STATUSES } from "@/lib/courses";
 
 const COLS =
-  "id, form_type, age_category, course_type, level, format, slug, title_ro, title_en, start_date, end_date, schedule_label_ro, schedule_label_en, session_count, total_hours, price_lei, image_url, max_seats, status, is_active, sort_order, content";
+  "id, form_type, age_category, course_type, level, format, slug, title_ro, title_en, start_date, end_date, schedule_label_ro, schedule_label_en, session_count, total_hours, price_lei, image_url, max_seats, teaching_language, status, is_active, sort_order, content";
 
 export interface CourseFilters {
   age?: string | null;

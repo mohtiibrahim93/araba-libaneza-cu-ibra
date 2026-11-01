@@ -214,7 +214,14 @@ export function languageCounterpart(
   target: "ro" | "en",
 ): string | null {
   const clean = path.replace(/\/+$/, "") || "/";
-  return (target === "en" ? EN_FOR_RO : RO_FOR_EN)[clean] ?? null;
+  const mapped = (target === "en" ? EN_FOR_RO : RO_FOR_EN)[clean];
+  if (mapped) return mapped;
+  // One page per group, same slug in both languages (src/lib/groupPage.ts).
+  const ro = clean.match(/^\/cursuri\/curs\/([a-z0-9-]+)$/);
+  if (ro && target === "en") return `/en/courses/course/${ro[1]}`;
+  const en = clean.match(/^\/en\/courses\/course\/([a-z0-9-]+)$/);
+  if (en && target === "ro") return `/cursuri/curs/${en[1]}`;
+  return null;
 }
 
 /**

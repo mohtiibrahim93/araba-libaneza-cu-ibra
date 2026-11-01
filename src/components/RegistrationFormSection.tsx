@@ -62,6 +62,8 @@ interface RegistrationFormSectionProps {
    */
   lockCourseType?: boolean;
   lessonType?: "group" | "private";
+  /** One group's own page: that exact group is chosen, in its language. */
+  defaultCohort?: { id: string; teaching_language: "ro" | "en" };
   embedded?: boolean;
   onBack?: () => void;
 }
@@ -88,6 +90,7 @@ const RegistrationFormSection = ({
   lockSelection = false,
   lockCourseType = false,
   lessonType = "group",
+  defaultCohort,
   embedded = false,
   onBack,
 }: RegistrationFormSectionProps = {}) => {
@@ -148,12 +151,14 @@ const RegistrationFormSection = ({
     null,
   );
   const [honeypot, setHoneypot] = useState("");
-  const [cohortId, setCohortId] = useState<string | null>(null);
+  const [cohortId, setCohortId] = useState<string | null>(
+    defaultCohort?.id ?? null,
+  );
   // The language the chosen class is taught in, which is not necessarily the
   // language the form was filled in. Kept so the registration records what the
   // student actually signed up for.
   const [cohortLanguage, setCohortLanguage] = useState<"ro" | "en" | null>(
-    null,
+    defaultCohort?.teaching_language ?? null,
   );
   const [kidsSlotId, setKidsSlotId] = useState<string | null>(null);
   const [depositCheckoutFailed, setDepositCheckoutFailed] = useState(false);
