@@ -726,10 +726,11 @@ export const translations = {
     quizResultPrivateDesc:
       "Program flexibil și atenție 100% pe obiectivele tale.",
     quizResultKidsTitle: "Arabă pentru Copii",
-    quizResultKidsDesc: "Activități interactive, potrivite pentru cei mici.",
+    quizResultKidsDesc:
+      "Cursul pentru copii nu s-a deschis încă. Lasă-ne datele și te anunțăm când pornește.",
     quizResultPriceFromGroup: "de la {price} LEI / lună",
     quizResultPricePrivate: "150 LEI online · 210 LEI fizic / ședință",
-    quizResultPriceKids: "Detalii la înscriere",
+    quizResultPriceKids: "Te anunțăm când se deschide",
     quizContinueCta: "Continuă la înscriere",
     quizCompareAll: "Sau compară toate opțiunile →",
     // Comparison panel
@@ -1672,10 +1673,11 @@ export const translations = {
     quizResultPrivateTitle: "1-on-1 Private Lessons",
     quizResultPrivateDesc: "Flexible scheduling and 100% focus on your goals.",
     quizResultKidsTitle: "Arabic for Kids",
-    quizResultKidsDesc: "Interactive activities tailored for younger learners.",
+    quizResultKidsDesc:
+      "The children's course has not opened yet. Leave your details and we'll tell you when it starts.",
     quizResultPriceFromGroup: "from {price} LEI / month",
     quizResultPricePrivate: "150 LEI online · 210 LEI in person / session",
-    quizResultPriceKids: "Details at registration",
+    quizResultPriceKids: "We'll let you know when it opens",
     quizContinueCta: "Continue to registration",
     quizCompareAll: "Or compare all options →",
     // Comparison panel

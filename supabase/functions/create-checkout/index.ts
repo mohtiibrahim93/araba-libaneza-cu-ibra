@@ -14,6 +14,9 @@ import {
 
 const COURSE_TYPES = ["group", "private"];
 
+/** The children's course takes sign-ups and deposits only when this is true. */
+const KIDS_COURSE_OPEN = false;
+
 serve(async (req) => {
   const corsHeaders = buildCorsHeaders(req);
   if (req.method === "OPTIONS") {
@@ -34,6 +37,25 @@ serve(async (req) => {
     // mandatory for those flows.
     if (courseType !== "kids_deposit" && !registrationId) {
       throw new Error("registrationId is required");
+    }
+    // The children's course is not open (owner, 27 Oct 2026: notify-me only),
+    // but its deposit was still payable, even without a registration (audit
+    // P0-9). Flip KIDS_COURSE_OPEN when it opens; a deposit then needs a
+    // registration like every other payment.
+    if (
+      courseType === "kids_deposit" &&
+      (!KIDS_COURSE_OPEN || !registrationId)
+    ) {
+      return new Response(
+        JSON.stringify({
+          error: "Cursul pentru copii nu este deschis încă.",
+          code: "kids_closed",
+        }),
+        {
+          headers: { ...corsHeaders, "Content-Type": "application/json" },
+          status: 409,
+        },
+      );
     }
 
     // Validate registrationId format & state BEFORE talking to Stripe so an

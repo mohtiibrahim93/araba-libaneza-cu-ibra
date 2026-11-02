@@ -327,12 +327,10 @@ const FindYourTrackQuiz = () => {
             <p className="text-lg font-semibold text-foreground mb-6">
               {price}
             </p>
-            {(track === "group" || track === "kids") && (
+            {/* No seats badge for kids: the course is not open (audit P0-9). */}
+            {track === "group" && (
               <div className="flex justify-center mb-6 -mt-2">
-                <SpotsBadge
-                  formType={track === "kids" ? "kids" : "group"}
-                  level={track === "group" ? (level ?? "A1") : null}
-                />
+                <SpotsBadge formType="group" level={level ?? "A1"} />
               </div>
             )}
             <Button
