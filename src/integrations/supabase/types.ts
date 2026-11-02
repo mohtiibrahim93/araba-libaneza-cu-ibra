@@ -1185,47 +1185,6 @@ export type Database = {
         }
         Relationships: []
       }
-      registration_payments: {
-        Row: {
-          amount_lei: number
-          created_at: string
-          id: string
-          kind: string
-          method: string
-          paid_at: string
-          recorded_by: string
-          registration_id: string
-        }
-        Insert: {
-          amount_lei: number
-          created_at?: string
-          id?: string
-          kind: string
-          method: string
-          paid_at?: string
-          recorded_by: string
-          registration_id: string
-        }
-        Update: {
-          amount_lei?: number
-          created_at?: string
-          id?: string
-          kind?: string
-          method?: string
-          paid_at?: string
-          recorded_by?: string
-          registration_id?: string
-        }
-        Relationships: [
-          {
-            foreignKeyName: "registration_payments_registration_id_fkey"
-            columns: ["registration_id"]
-            isOneToOne: false
-            referencedRelation: "registrations"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
       registrations: {
         Row: {
           anonymized_at: string | null
