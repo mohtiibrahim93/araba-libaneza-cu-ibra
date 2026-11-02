@@ -358,7 +358,7 @@ describe("website trial sign-up with no lesson", () => {
       { status: 200, body: {} },
     );
     const out = await (await h.call({ action: "private_students" })).json();
-    expect(out.data.map((s: Row) => s.id)).toEqual(["reg-trial"]);
+    expect(out.data.map((s: Row) => s["id"])).toEqual(["reg-trial"]);
     expect(out.data[0]).toMatchObject({ form_type: "trial" });
   });
 
@@ -389,7 +389,7 @@ describe("website trial sign-up with no lesson", () => {
       (w) => w.table === "registrations" && w.op === "insert",
     );
     expect(inserts).toHaveLength(1);
-    expect(inserts[0].payload).toMatchObject({
+    expect(inserts[0]?.payload).toMatchObject({
       form_type: "private",
       email: "visitor@example.test",
     });
