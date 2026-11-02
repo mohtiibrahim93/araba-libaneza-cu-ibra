@@ -212,6 +212,8 @@ serve(async (req) => {
             discountApplied,
             currency,
             publishableKey: stripePublishableKey,
+            plan,
+            planOptions: options,
           });
         }
       } catch (retrieveErr) {
@@ -302,6 +304,8 @@ serve(async (req) => {
       discountApplied,
       currency,
       publishableKey: stripePublishableKey,
+      plan,
+      planOptions: options,
     });
   } catch (error) {
     const message = error instanceof Error ? error.message : "Unknown error";
