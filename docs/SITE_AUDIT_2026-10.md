@@ -19,7 +19,17 @@ re-checked on 26 Oct against main and the live site.
   in a browser against captured Google requests. Still in URLs (not sent to
   Google): `/checkout?email=&name=`, `?token=`, `?sig=`; moving them out
   belongs with P0-4/P0-5 (same files).
-- OPEN P0-4 … P0-9 and everything below: still open as of 26 Oct.
+- DONE P0-4 to P0-9 (live 2 Nov 2026): P0-4, P0-6, P0-7 in 5be22d98; P0-9 in
+  b82f0209; P0-5 and P0-8 were fixed on 27 Oct by another session.
+- DONE 2 Nov 2026: four lesson types in the admin form (Plătită, Probă
+  gratuită, Recuperare, Bonus); website trial sign-ups with no time chosen can
+  be booked from the admin form (7b5c0f53).
+- BUILT, NOT LIVE 2 Nov 2026: group seats (2-hour hold for unfinished
+  payments, finish-payment and seat-released emails, over-capacity alert,
+  "1 lună acordată"), b0fb8efc. Needs migration 20261103090000 and a deploy
+  of admin-registrations, booking-reminders, stripe-webhook,
+  create-checkout-session, create-payment-intent, create-subscription.
+- Everything below P0 is still open unless marked.
 - DONE One group registration from 11 Oct (A1 in person) had no group attached
   (`cohort_id` null), so it could not pay. Resolved (confirmed by the owner, 30 Oct).
 - Suggested next order: P0-4 and P0-5 (the group payment flow), then P0-6 to P0-9.
