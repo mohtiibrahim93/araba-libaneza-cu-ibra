@@ -12,6 +12,7 @@ import { groupEnrolmentError } from "../_shared/group-enrolment.ts";
 
 import { serve } from "https://deno.land/std@0.190.0/http/server.ts";
 import Stripe from "https://esm.sh/stripe@18.5.0";
+import { offeredSlot } from "../_shared/booking.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2.57.2";
 import { buildCorsHeaders, resolveReturnOrigin } from "../_shared/cors.ts";
 import { signRegistrationId } from "../_shared/registration-access.ts";
@@ -129,6 +130,29 @@ serve(async (req) => {
       put("booking_language", booking.language, 8);
       put("booking_notes", booking.notes);
       if (booking.weekly === true) bookingMeta.booking_weekly = "1";
+    }
+
+    // Audit P0-7: only a time this site would offer. The booking itself is
+    // made by the webhook after payment, so this is the check before the card.
+    if (
+      bookingMeta.booking_start_at &&
+      !(await offeredSlot(
+        supabaseAdmin,
+        bookingMeta.booking_event_type || "trial",
+        bookingMeta.booking_format || "online",
+        bookingMeta.booking_start_at,
+      ))
+    ) {
+      return new Response(
+        JSON.stringify({
+          error: "Ora aleasă nu mai este disponibilă. Alege altă oră.",
+          code: "invalid_slot",
+        }),
+        {
+          headers: { ...corsHeaders, "Content-Type": "application/json" },
+          status: 409,
+        },
+      );
     }
 
     // Best-effort reuse: if we already created a session and it's still open,

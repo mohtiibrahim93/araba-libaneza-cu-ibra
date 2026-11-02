@@ -14,6 +14,11 @@ import {
   weekdayInTz as weekdayInTzLocal,
   minNoticeHours,
   physicalDayAllowed,
+  utcToZonedParts as utcToZonedPartsLocal,
+  inBlackout,
+  rulesForEventType,
+  LEVEL_CHECK_RULES,
+  LEVEL_CHECK_SLUG,
 } from "./schedule-rules.ts";
 
 export const GCAL_GATEWAY =
@@ -75,6 +80,47 @@ export function zonedToUtc(
 export function parseHM(t: string): [number, number] {
   const [h, m] = t.split(":").map(Number);
   return [h, m || 0];
+}
+
+/**
+ * Google Calendar busy times, or null when Google did not answer. Where a
+ * visitor chooses or books a time, null means "refuse" rather than "free"
+ * (2 Nov 2026): an empty answer from a failed call let any slot through.
+ */
+export async function gcalBusyOrNull(
+  timeMinISO: string,
+  timeMaxISO: string,
+): Promise<Array<{ start: string; end: string }> | null> {
+  const lovableKey = Deno.env.get("LOVABLE_API_KEY");
+  const gcalKey = Deno.env.get("GOOGLE_CALENDAR_API_KEY");
+  if (!lovableKey || !gcalKey) return null;
+  try {
+    const res = await fetch(`${GCAL_GATEWAY}/freeBusy`, {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${lovableKey}`,
+        "X-Connection-Api-Key": gcalKey,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        timeMin: timeMinISO,
+        timeMax: timeMaxISO,
+        timeZone: TZ,
+        items: [{ id: "primary" }],
+      }),
+    });
+    if (!res.ok) {
+      console.error("[booking] freebusy failed", res.status, await res.text());
+      return null;
+    }
+    const data = await res.json();
+    const cal = data?.calendars?.primary;
+    if (!cal || (Array.isArray(cal.errors) && cal.errors.length)) return null;
+    return (cal.busy ?? []) as Array<{ start: string; end: string }>;
+  } catch (err) {
+    console.error("[booking] freebusy error", err);
+    return null;
+  }
 }
 
 /** Google Calendar freebusy via gateway. Returns array of {start, end} UTC ISO strings. */
@@ -540,4 +586,62 @@ export function cohortBusyForDays(
     }
   }
   return out;
+}
+
+/**
+ * Whether the site would have offered this start time for this lesson type
+ * and format: inside the published hours, the notice and advance windows, the
+ * in-person days, and not on a day off. The same test booking-manage applies
+ * to a student's reschedule.
+ *
+ * Audit P0-7: a lesson time travels with a payment and is only created by the
+ * Stripe webhook afterwards, so the payment functions check it with this before
+ * any card is charged — a tampered request could otherwise pay for 03:00.
+ * Busy times are still checked by booking-create when the booking is made.
+ */
+// deno-lint-ignore no-explicit-any
+export async function offeredSlot(
+  supabase: any,
+  slug: string,
+  format: string,
+  startISO: string,
+): Promise<boolean> {
+  const startMs = Date.parse(startISO);
+  if (!Number.isFinite(startMs)) return false;
+  const iso = new Date(startMs).toISOString();
+  const { data: et } = await supabase
+    .from("booking_event_types")
+    .select(
+      "slug,duration_min,min_notice_hours,max_advance_days,physical_weekdays,is_active",
+    )
+    .eq("slug", slug)
+    .maybeSingle();
+  if (!et || et.is_active === false) return false;
+  const p = utcToZonedPartsLocal(new Date(startMs));
+  const dayKey = `${p.year}-${String(p.month).padStart(2, "0")}-${String(p.day).padStart(2, "0")}`;
+  const [{ data: rules }, { data: blackouts }] = await Promise.all([
+    supabase
+      .from("availability_rules")
+      .select("weekday,start_time,end_time,event_type_slug")
+      .eq("is_active", true),
+    supabase
+      .from("availability_blackouts")
+      .select("start_date,end_date")
+      .lte("start_date", dayKey)
+      .gte("end_date", dayKey),
+  ]);
+  const offered = candidateSlotsForDays(
+    [{ y: p.year, m: p.month, d: p.day }],
+    rulesForEventType(
+      rules ?? [],
+      slug,
+      slug === LEVEL_CHECK_SLUG ? LEVEL_CHECK_RULES : undefined,
+    ),
+    et.duration_min,
+  );
+  return (
+    offered.includes(iso) &&
+    passesTimingRules(et, format, iso) &&
+    !inBlackout(iso, blackouts ?? [])
+  );
 }

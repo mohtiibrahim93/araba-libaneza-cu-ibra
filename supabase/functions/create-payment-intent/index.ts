@@ -2,8 +2,10 @@ import { groupEnrolmentError } from "../_shared/group-enrolment.ts";
 import { serve } from "https://deno.land/std@0.190.0/http/server.ts";
 import Stripe from "https://esm.sh/stripe@18.5.0";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2.57.2";
+import { offeredSlot } from "../_shared/booking.ts";
 import { buildCorsHeaders } from "../_shared/cors.ts";
 import { verifiedRegistrationOwner } from "../_shared/verified-registration-owner.ts";
+import { signRegistrationId } from "../_shared/registration-access.ts";
 import {
   groupFullCourseUnitAmount,
   groupMonthlyUnitAmount,
@@ -138,6 +140,29 @@ serve(async (req) => {
     }
     const hasBooking = Boolean(bookingMeta.booking_start_at);
 
+    // Audit P0-7: only a time this site would offer. The booking itself is
+    // made by the webhook after payment, so this is the check before the card.
+    if (
+      bookingMeta.booking_start_at &&
+      !(await offeredSlot(
+        supabaseAdmin,
+        bookingMeta.booking_event_type || "paid",
+        bookingMeta.booking_format || "online",
+        bookingMeta.booking_start_at,
+      ))
+    ) {
+      return new Response(
+        JSON.stringify({
+          error: "Ora aleasă nu mai este disponibilă. Alege altă oră.",
+          code: "invalid_slot",
+        }),
+        {
+          headers: { ...corsHeaders, "Content-Type": "application/json" },
+          status: 409,
+        },
+      );
+    }
+
     const stripePublishableKey = Deno.env.get("STRIPE_PUBLISHABLE_KEY") || "";
     if (!stripePublishableKey.startsWith("pk_")) {
       throw new Error(
@@ -216,6 +241,7 @@ serve(async (req) => {
               JSON.stringify({
                 clientSecret: existing.client_secret,
                 paymentIntentId: existing.id,
+                sig: await signRegistrationId(registrationId),
                 amount: existing.amount,
                 unitAmount,
                 quantity,
@@ -261,6 +287,7 @@ serve(async (req) => {
               JSON.stringify({
                 clientSecret: updated.client_secret,
                 paymentIntentId: updated.id,
+                sig: await signRegistrationId(registrationId),
                 amount: updated.amount,
                 unitAmount,
                 quantity,
@@ -349,6 +376,10 @@ serve(async (req) => {
       JSON.stringify({
         clientSecret: intent.client_secret,
         paymentIntentId: intent.id,
+        // The status page proves the payment with this signed id; the return
+        // link carried no proof, so an embedded card payment never showed as
+        // paid and the purchase event never fired (audit P0-4).
+        sig: await signRegistrationId(registrationId),
         amount: finalAmount,
         unitAmount,
         quantity,

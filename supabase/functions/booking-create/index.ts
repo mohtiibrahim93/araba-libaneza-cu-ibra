@@ -4,7 +4,7 @@ import {
   TZ,
   json as _json,
   gcalCreateEvent,
-  gcalFreebusy,
+  gcalBusyOrNull,
   overlaps,
   candidateSlotsForDays,
   utcToZonedParts,
@@ -327,7 +327,7 @@ Deno.serve(async (req) => {
     ).toISOString();
 
     const [busy, { data: clashes }] = await Promise.all([
-      gcalFreebusy(checkStart, checkEnd),
+      gcalBusyOrNull(checkStart, checkEnd),
       supabase
         .from("bookings")
         .select("start_at,end_at")
@@ -344,7 +344,17 @@ Deno.serve(async (req) => {
         break;
       }
     }
-    for (const b of busy) {
+    // Google did not answer: a visitor is refused; the owner and the
+    // post-payment webhook are told and go on, so nobody pays and is refused.
+    if (busy === null) {
+      if (!internalCall)
+        return json(
+          { error: "calendar unavailable", code: "calendar_unavailable" },
+          503,
+        );
+      console.warn("[booking-create] calendar unknown for an internal booking");
+    }
+    for (const b of busy ?? []) {
       if (overlaps(s, e, Date.parse(b.start), Date.parse(b.end))) {
         found.push("calendar");
         break;

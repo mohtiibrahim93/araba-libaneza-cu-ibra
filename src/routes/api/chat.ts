@@ -20,7 +20,12 @@ export const Route = createFileRoute("/api/chat")({
   server: {
     handlers: {
       POST: async ({ request }) => {
-        const { messages } = (await request.json()) as ChatRequestBody;
+        // Invalid JSON used to throw and serve a 500 page (audit P0-6).
+        const body = (await request
+          .json()
+          .catch(() => null)) as ChatRequestBody | null;
+        if (!body) return new Response("Invalid JSON", { status: 400 });
+        const { messages } = body;
         if (!Array.isArray(messages) || messages.length === 0) {
           return new Response("Messages are required", { status: 400 });
         }
@@ -66,6 +71,31 @@ export const Route = createFileRoute("/api/chat")({
         const key = process.env["LOVABLE_API_KEY"];
         if (!key) {
           return new Response("Missing LOVABLE_API_KEY", { status: 500 });
+        }
+
+        // Every turn spends paid AI credits, so a visitor gets 30 an hour
+        // (audit P0-6), the same guard as the contact form. If the guard
+        // cannot be checked, the assistant declines rather than spends.
+        const ip =
+          request.headers.get("cf-connecting-ip") ??
+          request.headers.get("x-forwarded-for")?.split(",")[0]?.trim() ??
+          "unknown";
+        const bucket = Buffer.from(
+          await crypto.subtle.digest("SHA-256", new TextEncoder().encode(ip)),
+        ).toString("hex");
+        const { supabaseAdmin } =
+          await import("@/integrations/supabase/client.server");
+        const limit = await supabaseAdmin.rpc("check_and_record_rate_limit", {
+          p_bucket: `chat_ip:${bucket}`,
+          p_max: 30,
+          p_window_seconds: 3600,
+        });
+        if (limit.error) {
+          console.error("[chat] rate limit check failed", limit.error);
+          return new Response("Service unavailable", { status: 503 });
+        }
+        if (!limit.data) {
+          return new Response("Too many requests", { status: 429 });
         }
 
         // The SDK is loaded here rather than at the top of the file. Imported

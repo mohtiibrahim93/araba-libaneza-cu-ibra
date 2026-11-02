@@ -467,7 +467,10 @@ const NativeScheduler = ({
           return Object.keys(json.slots_by_date ?? {}).sort()[0] ?? null;
         });
       } catch (e) {
-        setError(e instanceof Error ? e.message : "load failed");
+        // A silent 30-second refresh that fails (e.g. Google did not answer)
+        // keeps the times already shown; the booking itself is checked again.
+        if (!opts?.silent)
+          setError(e instanceof Error ? e.message : "load failed");
       } finally {
         if (!opts?.silent) setLoading(false);
       }

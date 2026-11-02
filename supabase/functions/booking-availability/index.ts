@@ -2,7 +2,7 @@ import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 import {
   TZ,
   json as _json,
-  gcalFreebusy,
+  gcalBusyOrNull,
   overlaps,
   utcToZonedParts,
   candidateSlotsForDays,
@@ -116,7 +116,7 @@ Deno.serve(async (req) => {
     ).toISOString();
 
     const [busy, { data: existing }, { data: cohorts }] = await Promise.all([
-      gcalFreebusy(windowStart, windowEnd),
+      gcalBusyOrNull(windowStart, windowEnd),
       supabase
         .from("bookings")
         .select("start_at,end_at")
@@ -139,6 +139,13 @@ Deno.serve(async (req) => {
       start: Date.parse(b.start_at) - et.buffer_before_min * 60_000,
       end: Date.parse(b.end_at) + et.buffer_after_min * 60_000,
     }));
+    // Google did not answer: no times rather than times that may clash.
+    if (busy === null) {
+      return json(
+        { error: "calendar unavailable", code: "calendar_unavailable" },
+        503,
+      );
+    }
     const gcalBusy = busy.map((b) => ({
       start: Date.parse(b.start),
       end: Date.parse(b.end),

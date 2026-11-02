@@ -46,14 +46,15 @@ const PaymentForm = ({
   courseType,
   registrationId,
   monthsTotal,
-  email,
+  sig,
 }: {
   amount: number;
   currency: string;
   courseType: CourseType;
   registrationId: string;
   monthsTotal: number;
-  email: string;
+  /** Server-signed registration id: what lets the status page show "paid". */
+  sig: string;
 }) => {
   const stripe = useStripe();
   const elements = useElements();
@@ -69,7 +70,9 @@ const PaymentForm = ({
     returnUrl.searchParams.set("currency", currency);
     if (registrationId)
       returnUrl.searchParams.set("registration_id", registrationId);
-    if (email) returnUrl.searchParams.set("email", email);
+    // The signed id proves the payment on /payment-status (audit P0-4); the
+    // email no longer travels in the URL (audit P0-3).
+    if (sig) returnUrl.searchParams.set("sig", sig);
     const { error } = await stripe.confirmPayment({
       elements,
       confirmParams: {
@@ -175,6 +178,7 @@ const Checkout = () => {
   const [stripePromise, setStripePromise] =
     useState<Promise<Stripe | null> | null>(null);
   const [amount, setAmount] = useState(0);
+  const [sig, setSig] = useState("");
   const [monthsTotal, setMonthsTotal] = useState(0);
   const [currency, setCurrency] = useState("ron");
   const [error, setError] = useState<string | null>(null);
@@ -275,6 +279,7 @@ const Checkout = () => {
             if (!cancelled) setStripeLoadFailed(true);
           });
         setAmount(data.amount);
+        setSig(typeof data.sig === "string" ? data.sig : "");
         setMonthsTotal(
           typeof data.monthsTotal === "number" ? data.monthsTotal : 0,
         );
@@ -500,7 +505,7 @@ const Checkout = () => {
                 courseType={courseType as CourseType}
                 registrationId={registrationId}
                 monthsTotal={monthsTotal}
-                email={email}
+                sig={sig}
               />
             </Elements>
           )}
