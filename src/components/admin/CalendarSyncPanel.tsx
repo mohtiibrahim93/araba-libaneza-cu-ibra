@@ -146,13 +146,19 @@ export default function CalendarSyncPanel({
           </p>
         )
       )}
+      {/* The owner's calendar holds more than lessons (owner, 1 Nov 2026: "my
+          admin calendar should show students"). They still block booking
+          slots through Google free/busy; here they stay folded into one line,
+          open only to import a student whose event was not recognised. */}
       {showExternal && !!result?.unmatched.length && (
-        <div className="space-y-2">
-          <p className="text-sm font-semibold">
-            Evenimente Google fără cursant sau grupă asociată
-          </p>
+        <details className="space-y-2">
+          <summary className="cursor-pointer text-sm text-muted-foreground">
+            Alte evenimente din calendar: {result.unmatched.length} — nu sunt
+            cursanți; blochează programările
+          </summary>
           <p className="text-xs text-muted-foreground">
-            Sunt afișate din calendar; nu sunt înscrieri și nu confirmă plata.
+            Evenimente Google fără cursant sau grupă asociată. Sunt afișate din
+            calendar; nu sunt înscrieri și nu confirmă plata.
           </p>
           {result.unmatched.map((event) => (
             <div
@@ -184,7 +190,7 @@ export default function CalendarSyncPanel({
               )}
             </div>
           ))}
-        </div>
+        </details>
       )}
     </section>
   );
