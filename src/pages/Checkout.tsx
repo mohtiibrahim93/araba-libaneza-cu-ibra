@@ -26,15 +26,18 @@ const COURSE_LABEL: Record<CourseType, string> = {
 // supabase.functions.invoke wraps non-2xx responses in a FunctionsHttpError
 // whose .context holds the original Response — without this, every server
 // error degrades to the cryptic "Edge Function returned a non-2xx status code".
-async function readInvokeBody(
-  err: unknown,
-): Promise<Record<string, unknown> | null> {
+type InvokeErrorBody = {
+  error?: unknown;
+  code?: unknown;
+  plan?: unknown;
+  planOptions?: unknown;
+};
+async function readInvokeBody(err: unknown): Promise<InvokeErrorBody | null> {
   const ctx = (err as { context?: Response })?.context;
   if (ctx && typeof ctx.json === "function") {
     try {
       const body = await ctx.clone().json();
-      if (body && typeof body === "object")
-        return body as Record<string, unknown>;
+      if (body && typeof body === "object") return body as InvokeErrorBody;
     } catch {
       /* not json */
     }
