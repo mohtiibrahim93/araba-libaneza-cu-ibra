@@ -189,6 +189,28 @@ serve(async (req) => {
     const courseType = (
       reg.form_type === "trial" ? "private" : reg.form_type
     ) as "group" | "private" | "kids";
+    // A group's Stripe page closes when its seat hold does (owner, 2 Nov
+    // 2026: 2 hours), so nobody pays on a page whose seat was released.
+    // Stripe accepts 30 minutes to 24 hours from now. The deadline is part of
+    // the idempotency key, so a new hold opens a new page.
+    let groupExpiresAt: number | undefined;
+    if (courseType === "group") {
+      const { data: held } = await supabaseAdmin
+        .from("registrations")
+        .select("seat_hold_until")
+        .eq("id", registrationId)
+        .maybeSingle();
+      const until = held?.seat_hold_until
+        ? Date.parse(held.seat_hold_until)
+        : Number.NaN;
+      if (Number.isFinite(until))
+        groupExpiresAt = Math.ceil(
+          Math.max(until, Date.now() + 31 * 60_000) / 1000,
+        );
+    }
+    const expiryFields = groupExpiresAt ? { expires_at: groupExpiresAt } : {};
+    const expiryKey = groupExpiresAt ? `_x${groupExpiresAt}` : "";
+
     // The plan comes from the row (applied above), never from the request.
     const isSubscription = hasPlan(courseType) && plan === "monthly";
     const expectedMode: Stripe.Checkout.SessionCreateParams.Mode =
@@ -367,6 +389,7 @@ serve(async (req) => {
       session = await stripe.checkout.sessions.create(
         {
           mode: "subscription",
+          ...expiryFields,
           customer: customerId,
           customer_email: customerId ? undefined : reg.email || undefined,
           success_url: successUrl,
@@ -406,7 +429,7 @@ serve(async (req) => {
         // the previous session expired (24 h) isn't pinned by Stripe's
         // idempotency layer to the dead session forever.
         {
-          idempotencyKey: `cos_sub_${registrationId}_${Math.floor(Date.now() / 3_600_000)}${replacedSuffix}`,
+          idempotencyKey: `cos_sub_${registrationId}_${Math.floor(Date.now() / 3_600_000)}${replacedSuffix}${expiryKey}`,
         },
       );
     } else {
@@ -430,6 +453,7 @@ serve(async (req) => {
       session = await stripe.checkout.sessions.create(
         {
           mode: "payment",
+          ...expiryFields,
           customer: customerId,
           customer_email: customerId ? undefined : reg.email || undefined,
           success_url: successUrl,
@@ -476,7 +500,7 @@ serve(async (req) => {
         // The slot is part of the key, so picking another time in the same hour
         // opens a new session instead of Stripe replaying the old one.
         {
-          idempotencyKey: `cos_pay_${registrationId}_${Math.floor(Date.now() / 3_600_000)}${replacedSuffix}${
+          idempotencyKey: `cos_pay_${registrationId}_${Math.floor(Date.now() / 3_600_000)}${replacedSuffix}${expiryKey}${
             isPrivate && bookingMeta.booking_start_at
               ? `_${bookingMeta.booking_start_at}${bookingMeta.booking_weekly ? "_w" : ""}`
               : ""

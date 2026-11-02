@@ -71,14 +71,14 @@ describe("group capacity before payment", () => {
       "The selected group is full",
     );
   });
-  it("allows the last free seat and holds it for 30 minutes while paying", async () => {
+  it("allows the last free seat and holds it for 2 hours while paying (owner, 2 Nov 2026)", async () => {
     const { groupEnrolmentError } = helper() as any;
     holds.length = 0;
     expect(await groupEnrolmentError(db(cohort, 5), registration)).toBeNull();
     expect(holds).toEqual([
       {
         name: "hold_group_seat",
-        args: { p_registration: "reg", p_minutes: 30 },
+        args: { p_registration: "reg", p_minutes: 120 },
       },
     ]);
   });

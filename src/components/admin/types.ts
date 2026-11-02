@@ -76,6 +76,8 @@ export interface Registration {
   months_paid?: number | null;
   /** Cash/transfer received for a group course (registration_payments). */
   offline_paid_lei?: number | null;
+  /** Months given by private agreement (registration_payments kind credit). */
+  credit_months?: number | null;
   /** "full" once the whole course was paid in one go, else "monthly". */
   payment_plan?: "monthly" | "full" | null;
   canceled_at?: string | null;

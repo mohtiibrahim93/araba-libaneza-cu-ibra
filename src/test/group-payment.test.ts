@@ -77,3 +77,41 @@ describe("server and database", () => {
     expect(sql).not.toMatch(/create policy/i);
   });
 });
+
+// Owner, 2 Nov 2026 (Andrada): a month given by private agreement, e.g.
+// carried over from a previous course, covers a month of the new course but
+// is not money: it counts in the months, never in the lei or payment_status.
+describe("a month given by agreement", () => {
+  it("shows in the months, not in the lei", () => {
+    expect(
+      groupPaymentSummary({
+        id: "r",
+        name: "x",
+        months_paid: 2,
+        months_total: 4,
+        offline_paid_lei: 500,
+        credit_months: 1,
+        payment_plan: "monthly",
+      }),
+    ).toBe("Lunar 2/4 luni · 500 lei · 1 lună acordată");
+  });
+
+  it("is stored with no amount and leaves payment_status alone", () => {
+    const src = readFileSync(
+      "supabase/functions/admin-registrations/index.ts",
+      "utf8",
+    );
+    const action = src.slice(src.indexOf('action === "record_group_payment"'));
+    expect(action).toContain('const amount = kind === "credit" ? 0');
+    expect(action).toMatch(
+      /\.\.\.\(kind === "credit"\s*\?\s*\{\}\s*:\s*\{\s*payment_status: "paid"/,
+    );
+    const sql = readFileSync(
+      "supabase/migrations/20261103090000_group_seat_hold_two_hours.sql",
+      "utf8",
+    );
+    expect(sql).toContain(
+      "(kind = 'credit' and method = 'credit' and amount_lei = 0)",
+    );
+  });
+});

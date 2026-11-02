@@ -100,10 +100,13 @@ export default function CourseOverviewAdmin({
             includePayment={false}
           />
           <p className="text-xs text-muted-foreground">
-            Locurile ocupate folosesc regula existentă: înscrieri
-            calificate/convertite, numărători manuale și ajustări. Plățile sunt
-            afișate separat. Minim pentru pornire: jumătate din capacitate,
-            rotunjit în sus.
+            Un loc e ocupat de: o înscriere plătită (sau gratuită), un cursant
+            adăugat de tine sau marcat Calificat/Convertit, numărătorile manuale
+            și ajustările. O plată începută și neterminată ține locul cel mult 2
+            ore; după aceea locul se eliberează singur, iar înscrierea rămâne
+            vizibilă ca „Expirat”. Înscrierile anulate sau rambursate nu ocupă
+            locuri. Minim pentru pornire: jumătate din capacitate, rotunjit în
+            sus.
           </p>
           {visible.length === 0 ? (
             <p>Nicio grupă pentru filtrele selectate.</p>
@@ -115,9 +118,7 @@ export default function CourseOverviewAdmin({
                   className="space-y-3 rounded-lg border border-border p-4"
                 >
                   <div>
-                    <h3 className="font-semibold">
-                      {cohortAdminTitle(c)}
-                    </h3>
+                    <h3 className="font-semibold">{cohortAdminTitle(c)}</h3>
                     <p className="text-sm">
                       {c.format === "online"
                         ? "Online"
@@ -200,10 +201,7 @@ export default function CourseOverviewAdmin({
                       size="sm"
                       variant="outline"
                       onClick={() =>
-                        onShowRegistrations(
-                          c.id,
-                          cohortAdminTitle(c),
-                        )
+                        onShowRegistrations(c.id, cohortAdminTitle(c))
                       }
                     >
                       Vezi înscrierile grupei

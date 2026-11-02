@@ -29,6 +29,8 @@ import { template as gdprErasureRequest } from "./gdpr-erasure-request.tsx";
 import { template as arabiziCheatSheet } from "./arabizi-cheat-sheet.tsx";
 import { template as expresiiLibaneze } from "./expresii-libaneze.tsx";
 import { template as plan30Zile } from "./plan-30-zile.tsx";
+import { template as groupSeatHold } from "./group-seat-hold.tsx";
+import { template as adminGroupOverCapacity } from "./admin-group-over-capacity.tsx";
 
 export const TEMPLATES: Record<string, TemplateEntry> = {
   "registration-confirmation": registrationConfirmation,
@@ -51,4 +53,6 @@ export const TEMPLATES: Record<string, TemplateEntry> = {
   "arabizi-cheat-sheet": arabiziCheatSheet,
   "expresii-libaneze": expresiiLibaneze,
   "plan-30-zile": plan30Zile,
+  "group-seat-hold": groupSeatHold,
+  "admin-group-over-capacity": adminGroupOverCapacity,
 };

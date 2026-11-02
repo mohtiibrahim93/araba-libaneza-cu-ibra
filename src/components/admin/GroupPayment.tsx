@@ -26,6 +26,7 @@ export interface GroupPaymentRow {
   months_paid?: number | null;
   months_total?: number | null;
   offline_paid_lei?: number | null;
+  credit_months?: number | null;
   payment_plan?: "monthly" | "full" | null;
 }
 
@@ -45,15 +46,21 @@ export function groupPrices(r: GroupPaymentRow) {
   return { monthly, months, full };
 }
 
-/** "Lunar 2/4 luni · 1.000 lei" / "Integral · 1.700 lei" / null. */
+/**
+ * "Lunar 2/4 luni · 500 lei · 1 lună acordată" / "Integral · 1.700 lei" / null.
+ * Months given by agreement count in the months covered, not in the lei.
+ */
 export function groupPaymentSummary(r: GroupPaymentRow): string | null {
   const total = r.months_total ?? null;
   const paid = r.months_paid ?? 0;
   const lei = r.offline_paid_lei
     ? ` · ${formatLei(r.offline_paid_lei)} lei`
     : "";
+  const credit = r.credit_months
+    ? ` · ${r.credit_months} ${r.credit_months === 1 ? "lună acordată" : "luni acordate"}`
+    : "";
   if (r.payment_plan === "full") return `Integral${lei}`;
-  if (total && paid > 0) return `Lunar ${paid}/${total} luni${lei}`;
+  if (total && paid > 0) return `Lunar ${paid}/${total} luni${lei}${credit}`;
   return null;
 }
 
@@ -69,20 +76,20 @@ export default function GroupPayment({
   const total = row.months_total ?? months;
   const done = paid >= total;
   const [open, setOpen] = useState(false);
-  const [kind, setKind] = useState<"month" | "full">("month");
+  const [kind, setKind] = useState<"month" | "full" | "credit">("month");
   const [method, setMethod] = useState<"cash" | "transfer">("cash");
   const [amount, setAmount] = useState(String(monthly));
   const [saving, setSaving] = useState(false);
   const summary = groupPaymentSummary(row);
 
-  const pick = (k: "month" | "full") => {
+  const pick = (k: "month" | "full" | "credit") => {
     setKind(k);
-    setAmount(String(k === "full" ? full : monthly));
+    setAmount(String(k === "full" ? full : k === "credit" ? 0 : monthly));
   };
 
   const save = async () => {
-    const value = Number(amount.replace(",", "."));
-    if (!Number.isFinite(value) || value <= 0) {
+    const value = kind === "credit" ? 0 : Number(amount.replace(",", "."));
+    if (kind !== "credit" && (!Number.isFinite(value) || value <= 0)) {
       toast({ title: "Scrie suma primită.", variant: "destructive" });
       return;
     }
@@ -101,7 +108,9 @@ export default function GroupPayment({
         title:
           kind === "full"
             ? `${row.name}: plătit integral (${formatLei(value)} lei)`
-            : `${row.name}: luna ${data.months_paid}/${data.months_total} plătită (${formatLei(value)} lei)`,
+            : kind === "credit"
+              ? `${row.name}: luna ${data.months_paid}/${data.months_total} acordată, fără plată`
+              : `${row.name}: luna ${data.months_paid}/${data.months_total} plătită (${formatLei(value)} lei)`,
       });
       setOpen(false);
       onDone?.();
@@ -127,7 +136,7 @@ export default function GroupPayment({
           onClick={() => setOpen(true)}
           className="inline-flex min-h-11 items-center rounded-xl border border-border px-4 font-semibold hover:border-brand-green/60"
         >
-          Încasare cash / transfer
+          Încasare cash / transfer / lună acordată
         </button>
       ) : (
         <fieldset className="space-y-3 rounded-xl border border-border p-3">
@@ -150,6 +159,10 @@ export default function GroupPayment({
                       ["full", `Integral −15% · ${formatLei(full)} lei`],
                     ] as const)
                   : []),
+                [
+                  "credit",
+                  `1 lună acordată (${paid + 1}/${total}) · fără plată`,
+                ],
               ] as const
             ).map(([k, label]) => (
               <button
@@ -164,39 +177,49 @@ export default function GroupPayment({
               </button>
             ))}
           </div>
-          <div
-            className="flex flex-wrap gap-2"
-            role="radiogroup"
-            aria-label="Cum a plătit"
-          >
-            {(
-              [
-                ["cash", "Cash"],
-                ["transfer", "Transfer bancar"],
-              ] as const
-            ).map(([m, label]) => (
-              <button
-                key={m}
-                type="button"
-                role="radio"
-                aria-checked={method === m}
-                onClick={() => setMethod(m)}
-                className={`min-h-11 rounded-xl border px-3 ${method === m ? "border-primary bg-primary/10 font-semibold" : "border-border"}`}
+          {kind === "credit" ? (
+            <p className="text-xs text-muted-foreground">
+              O lună acoperită printr-o înțelegere (de exemplu, din cursul
+              anterior). Nu e o încasare: nu apare la bani și nu schimbă starea
+              plății.
+            </p>
+          ) : (
+            <>
+              <div
+                className="flex flex-wrap gap-2"
+                role="radiogroup"
+                aria-label="Cum a plătit"
               >
-                {label}
-              </button>
-            ))}
-          </div>
-          <label className="flex flex-wrap items-center gap-2">
-            Suma primită
-            <input
-              inputMode="decimal"
-              value={amount}
-              onChange={(e) => setAmount(e.target.value)}
-              className="h-11 w-28 rounded-xl border border-input bg-background px-3"
-            />
-            lei
-          </label>
+                {(
+                  [
+                    ["cash", "Cash"],
+                    ["transfer", "Transfer bancar"],
+                  ] as const
+                ).map(([m, label]) => (
+                  <button
+                    key={m}
+                    type="button"
+                    role="radio"
+                    aria-checked={method === m}
+                    onClick={() => setMethod(m)}
+                    className={`min-h-11 rounded-xl border px-3 ${method === m ? "border-primary bg-primary/10 font-semibold" : "border-border"}`}
+                  >
+                    {label}
+                  </button>
+                ))}
+              </div>
+              <label className="flex flex-wrap items-center gap-2">
+                Suma primită
+                <input
+                  inputMode="decimal"
+                  value={amount}
+                  onChange={(e) => setAmount(e.target.value)}
+                  className="h-11 w-28 rounded-xl border border-input bg-background px-3"
+                />
+                lei
+              </label>
+            </>
+          )}
           <div className="flex flex-wrap gap-2">
             <button
               type="button"
@@ -204,7 +227,11 @@ export default function GroupPayment({
               onClick={() => void save()}
               className="inline-flex min-h-11 items-center rounded-xl bg-primary px-4 font-semibold text-primary-foreground disabled:opacity-60"
             >
-              {saving ? "Se salvează…" : "Salvează plata"}
+              {saving
+                ? "Se salvează…"
+                : kind === "credit"
+                  ? "Salvează luna acordată"
+                  : "Salvează plata"}
             </button>
             <button
               type="button"

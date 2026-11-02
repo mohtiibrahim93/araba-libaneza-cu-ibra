@@ -270,7 +270,16 @@ serve(async (req) => {
           quantity: String(quantity),
         },
       },
-      { idempotencyKey: `sub_${registrationId}` },
+      // One key per attempt: a subscription that ended unpaid (cancelled when
+      // the group seat hold ran out, or expired by Stripe) is followed by a new
+      // one, which the fixed key `sub_<id>` would refuse.
+      {
+        idempotencyKey: `sub_${registrationId}${
+          regRow.stripe_subscription_id
+            ? `_after_${regRow.stripe_subscription_id}`
+            : ""
+        }`,
+      },
     );
 
     const clientSecret = firstInvoiceClientSecret(

@@ -1,3 +1,6 @@
+/** How long a started, unpaid group payment holds its seat (owner, 2 Nov 2026). */
+export const GROUP_HOLD_MINUTES = 120;
+
 /** Validate the stored group, never a client-supplied replacement. */
 export async function groupEnrolmentError(
   db: any,
@@ -32,15 +35,16 @@ export async function groupEnrolmentError(
   )
     return "The selected group is not open for registration";
   // A seat is taken once the student is accepted or has paid. Someone already
-  // holding one keeps it; anyone else gets a 30-minute hold on a free seat
-  // while they pay (hold_group_seat locks the group, so two last-seat payments
-  // are decided one after the other), or is told the group is full.
+  // holding one keeps it; anyone else gets a hold on a free seat while they
+  // pay (GROUP_HOLD_MINUTES, owner 2 Nov 2026: 2 hours; reopening the page
+  // keeps the same deadline). hold_group_seat locks the group, so two
+  // last-seat payments are decided one after the other; a full group is told so.
   if (reg.lead_status === "qualified" || reg.lead_status === "converted")
     return null;
   if (!reg.id) return "The selected group is unavailable";
   const { data: held, error: holdError } = await db.rpc("hold_group_seat", {
     p_registration: reg.id,
-    p_minutes: 30,
+    p_minutes: GROUP_HOLD_MINUTES,
   });
   if (holdError) return "The selected group is unavailable";
   if (held !== true) return "The selected group is full";

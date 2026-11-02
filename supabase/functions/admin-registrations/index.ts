@@ -4795,21 +4795,32 @@ Deno.serve(async (req) => {
     // received. One row in registration_payments per payment; months_paid
     // advances like a Stripe subscription's would. The amount is what the
     // owner typed, prefilled from the price table by the panel.
+    // kind "credit" (owner, 2 Nov 2026): a month given by private agreement,
+    // e.g. carried over from a previous course. It covers one month and no
+    // money moves: amount 0, method "credit", and payment_status is left as it
+    // is (it tracks the money).
     if (action === "record_group_payment") {
       const kind =
-        body.kind === "full" ? "full" : body.kind === "month" ? "month" : null;
+        body.kind === "full"
+          ? "full"
+          : body.kind === "month"
+            ? "month"
+            : body.kind === "credit"
+              ? "credit"
+              : null;
       const method =
-        body.method === "cash" || body.method === "transfer"
-          ? body.method
-          : null;
-      const amount = Number(body.amount_lei);
+        kind === "credit"
+          ? "credit"
+          : body.method === "cash" || body.method === "transfer"
+            ? body.method
+            : null;
+      const amount = kind === "credit" ? 0 : Number(body.amount_lei);
       if (
         typeof id !== "string" ||
         !kind ||
         !method ||
         !Number.isFinite(amount) ||
-        amount <= 0 ||
-        amount > 100000
+        (kind !== "credit" && (amount <= 0 || amount > 100000))
       )
         return jsonResponse(
           { error: "Alege luna sau integral, cash sau transfer, și suma." },
@@ -4864,9 +4875,13 @@ Deno.serve(async (req) => {
       const { error: updErr } = await supabase
         .from("registrations")
         .update({
-          payment_status: "paid",
-          paid_at: reg.paid_at ?? paidAt,
-          payment_method: method,
+          ...(kind === "credit"
+            ? {}
+            : {
+                payment_status: "paid",
+                paid_at: reg.paid_at ?? paidAt,
+                payment_method: method,
+              }),
           months_total: total,
           months_paid: monthsPaid,
           lead_status: "converted",
@@ -5571,6 +5586,11 @@ Deno.serve(async (req) => {
         for (const p of rows) {
           const r = data.find((x) => x.id === p.registration_id);
           if (!r) continue;
+          // A month given by agreement covers a month, but is not money.
+          if (p.kind === "credit") {
+            r.credit_months = (r.credit_months ?? 0) + 1;
+            continue;
+          }
           r.offline_paid_lei = (r.offline_paid_lei ?? 0) + Number(p.amount_lei);
           r.payment_plan =
             p.kind === "full" ? "full" : (r.payment_plan ?? "monthly");

@@ -6,6 +6,8 @@ import {
   manageUrl,
 } from "../_shared/booking-emails.ts";
 import { sendTemplateEmail } from "../_shared/managed-email.ts";
+import Stripe from "https://esm.sh/stripe@18.5.0";
+import { processGroupHolds } from "../_shared/group-holds.ts";
 import { buildCorsHeaders } from "../_shared/cors.ts";
 import { lessonOfPackage } from "../_shared/package-lessons.ts";
 import { packageLessonNumber } from "../_shared/package-titles.ts";
@@ -234,8 +236,27 @@ Deno.serve(async (req) => {
     appealReminders++;
   }
 
+  // Group payments started and not finished (owner, 2 Nov 2026): the
+  // "finish your payment" email 15 minutes in, and the 2-hour seat hold
+  // released at its deadline (_shared/group-holds.ts). Its own try, so a
+  // Stripe or email outage never stops the lesson reminders above.
+  let groupHolds: Record<string, number> | { error: string };
+  try {
+    const stripeKey = Deno.env.get("STRIPE_SECRET_KEY");
+    groupHolds = await processGroupHolds(
+      supabase,
+      stripeKey
+        ? new Stripe(stripeKey, { apiVersion: "2025-08-27.basil" })
+        : null,
+    );
+  } catch (e) {
+    console.error("[booking-reminders] group holds failed", e);
+    groupHolds = { error: e instanceof Error ? e.message : String(e) };
+  }
+
   return json({
     appeal_reminders: appealReminders,
+    group_holds: groupHolds,
     ok: true,
     results,
     done_checks: { sent: doneChecks, failed: doneCheckFailed },

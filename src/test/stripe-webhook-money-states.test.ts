@@ -93,6 +93,7 @@ function run(
         sendTemplateEmail: async () => ({ sent: true }),
       },
       "../_shared/private-series.ts": { privateLessonStarts: () => [] },
+      "../_shared/group-holds.ts": { flagOverCapacity: async () => false },
     },
     { STRIPE_SECRET_KEY: "sk_test", STRIPE_WEBHOOK_SECRET: "whsec" },
   );

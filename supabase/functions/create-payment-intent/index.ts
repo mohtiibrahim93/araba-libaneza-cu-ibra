@@ -257,6 +257,11 @@ serve(async (req) => {
         const existing = await stripe.paymentIntents.retrieve(
           regRow.stripe_session_id,
         );
+        // A group payment not finished in time is cancelled when its seat
+        // hold runs out (_shared/group-holds.ts). A new attempt needs a new
+        // intent; the unsalted key would hand back the cancelled one.
+        if (existing?.status === "canceled")
+          idempotencySuffix = `_after_${existing.id}`;
         if (
           existing &&
           existing.client_secret &&

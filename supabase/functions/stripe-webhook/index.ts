@@ -1,5 +1,6 @@
 import { serve } from "https://deno.land/std@0.190.0/http/server.ts";
 import Stripe from "https://esm.sh/stripe@18.5.0";
+import { flagOverCapacity } from "../_shared/group-holds.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2.57.2";
 import { buildCorsHeaders } from "../_shared/cors.ts";
 import { sendTemplateEmail } from "../_shared/managed-email.ts";
@@ -524,6 +525,11 @@ serve(async (req) => {
         if (updated && session.metadata?.course_type === "private") {
           await bookPrivateLessons(supabase, updated, session.metadata ?? {});
         }
+        // A group payment is accepted even when it came after its seat hold
+        // ran out and the group filled up meanwhile; the owner is told
+        // (owner, 2 Nov 2026: no silent refund).
+        if (updated?.form_type === "group")
+          await flagOverCapacity(supabase, updated.id);
         break;
       }
 
@@ -590,7 +596,7 @@ serve(async (req) => {
             stripe_session_id: intent.id,
           })
           .eq(matchColumn, matchValue)
-          .select("id, email, name, phone, language")
+          .select("id, email, name, phone, language, form_type")
           .maybeSingle();
 
         if (updateError) {
@@ -617,6 +623,8 @@ serve(async (req) => {
         ) {
           await bookPrivateLessons(supabase, updated, intent.metadata ?? {});
         }
+        if (updated?.form_type === "group")
+          await flagOverCapacity(supabase, updated.id);
         break;
       }
 
@@ -661,7 +669,7 @@ serve(async (req) => {
           );
         }
 
-        const { error: updateError } = await supabase
+        const { data: paidRows, error: updateError } = await supabase
           .from("registrations")
           .update({
             payment_status: "paid",
@@ -670,11 +678,21 @@ serve(async (req) => {
             months_paid: monthsPaid,
             subscription_status: "active",
           })
-          .eq("stripe_subscription_id", subId);
+          .eq("stripe_subscription_id", subId)
+          .select("id, form_type");
         if (updateError) {
           console.error("Failed to record invoice.paid:", updateError);
           throw updateError;
         }
+        // The first month is when the seat is taken; later months change
+        // nothing about the group's size.
+        if (monthsPaid === 1)
+          for (const row of (paidRows ?? []) as {
+            id: string;
+            form_type: string | null;
+          }[])
+            if (row.form_type === "group")
+              await flagOverCapacity(supabase, row.id);
         break;
       }
 
