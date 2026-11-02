@@ -4102,12 +4102,19 @@ Deno.serve(async (req) => {
         "created_at",
         false,
       );
-      const students = regs.filter(
-        (r) => r.form_type === "private" && !r.anonymized_at,
+      // A free trial booked on the website whose time was never chosen (owner,
+      // 2 Nov 2026: the visitor did not finish, the hour was agreed on
+      // WhatsApp) is listed too, so its lesson goes on that sign-up instead of
+      // a second one. Once it has a lesson it drops off the list.
+      const candidates = regs.filter(
+        (r) =>
+          (r.form_type === "private" || r.form_type === "trial") &&
+          !r.anonymized_at,
       );
       const used = new Map<string, number>();
-      for (let offset = 0; offset < students.length; offset += 100) {
-        const ids = students.slice(offset, offset + 100).map((r) => r.id);
+      const hasLesson = new Set<string>();
+      for (let offset = 0; offset < candidates.length; offset += 100) {
+        const ids = candidates.slice(offset, offset + 100).map((r) => r.id);
         const result = await supabase
           .from("bookings")
           .select(
@@ -4115,6 +4122,7 @@ Deno.serve(async (req) => {
           )
           .in("registration_id", ids);
         if (result.error) throw result.error;
+        for (const row of result.data ?? []) hasLesson.add(row.registration_id);
         for (const row of result.data ?? [])
           if (countsAgainstPackage(row))
             used.set(
@@ -4122,9 +4130,13 @@ Deno.serve(async (req) => {
               (used.get(row.registration_id) ?? 0) + 1,
             );
       }
+      const students = candidates.filter(
+        (r) => r.form_type === "private" || !hasLesson.has(r.id),
+      );
       return jsonResponse({
         data: students.map((r) => ({
           id: r.id,
+          form_type: r.form_type,
           name: r.name,
           email: r.contact_email || r.email,
           phone: r.phone,
@@ -4245,6 +4257,7 @@ Deno.serve(async (req) => {
         accountEmail: string;
         contactEmail: string | null;
         phone: string | null;
+        trialSignup: boolean;
       } | null = null;
       if (
         b.registration_id !== undefined &&
@@ -4261,7 +4274,7 @@ Deno.serve(async (req) => {
         if (
           lookupErr ||
           !reg ||
-          reg.form_type !== "private" ||
+          (reg.form_type !== "private" && reg.form_type !== "trial") ||
           reg.anonymized_at
         ) {
           return jsonResponse({ error: "Cursantul nu a fost găsit." });
@@ -4273,6 +4286,7 @@ Deno.serve(async (req) => {
           accountEmail: reg.email || reg.contact_email || "",
           contactEmail: reg.contact_email || null,
           phone: reg.phone ?? null,
+          trialSignup: reg.form_type === "trial",
         };
       }
       const studentName = existing ? existing.name.trim() : name;
@@ -4288,7 +4302,11 @@ Deno.serve(async (req) => {
         return jsonResponse({ error: "Data sau ora nu sunt valide." });
       }
 
-      const onExisting = existing !== null && !extra && !trial;
+      // A website trial sign-up takes its own trial lesson; any other kind of
+      // lesson for that person gets a registration of its own, with their
+      // details, like an extra lesson.
+      const onExisting =
+        existing !== null && !extra && (existing.trialSignup ? trial : !trial);
       const registrationId = onExisting ? existing!.id : crypto.randomUUID();
       const { error: regErr } = onExisting
         ? { error: null }

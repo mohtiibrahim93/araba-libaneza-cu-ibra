@@ -30,10 +30,14 @@ export interface PrivateStudent {
   lessons_used: number;
   payment_status: string | null;
   source: string | null;
+  /** "trial": a website trial sign-up with no lesson yet (time never chosen). */
+  form_type?: string | null;
 }
 
 /** "Name — email · 2/5 lecții · plătit" — enough to tell two students apart. */
 export function studentOptionLabel(s: PrivateStudent): string {
+  if (s.form_type === "trial")
+    return `${s.name || "Fără nume"} — ${s.email || "fără email"} · probă de pe site, fără oră aleasă`;
   const paid =
     s.payment_status === "paid"
       ? "plătit"
@@ -163,7 +167,15 @@ export default function BookLessonDialog({
     setBkName(s.name ?? "");
     setBkEmail(s.email ?? "");
     setBkPhone(s.phone ?? "");
+    // A website trial sign-up: the lesson is the trial it asked for.
+    if (s.form_type === "trial") {
+      setBkKind("trial");
+      setBkExtra(false);
+    }
   };
+  const chosenIsTrialSignup =
+    !!bkStudentId &&
+    bkStudents?.find((x) => x.id === bkStudentId)?.form_type === "trial";
 
   const submitBooking = async (force: boolean) => {
     const [y, m, d] = bkDate.split("-").map(Number) as (number | undefined)[];
@@ -292,7 +304,7 @@ export default function BookLessonDialog({
                 </option>
               ))}
             </select>
-            {bkStudentId && (
+            {bkStudentId && !chosenIsTrialSignup && (
               <label className="flex items-center gap-2 text-sm">
                 <input
                   type="checkbox"
@@ -306,11 +318,15 @@ export default function BookLessonDialog({
               </label>
             )}
             <p className="text-[11px] text-muted-foreground">
-              {bkStudentId && bkExtra
-                ? "Se creează o înscriere nouă pentru această lecție, cu datele lui salvate. Pachetul lui rămâne neatins."
-                : bkStudentId
-                  ? "Lecția se adaugă la înscrierea lui. Datele de mai jos sunt cele salvate; emailul contului și al plății nu se schimbă."
-                  : "Alege un cursant înscris pe site sau programat deja de tine, ca lecția să intre la el, nu ca înscriere nouă."}
+              {chosenIsTrialSignup
+                ? bkKind === "trial"
+                  ? "Proba se adaugă la înscrierea lui de pe site; nu se creează o înscriere nouă."
+                  : "Pentru altă lecție decât proba se creează o înscriere nouă, cu datele lui de pe site."
+                : bkStudentId && bkExtra
+                  ? "Se creează o înscriere nouă pentru această lecție, cu datele lui salvate. Pachetul lui rămâne neatins."
+                  : bkStudentId
+                    ? "Lecția se adaugă la înscrierea lui. Datele de mai jos sunt cele salvate; emailul contului și al plății nu se schimbă."
+                    : "Alege un cursant înscris pe site sau programat deja de tine, ca lecția să intre la el, nu ca înscriere nouă."}
             </p>
           </div>
           <div className="space-y-1.5 sm:col-span-2">

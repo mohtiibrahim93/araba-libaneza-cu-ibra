@@ -13,8 +13,10 @@ describe("manual booking can be a free trial", () => {
   it("creates its own trial registration that owes nothing", () => {
     expect(action).toContain('form_type: trial ? "trial" : "private"');
     expect(action).toMatch(/payment_status: trial\s*\?\s*"unpaid"/);
-    expect(action).toContain(
-      "const onExisting = existing !== null && !extra && !trial;",
+    // A trial never lands on a private student's package; only a website
+    // trial sign-up with no lesson yet takes it on its own registration.
+    expect(action).toMatch(
+      /const onExisting =\s*existing !== null &&\s*!extra &&\s*\(existing\.trialSignup \? trial : !trial\);/,
     );
   });
 

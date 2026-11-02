@@ -325,3 +325,90 @@ describe("lecție în plus for an existing student", () => {
     ).toEqual(["insert", "delete"]);
   });
 });
+
+// Owner, 2 Nov 2026: a visitor signed up for the free trial on the website but
+// never chose a time; the hour was agreed on WhatsApp. The booking form lists
+// that sign-up and the trial lesson goes on it, not on a second registration.
+describe("website trial sign-up with no lesson", () => {
+  const trialSignup: Row = {
+    ...website,
+    id: "reg-trial",
+    form_type: "trial",
+    quantity: 1,
+    payment_status: "unpaid",
+    contact_email: null,
+    email: "visitor@example.test",
+  };
+
+  it("is listed until it has a lesson", async () => {
+    const h = harness(
+      {
+        registrations: [
+          trialSignup,
+          { ...trialSignup, id: "reg-trial-booked" },
+        ],
+        bookings: [
+          {
+            registration_id: "reg-trial-booked",
+            event_type_slug: "trial",
+            status: "confirmed",
+          },
+        ],
+      },
+      { status: 200, body: {} },
+    );
+    const out = await (await h.call({ action: "private_students" })).json();
+    expect(out.data.map((s: Row) => s.id)).toEqual(["reg-trial"]);
+    expect(out.data[0]).toMatchObject({ form_type: "trial" });
+  });
+
+  it("takes its trial lesson on the same registration", async () => {
+    const h = harness(
+      { registrations: [trialSignup] },
+      { status: 200, body: { ok: true } },
+    );
+    const out = await (
+      await h.call({ ...slot, registration_id: "reg-trial", trial: true })
+    ).json();
+    expect(out).toMatchObject({ success: true, registration_id: "reg-trial" });
+    expect(h.bookingBody()).toMatchObject({
+      registration_id: "reg-trial",
+      event_type: "trial",
+      student_email: "visitor@example.test",
+    });
+    expect(h.writes.filter((w) => w.table === "registrations")).toEqual([]);
+  });
+
+  it("gets a registration of its own for a paid lesson", async () => {
+    const h = harness(
+      { registrations: [trialSignup] },
+      { status: 200, body: { ok: true } },
+    );
+    await h.call({ ...slot, registration_id: "reg-trial" });
+    const inserts = h.writes.filter(
+      (w) => w.table === "registrations" && w.op === "insert",
+    );
+    expect(inserts).toHaveLength(1);
+    expect(inserts[0].payload).toMatchObject({
+      form_type: "private",
+      email: "visitor@example.test",
+    });
+  });
+
+  it("is labelled as a website trial in the form", async () => {
+    const { studentOptionLabel } = await import("@/components/BookingsAdmin");
+    expect(
+      studentOptionLabel({
+        id: "x",
+        name: "Madalina",
+        email: "m@example.test",
+        phone: null,
+        quantity: 1,
+        lessons_used: 0,
+        payment_status: "unpaid",
+        source: "form",
+        form_type: "trial",
+      }),
+    ).toBe("Madalina — m@example.test · probă de pe site, fără oră aleasă");
+  });
+});
