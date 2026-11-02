@@ -26,7 +26,7 @@ FORMATE
 - Curs de grup (online sau fizic), pe niveluri CEFR, 2 ședințe/săptămână, 1h30 fiecare.
 - Lecții private 1:1 (online sau fizic), programare flexibilă.
 - Curs pentru copii: NU este încă deschis — nici grupe, nici lecții private. Se poate lăsa doar o cerere „Anunță-mă” pe /curs-araba-copii, iar vizitatorul e anunțat când pornește. Când va porni: grupe de maximum 6 copii, lecții de 60 de minute, maximum 8 lecții pe lună.
-- Lecție de probă gratuită, online în orice zi disponibilă sau fizic la centru sâmbăta și duminica.
+- Lecție de probă gratuită, online în orice zi disponibilă sau fizic la centru în orice zi, rezervată cu cel puțin 24 de ore înainte.
 
 PREȚURI (LEI; prețul fizic e cu 40% peste cel online)
 Grup, abonament lunar:

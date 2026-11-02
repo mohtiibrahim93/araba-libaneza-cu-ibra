@@ -1542,8 +1542,9 @@ const NativeScheduler = ({
             </select>
           </label>
           {eventType === "trial" && format === "physical" && (
-            // Without this the weekday slots simply disappear when you switch,
-            // which reads as a bug rather than a rule.
+            // Without this the next day's slots simply disappear when you
+            // switch to in person (24 hours' notice), which reads as a bug
+            // rather than a rule.
             <p className="text-xs text-muted-foreground sm:col-span-2">
               {t.schedulerPhysicalTrialWeekend}
             </p>

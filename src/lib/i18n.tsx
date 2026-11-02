@@ -466,7 +466,7 @@ export const translations = {
     // pages we most want indexed. Every claim here is already stated elsewhere
     // on the site or comes from booking_event_types in the database.
     schedulerPhysicalTrialWeekend:
-      "La centrul din București se poate programa deocamdată doar sâmbăta și duminica. Pentru celelalte zile, alege online.",
+      "La centrul din București, proba se programează cu cel puțin 24 de ore înainte. Pentru o oră mai apropiată, alege online.",
     quizWhatH2: "Ce face chestionarul",
     quizWhatP:
       "Îți pune câteva întrebări scurte despre motivul pentru care vrei să înveți, timpul pe care îl ai și felul în care preferi să studiezi, apoi îți arată ce format ți se potrivește: grupă pe nivel, lecții private 1:1 sau curs pentru copii. Durează sub două minute și nu cere înregistrare.",
@@ -500,7 +500,7 @@ export const translations = {
       "Dacă nu ai mai studiat cu noi, începe cu proba gratuită: 30 de minute în care ne cunoaștem, îți răspund la întrebări și stabilim de unde pornești. Dacă știi deja ce vrei — grupă, lecții 1:1 sau curs pentru copii — mergi direct la înscriere.",
     bookingLandingWhereH2: "Unde au loc lecțiile",
     bookingLandingWhereP:
-      "Online pe Zoom, de oriunde, sau fizic la Raduga Creative Center, Strada Icoanei 80, București. Proba fizică se programează deocamdată doar sâmbăta și duminica; online, în orice zi cu locuri libere.",
+      "Online pe Zoom, de oriunde, sau fizic la Raduga Creative Center, Strada Icoanei 80, București. Proba fizică se programează în orice zi, cu cel puțin 24 de ore înainte; online, în orice zi cu locuri libere.",
     bookingLandingWhenH2: "Când poți rezerva",
     bookingLandingWhenP:
       "Sloturile se rezervă cu cel puțin 12 ore înainte și cu cel mult 30 de zile în avans. Primești confirmarea pe email, cu un link din care poți anula sau reprograma.",
@@ -514,7 +514,7 @@ export const translations = {
     // These four describe the order of the page, so they moved when the page
     // did: the times come first now, and the details are asked for last.
     trialHowLi1:
-      "Alegi formatul — online în orice zi disponibilă, sau fizic la centrul din București, sâmbăta și duminica.",
+      "Alegi formatul — online în orice zi disponibilă, sau fizic la centrul din București, cu cel puțin 24 de ore înainte.",
     trialHowLi2: "Alegi singur intervalul, din sloturile libere din calendar.",
     trialHowLi3: "Completezi numele, emailul și telefonul.",
     trialHowLi4:
@@ -1418,7 +1418,7 @@ export const translations = {
     trialPageSeoDesc:
       "Book a free 30-minute lesson with Ibra. The trial is 0 lei; your card confirms the spot, with no payment.",
     schedulerPhysicalTrialWeekend:
-      "At the Bucharest centre, bookings are for now only on Saturdays and Sundays. For any other day, choose online.",
+      "At the Bucharest centre, a trial is booked at least 24 hours ahead. For an earlier time, choose online.",
     quizWhatH2: "What the quiz does",
     quizWhatP:
       "It asks a few short questions about why you want to learn, how much time you have and how you prefer to study, then shows which format fits: a group at your level, 1:1 private lessons, or a course for children. It takes under two minutes and needs no sign-up.",
@@ -1452,7 +1452,7 @@ export const translations = {
       "If you have not studied with us before, start with the free trial: 30 minutes to meet, answer your questions and work out where you begin. If you already know what you want — a group, 1:1 lessons, or a course for children — go straight to enrolment.",
     bookingLandingWhereH2: "Where lessons happen",
     bookingLandingWhereP:
-      "Online over Zoom from anywhere, or in person at Raduga Creative Center, Strada Icoanei 80, Bucharest. In-person trials are for now only on Saturdays and Sundays; online, any day with a free slot.",
+      "Online over Zoom from anywhere, or in person at Raduga Creative Center, Strada Icoanei 80, Bucharest. In-person trials are on any day, booked at least 24 hours ahead; online, any day with a free slot.",
     bookingLandingWhenH2: "When you can book",
     bookingLandingWhenP:
       "Slots are booked at least 12 hours ahead and at most 30 days in advance. You get a confirmation email with a link to cancel or reschedule.",
@@ -1464,7 +1464,7 @@ export const translations = {
       "The trial exists so you can meet the teacher, try the method and see whether the format suits you before paying for anything. If after those 30 minutes it is not for you, nothing happens — no cancellation to request, nothing to explain.",
     trialHowH2: "How booking works",
     trialHowLi1:
-      "Choose the format — online on any open day, or in person at the Bucharest centre on Saturdays and Sundays.",
+      "Choose the format — online on any open day, or in person at the Bucharest centre, booked at least 24 hours ahead.",
     trialHowLi2:
       "Pick the time slot yourself, from what is free in the calendar.",
     trialHowLi3: "Fill in your name, email and phone.",
