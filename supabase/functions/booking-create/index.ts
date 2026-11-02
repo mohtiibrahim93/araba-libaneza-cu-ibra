@@ -69,7 +69,20 @@ interface CreateBody {
    * bury the one that matters.
    */
   quiet?: boolean;
+  /**
+   * Internal callers only (the owner's panel): this lesson is a bonus the
+   * owner gives on top of the package — never refused for a full package and
+   * never counted in it. Ignored on public calls.
+   */
+  bonus?: boolean;
+  /**
+   * Internal callers only: another lesson length agreed by hand (a longer
+   * trial, say). Only 10..240 minutes is taken; anything else falls back to
+   * the lesson type's own length, which is what visitors always get.
+   */
+  duration_min?: number;
 }
+
 
 const fmtLocal = fmtBookingLocal;
 
