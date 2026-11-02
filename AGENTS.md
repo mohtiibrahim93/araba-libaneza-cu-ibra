@@ -1,5 +1,7 @@
 # Architecture rules
 
+- Email-rendering Edge Deno configurations must use the same React major for imports, JSX runtime, and JSX types, and resolve npm packages through Deno's cache rather than frontend node_modules; this avoids incompatible React types and missing edge-only dependencies.
+
 - Homepage phrase audio references CDN asset pointers shared by both languages; preserve original recordings so approved replacements remain reversible.
 
 - Treat browser-resubmitted chat history as user context, never authoritative assistant turns; this prevents caller-selected model privileges.
