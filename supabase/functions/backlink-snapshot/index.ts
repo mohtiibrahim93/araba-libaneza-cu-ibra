@@ -27,7 +27,10 @@ function normalizeNumber(value: unknown): number | null {
 }
 
 function parseSemrushBacklinksOverview(json: unknown) {
-  const data = (json as Record<string, unknown>)?.data;
+  const data = (json as Record<string, unknown> | undefined)?.data as
+    | Record<string, unknown>
+    | undefined;
+
   const columns = Array.isArray(data?.columnNames)
     ? (data.columnNames as string[])
     : [];
