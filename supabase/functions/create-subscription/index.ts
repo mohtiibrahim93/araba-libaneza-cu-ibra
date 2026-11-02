@@ -1,4 +1,5 @@
 import { groupEnrolmentError } from "../_shared/group-enrolment.ts";
+import { applyPlanChange, planOptions } from "../_shared/registration-plan.ts";
 import { serve } from "https://deno.land/std@0.190.0/http/server.ts";
 import Stripe from "https://esm.sh/stripe@18.5.0";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2.57.2";
@@ -51,7 +52,7 @@ serve(async (req) => {
   }
 
   try {
-    const { email, name, registrationId } = await req.json();
+    const { email, name, registrationId, changePlan } = await req.json();
 
     if (!registrationId || typeof registrationId !== "string") {
       return new Response(
@@ -70,7 +71,7 @@ serve(async (req) => {
     const { data: regRow, error: regErr } = await supabaseAdmin
       .from("registrations")
       .select(
-        "id, form_type, payment_status, stripe_subscription_id, email, quantity, level, cohort_id, format, lead_status",
+        "id, form_type, payment_status, stripe_subscription_id, email, quantity, level, cohort_id, format, lead_status, plan",
       )
       .eq("id", registrationId)
       .maybeSingle();
@@ -113,6 +114,26 @@ serve(async (req) => {
     if (regRow.payment_status === "paid" || regRow.payment_status === "free") {
       return new Response(
         JSON.stringify({ error: "Registration already paid" }),
+        {
+          status: 409,
+          headers: { ...corsHeaders, "Content-Type": "application/json" },
+        },
+      );
+    }
+
+    // The plan lives on the row. The buyer may switch it on /checkout
+    // (changePlan, written to the row first); a pay-in-full row is charged by
+    // create-payment-intent, so this function refuses it and names the plan.
+    const plan = await applyPlanChange(supabaseAdmin, regRow, changePlan);
+    const options = planOptions(regRow);
+    if (plan !== "monthly") {
+      return new Response(
+        JSON.stringify({
+          error: "This registration is set to pay the whole course upfront",
+          code: "plan_mismatch",
+          plan,
+          planOptions: options,
+        }),
         {
           status: 409,
           headers: { ...corsHeaders, "Content-Type": "application/json" },
@@ -191,6 +212,8 @@ serve(async (req) => {
             discountApplied,
             currency,
             publishableKey: stripePublishableKey,
+            plan,
+            planOptions: options,
           });
         }
       } catch (retrieveErr) {
@@ -281,6 +304,8 @@ serve(async (req) => {
       discountApplied,
       currency,
       publishableKey: stripePublishableKey,
+      plan,
+      planOptions: options,
     });
   } catch (error) {
     const message = error instanceof Error ? error.message : "Unknown error";

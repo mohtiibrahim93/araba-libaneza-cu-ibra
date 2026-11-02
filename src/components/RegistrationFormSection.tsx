@@ -534,6 +534,9 @@ const RegistrationFormSection = ({
         email: email || null,
         center: center || null,
         format,
+        // The payment plan the buyer picked, read back by the payment
+        // functions (embedded and hosted Stripe alike). Kids has no picker yet.
+        plan: courseType === "group" ? groupPlan : "monthly",
         notes,
         child_age: courseType === "kids" ? childAge || null : null,
         level: courseType === "group" ? level || null : null,
