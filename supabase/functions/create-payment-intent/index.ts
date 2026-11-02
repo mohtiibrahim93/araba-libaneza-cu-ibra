@@ -1,4 +1,9 @@
 import { groupEnrolmentError } from "../_shared/group-enrolment.ts";
+import {
+  applyPlanChange,
+  hasPlan,
+  planOptions,
+} from "../_shared/registration-plan.ts";
 import { serve } from "https://deno.land/std@0.190.0/http/server.ts";
 import Stripe from "https://esm.sh/stripe@18.5.0";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2.57.2";
@@ -26,7 +31,7 @@ serve(async (req) => {
   }
 
   try {
-    const { courseType, email, name, registrationId, booking } =
+    const { courseType, email, name, registrationId, booking, changePlan } =
       await req.json();
 
     if (!courseType || !COURSE_TYPES.includes(courseType)) {
@@ -55,7 +60,7 @@ serve(async (req) => {
     const { data: regRow, error: regErr } = await supabaseAdmin
       .from("registrations")
       .select(
-        "id, created_at, form_type, payment_status, stripe_session_id, email, quantity, level, cohort_id, format, lead_status",
+        "id, created_at, form_type, payment_status, stripe_session_id, email, quantity, level, cohort_id, format, lead_status, plan",
       )
       .eq("id", registrationId)
       .maybeSingle();
@@ -93,6 +98,31 @@ serve(async (req) => {
     if (regRow.payment_status === "paid" || regRow.payment_status === "free") {
       return new Response(
         JSON.stringify({ error: "Registration already paid" }),
+        {
+          status: 409,
+          headers: { ...corsHeaders, "Content-Type": "application/json" },
+        },
+      );
+    }
+
+    // Group / kids: the plan lives on the row. The buyer may switch it on
+    // /checkout (changePlan, written to the row first). This function charges
+    // the pay-in-full plan only; a monthly row belongs to create-subscription,
+    // so refuse it and name the plan in force.
+    const rowHasPlan = hasPlan(regRow.form_type);
+    const plan = rowHasPlan
+      ? await applyPlanChange(supabaseAdmin, regRow, changePlan)
+      : null;
+    const planFields = rowHasPlan
+      ? { plan, planOptions: planOptions(regRow) }
+      : {};
+    if (rowHasPlan && plan !== "full") {
+      return new Response(
+        JSON.stringify({
+          error: "This registration is set to the monthly subscription",
+          code: "plan_mismatch",
+          ...planFields,
+        }),
         {
           status: 409,
           headers: { ...corsHeaders, "Content-Type": "application/json" },
@@ -248,6 +278,7 @@ serve(async (req) => {
                 discountApplied,
                 currency: existing.currency,
                 publishableKey: stripePublishableKey,
+                ...planFields,
               }),
               {
                 headers: { ...corsHeaders, "Content-Type": "application/json" },
@@ -294,6 +325,7 @@ serve(async (req) => {
                 discountApplied,
                 currency: updated.currency,
                 publishableKey: stripePublishableKey,
+                ...planFields,
               }),
               {
                 headers: { ...corsHeaders, "Content-Type": "application/json" },
@@ -386,6 +418,7 @@ serve(async (req) => {
         discountApplied,
         currency,
         publishableKey: stripePublishableKey,
+        ...planFields,
       }),
       {
         headers: { ...corsHeaders, "Content-Type": "application/json" },
