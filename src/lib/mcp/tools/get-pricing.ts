@@ -15,8 +15,11 @@ const ONLINE_PRICES = {
   kidsPrivateLesson: 150,
   kidsGroupMonthly: 500,
 };
-const round10 = (n: number) => Math.round(n / 10) * 10;
-const physicalPrice = (online: number) => round10(online * 1.4);
+// Defaults (never used: every call passes a value) keep the parameter types
+// after bundling, which strips annotations, so the generated
+// supabase/functions/mcp/index.ts still type-checks without "implicit any".
+const round10 = (n = 0) => Math.round(n / 10) * 10;
+const physicalPrice = (online = 0) => round10(online * 1.4);
 
 export default defineTool({
   name: "get_pricing",

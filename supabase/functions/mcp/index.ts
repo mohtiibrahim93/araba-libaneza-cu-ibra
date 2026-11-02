@@ -20,8 +20,8 @@ var ONLINE_PRICES = {
   kidsPrivateLesson: 150,
   kidsGroupMonthly: 500
 };
-var round10 = (n) => Math.round(n / 10) * 10;
-var physicalPrice = (online) => round10(online * 1.4);
+var round10 = (n = 0) => Math.round(n / 10) * 10;
+var physicalPrice = (online = 0) => round10(online * 1.4);
 var get_pricing_default = defineTool({
   name: "get_pricing",
   title: "Get course pricing",
