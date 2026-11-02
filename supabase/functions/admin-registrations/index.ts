@@ -4731,6 +4731,111 @@ Deno.serve(async (req) => {
     // owner from Acasă. payment_status tracks the money, and the money has
     // arrived, so it becomes "paid", with how it was paid. Never over a
     // registration already paid or refunded.
+    // A group course paid to the owner in cash or by transfer (owner, 1 Nov
+    // 2026): one month, or the whole course with its -15%, and the amount
+    // received. One row in registration_payments per payment; months_paid
+    // advances like a Stripe subscription's would. The amount is what the
+    // owner typed, prefilled from the price table by the panel.
+    if (action === "record_group_payment") {
+      const kind =
+        body.kind === "full" ? "full" : body.kind === "month" ? "month" : null;
+      const method =
+        body.method === "cash" || body.method === "transfer"
+          ? body.method
+          : null;
+      const amount = Number(body.amount_lei);
+      if (
+        typeof id !== "string" ||
+        !kind ||
+        !method ||
+        !Number.isFinite(amount) ||
+        amount <= 0 ||
+        amount > 100000
+      )
+        return jsonResponse(
+          { error: "Alege luna sau integral, cash sau transfer, și suma." },
+          400,
+        );
+      const { data: reg, error: regErr } = await supabase
+        .from("registrations")
+        .select(
+          "id, form_type, level, cohort_id, months_paid, months_total, paid_at, refunded_at, anonymized_at",
+        )
+        .eq("id", id)
+        .maybeSingle();
+      if (regErr) throw regErr;
+      if (!reg || reg.anonymized_at || reg.form_type !== "group")
+        return jsonResponse(
+          { error: "Doar pentru o înscriere la grupă." },
+          400,
+        );
+      if (reg.refunded_at)
+        return jsonResponse({ error: "Înscrierea a fost rambursată." }, 409);
+      let level = reg.level as string | null;
+      if (reg.cohort_id) {
+        const { data: c } = await supabase
+          .from("group_cohorts")
+          .select("level")
+          .eq("id", reg.cohort_id)
+          .maybeSingle();
+        level = (c?.level as string | null) ?? level;
+      }
+      const total =
+        (reg.months_total as number | null) ??
+        GROUP_MONTHS[
+          (level ?? "A1").toUpperCase() as keyof typeof GROUP_MONTHS
+        ] ??
+        GROUP_MONTHS.A1;
+      const paidSoFar = Number(reg.months_paid ?? 0);
+      if (paidSoFar >= total)
+        return jsonResponse({ error: "Toate lunile sunt deja plătite." }, 409);
+      const monthsPaid = kind === "full" ? total : paidSoFar + 1;
+      const paidAt = new Date().toISOString();
+      const { error: insErr } = await supabase
+        .from("registration_payments")
+        .insert({
+          registration_id: id,
+          kind,
+          method,
+          amount_lei: Math.round(amount * 100) / 100,
+          recorded_by: callerEmail!,
+          paid_at: paidAt,
+        });
+      if (insErr) throw insErr;
+      const { error: updErr } = await supabase
+        .from("registrations")
+        .update({
+          payment_status: "paid",
+          paid_at: reg.paid_at ?? paidAt,
+          payment_method: method,
+          months_total: total,
+          months_paid: monthsPaid,
+          lead_status: "converted",
+          followup_snoozed_until: null,
+        })
+        .eq("id", id)
+        .eq("months_paid", reg.months_paid ?? 0);
+      if (updErr) throw updErr;
+      await supabase.from("audit_logs").insert({
+        actor: callerEmail!,
+        action: "record_group_payment",
+        registration_id: id,
+        details: {
+          kind,
+          method,
+          amount_lei: amount,
+          months_paid: monthsPaid,
+          months_total: total,
+          at: paidAt,
+        },
+      });
+      return jsonResponse({
+        success: true,
+        months_paid: monthsPaid,
+        months_total: total,
+      });
+    }
+
     if (action === "mark_paid_offline") {
       const method =
         body.method === "cash" || body.method === "transfer"
@@ -5381,6 +5486,36 @@ Deno.serve(async (req) => {
         for (const r of data) r.cohort = byId.get(r.cohort_id) ?? null;
       } else {
         for (const r of data) r.cohort = null;
+      }
+      // Cash/transfer payments for group courses: the plan and the total
+      // received. Skipped quietly before migration 20261102130000.
+      const groupIds = data
+        .filter((r) => r.form_type === "group")
+        .map((r) => r.id);
+      if (groupIds.length) {
+        const rows: Array<{
+          registration_id: string;
+          kind: string;
+          amount_lei: number;
+        }> = [];
+        for (let offset = 0; offset < groupIds.length; offset += 100) {
+          const result = await supabase
+            .from("registration_payments")
+            .select("registration_id, kind, amount_lei")
+            .in("registration_id", groupIds.slice(offset, offset + 100));
+          if (result.error) {
+            rows.length = 0;
+            break;
+          }
+          rows.push(...(result.data ?? []));
+        }
+        for (const p of rows) {
+          const r = data.find((x) => x.id === p.registration_id);
+          if (!r) continue;
+          r.offline_paid_lei = (r.offline_paid_lei ?? 0) + Number(p.amount_lei);
+          r.payment_plan =
+            p.kind === "full" ? "full" : (r.payment_plan ?? "monthly");
+        }
       }
       // Older manual private bookings used the default source='form'. Their
       // existing audit record proves the origin without changing stored rows.

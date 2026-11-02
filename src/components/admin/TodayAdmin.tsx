@@ -20,6 +20,7 @@ import { TrialOutcomeControl } from "@/components/admin/TrialOutcome";
 import LessonEditDialog from "./LessonEditDialog";
 import { PackageLessonBadge } from "./LessonOutcome";
 import { cohortAdminTitle } from "./RegistrationCourse";
+import GroupPayment from "./GroupPayment";
 
 /**
  * The screen the panel opens on.
@@ -806,7 +807,13 @@ const TodayAdmin = ({
                           ))}
                         </div>
                       )}
+                      {/* A group course paid by hand records the month or
+                          the whole course and the amount (owner, 1 Nov 2026). */}
+                      {unpaid && r.form_type === "group" && (
+                        <GroupPayment row={r} onDone={() => void load()} />
+                      )}
                       {unpaid &&
+                        r.form_type !== "group" &&
                         (["cash", "transfer"] as const).map((method) => (
                           <button
                             key={method}

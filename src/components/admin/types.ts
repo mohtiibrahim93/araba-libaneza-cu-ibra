@@ -74,6 +74,10 @@ export interface Registration {
   subscription_status?: string | null;
   months_total?: number | null;
   months_paid?: number | null;
+  /** Cash/transfer received for a group course (registration_payments). */
+  offline_paid_lei?: number | null;
+  /** "full" once the whole course was paid in one go, else "monthly". */
+  payment_plan?: "monthly" | "full" | null;
   canceled_at?: string | null;
   refunded_amount?: number | null;
   /** Kids seat deposit, kept apart from payment_status (the course's money). */

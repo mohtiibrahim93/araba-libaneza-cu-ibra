@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import GroupPayment from "./GroupPayment";
 import * as DialogPrimitive from "@radix-ui/react-dialog";
 import { Gamepad2, Loader2, Mail, MessageCircle, Phone, X } from "lucide-react";
 import { invokeAdmin } from "@/lib/adminAuth";
@@ -296,6 +297,9 @@ const PersonSheet = ({
                     </span>
                   </div>
                 </div>
+                {person.form_type === "group" && (
+                  <GroupPayment row={person} onDone={onChanged} />
+                )}
 
                 <section className="space-y-3">
                   <h2 className="text-xs font-bold uppercase tracking-[0.12em] text-muted-foreground">
