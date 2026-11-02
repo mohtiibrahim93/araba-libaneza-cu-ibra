@@ -56,6 +56,22 @@ export function weekdayInTz(d: Date, tz = TZ): number {
 export const PHYSICAL_TRIAL_WEEKDAYS = [0, 6]; // Sunday, Saturday
 
 /**
+ * An in-person lesson needs a day's notice (owner, 2 Nov 2026): booked at
+ * 12:00 for 13:00 at the center, Ibra could not get there in time. Online keeps
+ * the lesson type's own notice; in person takes whichever is longer.
+ */
+export const PHYSICAL_MIN_NOTICE_HOURS = 24;
+
+/** Hours of notice a booking of this type needs in this format. */
+export function minNoticeHours(
+  et: { min_notice_hours?: number | null },
+  format: string,
+): number {
+  const own = et.min_notice_hours ?? 0;
+  return format === "physical" ? Math.max(own, PHYSICAL_MIN_NOTICE_HOURS) : own;
+}
+
+/**
  * The level check with Ibra (event type `verificare-nivel`) has its own hours,
  * not the general availability rules: weekdays 12:00–13:00, the owner's usual
  * free hour (October 2026). A lesson booked then still blocks it — the usual

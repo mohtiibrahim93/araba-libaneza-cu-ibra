@@ -12,6 +12,7 @@ export {
 import {
   TZ,
   weekdayInTz as weekdayInTzLocal,
+  minNoticeHours,
   physicalDayAllowed,
 } from "./schedule-rules.ts";
 
@@ -497,7 +498,7 @@ export function passesTimingRules(
   now = Date.now(),
 ): boolean {
   const t = Date.parse(iso);
-  const minNoticeMs = (et.min_notice_hours ?? 0) * 3_600_000;
+  const minNoticeMs = minNoticeHours(et, format) * 3_600_000;
   const maxAdvanceMs = (et.max_advance_days ?? 30) * 86_400_000;
   if (t < now + minNoticeMs || t > now + maxAdvanceMs) return false;
   return physicalDayAllowed(et, format, iso);

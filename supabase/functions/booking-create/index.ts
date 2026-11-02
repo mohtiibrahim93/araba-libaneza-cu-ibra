@@ -21,6 +21,7 @@ import {
   LEVEL_CHECK_RULES,
   LEVEL_CHECK_SLUG,
   inBlackout,
+  minNoticeHours,
   physicalDayAllowed,
   rulesForEventType,
 } from "../_shared/schedule-rules.ts";
@@ -301,7 +302,7 @@ Deno.serve(async (req) => {
     // A time in the past is still refused, for everyone.
     if (
       !internalCall &&
-      startMs < now + (et.min_notice_hours ?? 0) * 3_600_000
+      startMs < now + minNoticeHours(et, body.format ?? "online") * 3_600_000
     ) {
       return json({ error: "slot too soon" }, 409);
     }

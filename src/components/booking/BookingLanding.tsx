@@ -60,8 +60,8 @@ const BookingLanding = () => {
       title: en ? "Free trial lesson" : "Lecție de probă gratuită",
       meta: en ? "30 min · 0 lei" : "30 min · 0 lei",
       text: en
-        ? "We meet, you ask anything, and we find your level. Online any day, in person at weekends."
-        : "Ne cunoaștem, întrebi orice și îți aflăm nivelul. Online în orice zi, fizic în weekend.",
+        ? "We meet, you ask anything, and we find your level. Online any day, in person with 24 hours’ notice."
+        : "Ne cunoaștem, întrebi orice și îți aflăm nivelul. Online în orice zi, fizic cu cel puțin 24 de ore înainte.",
     },
     {
       id: "grup",

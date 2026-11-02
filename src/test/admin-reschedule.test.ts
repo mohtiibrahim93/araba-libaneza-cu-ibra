@@ -229,7 +229,9 @@ describe("the notice period and the panel", () => {
     // "I am with him now, put the lesson in for this afternoon" is the normal
     // reason to book from the panel; a 12-hour notice would refuse it.
     expect(code(create)).toContain(
-      code("if (!internalCall && startMs < now + (et.min_notice_hours ?? 0)"),
+      code(
+        'if (!internalCall && startMs < now + minNoticeHours(et, body.format ?? "online")',
+      ),
     );
   });
 

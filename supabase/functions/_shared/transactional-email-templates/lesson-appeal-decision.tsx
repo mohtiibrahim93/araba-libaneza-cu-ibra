@@ -1,4 +1,4 @@
-import * as React from "npm:react@19.3.0";
+import * as React from "npm:react@19.3.1";
 import {
   Body,
   Container,

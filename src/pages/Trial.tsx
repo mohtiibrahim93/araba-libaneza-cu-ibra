@@ -27,7 +27,10 @@ const TrialPage = () => {
     { Icon: Clock, text: "30 min" },
     { Icon: Wallet, text: "0 lei" },
     { Icon: CalendarDays, text: en ? "Online any day" : "Online în orice zi" },
-    { Icon: MapPin, text: en ? "In person at weekends" : "Fizic în weekend" },
+    {
+      Icon: MapPin,
+      text: en ? "In person, 24 h ahead" : "Fizic, cu 24 h înainte",
+    },
   ];
   const steps = [t.trialHowLi1, t.trialHowLi2, t.trialHowLi3, t.trialHowLi4];
   // The card rule is stated once, in the notice beside the calendar where the

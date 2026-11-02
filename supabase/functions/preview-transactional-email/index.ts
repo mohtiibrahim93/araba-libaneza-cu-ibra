@@ -1,4 +1,4 @@
-import * as React from "npm:react@19.3.0";
+import * as React from "npm:react@19.3.1";
 import { render } from "npm:@react-email/components@1.0.12";
 import { TEMPLATES } from "../_shared/transactional-email-templates/registry.ts";
 import { buildCorsHeaders } from "../_shared/cors.ts";

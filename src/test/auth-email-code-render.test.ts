@@ -17,7 +17,7 @@ function loadEdgeTemplate(file: string, exportedName: string) {
   }).outputText;
   const module = { exports: {} as Record<string, React.ComponentType<any>> };
   const edgeRequire = (name: string) => {
-    if (name === "npm:react@19.3.0") return require("react");
+    if (name === "npm:react@19.3.1") return require("react");
     if (name === "npm:@react-email/components@1.0.12")
       return require("@react-email/components");
     throw new Error(`Unexpected edge-template import: ${name}`);

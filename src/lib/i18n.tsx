@@ -457,7 +457,7 @@ export const translations = {
     // Stripe card confirmation: the visitor met the card only after clicking
     // through, which is the worst place to learn about it. Say it up front.
     trialPageSubtitle:
-      "30 de minute, 0 lei. Îți confirmi locul cu cardul, fără nicio plată. Online oricând, sau fizic în București sâmbăta și duminica.",
+      "30 de minute, 0 lei. Îți confirmi locul cu cardul, fără nicio plată. Online oricând, sau fizic în București, rezervat cu cel puțin 24 de ore înainte.",
     trialPageSeoTitle: "Lecție gratuită de arabă libaneză | Ibra",
     trialPageSeoDesc:
       "Rezervă o lecție gratuită de 30 de minute cu Ibra. Proba costă 0 lei; locul se confirmă cu cardul, fără plată.",
@@ -1413,7 +1413,7 @@ export const translations = {
       "30 minutes with Ibra — we'll discuss your goals and answer your questions. The first session is free.",
     trialPageTitle: "Free trial lesson",
     trialPageSubtitle:
-      "30 minutes, 0 lei. You confirm the spot with your card, with nothing charged. Online any day, or in person in Bucharest at weekends.",
+      "30 minutes, 0 lei. You confirm the spot with your card, with nothing charged. Online any day, or in person in Bucharest, booked at least 24 hours ahead.",
     trialPageSeoTitle: "Free trial lesson — Lebanese Arabic",
     trialPageSeoDesc:
       "Book a free 30-minute lesson with Ibra. The trial is 0 lei; your card confirms the spot, with no payment.",
