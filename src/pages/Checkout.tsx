@@ -26,19 +26,127 @@ const COURSE_LABEL: Record<CourseType, string> = {
 // supabase.functions.invoke wraps non-2xx responses in a FunctionsHttpError
 // whose .context holds the original Response — without this, every server
 // error degrades to the cryptic "Edge Function returned a non-2xx status code".
-async function readInvokeError(err: unknown): Promise<string | null> {
+async function readInvokeBody(
+  err: unknown,
+): Promise<Record<string, unknown> | null> {
   const ctx = (err as { context?: Response })?.context;
   if (ctx && typeof ctx.json === "function") {
     try {
-      const body = await ctx.json();
-      if (body && typeof body.error === "string" && body.error)
-        return body.error;
+      const body = await ctx.clone().json();
+      if (body && typeof body === "object")
+        return body as Record<string, unknown>;
     } catch {
       /* not json */
     }
   }
   return null;
 }
+async function readInvokeError(err: unknown): Promise<string | null> {
+  const body = await readInvokeBody(err);
+  return body && typeof body.error === "string" && body.error
+    ? body.error
+    : null;
+}
+
+type Plan = "monthly" | "full";
+type PlanOptions = {
+  monthly: { amount: number; monthsTotal: number };
+  full: { amount: number; fullBase: number };
+};
+const asPlan = (v: unknown): Plan | null =>
+  v === "full" || v === "monthly" ? v : null;
+const asPlanOptions = (v: unknown): PlanOptions | null => {
+  const o = v as PlanOptions | null | undefined;
+  return o &&
+    typeof o.monthly?.amount === "number" &&
+    typeof o.full?.amount === "number"
+    ? o
+    : null;
+};
+const lei = (bani: number) =>
+  new Intl.NumberFormat("ro-RO", { maximumFractionDigits: 0 }).format(
+    bani / 100,
+  );
+
+/** Monthly subscription vs. whole course upfront (−15%): same figures as the form. */
+const PlanChooser = ({
+  plan,
+  options,
+  disabled,
+  english,
+  onChange,
+}: {
+  plan: Plan;
+  options: PlanOptions;
+  disabled: boolean;
+  english: boolean;
+  onChange: (p: Plan) => void;
+}) => {
+  const items: {
+    plan: Plan;
+    title: string;
+    big: string;
+    sub: string;
+    badge?: string;
+  }[] = [
+    {
+      plan: "monthly",
+      title: english ? "Monthly subscription" : "Abonament lunar",
+      big: `${lei(options.monthly.amount)} LEI / ${english ? "month" : "lună"}`,
+      sub: `× ${options.monthly.monthsTotal} ${english ? "months" : "luni"}`,
+    },
+    {
+      plan: "full",
+      title: english ? "Whole course upfront" : "Tot cursul în avans",
+      big: `${lei(options.full.amount)} LEI`,
+      sub: `${lei(options.full.fullBase)} LEI`,
+      badge: "−15%",
+    },
+  ];
+  return (
+    <div
+      className="grid grid-cols-2 gap-2 mb-6"
+      role="radiogroup"
+      aria-label={english ? "Payment plan" : "Mod de plată"}
+    >
+      {items.map((o) => {
+        const active = plan === o.plan;
+        return (
+          <button
+            key={o.plan}
+            type="button"
+            role="radio"
+            aria-checked={active}
+            disabled={disabled}
+            onClick={() => !active && onChange(o.plan)}
+            className={`text-left rounded-lg border p-3 transition-colors disabled:opacity-60 ${
+              active
+                ? "border-primary bg-primary/5"
+                : "border-border bg-background hover:bg-muted"
+            }`}
+          >
+            <div className="flex items-center justify-between">
+              <span className="text-sm font-semibold text-foreground">
+                {o.title}
+              </span>
+              {o.badge && (
+                <span className="text-[10px] font-bold uppercase tracking-wide text-primary bg-primary/10 px-1.5 py-0.5 rounded-[4px]">
+                  {o.badge}
+                </span>
+              )}
+            </div>
+            <p className="mt-1 text-base font-bold text-foreground">{o.big}</p>
+            <p
+              className={`text-[11px] text-muted-foreground ${o.plan === "full" ? "line-through" : ""}`}
+            >
+              {o.sub}
+            </p>
+          </button>
+        );
+      })}
+    </div>
+  );
+};
 
 const PaymentForm = ({
   amount,
