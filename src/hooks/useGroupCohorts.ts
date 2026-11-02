@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import type { Cohort, CohortStatus } from "@/lib/cohortTypes";
+import { fallbackCohorts } from "@/data/fallbackGroups";
 
 export type { Cohort, CohortStatus } from "@/lib/cohortTypes";
 
@@ -51,7 +52,7 @@ async function fetchCohorts(
   ]);
   if (error) {
     console.error("[useGroupCohorts] load error", error);
-    return [];
+    return fallbackCohorts(formType, level, format, teachingLanguage);
   }
 
   const takenMap = new Map<string, number>();
@@ -107,7 +108,7 @@ export function useGroupCohorts(
         teachingLanguage ?? null,
       ).catch((err) => {
         console.error("[useGroupCohorts] unreachable backend", err);
-        return [] as Cohort[];
+        return fallbackCohorts(formType, level, format, teachingLanguage);
       });
       if (active) {
         setCohorts(data);
