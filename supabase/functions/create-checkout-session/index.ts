@@ -1,4 +1,9 @@
 import { groupEnrolmentError } from "../_shared/group-enrolment.ts";
+import {
+  applyPlanChange,
+  hasPlan,
+  planOptions,
+} from "../_shared/registration-plan.ts";
 // Hosted Stripe Checkout fallback. When js.stripe.com is blocked in the
 // visitor's browser (Brave Shields, adblockers, DNS filters, corporate Wi-Fi,
 // etc.), the embedded Elements flow on /checkout can't load. This function
@@ -35,7 +40,9 @@ serve(async (req) => {
   }
 
   try {
-    const { registrationId, plan, setup, booking } = await req.json();
+    // `plan` from older clients is ignored: the plan is read from the row.
+    const { registrationId, changePlan, quote, setup, booking } =
+      await req.json();
     if (!registrationId || typeof registrationId !== "string") {
       return new Response(
         JSON.stringify({ error: "registrationId is required" }),
@@ -59,7 +66,7 @@ serve(async (req) => {
     const { data: reg } = await supabaseAdmin
       .from("registrations")
       .select(
-        "id, created_at, form_type, payment_status, email, name, quantity, level, cohort_id, format, stripe_session_id, lead_status",
+        "id, created_at, form_type, payment_status, email, name, quantity, level, cohort_id, format, stripe_session_id, lead_status, plan",
       )
       .eq("id", registrationId)
       .maybeSingle();
@@ -98,6 +105,26 @@ serve(async (req) => {
       );
     }
 
+    // Group / kids plan: read from the row. The buyer may switch it on
+    // /checkout (changePlan), which is written to the row before pricing.
+    // `quote: true` only reports the plan and both amounts, creating nothing,
+    // so the hosted-fallback screen can offer the choice before redirecting.
+    const plan = hasPlan(reg.form_type)
+      ? await applyPlanChange(supabaseAdmin, reg, changePlan)
+      : null;
+    if (quote === true) {
+      return new Response(
+        JSON.stringify({
+          plan,
+          planOptions: plan ? planOptions(reg) : null,
+        }),
+        {
+          status: 200,
+          headers: { ...corsHeaders, "Content-Type": "application/json" },
+        },
+      );
+    }
+
     const stripe = new Stripe(Deno.env.get("STRIPE_SECRET_KEY") || "", {
       apiVersion: "2025-08-27.basil",
     });
@@ -109,7 +136,9 @@ serve(async (req) => {
     // DB with it; the camelCase param would leave the page "pending" forever.
     const regSig = await signRegistrationId(registrationId);
     const successUrl = `${origin}/payment-status?registration_id=${encodeURIComponent(registrationId)}&sig=${regSig}&courseType=${encodeURIComponent(reg.form_type ?? "group")}&session_id={CHECKOUT_SESSION_ID}`;
-    const cancelUrl = `${origin}/checkout?courseType=${encodeURIComponent(reg.form_type ?? "group")}&registrationId=${encodeURIComponent(registrationId)}&email=${encodeURIComponent(reg.email ?? "")}&name=${encodeURIComponent(reg.name ?? "")}&fallback=1`;
+    // plan + quantity ride along so the page comes back as it was; the row
+    // (reg.plan) stays the authority for what is charged.
+    const cancelUrl = `${origin}/checkout?courseType=${encodeURIComponent(reg.form_type ?? "group")}&registrationId=${encodeURIComponent(registrationId)}&email=${encodeURIComponent(reg.email ?? "")}&name=${encodeURIComponent(reg.name ?? "")}${plan ? `&plan=${plan}` : ""}&quantity=${encodeURIComponent(String(reg.quantity ?? 1))}&fallback=1`;
 
     // The slot (trial) or first lesson (private) rides along in the session
     // metadata and is booked by the webhook once Stripe confirms. Metadata
@@ -155,10 +184,25 @@ serve(async (req) => {
       );
     }
 
+    // A trial lead paying here converts to a private lesson (their freebie
+    // is spent) — price it as private instead of failing on the raw type.
+    const courseType = (
+      reg.form_type === "trial" ? "private" : reg.form_type
+    ) as "group" | "private" | "kids";
+    // The plan comes from the row (applied above), never from the request.
+    const isSubscription = hasPlan(courseType) && plan === "monthly";
+    const expectedMode: Stripe.Checkout.SessionCreateParams.Mode =
+      setup === true ? "setup" : isSubscription ? "subscription" : "payment";
+
     // Best-effort reuse: if we already created a session and it's still open,
     // return its URL instead of stacking duplicates.
     // Not when a slot comes with the request: the open session carries the slot
     // picked last time, and reusing it would book that one instead.
+    // Only when it is the same kind of session: an open monthly-subscription
+    // session must not be handed back to someone who now pays in full (or the
+    // other way round). A mismatched open session is expired so it can no
+    // longer be paid, and the new one gets its own idempotency key.
+    let replacedSuffix = "";
     if (
       !bookingMeta.booking_start_at &&
       reg.stripe_session_id &&
@@ -169,26 +213,27 @@ serve(async (req) => {
           reg.stripe_session_id,
         );
         if (prior.status === "open" && prior.url) {
-          return new Response(
-            JSON.stringify({ url: prior.url, sessionId: prior.id }),
-            {
-              headers: { ...corsHeaders, "Content-Type": "application/json" },
-              status: 200,
-            },
-          );
+          if (prior.mode === expectedMode) {
+            return new Response(
+              JSON.stringify({ url: prior.url, sessionId: prior.id, plan }),
+              {
+                headers: { ...corsHeaders, "Content-Type": "application/json" },
+                status: 200,
+              },
+            );
+          }
+          try {
+            await stripe.checkout.sessions.expire(prior.id);
+          } catch (expireErr) {
+            console.warn("could not expire mismatched session:", expireErr);
+          }
+          replacedSuffix = `_r${prior.id.slice(-12)}`;
         }
       } catch (_e) {
         // fall through to create a new one
       }
     }
 
-    // A trial lead paying here converts to a private lesson (their freebie
-    // is spent) — price it as private instead of failing on the raw type.
-    const courseType = (
-      reg.form_type === "trial" ? "private" : reg.form_type
-    ) as "group" | "private" | "kids";
-    const isSubscription =
-      (courseType === "group" || courseType === "kids") && plan !== "full";
     const quantity = Math.max(
       1,
       Math.min(100, Number.parseInt(String(reg.quantity ?? 1), 10) || 1),
@@ -284,7 +329,7 @@ serve(async (req) => {
           },
         },
         {
-          idempotencyKey: `cos_setup_${registrationId}_${Math.floor(Date.now() / 3_600_000)}`,
+          idempotencyKey: `cos_setup_${registrationId}_${Math.floor(Date.now() / 3_600_000)}${replacedSuffix}`,
         },
       );
       // Trace only — a setup session is not a payment, so payment_status is
@@ -361,7 +406,7 @@ serve(async (req) => {
         // the previous session expired (24 h) isn't pinned by Stripe's
         // idempotency layer to the dead session forever.
         {
-          idempotencyKey: `cos_sub_${registrationId}_${Math.floor(Date.now() / 3_600_000)}`,
+          idempotencyKey: `cos_sub_${registrationId}_${Math.floor(Date.now() / 3_600_000)}${replacedSuffix}`,
         },
       );
     } else {
@@ -431,7 +476,7 @@ serve(async (req) => {
         // The slot is part of the key, so picking another time in the same hour
         // opens a new session instead of Stripe replaying the old one.
         {
-          idempotencyKey: `cos_pay_${registrationId}_${Math.floor(Date.now() / 3_600_000)}${
+          idempotencyKey: `cos_pay_${registrationId}_${Math.floor(Date.now() / 3_600_000)}${replacedSuffix}${
             isPrivate && bookingMeta.booking_start_at
               ? `_${bookingMeta.booking_start_at}${bookingMeta.booking_weekly ? "_w" : ""}`
               : ""

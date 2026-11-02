@@ -1265,6 +1265,7 @@ export type Database = {
           payment_method: string | null
           payment_status: string
           phone: string
+          plan: string
           quantity: number
           referral_code: string | null
           refund_reason: string | null
@@ -1319,6 +1320,7 @@ export type Database = {
           payment_method?: string | null
           payment_status?: string
           phone: string
+          plan?: string
           quantity?: number
           referral_code?: string | null
           refund_reason?: string | null
@@ -1373,6 +1375,7 @@ export type Database = {
           payment_method?: string | null
           payment_status?: string
           phone?: string
+          plan?: string
           quantity?: number
           referral_code?: string | null
           refund_reason?: string | null

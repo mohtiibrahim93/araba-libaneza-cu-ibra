@@ -26,19 +26,132 @@ const COURSE_LABEL: Record<CourseType, string> = {
 // supabase.functions.invoke wraps non-2xx responses in a FunctionsHttpError
 // whose .context holds the original Response — without this, every server
 // error degrades to the cryptic "Edge Function returned a non-2xx status code".
-async function readInvokeError(err: unknown): Promise<string | null> {
+type InvokeErrorBody = {
+  error?: unknown;
+  code?: unknown;
+  plan?: unknown;
+  planOptions?: unknown;
+};
+async function readInvokeBody(err: unknown): Promise<InvokeErrorBody | null> {
   const ctx = (err as { context?: Response })?.context;
   if (ctx && typeof ctx.json === "function") {
     try {
-      const body = await ctx.json();
-      if (body && typeof body.error === "string" && body.error)
-        return body.error;
+      const body = await ctx.clone().json();
+      if (body && typeof body === "object") return body as InvokeErrorBody;
     } catch {
       /* not json */
     }
   }
   return null;
 }
+async function readInvokeError(err: unknown): Promise<string | null> {
+  const body = await readInvokeBody(err);
+  return body && typeof body.error === "string" && body.error
+    ? body.error
+    : null;
+}
+
+type Plan = "monthly" | "full";
+type PlanOptions = {
+  monthly: { amount: number; monthsTotal: number };
+  full: { amount: number; fullBase: number };
+};
+const asPlan = (v: unknown): Plan | null =>
+  v === "full" || v === "monthly" ? v : null;
+const asPlanOptions = (v: unknown): PlanOptions | null => {
+  const o = v as PlanOptions | null | undefined;
+  return o &&
+    typeof o.monthly?.amount === "number" &&
+    typeof o.full?.amount === "number"
+    ? o
+    : null;
+};
+const lei = (bani: number) =>
+  new Intl.NumberFormat("ro-RO", { maximumFractionDigits: 0 }).format(
+    bani / 100,
+  );
+
+/** Monthly subscription vs. whole course upfront (−15%): same figures as the form. */
+const PlanChooser = ({
+  plan,
+  options,
+  disabled,
+  english,
+  titles,
+  onChange,
+}: {
+  plan: Plan;
+  options: PlanOptions;
+  disabled: boolean;
+  english: boolean;
+  titles: { monthly: string; full: string };
+  onChange: (p: Plan) => void;
+}) => {
+  const items: {
+    plan: Plan;
+    title: string;
+    big: string;
+    sub: string;
+    badge?: string;
+  }[] = [
+    {
+      plan: "monthly",
+      title: titles.monthly,
+      big: `${lei(options.monthly.amount)} LEI / ${english ? "month" : "lună"}`,
+      sub: `× ${options.monthly.monthsTotal} ${english ? "months" : "luni"}`,
+    },
+    {
+      plan: "full",
+      title: titles.full,
+      big: `${lei(options.full.amount)} LEI`,
+      sub: `${lei(options.full.fullBase)} LEI`,
+      badge: "−15%",
+    },
+  ];
+  return (
+    <div
+      className="grid grid-cols-2 gap-2 mb-6"
+      role="radiogroup"
+      aria-label={english ? "Payment plan" : "Mod de plată"}
+    >
+      {items.map((o) => {
+        const active = plan === o.plan;
+        return (
+          <button
+            key={o.plan}
+            type="button"
+            role="radio"
+            aria-checked={active}
+            disabled={disabled}
+            onClick={() => !active && onChange(o.plan)}
+            className={`text-left rounded-lg border p-3 transition-colors disabled:opacity-60 ${
+              active
+                ? "border-primary bg-primary/5"
+                : "border-border bg-background hover:bg-muted"
+            }`}
+          >
+            <div className="flex items-center justify-between">
+              <span className="text-sm font-semibold text-foreground">
+                {o.title}
+              </span>
+              {o.badge && (
+                <span className="text-[10px] font-bold uppercase tracking-wide text-primary bg-primary/10 px-1.5 py-0.5 rounded-[4px]">
+                  {o.badge}
+                </span>
+              )}
+            </div>
+            <p className="mt-1 text-base font-bold text-foreground">{o.big}</p>
+            <p
+              className={`text-[11px] text-muted-foreground ${o.plan === "full" ? "line-through" : ""}`}
+            >
+              {o.sub}
+            </p>
+          </button>
+        );
+      })}
+    </div>
+  );
+};
 
 const PaymentForm = ({
   amount,
@@ -150,15 +263,26 @@ const Checkout = () => {
     1,
     Math.min(100, Number.parseInt(params.get("quantity") || "1", 10) || 1),
   );
-  // Group only: "monthly" (subscription, default) vs "full" (pay the whole
-  // course upfront as one charge). Private ignores this.
-  const groupPlan = params.get("plan") === "full" ? "full" : "monthly";
+  // Group / kids: "monthly" (subscription) vs "full" (whole course upfront,
+  // −15%). The registration row holds the plan; the `plan` URL parameter is
+  // only a first guess so the right payment is prepared without a round trip.
+  // The server answers plan_mismatch when the row says otherwise, and we
+  // follow the row. Private ignores this.
+  const hasPlan = courseType === "group" || courseType === "kids";
+  const [plan, setPlan] = useState<Plan>(
+    params.get("plan") === "full" ? "full" : "monthly",
+  );
+  const [planOptions, setPlanOptions] = useState<PlanOptions | null>(null);
+  // A switch the buyer made on this page, sent once as `changePlan` so the
+  // server writes it to the row before preparing the payment.
+  const pendingChange = useRef<Plan | null>(null);
   // Force the hosted-Stripe-Checkout fallback: set via `?fallback=1` when the
   // user returns from cancel_url, or auto-flipped below if js.stripe.com fails
   // to load / times out in this browser.
   const forceFallback = params.get("fallback") === "1";
 
-  const { lang } = useI18n();
+  const { lang, t } = useI18n();
+  const english = lang === "en";
   const [verifiedEmail, setVerifiedEmail] = useState<string | null>(null);
   const emailVerified = !!email && verifiedEmail === email;
   // The registration form cannot send the student their confirmation: they are
@@ -198,12 +322,6 @@ const Checkout = () => {
 
   useEffect(() => {
     if (!emailVerified) return;
-    // If we're already in fallback mode there's no point trying to load
-    // Stripe.js at all — the visitor's browser blocks it.
-    if (forceFallback) {
-      setPhase("ready");
-      return;
-    }
     // Opened directly, or from a stale link: there is no registration to
     // charge. Say so in plain words instead of passing the server's
     // "registrationId is required" through to the visitor.
@@ -217,38 +335,83 @@ const Checkout = () => {
       return;
     }
     let cancelled = false;
+    // Back from Stripe's hosted page (cancel): the embedded form is not tried
+    // again. Group / kids get the stored plan and both amounts so the buyer
+    // can switch before going back to Stripe.
+    if (forceFallback) {
+      if (!hasPlan) {
+        setPhase("ready");
+        return;
+      }
+      (async () => {
+        const { data } = await supabase.functions.invoke(
+          "create-checkout-session",
+          { body: { registrationId, email, quote: true } },
+        );
+        if (cancelled) return;
+        const p = asPlan(data?.plan);
+        if (p) setPlan(p);
+        setPlanOptions(asPlanOptions(data?.planOptions));
+        setPhase("ready");
+      })();
+      return () => {
+        cancelled = true;
+      };
+    }
+    setPhase("initializing");
+    setClientSecret(null);
     (async () => {
       try {
         if (!courseType || !["group", "private", "kids"].includes(courseType)) {
           throw new Error("Tip de curs invalid");
         }
         // Once per visit to this page. The effect re-runs when the query
-        // params or the fallback flag change, and a retry is not a second
-        // checkout.
+        // params, the plan or the fallback flag change, and a retry is not a
+        // second checkout.
         if (!checkoutStartSent.current) {
           checkoutStartSent.current = true;
           trackCheckoutStart(courseType);
         }
         // Group / kids monthly → subscription. Pay-in-full and private → a
         // one-time PaymentIntent (the edge function derives the amount).
-        const useSubscription =
-          (courseType === "group" || courseType === "kids") &&
-          groupPlan === "monthly";
+        const changePlan = pendingChange.current ?? undefined;
+        const useSubscription = hasPlan && plan === "monthly";
         const { data, error: invokeError } = useSubscription
           ? await supabase.functions.invoke("create-subscription", {
-              body: { email, name, registrationId },
+              body: { email, name, registrationId, changePlan },
             })
           : await supabase.functions.invoke("create-payment-intent", {
-              body: { courseType, email, name, registrationId, quantity },
+              body: {
+                courseType,
+                email,
+                name,
+                registrationId,
+                quantity,
+                changePlan,
+              },
             });
         if (invokeError) {
-          const serverMsg = await readInvokeError(invokeError);
+          const body = await readInvokeBody(invokeError);
+          // The row holds the other plan: follow it (this re-runs the effect).
+          const rowPlan = asPlan(body?.plan);
+          if (
+            !cancelled &&
+            body?.code === "plan_mismatch" &&
+            rowPlan &&
+            rowPlan !== plan
+          ) {
+            pendingChange.current = null;
+            setPlanOptions(asPlanOptions(body?.planOptions));
+            setPlan(rowPlan);
+            return;
+          }
           throw new Error(
-            serverMsg ??
-              invokeError.message ??
+            (typeof body?.error === "string" && body.error) ||
+              invokeError.message ||
               "Eroare la inițializarea plății",
           );
         }
+        pendingChange.current = null;
         // Safe diagnostic log: never print full clientSecret or full key.
         console.info("[checkout] payment-intent response", {
           amount: data?.amount,
@@ -268,16 +431,19 @@ const Checkout = () => {
           throw new Error("Sumă invalidă returnată de server");
         }
         if (cancelled) return;
+        const opts = asPlanOptions(data.planOptions);
+        if (opts) setPlanOptions(opts);
         setClientSecret(data.clientSecret);
-        const promise = loadStripe(data.publishableKey);
-        setStripePromise(promise);
-        promise
-          .then((s) => {
-            if (!cancelled && !s) setStripeLoadFailed(true);
-          })
-          .catch(() => {
-            if (!cancelled) setStripeLoadFailed(true);
-          });
+        // One Stripe.js load per page: a plan switch only needs a new secret.
+        if (!stripePromise) {
+          const promise = loadStripe(data.publishableKey);
+          setStripePromise(promise);
+          promise
+            .then((s) => {
+              if (!s) setStripeLoadFailed(true);
+            })
+            .catch(() => setStripeLoadFailed(true));
+        }
         setAmount(data.amount);
         setSig(typeof data.sig === "string" ? data.sig : "");
         setMonthsTotal(
@@ -287,6 +453,7 @@ const Checkout = () => {
         setPhase("ready");
       } catch (err) {
         console.error(err);
+        if (cancelled) return;
         const msg =
           err instanceof Error ? err.message : "Eroare la inițializarea plății";
         setError(msg);
@@ -296,16 +463,23 @@ const Checkout = () => {
     return () => {
       cancelled = true;
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
     courseType,
     email,
     name,
     registrationId,
     quantity,
-    groupPlan,
+    plan,
     forceFallback,
     emailVerified,
   ]);
+
+  const switchPlan = (next: Plan) => {
+    if (next === plan) return;
+    pendingChange.current = next;
+    setPlan(next);
+  };
 
   // Watchdog: some blockers never reject the js.stripe.com fetch, they just
   // hang. If Stripe.js hasn't resolved after 6 s while we're supposedly
@@ -341,17 +515,15 @@ const Checkout = () => {
     }
     setHostedLoading(true);
     try {
+      // The plan shown here is written to the row first (changePlan), so the
+      // hosted session charges exactly what the buyer picked.
       const { data, error: invokeError } = await supabase.functions.invoke(
         "create-checkout-session",
         {
           body: {
             registrationId,
             email,
-            plan:
-              (courseType === "group" || courseType === "kids") &&
-              groupPlan === "full"
-                ? "full"
-                : "monthly",
+            ...(hasPlan ? { changePlan: plan } : {}),
           },
         },
       );
@@ -374,13 +546,17 @@ const Checkout = () => {
   };
 
   // When the embedded card form can't load, don't stop at an error screen —
-  // go straight to Stripe's hosted page. The manual button below stays as a
-  // backup if the automatic redirect itself fails.
+  // go straight to Stripe's hosted page with the plan already on the row. The
+  // manual button below stays as a backup if the automatic redirect fails.
+  // Back from Stripe's cancel page (forceFallback) a group / kids buyer gets
+  // the plan choice and a button instead, so they can switch before paying.
+  const offerChoiceFirst = forceFallback && hasPlan;
   const autoRedirectRef = useRef(false);
   useEffect(() => {
     if (
       !emailVerified ||
       !showFallback ||
+      offerChoiceFirst ||
       autoRedirectRef.current ||
       !registrationId
     )
@@ -388,7 +564,7 @@ const Checkout = () => {
     autoRedirectRef.current = true;
     void startHostedCheckout();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [showFallback, registrationId, emailVerified]);
+  }, [showFallback, registrationId, emailVerified, offerChoiceFirst]);
 
   const options = useMemo(
     () =>
@@ -405,6 +581,20 @@ const Checkout = () => {
     !!stripePromise &&
     !!options &&
     amount > 0;
+
+  const chooser =
+    emailVerified && hasPlan && planOptions ? (
+      <PlanChooser
+        plan={plan}
+        options={planOptions}
+        english={english}
+        titles={{ monthly: t.groupPlanMonthly, full: t.groupPlanFull }}
+        disabled={
+          hostedLoading || (!showFallback && phase === "initializing")
+        }
+        onChange={switchPlan}
+      />
+    ) : null;
 
   return (
     <div className="min-h-screen bg-muted/30 py-12 px-gutter">
@@ -428,12 +618,38 @@ const Checkout = () => {
             </p>
           </div>
 
+          {chooser}
+
           {!emailVerified ? (
             <CheckoutEmailGate
               email={email}
-              english={lang === "en"}
+              english={english}
               onVerified={onEmailVerified}
             />
+          ) : offerChoiceFirst && !hostedAutoFailed ? (
+            /* Back from Stripe's page: choose the plan (above), then go back. */
+            <div className="text-center space-y-3">
+              <Button
+                onClick={startHostedCheckout}
+                disabled={hostedLoading || phase !== "ready"}
+                size="lg"
+                className="w-full"
+              >
+                {hostedLoading || phase !== "ready" ? (
+                  <>
+                    <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                    Se pregătește...
+                  </>
+                ) : english ? (
+                  "Continue to secure Stripe payment"
+                ) : (
+                  "Continuă către plata securizată Stripe"
+                )}
+              </Button>
+              <p className="text-xs text-muted-foreground">
+                Plată securizată procesată de Stripe.
+              </p>
+            </div>
           ) : showFallback && !hostedAutoFailed ? (
             /* Seamless path: the embedded form can't load here, so we're
                already redirecting to Stripe's hosted page — no error screen,
@@ -498,7 +714,11 @@ const Checkout = () => {
               </p>
             </div>
           ) : (
-            <Elements stripe={stripePromise!} options={options!}>
+            <Elements
+              key={clientSecret!}
+              stripe={stripePromise!}
+              options={options!}
+            >
               <PaymentForm
                 amount={amount}
                 currency={currency}
