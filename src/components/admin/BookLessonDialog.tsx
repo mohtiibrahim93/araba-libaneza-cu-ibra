@@ -84,6 +84,9 @@ export default function BookLessonDialog({
   const [bkPaid, setBkPaid] = useState(false);
   // "Gratuită (recuperare)": a lesson given for free. Excludes "A plătit deja".
   const [bkFree, setBkFree] = useState(false);
+  // "Lecție de probă": the free 30-minute trial, on its own registration
+  // (owner, 2 Nov 2026). Excludes the package, paid and make-up choices.
+  const [bkTrial, setBkTrial] = useState(false);
   const [bkNotes, setBkNotes] = useState("");
   const [bkBusy, setBkBusy] = useState(false);
   const [bkWarn, setBkWarn] = useState<string[] | null>(null);
@@ -116,6 +119,7 @@ export default function BookLessonDialog({
     setBkQuantity(1);
     setBkPaid(false);
     setBkFree(false);
+    setBkTrial(false);
     setBkNotes("");
     setBkWarn(null);
     setBkStudentId("");
@@ -195,9 +199,10 @@ export default function BookLessonDialog({
         student_phone: bkPhone.trim(),
         start_at: startAt,
         format: bkFormat,
-        quantity: bkQuantity,
-        paid: bkPaid && !bkFree,
-        ...(bkFree ? { free: true } : {}),
+        quantity: bkTrial ? 1 : bkQuantity,
+        paid: bkPaid && !bkFree && !bkTrial,
+        ...(bkFree && !bkTrial ? { free: true } : {}),
+        ...(bkTrial ? { trial: true } : {}),
         notes: bkNotes.trim() || undefined,
         force,
       });
@@ -369,6 +374,22 @@ export default function BookLessonDialog({
             </select>
           </div>
           {(!bkStudentId || bkExtra) && (
+            <label className="flex items-center gap-2 text-sm font-medium sm:col-span-2">
+              <input
+                type="checkbox"
+                checked={bkTrial}
+                onChange={(e) => {
+                  setBkTrial(e.target.checked);
+                  if (e.target.checked) {
+                    setBkPaid(false);
+                    setBkFree(false);
+                  }
+                }}
+              />
+              Lecție de probă (gratuită, 30 min)
+            </label>
+          )}
+          {(!bkStudentId || bkExtra) && !bkTrial && (
             <>
               <div className="space-y-1.5">
                 <Label className="text-xs">Câte lecții a luat</Label>

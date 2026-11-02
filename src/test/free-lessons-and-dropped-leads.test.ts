@@ -37,12 +37,17 @@ describe("a lesson given for free", () => {
   it("can be booked as free from Lecție în plus", () => {
     expect(code(admin)).toContain(code("const free = b.free === true;"));
     expect(code(admin)).toContain(
-      code('payment_status: free ? "free" : paid ? "paid" : "unpaid",'),
+      code(
+        'payment_status: trial ? "unpaid" : free ? "free" : paid ? "paid" : "unpaid",',
+      ),
     );
     // The booking form lives in BookLessonDialog since 26 Oct 2026.
     const ui = read("src/components/admin/BookLessonDialog.tsx");
-    expect(code(ui)).toContain(code("...(bkFree ? { free: true } : {}),"));
-    expect(code(ui)).toContain(code("paid: bkPaid && !bkFree,"));
+    // A trial (2 Nov 2026) is neither paid nor a make-up lesson.
+    expect(code(ui)).toContain(
+      code("...(bkFree && !bkTrial ? { free: true } : {}),"),
+    );
+    expect(code(ui)).toContain(code("paid: bkPaid && !bkFree && !bkTrial,"));
   });
 
   it("is marked free only from unpaid, never over a payment Stripe knows about", () => {

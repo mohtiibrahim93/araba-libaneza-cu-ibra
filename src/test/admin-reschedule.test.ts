@@ -187,15 +187,19 @@ describe("booking a private lesson from the panel", () => {
   it("books the private lesson type, by its real slug", () => {
     // "paid" is the 60-minute private lesson in booking_event_types; the
     // group courses are not bookings at all.
-    expect(head).toContain('event_type: "paid"');
+    // A hand-booked free trial (2 Nov 2026) is the "trial" type instead.
+    expect(head).toContain('event_type: trial ? "trial" : "paid"');
   });
 
   it("records unpaid rather than pending when it is not paid for", () => {
     // AGENTS.md: unpaid means no payment was attempted, which is exactly a
     // lesson agreed by hand. pending would claim money is in flight.
     // free: a lesson the owner gives for free (26 October 2026).
-    expect(head).toContain(
-      'payment_status: free ? "free" : paid ? "paid" : "unpaid"',
+    // A hand-booked trial owes nothing and is not revenue: unpaid too.
+    expect(code(head)).toContain(
+      code(
+        'payment_status: trial ? "unpaid" : free ? "free" : paid ? "paid" : "unpaid"',
+      ),
     );
     expect(head).not.toContain('"pending"');
   });

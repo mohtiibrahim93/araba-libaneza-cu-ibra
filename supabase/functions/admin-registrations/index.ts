@@ -4184,6 +4184,7 @@ Deno.serve(async (req) => {
         extra?: unknown;
         free?: unknown;
         quiet?: unknown;
+        trial?: unknown;
       };
       const name =
         typeof b.student_name === "string" ? b.student_name.trim() : "";
@@ -4202,6 +4203,10 @@ Deno.serve(async (req) => {
       // A lesson the owner gives for free (a make-up lesson): nothing is owed.
       const free = b.free === true;
       const force = b.force === true;
+      // A free trial booked by hand (owner, 2 Nov 2026): its own trial
+      // registration and the 30-minute trial lesson, never a paid lesson on a
+      // student's package. The one-trial-per-email rule still applies.
+      const trial = b.trial === true;
 
       // An existing private student (a website purchase or an earlier
       // hand-made booking): the lesson goes on their own registration, so a
@@ -4263,13 +4268,13 @@ Deno.serve(async (req) => {
         return jsonResponse({ error: "Data sau ora nu sunt valide." });
       }
 
-      const onExisting = existing !== null && !extra;
+      const onExisting = existing !== null && !extra && !trial;
       const registrationId = onExisting ? existing!.id : crypto.randomUUID();
       const { error: regErr } = onExisting
         ? { error: null }
         : await supabase.from("registrations").insert({
             id: registrationId,
-            form_type: "private",
+            form_type: trial ? "trial" : "private",
             source: "admin",
             name: studentName,
             // An extra lesson keeps the same account email as the student's other
@@ -4281,11 +4286,18 @@ Deno.serve(async (req) => {
             phone: studentPhone || null,
             language,
             format: format === "physical" ? "fizic" : "online",
-            quantity,
+            quantity: trial ? 1 : quantity,
             // unpaid is "no payment has been attempted", which is exactly true of
             // a lesson agreed by hand and not yet paid for. Never pending: there
             // is no payment in flight. free when the owner gives it for free.
-            payment_status: free ? "free" : paid ? "paid" : "unpaid",
+            // A trial owes nothing and is not revenue: unpaid, like the site's.
+            payment_status: trial
+              ? "unpaid"
+              : free
+                ? "free"
+                : paid
+                  ? "paid"
+                  : "unpaid",
             // Not a lead to chase: the owner has already spoken to them.
             lead_status: "contacted",
           });
@@ -4303,8 +4315,9 @@ Deno.serve(async (req) => {
             "Content-Type": "application/json",
           },
           body: JSON.stringify({
-            // "paid" is the private 60-minute lesson in booking_event_types.
-            event_type: "paid",
+            // "paid" is the private 60-minute lesson in booking_event_types;
+            // "trial" the free 30-minute one.
+            event_type: trial ? "trial" : "paid",
             registration_id: registrationId,
             start_at: startAt,
             format,
@@ -4355,6 +4368,7 @@ Deno.serve(async (req) => {
               format,
               quantity,
               paid,
+              ...(trial ? { trial: true } : {}),
               forced: force,
               ...(existing ? { extra_for: existing.id } : {}),
             },
