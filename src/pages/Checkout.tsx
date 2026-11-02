@@ -74,12 +74,14 @@ const PlanChooser = ({
   options,
   disabled,
   english,
+  titles,
   onChange,
 }: {
   plan: Plan;
   options: PlanOptions;
   disabled: boolean;
   english: boolean;
+  titles: { monthly: string; full: string };
   onChange: (p: Plan) => void;
 }) => {
   const items: {
@@ -91,13 +93,13 @@ const PlanChooser = ({
   }[] = [
     {
       plan: "monthly",
-      title: english ? "Monthly subscription" : "Abonament lunar",
+      title: titles.monthly,
       big: `${lei(options.monthly.amount)} LEI / ${english ? "month" : "lună"}`,
       sub: `× ${options.monthly.monthsTotal} ${english ? "months" : "luni"}`,
     },
     {
       plan: "full",
-      title: english ? "Whole course upfront" : "Tot cursul în avans",
+      title: titles.full,
       big: `${lei(options.full.amount)} LEI`,
       sub: `${lei(options.full.fullBase)} LEI`,
       badge: "−15%",
@@ -276,7 +278,7 @@ const Checkout = () => {
   // to load / times out in this browser.
   const forceFallback = params.get("fallback") === "1";
 
-  const { lang } = useI18n();
+  const { lang, t } = useI18n();
   const english = lang === "en";
   const [verifiedEmail, setVerifiedEmail] = useState<string | null>(null);
   const emailVerified = !!email && verifiedEmail === email;
@@ -583,6 +585,7 @@ const Checkout = () => {
         plan={plan}
         options={planOptions}
         english={english}
+        titles={{ monthly: t.groupPlanMonthly, full: t.groupPlanFull }}
         disabled={
           hostedLoading || (!showFallback && phase === "initializing")
         }
