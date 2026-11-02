@@ -2262,7 +2262,8 @@ Deno.serve(async (req) => {
             : undefined;
       if (
         typeof id !== "string" ||
-        (outcome !== null && !["excused", "lost"].includes(outcome ?? ""))
+        (outcome !== null &&
+          !["excused", "lost", "bonus"].includes(outcome ?? ""))
       ) {
         return jsonResponse({ error: "Rezultat invalid." }, 400);
       }
@@ -2281,7 +2282,19 @@ Deno.serve(async (req) => {
           400,
         );
       const started = Date.parse(booking.start_at) <= Date.now();
-      if (outcome !== null && !started && booking.status !== "cancelled") {
+      // A bonus is the owner's gift and can be given before the lesson; the
+      // others judge a lesson that took place or was cancelled.
+      if (outcome === "bonus" && booking.status === "cancelled")
+        return jsonResponse(
+          { error: "O lecție anulată nu poate fi bonus." },
+          400,
+        );
+      if (
+        outcome !== null &&
+        outcome !== "bonus" &&
+        !started &&
+        booking.status !== "cancelled"
+      ) {
         return jsonResponse({ error: "Lecția nu a avut loc încă." }, 400);
       }
       const { error: uErr } = await supabase
@@ -4185,6 +4198,8 @@ Deno.serve(async (req) => {
         free?: unknown;
         quiet?: unknown;
         trial?: unknown;
+        bonus?: unknown;
+        duration_min?: unknown;
       };
       const name =
         typeof b.student_name === "string" ? b.student_name.trim() : "";
@@ -4207,6 +4222,11 @@ Deno.serve(async (req) => {
       // registration and the 30-minute trial lesson, never a paid lesson on a
       // student's package. The one-trial-per-email rule still applies.
       const trial = b.trial === true;
+      // A bonus lesson, the owner's gift (2 Nov 2026): on an existing
+      // student's own lesson list without counting in the package; for
+      // someone new, a free lesson of its own.
+      const bonus = !trial && b.bonus === true;
+      const durationMin = Number(b.duration_min);
 
       // An existing private student (a website purchase or an earlier
       // hand-made booking): the lesson goes on their own registration, so a
@@ -4318,6 +4338,12 @@ Deno.serve(async (req) => {
             // "paid" is the private 60-minute lesson in booking_event_types;
             // "trial" the free 30-minute one.
             event_type: trial ? "trial" : "paid",
+            ...(bonus ? { bonus: true } : {}),
+            ...(Number.isInteger(durationMin) &&
+            durationMin >= 10 &&
+            durationMin <= 240
+              ? { duration_min: durationMin }
+              : {}),
             registration_id: registrationId,
             start_at: startAt,
             format,
@@ -4369,6 +4395,7 @@ Deno.serve(async (req) => {
               quantity,
               paid,
               ...(trial ? { trial: true } : {}),
+              ...(bonus ? { bonus: true } : {}),
               forced: force,
               ...(existing ? { extra_for: existing.id } : {}),
             },

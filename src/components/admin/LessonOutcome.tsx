@@ -5,7 +5,7 @@ import {
   packageLessonLabel,
 } from "../../../supabase/functions/_shared/package-lessons";
 
-export type LessonOutcome = "excused" | "lost" | null;
+export type LessonOutcome = "excused" | "lost" | "bonus" | null;
 
 export interface PackageLessonLike {
   id: string;
@@ -65,7 +65,8 @@ export function PackageLessonBadge({ lesson }: { lesson: PackageLessonLike }) {
 
 /**
  * The owner's word on a package lesson that took place or was cancelled:
- * scuzat (does not count) or pierdută (counts). Hidden before the lesson
+ * scuzat (does not count), pierdută (counts) or bonus (never counts; can be
+ * set before the lesson too). Otherwise hidden before the lesson
  * starts unless it was cancelled.
  */
 export function LessonOutcomeControl({
@@ -80,7 +81,8 @@ export function LessonOutcomeControl({
   if (!isPackageLesson(lesson) || lesson.status === "rescheduled") return null;
   const started = Date.parse(lesson.start_at) <= Date.now();
   const cancelled = lesson.status === "cancelled";
-  if (!started && !cancelled) return null;
+  // Before the lesson only "bonus" (the owner's gift, 2 Nov 2026) can be set.
+  const upcoming = !started && !cancelled;
   const counts = countsAgainstPackage(lesson);
 
   const save = async (value: string) => {
@@ -113,7 +115,8 @@ export function LessonOutcomeControl({
           className="mt-1 block w-full rounded border border-input bg-background px-2 py-1 text-xs"
           value={
             lesson.trial_outcome === "excused" ||
-            lesson.trial_outcome === "lost"
+            lesson.trial_outcome === "lost" ||
+            lesson.trial_outcome === "bonus"
               ? lesson.trial_outcome
               : ""
           }
@@ -121,16 +124,23 @@ export function LessonOutcomeControl({
           onChange={(e) => void save(e.target.value)}
         >
           <option value="">
-            {cancelled
-              ? "Anulată la timp — nu se numără"
-              : "A avut loc — se numără"}
+            {upcoming
+              ? "Lecție din pachet — se numără"
+              : cancelled
+                ? "Anulată la timp — nu se numără"
+                : "A avut loc — se numără"}
           </option>
-          <option value="excused">Scuzat — nu se numără</option>
-          <option value="lost">
-            {cancelled
-              ? "Anulare târzie — pierdută (se numără)"
-              : "Nu a venit — pierdută (se numără)"}
-          </option>
+          {!upcoming && <option value="excused">Scuzat — nu se numără</option>}
+          {!upcoming && (
+            <option value="lost">
+              {cancelled
+                ? "Anulare târzie — pierdută (se numără)"
+                : "Nu a venit — pierdută (se numără)"}
+            </option>
+          )}
+          {!cancelled && (
+            <option value="bonus">Bonus oferit de mine — nu se numără</option>
+          )}
         </select>
       </label>
       {error && (

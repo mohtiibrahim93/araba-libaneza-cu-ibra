@@ -31,7 +31,8 @@ describe("paid lessons are capped at the quantity bought", () => {
       src.indexOf('code: "lessons_used_up"'),
     );
     // Free bookings (the trial and the level check with Ibra) are not lessons.
-    expect(block).toContain("if (!isFree) {");
+    // The owner's bonus (2 Nov 2026) is the one exception, decided above.
+    expect(block).toContain("if (!isFree && !bonus) {");
     expect(block).not.toContain("internalCall");
   });
 

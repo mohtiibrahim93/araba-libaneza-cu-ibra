@@ -82,11 +82,13 @@ export default function BookLessonDialog({
   const [bkFormat, setBkFormat] = useState<"online" | "physical">("online");
   const [bkQuantity, setBkQuantity] = useState(1);
   const [bkPaid, setBkPaid] = useState(false);
-  // "Gratuită (recuperare)": a lesson given for free. Excludes "A plătit deja".
-  const [bkFree, setBkFree] = useState(false);
-  // "Lecție de probă": the free 30-minute trial, on its own registration
-  // (owner, 2 Nov 2026). Excludes the package, paid and make-up choices.
-  const [bkTrial, setBkTrial] = useState(false);
+  // The kind of lesson (owner, 2 Nov 2026): paid; free trial (its own
+  // registration, 30 min unless agreed otherwise); recuperare (free make-up,
+  // its own registration); bonus (the owner's gift, never counted).
+  const [bkKind, setBkKind] = useState<"paid" | "trial" | "makeup" | "bonus">(
+    "paid",
+  );
+  const [bkDuration, setBkDuration] = useState(30);
   const [bkNotes, setBkNotes] = useState("");
   const [bkBusy, setBkBusy] = useState(false);
   const [bkWarn, setBkWarn] = useState<string[] | null>(null);
@@ -118,8 +120,8 @@ export default function BookLessonDialog({
     setBkFormat(initial?.format ?? "online");
     setBkQuantity(1);
     setBkPaid(false);
-    setBkFree(false);
-    setBkTrial(false);
+    setBkKind("paid");
+    setBkDuration(30);
     setBkNotes("");
     setBkWarn(null);
     setBkStudentId("");
@@ -191,7 +193,8 @@ export default function BookLessonDialog({
         ...(bkStudentId
           ? {
               registration_id: bkStudentId,
-              ...(bkExtra ? { extra: true } : {}),
+              // A make-up lesson is its own free registration, as before.
+              ...(bkExtra || bkKind === "makeup" ? { extra: true } : {}),
             }
           : {}),
         student_name: bkName.trim(),
@@ -199,10 +202,13 @@ export default function BookLessonDialog({
         student_phone: bkPhone.trim(),
         start_at: startAt,
         format: bkFormat,
-        quantity: bkTrial ? 1 : bkQuantity,
-        paid: bkPaid && !bkFree && !bkTrial,
-        ...(bkFree && !bkTrial ? { free: true } : {}),
-        ...(bkTrial ? { trial: true } : {}),
+        quantity: bkKind === "paid" ? bkQuantity : 1,
+        paid: bkKind === "paid" && bkPaid,
+        ...(bkKind === "makeup" || bkKind === "bonus" ? { free: true } : {}),
+        ...(bkKind === "trial"
+          ? { trial: true, duration_min: bkDuration }
+          : {}),
+        ...(bkKind === "bonus" ? { bonus: true } : {}),
         notes: bkNotes.trim() || undefined,
         force,
       });
@@ -373,23 +379,73 @@ export default function BookLessonDialog({
               <option value="physical">La centru</option>
             </select>
           </div>
-          {(!bkStudentId || bkExtra) && (
-            <label className="flex items-center gap-2 text-sm font-medium sm:col-span-2">
-              <input
-                type="checkbox"
-                checked={bkTrial}
-                onChange={(e) => {
-                  setBkTrial(e.target.checked);
-                  if (e.target.checked) {
-                    setBkPaid(false);
-                    setBkFree(false);
-                  }
-                }}
+          {/* One kind per lesson (owner, 2 Nov 2026). Recuperare: free, when
+              the lesson was not fully held through the owner or for a real
+              reason. Bonus: the owner's gift, never counted in a package. */}
+          <fieldset className="space-y-2 sm:col-span-2">
+            <legend className="text-xs font-medium">Tip lecție</legend>
+            <div className="grid gap-2 sm:grid-cols-2">
+              {(
+                [
+                  ["paid", "Plătită"],
+                  ["trial", "Probă gratuită"],
+                  ["makeup", "Recuperare (gratuită)"],
+                  ["bonus", "Bonus oferit de mine (gratuită)"],
+                ] as const
+              ).map(([kind, label]) => (
+                <label
+                  key={kind}
+                  className={`flex min-h-11 cursor-pointer items-center gap-2 rounded-lg border px-3 text-sm ${bkKind === kind ? "border-primary bg-primary/10 font-semibold" : "border-input"}`}
+                >
+                  <input
+                    type="radio"
+                    name="lesson-kind"
+                    value={kind}
+                    checked={bkKind === kind}
+                    onChange={() => {
+                      setBkKind(kind);
+                      if (kind !== "paid") setBkPaid(false);
+                      if (kind === "trial") setBkDuration(30);
+                    }}
+                  />
+                  {label}
+                </label>
+              ))}
+            </div>
+            {bkKind === "makeup" && (
+              <p className="text-[11px] text-muted-foreground">
+                Când lecția nu s-a ținut din vina ta sau cursantul a avut un
+                motiv real. Nu datorează nimic.
+              </p>
+            )}
+            {bkKind === "bonus" && (
+              <p className="text-[11px] text-muted-foreground">
+                Cadou de la tine: nu se numără în pachet
+                {bkStudentId && !bkExtra
+                  ? " (apare în lecțiile lui, marcată Bonus)."
+                  : "."}
+              </p>
+            )}
+          </fieldset>
+          {bkKind === "trial" && (
+            <div className="space-y-1.5">
+              <Label className="text-xs">Durata probei (minute)</Label>
+              <Input
+                className="h-9"
+                type="number"
+                min={10}
+                max={240}
+                step={5}
+                value={bkDuration}
+                onChange={(e) =>
+                  setBkDuration(
+                    Math.min(240, Math.max(10, Number(e.target.value) || 30)),
+                  )
+                }
               />
-              Lecție de probă (gratuită, 30 min)
-            </label>
+            </div>
           )}
-          {(!bkStudentId || bkExtra) && !bkTrial && (
+          {(!bkStudentId || bkExtra) && bkKind === "paid" && (
             <>
               <div className="space-y-1.5">
                 <Label className="text-xs">Câte lecții a luat</Label>
@@ -414,23 +470,9 @@ export default function BookLessonDialog({
                 <input
                   type="checkbox"
                   checked={bkPaid}
-                  onChange={(e) => {
-                    setBkPaid(e.target.checked);
-                    if (e.target.checked) setBkFree(false);
-                  }}
+                  onChange={(e) => setBkPaid(e.target.checked)}
                 />
                 A plătit deja
-              </label>
-              <label className="flex items-center gap-2 text-sm sm:col-span-2">
-                <input
-                  type="checkbox"
-                  checked={bkFree}
-                  onChange={(e) => {
-                    setBkFree(e.target.checked);
-                    if (e.target.checked) setBkPaid(false);
-                  }}
-                />
-                Gratuită (recuperare) — nu datorează nimic
               </label>
             </>
           )}

@@ -27,7 +27,47 @@ describe("manual booking can be a free trial", () => {
       "src/components/admin/BookLessonDialog.tsx",
       "utf8",
     );
-    expect(form).toContain("Lecție de probă (gratuită, 30 min)");
-    expect(form).toContain("...(bkTrial ? { trial: true } : {})");
+    expect(form).toContain('["trial", "Probă gratuită"]');
+    expect(form).toContain("trial: true, duration_min: bkDuration");
+  });
+});
+
+describe("a bonus lesson never counts in the package", () => {
+  it("is not counted, booked or marked", async () => {
+    const { countsAgainstPackage } =
+      await import("../../supabase/functions/_shared/package-lessons");
+    expect(
+      countsAgainstPackage({
+        id: "b",
+        start_at: "2026-11-05T10:00:00Z",
+        status: "confirmed",
+        event_type_slug: "paid",
+        trial_outcome: "bonus",
+      }),
+    ).toBe(false);
+  });
+
+  it("is stored as the bonus outcome and skips the package cap", () => {
+    const create = readFileSync(
+      "supabase/functions/booking-create/index.ts",
+      "utf8",
+    );
+    expect(create).toContain(
+      "const bonus = internalCall && body.bonus === true;",
+    );
+    expect(create).toContain('trial_outcome: "bonus"');
+  });
+
+  it("can be marked later, also before the lesson, and the database accepts it", () => {
+    const admin = readFileSync(
+      "supabase/functions/admin-registrations/index.ts",
+      "utf8",
+    );
+    expect(admin).toMatch(/\["excused", "lost", "bonus"\]/);
+    const sql = readFileSync(
+      "supabase/migrations/20261102210000_lesson_outcome_bonus.sql",
+      "utf8",
+    );
+    expect(sql).toContain("'bonus'");
   });
 });

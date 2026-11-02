@@ -43,11 +43,13 @@ describe("a lesson given for free", () => {
     );
     // The booking form lives in BookLessonDialog since 26 Oct 2026.
     const ui = read("src/components/admin/BookLessonDialog.tsx");
-    // A trial (2 Nov 2026) is neither paid nor a make-up lesson.
+    // One lesson kind since 2 Nov 2026: make-up and bonus are free.
     expect(code(ui)).toContain(
-      code("...(bkFree && !bkTrial ? { free: true } : {}),"),
+      code(
+        '...(bkKind === "makeup" || bkKind === "bonus" ? { free: true } : {}),',
+      ),
     );
-    expect(code(ui)).toContain(code("paid: bkPaid && !bkFree && !bkTrial,"));
+    expect(code(ui)).toContain(code('paid: bkKind === "paid" && bkPaid,'));
   });
 
   it("is marked free only from unpaid, never over a payment Stripe knows about", () => {

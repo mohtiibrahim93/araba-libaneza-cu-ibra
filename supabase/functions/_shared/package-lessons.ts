@@ -9,6 +9,8 @@
 //   owner.
 // - The owner can always decide otherwise: "scuzat" (excused) never counts,
 //   "pierdută" (lost) always does — after a student's appeal, for instance.
+// - A bonus lesson, the owner's gift (2 Nov 2026), never counts, whether it
+//   was booked as a bonus or marked as one later.
 //
 // Numbers follow the date: the counted lessons of a package, oldest first,
 // are 1, 2, 3… so a lesson moved or excused renumbers the rest by itself.
@@ -18,7 +20,7 @@ export interface PackageLessonRow {
   start_at: string;
   status: string;
   event_type_slug: string;
-  /** done | excused | lost | null — the owner's word (trial_outcome column). */
+  /** done | excused | lost | bonus | null — the owner's word (trial_outcome column). */
   trial_outcome?: string | null;
 }
 
@@ -26,7 +28,8 @@ export interface PackageLessonRow {
 export function countsAgainstPackage(b: PackageLessonRow): boolean {
   if (b.event_type_slug === "trial" || b.event_type_slug === "verificare-nivel")
     return false;
-  if (b.trial_outcome === "excused") return false;
+  if (b.trial_outcome === "excused" || b.trial_outcome === "bonus")
+    return false;
   if (b.trial_outcome === "lost") return true;
   return b.status === "confirmed" || b.status === "completed";
 }

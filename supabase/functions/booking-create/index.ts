@@ -215,12 +215,17 @@ Deno.serve(async (req) => {
       return json({ error: "payment required", code: "payment_required" }, 402);
     }
 
+    // A bonus lesson the owner gives (2 Nov 2026) is on top of the package:
+    // never refused for a full package and never counted in it. Only the
+    // owner's panel sends it; a visitor's or the webhook's booking cannot.
+    const bonus = internalCall && body.bonus === true;
+
     // A paid registration books at most the number of lessons it bought.
     let packageRows: PackageLessonRow[] = [];
     let bought = 1;
     // Applied to internal calls too, so the webhook can never book more than
     // the package either (a redelivered event lands here as well).
-    if (!isFree) {
+    if (!isFree && !bonus) {
       bought = Math.max(1, Number.parseInt(String(reg.quantity ?? 1), 10) || 1);
       // The owner's rule (_shared/package-lessons.ts): a lesson booked or
       // taken counts, so does one marked lost (no-show, late cancellation);
@@ -290,7 +295,17 @@ Deno.serve(async (req) => {
     const startMs = Date.parse(body.start_at);
     if (!Number.isFinite(startMs))
       return json({ error: "invalid start_at" }, 400);
-    const endMs = startMs + et.duration_min * 60_000;
+    // The owner may agree another length by hand (a longer trial, say);
+    // visitors always get the lesson type's own.
+    const ownDuration = Number(body.duration_min);
+    const durationMin =
+      internalCall &&
+      Number.isInteger(ownDuration) &&
+      ownDuration >= 10 &&
+      ownDuration <= 240
+        ? ownDuration
+        : et.duration_min;
+    const endMs = startMs + durationMin * 60_000;
     const startISO = new Date(startMs).toISOString();
     const endISO = new Date(endMs).toISOString();
 
@@ -448,6 +463,13 @@ Deno.serve(async (req) => {
         status: "confirmed",
         language,
         gdpr_consent_at: new Date().toISOString(),
+        ...(bonus
+          ? {
+              trial_outcome: "bonus",
+              trial_outcome_at: new Date().toISOString(),
+              trial_outcome_by: "owner",
+            }
+          : {}),
       })
       .select()
       .single();
@@ -566,7 +588,7 @@ Deno.serve(async (req) => {
             fmtLocal(startISO, language),
             language === "en" ? "en" : "ro",
           ),
-          durationMin: et.duration_min,
+          durationMin,
           format,
           meetLink: onlineLink,
           manageUrl: manageUrl(inserted.manage_token),
