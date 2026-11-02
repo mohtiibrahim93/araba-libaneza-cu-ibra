@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { type Course, PUBLIC_COURSE_STATUSES } from "@/lib/courses";
+import { fallbackCourseBySlug, fallbackCourses } from "@/data/fallbackGroups";
 
 const COLS =
   "id, form_type, age_category, course_type, level, format, slug, title_ro, title_en, start_date, end_date, schedule_label_ro, schedule_label_en, session_count, total_hours, price_lei, image_url, max_seats, teaching_language, status, is_active, sort_order, content";
@@ -62,12 +63,21 @@ async function fetchCourses(f: CourseFilters): Promise<Course[]> {
   ]);
   if (error) {
     console.error("[useCourses] load error", error);
-    return [];
+    // Database unreachable (e.g. paused): show the backup list instead.
+    return f.includeAll || (f.courseType ?? "grup") !== "grup"
+      ? []
+      : backupFor(f);
   }
   return withSeats(
     (data as Row[]) || [],
     counts as { cohort_id: string; taken: number }[],
   );
+}
+
+function backupFor(f: CourseFilters): Course[] {
+  return fallbackCourses()
+    .filter((c) => !f.age || c.age_category === f.age)
+    .filter((c) => !f.format || !c.format || c.format === f.format);
 }
 
 /** Group courses matching the chosen facets (age / modality). */
@@ -84,7 +94,7 @@ export function useCourses(filters: CourseFilters) {
       // skeleton for ever instead of showing the "no courses yet" copy.
       .catch((err) => {
         console.error("[useCourses] unreachable backend", err);
-        return [] as Course[];
+        return filters.includeAll ? ([] as Course[]) : backupFor(filters);
       })
       .then((d) => {
         if (active) {
@@ -144,14 +154,18 @@ export function useCourseBySlug(slug: string | undefined) {
       }
       if (!active) return;
       const row = rows && rows[0];
-      setCourse(row ? (withSeats([row as Row], counts)[0] ?? null) : null);
+      setCourse(
+        row
+          ? (withSeats([row as Row], counts)[0] ?? null)
+          : fallbackCourseBySlug(slug),
+      );
       setLoading(false);
     })().catch((err) => {
       // Unreachable backend: fall through to the page's not-found/fallback
       // rendering instead of spinning for ever.
       console.error("[useCourseBySlug] unreachable backend", err);
       if (active) {
-        setCourse(null);
+        setCourse(fallbackCourseBySlug(slug));
         setLoading(false);
       }
     });
