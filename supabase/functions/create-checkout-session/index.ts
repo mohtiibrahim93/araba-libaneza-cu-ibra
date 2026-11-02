@@ -155,10 +155,25 @@ serve(async (req) => {
       );
     }
 
+    // A trial lead paying here converts to a private lesson (their freebie
+    // is spent) — price it as private instead of failing on the raw type.
+    const courseType = (
+      reg.form_type === "trial" ? "private" : reg.form_type
+    ) as "group" | "private" | "kids";
+    // The plan comes from the row (applied above), never from the request.
+    const isSubscription = hasPlan(courseType) && plan === "monthly";
+    const expectedMode: Stripe.Checkout.SessionCreateParams.Mode =
+      setup === true ? "setup" : isSubscription ? "subscription" : "payment";
+
     // Best-effort reuse: if we already created a session and it's still open,
     // return its URL instead of stacking duplicates.
     // Not when a slot comes with the request: the open session carries the slot
     // picked last time, and reusing it would book that one instead.
+    // Only when it is the same kind of session: an open monthly-subscription
+    // session must not be handed back to someone who now pays in full (or the
+    // other way round). A mismatched open session is expired so it can no
+    // longer be paid, and the new one gets its own idempotency key.
+    let replacedSuffix = "";
     if (
       !bookingMeta.booking_start_at &&
       reg.stripe_session_id &&
@@ -169,26 +184,27 @@ serve(async (req) => {
           reg.stripe_session_id,
         );
         if (prior.status === "open" && prior.url) {
-          return new Response(
-            JSON.stringify({ url: prior.url, sessionId: prior.id }),
-            {
-              headers: { ...corsHeaders, "Content-Type": "application/json" },
-              status: 200,
-            },
-          );
+          if (prior.mode === expectedMode) {
+            return new Response(
+              JSON.stringify({ url: prior.url, sessionId: prior.id, plan }),
+              {
+                headers: { ...corsHeaders, "Content-Type": "application/json" },
+                status: 200,
+              },
+            );
+          }
+          try {
+            await stripe.checkout.sessions.expire(prior.id);
+          } catch (expireErr) {
+            console.warn("could not expire mismatched session:", expireErr);
+          }
+          replacedSuffix = `_r${prior.id.slice(-12)}`;
         }
       } catch (_e) {
         // fall through to create a new one
       }
     }
 
-    // A trial lead paying here converts to a private lesson (their freebie
-    // is spent) — price it as private instead of failing on the raw type.
-    const courseType = (
-      reg.form_type === "trial" ? "private" : reg.form_type
-    ) as "group" | "private" | "kids";
-    const isSubscription =
-      (courseType === "group" || courseType === "kids") && plan !== "full";
     const quantity = Math.max(
       1,
       Math.min(100, Number.parseInt(String(reg.quantity ?? 1), 10) || 1),
