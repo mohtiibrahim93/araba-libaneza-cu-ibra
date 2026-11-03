@@ -112,10 +112,9 @@ export function describeGroup(c: CohortRow | null, lang: Lang): string {
 
 /** The checkout page for this registration (the same link the site uses). */
 export function finishPaymentUrl(r: HoldRow): string {
+  // No email or name in the address (audit: personal data in URLs); the
+  // checkout page asks for the email, which the student then verifies.
   const params = new URLSearchParams({ courseType: "group" });
-  const email = r.email || r.contact_email;
-  if (email) params.set("email", email);
-  if (r.name) params.set("name", r.name);
   params.set("registrationId", r.id);
   params.set("plan", r.plan === "full" ? "full" : "monthly");
   return `${SITE_ORIGIN}/checkout?${params.toString()}`;

@@ -3,12 +3,20 @@ import { supabase } from "@/integrations/supabase/client";
 export default function CheckoutEmailGate({
   email,
   onVerified,
+  onEmailEntered,
   english = false,
 }: {
   email: string;
   onVerified: () => void;
+  /**
+   * The checkout page no longer carries the email in its address: a visitor
+   * who arrives without it (a payment link opened from an email) types it
+   * here, then verifies it like anyone else.
+   */
+  onEmailEntered?: (email: string) => void;
   english?: boolean;
 }) {
+  const [typed, setTyped] = useState("");
   const [checking, setChecking] = useState(true),
     [sent, setSent] = useState(false),
     [busy, setBusy] = useState(false),
@@ -57,6 +65,39 @@ export default function CheckoutEmailGate({
       <p role="status">
         {english ? "Checking your account…" : "Se verifică contul…"}
       </p>
+    );
+  if (!email && onEmailEntered)
+    return (
+      <form
+        className="space-y-3 rounded border p-4"
+        onSubmit={(e) => {
+          e.preventDefault();
+          if (/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(typed.trim()))
+            onEmailEntered(typed);
+        }}
+      >
+        <label className="block space-y-1 text-sm">
+          <span>
+            {english
+              ? "The email you registered with"
+              : "Emailul cu care te-ai înscris"}
+          </span>
+          <input
+            type="email"
+            required
+            autoComplete="email"
+            value={typed}
+            onChange={(e) => setTyped(e.target.value)}
+            className="h-11 w-full rounded-md border border-input bg-background px-3"
+          />
+        </label>
+        <button
+          type="submit"
+          className="inline-flex h-11 items-center rounded-md bg-primary px-4 font-semibold text-primary-foreground"
+        >
+          {english ? "Continue" : "Continuă"}
+        </button>
+      </form>
     );
   if (!email)
     return (

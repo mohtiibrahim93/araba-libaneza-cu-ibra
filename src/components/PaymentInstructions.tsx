@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { saveCheckoutContact } from "@/lib/checkoutContact";
 import { useI18n } from "@/lib/i18n";
 import { useNavigate } from "@/lib/router-compat";
 import {
@@ -50,8 +51,12 @@ const PaymentInstructions = ({
     // twice, and the arrival is the better place: it also catches visitors who
     // reach /checkout from a payment link rather than from this button.
     const params = new URLSearchParams({ courseType });
-    if (email) params.set("email", email);
-    if (name) params.set("name", name);
+    // Email and name travel through this tab's storage, not the address.
+    if (registrationId)
+      saveCheckoutContact(registrationId, {
+        email: email ?? "",
+        name: name ?? "",
+      });
     if (registrationId) params.set("registrationId", registrationId);
     if (quantity && quantity > 1) params.set("quantity", String(quantity));
     if ((courseType === "group" || courseType === "kids") && plan)

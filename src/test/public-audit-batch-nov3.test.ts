@@ -103,3 +103,27 @@ describe("copy that contradicted itself", () => {
     );
   });
 });
+
+describe("no email or name in checkout addresses", () => {
+  it("links to /checkout carry neither; the tab's storage does", () => {
+    for (const f of [
+      "src/components/PaymentInstructions.tsx",
+      "src/components/NativeScheduler.tsx",
+    ]) {
+      const src = read(f);
+      expect(src).toContain("saveCheckoutContact(");
+      expect(src).not.toMatch(/params\.set\("(email|name)"/);
+      expect(src).not.toContain("&email=${");
+    }
+    expect(
+      read("supabase/functions/create-checkout-session/index.ts"),
+    ).not.toContain("&email=${encodeURIComponent(reg.email");
+  });
+
+  it("an older link is read once and the address cleaned", () => {
+    const checkout = read("src/pages/Checkout.tsx");
+    expect(checkout).toContain('clean.searchParams.delete("email")');
+    expect(checkout).toContain("window.history.replaceState(");
+    expect(checkout).toContain("onEmailEntered={typeEmail}");
+  });
+});

@@ -1,5 +1,9 @@
 import { useI18n } from "@/lib/i18n";
 import CheckoutEmailGate from "@/components/CheckoutEmailGate";
+import {
+  readCheckoutContact,
+  saveCheckoutContact,
+} from "@/lib/checkoutContact";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useNavigate, useSearchParams } from "@/lib/router-compat";
 import { loadStripe, Stripe } from "@stripe/stripe-js";
@@ -256,9 +260,40 @@ const Checkout = () => {
   const navigate = useNavigate();
   const checkoutStartSent = useRef(false);
   const courseType = (params.get("courseType") as CourseType) || "group";
-  const email = params.get("email") || "";
-  const name = params.get("name") || "";
   const registrationId = params.get("registrationId") || "";
+  // The email and name arrive through this tab's sessionStorage, not the
+  // address (src/lib/checkoutContact.ts). An older link that still carries
+  // them is read once, stored, and the address is cleaned. A visitor with
+  // nothing stored types the email in the verification step.
+  const urlEmail = params.get("email") || "";
+  const urlName = params.get("name") || "";
+  const [contact, setContact] = useState<{ email: string; name: string }>({
+    email: urlEmail,
+    name: urlName,
+  });
+  useEffect(() => {
+    if (urlEmail) {
+      saveCheckoutContact(registrationId, { email: urlEmail, name: urlName });
+      const clean = new URL(window.location.href);
+      clean.searchParams.delete("email");
+      clean.searchParams.delete("name");
+      window.history.replaceState(window.history.state, "", clean.toString());
+      return;
+    }
+    const stored = readCheckoutContact(registrationId);
+    if (stored) setContact(stored);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [registrationId]);
+  const email = contact.email;
+  const name = contact.name;
+  const typeEmail = useCallback(
+    (typed: string) => {
+      const next = { email: typed.trim(), name: contact.name };
+      setContact(next);
+      saveCheckoutContact(registrationId, next);
+    },
+    [contact.name, registrationId],
+  );
   const quantity = Math.max(
     1,
     Math.min(100, Number.parseInt(params.get("quantity") || "1", 10) || 1),
@@ -589,9 +624,7 @@ const Checkout = () => {
         options={planOptions}
         english={english}
         titles={{ monthly: t.groupPlanMonthly, full: t.groupPlanFull }}
-        disabled={
-          hostedLoading || (!showFallback && phase === "initializing")
-        }
+        disabled={hostedLoading || (!showFallback && phase === "initializing")}
         onChange={switchPlan}
       />
     ) : null;
@@ -625,6 +658,7 @@ const Checkout = () => {
               email={email}
               english={english}
               onVerified={onEmailVerified}
+              onEmailEntered={typeEmail}
             />
           ) : offerChoiceFirst && !hostedAutoFailed ? (
             /* Back from Stripe's page: choose the plan (above), then go back. */

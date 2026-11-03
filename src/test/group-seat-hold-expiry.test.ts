@@ -169,6 +169,8 @@ describe("group seat hold: reminder and release", () => {
     });
     expect(sent[0]!.data.deadline).toContain("13:40");
     expect(sent[0]!.data.url).toContain("registrationId=r1");
+    // No personal data in the link (audit: email and name in URLs).
+    expect(sent[0]!.data.url).not.toMatch(/[?&](email|name)=/);
     expect(sent[0]!.data.group).toContain("A1 online");
     expect(reg).toHaveProperty("hold_reminder_sent_at", now.toISOString());
   });

@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { saveCheckoutContact } from "@/lib/checkoutContact";
 import {
   Calendar,
   Loader2,
@@ -903,7 +904,10 @@ const NativeScheduler = ({
           {effectiveRegistrationId && (
             <Button asChild variant="outline" className="flex-1">
               <Link
-                to={`/checkout?courseType=private&registrationId=${encodeURIComponent(effectiveRegistrationId)}&email=${encodeURIComponent(email)}&name=${encodeURIComponent(name)}`}
+                to={`/checkout?courseType=private&registrationId=${encodeURIComponent(effectiveRegistrationId)}`}
+                onClick={() =>
+                  saveCheckoutContact(effectiveRegistrationId, { email, name })
+                }
               >
                 <CreditCard className="w-4 h-4 mr-2" />
                 {lang === "ro" ? "Plătește lecția" : "Pay for the lesson"}

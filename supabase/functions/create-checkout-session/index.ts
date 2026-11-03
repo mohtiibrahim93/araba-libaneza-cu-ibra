@@ -138,7 +138,7 @@ serve(async (req) => {
     const successUrl = `${origin}/payment-status?registration_id=${encodeURIComponent(registrationId)}&sig=${regSig}&courseType=${encodeURIComponent(reg.form_type ?? "group")}&session_id={CHECKOUT_SESSION_ID}`;
     // plan + quantity ride along so the page comes back as it was; the row
     // (reg.plan) stays the authority for what is charged.
-    const cancelUrl = `${origin}/checkout?courseType=${encodeURIComponent(reg.form_type ?? "group")}&registrationId=${encodeURIComponent(registrationId)}&email=${encodeURIComponent(reg.email ?? "")}&name=${encodeURIComponent(reg.name ?? "")}${plan ? `&plan=${plan}` : ""}&quantity=${encodeURIComponent(String(reg.quantity ?? 1))}&fallback=1`;
+    const cancelUrl = `${origin}/checkout?courseType=${encodeURIComponent(reg.form_type ?? "group")}&registrationId=${encodeURIComponent(registrationId)}${plan ? `&plan=${plan}` : ""}&quantity=${encodeURIComponent(String(reg.quantity ?? 1))}&fallback=1`;
 
     // The slot (trial) or first lesson (private) rides along in the session
     // metadata and is booked by the webhook once Stripe confirms. Metadata
