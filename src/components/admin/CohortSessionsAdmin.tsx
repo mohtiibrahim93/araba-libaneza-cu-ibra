@@ -63,6 +63,8 @@ const fmtWhen = (iso: string) =>
     month: "short",
     hour: "2-digit",
     minute: "2-digit",
+    // Always 24-hour: "07:00" for a 19:00 lesson was read as a wrong time.
+    hourCycle: "h23",
   });
 
 const CohortSessionsAdmin = () => {

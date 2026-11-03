@@ -1156,8 +1156,10 @@ const Admin = () => {
             onChange={setCourseDetailsFilter}
           />
 
+          {/* Floating, so ticking a row never pushes the table (and the row
+              under the cursor) down next to the red Șterge. */}
           {selected.size > 0 && (
-            <div className="rounded-lg border border-border bg-background px-gutter h-12 flex items-center justify-between shadow-xs">
+            <div className="fixed inset-x-4 bottom-4 z-40 mx-auto flex h-12 max-w-3xl items-center justify-between rounded-lg border border-border bg-background px-gutter shadow-lg">
               <span className="text-sm text-muted-foreground">
                 {selected.size} selectat{selected.size > 1 ? "e" : "ă"}
               </span>
@@ -1216,40 +1218,44 @@ const Admin = () => {
                     </AlertDialogFooter>
                   </AlertDialogContent>
                 </AlertDialog>
-                <AlertDialog onOpenChange={(o) => !o && setForceText("")}>
-                  <AlertDialogTrigger asChild>
-                    <Button variant="outline" size="sm" disabled={deleting}>
-                      <Trash2 className="w-4 h-4" />
-                      Forțează ștergerea (test)
-                    </Button>
-                  </AlertDialogTrigger>
-                  <AlertDialogContent>
-                    <AlertDialogHeader>
-                      <AlertDialogTitle>Ștergere forțată</AlertDialogTitle>
-                      <AlertDialogDescription>
-                        Șterge {selected.size} înscrier
-                        {selected.size === 1 ? "e" : "i"} chiar dacă au plăți,
-                        inclusiv rezervările legate. Folosește doar pentru
-                        înscrieri de test. Scrie STERGE pentru a confirma.
-                      </AlertDialogDescription>
-                    </AlertDialogHeader>
-                    <input
-                      value={forceText}
-                      onChange={(e) => setForceText(e.target.value)}
-                      placeholder="STERGE"
-                      className="w-full rounded-md border border-input bg-background px-3 py-2 text-sm"
-                    />
-                    <AlertDialogFooter>
-                      <AlertDialogCancel>Anulează</AlertDialogCancel>
-                      <AlertDialogAction
-                        disabled={forceText.trim().toUpperCase() !== "STERGE"}
-                        onClick={() => handleDelete(true)}
-                      >
-                        Șterge forțat
-                      </AlertDialogAction>
-                    </AlertDialogFooter>
-                  </AlertDialogContent>
-                </AlertDialog>
+                {/* Deletes paid registrations and their bookings: for test
+                    data on a local build only, never in the live admin. */}
+                {import.meta.env.DEV && (
+                  <AlertDialog onOpenChange={(o) => !o && setForceText("")}>
+                    <AlertDialogTrigger asChild>
+                      <Button variant="outline" size="sm" disabled={deleting}>
+                        <Trash2 className="w-4 h-4" />
+                        Forțează ștergerea (test)
+                      </Button>
+                    </AlertDialogTrigger>
+                    <AlertDialogContent>
+                      <AlertDialogHeader>
+                        <AlertDialogTitle>Ștergere forțată</AlertDialogTitle>
+                        <AlertDialogDescription>
+                          Șterge {selected.size} înscrier
+                          {selected.size === 1 ? "e" : "i"} chiar dacă au plăți,
+                          inclusiv rezervările legate. Folosește doar pentru
+                          înscrieri de test. Scrie STERGE pentru a confirma.
+                        </AlertDialogDescription>
+                      </AlertDialogHeader>
+                      <input
+                        value={forceText}
+                        onChange={(e) => setForceText(e.target.value)}
+                        placeholder="STERGE"
+                        className="w-full rounded-md border border-input bg-background px-3 py-2 text-sm"
+                      />
+                      <AlertDialogFooter>
+                        <AlertDialogCancel>Anulează</AlertDialogCancel>
+                        <AlertDialogAction
+                          disabled={forceText.trim().toUpperCase() !== "STERGE"}
+                          onClick={() => handleDelete(true)}
+                        >
+                          Șterge forțat
+                        </AlertDialogAction>
+                      </AlertDialogFooter>
+                    </AlertDialogContent>
+                  </AlertDialog>
+                )}
               </div>
             </div>
           )}

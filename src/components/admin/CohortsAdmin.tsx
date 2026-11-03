@@ -492,12 +492,12 @@ const CohortsAdmin = () => {
                 </div>
                 <div>
                   <Label className="text-[10px] uppercase text-muted-foreground">
-                    Manual
+                    Ajustare locuri
                   </Label>
                   <Input
                     type="number"
                     min={0}
-                    title="Înscrieri manuale (WhatsApp/TikTok/direct)"
+                    title="Locuri ocupate fără un cursant anume (număr vechi). Un cursant nou se adaugă cu „Adaugă un cursant manual”, nu aici."
                     value={r.manual_offset ?? 0}
                     onChange={(e) =>
                       update(r.id, {

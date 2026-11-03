@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import GroupPayment from "./GroupPayment";
+import MoveToCohort from "./MoveToCohort";
 import * as DialogPrimitive from "@radix-ui/react-dialog";
 import { Gamepad2, Loader2, Mail, MessageCircle, Phone, X } from "lucide-react";
 import { invokeAdmin } from "@/lib/adminAuth";
@@ -299,6 +300,13 @@ const PersonSheet = ({
                 </div>
                 {person.form_type === "group" && (
                   <GroupPayment row={person} onDone={onChanged} />
+                )}
+                {person.form_type === "group" && (
+                  <MoveToCohort
+                    registrationId={person.id}
+                    currentCohortId={person.cohort_id}
+                    onDone={onChanged}
+                  />
                 )}
 
                 <section className="space-y-3">

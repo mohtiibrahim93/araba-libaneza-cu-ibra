@@ -1185,6 +1185,83 @@ Deno.serve(async (req) => {
     }
 
     // ============ Group cohorts ============
+    // Move an existing group registration into another group (audit, 1 Nov
+    // 2026: there was no control for it, so a student who changed group had
+    // to be deleted and added again). The registration keeps its payments;
+    // level, format and teaching language follow the new group. A full group
+    // is refused unless the owner confirms (force), and then shows as over
+    // capacity like any other.
+    if (action === "move_to_cohort") {
+      const targetId = typeof body.cohort_id === "string" ? body.cohort_id : "";
+      if (typeof id !== "string" || !targetId)
+        return jsonResponse({ error: "Alege grupa." }, 400);
+      const { data: reg, error: regErr } = await supabase
+        .from("registrations")
+        .select(
+          "id, form_type, cohort_id, payment_status, lead_status, anonymized_at, canceled_at",
+        )
+        .eq("id", id)
+        .maybeSingle();
+      if (regErr) throw regErr;
+      if (!reg || reg.anonymized_at || reg.form_type !== "group")
+        return jsonResponse(
+          { error: "Doar pentru o înscriere la grupă." },
+          400,
+        );
+      if (reg.cohort_id === targetId)
+        return jsonResponse({ error: "Este deja în această grupă." }, 400);
+      const { data: target, error: cErr } = await supabase
+        .from("group_cohorts")
+        .select("id, form_type, level, format, teaching_language, max_seats")
+        .eq("id", targetId)
+        .maybeSingle();
+      if (cErr) throw cErr;
+      if (!target || target.form_type !== "group")
+        return jsonResponse({ error: "Grupa nu a fost găsită." }, 404);
+      const takesSeat =
+        !reg.canceled_at &&
+        reg.payment_status !== "refunded" &&
+        (reg.payment_status === "paid" ||
+          reg.payment_status === "free" ||
+          reg.lead_status === "qualified" ||
+          reg.lead_status === "converted");
+      if (takesSeat && target.max_seats && body.force !== true) {
+        const { data: taken, error: tErr } = await supabase.rpc(
+          "cohort_seats_taken",
+          { p_cohort: target.id },
+        );
+        if (tErr) throw tErr;
+        if (Number(taken ?? 0) >= target.max_seats)
+          return jsonResponse({
+            error: `Grupa e plină (${taken}/${target.max_seats}).`,
+            code: "cohort_full",
+          });
+      }
+      const { error: updErr } = await supabase
+        .from("registrations")
+        .update({
+          cohort_id: target.id,
+          level: target.level,
+          format: target.format,
+          teaching_language: target.teaching_language,
+          // A hold belongs to the old group's seat.
+          seat_hold_until: null,
+        })
+        .eq("id", reg.id);
+      if (updErr) throw updErr;
+      await supabase.from("audit_logs").insert({
+        actor: callerEmail!,
+        action: "move_to_cohort",
+        registration_id: reg.id,
+        details: {
+          from: reg.cohort_id,
+          to: target.id,
+          forced: body.force === true,
+        },
+      });
+      return jsonResponse({ success: true });
+    }
+
     if (action === "list_cohorts") {
       const { data, error } = await supabase
         .from("group_cohorts")
@@ -3775,6 +3852,10 @@ Deno.serve(async (req) => {
           .in("registration_id", trialIds);
         if (bErr) throw bErr;
         for (const b of bookings ?? []) {
+          // A cancelled lesson never hides a kept one for the same sign-up.
+          const prior = bookingsByReg.get(b.registration_id as string);
+          if (prior && prior.status !== "cancelled" && b.status === "cancelled")
+            continue;
           bookingsByReg.set(b.registration_id as string, {
             start_at: b.start_at as string,
             end_at: b.end_at as string,
@@ -3819,11 +3900,17 @@ Deno.serve(async (req) => {
           Date.parse(conversion.created_at) > Date.parse(t.created_at)
             ? conversion
             : null;
+        // A trial that took place is "completed" (calendar sync, the owner's
+        // done check), no longer "confirmed": counting only "confirmed" showed
+        // 0 booked and 0 held next to 3 converted (audit, 1 Nov 2026).
+        const kept =
+          booking?.status === "confirmed" || booking?.status === "completed";
         const attended =
-          booking?.status === "confirmed" && Date.parse(booking.end_at) < now;
+          booking?.status === "completed" ||
+          (booking?.status === "confirmed" && Date.parse(booking.end_at) < now);
         return {
           ...t,
-          booked: !!booking && booking.status === "confirmed",
+          booked: !!booking && kept,
           booking_start_at: booking?.start_at ?? null,
           attended,
           converted: !!validConversion,

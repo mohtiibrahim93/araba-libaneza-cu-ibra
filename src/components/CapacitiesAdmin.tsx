@@ -83,9 +83,9 @@ const CapacitiesAdmin = () => {
         </h2>
         <p className="text-sm text-muted-foreground">
           Setează numărul maxim de locuri și minimul necesar pentru ca grupa să
-          pornească. Grupele au capacități separate pentru fizic și online.
-          Înscrierile din alte surse (WhatsApp, TikTok, direct etc.) se adaugă
-          din panoul „Înscrieri manuale" de mai jos.
+          pornească. Grupele au capacități separate pentru fizic și online. Un
+          cursant venit din alte surse (WhatsApp, TikTok, direct etc.) se adaugă
+          din fila „Înscrieri externe”, cu „Adaugă un cursant manual”.
         </p>
       </div>
       {loading ? (

@@ -157,6 +157,17 @@ export default function CourseOverviewAdmin({
                       Locuri ocupate: {c.taken ?? "Nespecificat"} /{" "}
                       {c.max_seats}
                     </p>
+                    {c.taken !== null &&
+                      c.manual_signup_count + (c.manual_offset ?? 0) > 0 && (
+                        <p className="text-xs text-muted-foreground">
+                          din care{" "}
+                          {Math.min(
+                            c.taken,
+                            c.manual_signup_count + (c.manual_offset ?? 0),
+                          )}{" "}
+                          doar ca număr, fără un cursant anume
+                        </p>
+                      )}
                     {c.taken !== null && (
                       <p>Locuri libere: {Math.max(0, c.max_seats - c.taken)}</p>
                     )}

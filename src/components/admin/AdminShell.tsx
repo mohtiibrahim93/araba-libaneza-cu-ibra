@@ -87,7 +87,7 @@ const Brand = () => (
     </span>
     <span className="flex flex-col leading-tight">
       <span className="font-display text-base font-bold text-foreground">
-        Arabă cu Ibra
+        Arabă Libaneză cu Ibra
       </span>
       <span className="text-xs text-muted-foreground">Administrare</span>
     </span>
