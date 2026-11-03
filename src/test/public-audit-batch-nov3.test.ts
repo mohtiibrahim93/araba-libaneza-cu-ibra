@@ -131,7 +131,7 @@ describe("no email or name in checkout addresses", () => {
 describe("redirect aliases never point a real page elsewhere", () => {
   it("/en/prices ends on /preturi, and /preturi itself is not redirected", async () => {
     const { resolveRedirect } = await import("@/lib/redirects");
-    expect(resolveRedirect("/en/prices")).toBe("/preturi");
+    expect(resolveRedirect("/en/pricing")).toBe("/en/prices");
     expect(resolveRedirect("/preturi")).toBeNull();
     expect(resolveRedirect("/pricing")).toBe("/preturi");
   });

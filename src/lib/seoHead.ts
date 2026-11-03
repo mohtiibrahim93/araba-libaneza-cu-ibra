@@ -429,6 +429,12 @@ const STATIC_ROUTES: SeoRoute[] = [
     lang: "en",
   },
   {
+    path: "/en/prices",
+    title: "Lebanese Arabic course prices | Group, private, trial",
+    description: `All prices: group courses A1–C2 from ${PRICE.groupFromOnline} lei a month online, private lessons ${PRICE.privateOnline} lei, −15% when paying in full or for 20 lessons. The first lesson is free.`,
+    lang: "en",
+  },
+  {
     path: "/en/trial",
     title: "Free Lebanese Arabic Trial Lesson | Ibra",
     description:
@@ -795,6 +801,7 @@ const LANDING_PAIRS: Array<[string, string]> = [
 /** Course pages: one bilingual component, two URLs, generated together. */
 const COURSE_PAIRS: Array<[string, string]> = [
   ["/trial", "/en/trial"],
+  ["/preturi", "/en/prices"],
   ["/booking", "/en/booking"],
   ["/quiz", "/en/quiz"],
   ["/te-ajutam", "/en/find-your-page"],

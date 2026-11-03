@@ -1,3 +1,5 @@
+import { supabase } from "@/integrations/supabase/client";
+import { groupPagePath } from "@/lib/groupPage";
 import { useCallback, useEffect, useState } from "react";
 import { invokeAdmin } from "@/lib/adminAuth";
 import { BUCHAREST_TZ } from "@/lib/timezone";
@@ -95,6 +97,38 @@ export default function FormingCohortsAdmin({
   onShowRegistrations,
 }: { onShowRegistrations?: (id: string, name: string) => void } = {}) {
   const [rows, setRows] = useState<CourseSummary[]>([]);
+  // Each group's public address (its stored slug), for "Pagina publică".
+  const [slugs, setSlugs] = useState<Record<string, string>>({});
+  useEffect(() => {
+    // Best effort: without slugs the card simply has no "Pagina publică".
+    if (typeof supabase.from !== "function") return;
+    type SlugRow = { id: string; slug: string | null };
+    const table = supabase.from("group_cohorts") as unknown as {
+      select: (c: string) => PromiseLike<{ data: SlugRow[] | null }>;
+    };
+    void Promise.resolve(table.select("id, slug"))
+      .then(({ data }) =>
+        setSlugs(
+          Object.fromEntries(
+            (data ?? [])
+              .filter((r) => r.slug)
+              .map((r) => [r.id, r.slug as string]),
+          ),
+        ),
+      )
+      .catch(() => undefined);
+  }, []);
+  // "Editează grupa": the group's row in the editor further down this tab.
+  const editGroup = (id: string) => {
+    const row = document.getElementById(`cohort-row-${id}`);
+    if (!row) return;
+    row.scrollIntoView({ behavior: "smooth", block: "start" });
+    row.classList.add("ring-2", "ring-primary");
+    window.setTimeout(
+      () => row.classList.remove("ring-2", "ring-primary"),
+      2500,
+    );
+  };
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
   const load = useCallback(async () => {
@@ -251,14 +285,34 @@ export default function FormingCohortsAdmin({
                     {(c.manual_offset ?? 0) + c.manual_signup_count}.
                   </p>
                 )}
-                {onShowRegistrations && (
+                <div className="flex flex-wrap gap-2">
+                  {onShowRegistrations && (
+                    <Button
+                      size="sm"
+                      onClick={() => onShowRegistrations(c.id, title)}
+                    >
+                      Vezi înscrierile ({c.registration_count})
+                    </Button>
+                  )}
                   <Button
                     size="sm"
-                    onClick={() => onShowRegistrations(c.id, title)}
+                    variant="outline"
+                    onClick={() => editGroup(c.id)}
                   >
-                    Vezi înscrierile ({c.registration_count})
+                    Editează grupa
                   </Button>
-                )}
+                  {slugs[c.id] && c.status !== "draft" && (
+                    <Button size="sm" variant="outline" asChild>
+                      <a
+                        href={groupPagePath(slugs[c.id]!, "ro")}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                      >
+                        Pagina publică ↗
+                      </a>
+                    </Button>
+                  )}
+                </div>
               </article>
             );
           })}

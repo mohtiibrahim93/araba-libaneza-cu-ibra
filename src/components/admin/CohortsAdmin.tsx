@@ -419,7 +419,8 @@ const CohortsAdmin = () => {
           {rows.map((r) => (
             <div
               key={r.id}
-              className="rounded-md border border-border bg-background p-2"
+              id={`cohort-row-${r.id}`}
+              className="scroll-mt-24 rounded-md border border-border bg-background p-2 transition-shadow"
             >
               <div className="grid gap-2 md:grid-cols-[70px_50px_96px_64px_130px_64px_84px_1fr_1fr_150px_auto] items-end">
                 <div className="text-xs font-semibold">

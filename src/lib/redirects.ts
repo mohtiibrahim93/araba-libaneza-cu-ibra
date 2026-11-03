@@ -118,8 +118,7 @@ const ALIASES: Record<string, string> = {
   "/en/reviews": "/#testimonials",
   // /preturi is bilingual with no English twin, so an English reader gets
   // it in English (audit P1: /en/prices landed on the Romanian /cursuri).
-  "/en/pricing": "/preturi",
-  "/en/prices": "/preturi",
+  "/en/pricing": "/en/prices",
   "/en/tutor": "/en/arabic-tutor",
   "/en/private-lessons": "/en/courses/private",
   "/en/group-courses": "/en/courses/group",

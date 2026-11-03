@@ -110,6 +110,7 @@ import { Route as EnLevantineArabicDialectsMapRouteImport } from './routes/en/le
 import { Route as EnLevelTestRouteImport } from './routes/en/level-test'
 import { Route as EnMyBookingsRouteImport } from './routes/en/my-bookings'
 import { Route as EnPlayRouteImport } from './routes/en/play'
+import { Route as EnPricesRouteImport } from './routes/en/prices'
 import { Route as EnPrivacyRouteImport } from './routes/en/privacy'
 import { Route as EnQuizRouteImport } from './routes/en/quiz'
 import { Route as EnTermsRouteImport } from './routes/en/terms'
@@ -684,6 +685,11 @@ const EnPlayRoute = EnPlayRouteImport.update({
   path: '/en/play',
   getParentRoute: () => rootRouteImport,
 } as any)
+const EnPricesRoute = EnPricesRouteImport.update({
+  id: '/en/prices',
+  path: '/en/prices',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const EnPrivacyRoute = EnPrivacyRouteImport.update({
   id: '/en/privacy',
   path: '/en/privacy',
@@ -980,6 +986,7 @@ export interface FileRoutesByFullPath {
   '/en/level-test': typeof EnLevelTestRoute
   '/en/my-bookings': typeof EnMyBookingsRoute
   '/en/play': typeof EnPlayRouteWithChildren
+  '/en/prices': typeof EnPricesRoute
   '/en/privacy': typeof EnPrivacyRoute
   '/en/quiz': typeof EnQuizRoute
   '/en/terms': typeof EnTermsRoute
@@ -1119,6 +1126,7 @@ export interface FileRoutesByTo {
   '/en/levantine-arabic-dialects-map': typeof EnLevantineArabicDialectsMapRoute
   '/en/level-test': typeof EnLevelTestRoute
   '/en/my-bookings': typeof EnMyBookingsRoute
+  '/en/prices': typeof EnPricesRoute
   '/en/privacy': typeof EnPrivacyRoute
   '/en/quiz': typeof EnQuizRoute
   '/en/terms': typeof EnTermsRoute
@@ -1261,6 +1269,7 @@ export interface FileRoutesById {
   '/en/level-test': typeof EnLevelTestRoute
   '/en/my-bookings': typeof EnMyBookingsRoute
   '/en/play': typeof EnPlayRouteWithChildren
+  '/en/prices': typeof EnPricesRoute
   '/en/privacy': typeof EnPrivacyRoute
   '/en/quiz': typeof EnQuizRoute
   '/en/terms': typeof EnTermsRoute
@@ -1404,6 +1413,7 @@ export interface FileRouteTypes {
     | '/en/level-test'
     | '/en/my-bookings'
     | '/en/play'
+    | '/en/prices'
     | '/en/privacy'
     | '/en/quiz'
     | '/en/terms'
@@ -1543,6 +1553,7 @@ export interface FileRouteTypes {
     | '/en/levantine-arabic-dialects-map'
     | '/en/level-test'
     | '/en/my-bookings'
+    | '/en/prices'
     | '/en/privacy'
     | '/en/quiz'
     | '/en/terms'
@@ -1684,6 +1695,7 @@ export interface FileRouteTypes {
     | '/en/level-test'
     | '/en/my-bookings'
     | '/en/play'
+    | '/en/prices'
     | '/en/privacy'
     | '/en/quiz'
     | '/en/terms'
@@ -1826,6 +1838,7 @@ export interface RootRouteChildren {
   EnLevelTestRoute: typeof EnLevelTestRoute
   EnMyBookingsRoute: typeof EnMyBookingsRoute
   EnPlayRoute: typeof EnPlayRouteWithChildren
+  EnPricesRoute: typeof EnPricesRoute
   EnPrivacyRoute: typeof EnPrivacyRoute
   EnQuizRoute: typeof EnQuizRoute
   EnTermsRoute: typeof EnTermsRoute
@@ -2577,6 +2590,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof EnPlayRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/en/prices': {
+      id: '/en/prices'
+      path: '/en/prices'
+      fullPath: '/en/prices'
+      preLoaderRoute: typeof EnPricesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/en/privacy': {
       id: '/en/privacy'
       path: '/en/privacy'
@@ -2978,6 +2998,7 @@ const rootRouteChildren: RootRouteChildren = {
   EnLevelTestRoute: EnLevelTestRoute,
   EnMyBookingsRoute: EnMyBookingsRoute,
   EnPlayRoute: EnPlayRouteWithChildren,
+  EnPricesRoute: EnPricesRoute,
   EnPrivacyRoute: EnPrivacyRoute,
   EnQuizRoute: EnQuizRoute,
   EnTermsRoute: EnTermsRoute,
