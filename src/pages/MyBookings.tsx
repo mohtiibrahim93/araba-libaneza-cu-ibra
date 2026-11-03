@@ -323,7 +323,15 @@ const MyBookings = ({ lang }: { lang: Lang }) => {
               </p>
             )}
             {bookings.map((booking) => {
-              const active = booking.status === "confirmed";
+              // A lesson that has ended is over even while its row still says
+              // "confirmed" (the calendar sync marks it later): no join link,
+              // no "too late to change" (audit P1 #10).
+              const ended = Date.parse(booking.end_at) <= Date.now();
+              const active = booking.status === "confirmed" && !ended;
+              const shownStatus =
+                booking.status === "confirmed" && ended
+                  ? "completed"
+                  : booking.status;
               const name =
                 lang === "ro"
                   ? booking.booking_event_types?.name_ro
@@ -365,7 +373,7 @@ const MyBookings = ({ lang }: { lang: Lang }) => {
                     <span
                       className={`w-fit rounded-full px-3 py-1 text-xs font-semibold ${active ? "bg-brand-green/10 text-brand-green" : "bg-muted text-foreground"}`}
                     >
-                      {c.statuses[booking.status]}
+                      {c.statuses[shownStatus]}
                     </span>
                   </div>
                   {active && booking.meet_link && (

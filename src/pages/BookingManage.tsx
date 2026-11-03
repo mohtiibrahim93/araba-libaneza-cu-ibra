@@ -580,8 +580,10 @@ const BookingManageInner = () => {
                 </AlertDialogDescription>
               </AlertDialogHeader>
               <AlertDialogFooter>
+                {/* Not "Anulează": that is the word for cancelling the
+                    lesson, on the same page (audit P1 #10). */}
                 <AlertDialogCancel disabled={busy}>
-                  {t.manageCancelButton}
+                  {t.manageRescheduleBack}
                 </AlertDialogCancel>
                 <AlertDialogAction
                   disabled={busy}

@@ -1,5 +1,16 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
+/** Our own message, safe to show as it is. */
+class WrongEmail extends Error {}
+
+const isRateLimited = (failure: unknown) => {
+  const f = failure as { status?: number; code?: string; message?: string };
+  return (
+    f?.status === 429 ||
+    /rate|security purposes|seconds/i.test(String(f?.code ?? f?.message ?? ""))
+  );
+};
+
 export default function CheckoutEmailGate({
   email,
   onVerified,
@@ -69,7 +80,7 @@ export default function CheckoutEmailGate({
   if (!email && onEmailEntered)
     return (
       <form
-        className="space-y-3 rounded border p-4"
+        className="space-y-4 rounded-2xl border border-border bg-card p-5 sm:p-6"
         onSubmit={(e) => {
           e.preventDefault();
           if (/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(typed.trim()))
@@ -88,12 +99,12 @@ export default function CheckoutEmailGate({
             autoComplete="email"
             value={typed}
             onChange={(e) => setTyped(e.target.value)}
-            className="h-11 w-full rounded-md border border-input bg-background px-3"
+            className="h-12 w-full rounded-xl border border-input bg-background px-3"
           />
         </label>
         <button
           type="submit"
-          className="inline-flex h-11 items-center rounded-md bg-primary px-4 font-semibold text-primary-foreground"
+          className="inline-flex h-11 items-center justify-center rounded-xl bg-primary px-5 font-semibold text-primary-foreground transition-colors hover:bg-primary/90 disabled:opacity-60 w-full"
         >
           {english ? "Continue" : "Continuă"}
         </button>
@@ -108,13 +119,15 @@ export default function CheckoutEmailGate({
       </p>
     );
   return (
-    <section className="space-y-3 rounded border p-4">
-      <h2 className="font-semibold">
+    <section className="space-y-4 rounded-2xl border border-border bg-card p-5 sm:p-6">
+      <h2 className="text-lg font-semibold text-foreground">
         {english
           ? "Verify your registration email"
           : "Verifică emailul înscrierii"}
       </h2>
-      <p className="text-sm">{email}</p>
+      <p className="rounded-lg bg-muted px-3 py-2 text-sm font-medium text-foreground">
+        {email}
+      </p>
       <p className="text-sm text-muted-foreground">
         {english
           ? "We verify your email before opening payment. Verification does not save a card or confirm a payment."
@@ -124,7 +137,7 @@ export default function CheckoutEmailGate({
         <button
           type="button"
           disabled={busy}
-          className="rounded bg-primary p-2 text-primary-foreground"
+          className="inline-flex h-11 items-center justify-center rounded-xl bg-primary px-5 font-semibold text-primary-foreground transition-colors hover:bg-primary/90 disabled:opacity-60 w-full"
           onClick={async () => {
             setBusy(true);
             setError("");
@@ -136,10 +149,17 @@ export default function CheckoutEmailGate({
               if (error) throw error;
               setSent(true);
             } catch (failure) {
+              // Supabase's own text ("For security purposes, you can only
+              // request this after 37 seconds") was shown raw (audit P1 #8).
+              console.error("[checkout] send code failed", failure);
               setError(
-                failure instanceof Error
-                  ? failure.message
-                  : "Nu am putut trimite codul.",
+                isRateLimited(failure)
+                  ? english
+                    ? "A code was sent a moment ago. Wait a minute, then try again."
+                    : "Ți-am trimis un cod chiar acum. Așteaptă un minut și încearcă din nou."
+                  : english
+                    ? "We could not send the code. Try again in a minute."
+                    : "Nu am putut trimite codul. Încearcă din nou peste un minut.",
               );
             } finally {
               setBusy(false);
@@ -163,17 +183,20 @@ export default function CheckoutEmailGate({
               });
               if (error) throw error;
               if (!matches(data.user))
-                throw new Error(
+                throw new WrongEmail(
                   english
                     ? "Use the email from your registration."
                     : "Folosește emailul înscrierii.",
                 );
               callback.current();
             } catch (failure) {
+              console.error("[checkout] verify code failed", failure);
               setError(
-                failure instanceof Error
+                failure instanceof WrongEmail
                   ? failure.message
-                  : "Verificare eșuată.",
+                  : english
+                    ? "That code is not right or has expired. Check the latest email, or send a new code."
+                    : "Codul nu e corect sau a expirat. Verifică ultimul email sau cere un cod nou.",
               );
             } finally {
               setBusy(false);
@@ -183,7 +206,7 @@ export default function CheckoutEmailGate({
           <label className="block">
             {english ? "Code received by email" : "Codul primit prin email"}
             <input
-              className="mt-1 block rounded border p-2"
+              className="mt-1.5 block h-12 w-full rounded-xl border border-input bg-background px-3 text-lg tracking-[0.3em]"
               inputMode="numeric"
               autoComplete="one-time-code"
               value={code}
@@ -199,14 +222,14 @@ export default function CheckoutEmailGate({
           <button
             type="submit"
             disabled={busy}
-            className="rounded bg-primary p-2 text-primary-foreground"
+            className="inline-flex h-11 items-center justify-center rounded-xl bg-primary px-5 font-semibold text-primary-foreground transition-colors hover:bg-primary/90 disabled:opacity-60 w-full"
           >
             {english ? "Verify email" : "Verifică emailul"}
           </button>
           <button
             type="button"
             disabled={busy}
-            className="ml-3"
+            className="w-full text-sm font-medium text-brand-green underline-offset-4 hover:underline"
             onClick={() => {
               setSent(false);
               setCode("");

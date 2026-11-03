@@ -6,7 +6,6 @@ import {
   ONLINE_PRICES,
   PRIVATE_PACKAGE_DISCOUNT,
   PRIVATE_PACKAGE_SIZE,
-  privateDiscountFor,
 } from "@/lib/pricing";
 
 const FAQ = [
@@ -70,15 +69,14 @@ const ArabicTutor = () => (
     <DirectAnswer question="What does a private Arabic tutor cost, and who teaches?">
       <p>
         A private Arabic lesson here is {ONLINE_PRICES.privateLesson} RON for 60
-        minutes one-to-one, with {Math.round(privateDiscountFor(10) * 100)}% off
-        from ten lessons and {Math.round(PRIVATE_PACKAGE_DISCOUNT * 100)}% off
-        from {PRIVATE_PACKAGE_SIZE} — no subscription, no minimum term. The
-        tutor is <strong>Ibra</strong>, a native Lebanese speaker teaching from
-        Bucharest for more than five years, live over video anywhere in the
-        world or in person at Strada Icoanei 80. Lessons cover CEFR A1 to C2 in
-        Lebanese Arabic — the Levantine dialect of Lebanon, Syria, Jordan and
-        Palestine — and you speak in the first one, with the Arabic script kept
-        optional.
+        minutes one-to-one, with {Math.round(PRIVATE_PACKAGE_DISCOUNT * 100)}%
+        off a package of {PRIVATE_PACKAGE_SIZE} lessons — no subscription, no
+        minimum term. The tutor is <strong>Ibra</strong>, a native Lebanese
+        speaker teaching from Bucharest for more than five years, live over
+        video anywhere in the world or in person at Strada Icoanei 80. Lessons
+        cover CEFR A1 to C2 in Lebanese Arabic — the Levantine dialect of
+        Lebanon, Syria, Jordan and Palestine — and you speak in the first one,
+        with the Arabic script kept optional.
       </p>
       <p>
         The first 30-minute lesson is free: a card confirms the slot, and
