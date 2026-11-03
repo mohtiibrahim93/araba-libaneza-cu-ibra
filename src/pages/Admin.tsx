@@ -144,7 +144,9 @@ const Admin = () => {
     useState<LeadStatusFilter>("all");
   // Lead-uri / Cursanți / Închise. A specific status or group chosen below
   // shows everyone with it, whichever tab they belong to.
-  const [segment, setSegment] = useState<LeadSegment>("leads");
+  // "all" = everyone (owner, 3 Nov 2026: "Toate statusurile" still kept only
+  // the selected tab, so it never showed everyone).
+  const [segment, setSegment] = useState<LeadSegment | "all">("leads");
   const [privateMessageSearch, setPrivateMessageSearch] = useState("");
   const [courseDetailsFilter, setCourseDetailsFilter] =
     useState(emptyCourseFilters);
@@ -253,6 +255,7 @@ const Admin = () => {
       const matchesSegment =
         leadStatusFilter !== "all" ||
         !!selectedGroup ||
+        segment === "all" ||
         leadSegment(r) === segment;
       const matchesPrivateMessage =
         messageTerms.length === 0 ||
@@ -283,7 +286,8 @@ const Admin = () => {
   ]);
 
   const segmentCounts = useMemo(() => {
-    const counts: Record<LeadSegment, number> = {
+    const counts: Record<LeadSegment | "all", number> = {
+      all: 0,
       leads: 0,
       students: 0,
       closed: 0,
@@ -291,6 +295,17 @@ const Admin = () => {
     for (const r of registrations) {
       if ((r.lead_status || "new") === "incomplete") continue;
       counts[leadSegment(r)] += 1;
+      counts.all += 1;
+    }
+    return counts;
+  }, [registrations]);
+
+  // How many registrations have each status, shown in the status filter.
+  const statusCounts = useMemo(() => {
+    const counts: Record<string, number> = {};
+    for (const r of registrations) {
+      const st = r.lead_status || "new";
+      counts[st] = (counts[st] ?? 0) + 1;
     }
     return counts;
   }, [registrations]);
@@ -1067,7 +1082,11 @@ const Admin = () => {
             aria-label="Înscrieri"
             className="flex flex-wrap gap-2"
           >
-            {(Object.keys(leadSegmentLabels) as LeadSegment[]).map((key) => {
+            {(
+              ["all", ...Object.keys(leadSegmentLabels)] as (
+                LeadSegment | "all"
+              )[]
+            ).map((key) => {
               const active =
                 leadStatusFilter === "all" && !selectedGroup && segment === key;
               return (
@@ -1083,7 +1102,8 @@ const Admin = () => {
                   }}
                   className={`min-h-10 rounded-full border px-4 text-sm font-semibold transition-colors ${active ? "border-brand-green bg-brand-green text-white" : "border-border hover:border-brand-green/60"}`}
                 >
-                  {leadSegmentLabels[key]} · {segmentCounts[key]}
+                  {key === "all" ? "Toate" : leadSegmentLabels[key]} ·{" "}
+                  {segmentCounts[key]}
                 </button>
               );
             })}
@@ -1147,7 +1167,15 @@ const Admin = () => {
               setCourseTypeFilter(value);
               setSelectedGroup(null);
             }}
-            onLeadStatusChange={setLeadStatusFilter}
+            onLeadStatusChange={(value) => {
+              setLeadStatusFilter(value);
+              // "Toate statusurile" means everyone, not "everyone in the tab".
+              if (value === "all") {
+                setSegment("all");
+                setSelectedGroup(null);
+              }
+            }}
+            statusCounts={statusCounts}
             onPrivateMessageSearchChange={setPrivateMessageSearch}
             onReset={() => {
               setCourseTypeFilter("all");

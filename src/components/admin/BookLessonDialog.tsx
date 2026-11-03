@@ -147,6 +147,8 @@ export default function BookLessonDialog({
             setBkPaid(initial.newPackage.paid);
           }
           setBkStudentId(s.id);
+          // A website trial sign-up opened from its sheet: the free trial.
+          if (s.form_type === "trial") setBkKind("trial");
           setBkName(s.name ?? "");
           setBkEmail(s.email ?? "");
           setBkPhone(s.phone ?? "");

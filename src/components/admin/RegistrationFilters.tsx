@@ -18,6 +18,8 @@ interface Props {
   privateMessageSearch: string;
   onCourseTypeChange: (v: CourseTypeFilter) => void;
   onLeadStatusChange: (v: LeadStatusFilter) => void;
+  /** Registrations per status, shown next to each option. */
+  statusCounts?: Record<string, number>;
   onPrivateMessageSearchChange: (v: string) => void;
   onReset: () => void;
 }
@@ -28,6 +30,7 @@ const RegistrationFilters = ({
   privateMessageSearch,
   onCourseTypeChange,
   onLeadStatusChange,
+  statusCounts,
   onPrivateMessageSearchChange,
   onReset,
 }: Props) => (
@@ -68,6 +71,7 @@ const RegistrationFilters = ({
             {LEAD_STATUSES.map((status) => (
               <SelectItem key={status} value={status}>
                 {leadStatusLabels[status]}
+                {statusCounts ? ` (${statusCounts[status] ?? 0})` : ""}
               </SelectItem>
             ))}
           </SelectContent>
