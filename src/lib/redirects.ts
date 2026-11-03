@@ -32,11 +32,13 @@ const ALIASES: Record<string, string> = {
   "/pareri": "/#testimonials",
 
   // Courses & pricing
-  "/preturi": "/cursuri",
-  "/pret": "/cursuri",
-  "/tarife": "/cursuri",
-  "/costuri": "/cursuri",
-  "/pricing": "/cursuri",
+  // /preturi is a real page now. Its old alias to /cursuri also caught the
+  // redirect *to* /preturi (the 404 view re-renders at the new address), so
+  // /en/prices ended on /cursuri (Chrome check, 3 Nov 2026).
+  "/pret": "/preturi",
+  "/tarife": "/preturi",
+  "/costuri": "/preturi",
+  "/pricing": "/preturi",
   "/courses": "/cursuri",
   "/curs": "/cursuri",
   "/curs-araba": "/cursuri-araba",
