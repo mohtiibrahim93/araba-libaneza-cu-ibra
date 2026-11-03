@@ -1,3 +1,4 @@
+import { PRICE } from "@/lib/pricing";
 import { Link } from "@/components/LocalizedLink";
 import EnLandingLayout from "./EnLandingLayout";
 
@@ -12,7 +13,7 @@ const FAQ = [
   },
   {
     q: "How much do the classes cost?",
-    a: "Group courses: 500 LEI / month online, 700 LEI / month in person in Bucharest (~€100 / €140). Private 1-on-1 lessons: 150 LEI online / 210 LEI in person, per 60 min (~€30 / €42). First 30-minute trial lesson is free.",
+    a: `Group courses: ${PRICE.groupFromOnline} LEI / month online, ${PRICE.groupFromFizic} LEI / month in person in Bucharest (~€100 / €140). Private 1-on-1 lessons: ${PRICE.privateOnline} LEI online / ${PRICE.privateFizic} LEI in person, per 60 min (~€30 / €42). First 30-minute trial lesson is free.`,
   },
   {
     q: "When do the classes run?",
@@ -78,16 +79,17 @@ const ArabicClassesNearMe = () => (
     <h2>Class formats</h2>
     <ul>
       <li>
-        <strong>Group course, in person (Bucharest):</strong> 700 LEI / month, 2
-        lessons of 90 min per week, max 8 students.
+        <strong>Group course, in person (Bucharest):</strong>{" "}
+        {PRICE.groupFromFizic} LEI / month, 2 lessons of 90 min per week, max 8
+        students.
       </li>
       <li>
-        <strong>Group course, online:</strong> 500 LEI / month, 2 lessons of 90
-        min per week, max 6 students.
+        <strong>Group course, online:</strong> {PRICE.groupFromOnline} LEI /
+        month, 2 lessons of 90 min per week, max 6 students.
       </li>
       <li>
-        <strong>Private 1-on-1:</strong> 150 LEI online / 210 LEI in person, per
-        60 min — see the{" "}
+        <strong>Private 1-on-1:</strong> {PRICE.privateOnline} LEI online /{" "}
+        {PRICE.privateFizic} LEI in person, per 60 min — see the{" "}
         <Link to="/en/arabic-tutor">private Arabic tutor page</Link>.
       </li>
       <li>

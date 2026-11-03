@@ -1,3 +1,4 @@
+import { isOpenLevel } from "@/lib/openLevels";
 import GroupStartRule from "@/components/GroupStartRule";
 import CourseLayout from "@/components/course/CourseLayout";
 import { useI18n } from "@/lib/i18n";
@@ -18,7 +19,7 @@ import FormingGroups from "@/components/courses/FormingGroups";
 
 const WHATSAPP_URL = "https://wa.me/40763124514";
 const LEVELS = ["A1", "A2", "B1", "B2", "C1", "C2"] as const;
-const isAvailable = (l: string) => l === "A1" || l === "A2";
+const isAvailable = (l: string) => isOpenLevel(l);
 
 const CursGrup = () => {
   const { t, lang } = useI18n();

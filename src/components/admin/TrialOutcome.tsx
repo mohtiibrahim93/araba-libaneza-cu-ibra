@@ -1,3 +1,4 @@
+import { PRICE } from "@/lib/pricing";
 import { useState } from "react";
 import { invokeAdmin } from "@/lib/adminAuth";
 import {
@@ -206,7 +207,7 @@ export function NoShowFeeControl({ bookingId }: { bookingId: string }) {
       if (data?.success)
         setMessage({
           ok: true,
-          text: `Încasat: ${data.data?.amount_label ?? "150 lei"}.`,
+          text: `Încasat: ${data.data?.amount_label ?? `${PRICE.noShowFee} lei`}.`,
         });
       else
         setMessage({
@@ -230,7 +231,7 @@ export function NoShowFeeControl({ bookingId }: { bookingId: string }) {
         disabled={busy}
         className="rounded border border-input px-2 py-1 text-[11px] font-medium hover:bg-muted disabled:opacity-60"
       >
-        Încasează taxa de neprezentare (150 lei)
+        Încasează taxa de neprezentare ({PRICE.noShowFee} lei)
       </button>
       {message && (
         <p

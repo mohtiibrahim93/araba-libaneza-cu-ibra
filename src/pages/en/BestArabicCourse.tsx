@@ -1,7 +1,7 @@
 import { Link } from "@/components/LocalizedLink";
 import EnLandingLayout from "./EnLandingLayout";
 import DirectAnswer from "@/components/seo/DirectAnswer";
-import { ONLINE_PRICES } from "@/lib/pricing";
+import { ONLINE_PRICES, PRICE } from "@/lib/pricing";
 
 const FAQ = [
   {
@@ -14,7 +14,7 @@ const FAQ = [
   },
   {
     q: "Group classes or private 1-on-1 lessons?",
-    a: "Groups win on motivation, peer conversation and cost (from 500 LEI / month). Private lessons win on speed and specific goals (150 LEI online / 210 LEI in person per 60-minute lesson, with −15% on a package of 20). The most effective mix for most learners is a group plus one or two private lessons a month for weak spots.",
+    a: `Groups win on motivation, peer conversation and cost (from ${PRICE.groupFromOnline} LEI / month). Private lessons win on speed and specific goals (${PRICE.privateOnline} LEI online / ${PRICE.privateFizic} LEI in person per 60-minute lesson, with −15% on a package of 20). The most effective mix for most learners is a group plus one or two private lessons a month for weak spots.`,
   },
   {
     q: "Can Duolingo replace an Arabic course?",
@@ -142,7 +142,9 @@ const BestArabicCourse = () => (
           <tr className="border-b border-border/60 align-top">
             <td className="py-2 pr-3 font-semibold">Group course A1–C2</td>
             <td className="py-2 px-3">Motivation, peer conversation, value</td>
-            <td className="py-2 px-3">from 500 LEI / month</td>
+            <td className="py-2 px-3">
+              from {PRICE.groupFromOnline} LEI / month
+            </td>
             <td className="py-2 pl-3">Fixed schedule, shared pace</td>
           </tr>
           <tr className="border-b border-border/60 align-top">
@@ -153,7 +155,8 @@ const BestArabicCourse = () => (
               Specific goals, fastest progress, flexible hours
             </td>
             <td className="py-2 px-3">
-              150 LEI online / 210 LEI in person, 60 min (−15% for 20 lessons)
+              {PRICE.privateOnline} LEI online / {PRICE.privateFizic} LEI in
+              person, 60 min (−15% for 20 lessons)
             </td>
             <td className="py-2 pl-3">Higher hourly cost</td>
           </tr>
@@ -165,7 +168,8 @@ const BestArabicCourse = () => (
               Learners outside Bucharest, diaspora, any time zone
             </td>
             <td className="py-2 px-3">
-              Cheaper than in person (500 vs 700 LEI / month at A1)
+              Cheaper than in person (500 vs {PRICE.groupFromFizic} LEI / month
+              at A1)
             </td>
             <td className="py-2 pl-3">Requires self-discipline</td>
           </tr>

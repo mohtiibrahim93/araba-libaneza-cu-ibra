@@ -124,3 +124,23 @@ export const dualPriceLabel = (
   `${labels.online} ${formatLei(online)} · ${labels.fizic} ${formatLei(
     physicalPrice(online),
   )} ${unit}`;
+
+/**
+ * The prices the site's copy quotes, in one place (audit P2: prices were
+ * typed into about 30 strings and drifted). Change ONLINE_PRICES above and
+ * every sentence built from this follows.
+ */
+export const PRICE = {
+  /** Group course, cheapest level (A1), per month online / in person. */
+  groupFromOnline: ONLINE_PRICES.groupMonthly.A1,
+  groupFromFizic: physicalPrice(ONLINE_PRICES.groupMonthly.A1),
+  /** Group course, dearest level (C2), per month online. */
+  groupToOnline: ONLINE_PRICES.groupMonthly.C2,
+  /** Private 1:1 lesson, 60 minutes, online / in person. */
+  privateOnline: ONLINE_PRICES.privateLesson,
+  privateFizic: physicalPrice(ONLINE_PRICES.privateLesson),
+  /** Kids group, per child per month (online). */
+  kidsMonthly: ONLINE_PRICES.kidsGroupMonthly,
+  /** A missed free trial is charged the price of a private lesson. */
+  noShowFee: ONLINE_PRICES.privateLesson,
+} as const;

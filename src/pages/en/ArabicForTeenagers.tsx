@@ -1,3 +1,4 @@
+import { PRICE } from "@/lib/pricing";
 import { Link } from "@/components/LocalizedLink";
 import EnLandingLayout from "./EnLandingLayout";
 
@@ -20,7 +21,7 @@ const FAQ = [
   },
   {
     q: "How much do teen Arabic classes cost?",
-    a: "Same as the adult groups: from 500 LEI / month for a group (2 × 90-minute lessons per week), or 150 LEI online / 210 LEI in person per 60-minute private lesson, with −15% on a package of 20. The first 30-minute trial lesson is free.",
+    a: `Same as the adult groups: from ${PRICE.groupFromOnline} LEI / month for a group (2 × 90-minute lessons per week), or ${PRICE.privateOnline} LEI online / ${PRICE.privateFizic} LEI in person per 60-minute private lesson, with −15% on a package of 20. The first 30-minute trial lesson is free.`,
   },
 ];
 
@@ -118,12 +119,13 @@ const ArabicForTeenagers = () => (
     <h2>Pricing</h2>
     <ul>
       <li>
-        <strong>Group:</strong> from 500 LEI / month (2 × 90 min per week), 15%
-        off when the level is paid in full.
+        <strong>Group:</strong> from {PRICE.groupFromOnline} LEI / month (2 × 90
+        min per week), 15% off when the level is paid in full.
       </li>
       <li>
-        <strong>Private 1-on-1:</strong> 150 LEI online / 210 LEI in person per
-        60-minute lesson, with −15% from 20 lessons.
+        <strong>Private 1-on-1:</strong> {PRICE.privateOnline} LEI online /{" "}
+        {PRICE.privateFizic} LEI in person per 60-minute lesson, with −15% from
+        20 lessons.
       </li>
       <li>
         <strong>Trial lesson (30 min):</strong> free, with a parent present if

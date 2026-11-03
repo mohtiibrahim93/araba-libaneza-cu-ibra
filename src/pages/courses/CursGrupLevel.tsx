@@ -1,3 +1,4 @@
+import { isOpenLevel } from "@/lib/openLevels";
 import GroupStartRule from "@/components/GroupStartRule";
 import FormingGroups from "@/components/courses/FormingGroups";
 import { useMemo } from "react";
@@ -78,7 +79,7 @@ const LEVEL_POSTERS: Partial<
 const BASE_URL = "https://centruldearabalibaneza.com";
 const WHATSAPP_URL = "https://wa.me/40763124514";
 const VALID = ["a1", "a2", "b1", "b2", "c1", "c2"] as const;
-const isAvailable = (level: LevelType) => level === "A1" || level === "A2";
+const isAvailable = (level: LevelType) => isOpenLevel(level);
 
 const CursGrupLevel = () => {
   const { t, lang } = useI18n();

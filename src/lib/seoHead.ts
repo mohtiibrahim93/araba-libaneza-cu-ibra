@@ -1,3 +1,4 @@
+import { PRICE } from "@/lib/pricing";
 /**
  * Per-page <head> data, server-rendered.
  *
@@ -108,8 +109,7 @@ const STATIC_ROUTES: SeoRoute[] = [
   {
     path: "/preturi",
     title: "Prețuri cursuri arabă libaneză | Grup, private, probă",
-    description:
-      "Toate prețurile: grup A1–C2 de la 500 lei/lună online, lecții private 150 lei, −15% la plata integrală sau la 20 de lecții. Prima lecție e gratuită.",
+    description: `Toate prețurile: grup A1–C2 de la ${PRICE.groupFromOnline} lei/lună online, lecții private ${PRICE.privateOnline} lei, −15% la plata integrală sau la 20 de lecții. Prima lecție e gratuită.`,
   },
   {
     path: "/te-ajutam",
@@ -165,14 +165,12 @@ const STATIC_ROUTES: SeoRoute[] = [
   {
     path: "/cursuri/grup",
     title: "Curs de Grup de Arabă Libaneză (A1–C2) — București & online",
-    description:
-      "Curs de grup de arabă libaneză cu profesor nativ. Niveluri A1–C2, grupe mici (max. 6 online, 8 fizic), fizic în București sau online. De la 500 LEI / lună.",
+    description: `Curs de grup de arabă libaneză cu profesor nativ. Niveluri A1–C2, grupe mici (max. 6 online, 8 fizic), fizic în București sau online. De la ${PRICE.groupFromOnline} LEI / lună.`,
   },
   {
     path: "/cursuri/private",
     title: "Lecții Private de Arabă Libaneză 1:1 — București & online",
-    description:
-      "Lecții 1:1 de arabă libaneză cu profesor nativ. Program flexibil, curriculum adaptat ție, fizic în București sau online. 150 LEI / lecție online, 210 LEI fizic.",
+    description: `Lecții 1:1 de arabă libaneză cu profesor nativ. Program flexibil, curriculum adaptat ție, fizic în București sau online. ${PRICE.privateOnline} LEI / lecție online, ${PRICE.privateFizic} LEI fizic.`,
   },
   {
     path: "/cursuri/copii",
@@ -183,8 +181,7 @@ const STATIC_ROUTES: SeoRoute[] = [
   {
     path: "/cursuri/adulti",
     title: "Cursuri Arabă Libaneză — Adulți (18+)",
-    description:
-      "Cursuri de arabă libaneză pentru adulți (18+): grupe mici A1–C2 de la 500 lei/lună sau lecții private 1:1, online sau fizic în București.",
+    description: `Cursuri de arabă libaneză pentru adulți (18+): grupe mici A1–C2 de la ${PRICE.groupFromOnline} lei/lună sau lecții private 1:1, online sau fizic în București.`,
   },
   {
     path: "/cursuri/tineri",
@@ -245,9 +242,8 @@ const STATIC_ROUTES: SeoRoute[] = [
   },
   {
     path: "/meditatii-araba",
-    title: "Meditații Arabă 1:1 București & Online | de la 150 lei/oră",
-    description:
-      "Meditații de arabă libaneză 1:1 cu profesor nativ, în București sau online: 150 lei/lecție online, 210 lei fizic (60 min). Prima lecție de probă e gratuită.",
+    title: `Meditații Arabă 1:1 București & Online | de la ${PRICE.privateOnline} lei/oră`,
+    description: `Meditații de arabă libaneză 1:1 cu profesor nativ, în București sau online: ${PRICE.privateOnline} lei/lecție online, ${PRICE.privateFizic} lei fizic (60 min). Prima lecție de probă e gratuită.`,
   },
   {
     path: "/intrebari-frecvente",
@@ -265,8 +261,7 @@ const STATIC_ROUTES: SeoRoute[] = [
   {
     path: "/cursuri-araba-bucuresti",
     title: "Cursuri Arabă București 2026 | Prima Lecție Gratuită",
-    description:
-      "Cursuri de arabă în București, str. Icoanei 80: grupe mici A1–C2 de la 700 lei/lună, meditații 1:1 și curs pentru copii. Prima lecție de probă e gratuită.",
+    description: `Cursuri de arabă în București, str. Icoanei 80: grupe mici A1–C2 de la ${PRICE.groupFromFizic} lei/lună, meditații 1:1 și curs pentru copii. Prima lecție de probă e gratuită.`,
   },
   {
     path: "/curs-araba-copii",
@@ -485,15 +480,13 @@ const STATIC_ROUTES: SeoRoute[] = [
   {
     path: "/en/courses/group",
     title: "Lebanese Arabic Group Course (A1–C2) — Online & Bucharest",
-    description:
-      "Small-group Lebanese Arabic classes with a native teacher. Levels A1 to C2, max 6 online, 8 in person, from 500 LEI a month. Free trial lesson.",
+    description: `Small-group Lebanese Arabic classes with a native teacher. Levels A1 to C2, max 6 online, 8 in person, from ${PRICE.groupFromOnline} LEI a month. Free trial lesson.`,
     lang: "en",
   },
   {
     path: "/en/courses/private",
     title: "Private 1-on-1 Lebanese Arabic Lessons — Online & Bucharest",
-    description:
-      "One-to-one Lebanese Arabic lessons with a native teacher. Flexible schedule, a curriculum built around you, online or in Bucharest. 150 LEI per lesson.",
+    description: `One-to-one Lebanese Arabic lessons with a native teacher. Flexible schedule, a curriculum built around you, online or in Bucharest. ${PRICE.privateOnline} LEI per lesson.`,
     lang: "en",
   },
   {
@@ -534,8 +527,7 @@ const STATIC_ROUTES: SeoRoute[] = [
   {
     path: "/en/arabic-tutor",
     title: "Arabic Tutor Online — 1-on-1 Lessons | Native Teacher",
-    description:
-      "Private Lebanese Arabic tutor — 1-on-1 lessons with a native teacher, 5+ years experience. CEFR A1–C2, free trial. 150 LEI online / 210 LEI in person, 60 min.",
+    description: `Private Lebanese Arabic tutor — 1-on-1 lessons with a native teacher, 5+ years experience. CEFR A1–C2, free trial. ${PRICE.privateOnline} LEI online / ${PRICE.privateFizic} LEI in person, 60 min.`,
   },
   {
     path: "/en/faq",
@@ -600,8 +592,7 @@ const STATIC_ROUTES: SeoRoute[] = [
   {
     path: "/cursuri/privat",
     title: "Lecții Private de Arabă Libaneză 1:1 — București & online",
-    description:
-      "Lecții 1:1 de arabă libaneză cu profesor nativ. Program flexibil, curriculum adaptat ție, fizic în București sau online. 150 LEI / lecție online, 210 LEI fizic.",
+    description: `Lecții 1:1 de arabă libaneză cu profesor nativ. Program flexibil, curriculum adaptat ție, fizic în București sau online. ${PRICE.privateOnline} LEI / lecție online, ${PRICE.privateFizic} LEI fizic.`,
     canonical: "/cursuri/private",
   },
   {

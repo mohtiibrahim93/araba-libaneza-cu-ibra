@@ -1,3 +1,4 @@
+import { OPEN_LEVELS } from "@/lib/openLevels";
 import { useEffect, useId, useRef, useState } from "react";
 import { ChevronDown } from "lucide-react";
 import { useLocation } from "@/lib/router-compat";
@@ -27,7 +28,7 @@ const LEVELS = [
   { id: "C1", ro: "Avansat", en: "Advanced" },
   { id: "C2", ro: "Academic", en: "Academic" },
 ];
-const OPEN = new Set(["A1", "A2"]);
+const OPEN = new Set(OPEN_LEVELS);
 
 interface Props {
   label: string;

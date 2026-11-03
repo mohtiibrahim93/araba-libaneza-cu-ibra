@@ -1,3 +1,4 @@
+import { PRICE } from "@/lib/pricing";
 /**
  * Starting values for the page editor (admin -> "Pagini"), extracted from the
  * code-shipped SEO landings. Used to prefill the form so the owner corrects
@@ -148,8 +149,7 @@ export const PAGE_SEEDS: PageSeed[] = [
     path: "/meditatii-araba",
     meta_title:
       "Meditații Arabă Libaneză 1:1 cu Profesor Nativ | București & Online",
-    meta_description:
-      "Meditații de arabă libaneză cu profesor nativ libanez, 1:1, ritm personalizat. Fizic în București sau online pe Zoom. 150 lei/lecție online, 210 lei fizic, primă lecție gratuită.",
+    meta_description: `Meditații de arabă libaneză cu profesor nativ libanez, 1:1, ritm personalizat. Fizic în București sau online pe Zoom. ${PRICE.privateOnline} lei/lecție online, ${PRICE.privateFizic} lei fizic, primă lecție gratuită.`,
     h1: "Meditații de arabă libaneză 1:1 — profesor nativ, program flexibil",
     lead: "Meditații 1:1 de arabă libaneză cu profesor nativ, adaptate obiectivului tău — călătorie, familie, examen sau conversație. Fizic în București sau online, program flexibil.",
   },

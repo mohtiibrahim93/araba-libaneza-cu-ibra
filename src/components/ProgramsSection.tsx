@@ -1,3 +1,4 @@
+import { isOpenLevel } from "@/lib/openLevels";
 import { useEffect, useState } from "react";
 import { Link } from "@/components/LocalizedLink";
 import { useI18n } from "@/lib/i18n";
@@ -82,7 +83,7 @@ const ProgramsSection = () => {
     }
   }, []);
 
-  const isAvailable = (level: Level) => level === "A1" || level === "A2";
+  const isAvailable = (level: Level) => isOpenLevel(level);
   const a1Online = ONLINE_PRICES.groupMonthly.A1;
   const a1Fizic = physicalPrice(a1Online);
   const curriculum = getCurriculum(lang);

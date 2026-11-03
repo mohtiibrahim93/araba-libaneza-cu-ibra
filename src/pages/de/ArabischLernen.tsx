@@ -1,3 +1,4 @@
+import { PRICE } from "@/lib/pricing";
 import { Helmet } from "react-helmet-async";
 import { Link } from "@/lib/router-compat";
 import {
@@ -42,7 +43,7 @@ const FAQ = [
   },
   {
     q: "Was kosten die Kurse?",
-    a: "Gruppenkurse ab 500 LEI / Monat (~100 €) online. Privatstunden 1:1 kosten 150 LEI (~30 €) online bzw. 210 LEI vor Ort pro 60-Minuten-Lektion. Die erste 30-Minuten-Probestunde ist gratis.",
+    a: `Gruppenkurse ab ${PRICE.groupFromOnline} LEI / Monat (~100 €) online. Privatstunden 1:1 kosten ${PRICE.privateOnline} LEI (~30 €) online bzw. ${PRICE.privateFizic} LEI vor Ort pro 60-Minuten-Lektion. Die erste 30-Minuten-Probestunde ist gratis.`,
   },
 ];
 
@@ -205,7 +206,7 @@ const ArabischLernen = () => (
                 Stundenplan mit klarem CEFR-Curriculum.
               </p>
               <p className="text-sm font-medium text-foreground mt-3">
-                Ab 500 LEI / Monat (~100 €) online
+                Ab {PRICE.groupFromOnline} LEI / Monat (~100 €) online
               </p>
             </div>
             <div className="rounded-xl border border-border bg-muted/30 p-5">
@@ -217,7 +218,8 @@ const ArabischLernen = () => (
                 Zeitplan. Online weltweit oder Präsenz in Bukarest.
               </p>
               <p className="text-sm font-medium text-foreground mt-3">
-                150 LEI online · 210 LEI vor Ort / Lektion
+                {PRICE.privateOnline} LEI online · {PRICE.privateFizic} LEI vor
+                Ort / Lektion
               </p>
             </div>
           </div>
@@ -269,7 +271,7 @@ const ArabischLernen = () => (
             30 Minuten mit einem Muttersprachler — online weltweit oder in
             Präsenz in Bukarest. Kostenlos: Zur Reservierung hinterlegst du eine
             Karte, die nur bei Nichterscheinen oder einer Absage unter 24
-            Stunden mit 150 LEI belastet wird.
+            Stunden mit {PRICE.noShowFee} LEI belastet wird.
           </p>
           <div className="flex flex-col sm:flex-row gap-3 justify-center">
             <Link

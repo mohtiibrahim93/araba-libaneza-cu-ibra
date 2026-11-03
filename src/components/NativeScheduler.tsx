@@ -28,6 +28,7 @@ import { trackCheckoutStart } from "@/lib/tracking";
 import { getLocalTz, shortTzLabel, useShowLocalTz } from "@/lib/timezone";
 import {
   ONLINE_PRICES,
+  PRICE,
   formatLei,
   priceFor,
   privateDiscountFor,
@@ -375,15 +376,15 @@ const NativeScheduler = ({
           <>
             Poți anula sau reprograma gratuit cu cel puțin 24 de ore înainte.
             Dacă nu te prezinți sau anulezi mai târziu de 24 de ore, se
-            încasează de pe card <strong>150 lei</strong>, cât o lecție privată.
-            Taxa poate fi rambursată dacă o contești.
+            încasează de pe card <strong>{PRICE.noShowFee} lei</strong>, cât o
+            lecție privată. Taxa poate fi rambursată dacă o contești.
           </>
         ) : (
           <>
             You can cancel or reschedule free of charge at least 24 hours ahead.
             If you do not show up, or cancel later than 24 hours,{" "}
-            <strong>150 lei</strong> is charged to your card — the price of a
-            private lesson. The fee may be refunded if you appeal it.
+            <strong>{PRICE.noShowFee} lei</strong> is charged to your card — the
+            price of a private lesson. The fee may be refunded if you appeal it.
           </>
         )}
       </div>
@@ -395,8 +396,8 @@ const NativeScheduler = ({
             final îți confirmi locul cu cardul prin Stripe (nu se încasează
             nimic acum). Poți anula sau reprograma gratuit cu cel puțin 24 de
             ore înainte. Dacă nu te prezinți sau anulezi mai târziu de 24 de
-            ore, se încasează de pe card <strong>150 lei</strong>, cât o lecție
-            privată. Taxa poate fi rambursată dacă o contești.
+            ore, se încasează de pe card <strong>{PRICE.noShowFee} lei</strong>,
+            cât o lecție privată. Taxa poate fi rambursată dacă o contești.
           </>
         ) : (
           <>
@@ -404,9 +405,9 @@ const NativeScheduler = ({
             at the end you confirm your spot with your card through Stripe
             (nothing is charged now). You can cancel or reschedule free of
             charge at least 24 hours ahead. If you do not show up, or cancel
-            later than 24 hours, <strong>150 lei</strong> is charged to your
-            card — the price of a private lesson. The fee may be refunded if you
-            appeal it.
+            later than 24 hours, <strong>{PRICE.noShowFee} lei</strong> is
+            charged to your card — the price of a private lesson. The fee may be
+            refunded if you appeal it.
           </>
         )}
       </div>
@@ -898,8 +899,8 @@ const NativeScheduler = ({
         </h3>
         <p className="text-sm text-muted-foreground">
           {lang === "ro"
-            ? "Emailul tău are deja o probă gratuită programată sau ținută — proba e doar pentru prima lecție. Poți continua direct cu lecții plătite (150 lei/lecție) sau scrie-ne pe WhatsApp dacă crezi că e o greșeală."
-            : "Your email already has a scheduled or completed free trial — the trial is for the first lesson only. You can continue with paid lessons (150 lei/lesson), or message us on WhatsApp if you think this is a mistake."}
+            ? `Emailul tău are deja o probă gratuită programată sau ținută — proba e doar pentru prima lecție. Poți continua direct cu lecții plătite (${PRICE.privateOnline} lei/lecție) sau scrie-ne pe WhatsApp dacă crezi că e o greșeală.`
+            : `Your email already has a scheduled or completed free trial — the trial is for the first lesson only. You can continue with paid lessons (${PRICE.privateOnline} lei/lesson), or message us on WhatsApp if you think this is a mistake.`}
         </p>
         <div className="flex flex-col sm:flex-row gap-2">
           <Button asChild className="flex-1">

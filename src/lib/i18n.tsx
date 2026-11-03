@@ -1,3 +1,4 @@
+import { PRICE, formatLei } from "@/lib/pricing";
 import {
   createContext,
   useCallback,
@@ -414,7 +415,7 @@ export const translations = {
     navEnroll: "Înscrie-te",
 
     // Hero extras
-    heroTrustStudents: "de la 500 LEI/lună",
+    heroTrustStudents: `de la ${PRICE.groupFromOnline} LEI/lună`,
 
     // Cultural value section
     cultureBadge: "O Perspectivă Mai Largă",
@@ -527,8 +528,7 @@ export const translations = {
       "Se rezervă cu cel puțin 12 ore înainte și cu cel mult 30 de zile în avans.",
     trialRulesLi3:
       "Poți anula sau reprograma gratuit cu cel puțin 24 de ore înainte, din linkul primit pe email.",
-    trialRulesLi4:
-      "Proba costă 0 lei; cardul se salvează în siguranță la confirmarea locului. Dacă nu te prezinți sau anulezi mai târziu de 24 de ore, se încasează de pe card 150 lei, cât o lecție privată. Taxa poate fi rambursată dacă o contești.",
+    trialRulesLi4: `Proba costă 0 lei; cardul se salvează în siguranță la confirmarea locului. Dacă nu te prezinți sau anulezi mai târziu de 24 de ore, se încasează de pe card ${PRICE.noShowFee} lei, cât o lecție privată. Taxa poate fi rambursată dacă o contești.`,
 
     trialFormSubmitting: "Se salvează…",
     trialFormCta: "Continuă spre programare",
@@ -735,7 +735,7 @@ export const translations = {
     quizResultKidsDesc:
       "Cursul pentru copii nu s-a deschis încă. Lasă-ne datele și te anunțăm când pornește.",
     quizResultPriceFromGroup: "de la {price} LEI / lună",
-    quizResultPricePrivate: "150 LEI online · 210 LEI fizic / ședință",
+    quizResultPricePrivate: `${PRICE.privateOnline} LEI online · ${PRICE.privateFizic} LEI fizic / ședință`,
     quizResultPriceKids: "Te anunțăm când se deschide",
     quizContinueCta: "Continuă la înscriere",
     quizCompareAll: "Sau compară toate opțiunile →",
@@ -752,9 +752,9 @@ export const translations = {
     compareGroupLabel: "Grup",
     comparePrivateLabel: "Privat",
     compareKidsLabel: "Copii",
-    compareGroupPrice: "500–1.000 LEI / lună",
-    comparePrivatePrice: "150 LEI online · 210 LEI fizic / ședință",
-    compareKidsPrice: "500 LEI / copil",
+    compareGroupPrice: `${PRICE.groupFromOnline}–${formatLei(PRICE.groupToOnline)} LEI / lună`,
+    comparePrivatePrice: `${PRICE.privateOnline} LEI online · ${PRICE.privateFizic} LEI fizic / ședință`,
+    compareKidsPrice: `${PRICE.kidsMonthly} LEI / copil`,
     compareGroupStudents: "online max. 6 (min. 3) · fizic max. 8 (min. 4)",
     comparePrivateStudents: "1",
     compareKidsStudents: "max. 6",
@@ -856,12 +856,11 @@ export const translations = {
     // /cursuri/grup
     courseGrupMetaTitle:
       "Curs de Grup de Arabă Libaneză (A1–C2) — București & online",
-    courseGrupMetaDesc:
-      "Curs de grup de arabă libaneză cu profesor nativ. Niveluri A1–C2, grupe mici (max. 6 online, 8 fizic), fizic în București sau online. De la 500 LEI / lună.",
+    courseGrupMetaDesc: `Curs de grup de arabă libaneză cu profesor nativ. Niveluri A1–C2, grupe mici (max. 6 online, 8 fizic), fizic în București sau online. De la ${PRICE.groupFromOnline} LEI / lună.`,
     courseGrupH1: "Curs de Grup de Arabă Libaneză",
     courseGrupIntro:
       "Învață araba libaneză într-un grup mic (maximum 6 cursanți online și 8 fizic), cu profesor nativ și un curriculum CEFR clar de la A1 la C2. Cursurile au loc fizic în București sau online, cu lecții de două ori pe săptămână.",
-    courseGrupPriceLine: "De la 500 LEI / lună · 6 niveluri (A1 → C2)",
+    courseGrupPriceLine: `De la ${PRICE.groupFromOnline} LEI / lună · 6 niveluri (A1 → C2)`,
     courseGrupFeat1: "Grupuri mici — max. 6 cursanți online, 8 fizic",
     courseGrupFeat2: "Curriculum CEFR (A1–C2)",
     courseGrupFeat3: "Două ședințe pe săptămână (90 min)",
@@ -870,8 +869,7 @@ export const translations = {
     // /cursuri/private
     coursePrivateMetaTitle:
       "Lecții Private de Arabă Libaneză 1:1 — București & online",
-    coursePrivateMetaDesc:
-      "Lecții 1:1 de arabă libaneză cu profesor nativ. Program flexibil, curriculum adaptat ție, fizic în București sau online. 150 LEI / lecție online, 210 LEI fizic.",
+    coursePrivateMetaDesc: `Lecții 1:1 de arabă libaneză cu profesor nativ. Program flexibil, curriculum adaptat ție, fizic în București sau online. ${PRICE.privateOnline} LEI / lecție online, ${PRICE.privateFizic} LEI fizic.`,
     coursePrivateH1: "Lecții Private de Arabă Libaneză",
     coursePrivateIntro:
       "Lecții 1:1 cu profesor nativ, adaptate ritmului și obiectivelor tale. Alege orarul care ți se potrivește, fizic în București sau online prin Zoom. Pachetele cu mai multe lecții vin cu reducere.",
@@ -1381,7 +1379,7 @@ export const translations = {
     navWhy: "Why Us",
     navEnroll: "Enroll",
 
-    heroTrustStudents: "from 500 LEI/month",
+    heroTrustStudents: `from ${PRICE.groupFromOnline} LEI/month`,
 
     cultureBadge: "A Wider Perspective",
     cultureTitle: "More than a language — a culture",
@@ -1483,8 +1481,7 @@ export const translations = {
       "Book it at least 12 hours ahead and at most 30 days in advance.",
     trialRulesLi3:
       "You can cancel or reschedule free of charge at least 24 hours ahead, from the link in your email.",
-    trialRulesLi4:
-      "The trial costs 0 lei; your card is stored securely when confirming the spot. If you do not show up, or cancel later than 24 hours, 150 lei is charged to your card — the price of a private lesson. The fee may be refunded if you appeal it.",
+    trialRulesLi4: `The trial costs 0 lei; your card is stored securely when confirming the spot. If you do not show up, or cancel later than 24 hours, ${PRICE.noShowFee} lei is charged to your card — the price of a private lesson. The fee may be refunded if you appeal it.`,
 
     trialFormSubmitting: "Saving…",
     trialFormCta: "Continue to scheduling",
@@ -1686,7 +1683,7 @@ export const translations = {
     quizResultKidsDesc:
       "The children's course has not opened yet. Leave your details and we'll tell you when it starts.",
     quizResultPriceFromGroup: "from {price} LEI / month",
-    quizResultPricePrivate: "150 LEI online · 210 LEI in person / session",
+    quizResultPricePrivate: `${PRICE.privateOnline} LEI online · ${PRICE.privateFizic} LEI in person / session`,
     quizResultPriceKids: "We'll let you know when it opens",
     quizContinueCta: "Continue to registration",
     quizCompareAll: "Or compare all options →",
@@ -1703,9 +1700,9 @@ export const translations = {
     compareGroupLabel: "Group",
     comparePrivateLabel: "Private",
     compareKidsLabel: "Kids",
-    compareGroupPrice: "500–1,000 LEI / month",
-    comparePrivatePrice: "150 LEI online · 210 LEI in person / session",
-    compareKidsPrice: "500 LEI / child",
+    compareGroupPrice: `${PRICE.groupFromOnline}–${formatLei(PRICE.groupToOnline, "en")} LEI / month`,
+    comparePrivatePrice: `${PRICE.privateOnline} LEI online · ${PRICE.privateFizic} LEI in person / session`,
+    compareKidsPrice: `${PRICE.kidsMonthly} LEI / child`,
     compareGroupStudents: "online max. 6 (min. 3) · fizic max. 8 (min. 4)",
     comparePrivateStudents: "1",
     compareKidsStudents: "max. 6",
@@ -1800,12 +1797,11 @@ export const translations = {
     // /cursuri/grup
     courseGrupMetaTitle:
       "Lebanese Arabic Group Course (A1–C2) — Bucharest & online",
-    courseGrupMetaDesc:
-      "Lebanese Arabic group course with a native instructor. CEFR levels A1–C2, small groups (max 6 students online, 8 in person), in Bucharest or online. From 500 LEI / month.",
+    courseGrupMetaDesc: `Lebanese Arabic group course with a native instructor. CEFR levels A1–C2, small groups (max 6 students online, 8 in person), in Bucharest or online. From ${PRICE.groupFromOnline} LEI / month.`,
     courseGrupH1: "Lebanese Arabic Group Course",
     courseGrupIntro:
       "Learn Lebanese Arabic in a small group (at most 6 students online and 8 in person), with a native instructor and a clear CEFR curriculum from A1 to C2. Classes run in person in Bucharest or online, twice a week.",
-    courseGrupPriceLine: "From 500 LEI / month · 6 levels (A1 → C2)",
+    courseGrupPriceLine: `From ${PRICE.groupFromOnline} LEI / month · 6 levels (A1 → C2)`,
     courseGrupFeat1: "Small groups — max 6 students online, 8 in person",
     courseGrupFeat2: "CEFR curriculum (A1–C2)",
     courseGrupFeat3: "Two sessions per week (90 min)",
@@ -1814,8 +1810,7 @@ export const translations = {
     // /cursuri/private
     coursePrivateMetaTitle:
       "Private 1-on-1 Lebanese Arabic Lessons — Bucharest & online",
-    coursePrivateMetaDesc:
-      "One-on-one Lebanese Arabic lessons with a native instructor. Flexible schedule, curriculum tailored to you, in person in Bucharest or online. 150 LEI / lesson online, 210 LEI in person.",
+    coursePrivateMetaDesc: `One-on-one Lebanese Arabic lessons with a native instructor. Flexible schedule, curriculum tailored to you, in person in Bucharest or online. ${PRICE.privateOnline} LEI / lesson online, ${PRICE.privateFizic} LEI in person.`,
     coursePrivateH1: "Private Lebanese Arabic Lessons",
     coursePrivateIntro:
       "One-on-one lessons with a native instructor, paced to your goals. Pick a schedule that works for you, in person in Bucharest or online via Zoom. Multi-lesson packs come with a discount.",

@@ -1,3 +1,4 @@
+import { OPEN_LEVELS } from "@/lib/openLevels";
 import GroupStartRule from "@/components/GroupStartRule";
 import {
   Gift,
@@ -35,7 +36,7 @@ import type { LevelType } from "@/components/RegistrationForm/types";
  */
 
 const LEVELS: LevelType[] = ["A1", "A2", "B1", "B2", "C1", "C2"];
-const OPEN = new Set<LevelType>(["A1", "A2"]);
+const OPEN = new Set<LevelType>(OPEN_LEVELS as LevelType[]);
 
 const PreturiPage = () => {
   const { t, lang } = useI18n();
