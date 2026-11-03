@@ -232,7 +232,7 @@ const CourseMegaMenu = ({ label, lang, courses, next }: Props) => {
                     : `în ${next.teaching_language === "en" ? "engleză" : "română"} · ${next.seatsLeft} din ${next.max_seats} locuri libere`}
                 </span>
                 <Link
-                  to={cohortHref(next)}
+                  to={cohortHref(next, lang)}
                   className="mt-2 inline-flex h-10 w-fit items-center rounded-xl bg-primary px-5 text-sm font-semibold text-primary-foreground transition-colors hover:bg-primary/90"
                 >
                   {en ? "Sign up" : "Înscrie-te"}

@@ -9,6 +9,7 @@ import {
 } from "react";
 import { useSiteTexts } from "@/hooks/useSiteTexts";
 import { HOME_META } from "@/lib/pageMeta";
+import { languageCounterpart } from "@/lib/languageRoutes";
 
 type Lang = "ro" | "en";
 
@@ -469,7 +470,7 @@ export const translations = {
       "La centrul din București, proba se programează cu cel puțin 24 de ore înainte. Pentru o oră mai apropiată, alege online.",
     quizWhatH2: "Ce face chestionarul",
     quizWhatP:
-      "Îți pune câteva întrebări scurte despre motivul pentru care vrei să înveți, timpul pe care îl ai și felul în care preferi să studiezi, apoi îți arată ce format ți se potrivește: grupă pe nivel, lecții private 1:1 sau curs pentru copii. Durează sub două minute și nu cere înregistrare.",
+      "Îți pune trei întrebări scurte: pentru cine este cursul, cum preferi să înveți și ce nivel ai. Apoi îți arată ce format ți se potrivește: grupă pe nivel, lecții private 1:1 sau curs pentru copii. Durează în jur de 30 de secunde și nu cere înregistrare.",
     quizNotH2: "Ce nu este",
     quizNotP:
       "Nu e un test de gramatică și nu îți dă o notă — pentru asta există testul de nivel, cu 24 de întrebări. Chestionarul de aici alege doar formatul de curs; nivelul final se confirmă oricum în lecția de probă, în conversație cu Ibra.",
@@ -624,7 +625,8 @@ export const translations = {
     nameRequiredError: "Completează numele.",
     schedulerSlotTaken: "Slotul tocmai a fost rezervat. Alege altul.",
     schedulerBookingFailed: "Rezervarea a eșuat. Încearcă din nou.",
-    schedulerLoadingSlots: "Se încarcă sloturile…",
+    schedulerLoadingSlots:
+      "Verificăm în calendarul lui Ibra orele libere din următoarele zile… durează câteva secunde.",
     schedulerNoSlots30d:
       "Nu sunt sloturi disponibile în următoarele 30 de zile. Scrie-ne pe WhatsApp.",
     schedulerNoTimesToday: "Nicio oră disponibilă în această zi.",
@@ -721,7 +723,8 @@ export const translations = {
     quizLevelTestCta: "Fă testul de nivel — 24 de întrebări, ~15 minute",
     quizResultTitle: "Cursul potrivit pentru tine",
     quizResultGroupTitle: "Curs de Grup — nivel {level}",
-    quizResultGroupDesc: "Grupuri mici, profesori nativi și un preț prietenos.",
+    quizResultGroupDesc:
+      "Grupuri mici, un profesor nativ și un preț prietenos.",
     quizResultPrivateTitle: "Lecții Private 1-la-1",
     quizResultPrivateDesc:
       "Program flexibil și atenție 100% pe obiectivele tale.",
@@ -919,7 +922,7 @@ export const translations = {
     dontKnowOptQuizTitle: "Fă quiz-ul (30 sec)",
     dontKnowOptQuizDesc:
       "Răspunde la câteva întrebări și îți recomandăm cursul potrivit.",
-    dontKnowOptTestTitle: "Test la centru (gratuit)",
+    dontKnowOptTestTitle: "Test cu profesorul (gratuit)",
     dontKnowOptTestDesc:
       "Programează un test rapid 1:1 cu profesorul, fizic sau online.",
     dontKnowOptWhatsAppTitle: "Vorbim pe WhatsApp",
@@ -1252,7 +1255,7 @@ export const translations = {
     mainLeadLocationLabel: "Location",
     mainLeadLocationPlaceholder: "Choose city / area",
     mainLeadLocationHelp:
-      "Physical locations depend on available teachers and centers.",
+      "Physical locations depend on available teachers and centres.",
     mainLeadLocationBucharestCentru: "Bucharest — Center (Raduga)",
     mainLeadOnlineInfoTitle: "Online lessons",
     mainLeadOnlineInfoDesc:
@@ -1307,7 +1310,7 @@ export const translations = {
     // Payment instructions
     paymentTitle: "Payment Instructions",
     paymentDesc: "You can pay using one of the following methods:",
-    paymentCash: "Cash at the center (Raduga Creative Center, Bucharest)",
+    paymentCash: "Cash at the centre (Raduga Creative Center, Bucharest)",
     paymentTransfer: "Bank transfer",
     paymentIban: "IBAN: contact us on WhatsApp for details",
     paymentPaypal: "PayPal (contact us for details)",
@@ -1422,7 +1425,7 @@ export const translations = {
       "At the Bucharest centre, a trial is booked at least 24 hours ahead. For an earlier time, choose online.",
     quizWhatH2: "What the quiz does",
     quizWhatP:
-      "It asks a few short questions about why you want to learn, how much time you have and how you prefer to study, then shows which format fits: a group at your level, 1:1 private lessons, or a course for children. It takes under two minutes and needs no sign-up.",
+      "It asks three short questions: who the course is for, how you prefer to learn and what your level is. Then it shows which format fits: a group at your level, 1:1 private lessons, or a course for children. It takes about 30 seconds and needs no sign-up.",
     quizNotH2: "What it is not",
     quizNotP:
       "It is not a grammar test and it does not grade you — the 24-question level test does that. This questionnaire only picks the course format; your final level is confirmed in the trial lesson, in conversation with Ibra.",
@@ -1539,7 +1542,7 @@ export const translations = {
       "You'll receive a confirmation email with all the details within a few minutes.",
     thankYouStep2Title: "We send you the details",
     thankYouStep2Desc:
-      "Within 24 hours of payment we write to you with the Zoom link (online) or the center's address (in person) and the materials.",
+      "Within 24 hours of payment we write to you with the Zoom link (online) or the centre's address (in person) and the materials.",
     thankYouStep3Title: "Your first lesson",
     thankYouStep3Desc:
       "See you at your first lesson! Come with questions and enthusiasm.",
@@ -1572,7 +1575,8 @@ export const translations = {
     nameRequiredError: "Fill in your name.",
     schedulerSlotTaken: "Slot just got taken. Pick another.",
     schedulerBookingFailed: "Booking failed. Please try again.",
-    schedulerLoadingSlots: "Loading slots…",
+    schedulerLoadingSlots:
+      "Checking Ibra's calendar for free times in the coming days… this takes a few seconds.",
     schedulerNoSlots30d:
       "No available slots in the next 30 days. Message us on WhatsApp.",
     schedulerNoTimesToday: "No times available this day.",
@@ -1669,7 +1673,7 @@ export const translations = {
       "Take the level test — 24 questions, ~15 minutes (in Romanian)",
     quizResultTitle: "Your recommended course",
     quizResultGroupTitle: "Group Course — level {level}",
-    quizResultGroupDesc: "Small groups, native teachers and a friendly price.",
+    quizResultGroupDesc: "Small groups, a native teacher and a friendly price.",
     quizResultPrivateTitle: "1-on-1 Private Lessons",
     quizResultPrivateDesc: "Flexible scheduling and 100% focus on your goals.",
     quizResultKidsTitle: "Arabic for Kids",
@@ -1857,9 +1861,9 @@ export const translations = {
     dontKnowOptQuizTitle: "Take the quiz (30 sec)",
     dontKnowOptQuizDesc:
       "Answer a few questions and we'll recommend the right course.",
-    dontKnowOptTestTitle: "Test at the center (free)",
+    dontKnowOptTestTitle: "Test with the teacher (free)",
     dontKnowOptTestDesc:
-      "Book a quick 1:1 test with the instructor, in person or online.",
+      "Book a quick 1:1 test with the teacher, in person or online.",
     dontKnowOptWhatsAppTitle: "Chat on WhatsApp",
     dontKnowOptWhatsAppDesc: "We'll reply directly and help you choose.",
 
@@ -1909,7 +1913,7 @@ export const translations = {
     copiiCurriculumItemGames: "Interactive games and fun competitions",
     copiiCurriculumItemMusic: "Songs and rhythms in Lebanese Arabic",
     copiiCurriculumItemVocab:
-      "Thematic vocabulary (animals, colors, family, daily life)",
+      "Thematic vocabulary (animals, colours, family, daily life)",
     copiiCurriculumItemStories: "Simple stories and role-play skits",
     copiiCurriculumItemWriting:
       "Writing in the Arabic alphabet or in Arabizi, as the parents choose",
@@ -1991,6 +1995,9 @@ export const I18nProvider = ({
       window.location.pathname.startsWith("/en/")
     )
       return;
+    // A Romanian page with an English twin stays Romanian: the saved choice
+    // only applies where the address does not say (checkout, admin, …).
+    if (languageCounterpart(window.location.pathname, "en")) return;
     const savedLang = window.localStorage.getItem("site-language");
     if ((savedLang === "en" || savedLang === "ro") && savedLang !== lang)
       setLangState(savedLang);

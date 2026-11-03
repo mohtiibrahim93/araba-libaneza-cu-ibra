@@ -170,14 +170,14 @@ const GroupFields = ({
             {
               plan: "monthly",
               title: t.groupPlanMonthly,
-              big: `${formatLei(monthly)} LEI / ${lang === "en" ? "month" : "lună"}`,
+              big: `${formatLei(monthly, lang)} LEI / ${lang === "en" ? "month" : "lună"}`,
               sub: `× ${months} ${lang === "en" ? "months" : "luni"}`,
             },
             {
               plan: "full",
               title: t.groupPlanFull,
-              big: `${formatLei(fullDiscounted)} LEI`,
-              sub: `${formatLei(fullBase)} LEI`,
+              big: `${formatLei(fullDiscounted, lang)} LEI`,
+              sub: `${formatLei(fullBase, lang)} LEI`,
               badge: discountLabel(GROUP_FULL_COURSE_DISCOUNT),
             },
           ];

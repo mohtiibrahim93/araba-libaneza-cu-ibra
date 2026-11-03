@@ -364,6 +364,13 @@ const PreturiPage = () => {
                   ? "30 minutes with Ibra: we meet, you ask anything, and we find your level. Once per person."
                   : "30 de minute cu Ibra: ne cunoaștem, întrebi orice și îți aflăm nivelul. O singură dată de persoană."}
               </p>
+              {/* The no-show charge was said only on /trial (audit, 1 Nov
+                  2026); "0 lei" on its own read as no strings attached. */}
+              <p className="text-sm text-muted-foreground">
+                {en
+                  ? `Your place is confirmed with your card, nothing is charged. If you don't come or cancel less than 24 hours before, ${formatLei(ONLINE_PRICES.privateLesson, "en")} lei is charged, the price of a private lesson.`
+                  : `Locul se confirmă cu cardul, fără nicio plată. Dacă nu vii sau anulezi cu mai puțin de 24 de ore înainte, se încasează ${formatLei(ONLINE_PRICES.privateLesson)} lei, cât o lecție privată.`}
+              </p>
               <Link
                 to="/trial"
                 className="mt-auto text-sm font-semibold text-brand-green hover:underline"

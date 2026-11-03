@@ -323,7 +323,7 @@ const CursGrupLevel = () => {
                     {t.priceOnlineShort}
                   </span>
                   <span className="font-display text-3xl font-bold text-foreground">
-                    {formatLei(online)}
+                    {formatLei(online, lang)}
                   </span>
                   <span className="text-sm text-muted-foreground">
                     {" "}
@@ -335,7 +335,7 @@ const CursGrupLevel = () => {
                     {t.priceFizicShort}
                   </span>
                   <span className="font-display text-3xl font-bold text-foreground">
-                    {formatLei(fizic)}
+                    {formatLei(fizic, lang)}
                   </span>
                   <span className="text-sm text-muted-foreground">
                     {" "}
@@ -362,7 +362,21 @@ const CursGrupLevel = () => {
               </div>
               {LEVEL_POSTERS[slug] && availableFormats.length > 0 && (
                 <div className="mt-6">
-                  <div className="mb-3 inline-flex rounded-full border border-border bg-muted/40 p-1 text-sm">
+                  {/* Says what it switches (audit, 1 Nov 2026: an unlabelled
+                      Fizic / Online toggle above the poster). */}
+                  <p
+                    id="poster-format-label"
+                    className="mb-2 text-sm font-medium text-muted-foreground"
+                  >
+                    {lang === "en"
+                      ? "Show the group poster for:"
+                      : "Vezi afișul grupei pentru:"}
+                  </p>
+                  <div
+                    role="group"
+                    aria-labelledby="poster-format-label"
+                    className="mb-3 inline-flex rounded-full border border-border bg-muted/40 p-1 text-sm"
+                  >
                     {(["fizic", "online"] as PosterFormat[]).map((fmt) => {
                       const enabled = availableFormats.includes(fmt);
                       const active = selectedFormat === fmt;

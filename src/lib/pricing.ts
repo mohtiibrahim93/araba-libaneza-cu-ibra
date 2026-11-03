@@ -110,7 +110,10 @@ export const privatePackageFull = (): number =>
 export const privatePackageDiscounted = (): number =>
   Math.round(privatePackageFull() * (1 - PRIVATE_PACKAGE_DISCOUNT));
 
-export const formatLei = (n: number): string => n.toLocaleString("ro-RO");
+/** "1.700" in Romanian, "1,700" in English (audit, 1 Nov 2026: English pages
+ * showed Romanian number formatting). Romanian unless a language is given. */
+export const formatLei = (n: number, lang: "ro" | "en" = "ro"): string =>
+  n.toLocaleString(lang === "en" ? "en-GB" : "ro-RO");
 
 /** Compact dual-price string, e.g. "Online 500 · Fizic 700 LEI / lună". */
 export const dualPriceLabel = (

@@ -14,6 +14,7 @@ import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { I18nProvider, useI18n } from "@/lib/i18n";
+import { languageCounterpart } from "@/lib/languageRoutes";
 import { useRouteAnalytics } from "@/hooks/useRouteAnalytics";
 import { useLocation } from "@/lib/router-compat";
 import { initContactClickTracking } from "@/lib/tracking";
@@ -319,7 +320,15 @@ const LanguageFromPath = () => {
   const { pathname } = useLocation();
   const { lang, setLang } = useI18n();
   useEffect(() => {
-    if (pathname.startsWith("/en/") && lang !== "en") setLang("en");
+    // The address decides (audit P1 #3: after an /en page, every Romanian URL
+    // rendered in English with <html lang="en">). An /en address is English;
+    // a Romanian page that has an English twin is Romanian. Pages with no
+    // twin (checkout, admin, a booking link) keep the visitor's choice.
+    if (pathname === "/en" || pathname.startsWith("/en/")) {
+      if (lang !== "en") setLang("en");
+    } else if (languageCounterpart(pathname, "en") && lang !== "ro") {
+      setLang("ro");
+    }
   }, [pathname, lang, setLang]);
   return null;
 };

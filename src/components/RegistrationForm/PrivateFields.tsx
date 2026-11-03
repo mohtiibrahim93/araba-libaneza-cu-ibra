@@ -32,7 +32,7 @@ const PrivateFields = ({
   format,
   basePriceOnline = ONLINE_PRICES.privateLesson,
 }: Props) => {
-  const { t } = useI18n();
+  const { t, lang } = useI18n();
   const unit = priceFor(
     basePriceOnline,
     format === "fizic" ? "fizic" : "online",
@@ -79,13 +79,13 @@ const PrivateFields = ({
           {discount > 0 ? (
             <p className="text-sm font-semibold text-foreground">
               <span className="text-muted-foreground line-through font-normal mr-1.5">
-                {formatLei(Math.round(subtotal))}
+                {formatLei(Math.round(subtotal), lang)}
               </span>
-              {formatLei(Math.round(total))} LEI
+              {formatLei(Math.round(total), lang)} LEI
             </p>
           ) : (
             <p className="text-sm font-semibold text-foreground">
-              {formatLei(Math.round(total))} LEI
+              {formatLei(Math.round(total), lang)} LEI
             </p>
           )}
           {discount > 0 ? (
@@ -97,7 +97,7 @@ const PrivateFields = ({
               {" · "}
               {t.privateQuantitySaved.replace(
                 "{amount}",
-                formatLei(Math.round(saved)),
+                formatLei(Math.round(saved), lang),
               )}
             </p>
           ) : next ? (
@@ -108,7 +108,10 @@ const PrivateFields = ({
             </p>
           ) : null}
           <p className="text-[11px] text-muted-foreground mt-0.5">
-            {t.privateQuantityPerLesson.replace("{price}", formatLei(unit))}
+            {t.privateQuantityPerLesson.replace(
+              "{price}",
+              formatLei(unit, lang),
+            )}
           </p>
         </div>
       </div>

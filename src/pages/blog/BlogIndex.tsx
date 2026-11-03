@@ -212,8 +212,11 @@ const BlogIndex = () => {
 
         <section className="w-full max-w-content mx-auto px-gutter pb-16">
           <ul className="grid gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-            {visible.map((post) => {
+            {visible.map((post, index) => {
               const cover = getBlogCover(post.slug);
+              // The first row is on screen at once: load it now rather than
+              // lazily (audit, 1 Nov 2026: grey boxes for 2–3 s).
+              const aboveFold = index < 3;
               return (
                 <li key={post.slug}>
                   <Link
@@ -227,7 +230,8 @@ const BlogIndex = () => {
                           alt={L(cover.alt, lang)}
                           width={1200}
                           height={900}
-                          loading="lazy"
+                          loading={aboveFold ? "eager" : "lazy"}
+                          fetchPriority={index === 0 ? "high" : "auto"}
                           decoding="async"
                           className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-[1.03]"
                         />

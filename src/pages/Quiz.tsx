@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { useI18n } from "@/lib/i18n";
-import { Link } from "@/lib/router-compat";
+import { Link } from "@/components/LocalizedLink";
 import { ChevronRight } from "lucide-react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";

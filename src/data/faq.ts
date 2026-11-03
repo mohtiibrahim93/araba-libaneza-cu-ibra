@@ -42,6 +42,10 @@ export const FAQ_CONTENT: Record<"ro" | "en", { groups: FAQGroup[] }> = {
             q: "Care este diferența dintre araba libaneză și araba „standard” (Fusha)?",
             a: "Fusha este araba formală folosită în știri, cărți și contexte oficiale — nimeni nu o vorbește acasă. Libaneza este limba vie a străzii: propoziții mai scurte, vocale mai relaxate, ق devine adesea stop glotal, și cuvinte împrumutate din franceză. Dacă vrei să vorbești cu oameni, alegi libaneza; dacă vrei să citești ziare, alegi Fusha.",
           },
+          {
+            q: "Ce să învăț, araba egipteană sau cea levantină?",
+            a: "Depinde de unde sunt oamenii tăi. Araba egipteană are cea mai mare prezență în media (filme, muzică) și e înțeleasă pe scară largă. Levantina — mai ales libaneza — domină muzica pop modernă, televiziunea prin satelit și afacerile din Liban, Siria, Iordania și Palestina, și e și ea foarte larg înțeleasă. Dacă legăturile tale sunt cu Levantul, învață libaneza.",
+          },
         ],
       },
       {
@@ -264,6 +268,14 @@ export const FAQ_CONTENT: Record<"ro" | "en", { groups: FAQGroup[] }> = {
             a: 'Politically, yes: Lebanon is a member of the Arab League, and Arabic is the official language. By origin, the Lebanese are an Arabised nation descending primarily from the native people of the Levant — the Canaanites, a family of related peoples. Those on the land of today\'s Lebanon, above all on the coast (Byblos, Beirut, Sidon, Tyre, Tripoli), are the Phoenicians: the Greeks named them so, most probably from phoinos (dark red, purple), the colour of the Tyrian purple dye they were famous for. A 2017 study in The American Journal of Human Genetics, on 3,700-year-old DNA from Sidon, found that about 93% of present-day Lebanese ancestry comes from the Bronze Age Canaanites. In Greek and Roman times they became Christian and spoke Aramaic, then Syriac, as a liturgical and everyday language — the Maronite Church still uses it in its liturgy, and Lebanese Arabic keeps traces of it (ēmta, "when"; jawwa / barra, "inside / outside"). After the 7th century they were Arabised and some Islamised — but they are the same people as their ancestors.',
           },
           {
+            q: "Do Lebanese people speak Arabic?",
+            a: "Yes. The mother tongue of most Lebanese is Lebanese Arabic (a Levantine dialect), which they speak every day at home, at work and in the media. Many also speak French or English, but Lebanese Arabic remains the main language of everyday life.",
+          },
+          {
+            q: "Is Lebanese Arabic, or a separate language?",
+            a: "Lebanese is a dialect of Arabic, part of the Levantine family (with Syrian, Palestinian and Jordanian). It is written in the Arabic alphabet and shares most of its vocabulary with Modern Standard Arabic (Fusha), but its pronunciation, simpler grammar and influences from French, Turkish and Aramaic make it sound distinct.",
+          },
+          {
             q: "What's the difference between Lebanese Arabic and Modern Standard Arabic?",
             a: "MSA (Fusha) is the formal Arabic used in news, books, and official settings — nobody actually speaks it at home. Lebanese is the living street language: shorter sentences, relaxed vowels, ق often becoming a glottal stop, and French loanwords. If you want to talk to people, learn Lebanese; if you want to read newspapers, learn Fusha.",
           },
@@ -361,6 +373,10 @@ export const FAQ_CONTENT: Record<"ro" | "en", { groups: FAQGroup[] }> = {
           {
             q: "Can I learn online effectively, or do I need in-person classes?",
             a: "Yes, online learning with a native teacher over Zoom works very well — many of our students learn that way. In-person classes at Raduga Creative Center in Bucharest are an option if you prefer face-to-face interaction.",
+          },
+          {
+            q: "Do I have to learn the Arabic alphabet from the start?",
+            a: "Not necessarily. We start with Latin transliteration (Arabizi) so you can focus on speaking. At A1 and A2 the course is spoken only; from B1 or B2, groups that want to read and write can add the Arabic alphabet, but only if every student asks for it. In private lessons the alphabet is added on request, usually once you have started speaking. You can have it from the start, but then it can get in the way of pronunciation. And note: the alphabet does not teach you Standard Arabic (press, books); it is only the script, and the language stays Lebanese. You can speak Lebanese fluently without reading Arabic.",
           },
           {
             q: "Can I learn Arabic on my own, without a teacher?",

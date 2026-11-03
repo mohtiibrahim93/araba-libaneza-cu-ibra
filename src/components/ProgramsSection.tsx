@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Link } from "@/lib/router-compat";
+import { Link } from "@/components/LocalizedLink";
 import { useI18n } from "@/lib/i18n";
 import { Check, MessageCircle, ChevronRight } from "lucide-react";
 
@@ -262,7 +262,7 @@ const ProgramsSection = () => {
                                   setActiveLevel(isActive ? null : level)
                                 }
                                 aria-pressed={isActive}
-                                className={`px-3 py-1.5 text-xs font-semibold rounded-full border transition-colors ${
+                                className={`tap-target min-h-9 px-3.5 py-1.5 text-xs font-semibold rounded-full border transition-colors ${
                                   isActive
                                     ? "bg-primary text-primary-foreground border-primary"
                                     : available
@@ -798,7 +798,7 @@ const ProgramsSection = () => {
                 ].map(([title, desc]) => (
                   <a
                     key={title}
-                    href="/quiz"
+                    href={lang === "en" ? "/en/quiz" : "/quiz"}
                     className="flex flex-col rounded-xl border border-[#E7E1D6] bg-background px-5 py-4 transition-colors hover:border-brand-green dark:border-border"
                   >
                     <span className="font-semibold text-foreground">
@@ -809,7 +809,7 @@ const ProgramsSection = () => {
                 ))}
               </div>
               <a
-                href="/quiz"
+                href={lang === "en" ? "/en/quiz" : "/quiz"}
                 className="mt-1 text-sm font-semibold text-brand-green underline underline-offset-4 hover:opacity-80"
               >
                 {lang === "en" ? "Take the full quiz →" : "Fă tot quiz-ul →"}

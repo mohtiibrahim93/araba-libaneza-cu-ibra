@@ -167,7 +167,7 @@ const Phone = ({ bubbles, lang }: { bubbles: Bubble[]; lang: "ro" | "en" }) => (
               {b.text}
             </span>
             {b.gloss && (
-              <span className="px-1 text-[8.5px] italic leading-snug text-[#8A857B]">
+              <span className="px-1 text-[10px] italic leading-snug text-[#8A857B]">
                 {b.gloss[lang]}
               </span>
             )}

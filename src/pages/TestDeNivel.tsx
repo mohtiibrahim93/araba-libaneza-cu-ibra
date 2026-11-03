@@ -48,7 +48,7 @@ const COPY = {
       "Nu măsoară ascultarea și nici vorbirea — acestea se verifică într-o conversație cu Ibra.",
       "Rezultatul este o recomandare de pornire, nu o certificare CEFR.",
       "Poți răspunde „Nu știu”. Este înregistrat ca atare și nu îți strică rezultatul.",
-      "Nu ai nevoie de cont. Progresul rămâne în browserul tău.",
+      "Nu ai nevoie de cont. Fără cont, progresul rămâne în browserul tău.",
     ],
     afterH2: "După test",
     afterP:
@@ -83,7 +83,7 @@ const COPY = {
       "It does not measure listening or speaking — those are checked in a conversation with Ibra.",
       "The result is a starting recommendation, not a CEFR certification.",
       "You can answer “I don't know”. It is recorded as such and does not count against you.",
-      "No account needed. Your progress stays in your own browser.",
+      "No account needed. Without one, your progress stays in your own browser.",
     ],
     afterH2: "After the test",
     afterP:
@@ -192,14 +192,19 @@ const TestDeNivel = () => {
                 {c.honestH2}
               </h2>
               <ul className="mt-3 space-y-2 text-muted-foreground leading-relaxed">
-                {c.honest.map((line) => (
-                  <li key={line} className="flex gap-2">
-                    <span aria-hidden className="text-primary">
-                      ·
-                    </span>
-                    <span>{line}</span>
-                  </li>
-                ))}
+                {/* Signed in, the account box above says progress is saved
+                    to the account: the "stays in your browser" line would
+                    contradict it (audit, 1 Nov 2026). */}
+                {c.honest
+                  .filter((line, i) => !(user && i === c.honest.length - 1))
+                  .map((line) => (
+                    <li key={line} className="flex gap-2">
+                      <span aria-hidden className="text-primary">
+                        ·
+                      </span>
+                      <span>{line}</span>
+                    </li>
+                  ))}
               </ul>
             </div>
             <div>

@@ -39,15 +39,25 @@ describe("the game frame follows the reader's language", () => {
     expect(read("src/components/YallaGame.tsx")).toContain("&lang=${lang}");
   });
 
-  describe("an English visitor on /joc", () => {
+  // Since 3 Nov 2026 the address decides the language wherever a page has a
+  // twin in the other language (audit P1 #3: Romanian URLs rendered in
+  // English after an /en visit). The English game is /en/play; /joc is the
+  // Romanian one even for a visitor whose last choice was English.
+  describe("an English visitor", () => {
     beforeEach(() => {
       window.localStorage.setItem("site-language", "en");
     });
 
-    it("gets a frame asking the game for English", async () => {
-      renderRoute("/joc");
+    it("gets a frame asking the game for English on /en/play", async () => {
+      renderRoute("/en/play");
       const frame = await screen.findByTitle(/Yalla/i, {}, { timeout: 5000 });
       expect(frame.getAttribute("src") ?? "").toContain("lang=en");
+    });
+
+    it("gets the Romanian game at the Romanian address /joc", async () => {
+      renderRoute("/joc");
+      const frame = await screen.findByTitle(/Yalla/i, {}, { timeout: 5000 });
+      expect(frame.getAttribute("src") ?? "").toContain("lang=ro");
     });
   });
 

@@ -42,7 +42,7 @@ const AskAssistant = () => {
           type="button"
           onClick={openPanel}
           aria-label={copy.open}
-          className="fixed bottom-5 left-5 z-40 h-12 gap-2 rounded-full pl-4 pr-5 shadow-lg"
+          className="ask-assistant-fab fixed bottom-5 left-5 z-40 h-12 gap-2 rounded-full pl-4 pr-5 shadow-lg"
         >
           <MessageCircleQuestion className="size-5" />
           <span className="hidden text-sm sm:inline">{copy.open}</span>

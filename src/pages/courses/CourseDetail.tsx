@@ -532,7 +532,7 @@ const CourseDetail = () => {
                 </p>
               ) : monthly != null ? (
                 <p className="text-3xl font-bold text-foreground">
-                  {formatLei(monthly)}{" "}
+                  {formatLei(monthly, lang)}{" "}
                   <span className="text-base font-medium text-muted-foreground">
                     {lang === "en"
                       ? `LEI / month · ${GROUP_COURSE_MONTHS[levelKey]} months`

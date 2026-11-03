@@ -381,3 +381,27 @@
 .grecaptcha-badge {
   visibility: hidden;
 }
+
+/* The homepage's "Înscrie-te rapid" bar on phones (MobileEnrollmentCTA): while
+   it shows, the assistant button sits above it instead of under it, and the
+   page ends above it so nothing is covered. */
+@media (max-width: 767px) {
+  body[data-mobile-cta] .ask-assistant-fab {
+    bottom: 6rem;
+  }
+  body[data-mobile-cta] main {
+    padding-bottom: 5rem;
+  }
+}
+
+/* A small control with a finger-sized hit area (audit, 1 Nov 2026: pills,
+   chips and links of 20–29 px on phones). The visible size stays the same;
+   the invisible edge makes it easier to hit. */
+.tap-target {
+  position: relative;
+}
+.tap-target::after {
+  content: "";
+  position: absolute;
+  inset: -8px -4px;
+}

@@ -135,7 +135,7 @@ function GroupCard({ c, lang }: { c: Course; lang: "ro" | "en" }) {
 
       {monthly != null && (
         <p className="text-sm text-foreground">
-          <strong>{formatLei(monthly)} lei</strong>{" "}
+          <strong>{formatLei(monthly, lang)} lei</strong>{" "}
           <span className="text-muted-foreground">
             {lang === "en"
               ? `/ month · ${GROUP_COURSE_MONTHS[levelKey]} months`

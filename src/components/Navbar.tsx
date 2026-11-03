@@ -61,7 +61,12 @@ import {
 import NavDropdown from "@/components/NavDropdown";
 import CourseMegaMenu from "@/components/CourseMegaMenu";
 import { useActiveCohorts } from "@/hooks/useActiveCohorts";
-import { nextOpenCohort, shortDate, cohortHref } from "@/lib/nextCohort";
+import {
+  nextOpenCohort,
+  shortDate,
+  cohortHref,
+  teachingLanguageShort,
+} from "@/lib/nextCohort";
 import { cn } from "@/lib/utils";
 
 /** Height of the green band above the menu, in px (kept in step with h-[38px]). */
@@ -160,7 +165,7 @@ const Navbar = () => {
   }, []);
 
   const { cohorts } = useActiveCohorts();
-  const next = nextOpenCohort(cohorts);
+  const next = nextOpenCohort(cohorts, new Date(), lang);
 
   // Navigate to an in-page anchor; if currently on a different route,
   // route to "/" first then scroll once the target mounts.
@@ -265,7 +270,7 @@ const Navbar = () => {
   );
 
   const nextLabel = next
-    ? `${next.level} ${next.format === "fizic" ? (lang === "en" ? "in person" : "fizic") : "online"} · ${shortDate(next.start_date, lang)}`
+    ? `${next.level} ${next.format === "fizic" ? (lang === "en" ? "in person" : "fizic") : "online"}, ${teachingLanguageShort(next, lang)} · ${shortDate(next.start_date, lang)}`
     : null;
   const seatsLabel = next
     ? lang === "en"
@@ -301,15 +306,15 @@ const Navbar = () => {
         <div className="flex h-[38px] w-full items-center gap-4 px-gutter text-[13px] xl:px-8">
           {next ? (
             <Link
-              to={cohortHref(next)}
+              to={cohortHref(next, lang)}
               tabIndex={scrolled ? -1 : undefined}
-              className="inline-flex min-w-0 items-center gap-1 truncate rounded-full bg-white/[0.12] px-3 py-1 font-semibold transition-colors hover:bg-white/20"
+              className="tap-target inline-flex min-w-0 items-center gap-1 truncate rounded-full bg-white/[0.12] px-3 py-1 font-semibold transition-colors hover:bg-white/20"
             >
               <span className="hidden sm:inline">
                 {lang === "en" ? "Next course:" : "Următorul curs:"}
               </span>
               <span className="text-[#E9C77B]">{nextLabel}</span>
-              <span className="hidden md:inline">· {seatsLabel}</span>
+              <span className="hidden sm:inline">· {seatsLabel}</span>
               <span aria-hidden="true">→</span>
             </Link>
           ) : (
@@ -344,7 +349,7 @@ const Navbar = () => {
               rel="noopener noreferrer"
               tabIndex={scrolled ? -1 : undefined}
               aria-label="WhatsApp"
-              className="inline-flex h-7 items-center gap-1.5 rounded-full bg-[#25D366] px-2.5 font-semibold text-white transition-opacity hover:opacity-90 sm:px-3"
+              className="tap-target inline-flex h-7 items-center gap-1.5 rounded-full bg-[#25D366] px-2.5 font-semibold text-white transition-opacity hover:opacity-90 sm:px-3"
             >
               <MessageCircle className="h-3.5 w-3.5" aria-hidden="true" />
               <span className="hidden sm:inline">WhatsApp</span>
@@ -352,7 +357,7 @@ const Navbar = () => {
             <Link
               to={lang === "en" ? "/en/booking" : "/booking"}
               tabIndex={scrolled ? -1 : undefined}
-              className="inline-flex h-7 items-center gap-1.5 rounded-full bg-white px-3 font-semibold text-brand-green transition-opacity hover:opacity-90"
+              className="tap-target inline-flex h-7 items-center gap-1.5 rounded-full bg-white px-3 font-semibold text-brand-green transition-opacity hover:opacity-90"
             >
               <Calendar className="h-3.5 w-3.5" aria-hidden="true" />
               {t.navBooking}
@@ -440,7 +445,7 @@ const Navbar = () => {
                 key={l.href}
                 // "/#faq", not "#faq": these sections live on the homepage, so on
                 // any other page a bare hash points at an id that is not there.
-                href={`/${l.href}`}
+                href={`${homePath}${l.href}`}
                 onClick={goToAnchor(l.href)}
                 className={navLinkClass(activeSection === l.href.slice(1))}
               >
@@ -512,7 +517,7 @@ const Navbar = () => {
             </div>
             {next && (
               <Link
-                to={cohortHref(next)}
+                to={cohortHref(next, lang)}
                 onClick={() => setOpen(false)}
                 className="mb-2 rounded-xl bg-brand-green/10 px-4 py-3 text-sm font-semibold text-brand-green"
               >
@@ -624,7 +629,7 @@ const Navbar = () => {
             {links.map((l) => (
               <a
                 key={l.href}
-                href={`/${l.href}`}
+                href={`${homePath}${l.href}`}
                 onClick={goToAnchor(l.href)}
                 className="text-base font-medium text-foreground/90 hover:text-foreground transition-colors py-3 min-h-12 flex items-center"
               >

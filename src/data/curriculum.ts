@@ -172,7 +172,7 @@ const RO: CurriculumLevel[] = [
     id: "b1",
     title: "Nivel B1 — Intermediar (Utilizator Independent)",
     objective:
-      "B1 este nivelul la care araba libaneză încetează să mai fie un set de fraze și devine o limbă în care gândești. Cursantul susține conversații pe teme variate, își argumentează poziția și înțelege media uzuală — știri, interviuri, discuții obișnuite. Sistemul verbal se închide complet: toate timpurile, verbele slabe și cele dublate, condiționalul real și ireal, pasivul, subjonctivul și vorbirea indirectă. Exclusiv vorbit — fără alfabet arab.",
+      "B1 este nivelul la care araba libaneză încetează să mai fie un set de fraze și devine o limbă în care gândești. Cursantul susține conversații pe teme variate, își argumentează poziția și înțelege media uzuală — știri, interviuri, discuții obișnuite. Sistemul verbal se închide complet: toate timpurile, verbele slabe și cele dublate, condiționalul real și ireal, pasivul, subjonctivul și vorbirea indirectă. Implicit vorbit, fără alfabet arab; o grupă îl poate adăuga de la B1, dacă toți cursanții vor.",
     intro: [
       "La A2 puteai purta o conversație dacă interlocutorul te ajuta puțin. La B1 nu mai ai nevoie de ajutorul acela. Cele 72 de lecții pornesc de la o recapitulare A2 cu diagnostic — ca să știm exact ce s-a așezat și ce nu — și se termină cu discurs extins și dezbatere.",
       "Cea mai mare parte a nivelului o ocupă gramatica pe care A1 și A2 au ocolit-o deliberat: consolidarea întregului sistem verbal, pronumele avansate și grupurile de clitice, condiționalul complet, pasivul și participiile, contextele de subjonctiv, modalele complexe, vorbirea indirectă și subordonarea. Nu sunt tabele de memorat — fiecare structură intră prin conversație, în contextul în care o vei folosi.",
@@ -613,7 +613,7 @@ const EN: CurriculumLevel[] = [
     id: "b1",
     title: "Level B1 — Intermediate (Independent User)",
     objective:
-      "B1 is where Lebanese Arabic stops being a set of phrases and becomes a language you think in. You sustain conversations on varied topics, argue a position and follow everyday media — news, interviews, ordinary discussion. The verb system closes completely here: all tenses, weak and doubled verbs, the real and unreal conditional, the passive, the subjunctive and reported speech. Spoken only — no Arabic alphabet.",
+      "B1 is where Lebanese Arabic stops being a set of phrases and becomes a language you think in. You sustain conversations on varied topics, argue a position and follow everyday media — news, interviews, ordinary discussion. The verb system closes completely here: all tenses, weak and doubled verbs, the real and unreal conditional, the passive, the subjunctive and reported speech. Spoken by default, no Arabic alphabet; a group can add it from B1 if all its students want it.",
     intro: [
       "At A2 you could hold a conversation if the other person met you halfway. At B1 you no longer need them to. The 72 lessons open with an A2 review and diagnostic — so we know exactly what has settled and what has not — and close with extended discourse and debate.",
       "Most of the level is the grammar A1 and A2 deliberately stepped around: consolidating the whole verb system, advanced pronouns and clitic clusters, the full conditional, the passive and participles, subjunctive contexts, complex modals, reported speech and subordination. None of it arrives as a table to memorise — every structure comes in through conversation, in the context where you will actually use it.",

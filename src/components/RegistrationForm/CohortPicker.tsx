@@ -196,8 +196,16 @@ const CohortPicker = ({
       >
         {cohorts.map((c) => {
           const active = c.id === selectedCohortId;
-          const label =
-            lang === "ro" ? c.schedule_label_ro : c.schedule_label_en;
+          // The owner's schedule text often says the start date too
+          // ("… · start sâmbătă, 7 noiembrie 2026 · 32 de lecții"); the card
+          // shows it just above, so that part is left out here (audit, 1 Nov
+          // 2026: the card repeated the start date).
+          const label = (
+            (lang === "ro" ? c.schedule_label_ro : c.schedule_label_en) ?? ""
+          )
+            .split(" · ")
+            .filter((part) => !/^(start|starts|starting)\b/i.test(part.trim()))
+            .join(" · ");
           const breakNote = lang === "ro" ? c.break_note_ro : c.break_note_en;
           const lowSeats = c.seatsLeft > 0 && c.seatsLeft < 5;
           const badge = statusBadge(c.status, t);

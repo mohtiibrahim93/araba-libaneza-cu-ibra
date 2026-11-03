@@ -1,5 +1,5 @@
 import { minGroupSize } from "@/lib/groupSize";
-import { Link } from "@/lib/router-compat";
+import { Link } from "@/components/LocalizedLink";
 import { MapPin, Monitor, ChevronRight, Flame, Users } from "lucide-react";
 import { getCurriculum } from "@/data/curriculum";
 import { useI18n } from "@/lib/i18n";
@@ -43,7 +43,7 @@ const ActiveCoursesBanner = () => {
           </div>
           <Link
             to="/cursuri/grup"
-            className="shrink-0 whitespace-nowrap text-sm font-semibold text-primary hover:underline underline-offset-4"
+            className="tap-target inline-flex min-h-11 shrink-0 items-center whitespace-nowrap text-sm font-semibold text-primary hover:underline underline-offset-4"
           >
             {lang === "en" ? "All groups →" : "Toate grupele →"}
           </Link>

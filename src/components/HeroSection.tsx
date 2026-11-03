@@ -57,7 +57,7 @@ const HeroSection = () => {
             href={WHATSAPP_URL}
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex items-center gap-1.5 text-sm text-muted-foreground hover:text-foreground transition-colors"
+            className="tap-target inline-flex min-h-11 items-center gap-1.5 text-sm text-muted-foreground hover:text-foreground transition-colors"
           >
             <MessageCircle className="w-4 h-4 text-[#25D366]" />
             {t.heroExplore}

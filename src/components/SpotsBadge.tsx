@@ -20,7 +20,7 @@ const SpotsBadge = ({
   compact = false,
   className = "",
 }: SpotsBadgeProps) => {
-  const { t } = useI18n();
+  const { t, lang } = useI18n();
   const { get, loading } = useGroupCapacities();
   // Groups count the seats of the groups still open to join. The level-wide
   // capacity row also counted groups that are already running, so a full
@@ -42,8 +42,13 @@ const SpotsBadge = ({
   }
 
   // Group: fizic and online tracked apart — never summed into one number.
-  const fizic = seatsOf(cohorts.filter((c) => c.format !== "online"));
-  const online = seatsOf(cohorts.filter((c) => c.format === "online"));
+  // Nor are groups taught in different languages (audit, 1 Nov 2026: the
+  // quiz read "10 locuri online", 4 in the Romanian group + 6 in the English
+  // one): the reader's own language counts, any group when none is taught in it.
+  const inMyLanguage = cohorts.filter((c) => c.teaching_language === lang);
+  const shown = inMyLanguage.length > 0 ? inMyLanguage : cohorts;
+  const fizic = seatsOf(shown.filter((c) => c.format !== "online"));
+  const online = seatsOf(shown.filter((c) => c.format === "online"));
   const present = [
     { info: fizic, label: t.spotsFizic },
     { info: online, label: t.spotsOnline },

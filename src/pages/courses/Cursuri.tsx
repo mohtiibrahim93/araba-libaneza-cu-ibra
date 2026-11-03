@@ -264,7 +264,7 @@ const Cursuri = () => {
                 </span>
               </Link>
               <Link
-                to="/trial"
+                to="/verificare-nivel"
                 className="rounded-xl border border-border bg-background p-5 hover:border-primary/50 transition-colors"
               >
                 <Building2 className="w-5 h-5 text-primary mb-2" />
