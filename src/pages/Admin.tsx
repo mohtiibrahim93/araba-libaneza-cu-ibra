@@ -1,4 +1,12 @@
-import { useState, useCallback, useEffect, useMemo, useRef } from "react";
+import {
+  lazy,
+  Suspense,
+  useState,
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+} from "react";
 import { supabase } from "@/integrations/supabase/client";
 
 import { Button } from "@/components/ui/button";
@@ -58,23 +66,33 @@ import CohortsAdmin from "@/components/admin/CohortsAdmin";
 import CourseOverviewAdmin from "@/components/admin/CourseOverviewAdmin";
 import FormingCohortsAdmin from "@/components/admin/FormingCohortsAdmin";
 import PrivateLessonsAdmin from "@/components/admin/PrivateLessonsAdmin";
-import BlogAdmin from "@/components/admin/BlogAdmin";
-import ResourcesAdmin from "@/components/admin/ResourcesAdmin";
-import PagesAdmin from "@/components/admin/PagesAdmin";
-import SiteTextsAdmin from "@/components/admin/SiteTextsAdmin";
-import BacklinksAdmin from "@/components/admin/BacklinksAdmin";
+const BlogAdmin = lazy(() => import("@/components/admin/BlogAdmin"));
+const ResourcesAdmin = lazy(() => import("@/components/admin/ResourcesAdmin"));
+const PagesAdmin = lazy(() => import("@/components/admin/PagesAdmin"));
+const SiteTextsAdmin = lazy(() => import("@/components/admin/SiteTextsAdmin"));
+const BacklinksAdmin = lazy(() => import("@/components/admin/BacklinksAdmin"));
 import CourseRequestsAdmin from "@/components/admin/CourseRequestsAdmin";
 import BookingSettingsAdmin from "@/components/admin/BookingSettingsAdmin";
 import BookingsAdmin from "@/components/BookingsAdmin";
 import CalendarHealth from "@/components/admin/CalendarHealth";
 import StudentJourneyAdmin from "@/components/admin/StudentJourneyAdmin";
 import TrialFunnelAdmin from "@/components/admin/TrialFunnelAdmin";
-import AnalyticsAdmin from "@/components/admin/AnalyticsAdmin";
+const AnalyticsAdmin = lazy(() => import("@/components/admin/AnalyticsAdmin"));
 import TodayAdmin, { type TodaySummary } from "@/components/admin/TodayAdmin";
 import StudentProgressAdmin from "@/components/admin/StudentProgressAdmin";
 import KidsSlotsAdmin from "@/components/admin/KidsSlotsAdmin";
-import AuditLogAdmin from "@/components/admin/AuditLogAdmin";
-import CardOverridesAdmin from "@/components/admin/CardOverridesAdmin";
+const AuditLogAdmin = lazy(() => import("@/components/admin/AuditLogAdmin"));
+const CardOverridesAdmin = lazy(
+  () => import("@/components/admin/CardOverridesAdmin"),
+);
+
+/**
+ * Rarely used tabs load when opened, not with the admin (audit P3 #6: the
+ * admin bundle was ~840 KB). Radix mounts only the open tab.
+ */
+const TabLoading = () => (
+  <p className="py-8 text-center text-sm text-muted-foreground">Se încarcă…</p>
+);
 import AdminLogin from "@/components/admin/AdminLogin";
 import SettingsTab from "@/components/admin/SettingsTab";
 import RegistrationFilters from "@/components/admin/RegistrationFilters";
@@ -1027,7 +1045,9 @@ const Admin = () => {
 
         {/* ── Analiză: aceleași date, dar pe o perioadă ────────────────── */}
         <TabsContent value="analytics" className="mt-0">
-          <AnalyticsAdmin />
+          <Suspense fallback={<TabLoading />}>
+            <AnalyticsAdmin />
+          </Suspense>
         </TabsContent>
 
         {/* ── Înscrieri: filtre + tabel + export ───────────────────────── */}
@@ -1360,33 +1380,47 @@ const Admin = () => {
 
         {/* ── Blog: editare articole (CMS override) ────────────────────── */}
         <TabsContent value="blog" className="mt-0">
-          <BlogAdmin />
+          <Suspense fallback={<TabLoading />}>
+            <BlogAdmin />
+          </Suspense>
         </TabsContent>
 
         {/* ── SEO: backlink-uri și sănătate domeniu ─────────────────────── */}
         <TabsContent value="resources" className="mt-0">
-          <ResourcesAdmin />
+          <Suspense fallback={<TabLoading />}>
+            <ResourcesAdmin />
+          </Suspense>
         </TabsContent>
 
         <TabsContent value="pages" className="mt-0">
-          <PagesAdmin />
+          <Suspense fallback={<TabLoading />}>
+            <PagesAdmin />
+          </Suspense>
         </TabsContent>
 
         <TabsContent value="site-texts" className="mt-0">
-          <SiteTextsAdmin />
+          <Suspense fallback={<TabLoading />}>
+            <SiteTextsAdmin />
+          </Suspense>
         </TabsContent>
 
         <TabsContent value="card-overrides" className="mt-0">
-          <CardOverridesAdmin />
+          <Suspense fallback={<TabLoading />}>
+            <CardOverridesAdmin />
+          </Suspense>
         </TabsContent>
 
         <TabsContent value="seo" className="mt-0">
-          <BacklinksAdmin />
+          <Suspense fallback={<TabLoading />}>
+            <BacklinksAdmin />
+          </Suspense>
         </TabsContent>
 
         {/* ── Setări: email, notificări, servicii, cont ────────────────── */}
         <TabsContent value="audit-log" className="mt-0">
-          <AuditLogAdmin />
+          <Suspense fallback={<TabLoading />}>
+            <AuditLogAdmin />
+          </Suspense>
         </TabsContent>
 
         <TabsContent value="settings" className="mt-0">

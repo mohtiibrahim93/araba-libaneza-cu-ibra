@@ -99,8 +99,9 @@ describe("the analytics tab", () => {
     expect(admin).toContain('value: "analytics"');
     expect(admin).toContain('<TabsContent value="analytics"');
     expect(admin).toContain("<AnalyticsAdmin />");
+    // Loaded when the tab is opened (bundle size, 3 Nov 2026).
     expect(admin).toContain(
-      'import AnalyticsAdmin from "@/components/admin/AnalyticsAdmin"',
+      'const AnalyticsAdmin = lazy(() => import("@/components/admin/AnalyticsAdmin"))',
     );
   });
 
