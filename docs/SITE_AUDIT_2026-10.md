@@ -29,7 +29,26 @@ re-checked on 26 Oct against main and the live site.
   "1 lună acordată"), b0fb8efc. Needs migration 20261103090000 and a deploy
   of admin-registrations, booking-reminders, stripe-webhook,
   create-checkout-session, create-payment-intent, create-subscription.
-- Everything below P0 is still open unless marked.
+- BUILT 3 Nov 2026, not live until deployed and published (commits 538b8eaf..eacea8b4):
+  - Admin (Chrome pass #1-#12): #1 one way to add a student, #3 seat split,
+    #4 24-hour times, #7 floating selection bar, #8 sidebar name, #9 tab
+    name, #10 trial funnel counts, #12 "Mută în altă grupă". #2 was already
+    done. #5 no longer reproduces (no "incomplete" rows). #6 is by design (a
+    make-up lesson or a new package is its own registration). #11 is an owner
+    decision (A2 online is a draft with a 2 Sep start).
+  - Public (Chrome pass #13-#35): done except #16 (covered by the forming
+    groups section), #18 (already fixed), #22 (no longer in the code), #32
+    (the owner's own chat spelling, left as is). #15 already showed dates.
+  - Payment links carry no email or name. ?token= and ?sig= stay: they are
+    the access keys of those pages, and P0-3 keeps them away from Google.
+  - P1 security: #2, #3, #4, #5, #7 done. #1 (which header holds the real
+    visitor IP behind Supabase) needs a live request to confirm. #6 is the
+    owner's Zoom setting.
+  - P1 broken: #2, #3, #4, #6, #8, #10 done. Open: #1 quiz comparison table,
+    #5 soft 404s (needs a server-side lookup), #7 Checkout/Payment status in
+    English, #9 trial form labels.
+  - P1 legal: owner and lawyer.
+- Everything else below is still open unless marked.
 - DONE One group registration from 11 Oct (A1 in person) had no group attached
   (`cohort_id` null), so it could not pay. Resolved (confirmed by the owner, 30 Oct).
 - Suggested next order: P0-4 and P0-5 (the group payment flow), then P0-6 to P0-9.
