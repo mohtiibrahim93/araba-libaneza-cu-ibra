@@ -1,5 +1,8 @@
+import Navbar from "@/components/Navbar";
+import Footer from "@/components/Footer";
 import { useEffect } from "react";
-import { Link, useSearchParams } from "@/lib/router-compat";
+import { useSearchParams } from "@/lib/router-compat";
+import { Link } from "@/components/LocalizedLink";
 import { ArrowLeft } from "lucide-react";
 import NativeScheduler from "@/components/NativeScheduler";
 import { useI18n } from "@/lib/i18n";
@@ -32,26 +35,35 @@ const BookingInner = () => {
   // the visitor picks a course, then a date, then books.
   if (!hasValidRegistration) return <BookingLanding />;
 
+  // With the menu and footer like every other page (audit P3: this page was
+  // the only one without them).
   return (
-    <main className="min-h-screen bg-background py-12 px-gutter">
-      <div className="w-full max-w-2xl 2xl:max-w-3xl mx-auto">
-        <Link
-          to="/"
-          className="inline-flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground mb-6"
-        >
-          <ArrowLeft className="w-4 h-4" /> {t.navHome}
-        </Link>
-        <h1 className="text-3xl font-bold tracking-tight mb-2">
-          {type === "paid" ? t.bookingPageTitlePaid : t.bookingPageTitleTrial}
-        </h1>
-        <p className="text-muted-foreground mb-8">
-          {type === "paid"
-            ? t.bookingPageSubtitlePaid
-            : t.bookingPageSubtitleTrial}
-        </p>
-        <NativeScheduler eventType={type} registrationId={registrationId} />
-      </div>
-    </main>
+    <div className="flex min-h-screen flex-col bg-background">
+      <Navbar />
+      <main
+        id="main-content"
+        className="flex-1 bg-background pt-32 pb-12 px-gutter"
+      >
+        <div className="w-full max-w-2xl 2xl:max-w-3xl mx-auto">
+          <Link
+            to="/"
+            className="inline-flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground mb-6"
+          >
+            <ArrowLeft className="w-4 h-4" /> {t.navHome}
+          </Link>
+          <h1 className="text-3xl font-bold tracking-tight mb-2">
+            {type === "paid" ? t.bookingPageTitlePaid : t.bookingPageTitleTrial}
+          </h1>
+          <p className="text-muted-foreground mb-8">
+            {type === "paid"
+              ? t.bookingPageSubtitlePaid
+              : t.bookingPageSubtitleTrial}
+          </p>
+          <NativeScheduler eventType={type} registrationId={registrationId} />
+        </div>
+      </main>
+      <Footer />
+    </div>
   );
 };
 

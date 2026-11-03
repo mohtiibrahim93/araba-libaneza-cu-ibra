@@ -527,7 +527,7 @@ const VerificareNivel = () => {
                 href={waHref}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex h-12 items-center gap-2 rounded-xl bg-[#25D366] px-6 font-semibold text-white transition hover:opacity-90"
+                className="inline-flex h-12 items-center gap-2 rounded-xl bg-[#0F7A3F] px-6 font-semibold text-white transition hover:opacity-90"
               >
                 <MessageCircle className="h-5 w-5" aria-hidden /> {c.waBtn}
               </a>

@@ -155,7 +155,11 @@ const ActiveCoursesBanner = () => {
                             : undefined
                         }
                       >
-                        {c.taken} / {c.max_seats} {t.capSeatsLabel}
+                        {/* Free seats, as on the group pages ("0 / 6
+                            ocupate" read as an empty, unpopular group). */}
+                        {lang === "en"
+                          ? `${c.seatsLeft} of ${c.max_seats} places free`
+                          : `${c.seatsLeft} din ${c.max_seats} locuri libere`}
                       </span>
                     </span>
                   </p>

@@ -191,7 +191,7 @@ const ProgramsSection = () => {
                 <div
                   id="group-levels"
                   className={`scroll-mt-24 ${CARD} ${
-                    inlineForm === "group" ? "md:col-span-3" : ""
+                    inlineForm === "group" ? "md:col-span-2" : ""
                   }`}
                 >
                   {inlineForm === "group" ? (

@@ -63,7 +63,13 @@ export const Steps = ({ steps }: { steps: Step[] }) => {
   return (
     <ol className="not-prose my-8 space-y-8 list-none pl-0">
       {steps.map((s, i) => (
-        <li key={i} className="border-l-2 border-border pl-5">
+        // id="step-N" is what the HowTo JSON-LD's step url points to (audit
+        // P3 SEO #4: the anchors did not exist).
+        <li
+          key={i}
+          id={`step-${i + 1}`}
+          className="scroll-mt-28 border-l-2 border-border pl-5"
+        >
           <h3 className="font-display text-lg font-bold text-foreground">
             {i + 1}. {pick(s.title, lang)}
           </h3>

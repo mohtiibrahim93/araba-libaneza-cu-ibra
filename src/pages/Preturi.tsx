@@ -169,7 +169,13 @@ const PreturiPage = () => {
                       {en ? "Whole level upfront" : "Tot nivelul, în avans"} (
                       {discountLabel(GROUP_FULL_COURSE_DISCOUNT)})
                     </th>
-                    <th className="px-5 py-4 font-semibold" />
+                    <th className="px-5 py-4 font-semibold">
+                      {/* The column of sign-up links; named for screen
+                          readers (audit P3: empty <th>). */}
+                      <span className="sr-only">
+                        {en ? "Sign up" : "Înscriere"}
+                      </span>
+                    </th>
                   </tr>
                 </thead>
                 <tbody>

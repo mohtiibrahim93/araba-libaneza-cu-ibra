@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from "react";
-import { Link, useSearchParams } from "@/lib/router-compat";
+import { useSearchParams } from "@/lib/router-compat";
+import { Link } from "@/components/LocalizedLink";
 import {
   CheckCircle2,
   Mail,

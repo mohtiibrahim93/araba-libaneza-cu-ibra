@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
-import { useParams, Link } from "@/lib/router-compat";
+import { useParams } from "@/lib/router-compat";
+import { Link } from "@/components/LocalizedLink";
 import { supabase } from "@/integrations/supabase/client";
 import { invokeAdmin } from "@/lib/adminAuth";
 import { lovable } from "@/integrations/lovable";

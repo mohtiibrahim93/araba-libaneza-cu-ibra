@@ -175,8 +175,20 @@ const BlogArticleLayout = ({
     "@context": "https://schema.org",
     "@type": "BreadcrumbList",
     itemListElement: [
-      { "@type": "ListItem", position: 1, name: homeLabel, item: `${BASE}/` },
-      { "@type": "ListItem", position: 2, name: "Blog", item: `${BASE}/blog` },
+      // In the reader's language (audit P3 SEO #2: English articles pointed
+      // at the Romanian home and blog).
+      {
+        "@type": "ListItem",
+        position: 1,
+        name: homeLabel,
+        item: lang === "en" ? `${BASE}/en` : `${BASE}/`,
+      },
+      {
+        "@type": "ListItem",
+        position: 2,
+        name: "Blog",
+        item: lang === "en" ? `${BASE}/en/blog` : `${BASE}/blog`,
+      },
       { "@type": "ListItem", position: 3, name: tCrumb, item: url },
     ],
   };
@@ -252,9 +264,13 @@ const BlogArticleLayout = ({
         {!served && cover ? (
           <meta name="twitter:image" content={socialImage} />
         ) : null}
-        <script type="application/ld+json">
-          {JSON.stringify(articleJsonLd)}
-        </script>
+        {/* The route head (seoHead) already serves the Article block; a
+            second one here made two per article (audit P3 SEO #1). */}
+        {!served && (
+          <script type="application/ld+json">
+            {JSON.stringify(articleJsonLd)}
+          </script>
+        )}
         <script type="application/ld+json">
           {JSON.stringify(breadcrumbJsonLd)}
         </script>

@@ -1,5 +1,6 @@
 import { Helmet } from "react-helmet-async";
-import { Link, useParams } from "@/lib/router-compat";
+import { useParams } from "@/lib/router-compat";
+import { Link } from "@/components/LocalizedLink";
 import {
   ChevronRight,
   CalendarDays,

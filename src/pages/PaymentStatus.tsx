@@ -1,7 +1,8 @@
 import { useEffect, useRef, useState } from "react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
-import { Link, useNavigate, useSearchParams } from "@/lib/router-compat";
+import { useNavigate, useSearchParams } from "@/lib/router-compat";
+import { Link } from "@/components/LocalizedLink";
 import {
   CheckCircle2,
   XCircle,

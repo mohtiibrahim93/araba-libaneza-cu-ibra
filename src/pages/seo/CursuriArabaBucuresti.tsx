@@ -1,4 +1,4 @@
-import { Link } from "@/lib/router-compat";
+import { Link } from "@/components/LocalizedLink";
 import { Helmet } from "react-helmet-async";
 import LandingLayout from "@/components/seo/LandingLayout";
 

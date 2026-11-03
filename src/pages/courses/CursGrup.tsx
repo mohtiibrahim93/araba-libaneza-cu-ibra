@@ -2,7 +2,7 @@ import { isOpenLevel } from "@/lib/openLevels";
 import GroupStartRule from "@/components/GroupStartRule";
 import CourseLayout from "@/components/course/CourseLayout";
 import { useI18n } from "@/lib/i18n";
-import { Link } from "@/lib/router-compat";
+import { Link } from "@/components/LocalizedLink";
 import { ChevronRight, MessageCircle, Sparkles, Building2 } from "lucide-react";
 import { getCurriculum } from "@/data/curriculum";
 import {

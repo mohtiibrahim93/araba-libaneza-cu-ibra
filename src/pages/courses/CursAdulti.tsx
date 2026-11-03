@@ -1,5 +1,5 @@
 import CourseLayout from "@/components/course/CourseLayout";
-import { Link } from "@/lib/router-compat";
+import { Link } from "@/components/LocalizedLink";
 import { ChevronRight, Users, User } from "lucide-react";
 import { useGroupCohorts } from "@/hooks/useGroupCohorts";
 import { cohortHref, longDate } from "@/lib/nextCohort";

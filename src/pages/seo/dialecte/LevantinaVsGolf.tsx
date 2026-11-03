@@ -1,4 +1,4 @@
-import { Link } from "@/lib/router-compat";
+import { Link } from "@/components/LocalizedLink";
 import LandingLayout from "@/components/seo/LandingLayout";
 import ComparisonTable from "@/components/seo/ComparisonTable";
 import { DIALECT_PARENTS } from "./parents";

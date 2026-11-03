@@ -18,7 +18,7 @@ import { toast } from "sonner";
 import GdprCheckbox from "@/components/GdprCheckbox";
 import { buildIcs, downloadIcs } from "@/lib/ics";
 import { Button } from "@/components/ui/button";
-import { Link } from "@/lib/router-compat";
+import { Link } from "@/components/LocalizedLink";
 import { Calendar as CalendarPicker } from "@/components/ui/calendar";
 import { ro as roLocale, enGB as enLocale } from "date-fns/locale";
 import { cn } from "@/lib/utils";

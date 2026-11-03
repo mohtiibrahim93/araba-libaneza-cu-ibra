@@ -1,4 +1,4 @@
-import { Link } from "@/lib/router-compat";
+import { Link } from "@/components/LocalizedLink";
 import LandingLayout from "@/components/seo/LandingLayout";
 import { CURSURI_ARABA_META } from "@/lib/pageMeta";
 

@@ -1,4 +1,4 @@
-import { Link } from "@/lib/router-compat";
+import { Link } from "@/components/LocalizedLink";
 import { useCourses } from "@/hooks/useCourses";
 import { useI18n } from "@/lib/i18n";
 import { groupPagePath, levelPagePath } from "@/lib/groupPage";

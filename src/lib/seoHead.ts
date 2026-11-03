@@ -904,6 +904,12 @@ export interface SeoHeadOptions {
    * drop the articles only page two lists. Used by the blog index routes.
    */
   canonicalSearch?: string;
+  /**
+   * Page number of a paginated index: page 2+ gets "— Pagina N" / "— Page N"
+   * in its title and description, so it no longer repeats page one's
+   * (audit P3 SEO #5).
+   */
+  page?: number;
 }
 
 export function seoHead(path: string, opts?: SeoHeadOptions): HeadResult {
@@ -913,7 +919,12 @@ export function seoHead(path: string, opts?: SeoHeadOptions): HeadResult {
   const url = BASE + (route.path === "/" ? "/" : route.path);
   const lang = route.lang ?? (route.path.startsWith("/en/") ? "en" : "ro");
   const ogLocale = lang === "en" ? "en_US" : lang === "de" ? "de_DE" : "ro_RO";
-  const { title, description } = route;
+  const pageSuffix =
+    opts?.page && opts.page > 1
+      ? ` — ${(route.lang ?? (route.path.startsWith("/en/") ? "en" : "ro")) === "en" ? "Page" : "Pagina"} ${opts.page}`
+      : "";
+  const title = route.title + pageSuffix;
+  const description = route.description + pageSuffix;
   // Canonical (and og:url) point at the consolidation target when set.
   const canonicalHref =
     (route.canonical ? BASE + route.canonical : url) +

@@ -146,7 +146,7 @@ const PaymentInstructions = ({
               href={WHATSAPP_URL}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 px-4 py-2 text-sm font-semibold rounded-lg bg-[#25D366] text-white hover:bg-[#1fb855] transition-colors"
+              className="inline-flex items-center gap-2 px-4 py-2 text-sm font-semibold rounded-lg bg-[#0F7A3F] text-white hover:bg-[#0c6533] transition-colors"
             >
               <MessageCircle className="w-4 h-4" />
               {t.paymentWhatsapp}

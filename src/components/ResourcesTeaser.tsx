@@ -82,7 +82,7 @@ const ResourcesTeaser = () => {
 
         <div className="mt-10 text-center">
           <Link
-            to="/blog"
+            to="/resurse"
             className="inline-flex items-center justify-center rounded-full border border-primary text-primary px-6 py-2.5 text-sm font-medium hover:bg-primary hover:text-primary-foreground transition-colors"
           >
             {isEn ? "Browse all resources" : "Vezi toate resursele"}

@@ -1,4 +1,4 @@
-import { Link } from "@/lib/router-compat";
+import { Link } from "@/components/LocalizedLink";
 import NotifyMeForm from "@/components/NotifyMeForm";
 import LandingLayout from "@/components/seo/LandingLayout";
 import { courseInstances, GROUP_WEEKLY_WORKLOAD } from "@/lib/courseSchema";

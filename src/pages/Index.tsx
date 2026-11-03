@@ -94,10 +94,12 @@ const PageContent = () => {
       // before anything has confirmed the charge — and the same payment is
       // already reported, once and verified, by /payment-status and
       // /thank-you. Sending it here made every real sale count twice.
-      window.history.replaceState({}, "", "/");
+      // Keep the page it came back to (/en stays /en; audit P3 i18n #4).
+      window.history.replaceState({}, "", window.location.pathname);
     } else if (payment === "canceled") {
       toast.info(t.paymentCanceled);
-      window.history.replaceState({}, "", "/");
+      // Keep the page it came back to (/en stays /en; audit P3 i18n #4).
+      window.history.replaceState({}, "", window.location.pathname);
     }
 
     // Return from the 0-lei trial card-on-file Stripe setup page.
@@ -117,7 +119,8 @@ const PageContent = () => {
         event_type: "trial",
         source: "card_saved",
       });
-      window.history.replaceState({}, "", "/");
+      // Keep the page it came back to (/en stays /en; audit P3 i18n #4).
+      window.history.replaceState({}, "", window.location.pathname);
     } else if (trialCard === "canceled") {
       // The card IS the booking now: nothing is reserved until it is saved, so
       // this can no longer promise the slot still stands.
@@ -127,7 +130,8 @@ const PageContent = () => {
           : "Fără card, fără rezervare — intervalul nu a fost reținut. Poți alege din nou o oră oricând.",
         { duration: 10000 },
       );
-      window.history.replaceState({}, "", "/");
+      // Keep the page it came back to (/en stays /en; audit P3 i18n #4).
+      window.history.replaceState({}, "", window.location.pathname);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);

@@ -1,4 +1,5 @@
-import { Link, Navigate, useLocation } from "@/lib/router-compat";
+import { Navigate, useLocation } from "@/lib/router-compat";
+import { Link } from "@/components/LocalizedLink";
 import { useEffect } from "react";
 import { Helmet } from "react-helmet-async";
 import Navbar from "@/components/Navbar";
@@ -52,7 +53,10 @@ const NotFound = () => {
       </Helmet>
       <ScrollToTop />
       <Navbar />
-      <main className="mx-auto max-w-5xl px-gutter pt-36 pb-16">
+      <main
+        id="main-content"
+        className="mx-auto max-w-5xl px-gutter pt-36 pb-16"
+      >
         <p className="text-xs font-semibold uppercase tracking-widest text-brand-green">
           404
         </p>

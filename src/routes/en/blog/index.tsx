@@ -13,7 +13,7 @@ export const Route = createFileRoute("/en/blog/")({
     );
     return seoHead(
       "/en/blog",
-      page > 1 ? { canonicalSearch: `?page=${page}` } : undefined,
+      page > 1 ? { canonicalSearch: `?page=${page}`, page } : undefined,
     );
   },
   component: BlogIndex,

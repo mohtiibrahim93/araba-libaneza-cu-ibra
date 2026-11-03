@@ -1,4 +1,4 @@
-import { Link } from "@/lib/router-compat";
+import { Link } from "@/components/LocalizedLink";
 import LandingLayout from "@/components/seo/LandingLayout";
 import CreditedFigure from "@/components/content/CreditedFigure";
 import arabicDialectsMap from "@/assets/arabic-dialects-map.webp";

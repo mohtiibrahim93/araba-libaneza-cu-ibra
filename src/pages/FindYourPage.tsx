@@ -28,7 +28,7 @@ const FindYourPage = ({ lang }: { lang: "ro" | "en" }) => (
     <Navbar />
     {/* pt-36 clears the fixed header (band + navbar); the title used to sit
         under it. */}
-    <main>
+    <main id="main-content">
       <div className="bg-cream pt-36 pb-12">
         <div className="mx-auto max-w-5xl px-gutter">
           <h1 className="font-display text-display-lg font-bold tracking-tight text-foreground">

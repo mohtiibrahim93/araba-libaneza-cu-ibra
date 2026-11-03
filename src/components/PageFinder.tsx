@@ -9,7 +9,7 @@
  * no waiting, and it works on the 404 page where there is nothing to fetch.
  */
 import { useMemo, useState } from "react";
-import { Link } from "@/lib/router-compat";
+import { Link } from "@/components/LocalizedLink";
 import { Search } from "lucide-react";
 import { L, blogPostsNewestFirst } from "@/lib/blogPosts";
 import { getBlogCover } from "@/lib/blogCovers";

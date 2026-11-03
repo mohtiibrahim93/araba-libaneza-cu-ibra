@@ -1,6 +1,6 @@
 import { ReactNode } from "react";
 import { Helmet } from "react-helmet-async";
-import { Link } from "@/lib/router-compat";
+import { Link } from "@/components/LocalizedLink";
 import { ChevronRight, MessageCircle, Check } from "lucide-react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";

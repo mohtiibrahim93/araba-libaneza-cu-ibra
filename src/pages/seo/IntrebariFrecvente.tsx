@@ -1,4 +1,4 @@
-import { Link } from "@/lib/router-compat";
+import { Link } from "@/components/LocalizedLink";
 import LandingLayout from "@/components/seo/LandingLayout";
 import FaqGroups from "@/components/FaqGroups";
 import { allFaqs } from "@/data/faq";

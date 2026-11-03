@@ -655,7 +655,7 @@ const AdminNotifications = () => {
                           </Button>
                           <Button
                             size="sm"
-                            className="bg-[#25D366] hover:bg-[#1fb855] text-white"
+                            className="bg-[#0F7A3F] hover:bg-[#0c6533] text-white"
                             disabled={isBusy}
                             onClick={() => handleOpenWhatsApp(r)}
                           >

@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
-import { Link, useNavigate, useParams } from "@/lib/router-compat";
+import { useNavigate, useParams } from "@/lib/router-compat";
+import { Link } from "@/components/LocalizedLink";
 import {
   ArrowLeft,
   Calendar,

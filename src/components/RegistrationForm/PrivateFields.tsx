@@ -51,7 +51,7 @@ const PrivateFields = ({
           type="button"
           onClick={() => onPrivateQuantityChange(clamp(privateQuantity - 1))}
           className="w-10 h-10 rounded-lg border border-border text-foreground hover:bg-muted transition-colors text-lg font-semibold"
-          aria-label="−"
+          aria-label={lang === "en" ? "One lesson fewer" : "O lecție mai puțin"}
         >
           −
         </button>
@@ -71,7 +71,7 @@ const PrivateFields = ({
           type="button"
           onClick={() => onPrivateQuantityChange(clamp(privateQuantity + 1))}
           className="w-10 h-10 rounded-lg border border-border text-foreground hover:bg-muted transition-colors text-lg font-semibold"
-          aria-label="+"
+          aria-label={lang === "en" ? "One lesson more" : "O lecție în plus"}
         >
           +
         </button>

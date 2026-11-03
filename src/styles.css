@@ -405,3 +405,14 @@
   position: absolute;
   inset: -8px -4px;
 }
+
+/* Visitors who ask their system for less motion get no decorative pulses
+   (audit P3 accessibility #7). Loading spinners keep turning: they say
+   something is happening. */
+@media (prefers-reduced-motion: reduce) {
+  .animate-pulse,
+  .animate-ping,
+  .animate-bounce {
+    animation: none !important;
+  }
+}

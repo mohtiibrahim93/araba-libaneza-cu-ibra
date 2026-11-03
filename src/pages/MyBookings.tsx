@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
-import { Link, useSearchParams } from "@/lib/router-compat";
+import { useSearchParams } from "@/lib/router-compat";
+import { Link } from "@/components/LocalizedLink";
 import {
   Calendar,
   Clock,
@@ -244,7 +245,10 @@ const MyBookings = ({ lang }: { lang: Lang }) => {
           </p>
         </div>
       </div>
-      <main className="mx-auto w-full max-w-4xl px-gutter pb-16">
+      <main
+        id="main-content"
+        className="mx-auto w-full max-w-4xl px-gutter pb-16"
+      >
         {!token && !sent && (
           <form
             onSubmit={requestLink}
