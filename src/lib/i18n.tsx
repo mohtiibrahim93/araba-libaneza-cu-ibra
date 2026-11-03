@@ -624,6 +624,8 @@ export const translations = {
     schedulerNameRequired: "Completează numele și emailul",
     nameRequiredError: "Completează numele.",
     schedulerSlotTaken: "Slotul tocmai a fost rezervat. Alege altul.",
+    schedulerSlotNotForFormat:
+      "Ora aleasă nu se poate rezerva la centru: proba fizică se programează cu cel puțin 24 de ore înainte. Alege altă oră sau online.",
     schedulerBookingFailed: "Rezervarea a eșuat. Încearcă din nou.",
     schedulerLoadingSlots:
       "Verificăm în calendarul lui Ibra orele libere din următoarele zile… durează câteva secunde.",
@@ -1575,6 +1577,8 @@ export const translations = {
     schedulerNameRequired: "Fill in name and email",
     nameRequiredError: "Fill in your name.",
     schedulerSlotTaken: "Slot just got taken. Pick another.",
+    schedulerSlotNotForFormat:
+      "That time cannot be booked at the centre: an in-person trial needs at least 24 hours' notice. Choose another time or online.",
     schedulerBookingFailed: "Booking failed. Please try again.",
     schedulerLoadingSlots:
       "Checking Ibra's calendar for free times in the coming days… this takes a few seconds.",

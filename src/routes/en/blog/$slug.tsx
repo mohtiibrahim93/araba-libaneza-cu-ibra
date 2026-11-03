@@ -1,4 +1,4 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, notFound } from "@tanstack/react-router";
 import { seoHead } from "@/lib/seoHead";
 import type { ComponentType } from "react";
 import NotFound from "@/pages/NotFound";
@@ -65,5 +65,10 @@ function EnBlogPost() {
 
 export const Route = createFileRoute("/en/blog/$slug")({
   head: ({ params }) => seoHead(`/en/blog/${params.slug}`),
+  // An unknown article answers 404, not a 200 "not found" page (audit P1 #5).
+  loader: ({ params }) => {
+    if (!BLOG_COMPONENTS[params.slug]) throw notFound();
+  },
+  notFoundComponent: NotFound,
   component: EnBlogPost,
 });

@@ -12,6 +12,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { trackPurchase } from "@/lib/tracking";
+import { useI18n } from "@/lib/i18n";
 
 type Status = "pending" | "succeeded" | "failed" | "canceled";
 
@@ -30,6 +31,8 @@ function mapRegistrationPaymentStatus(
 }
 
 const PaymentStatus = () => {
+  // English too (audit P1 #7: Checkout and Payment status were Romanian only).
+  const english = useI18n().lang === "en";
   const [params] = useSearchParams();
   const navigate = useNavigate();
 
@@ -42,7 +45,9 @@ const PaymentStatus = () => {
 
   const [status, setStatus] = useState<Status>("pending");
   const [amount, setAmount] = useState<number>(amountParam || 0);
-  const [message, setMessage] = useState<string>("Confirmăm plata...");
+  const [message, setMessage] = useState<string>(
+    english ? "Confirming your payment…" : "Confirmăm plata...",
+  );
   // A ref, not state: this guards a side effect that must happen at most once,
   // and a state update is not visible to the polling closure that set it.
   const purchaseSent = useRef(false);
@@ -127,7 +132,11 @@ const PaymentStatus = () => {
             }
             return;
           }
-          setMessage(`Confirmăm plata... (${attempt}/${MAX_POLLS})`);
+          setMessage(
+            english
+              ? `Confirming your payment… (${attempt}/${MAX_POLLS})`
+              : `Confirmăm plata... (${attempt}/${MAX_POLLS})`,
+          );
         } catch (e) {
           console.error("[payment-status] check failed", e);
         }
@@ -137,7 +146,9 @@ const PaymentStatus = () => {
         // Still pending after all attempts — treat as pending (webhook may arrive later).
         setStatus("pending");
         setMessage(
-          "Plata este încă în procesare. Vei primi confirmarea pe email în câteva minute.",
+          english
+            ? "Your payment is still being processed. You will get the confirmation by email in a few minutes."
+            : "Plata este încă în procesare. Vei primi confirmarea pe email în câteva minute.",
         );
       }
     };
@@ -151,7 +162,7 @@ const PaymentStatus = () => {
 
   const formattedAmount =
     amount > 0
-      ? new Intl.NumberFormat("ro-RO", {
+      ? new Intl.NumberFormat(english ? "en-GB" : "ro-RO", {
           style: "currency",
           currency,
           minimumFractionDigits: 0,
@@ -169,7 +180,7 @@ const PaymentStatus = () => {
                 <>
                   <Loader2 className="w-10 h-10 animate-spin text-brand-green mx-auto" />
                   <h1 className="font-display text-2xl font-bold">
-                    Confirmăm plata
+                    {english ? "Confirming your payment" : "Confirmăm plata"}
                   </h1>
                   <p className="text-sm text-muted-foreground">{message}</p>
                 </>
@@ -184,10 +195,12 @@ const PaymentStatus = () => {
                     />
                   </span>
                   <h1 className="font-display text-display-md font-bold tracking-tight">
-                    Plată reușită
+                    {english ? "Payment successful" : "Plată reușită"}
                   </h1>
                   <p className="text-sm text-muted-foreground">
-                    Îți mulțumim! Am înregistrat plata cu succes.
+                    {english
+                      ? "Thank you! Your payment has been recorded."
+                      : "Îți mulțumim! Am înregistrat plata cu succes."}
                   </p>
                   {formattedAmount && (
                     <p className="text-lg font-semibold text-foreground">
@@ -199,13 +212,13 @@ const PaymentStatus = () => {
                       <Link
                         to={`/thank-you?type=${encodeURIComponent(courseType)}&amount=${amount}&currency=${currency.toLowerCase()}${registrationId ? `&registration_id=${registrationId}` : ""}`}
                       >
-                        Continuă
+                        {english ? "Continue" : "Continuă"}
                       </Link>
                     </Button>
                     <Button asChild variant="ghost">
                       <Link to="/">
                         <ArrowLeft className="w-4 h-4 mr-1" />
-                        Acasă
+                        {english ? "Home" : "Acasă"}
                       </Link>
                     </Button>
                   </div>
@@ -220,22 +233,27 @@ const PaymentStatus = () => {
                   />
                   <h1 className="font-display text-2xl font-bold">
                     {status === "canceled"
-                      ? "Plata a fost anulată"
-                      : "Plata a eșuat"}
+                      ? english
+                        ? "The payment was cancelled"
+                        : "Plata a fost anulată"
+                      : english
+                        ? "The payment failed"
+                        : "Plata a eșuat"}
                   </h1>
                   <p className="text-sm text-muted-foreground">
-                    Nu am reușit să procesăm plata. Poți să încerci din nou sau
-                    să ne scrii pe WhatsApp la 0763 124 514.
+                    {english
+                      ? "We could not process the payment. You can try again or message us on WhatsApp at 0763 124 514."
+                      : "Nu am reușit să procesăm plata. Poți să încerci din nou sau să ne scrii pe WhatsApp la 0763 124 514."}
                   </p>
                   <div className="pt-3 flex flex-col sm:flex-row gap-2 justify-center">
                     <Button onClick={() => navigate(-1)} size="lg">
                       <RefreshCcw className="w-4 h-4 mr-1" />
-                      Încearcă din nou
+                      {english ? "Try again" : "Încearcă din nou"}
                     </Button>
                     <Button asChild variant="ghost">
                       <Link to="/">
                         <ArrowLeft className="w-4 h-4 mr-1" />
-                        Acasă
+                        {english ? "Home" : "Acasă"}
                       </Link>
                     </Button>
                   </div>
@@ -246,7 +264,8 @@ const PaymentStatus = () => {
 
           {registrationId && (
             <p className="text-center text-[11px] text-muted-foreground mt-4">
-              Ref înscriere: {registrationId.slice(0, 8)}
+              {english ? "Registration ref" : "Ref înscriere"}:{" "}
+              {registrationId.slice(0, 8)}
             </p>
           )}
         </div>

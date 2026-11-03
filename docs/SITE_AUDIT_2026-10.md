@@ -35,18 +35,20 @@ re-checked on 26 Oct against main and the live site.
     name, #10 trial funnel counts, #12 "Mută în altă grupă". #2 was already
     done. #5 no longer reproduces (no "incomplete" rows). #6 is by design (a
     make-up lesson or a new package is its own registration). #11 is an owner
-    decision (A2 online is a draft with a 2 Sep start).
+    decision: owner, 3 Nov: A2 online is not live yet; the only A2 running is
+    the in-person one, so the draft is correct.
   - Public (Chrome pass #13-#35): done except #16 (covered by the forming
     groups section), #18 (already fixed), #22 (no longer in the code), #32
-    (the owner's own chat spelling, left as is). #15 already showed dates.
+    (now "yalla, I'm in", owner 3 Nov). #15 already showed dates.
   - Payment links carry no email or name. ?token= and ?sig= stay: they are
     the access keys of those pages, and P0-3 keeps them away from Google.
   - P1 security: #2, #3, #4, #5, #7 done. #1 (which header holds the real
     visitor IP behind Supabase) needs a live request to confirm. #6 is the
     owner's Zoom setting.
-  - P1 broken: #2, #3, #4, #6, #8, #10 done. Open: #1 quiz comparison table,
-    #5 soft 404s (needs a server-side lookup), #7 Checkout/Payment status in
-    English, #9 trial form labels.
+  - P1 broken: all done (#1 table columns, #5 real 404s for unknown blog and
+    course addresses, #7 Checkout / Payment status / Private status in
+    English, #9 notes label and an honest message when a time is not offered
+    in person).
   - P1 legal: owner and lawyer.
 - Everything else below is still open unless marked.
 - DONE One group registration from 11 Oct (A1 in person) had no group attached

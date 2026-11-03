@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { Fragment, useState } from "react";
 import { useI18n } from "@/lib/i18n";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -121,8 +121,10 @@ const ComparisonPanel = ({ onBack }: ComparisonPanelProps) => {
           </p>
         </div>
 
-        {/* Desktop: 3 columns */}
-        <div className="hidden md:grid md:grid-cols-3 gap-0 rounded-2xl border border-border overflow-hidden bg-background">
+        {/* Desktop: a label column + 3 courses. It was grid-cols-3, so each
+            row's 4 cells slid into the next row (audit P1: cells in the
+            wrong columns). */}
+        <div className="hidden md:grid md:grid-cols-[minmax(0,1fr)_repeat(3,minmax(0,1.2fr))] gap-0 rounded-2xl border border-border overflow-hidden bg-background">
           {/* Header row */}
           <div className="bg-muted/60 p-4 border-b border-border" />
           {columns.map((col) => (
@@ -147,9 +149,8 @@ const ComparisonPanel = ({ onBack }: ComparisonPanelProps) => {
 
           {/* Data rows */}
           {rows.map((row, idx) => (
-            <>
+            <Fragment key={`row-${idx}`}>
               <div
-                key={`label-${idx}`}
                 className={`p-4 flex items-center text-sm font-medium text-muted-foreground ${idx % 2 === 1 ? "bg-muted/30" : ""} ${idx !== rows.length - 1 ? "border-b border-border" : ""}`}
               >
                 {row.label}
@@ -174,7 +175,7 @@ const ComparisonPanel = ({ onBack }: ComparisonPanelProps) => {
                   </span>
                 </div>
               ))}
-            </>
+            </Fragment>
           ))}
 
           {/* CTA row */}

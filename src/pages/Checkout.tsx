@@ -21,10 +21,17 @@ import { trackCheckoutStart } from "@/lib/tracking";
 
 type CourseType = "group" | "private" | "kids";
 
-const COURSE_LABEL: Record<CourseType, string> = {
-  group: "Curs de Grup",
-  private: "Lecție Privată",
-  kids: "Grupa de Copii",
+const COURSE_LABEL: Record<"ro" | "en", Record<CourseType, string>> = {
+  ro: {
+    group: "Curs de Grup",
+    private: "Lecție Privată",
+    kids: "Grupa de Copii",
+  },
+  en: {
+    group: "Group course",
+    private: "Private lesson",
+    kids: "Children's group",
+  },
 };
 
 // supabase.functions.invoke wraps non-2xx responses in a FunctionsHttpError
@@ -173,6 +180,7 @@ const PaymentForm = ({
   /** Server-signed registration id: what lets the status page show "paid". */
   sig: string;
 }) => {
+  const english = useI18n().lang === "en";
   const stripe = useStripe();
   const elements = useElements();
   const [submitting, setSubmitting] = useState(false);
@@ -198,14 +206,17 @@ const PaymentForm = ({
     });
     if (error) {
       toast.error(
-        error.message || "Plata a eșuat. Te rugăm să încerci din nou.",
+        error.message ||
+          (english
+            ? "The payment failed. Please try again."
+            : "Plata a eșuat. Te rugăm să încerci din nou."),
       );
       setSubmitting(false);
     }
   };
 
   const fmt = (bani: number) =>
-    new Intl.NumberFormat("ro-RO", {
+    new Intl.NumberFormat(english ? "en-GB" : "ro-RO", {
       style: "currency",
       currency: currency.toUpperCase(),
       minimumFractionDigits: 0,
@@ -219,12 +230,14 @@ const PaymentForm = ({
       {isSubscription && (
         <div className="rounded-lg border border-border bg-muted/40 p-4 text-sm">
           <p className="font-medium text-foreground">
-            Abonament lunar · {monthsTotal} luni
+            {english
+              ? `Monthly subscription · ${monthsTotal} months`
+              : `Abonament lunar · ${monthsTotal} luni`}
           </p>
           <p className="text-muted-foreground mt-1">
-            {fmt(amount)} / lună, facturat lunar timp de {monthsTotal} luni
-            (total {fmt(amount * monthsTotal)}). Se oprește automat după ultima
-            lună. Achiți prima lună acum.
+            {english
+              ? `${fmt(amount)} / month, billed monthly for ${monthsTotal} months (total ${fmt(amount * monthsTotal)}). It stops automatically after the last month. You pay the first month now.`
+              : `${fmt(amount)} / lună, facturat lunar timp de ${monthsTotal} luni (total ${fmt(amount * monthsTotal)}). Se oprește automat după ultima lună. Achiți prima lună acum.`}
           </p>
         </div>
       )}
@@ -238,18 +251,19 @@ const PaymentForm = ({
         {submitting ? (
           <>
             <Loader2 className="w-4 h-4 mr-2 animate-spin" />
-            Se procesează...
+            {english ? "Processing…" : "Se procesează..."}
           </>
         ) : (
           <>
-            Plătește {formatted}
-            {isSubscription ? " / lună" : ""}
+            {english ? "Pay" : "Plătește"} {formatted}
+            {isSubscription ? (english ? " / month" : " / lună") : ""}
           </>
         )}
       </Button>
       <p className="text-xs text-muted-foreground text-center">
-        Plată securizată procesată de Stripe. Datele cardului tău nu sunt
-        stocate pe acest site.
+        {english
+          ? "Secure payment processed by Stripe. Your card details are not stored on this site."
+          : "Plată securizată procesată de Stripe. Datele cardului tău nu sunt stocate pe acest site."}
       </p>
     </form>
   );
@@ -443,7 +457,9 @@ const Checkout = () => {
           throw new Error(
             (typeof body?.error === "string" && body.error) ||
               invokeError.message ||
-              "Eroare la inițializarea plății",
+              (english
+                ? "We could not prepare the payment. Please try again."
+                : "Nu am putut pregăti plata. Încearcă din nou."),
           );
         }
         pendingChange.current = null;
@@ -458,12 +474,23 @@ const Checkout = () => {
               : null,
         });
         if (!data?.clientSecret || !data?.publishableKey) {
+          // Technical detail for the log; the visitor gets the plain message.
+          console.error(
+            "[checkout] response without clientSecret/publishableKey",
+          );
           throw new Error(
-            "Răspuns invalid de la server (lipsă clientSecret / publishableKey)",
+            english
+              ? "We could not prepare the payment. Please try again."
+              : "Nu am putut pregăti plata. Încearcă din nou.",
           );
         }
         if (typeof data.amount !== "number" || data.amount <= 0) {
-          throw new Error("Sumă invalidă returnată de server");
+          console.error("[checkout] invalid amount from server");
+          throw new Error(
+            english
+              ? "We could not prepare the payment. Please try again."
+              : "Nu am putut pregăti plata. Încearcă din nou.",
+          );
         }
         if (cancelled) return;
         const opts = asPlanOptions(data.planOptions);
@@ -490,7 +517,11 @@ const Checkout = () => {
         console.error(err);
         if (cancelled) return;
         const msg =
-          err instanceof Error ? err.message : "Eroare la inițializarea plății";
+          err instanceof Error
+            ? err.message
+            : english
+              ? "We could not prepare the payment. Please try again."
+              : "Nu am putut pregăti plata. Încearcă din nou.";
         setError(msg);
         setPhase("error");
       }
@@ -545,7 +576,11 @@ const Checkout = () => {
 
   const startHostedCheckout = async () => {
     if (!registrationId) {
-      toast.error("Lipsă identificator înregistrare — reia formularul.");
+      toast.error(
+        english
+          ? "Your registration is missing. Please start again from the form."
+          : "Lipsă identificator înregistrare — reia formularul.",
+      );
       return;
     }
     setHostedLoading(true);
@@ -566,14 +601,21 @@ const Checkout = () => {
         const serverMsg = await readInvokeError(invokeError);
         throw new Error(serverMsg ?? "Nu am putut deschide pagina Stripe.");
       }
-      if (!data?.url) throw new Error("Server nu a returnat URL-ul de plată.");
+      if (!data?.url)
+        throw new Error(
+          english
+            ? "We could not prepare the payment. Please try again."
+            : "Nu am putut pregăti plata. Încearcă din nou.",
+        );
       window.location.href = data.url;
     } catch (err) {
       console.error(err);
       toast.error(
         err instanceof Error
           ? err.message
-          : "Nu am putut deschide pagina Stripe.",
+          : english
+            ? "We could not open Stripe's page."
+            : "Nu am putut deschide pagina Stripe.",
       );
       setHostedLoading(false);
       setHostedAutoFailed(true);
@@ -637,16 +679,17 @@ const Checkout = () => {
           className="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground mb-6"
         >
           <ArrowLeft className="w-4 h-4" />
-          Înapoi
+          {english ? "Back" : "Înapoi"}
         </button>
 
         <div className="bg-background rounded-2xl border border-border shadow-xs p-6 sm:p-8">
           <div className="mb-6">
             <h1 className="text-2xl font-bold text-foreground">
-              Finalizează plata
+              {english ? "Complete your payment" : "Finalizează plata"}
             </h1>
             <p className="text-sm text-muted-foreground mt-1">
-              {COURSE_LABEL[courseType as CourseType] || courseType}
+              {COURSE_LABEL[english ? "en" : "ro"][courseType as CourseType] ||
+                courseType}
               {name && ` • ${name}`}
             </p>
           </div>
@@ -672,7 +715,7 @@ const Checkout = () => {
                 {hostedLoading || phase !== "ready" ? (
                   <>
                     <Loader2 className="w-4 h-4 mr-2 animate-spin" />
-                    Se pregătește...
+                    {english ? "Preparing…" : "Se pregătește..."}
                   </>
                 ) : english ? (
                   "Continue to secure Stripe payment"
@@ -681,7 +724,9 @@ const Checkout = () => {
                 )}
               </Button>
               <p className="text-xs text-muted-foreground">
-                Plată securizată procesată de Stripe.
+                {english
+                  ? "Secure payment processed by Stripe."
+                  : "Plată securizată procesată de Stripe."}
               </p>
             </div>
           ) : showFallback && !hostedAutoFailed ? (
@@ -691,7 +736,9 @@ const Checkout = () => {
             <div className="text-center py-12" role="status" aria-live="polite">
               <Loader2 className="w-6 h-6 animate-spin mx-auto text-muted-foreground" />
               <p className="text-sm text-muted-foreground mt-3">
-                Te redirecționăm către pagina securizată Stripe...
+                {english
+                  ? "Taking you to Stripe's secure payment page…"
+                  : "Te redirecționăm către pagina securizată Stripe..."}
               </p>
             </div>
           ) : showFallback ? (
@@ -699,7 +746,9 @@ const Checkout = () => {
             <div className="text-center py-6 space-y-5">
               <AlertTriangle className="w-10 h-10 text-amber-500 mx-auto" />
               <p className="text-foreground font-medium">
-                Nu am putut deschide automat pagina de plată Stripe.
+                {english
+                  ? "We could not open Stripe's payment page automatically."
+                  : "Nu am putut deschide automat pagina de plată Stripe."}
               </p>
               <Button
                 onClick={startHostedCheckout}
@@ -710,41 +759,54 @@ const Checkout = () => {
                 {hostedLoading ? (
                   <>
                     <Loader2 className="w-4 h-4 mr-2 animate-spin" />
-                    Se pregătește...
+                    {english ? "Preparing…" : "Se pregătește..."}
                   </>
+                ) : english ? (
+                  "Try Stripe's page again"
                 ) : (
                   "Încearcă din nou pagina Stripe"
                 )}
               </Button>
               <p className="text-xs text-muted-foreground">
-                Dacă nici asta nu funcționează, scrie-ne pe WhatsApp la{" "}
+                {english
+                  ? "If that does not work either, message us on WhatsApp at"
+                  : "Dacă nici asta nu funcționează, scrie-ne pe WhatsApp la"}{" "}
                 <a href="https://wa.me/40763124514" className="underline">
                   0763 124 514
                 </a>{" "}
-                și trimitem un link de plată direct.
+                {english
+                  ? "and we will send you a direct payment link."
+                  : "și trimitem un link de plată direct."}
               </p>
             </div>
           ) : phase === "error" ? (
             <div className="text-center py-8 space-y-4">
               <AlertTriangle className="w-10 h-10 text-destructive mx-auto" />
               <p className="text-destructive font-medium">
-                {error || "Nu am putut pregăti plata"}
+                {error ||
+                  (english
+                    ? "We could not prepare the payment"
+                    : "Nu am putut pregăti plata")}
               </p>
               <p className="text-xs text-muted-foreground">
-                Reîncearcă sau contactează-ne pe WhatsApp la 0763 124 514.
+                {english
+                  ? "Try again, or message us on WhatsApp at 0763 124 514."
+                  : "Reîncearcă sau contactează-ne pe WhatsApp la 0763 124 514."}
               </p>
               <Button
                 variant="outline"
                 onClick={() => window.location.reload()}
               >
-                Reîncearcă
+                {english ? "Try again" : "Reîncearcă"}
               </Button>
             </div>
           ) : !canRenderElements ? (
             <div className="text-center py-12" role="status" aria-live="polite">
               <Loader2 className="w-6 h-6 animate-spin mx-auto text-muted-foreground" />
               <p className="text-sm text-muted-foreground mt-3">
-                Se pregătește plata securizată...
+                {english
+                  ? "Preparing the secure payment…"
+                  : "Se pregătește plata securizată..."}
               </p>
             </div>
           ) : (
@@ -767,7 +829,9 @@ const Checkout = () => {
 
         <div className="mt-6 flex items-center justify-center gap-2 text-xs text-muted-foreground">
           <CheckCircle2 className="w-3.5 h-3.5" />
-          Conexiune securizată SSL · 3D Secure
+          {english
+            ? "Secure SSL connection · 3D Secure"
+            : "Conexiune securizată SSL · 3D Secure"}
         </div>
       </div>
     </div>

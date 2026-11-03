@@ -433,6 +433,8 @@ const NativeScheduler = ({
   }, []);
 
   const selectedSlotRef = useRef<string | null>(null);
+  // The format the shown times were loaded for.
+  const loadedFormatRef = useRef<string | null>(null);
   useEffect(() => {
     selectedSlotRef.current = selectedSlot;
   }, [selectedSlot]);
@@ -457,9 +459,17 @@ const NativeScheduler = ({
             !selectedSlotRef.current ||
             (json.slots ?? []).includes(selectedSlotRef.current);
           if (prev && !stillAvailable && selectedSlotRef.current) {
-            toast.info(t.schedulerSlotTaken);
+            // After a switch to in person the time may simply not be offered
+            // there (24 hours' notice): saying "just taken" was false (audit
+            // P1 #9).
+            toast.info(
+              loadedFormatRef.current !== format
+                ? t.schedulerSlotNotForFormat
+                : t.schedulerSlotTaken,
+            );
             setSelectedSlot(null);
           }
+          loadedFormatRef.current = format;
           return json;
         });
         setSelectedDate((prev) => {
@@ -1560,6 +1570,7 @@ const NativeScheduler = ({
         <textarea
           value={notes}
           onChange={(e) => setNotes(e.target.value)}
+          aria-label={t.schedulerNotesPlaceholder}
           placeholder={t.schedulerNotesPlaceholder}
           rows={2}
           className="w-full px-3 py-2 rounded-md border border-input text-sm resize-none"

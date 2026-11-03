@@ -77,7 +77,7 @@ const CINEMA: Bubble[] = [
     },
   },
   {
-    text: "yalla, I m in",
+    text: "yalla, I'm in",
     tone: "red",
     side: "left",
     gloss: { ro: "Hai, vin și eu!", en: "Come on, I'm in!" },
