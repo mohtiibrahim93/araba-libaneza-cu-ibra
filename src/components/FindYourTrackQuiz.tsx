@@ -391,8 +391,11 @@ const FindYourTrackQuiz = () => {
           <CardContent className="p-6 sm:p-8">
             {/* Progress dots + step label */}
             <div className="flex items-center justify-between mb-6">
+              {/* role="img": an aria-label on a plain div is not read (axe:
+                  aria-prohibited-attr). The dots are one picture of progress. */}
               <div
                 className="flex items-center gap-2"
+                role="img"
                 aria-label={t.quizStepLabel
                   .replace("{n}", String(currentStep))
                   .replace("{total}", String(totalSteps))}

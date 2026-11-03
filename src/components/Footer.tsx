@@ -28,7 +28,7 @@ const Footer = () => {
           <p className="text-sm text-muted-foreground leading-relaxed">
             {t.footerTagline}
           </p>
-          <p className="mt-2 text-xs italic text-muted-foreground/80">
+          <p className="mt-2 text-xs italic text-muted-foreground">
             {lang === "en"
               ? "Lebanese Arabic, explained simply."
               : "Arabă libaneză, explicată simplu."}

@@ -92,7 +92,7 @@ const LearnLebaneseArabic = () => (
     <div className="rounded-2xl border border-border bg-gradient-to-br from-primary/5 to-primary/[0.02] p-5 md:p-6 not-prose my-6">
       <div className="flex flex-wrap items-center gap-4 md:gap-6">
         <div className="flex items-center gap-2">
-          <div className="flex" aria-label="Rated 5 out of 5">
+          <div className="flex" role="img" aria-label="Rated 5 out of 5">
             {[0, 1, 2, 3, 4].map((i) => (
               <Star key={i} className="w-4 h-4 fill-primary text-primary" />
             ))}

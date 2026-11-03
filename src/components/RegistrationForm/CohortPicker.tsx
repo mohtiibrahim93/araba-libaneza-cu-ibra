@@ -283,9 +283,7 @@ const CohortPicker = ({
                   <span
                     className={cn(
                       "font-medium",
-                      lowSeats
-                        ? "text-primary animate-pulse"
-                        : "text-muted-foreground",
+                      lowSeats ? "text-primary" : "text-muted-foreground",
                     )}
                   >
                     {c.seatsLeft} {t.cohortSeatsLeft}

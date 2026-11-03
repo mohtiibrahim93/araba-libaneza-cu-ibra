@@ -167,7 +167,7 @@ const Phone = ({ bubbles, lang }: { bubbles: Bubble[]; lang: "ro" | "en" }) => (
               {b.text}
             </span>
             {b.gloss && (
-              <span className="px-1 text-[10px] italic leading-snug text-[#8A857B]">
+              <span className="px-1 text-[10px] italic leading-snug text-[#6E6A61]">
                 {b.gloss[lang]}
               </span>
             )}
@@ -179,7 +179,7 @@ const Phone = ({ bubbles, lang }: { bubbles: Bubble[]; lang: "ro" | "en" }) => (
         aria-hidden="true"
         className="mx-2 mb-1.5 mt-2 flex items-center gap-1.5"
       >
-        <span className="flex-1 rounded-full border border-[#E5DFD3] bg-white px-2.5 py-1 text-[9px] text-[#A9A397]">
+        <span className="flex-1 rounded-full border border-[#E5DFD3] bg-white px-2.5 py-1 text-[9px] text-[#767067]">
           {lang === "en" ? "Message" : "Mesaj"}
         </span>
         <span className="flex h-5 w-5 items-center justify-center rounded-full bg-[#204F3A] text-[9px] text-white">

@@ -416,3 +416,14 @@
     animation: none !important;
   }
 }
+
+/* Red text on the site's pale pinks and creams was 3.8–4.4:1 (axe, 3 Nov
+   2026). Text only, light mode only, public site only: buttons keep the brand
+   red as their fill, and the admin keeps its green. #bd1e1e is ≥ 4.96:1 on
+   every background it was found on. */
+html:not(.dark) body .text-primary {
+  color: #bd1e1e;
+}
+html:not(.dark) body .admin-theme .text-primary {
+  color: hsl(var(--primary));
+}

@@ -121,7 +121,7 @@ const WhySection = () => {
                 <span className="inline-flex h-11 w-11 items-center justify-center rounded-2xl bg-brand-green/10 text-brand-green">
                   <Icon className="h-5 w-5" aria-hidden="true" />
                 </span>
-                <span className="text-sm font-bold tracking-[0.1em] text-muted-foreground/70">
+                <span className="text-sm font-bold tracking-[0.1em] text-muted-foreground">
                   {String(i + 1).padStart(2, "0")}
                 </span>
               </div>
