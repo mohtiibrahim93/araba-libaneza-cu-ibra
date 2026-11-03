@@ -530,9 +530,14 @@ serve(async (req) => {
   } catch (error) {
     const message = error instanceof Error ? error.message : "Unknown error";
     console.error("create-checkout-session error:", message);
-    return new Response(JSON.stringify({ error: message }), {
+    // The visitor gets a plain message; Stripe's and the server's own text
+    // stays in the log (audit P1: raw error text was shown on the page).
+    return new Response(JSON.stringify({ error: PUBLIC_PAYMENT_ERROR }), {
       headers: { ...corsHeaders, "Content-Type": "application/json" },
       status: 500,
     });
   }
 });
+
+const PUBLIC_PAYMENT_ERROR =
+  "Plata nu a putut fi pregătită. Încearcă din nou peste un minut sau scrie-ne pe WhatsApp. / The payment could not be prepared. Please try again in a minute or message us on WhatsApp.";

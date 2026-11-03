@@ -70,13 +70,24 @@ Deno.serve(async (req) => {
     // Limits are per resource so that requesting several different PDFs
     // (the normal flow on /invata-araba-gratis) never trips the limiter.
     const ipOk = await checkRateLimit(supabase, `resource:ip:${ip}`, 120, 3600);
+    // The form sends mail to whatever address is typed, so these limits are
+    // what stops it being used to flood someone else's inbox (audit P1): at
+    // most 2 of the same PDF and 3 PDFs in all to one address a day.
     const emailOk = await checkRateLimit(
       supabase,
       `resource:email:${cleanEmail}:${key}`,
-      20,
+      2,
       86400,
     );
-    if (!ipOk || !emailOk) {
+    const emailDayOk =
+      emailOk &&
+      (await checkRateLimit(
+        supabase,
+        `resource:email:${cleanEmail}`,
+        3,
+        86400,
+      ));
+    if (!ipOk || !emailOk || !emailDayOk) {
       return json({ error: "Prea multe cereri. Încearcă mai târziu." }, 429);
     }
 

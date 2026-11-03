@@ -7,10 +7,19 @@ const ALLOWED_ORIGINS = [
   "https://araba-libaneza-cu-ibra.lovable.app",
 ];
 
-// Lovable preview/editor sandboxes and localhost dev servers.
+// This project's own Lovable preview/editor sandboxes, and localhost dev
+// servers. Not any *.lovable.app site (audit P1 #7: every Lovable-hosted app
+// could call these functions from a visitor's browser).
+const PROJECT_ID = "b6dbaaf5-f5c4-4603-a0e4-cbbbddd78e67";
 const ALLOWED_ORIGIN_PATTERNS = [
-  /^https:\/\/([a-z0-9-]+--)?[a-z0-9-]+\.lovable\.app$/i,
-  /^https:\/\/([a-z0-9-]+\.)*lovableproject\.com$/i,
+  new RegExp(
+    `^https://([a-z0-9-]+--)?(${PROJECT_ID}|araba-libaneza-cu-ibra)\\.lovable\\.app$`,
+    "i",
+  ),
+  new RegExp(
+    `^https://([a-z0-9-]+\\.)*${PROJECT_ID}\\.lovableproject\\.com$`,
+    "i",
+  ),
   /^http:\/\/localhost(:\d+)?$/i,
   /^http:\/\/127\.0\.0\.1(:\d+)?$/i,
 ];

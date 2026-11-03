@@ -216,15 +216,22 @@ serve(async (req) => {
           : privateLessonUnitAmount(regRow.format);
     const currency = "ron";
 
+    // The Stripe customer is the registration's own, verified email (audit
+    // P1: it was matched by whatever email the browser sent, so one person's
+    // payment could land on another person's Stripe customer).
+    const customerEmail: string = regRow.email || "";
     // Find or create customer (best-effort)
     let customerId: string | undefined;
-    if (email) {
-      const customers = await stripe.customers.list({ email, limit: 1 });
+    if (customerEmail) {
+      const customers = await stripe.customers.list({
+        email: customerEmail,
+        limit: 1,
+      });
       if (customers.data.length > 0) {
         customerId = customers.data[0].id;
       } else {
         const customer = await stripe.customers.create({
-          email,
+          email: customerEmail,
           name: name || undefined,
         });
         customerId = customer.id;
@@ -371,7 +378,7 @@ serve(async (req) => {
         amount: finalAmount,
         currency,
         customer: customerId,
-        receipt_email: email || undefined,
+        receipt_email: customerEmail || undefined,
         automatic_payment_methods: { enabled: true },
         metadata: {
           course_type: courseType,
@@ -433,9 +440,14 @@ serve(async (req) => {
   } catch (error) {
     const message = error instanceof Error ? error.message : "Unknown error";
     console.error("create-payment-intent error:", message);
-    return new Response(JSON.stringify({ error: message }), {
+    // The visitor gets a plain message; Stripe's and the server's own text
+    // stays in the log (audit P1: raw error text was shown on the page).
+    return new Response(JSON.stringify({ error: PUBLIC_PAYMENT_ERROR }), {
       headers: { ...corsHeaders, "Content-Type": "application/json" },
       status: 500,
     });
   }
 });
+
+const PUBLIC_PAYMENT_ERROR =
+  "Plata nu a putut fi pregătită. Încearcă din nou peste un minut sau scrie-ne pe WhatsApp. / The payment could not be prepared. Please try again in a minute or message us on WhatsApp.";

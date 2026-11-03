@@ -61,6 +61,7 @@ serve(async (req) => {
     // Validate registrationId format & state BEFORE talking to Stripe so an
     // unauthenticated caller can't disrupt an existing paid registration.
     let existingReg: {
+      email: string | null;
       payment_status: string | null;
       stripe_session_id: string | null;
       form_type: string | null;
@@ -164,10 +165,17 @@ serve(async (req) => {
       apiVersion: "2025-08-27.basil",
     });
 
+    // The Stripe customer is the registration's own, verified email (audit
+    // P1: it was matched by whatever email the browser sent, so one person's
+    // payment could land on another person's Stripe customer).
+    const customerEmail: string = existingReg?.email || email || "";
     // Check if customer exists
     let customerId: string | undefined;
-    if (email) {
-      const customers = await stripe.customers.list({ email, limit: 1 });
+    if (customerEmail) {
+      const customers = await stripe.customers.list({
+        email: customerEmail,
+        limit: 1,
+      });
       if (customers.data.length > 0) {
         customerId = customers.data[0].id;
       }
@@ -234,7 +242,7 @@ serve(async (req) => {
     const session = await stripe.checkout.sessions.create(
       {
         customer: customerId,
-        customer_email: customerId ? undefined : email || undefined,
+        customer_email: customerId ? undefined : customerEmail || undefined,
         line_items: lineItems,
         mode: "payment",
         success_url: `${resolveReturnOrigin(req)}/thank-you?session_id={CHECKOUT_SESSION_ID}`,
