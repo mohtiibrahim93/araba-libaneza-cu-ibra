@@ -17,7 +17,7 @@ const content = {
       ],
       [
         "3. Înscriere și plăți",
-        "Înscrierea se face prin formularele de pe site sau prin WhatsApp. Plata se efectuează conform instrucțiunilor primite după confirmare. Acceptăm plata în LEI, EUR sau USD.",
+        "Înscrierea se face prin formularele de pe site sau prin WhatsApp. Prețurile sunt în lei și sunt cele de pe pagina Prețuri. Cursurile de grup se plătesc online cu cardul, prin Stripe: lunar (abonament care se oprește singur după ultima lună) sau integral în avans, cu 15% reducere. Lecțiile private se plătesc la rezervare. Plata cash sau prin transfer bancar e posibilă prin înțelegere directă cu noi. O plată online începută și neterminată păstrează locul în grupă cel mult 2 ore; după aceea locul se eliberează, iar înscrierea poate fi reluată cât timp mai sunt locuri.",
       ],
       [
         "4. Anulare și rambursare",
@@ -61,7 +61,7 @@ const content = {
   en: {
     title: "Terms & Conditions",
     updated: "Last updated:",
-    updatedValue: "October 2026",
+    updatedValue: "November 2026",
     sections: [
       [
         "1. Overview",
@@ -73,7 +73,7 @@ const content = {
       ],
       [
         "3. Registration and payments",
-        "Registration is completed through the forms on the website or via WhatsApp. Payment is made according to the instructions received after confirmation. We accept payment in LEI, EUR, or USD.",
+        "Registration is completed through the forms on the website or via WhatsApp. Prices are in lei, as listed on the Prices page. Group courses are paid online by card through Stripe: monthly (a subscription that stops by itself after the last month) or in full upfront, with a 15% discount. Private lessons are paid when booked. Cash or bank transfer is possible by direct agreement with us. An online payment that is started and not finished holds the place in the group for at most 2 hours; after that the place is released, and the registration can be resumed while places remain.",
       ],
       [
         "4. Cancellation and refund",
@@ -137,7 +137,7 @@ const TermsContent = () => {
         <div className="prose prose-sm text-muted-foreground space-y-6">
           <p>
             <strong>{page.updated}</strong>{" "}
-            {"updatedValue" in page ? page.updatedValue : "Octombrie 2026"}
+            {"updatedValue" in page ? page.updatedValue : "Noiembrie 2026"}
           </p>
           {page.sections.map(([title, body]) => (
             <section key={title} className="space-y-2">

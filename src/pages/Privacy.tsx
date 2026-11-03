@@ -21,7 +21,7 @@ const content: Record<"ro" | "en", PrivacyPage> = {
     sections: [
       [
         "1. Cine suntem",
-        "Centrul de Arabă Libaneză (Arabă Libaneză cu Ibra) oferă cursuri de arabă libaneză în București și online. Pentru orice întrebare despre datele tale: marhaba@centruldearabalibaneza.com.",
+        "Centrul de Arabă Libaneză (Arabă Libaneză cu Ibra) oferă cursuri de arabă libaneză în București și online. Operatorul datelor tale este E-SERVICES TODAY S.R.L., CUI 52051074, cu sediul social în Str. Dantelei nr. 12-14G, Bragadiru, județul Ilfov (datele complete sunt în Termeni și condiții, secțiunea 9). Pentru orice întrebare despre datele tale: marhaba@centruldearabalibaneza.com.",
       ],
       [
         "2. Ce date colectăm",
@@ -86,7 +86,7 @@ const content: Record<"ro" | "en", PrivacyPage> = {
     sections: [
       [
         "1. Who we are",
-        "Centrul de Arabă Libaneză (Lebanese Arabic with Ibra) offers Lebanese Arabic courses in Bucharest and online. For any question about your data: marhaba@centruldearabalibaneza.com.",
+        "Centrul de Arabă Libaneză (Lebanese Arabic with Ibra) offers Lebanese Arabic courses in Bucharest and online. The controller of your data is E-SERVICES TODAY S.R.L., tax ID (CUI) 52051074, registered office Str. Dantelei nr. 12-14G, Bragadiru, Ilfov county, Romania (full details in the Terms and Conditions, section 9). For any question about your data: marhaba@centruldearabalibaneza.com.",
       ],
       [
         "2. What data we collect",

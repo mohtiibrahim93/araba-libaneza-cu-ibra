@@ -141,6 +141,7 @@ export const PRICE = {
   privateFizic: physicalPrice(ONLINE_PRICES.privateLesson),
   /** Kids group, per child per month (online). */
   kidsMonthly: ONLINE_PRICES.kidsGroupMonthly,
+  kidsMonthlyFizic: physicalPrice(ONLINE_PRICES.kidsGroupMonthly),
   /** A missed free trial is charged the price of a private lesson. */
   noShowFee: ONLINE_PRICES.privateLesson,
 } as const;

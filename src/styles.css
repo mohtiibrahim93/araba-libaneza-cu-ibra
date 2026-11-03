@@ -2,6 +2,19 @@
 @source "../src";
 @import "tw-animate-css";
 /* Self-hosted display fonts (headlines + brand lockup) — ported from main.tsx */
+/* Inter and Instrument Sans are served from this site, like Lora and Noto
+   Naskh: loading them from Google Fonts sent every visitor's IP address to
+   Google before any consent (audit P1 legal #4). */
+@import "@fontsource/inter/300.css";
+@import "@fontsource/inter/400.css";
+@import "@fontsource/inter/500.css";
+@import "@fontsource/inter/600.css";
+@import "@fontsource/inter/700.css";
+@import "@fontsource/inter/800.css";
+@import "@fontsource/instrument-sans/400.css";
+@import "@fontsource/instrument-sans/500.css";
+@import "@fontsource/instrument-sans/600.css";
+@import "@fontsource/instrument-sans/700.css";
 @import "@fontsource/lora/600.css";
 @import "@fontsource/lora/700.css";
 @import "@fontsource/noto-naskh-arabic/600.css";

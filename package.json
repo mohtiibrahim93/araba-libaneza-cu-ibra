@@ -27,6 +27,8 @@
   "dependencies": {
     "@ai-sdk/openai": "^4.0.72",
     "@ai-sdk/react": "^4.0.110",
+    "@fontsource/instrument-sans": "5.2.8",
+    "@fontsource/inter": "5.2.8",
     "@fontsource/lora": "^5.2.8",
     "@fontsource/noto-naskh-arabic": "^5.2.11",
     "@hookform/resolvers": "^5.2.2",

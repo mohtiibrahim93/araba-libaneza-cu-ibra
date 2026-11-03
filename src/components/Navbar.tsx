@@ -69,8 +69,17 @@ import {
 } from "@/lib/nextCohort";
 import { cn } from "@/lib/utils";
 
-/** Height of the green band above the menu, in px (kept in step with h-[38px]). */
+/**
+ * Height of the green band above the menu, in px, kept in step with its
+ * classes: 44 on phones so its buttons are full-size tap targets (owner,
+ * 3 Nov 2026), 38 from 640 px up.
+ */
+const BAND_H_PHONE = 44;
 const BAND_H = 38;
+const bandHeight = () =>
+  typeof window !== "undefined" && window.innerWidth < 640
+    ? BAND_H_PHONE
+    : BAND_H;
 
 const Navbar = () => {
   const { t, setLang, lang } = useI18n();
@@ -116,8 +125,13 @@ const Navbar = () => {
   // very top of the document, so it scrolls away together with the band.
   useEffect(() => {
     const prev = document.body.style.paddingTop;
-    document.body.style.paddingTop = `${BAND_H}px`;
+    const apply = () => {
+      document.body.style.paddingTop = `${bandHeight()}px`;
+    };
+    apply();
+    window.addEventListener("resize", apply);
     return () => {
+      window.removeEventListener("resize", apply);
       document.body.style.paddingTop = prev;
     };
   }, []);
@@ -299,16 +313,16 @@ const Navbar = () => {
       <div
         className={cn(
           "overflow-hidden bg-brand-green text-white transition-[height] duration-200 dark:bg-[#163a2a]",
-          scrolled ? "h-0" : "h-[38px]",
+          scrolled ? "h-0" : "h-11 sm:h-[38px]",
         )}
         aria-hidden={scrolled || undefined}
       >
-        <div className="flex h-[38px] w-full items-center gap-4 px-gutter text-[13px] xl:px-8">
+        <div className="flex h-11 w-full items-center gap-4 px-gutter text-[13px] sm:h-[38px] xl:px-8">
           {next ? (
             <Link
               to={cohortHref(next, lang)}
               tabIndex={scrolled ? -1 : undefined}
-              className="tap-target inline-flex min-w-0 items-center gap-1 truncate rounded-full bg-white/[0.12] px-3 py-1 font-semibold transition-colors hover:bg-white/20"
+              className="tap-target inline-flex min-h-9 min-w-0 items-center gap-1 truncate rounded-full bg-white/[0.12] px-3 py-1 sm:min-h-0 font-semibold transition-colors hover:bg-white/20"
             >
               <span className="hidden sm:inline">
                 {lang === "en" ? "Next course:" : "Următorul curs:"}
@@ -349,7 +363,7 @@ const Navbar = () => {
               rel="noopener noreferrer"
               tabIndex={scrolled ? -1 : undefined}
               aria-label="WhatsApp"
-              className="tap-target inline-flex h-7 items-center gap-1.5 rounded-full bg-[#0F7A3F] px-2.5 font-semibold text-white transition-opacity hover:opacity-90 sm:px-3"
+              className="tap-target inline-flex h-9 items-center gap-1.5 rounded-full bg-[#0F7A3F] px-2.5 sm:h-7 font-semibold text-white transition-opacity hover:opacity-90 sm:px-3"
             >
               <MessageCircle className="h-3.5 w-3.5" aria-hidden="true" />
               <span className="hidden sm:inline">WhatsApp</span>
@@ -357,7 +371,7 @@ const Navbar = () => {
             <Link
               to={lang === "en" ? "/en/booking" : "/booking"}
               tabIndex={scrolled ? -1 : undefined}
-              className="tap-target inline-flex h-7 items-center gap-1.5 rounded-full bg-white px-3 font-semibold text-brand-green transition-opacity hover:opacity-90"
+              className="tap-target inline-flex h-9 items-center gap-1.5 rounded-full bg-white px-3 sm:h-7 font-semibold text-brand-green transition-opacity hover:opacity-90"
             >
               <Calendar className="h-3.5 w-3.5" aria-hidden="true" />
               {t.navBooking}
