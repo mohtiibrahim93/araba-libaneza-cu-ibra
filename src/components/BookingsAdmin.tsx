@@ -1,3 +1,4 @@
+import { Pager, usePaged } from "@/components/admin/Pager";
 import CalendarSyncPanel from "./admin/CalendarSyncPanel";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { invokeAdmin } from "@/lib/adminAuth";
@@ -217,6 +218,7 @@ const BookingsAdmin = ({
         )
     );
   }, [scopedRows, view, query]);
+  const paged = usePaged(visible, 50);
 
   const counts = useMemo(() => {
     const now = Date.now();
@@ -382,7 +384,7 @@ const BookingsAdmin = ({
               </tr>
             </thead>
             <tbody>
-              {visible.map((b) => (
+              {paged.pageRows.map((b) => (
                 <tr key={b.id} className="border-t border-border">
                   <td className="py-2 pr-2 whitespace-nowrap">
                     {fmt(b.start_at)}
@@ -509,6 +511,7 @@ const BookingsAdmin = ({
               ))}
             </tbody>
           </table>
+          <Pager {...paged} />
         </div>
       )}
 

@@ -1,3 +1,4 @@
+import { Pager, usePaged } from "./Pager";
 import { useEffect, useState } from "react";
 import { Link } from "@/lib/router-compat";
 import { invokeAdmin } from "@/lib/adminAuth";
@@ -549,6 +550,7 @@ const RegistrationsTable = ({
   onCancelSubscription,
   onOpen,
 }: Props) => {
+  const paged = usePaged(rows, 50);
   // Registration ids that already have a (non-cancelled) booking, so trial
   // leads who never picked a slot can be flagged for follow-up.
   const [bookedRegIds, setBookedRegIds] = useState<Set<string>>(new Set());
@@ -608,7 +610,7 @@ const RegistrationsTable = ({
           </TableRow>
         </TableHeader>
         <TableBody>
-          {rows.map((r) => (
+          {paged.pageRows.map((r) => (
             <TableRow
               key={r.id}
               data-state={selected.has(r.id) ? "selected" : undefined}
@@ -812,6 +814,7 @@ const RegistrationsTable = ({
           ))}
         </TableBody>
       </Table>
+      <Pager {...paged} />
     </div>
   );
 };
