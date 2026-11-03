@@ -1243,6 +1243,8 @@ export type Database = {
           followup_snoozed_until: string | null
           form_type: string
           format: string | null
+          hold_released_at: string | null
+          hold_reminder_sent_at: string | null
           id: string
           is_waitlist_deposit: boolean
           kids_slot_id: string | null
@@ -1298,6 +1300,8 @@ export type Database = {
           followup_snoozed_until?: string | null
           form_type: string
           format?: string | null
+          hold_released_at?: string | null
+          hold_reminder_sent_at?: string | null
           id?: string
           is_waitlist_deposit?: boolean
           kids_slot_id?: string | null
@@ -1353,6 +1357,8 @@ export type Database = {
           followup_snoozed_until?: string | null
           form_type?: string
           format?: string | null
+          hold_released_at?: string | null
+          hold_reminder_sent_at?: string | null
           id?: string
           is_waitlist_deposit?: boolean
           kids_slot_id?: string | null
