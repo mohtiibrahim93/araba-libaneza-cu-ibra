@@ -51,7 +51,36 @@ export function saveConsent(choice: ConsentChoice) {
   }
   // "essential" after an earlier "all" (reopened from the footer) withdraws it.
   updateGoogleConsent(choice === "all" ? "granted" : "denied");
+  // Withdrawing consent also removes what Analytics and Ads already stored
+  // (audit P1 legal #7: the _ga cookies stayed after "essential").
+  if (choice === "essential") deleteGoogleCookies();
   // Google's script is fetched only now, on "all" (see the bootstrap in
   // __root.tsx). "essential" never loads it.
   if (choice === "all") (window as GtagWindow).__loadGtag?.();
+}
+
+/** Analytics and Ads cookies: _ga, _ga_<id>, _gid, _gat*, _gcl_* (Ads). */
+export const GOOGLE_COOKIE = /^(_ga(_.+)?|_gid|_gat(_.+)?|_gcl_.+)$/;
+
+/**
+ * Delete Google's cookies on every domain form they can be set on: the host
+ * itself, ".host", and each parent domain (gtag sets them on the top
+ * domain, e.g. ".centruldearabalibaneza.com").
+ */
+export function deleteGoogleCookies(doc: Document = document) {
+  const names = doc.cookie
+    .split(";")
+    .map((c) => c.split("=")[0]?.trim() ?? "")
+    .filter((n) => GOOGLE_COOKIE.test(n));
+  if (names.length === 0) return;
+  const parts = doc.location.hostname.split(".");
+  const domains = [""];
+  for (let i = 0; i < parts.length - 1; i++) {
+    const d = parts.slice(i).join(".");
+    domains.push(d, `.${d}`);
+  }
+  const expired = "expires=Thu, 01 Jan 1970 00:00:00 GMT";
+  for (const name of names)
+    for (const domain of domains)
+      doc.cookie = `${name}=; ${expired}; path=/${domain ? `; domain=${domain}` : ""}`;
 }
