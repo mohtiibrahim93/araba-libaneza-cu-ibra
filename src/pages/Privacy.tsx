@@ -2,11 +2,22 @@ import { useI18n } from "@/lib/i18n";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 
-const content = {
+type PrivacyLink = { href: string; label: string };
+type PrivacyRichPart = string | PrivacyLink;
+type PrivacyExtra = { heading: string; body: PrivacyRichPart[] };
+type PrivacySection = [title: string, body: string, extra?: PrivacyExtra];
+type PrivacyPage = {
+  title: string;
+  updated: string;
+  updatedValue: string;
+  sections: PrivacySection[];
+};
+
+const content: Record<"ro" | "en", PrivacyPage> = {
   ro: {
     title: "Politica de Confidențialitate",
     updated: "Ultima actualizare:",
-    updatedValue: "Octombrie 2026",
+    updatedValue: "Noiembrie 2026",
     sections: [
       [
         "1. Cine suntem",
@@ -35,6 +46,32 @@ const content = {
       [
         "7. Cookie-uri",
         "Folosim cookie-uri tehnice necesare funcționării site-ului și, doar dacă accepți, cookie-uri de analiză și publicitate (Google Analytics și măsurarea campaniilor Google Ads). Când intri prima dată pe site, te întrebăm: „Acceptă toate” sau „Doar esențiale”. Alegerea ta se păstrează în browser și o poți schimba oricând din linkul „Setări cookies” din subsolul site-ului. Formularele folosesc Google reCAPTCHA ca să oprească spamul.",
+        {
+          heading: "Funcții de publicitate Google Analytics",
+          body: [
+            "Doar dacă accepți cookie-urile de analiză și publicitate, folosim următoarele funcții de publicitate ale Google Analytics: Google signals (asocierea datelor de vizitare cu informațiile din conturile Google ale utilizatorilor autentificați care au activat personalizarea reclamelor, pentru rapoarte agregate despre vârstă, sex și interese și pentru măsurarea pe mai multe dispozitive), rapoartele de date demografice și interese, și integrarea cu Google Ads (măsurarea conversiilor și liste de remarketing). Noi și Google folosim împreună cookie-uri proprii (precum cookie-ul Google Analytics) și cookie-uri sau identificatori terți (precum cookie-urile de publicitate Google) ca să generăm aceste rapoarte și să măsurăm campaniile. Rapoartele sunt agregate și nu te identifică personal. Poți renunța oricând: din „Setări cookies” din subsolul site-ului, din Setările pentru reclame Google (",
+            {
+              href: "https://adssettings.google.com",
+              label: "https://adssettings.google.com",
+            },
+            "), dezactivând personalizarea reclamelor în contul tău Google, cu add-on-ul de dezactivare Google Analytics (",
+            {
+              href: "https://tools.google.com/dlpage/gaoptout",
+              label: "https://tools.google.com/dlpage/gaoptout",
+            },
+            ") sau prin opțiunea de dezactivare NAI (",
+            {
+              href: "https://optout.networkadvertising.org",
+              label: "https://optout.networkadvertising.org",
+            },
+            "). Datele asociate contului tău Google le poți vedea și șterge din Activitatea mea (",
+            {
+              href: "https://myactivity.google.com",
+              label: "https://myactivity.google.com",
+            },
+            ").",
+          ],
+        },
       ],
       [
         "8. Contact",
@@ -45,7 +82,7 @@ const content = {
   en: {
     title: "Privacy Policy",
     updated: "Last updated:",
-    updatedValue: "October 2026",
+    updatedValue: "November 2026",
     sections: [
       [
         "1. Who we are",
@@ -74,6 +111,32 @@ const content = {
       [
         "7. Cookies",
         "We use technical cookies the site needs to work and, only if you accept, analytics and advertising cookies (Google Analytics and Google Ads campaign measurement). On your first visit we ask you: “Accept all” or “Essential only”. Your choice is kept in your browser and you can change it at any time via the “Cookie settings” link in the site footer. The forms use Google reCAPTCHA to stop spam.",
+        {
+          heading: "Google Analytics advertising features",
+          body: [
+            "Only if you accept the analytics and advertising cookies do we use the following Google Analytics advertising features: Google signals (linking browsing data with the account information of signed-in Google users who have personalisation of ads turned on, for aggregated reports about age, sex and interests and for measurement across several devices), the demographics and interests reports, and the integration with Google Ads (conversion measurement and remarketing lists). We and Google together use our own cookies (such as the Google Analytics cookie) and third-party cookies or identifiers (such as Google advertising cookies) to generate these reports and measure campaigns. The reports are aggregated and do not identify you personally. You can opt out at any time: from the “Cookie settings” link in the site footer, from Google Ad Settings (",
+            {
+              href: "https://adssettings.google.com",
+              label: "https://adssettings.google.com",
+            },
+            "), by turning off personalisation of ads in your Google account, with the Google Analytics opt-out add-on (",
+            {
+              href: "https://tools.google.com/dlpage/gaoptout",
+              label: "https://tools.google.com/dlpage/gaoptout",
+            },
+            ") or through the NAI opt-out (",
+            {
+              href: "https://optout.networkadvertising.org",
+              label: "https://optout.networkadvertising.org",
+            },
+            "). You can view and delete the data associated with your Google account in My Activity (",
+            {
+              href: "https://myactivity.google.com",
+              label: "https://myactivity.google.com",
+            },
+            ").",
+          ],
+        },
       ],
       [
         "8. Contact",
@@ -81,7 +144,7 @@ const content = {
       ],
     ],
   },
-} as const;
+};
 
 const PrivacyContent = () => {
   const { lang } = useI18n();
@@ -105,10 +168,34 @@ const PrivacyContent = () => {
           <p>
             <strong>{page.updated}</strong> {page.updatedValue}
           </p>
-          {page.sections.map(([title, body]) => (
+          {page.sections.map(([title, body, extra]) => (
             <section key={title} className="space-y-2">
               <h2 className="text-lg font-semibold text-foreground">{title}</h2>
               <p>{body}</p>
+              {extra && (
+                <>
+                  <h3 className="text-base font-semibold text-foreground">
+                    {extra.heading}
+                  </h3>
+                  <p>
+                    {extra.body.map((part, i) =>
+                      typeof part === "string" ? (
+                        part
+                      ) : (
+                        <a
+                          key={i}
+                          href={part.href}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="text-primary underline break-words"
+                        >
+                          {part.label}
+                        </a>
+                      ),
+                    )}
+                  </p>
+                </>
+              )}
             </section>
           ))}
         </div>
