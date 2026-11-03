@@ -21,13 +21,8 @@ interface CohortOption {
   max_seats: number;
 }
 
-const OPEN = [
-  "draft",
-  "forming",
-  "minimum_reached",
-  "confirmed",
-  "in_progress",
-];
+// Not drafts: a draft group is not live (owner, 3 Nov 2026: A2 online).
+const OPEN = ["forming", "minimum_reached", "confirmed", "in_progress"];
 
 export default function MoveToCohort({
   registrationId,

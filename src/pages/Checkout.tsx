@@ -332,6 +332,12 @@ const Checkout = () => {
 
   const { lang, t } = useI18n();
   const english = lang === "en";
+  // The server sends the Romanian title (this address has no English twin);
+  // an English reader gets an English tab title.
+  useEffect(() => {
+    if (english)
+      document.title = "Complete your payment — Centrul de Arabă Libaneză";
+  }, [english]);
   const [verifiedEmail, setVerifiedEmail] = useState<string | null>(null);
   const emailVerified = !!email && verifiedEmail === email;
   // The registration form cannot send the student their confirmation: they are

@@ -124,6 +124,7 @@ const ManualSignupsAdmin = () => {
                 className="ml-auto h-7 px-2 text-destructive hover:text-destructive hover:bg-destructive/10"
                 onClick={() => remove(r.id)}
                 disabled={deletingId === r.id}
+                aria-label={`Șterge numărul ${rowLabel(r)} +${r.count}`}
               >
                 {deletingId === r.id ? (
                   <Loader2 className="h-3.5 w-3.5 animate-spin" />

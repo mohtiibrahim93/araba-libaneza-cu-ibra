@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useState } from "react";
 import { invokeAdmin } from "@/lib/adminAuth";
-import { useI18n } from "@/lib/i18n";
+import { translations } from "@/lib/i18n";
 import {
   Loader2,
   GraduationCap,
@@ -41,7 +41,9 @@ const fmt = (iso: string | null) =>
     : "—";
 
 const TrialFunnelAdmin = () => {
-  const { t } = useI18n();
+  // The admin is in Romanian whatever language the visitor last used on the
+  // site (the funnel showed in English inside the Romanian admin).
+  const t = translations.ro;
   const [rows, setRows] = useState<TrialRow[]>([]);
   const [counts, setCounts] = useState<Counts | null>(null);
   const [loading, setLoading] = useState(true);
