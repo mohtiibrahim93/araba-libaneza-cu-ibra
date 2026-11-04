@@ -6,8 +6,10 @@ import {
   MapPin,
   MessagesSquare,
   Mic,
+  Plane,
   Sparkles,
   TrendingUp,
+  Users,
   type LucideIcon,
 } from "lucide-react";
 import { useI18n } from "@/lib/i18n";
@@ -147,28 +149,37 @@ const WhySection = () => {
               ? [
                   { Icon: Sprout, title: "Lebanese roots", text: "" },
                   { Icon: HeartHandshake, title: "A Lebanese partner or family", text: "" },
-                  { Icon: Briefcase, title: "Work", text: "Official papers are in Standard Arabic, but daily life happens in dialect." },
+                  { Icon: Briefcase, title: "Work", text: "To talk with Arabic-speaking colleagues, partners and clients. (For journalism, diplomacy or official translation you need Standard Arabic.)" },
+                  { Icon: Plane, title: "Travel", text: "For anyone who wants to visit Lebanon and get by with the locals." },
+                  { Icon: Users, title: "The Arab community in Romania", text: "Friends, neighbours, university classmates." },
                 ]
               : [
                   { Icon: Sprout, title: "Rădăcini libaneze", text: "" },
                   { Icon: HeartHandshake, title: "Partener sau familie din Liban", text: "" },
-                  { Icon: Briefcase, title: "Carieră", text: "Actele oficiale sunt în araba standard, dar viața de zi cu zi e în dialect." },
+                  { Icon: Briefcase, title: "Carieră", text: "Pentru a vorbi cu colegi, parteneri și clienți vorbitori de arabă. (Pentru jurnalism, diplomație sau traduceri oficiale ai nevoie de araba standard.)" },
+                  { Icon: Plane, title: "Călătorii", text: "Pentru cine vrea să viziteze Libanul și să se descurce cu localnicii." },
+                  { Icon: Users, title: "Comunitatea arabă din România", text: "Prieteni, vecini, colegi de facultate." },
                 ]
             ).map(({ Icon, title, text }) => (
               <li key={title} className="flex items-start gap-3 rounded-2xl bg-white/10 p-4">
                 <Icon className="mt-0.5 h-5 w-5 shrink-0 text-white" aria-hidden="true" />
-                <div>
+                <div className="min-w-0">
                   <p className="font-semibold text-white">{title}</p>
                   {text && <p className="mt-1 text-sm leading-relaxed text-white/85">{text}</p>}
                 </div>
               </li>
             ))}
           </ul>
+          <p className="text-sm leading-relaxed text-white/85">
+            {en
+              ? "Official papers are in Standard Arabic, but daily life happens in dialect."
+              : "Actele oficiale sunt în araba standard, dar viața de zi cu zi e în dialect."}
+          </p>
           <Link
             to="/trial"
             className="inline-flex h-12 shrink-0 self-start items-center justify-center rounded-xl bg-white px-6 font-semibold text-brand-green transition-opacity hover:opacity-90"
           >
-            {en ? "Book the free trial (0 lei) →" : "Rezervă lecția gratuită (0 lei) →"}
+            {en ? "Book the free trial →" : "Rezervă lecția gratuită →"}
           </Link>
         </div>
       </div>
