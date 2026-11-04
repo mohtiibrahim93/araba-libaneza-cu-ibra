@@ -142,12 +142,12 @@ const LibanezaVsPalestiniana = () => (
     <p>
       Vorbirea urbană — Ierusalim, Ramallah, Nablus, Haifa — e cea mai
       apropiată de libaneză și de siriana din Damasc: aceeași oprire glotală
-      pentru ق, același registru. Vorbind de sat, qaf-ul revine la un{" "}
+      pentru ق, aceeași intonație. În vorbirea de sat, qaf-ul revine la un{" "}
       <em>k</em> tare, iar în partea de sud a zonei și în Gaza un <em>k</em>
       iese mai moale, spre <em>č</em> („ch"). La toate se adaugă stratul
       local de împrumuturi: turcă din secolele otomane, engleză din mandat și
-      din școală, ebraică din接触ul de zi cu zi. Pentru un cursant, consecința
-      e simplă: înveți o bază levantină și ajustezi registru dupǝ zona
+      din școală, ebraică din contactul de zi cu zi. Pentru un cursant, consecința
+      e simplă: înveți o bază levantină și ajustezi vocabularul după zona
       familiei.
     </p>
 

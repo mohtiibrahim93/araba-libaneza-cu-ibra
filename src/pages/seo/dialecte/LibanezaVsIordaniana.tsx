@@ -52,7 +52,7 @@ const LibanezaVsIordaniana = () => (
     <p>
       Iordaniana e <strong>levantină de sud</strong>, la fel ca palestiniana,
       iar libaneza e <strong>levantină de nord</strong>. Ce înveți la un curs
-      de libaneză se aude几乎 la fel în Amman: același <em>b-</em> pentru
+      de libaneză se aude aproape la fel în Amman: același <em>b-</em> pentru
       prezent, același <em>biddi</em> pentru „vreau", aceleași pronume. Ce se
       schimbă e negația (sufixul <em>-sh</em>), pronunția lui{" "}
       <strong>ق</strong> și câteva cuvinte de zi cu zi. Iar în Iordania însăși
@@ -167,7 +167,7 @@ const LibanezaVsIordaniana = () => (
       din est. Vorbirea urbană a moștenit accentul palestinian — qaf-oprire
       glotală, intonație mai puțin cântată decât în Liban — iar cea de est a
       păstrat <em>g</em>-ul dur și trăsături apropiate de araba din Golf.
-      Același oraș, două registru. Pentru un cursant, vestea bună e că
+      Același oraș, două registre. Pentru un cursant, vestea bună e că
       libaneza merge în ambele: se aud două accente, nu două limbi.
     </p>
 
