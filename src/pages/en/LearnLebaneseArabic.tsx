@@ -28,7 +28,7 @@ const FAQ = [
   },
   {
     q: "Who is the teacher?",
-    a: "Ibra — a native Lebanese Arabic speaker with 5+ years of teaching experience (Preply and independent students), based in Bucharest. Lessons combine native pronunciation, cultural context and a structured CEFR method.",
+    a: "Ibra — a native Lebanese Arabic speaker with 6+ years of teaching experience (Preply and independent students), based in Bucharest. Lessons combine native pronunciation, cultural context and a structured CEFR method.",
   },
   {
     q: "How much do Lebanese Arabic courses cost?",
@@ -36,7 +36,7 @@ const FAQ = [
   },
   {
     q: "Is Levantine Arabic the same as Lebanese Arabic?",
-    a: "Lebanese is a variety of Levantine — specifically North Levantine, which it shares with Syrian. South Levantine covers Jordanian and Palestinian. Core grammar, most vocabulary and the pronunciation patterns overlap heavily, so learning Lebanese gives you roughly 90% comprehension across the whole Levantine region.",
+    a: "Lebanese is a variety of Levantine — specifically North Levantine, which it shares with Syrian. South Levantine covers Jordanian and Palestinian. Core grammar, most vocabulary and the pronunciation patterns overlap heavily, so learning Lebanese lets you understand most of what you hear across the whole Levantine region.",
   },
   {
     q: "Which Levantine variety do you teach — Lebanese, Syrian, Jordanian or Palestinian?",
@@ -63,7 +63,7 @@ const LearnLebaneseArabic = () => (
     metaTitle="Learn Lebanese Arabic Online | Native Teacher & Free Trial"
     description="Learn Lebanese (Levantine) Arabic online with a native teacher. Live 1-on-1 and small-group lessons from A1 to C2. Speak from lesson one—book a free trial."
     crumb="Learn Lebanese Arabic"
-    lead="Live 1-on-1 and small-group courses in Lebanese — the Levantine (Shami) Arabic spoken by 30–35 million people across Lebanon, Syria, Jordan and Palestine. Speak from lesson one, without starting from the alphabet. From beginner (A1) to advanced (C2)."
+    lead="Live 1-on-1 and small-group courses in Lebanese — the Levantine (Shami) Arabic spoken by tens of millions of people across Lebanon, Syria, Jordan and Palestine. Speak from lesson one, without starting from the alphabet. From beginner (A1) to advanced (C2)."
     faq={FAQ}
     courseSchema
     roHref="/cursuri-limba-araba"
@@ -105,7 +105,7 @@ const LearnLebaneseArabic = () => (
           <GraduationCap className="w-4 h-4 text-primary" />
           <span>
             <strong className="text-foreground">Native Lebanese teacher</strong>{" "}
-            — 5+ years experience
+            — 6+ years experience
           </span>
         </div>
         <div className="flex items-center gap-2 text-sm text-foreground/80">
@@ -181,11 +181,12 @@ const LearnLebaneseArabic = () => (
     <h2>Learning Levantine Arabic through Lebanese</h2>
     <p>
       Levantine Arabic (<em>Shami</em>) is the everyday spoken language of the
-      Eastern Mediterranean — 30–35 million native speakers across Lebanon,
-      Syria, Jordan and Palestine. It splits into North Levantine (Lebanese,
-      Syrian) and South Levantine (Jordanian, Palestinian), and the differences
-      between them are accent and a slice of vocabulary, not grammar. Learn one
-      properly and you follow conversations in all four countries.
+      Eastern Mediterranean — tens of millions of native speakers across
+      Lebanon, Syria, Jordan and Palestine. It splits into North Levantine
+      (Lebanese, Syrian) and South Levantine (Jordanian, Palestinian), and the
+      differences between them are accent and a slice of vocabulary, not
+      grammar. Learn one properly and you follow conversations in all four
+      countries.
     </p>
     <p>We teach the Lebanese variety, for three practical reasons:</p>
     <ul>
@@ -195,9 +196,9 @@ const LearnLebaneseArabic = () => (
         Levant.
       </li>
       <li>
-        <strong>Diaspora density:</strong> the Lebanese diaspora is one of the
-        largest globally (Brazil, France, the US, West Africa), so there are
-        people to practise with almost anywhere.
+        <strong>Diaspora density:</strong> there are large Lebanese communities
+        abroad (Brazil, France, the US, West Africa), so there are people to
+        practise with almost anywhere.
       </li>
       <li>
         <strong>Clarity:</strong> Lebanese is considered an easy Levantine
@@ -264,7 +265,7 @@ const LearnLebaneseArabic = () => (
       </li>
       <li>
         <strong>Native teacher:</strong> Ibra is a native Lebanese speaker with
-        5+ years of teaching experience.
+        6+ years of teaching experience.
       </li>
       <li>
         <strong>CEFR structure:</strong> six levels A1 → C2, from survival to

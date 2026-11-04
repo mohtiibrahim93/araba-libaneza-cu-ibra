@@ -343,15 +343,9 @@ const ArabaLibanezaVsArabaStandard = () => {
           </li>
         </ul>
         <p>
-          {en ? "With " : "Cu "}
-          <strong>
-            {en
-              ? "2–3 hours of study a week"
-              : "2–3 ore de studiu pe săptămână"}
-          </strong>
           {en
-            ? ", a beginner can hold simple conversations in Lebanese in 4–6 months. The same 'conversational' level in Fusha usually takes 2–3 times longer, because Fusha isn't used in conversation — so real practice is missing."
-            : ", un începător poate purta conversații simple în libaneză în 4–6 luni. Același nivel „de conversație” în Fusha ia de obicei de 2–3 ori mai mult, fiindcă Fusha nu se folosește în conversație — deci practica reală lipsește."}
+            ? "How long it takes differs from person to person. As a guide, the A1 course is 32 lessons, about 4 months. Fusha, by contrast, isn't used in conversation, so real practice is missing."
+            : "Cât durează diferă de la om la om. Ca reper, cursul A1 are 32 de lecții, cam 4 luni. Fusha, în schimb, nu se folosește în conversație, deci practica reală lipsește."}
         </p>
       </section>
 

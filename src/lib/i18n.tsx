@@ -88,7 +88,7 @@ export const translations = {
     benefit6Title: "Atenție personală",
     benefit6Desc:
       "Grupe mici și feedback constant de la un profesor nativ care te știe pe nume.",
-    whyStat2Val: "5+ ani",
+    whyStat2Val: "6+ ani",
 
     // Programs
     programsBadge: "Programele noastre",
@@ -400,12 +400,12 @@ export const translations = {
     socialProofPreplyMeta: "5.0★ · 21 recenzii verificate",
     instructorTitle: "Mar7aba! Sunt Ibra.",
     instructorBio1:
-      "Sunt vorbitor nativ de arabă libaneză, stabilit în București de peste 10 ani. Cu 5+ ani de experiență în predare pe platforme precum Preply.com și altele, am ajutat zeci de cursanți să descopere frumusețea limbii și culturii libaneze.",
+      "Sunt vorbitor nativ de arabă libaneză, stabilit în București de peste 10 ani. Cu 6+ ani de experiență în predare pe platforme precum Preply.com și altele, am ajutat zeci de cursanți să descopere frumusețea limbii și culturii libaneze.",
     instructorBio2:
       "Cursurile mele combină conversația practică cu perspective culturale autentice — de la expresii de zi cu zi până la tradițiile culinare libaneze. Abordarea mea se bazează pe comunicare reală, nu doar gramatică.",
     instructorStat1: "10+ ani",
     instructorStat1Label: "În București",
-    instructorStat2: "5+ ani",
+    instructorStat2: "6+ ani",
     instructorStat2Label: "Experiență predare",
     instructorStat3: "5.0★",
     instructorStat3Label: "Rating Preply",
@@ -1074,7 +1074,7 @@ export const translations = {
     benefit6Title: "Personal attention",
     benefit6Desc:
       "Small groups and constant feedback from a native teacher who knows you by name.",
-    whyStat2Val: "5+ yrs",
+    whyStat2Val: "6+ yrs",
 
     programsBadge: "Our Programs",
     programsTitle: "Choose Your Learning Path",
@@ -1366,12 +1366,12 @@ export const translations = {
     socialProofPreplyMeta: "5.0★ · 21 verified reviews",
     instructorTitle: "Mar7aba! I'm Ibra.",
     instructorBio1:
-      "I'm a native Lebanese Arabic speaker living in Bucharest for over 10 years. With 5+ years of teaching experience on platforms like Preply.com and others, I've helped dozens of students discover the beauty of the Lebanese language and culture.",
+      "I'm a native Lebanese Arabic speaker living in Bucharest for over 10 years. With 6+ years of teaching experience on platforms like Preply.com and others, I've helped dozens of students discover the beauty of the Lebanese language and culture.",
     instructorBio2:
       "My courses combine practical conversation with authentic cultural insights — from everyday expressions to Lebanese culinary traditions. My approach is based on real communication, not just grammar.",
     instructorStat1: "10+ years",
     instructorStat1Label: "In Bucharest",
-    instructorStat2: "5+ years",
+    instructorStat2: "6+ years",
     instructorStat2Label: "Teaching exp.",
     instructorStat3: "5.0★",
     instructorStat3Label: "Preply Rating",

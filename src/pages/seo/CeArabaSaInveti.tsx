@@ -26,7 +26,7 @@ const FAQ = [
   },
   {
     q: "Cât durează până vorbesc?",
-    a: "Cu 1–2 ore pe săptămână plus 15 minute zilnic, primele conversații simple apar în 6–8 săptămâni. Nivelul A1 complet (prezentare, cumpărături, orientare, small talk) se atinge în aproximativ 4 luni (32 de lecții, 2 pe săptămână).",
+    a: "Diferă de la om la om. Ca reper, cursul A1 (prezentare, cumpărături, orientare, small talk) are 32 de lecții, două pe săptămână, cam 4 luni.",
   },
 ];
 

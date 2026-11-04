@@ -535,7 +535,7 @@ const STATIC_ROUTES: SeoRoute[] = [
   {
     path: "/en/arabic-tutor",
     title: "Arabic Tutor Online — 1-on-1 Lessons | Native Teacher",
-    description: `Private Lebanese Arabic tutor — 1-on-1 lessons with a native teacher, 5+ years experience. CEFR A1–C2, free trial. ${PRICE.privateOnline} LEI online / ${PRICE.privateFizic} LEI in person, 60 min.`,
+    description: `Private Lebanese Arabic tutor — 1-on-1 lessons with a native teacher, 6+ years experience. CEFR A1–C2, free trial. ${PRICE.privateOnline} LEI online / ${PRICE.privateFizic} LEI in person, 60 min.`,
   },
   {
     path: "/en/faq",

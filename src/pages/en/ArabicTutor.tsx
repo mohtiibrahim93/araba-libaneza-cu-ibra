@@ -11,11 +11,11 @@ import {
 const FAQ = [
   {
     q: "Are you a native Arabic speaker?",
-    a: "Yes. Ibra is a native Lebanese Arabic speaker, based in Bucharest, with 5+ years of teaching experience (Preply and independent students worldwide). Native fluency plus real teaching training — not just a native speaker without a method.",
+    a: "Yes. Ibra is a native Lebanese Arabic speaker, based in Bucharest, with 6+ years of teaching experience (Preply and independent students worldwide). Native fluency plus real teaching training — not just a native speaker without a method.",
   },
   {
     q: "What teaching experience and qualifications do you have?",
-    a: "5+ years teaching Arabic to adult learners across Europe, North America and the Gulf — on Preply, independently online, and in person in Bucharest. Ongoing training in CEFR-based language pedagogy and the communicative method. Native fluency alone isn't enough — the method is what makes lessons work.",
+    a: "6+ years teaching Arabic to adult learners across Europe, North America and the Gulf — on Preply, independently online, and in person in Bucharest. Ongoing training in CEFR-based language pedagogy and the communicative method. Native fluency alone isn't enough — the method is what makes lessons work.",
   },
   {
     q: "Which variety of Arabic do you teach?",
@@ -39,7 +39,7 @@ const FAQ = [
   },
   {
     q: "How are lessons delivered?",
-    a: "Live over Zoom, worldwide, in any time zone that overlaps with Bucharest (EET). In-person lessons are available in Bucharest, Romania. Materials, recordings and homework are shared through email and a shared drive.",
+    a: "Live over Zoom, worldwide, in any time zone that overlaps with Bucharest (EET). In-person lessons are available in Bucharest, Romania. Materials and homework are shared through email and a shared drive.",
   },
   {
     q: "Do you offer a trial lesson?",
@@ -47,7 +47,7 @@ const FAQ = [
   },
   {
     q: "How do you track progress?",
-    a: "CEFR-aligned checkpoints (A1 → C2), weekly informal reviews, and a formal progress assessment every 8–10 lessons. You'll know exactly what you can do, what's next, and where the gaps are.",
+    a: "CEFR levels (A1 → C2), with a test halfway through the course, a final test, and quizzes and exercises along the way. You'll know exactly what you can do, what's next, and where the gaps are.",
   },
   {
     q: "Do you have reviews or testimonials from past students?",
@@ -61,7 +61,7 @@ const ArabicTutor = () => (
     roHref="/meditatii-araba"
     title="Arabic tutor online — private 1-on-1 lessons with a native teacher"
     metaTitle="Arabic Tutor Online — 1-on-1 Lessons | Native Teacher"
-    description="Private Lebanese Arabic tutor — 1-on-1 lessons with a native teacher, 5+ years experience. CEFR A1–C2, free trial. 150 LEI online / 210 LEI in person, 60 min."
+    description="Private Lebanese Arabic tutor — 1-on-1 lessons with a native teacher, 6+ years experience. CEFR A1–C2, free trial. 150 LEI online / 210 LEI in person, 60 min."
     crumb="Arabic tutor"
     lead="Private Arabic tutoring with a native Lebanese teacher — live 1-on-1 lessons online worldwide, or in person in Bucharest. Personalized pace, real conversation from day one."
     faq={FAQ}
@@ -93,7 +93,7 @@ const ArabicTutor = () => (
         },
         {
           icon: GraduationCap,
-          title: "5+ years teaching",
+          title: "6+ years teaching",
           desc: "Adult learners across Europe, N. America and the Gulf.",
         },
         {
@@ -121,7 +121,7 @@ const ArabicTutor = () => (
     <p>
       Looking for an <strong>Arabic tutor</strong> who actually speaks the
       dialect you'll use in real life, and who has more than just native
-      fluency? Ibra is a native Lebanese speaker with 5+ years of teaching
+      fluency? Ibra is a native Lebanese speaker with 6+ years of teaching
       experience, working with students from Europe, North America and the Gulf
       on Zoom, and with in-person students in Bucharest.
     </p>

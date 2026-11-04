@@ -46,7 +46,7 @@ const BestArabicCourse = () => (
         of it often ends with no conversation. If the people you want to talk to
         are Lebanese, Syrian, Jordanian or Palestinian, learn{" "}
         <strong>Lebanese Arabic (Levantine)</strong> — one dialect, four
-        countries, about 30–35 million speakers.
+        countries, tens of millions of speakers.
       </p>
       <p>
         Then pick the format by what you need: a small group for motivation and
@@ -201,8 +201,8 @@ const BestArabicCourse = () => (
         that, your own speaking time drops below five minutes per lesson.
       </li>
       <li>
-        <strong>CEFR structure (A1–C2)</strong> with an assessment every 8–10
-        lessons, so your level is an objective fact.
+        <strong>CEFR structure (A1–C2)</strong> with a mid-course test, a final
+        test, and quizzes and exercises along the way.
       </li>
       <li>
         <strong>Public pricing and a trial lesson.</strong> A good course has no

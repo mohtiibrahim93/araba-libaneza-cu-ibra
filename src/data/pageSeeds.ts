@@ -101,7 +101,7 @@ export const PAGE_SEEDS: PageSeed[] = [
     path: "/en/arabic-tutor",
     meta_title: "Arabic Tutor Online — 1-on-1 Lessons | Native Teacher",
     meta_description:
-      "Private Arabic tutor online — 1-on-1 lessons with a native Lebanese teacher (5+ years experience). CEFR A1–C2, flexible schedule, free trial. €30 / 90 min.",
+      "Private Arabic tutor online — 1-on-1 lessons with a native Lebanese teacher (6+ years experience). CEFR A1–C2, flexible schedule, free trial. €30 / 90 min.",
     h1: "Arabic tutor online — private 1-on-1 lessons with a native teacher",
     lead: "Private Arabic tutoring with a native Lebanese teacher — live 1-on-1 lessons online worldwide, or in person in Bucharest. Personalized pace, real conversation from day one.",
   },
@@ -119,7 +119,7 @@ export const PAGE_SEEDS: PageSeed[] = [
     meta_description:
       "Learn Lebanese Arabic (Levantine dialect) with a native instructor. Live 1-on-1 and small-group courses online worldwide, from beginner (A1) to advanced. Speak from lesson one — free trial.",
     h1: "Learn Lebanese Arabic online with a native teacher",
-    lead: "Live 1-on-1 and small-group courses in the Lebanese dialect — the everyday Levantine Arabic spoken by ~30 million people. Speak from lesson one, without starting from the alphabet. From beginner (A1) to advanced (C2).",
+    lead: "Live 1-on-1 and small-group courses in the Lebanese dialect — the everyday Levantine Arabic spoken by tens of millions of people. Speak from lesson one, without starting from the alphabet. From beginner (A1) to advanced (C2).",
   },
   {
     path: "/en/lebanese-arabic-vs-msa-vs-egyptian",

@@ -77,7 +77,7 @@ const ArabicDialectsGuide = () => (
 
     <h2>1. Levantine Arabic (Shami)</h2>
     <p>
-      Spoken across the Eastern Mediterranean by ~30–35 million people.{" "}
+      Spoken across the Eastern Mediterranean by tens of millions of people.{" "}
       <em>Shami</em> to its own speakers, it is the branch most learners end up
       wanting, because it is the language of everyday conversation across four
       countries at once.
@@ -161,8 +161,8 @@ const ArabicDialectsGuide = () => (
         that people recognise instantly.
       </li>
       <li>
-        <strong>Everything else:</strong> grammar, sentence structure and 90%+
-        of vocabulary are shared.
+        <strong>Everything else:</strong> grammar, sentence structure and most
+        of the vocabulary are shared.
       </li>
     </ul>
     <p>
@@ -318,9 +318,9 @@ const ArabicDialectsGuide = () => (
     <p>
       For most learners with no specific regional tie, we recommend starting
       with <Link to="/en/learn-lebanese-arabic">Lebanese Arabic</Link> — a North
-      Levantine variety with huge media reach, wide diaspora, and 90%+
-      comprehension across the whole Levantine region. For the step-by-step
-      route from zero to conversation, read{" "}
+      Levantine variety with huge media reach, wide diaspora, and it is
+      understood across the whole Levantine region. For the step-by-step route
+      from zero to conversation, read{" "}
       <Link to="/en/how-to-learn-lebanese-arabic">
         how to learn Lebanese Arabic
       </Link>

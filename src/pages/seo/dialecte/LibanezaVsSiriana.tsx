@@ -15,7 +15,7 @@ const FAQ = [
   },
   {
     q: "Care e diferența dintre levantina de nord și cea de sud?",
-    a: "Nordul înseamnă libaneză și siriană, sudul palestiniană și iordaniană. Gramatica și peste 90% din vocabular sunt comune. Diferă pronunția lui ق, culoarea vocalelor, intonația și forma negației: sudul adaugă des sufixul -sh (ma baʿrafsh), nordul de obicei nu.",
+    a: "Nordul înseamnă libaneză și siriană, sudul palestiniană și iordaniană. Gramatica și cea mai mare parte a vocabularului sunt comune. Diferă pronunția lui ق, culoarea vocalelor, intonația și forma negației: sudul adaugă des sufixul -sh (ma baʿrafsh), nordul de obicei nu.",
   },
   {
     q: "De ce sună libaneza atât de diferit de siriană, dacă sunt atât de apropiate?",

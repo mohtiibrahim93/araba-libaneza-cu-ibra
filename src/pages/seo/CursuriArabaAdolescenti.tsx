@@ -129,7 +129,7 @@ const CursuriArabaAdolescenti = () => (
       </li>
       <li>
         <strong>Elevi care vor o a treia limbă</strong> utilă și rară în CV-ul
-        viitor (arabă = peste 400 de milioane de vorbitori).
+        viitor (araba are sute de milioane de vorbitori).
       </li>
       <li>
         <strong>Familii mixte</strong> în care un părinte e vorbitor nativ —

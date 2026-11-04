@@ -135,7 +135,7 @@ const ArabicForTeenagers = () => (
 
     <h2>Native teacher, in Bucharest or online</h2>
     <p>
-      Ibra is a native Lebanese Arabic speaker with 5+ years of teaching
+      Ibra is a native Lebanese Arabic speaker with 6+ years of teaching
       experience, and teaches in English, French, Arabic or Romanian — whichever
       the teenager is most comfortable with. In-person lessons run at Raduga
       Creative Center (Strada Icoanei 80, Bucharest); online lessons run on

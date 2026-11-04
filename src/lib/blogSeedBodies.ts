@@ -703,7 +703,7 @@ Dincolo de asta, **Fusha este semnificativ mai grea** pentru un începător:
 - **Conjugări duale și forme verbale** mai complexe; libaneza are un sistem regularizat, mai apropiat de vorbirea zilnică.
 - **Vocabular formal**, mult mai rar auzit — greu de reținut fără expunere constantă.
 
-Cu **2–3 ore de studiu pe săptămână**, un începător poate purta conversații simple în libaneză în 4–6 luni. Același nivel „de conversație” în Fusha ia de obicei de 2–3 ori mai mult, fiindcă Fusha nu se folosește în conversație — deci practica reală lipsește.
+Cât durează diferă de la om la om. Ca reper, cursul A1 are 32 de lecții, cam 4 luni. Fusha, în schimb, nu se folosește în conversație, deci practica reală lipsește.
 
 ## 4. Context cultural: de ce libaneza e „media-friendly”
 
@@ -775,7 +775,7 @@ Beyond that, **Fusha is significantly harder** for a beginner:
 - **Dual conjugations and more complex verb forms**; Lebanese has a regularised system, closer to everyday speech.
 - **Formal vocabulary**, heard far less often — hard to retain without constant exposure.
 
-With **2–3 hours of study a week**, a beginner can hold simple conversations in Lebanese in 4–6 months. The same 'conversational' level in Fusha usually takes 2–3 times longer, because Fusha isn't used in conversation — so real practice is missing.
+How long it takes differs from person to person. As a guide, the A1 course is 32 lessons, about 4 months. Fusha, by contrast, isn't used in conversation, so real practice is missing.
 
 ## 4. Cultural context: why Lebanese is 'media-friendly'
 

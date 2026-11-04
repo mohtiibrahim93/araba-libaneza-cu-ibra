@@ -21,7 +21,7 @@ const FAQ = [
   },
   {
     q: "Cursurile de arabă sunt acreditate?",
-    a: "Cursurile respectă structura CEFR (A1–C2) — același cadru european folosit de școlile de limbi. La final primești un certificat intern de absolvire a cursului. Pentru certificări oficiale internaționale (ex. ALPT, examene universitare) te putem pregăti separat.",
+    a: "Cursurile respectă structura CEFR (A1–C2) — același cadru european folosit de școlile de limbi. La final primești un certificat intern de absolvire a cursului.",
   },
   {
     q: "În ce limbă se predau lecțiile?",

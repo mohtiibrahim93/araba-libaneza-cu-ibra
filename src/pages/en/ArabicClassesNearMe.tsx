@@ -9,7 +9,7 @@ const FAQ = [
   },
   {
     q: "Do you offer Arabic classes near me if I'm outside Bucharest?",
-    a: "Yes — the live online format is identical to in-person: same native teacher, same small groups (max 6 students), same materials. Students from across Europe, North America and the Gulf take the same courses over Zoom. If you're in Bucharest, choose in-person; anywhere else, online is the answer.",
+    a: "Yes — the live online format is identical to in-person: same native teacher, same small groups (max 6 students online, 8 in person), same materials. Students from across Europe, North America and the Gulf take the same courses over Zoom. If you're in Bucharest, choose in-person; anywhere else, online is the answer.",
   },
   {
     q: "How much do the classes cost?",
@@ -21,7 +21,7 @@ const FAQ = [
   },
   {
     q: "Which dialect do you teach?",
-    a: "Lebanese Arabic, a variety of Levantine Arabic that is understood across Lebanon, Syria, Jordan and Palestine (~30 million native speakers). We teach Lebanese Arabic only: Modern Standard Arabic (MSA / Fusha) is not offered.",
+    a: "Lebanese Arabic, a variety of Levantine Arabic that is understood across Lebanon, Syria, Jordan and Palestine. We teach Lebanese Arabic only: Modern Standard Arabic (MSA / Fusha) is not offered.",
   },
   {
     q: "Is there a free trial?",
