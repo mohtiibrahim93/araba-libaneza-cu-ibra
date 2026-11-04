@@ -13,7 +13,7 @@ const content = {
       ],
       [
         "2. Servicii oferite",
-        "Oferim cursuri de arabă libaneză pentru adulți (grup și privat); de la 16 ani pot participa și adolescenții, cu acordul părintelui. Cursul pentru adolescenți (12–17 ani) nu este încă deschis. Cursurile au loc fizic la Raduga Creative Center din București și online. Cursurile pentru copii nu sunt încă deschise (momentan se poate lăsa doar o cerere „Anunță-mă”); când pornesc, sunt fizice, la centru, în grupe de maximum 6 copii, cu lecții de 60 de minute și maximum 8 lecții pe lună, iar varianta online se va adăuga mai târziu ca opțiune. Cursurile acoperă toate nivelurile CEFR (A1–C2).",
+        "Oferim cursuri de arabă libaneză pentru adulți (grup și privat); de la 16 ani pot participa și adolescenții, cu acordul părintelui. Cursul pentru adolescenți (12–17 ani) nu are încă o grupă formată (vine în curând). Cursurile au loc fizic la Raduga Creative Center din București și online. Cursurile pentru copii nu sunt încă deschise (momentan se poate lăsa doar o cerere „Anunță-mă”); când pornesc, sunt fizice, la centru, în grupe de maximum 6 copii, cu lecții de 60 de minute și maximum 8 lecții pe lună, iar varianta online se va adăuga mai târziu ca opțiune. Cursurile acoperă toate nivelurile CEFR (A1–C2).",
       ],
       [
         "3. Înscriere și plăți",
@@ -73,7 +73,7 @@ const content = {
       ],
       [
         "2. Services",
-        "We offer Lebanese Arabic courses for adults (group and private); from 16, teenagers can join with a parent's consent. The teen course (12–17) is not open yet. Courses run in person at Raduga Creative Center in Bucharest and online. Kids' courses are not open yet (for now you can only ask to be notified); when they start, they are in person at the centre, in groups of up to 6 children, with 60-minute lessons and up to 8 lessons a month, and an online option will be added later. Courses cover all CEFR levels (A1–C2).",
+        "We offer Lebanese Arabic courses for adults (group and private); from 16, teenagers can join with a parent's consent. The teen course (12–17) has no group yet (coming soon). Courses run in person at Raduga Creative Center in Bucharest and online. Kids' courses are not open yet (for now you can only ask to be notified); when they start, they are in person at the centre, in groups of up to 6 children, with 60-minute lessons and up to 8 lessons a month, and an online option will be added later. Courses cover all CEFR levels (A1–C2).",
       ],
       [
         "3. Registration and payments",

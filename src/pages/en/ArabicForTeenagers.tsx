@@ -6,7 +6,7 @@ import NotifyMeForm from "@/components/NotifyMeForm";
 const FAQ = [
   {
     q: "What age are the teen Arabic classes for?",
-    a: "Ages 12–17. The teen course is not open yet: leave your details and we'll let you know when it starts. From 16, teenagers can already join the adult groups (A1–C2) with a parent's consent. For ages 6–11 there is a separate play-based kids course, in person at the centre (groups of up to 6 children, 60-minute lessons, up to 8 lessons a month), though it isn't open yet: you can ask to be notified.",
+    a: "Ages 12–17. The teen course is available, but there is no group yet: it's coming soon. Leave your details and we'll let you know when it starts. From 16, teenagers can already join the adult groups (A1–C2) with a parent's consent. For ages 6–11 there is a separate play-based kids course, in person at the centre (groups of up to 6 children, 60-minute lessons, up to 8 lessons a month), though it isn't open yet: you can ask to be notified.",
   },
   {
     q: "Which Arabic do teenagers learn here?",
@@ -32,9 +32,9 @@ const ArabicForTeenagers = () => (
     roHref="/cursuri-araba-adolescenti"
     title="Lebanese Arabic for teenagers (12–17) — Bucharest and online"
     metaTitle="Lebanese Arabic Classes for Teenagers | Bucharest & Online"
-    description="Lebanese Arabic for ages 12–17 with a native teacher, online or in Bucharest. Not open yet: ask to be notified. From 16, join the adult groups."
+    description="Lebanese Arabic for ages 12–17 with a native teacher, online or in Bucharest. Groups coming soon: ask to be notified. From 16, join the adult groups."
     crumb="Arabic for teenagers"
-    lead="The Lebanese Arabic course for teenagers (12–17) is not open yet: leave your details and we'll let you know when it starts. From 16, teenagers can already join the adult groups with a parent's consent."
+    lead="The Lebanese Arabic course for teenagers (12–17) is available, but there is no group yet: it's coming soon. Leave your details and we'll let you know when it starts. From 16, teenagers can already join the adult groups with a parent's consent."
     faq={FAQ}
   >
     <p>
@@ -96,7 +96,7 @@ const ArabicForTeenagers = () => (
           <tr className="border-b border-border/60 align-top">
             <td className="py-2 pr-3 font-semibold">12–15</td>
             <td className="py-2 px-3">
-              Teen group (not open yet) or private 1-on-1
+              Teen group (coming soon) or private 1-on-1
             </td>
             <td className="py-2 pl-3">In person or online</td>
           </tr>
@@ -111,8 +111,8 @@ const ArabicForTeenagers = () => (
       </table>
     </div>
     <p>
-      Dedicated teen groups are not open yet. Leave your details below and we'll
-      let you know when they start; in the meantime{" "}
+      There is no teen group yet. Leave your details below and we'll let you
+      know when they start; in the meantime{" "}
       <Link to="/en/arabic-tutor">private lessons</Link> are available
       immediately.
     </p>
@@ -150,7 +150,7 @@ const ArabicForTeenagers = () => (
 
     <section className="not-prose rounded-3xl bg-brand-green/5 p-5 sm:p-8">
       <span className="mb-2 block text-sm font-bold uppercase tracking-[0.1em] text-brand-green">
-        Not open yet
+        Coming soon
       </span>
       <h2
         id="waiting-list"
@@ -159,9 +159,9 @@ const ArabicForTeenagers = () => (
         Tell me when the teen course starts
       </h2>
       <p className="mt-2 leading-relaxed text-foreground/80">
-        The teen course (12–17) is not open yet. Leave your details and we'll
-        let you know first when it starts, with no obligation. From 16,
-        teenagers can already join the adult groups with a parent's consent.
+        Teen groups (12–17) are coming soon. Leave your details and we'll let
+        you know first when it starts, with no obligation. From 16, teenagers
+        can already join the adult groups with a parent's consent.
       </p>
       <NotifyMeForm
         context="Grupă adolescenți 12–17"

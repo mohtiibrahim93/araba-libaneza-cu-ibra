@@ -756,8 +756,8 @@ const ProgramsSection = () => {
               </h3>
               <p className="mx-auto mb-6 max-w-md text-sm text-muted-foreground">
                 {lang === "en"
-                  ? "Not open yet: leave your details and we'll let you know when it starts. From 16, teenagers can join the adult groups with a parent's consent."
-                  : "Încă nedeschis: lasă-ne datele și te anunțăm când pornește. De la 16 ani, adolescenții pot intra în grupele de adulți, cu acordul părintelui."}
+                  ? "Coming soon: there is no group yet; leave your details and we'll let you know when it starts. From 16, teenagers can join the adult groups with a parent's consent."
+                  : "În curând: încă nu avem o grupă formată; lasă-ne datele și te anunțăm când pornește. De la 16 ani, adolescenții pot intra în grupele de adulți, cu acordul părintelui."}
               </p>
               <div className="flex flex-wrap justify-center gap-3">
                 <Link

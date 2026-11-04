@@ -5,7 +5,7 @@ import LandingLayout from "@/components/seo/LandingLayout";
 const FAQ = [
   {
     q: "De la ce vârstă poate un adolescent să înceapă cursul de arabă?",
-    a: "Cursul pentru adolescenți (12–17 ani) nu este încă deschis: lasă-ne datele și te anunțăm când pornește. De la 16 ani, adolescenții pot intra deja în grupele de adulți (A1–C2), cu acordul părintelui. Pentru 6–11 ani există cursul separat pentru copii, prin joc (grupe de maximum 6 copii, lecții de 60 de minute, maximum 8 pe lună), dar nu este încă deschis: poți cere să fii anunțat.",
+    a: "Cursul pentru adolescenți (12–17 ani) e disponibil, dar încă nu avem o grupă formată: vine în curând. Lasă-ne datele și te anunțăm când pornește. De la 16 ani, adolescenții pot intra deja în grupele de adulți (A1–C2), cu acordul părintelui. Pentru 6–11 ani există cursul separat pentru copii, prin joc (grupe de maximum 6 copii, lecții de 60 de minute, maximum 8 pe lună), dar nu este încă deschis: poți cere să fii anunțat.",
   },
   {
     q: "Ce fel de arabă învață adolescenții?",
@@ -49,7 +49,7 @@ const CursuriArabaAdolescenti = () => (
     metaTitle="Arabă Libaneză pentru Adolescenți | Curs 12–17 ani"
     description="Arabă libaneză pentru 12–17 ani, online sau în București. Cursul nu e încă deschis: cere să fii anunțat. De la 16 ani, grupele de adulți."
     crumb="Cursuri arabă adolescenți"
-    lead="Cursul de arabă libaneză pentru adolescenți (12–17 ani) nu este încă deschis: lasă-ne datele și te anunțăm când pornește. De la 16 ani, adolescenții pot intra deja în grupele de adulți, cu acordul părintelui."
+    lead="Cursul de arabă libaneză pentru adolescenți (12–17 ani) e disponibil, dar încă nu avem o grupă formată: vine în curând. Lasă-ne datele și te anunțăm când pornește. De la 16 ani, adolescenții pot intra deja în grupele de adulți, cu acordul părintelui."
     faq={FAQ}
   >
     <p>
@@ -169,7 +169,7 @@ const CursuriArabaAdolescenti = () => (
           <tr className="border-b border-border/60 align-top">
             <td className="py-2 pr-3 font-semibold">12–15 ani</td>
             <td className="py-2 px-3">
-              Grupă de adolescenți (încă nedeschisă) sau meditații 1:1
+              Grupă de adolescenți (în curând) sau meditații 1:1
             </td>
             <td className="py-2 pl-3">Fizic sau online</td>
           </tr>
@@ -185,8 +185,8 @@ const CursuriArabaAdolescenti = () => (
       </table>
     </div>
     <p>
-      Grupele dedicate adolescenților nu sunt încă deschise. Lasă-ne datele mai
-      jos și te anunțăm când pornesc; până atunci poți începe cu{" "}
+      Încă nu avem o grupă de adolescenți formată. Lasă-ne datele mai jos și te
+      anunțăm când pornesc; până atunci poți începe cu{" "}
       <Link to="/meditatii-araba">meditații 1:1</Link>.
     </p>
 
@@ -290,7 +290,7 @@ const CursuriArabaAdolescenti = () => (
         finds it without reading the whole page. */}
     <section className="not-prose rounded-3xl bg-brand-green/5 p-5 sm:p-8">
       <span className="mb-2 block text-sm font-bold uppercase tracking-[0.1em] text-brand-green">
-        Încă nedeschis
+        În curând
       </span>
       <h2
         id="lista-asteptare"
@@ -299,10 +299,10 @@ const CursuriArabaAdolescenti = () => (
         Anunță-mă când pornește grupa
       </h2>
       <p className="mt-2 leading-relaxed text-foreground/80">
-        Cursul pentru adolescenți (12–17 ani) nu este încă deschis. Lasă-ți
-        datele și te anunțăm primul când pornește, fără nicio obligație. De la
-        16 ani se poate intra deja în grupele de adulți, cu acordul părintelui.
-        Între timp, poți începe oricând cu{" "}
+        Grupele pentru adolescenți (12–17 ani) vin în curând. Lasă-ți datele și
+        te anunțăm primul când pornește, fără nicio obligație. De la 16 ani se
+        poate intra deja în grupele de adulți, cu acordul părintelui. Între
+        timp, poți începe oricând cu{" "}
         <Link to="/meditatii-araba" className="text-primary underline">
           meditații de arabă 1:1
         </Link>

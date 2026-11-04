@@ -592,7 +592,7 @@ const STATIC_ROUTES: SeoRoute[] = [
     path: "/en/arabic-for-teenagers",
     title: "Lebanese Arabic Classes for Teenagers | Bucharest & Online",
     description:
-      "Lebanese Arabic for ages 12–17 with a native teacher, online or in Bucharest. Not open yet: ask to be notified. From 16, join the adult groups.",
+      "Lebanese Arabic for ages 12–17 with a native teacher, online or in Bucharest. Groups coming soon: ask to be notified. From 16, join the adult groups.",
   },
   {
     path: "/de/arabisch-lernen",
