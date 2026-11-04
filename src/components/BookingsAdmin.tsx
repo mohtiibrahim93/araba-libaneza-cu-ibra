@@ -413,6 +413,12 @@ const BookingsAdmin = ({
                   </td>
                   <td className="py-2 pr-2">
                     <div className="font-medium">{b.student_name}</div>
+                    {/* A make-up lesson's name, kept in its note (owner, 4 Nov 2026). */}
+                    {b.notes && /^Lectia .+\(recuperare \d+\)$/.test(b.notes) && (
+                      <div className="text-xs font-medium text-primary">
+                        {b.notes}
+                      </div>
+                    )}
                     <div className="text-xs text-muted-foreground">
                       {b.student_email}
                     </div>
