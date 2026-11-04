@@ -19,3 +19,11 @@ describe("a free trial reads Gratuit in the admin", () => {
     ).toBe("unpaid");
   });
 });
+
+import { readFileSync } from "node:fs";
+describe("a booked trial is saved as free", () => {
+  it("booking-create moves a trial from unpaid to free, never over a saved card", () => {
+    const src = readFileSync("supabase/functions/booking-create/index.ts", "utf8");
+    expect(src).toMatch(/update\(\{ payment_status: "free" \}\)[\s\S]{0,120}\.eq\("form_type", "trial"\)\s*\.eq\("payment_status", "unpaid"\)/);
+  });
+});

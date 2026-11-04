@@ -128,7 +128,7 @@ serve(async (req) => {
       // (A course already paid needs no seat deposit either.)
       if (
         regRow.payment_status === "paid" ||
-        regRow.payment_status === "free"
+        (regRow.payment_status === "free" && regRow.form_type !== "trial")
       ) {
         return new Response(JSON.stringify({ error: "Already paid" }), {
           headers: { ...corsHeaders, "Content-Type": "application/json" },

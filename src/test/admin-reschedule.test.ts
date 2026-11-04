@@ -198,7 +198,7 @@ describe("booking a private lesson from the panel", () => {
     // A hand-booked trial owes nothing and is not revenue: unpaid too.
     expect(code(head)).toContain(
       code(
-        'payment_status: trial ? "unpaid" : free ? "free" : paid ? "paid" : "unpaid"',
+        'payment_status: trial ? "free" : free ? "free" : paid ? "paid" : "unpaid"',
       ),
     );
     expect(head).not.toContain('"pending"');

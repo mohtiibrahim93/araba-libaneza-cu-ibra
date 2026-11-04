@@ -95,7 +95,11 @@ serve(async (req) => {
       });
     }
     // "free": the owner gave it for free, so there is nothing to charge.
-    if (regRow.payment_status === "paid" || regRow.payment_status === "free") {
+    // A trial's "free" covers the trial only: a later paid lesson is still owed.
+    if (
+      regRow.payment_status === "paid" ||
+      (regRow.payment_status === "free" && regRow.form_type !== "trial")
+    ) {
       return new Response(
         JSON.stringify({ error: "Registration already paid" }),
         {

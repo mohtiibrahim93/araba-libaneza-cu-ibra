@@ -223,7 +223,7 @@ Deno.serve(async (req) => {
       !isFree &&
       !internalCall &&
       reg.payment_status !== "paid" &&
-      reg.payment_status !== "free"
+      !(reg.payment_status === "free" && reg.form_type !== "trial")
     ) {
       return json({ error: "payment required", code: "payment_required" }, 402);
     }
@@ -508,6 +508,20 @@ Deno.serve(async (req) => {
         .eq("lead_status", "incomplete");
       if (clearErr)
         console.error("[booking-create] promote lead failed", clearErr);
+
+      // A booked free trial owes nothing: saved as "free", not "unpaid".
+      // Only from unpaid, so a saved card ("card_saved") or a no-show fee
+      // keeps its own status.
+      if (et.slug === "trial" && reg?.form_type === "trial") {
+        const { error: freeErr } = await supabase
+          .from("registrations")
+          .update({ payment_status: "free" })
+          .eq("id", body.registration_id)
+          .eq("form_type", "trial")
+          .eq("payment_status", "unpaid");
+        if (freeErr)
+          console.error("[booking-create] mark trial free failed", freeErr);
+      }
 
       const { error: legacyErr } = await supabase
         .from("registrations")

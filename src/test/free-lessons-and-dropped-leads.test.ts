@@ -38,7 +38,7 @@ describe("a lesson given for free", () => {
     expect(code(admin)).toContain(code("const free = b.free === true;"));
     expect(code(admin)).toContain(
       code(
-        'payment_status: trial ? "unpaid" : free ? "free" : paid ? "paid" : "unpaid",',
+        'payment_status: trial ? "free" : free ? "free" : paid ? "paid" : "unpaid",',
       ),
     );
     // The booking form lives in BookLessonDialog since 26 Oct 2026.
@@ -84,7 +84,7 @@ describe("a lesson given for free", () => {
       ),
     );
     expect(code(read("supabase/functions/booking-create/index.ts"))).toContain(
-      code('reg.payment_status !== "paid" && reg.payment_status !== "free"'),
+      code('reg.payment_status !== "paid" && !(reg.payment_status === "free" && reg.form_type !== "trial")'),
     );
     for (const [fn, row] of [
       ["create-checkout", "regRow"],
@@ -97,7 +97,7 @@ describe("a lesson given for free", () => {
         `${fn} must not charge for a free lesson`,
       ).toContain(
         code(
-          `if (${row}.payment_status === "paid" || ${row}.payment_status === "free") {`,
+          `if (${row}.payment_status === "paid" || (${row}.payment_status === "free" && ${row}.form_type !== "trial")) {`,
         ),
       );
     }
