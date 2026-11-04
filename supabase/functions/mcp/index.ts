@@ -74,7 +74,7 @@ var LEVELS = [
     lessons: 32,
     hours: 48,
     track: "Spoken",
-    schedule: "In person: Mon & Wed 19:00\u201320:30 group, 2 Sep \u2013 21 Dec 2026 (32 lessons), Strada Icoanei 80 \xB7 in progress \xB7 Online: the Sat 12:00\u201313:30 / Sun 17:30\u201319:00 group is in progress and full; new online groups taught in Romanian and in English, max 6 each, are open for registration \u2014 dates on /cursuri/grup/a1"
+    schedule: "In person: Mon 19:00 & Wed 18:30 group, 2 Sep \u2013 21 Dec 2026 (32 lessons), Strada Icoanei 80 \xB7 in progress \xB7 Online: the Sat 12:00\u201313:30 / Sun 17:30\u201319:00 group is in progress and full; new online groups taught in Romanian and in English, max 6 each, are open for registration \u2014 dates on /cursuri/grup/a1"
   },
   {
     id: "a2",
