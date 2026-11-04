@@ -97,7 +97,7 @@ describe("a lesson given for free", () => {
         `${fn} must not charge for a free lesson`,
       ).toContain(
         code(
-          `if (${row}.payment_status === "paid" || ${row}.payment_status === "free") {`,
+          `if (${row}.payment_status === "paid" || (${row}.payment_status === "free" && ${row}.form_type !== "trial")) {`,
         ),
       );
     }
