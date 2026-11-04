@@ -6,6 +6,7 @@
 
 import { safeAnalyticsUrl, URL_PARAMS } from "@/lib/analyticsUrl";
 import { trackMeta } from "@/lib/metaPixel";
+import { readConsent } from "@/lib/cookieConsent";
 
 export function trackEvent(
   eventName: string,
@@ -17,6 +18,71 @@ export function trackEvent(
   const path = window.location.pathname;
   if (safeAnalyticsUrl(path) !== path) return;
   (window as any).gtag("event", eventName, params && withSafeUrls(params));
+}
+
+// ---------------------------------------------------------------------------
+// Enhanced conversions (Google Ads): the visitor's email and phone, set with
+// gtag("set", "user_data", ...) immediately before registration_submit,
+// generate_lead, trial_booking_complete and purchase. gtag hashes them before
+// they leave the browser.
+//
+// Only with "Acceptă toate" (ad_user_data granted); otherwise nothing is set.
+// Never put them in event parameters, URLs, page_path or the console.
+// ---------------------------------------------------------------------------
+
+export interface UserData {
+  email?: string | null | undefined;
+  phone?: string | null | undefined;
+}
+
+/** Trimmed and lowercased; undefined unless it looks like an address. */
+export function normalizeEmail(raw?: string | null): string | undefined {
+  const e = (raw ?? "").trim().toLowerCase();
+  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(e) ? e : undefined;
+}
+
+/**
+ * E.164 (+40712345678) or undefined. Spaces, dashes, dots and brackets are
+ * dropped and a leading 00 becomes +; a number without a country code is left
+ * out rather than guessed.
+ */
+export function normalizePhone(raw?: string | null): string | undefined {
+  let p = (raw ?? "").replace(/[\s().-]/g, "");
+  if (p.startsWith("00")) p = `+${p.slice(2)}`;
+  return /^\+[1-9]\d{7,14}$/.test(p) ? p : undefined;
+}
+
+export function setUserData(user?: UserData) {
+  if (!user || typeof window === "undefined") return;
+  if (readConsent() !== "all") return;
+  const gtag = (window as any).gtag;
+  if (typeof gtag !== "function") return;
+  // Same rule as trackEvent: nothing on a page whose path holds a token.
+  const path = window.location.pathname;
+  if (safeAnalyticsUrl(path) !== path) return;
+  const email = normalizeEmail(user.email);
+  const phone_number = normalizePhone(user.phone);
+  if (!email && !phone_number) return;
+  gtag("set", "user_data", {
+    ...(email ? { email } : {}),
+    ...(phone_number ? { phone_number } : {}),
+  });
+}
+
+/**
+ * The confirmed email of this browser's Supabase session, if any. The trial
+ * card step and the group payment both require one, so on the pages they
+ * return to it is the visitor's own address. Read locally, no request.
+ */
+export async function sessionEmail(): Promise<string | undefined> {
+  if (readConsent() !== "all") return undefined;
+  try {
+    const { supabase } = await import("@/integrations/supabase/client");
+    const { data } = await supabase.auth.getSession();
+    return data.session?.user?.email ?? undefined;
+  } catch {
+    return undefined;
+  }
 }
 
 // Every URL-valued parameter goes through safeAnalyticsUrl, so no call site
@@ -54,7 +120,9 @@ function withSafeUrls(params: Record<string, unknown>) {
 export function trackGenerateLead(
   source: string,
   params?: Record<string, unknown>,
+  user?: UserData,
 ) {
+  setUserData(user);
   trackEvent("generate_lead", {
     method: "website_form",
     content_name: source,
@@ -71,6 +139,8 @@ export interface PurchaseDetails {
   value: number;
   currency: string;
   courseType?: string | null;
+  /** For enhanced conversions only; never sent as an event parameter. */
+  user?: UserData;
 }
 
 /**
@@ -87,7 +157,9 @@ export function trackPurchase({
   value,
   currency,
   courseType,
+  user,
 }: PurchaseDetails) {
+  setUserData(user);
   trackEvent("purchase", {
     transaction_id: transactionId,
     value,
@@ -172,7 +244,11 @@ export function trackRegistrationValidationFailed(
 }
 
 /** Submit passed validation and the insert was attempted. */
-export function trackRegistrationSubmit(formType: RegistrationFormType) {
+export function trackRegistrationSubmit(
+  formType: RegistrationFormType,
+  user?: UserData,
+) {
+  setUserData(user);
   trackEvent("registration_submit", { form_type: formType });
 }
 

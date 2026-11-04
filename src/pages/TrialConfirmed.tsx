@@ -12,7 +12,7 @@ import {
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { useI18n } from "@/lib/i18n";
-import { trackEvent } from "@/lib/tracking";
+import { sessionEmail, setUserData, trackEvent } from "@/lib/tracking";
 
 const TZ = "Europe/Bucharest";
 
@@ -44,9 +44,12 @@ const TrialConfirmed = () => {
   useEffect(() => {
     if (tracked.current) return;
     tracked.current = true;
-    trackEvent("trial_booking_complete", {
-      event_type: "trial",
-      source: "card_saved",
+    void sessionEmail().then((email) => {
+      setUserData({ email });
+      trackEvent("trial_booking_complete", {
+        event_type: "trial",
+        source: "card_saved",
+      });
     });
   }, []);
 

@@ -12,7 +12,7 @@ import {
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import { trackPurchase } from "@/lib/tracking";
+import { sessionEmail, trackPurchase } from "@/lib/tracking";
 import { useI18n } from "@/lib/i18n";
 
 type Status = "pending" | "succeeded" | "failed" | "canceled";
@@ -124,12 +124,16 @@ const PaymentStatus = () => {
               !purchaseSent.current
             ) {
               purchaseSent.current = true;
-              trackPurchase({
-                transactionId,
-                value: (amount || amountParam || 0) / 100,
-                currency,
-                courseType,
-              });
+              const value = (amount || amountParam || 0) / 100;
+              void sessionEmail().then((email) =>
+                trackPurchase({
+                  transactionId,
+                  value,
+                  currency,
+                  courseType,
+                  user: { email },
+                }),
+              );
             }
             return;
           }

@@ -102,7 +102,7 @@ const NotifyMeForm = ({
         notes: `Cerere „anunță-mă”: ${context}`,
       });
       if (error) throw error;
-      trackGenerateLead("notify_me", { context });
+      trackGenerateLead("notify_me", { context }, { email, phone });
       setSent(true);
     } catch (err) {
       console.error("[notify-me] insert failed", err);

@@ -93,6 +93,7 @@ const ThankYou = () => {
             value: (data.amountTotal || 0) / 100,
             currency: data.currency || "ron",
             courseType: data.courseType,
+            user: { email: data.customerEmail },
           });
         }
       } catch (e) {

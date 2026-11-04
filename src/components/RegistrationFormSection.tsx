@@ -431,7 +431,7 @@ const RegistrationFormSection = ({
       return;
     }
 
-    trackRegistrationSubmit(courseType as CourseType);
+    trackRegistrationSubmit(courseType as CourseType, { email, phone });
     setSubmitting(true);
     try {
       // reCAPTCHA v3 verification is intentionally soft: a missing token or
@@ -567,7 +567,7 @@ const RegistrationFormSection = ({
         body: { registrationId: id, email: email || "" },
       });
 
-      trackGenerateLead(formTypeLabel);
+      trackGenerateLead(formTypeLabel, undefined, { email, phone });
       toast.success(t.mainLeadSuccess);
       setSubmittedData({
         courseType: courseType as CourseType,

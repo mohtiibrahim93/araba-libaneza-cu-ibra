@@ -181,7 +181,11 @@ const Contact = ({ lang }: { lang: "ro" | "en" }) => {
       });
       if (!response.ok)
         throw new Error(`contact endpoint returned ${response.status}`);
-      trackGenerateLead("contact_form", { context: "contact_page" });
+      trackGenerateLead(
+        "contact_form",
+        { context: "contact_page" },
+        { email, phone },
+      );
       setSent(true);
     } catch (err) {
       console.error("[contact] send failed", err);
