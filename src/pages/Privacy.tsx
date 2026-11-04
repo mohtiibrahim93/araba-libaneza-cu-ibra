@@ -33,7 +33,7 @@ const content: Record<"ro" | "en", PrivacyPage> = {
       ],
       [
         "4. Cine ne ajută să le prelucrăm",
-        "Folosim furnizori care prelucrează date în numele nostru: Supabase (baza de date și conturile), Lovable (găzduirea site-ului, trimiterea emailurilor și asistentul AI de pe site), Stripe (plăți și păstrarea cardului pentru lecția de probă), Google (reCAPTCHA pentru protecția formularelor, Google Analytics și măsurarea campaniilor Google Ads, doar cu acordul tău, Google Calendar pentru programări și conectarea cu Google), Zoom (lecțiile online) și WhatsApp (dacă ne scrii acolo). Unii dintre ei pot prelucra date în afara Spațiului Economic European; fiecare are propria politică de confidențialitate. Nu vindem și nu închiriem datele tale.",
+        "Folosim furnizori care prelucrează date în numele nostru: Supabase (baza de date și conturile), Lovable (găzduirea site-ului, trimiterea emailurilor și asistentul AI de pe site), Stripe (plăți și păstrarea cardului pentru lecția de probă), Google (reCAPTCHA pentru protecția formularelor, Google Analytics și măsurarea campaniilor Google Ads, doar cu acordul tău, Google Calendar pentru programări și conectarea cu Google), Meta (Facebook Pixel, pentru măsurarea reclamelor de pe Facebook și Instagram, doar cu acordul tău), Zoom (lecțiile online) și WhatsApp (dacă ne scrii acolo). Unii dintre ei pot prelucra date în afara Spațiului Economic European; fiecare are propria politică de confidențialitate. Nu vindem și nu închiriem datele tale.",
       ],
       [
         "5. Cât timp le păstrăm",
@@ -45,7 +45,7 @@ const content: Record<"ro" | "en", PrivacyPage> = {
       ],
       [
         "7. Cookie-uri",
-        "Folosim cookie-uri tehnice necesare funcționării site-ului și, doar dacă accepți, cookie-uri de analiză și publicitate (Google Analytics și măsurarea campaniilor Google Ads). Când intri prima dată pe site, te întrebăm: „Acceptă toate” sau „Doar esențiale”. Alegerea ta se păstrează în browser și o poți schimba oricând din linkul „Setări cookies” din subsolul site-ului. Formularele folosesc Google reCAPTCHA ca să oprească spamul.",
+        "Folosim cookie-uri tehnice necesare funcționării site-ului și, doar dacă accepți, cookie-uri de analiză și publicitate (Google Analytics, măsurarea campaniilor Google Ads și Meta Pixel). Când intri prima dată pe site, te întrebăm: „Acceptă toate” sau „Doar esențiale”. Alegerea ta se păstrează în browser și o poți schimba oricând din linkul „Setări cookies” din subsolul site-ului. Formularele folosesc Google reCAPTCHA ca să oprească spamul. Dacă accepți, Meta (Facebook) primește prin Meta Pixel paginile pe care le vizitezi, faptul că ai trimis un formular de înscriere și plățile finalizate (suma, în lei), împreună cu identificatorii din browser (cookie-urile _fbp și _fbc), ca să măsurăm și să îmbunătățim reclamele de pe Facebook și Instagram. Nu îi trimitem numele, emailul sau telefonul tău. Dacă alegi „Doar esențiale”, Pixelul nu se încarcă, iar cookie-urile lui se șterg.",
         {
           heading: "Funcții de publicitate Google Analytics",
           body: [
@@ -98,7 +98,7 @@ const content: Record<"ro" | "en", PrivacyPage> = {
       ],
       [
         "4. Who helps us process it",
-        "We use providers that process data on our behalf: Supabase (database and accounts), Lovable (website hosting, sending emails and the AI assistant on the site), Stripe (payments and holding the card for the trial lesson), Google (reCAPTCHA to protect the forms, Google Analytics and Google Ads campaign measurement, only with your consent, Google Calendar for bookings, and Google sign-in), Zoom (online lessons) and WhatsApp (if you message us there). Some of them may process data outside the European Economic Area; each has its own privacy policy. We do not sell or rent your data.",
+        "We use providers that process data on our behalf: Supabase (database and accounts), Lovable (website hosting, sending emails and the AI assistant on the site), Stripe (payments and holding the card for the trial lesson), Google (reCAPTCHA to protect the forms, Google Analytics and Google Ads campaign measurement, only with your consent, Google Calendar for bookings, and Google sign-in), Meta (the Facebook Pixel, to measure ads on Facebook and Instagram, only with your consent), Zoom (online lessons) and WhatsApp (if you message us there). Some of them may process data outside the European Economic Area; each has its own privacy policy. We do not sell or rent your data.",
       ],
       [
         "5. How long we keep it",
@@ -110,7 +110,7 @@ const content: Record<"ro" | "en", PrivacyPage> = {
       ],
       [
         "7. Cookies",
-        "We use technical cookies the site needs to work and, only if you accept, analytics and advertising cookies (Google Analytics and Google Ads campaign measurement). On your first visit we ask you: “Accept all” or “Essential only”. Your choice is kept in your browser and you can change it at any time via the “Cookie settings” link in the site footer. The forms use Google reCAPTCHA to stop spam.",
+        "We use technical cookies the site needs to work and, only if you accept, analytics and advertising cookies (Google Analytics, Google Ads campaign measurement and the Meta Pixel). On your first visit we ask you: “Accept all” or “Essential only”. Your choice is kept in your browser and you can change it at any time via the “Cookie settings” link in the site footer. The forms use Google reCAPTCHA to stop spam. If you accept, Meta (Facebook) receives through the Meta Pixel the pages you visit, the fact that you sent a sign-up form, and completed payments (the amount, in lei), together with browser identifiers (the _fbp and _fbc cookies), so we can measure and improve our ads on Facebook and Instagram. We do not send it your name, email or phone number. If you choose “Essential only”, the Pixel does not load and its cookies are deleted.",
         {
           heading: "Google Analytics advertising features",
           body: [

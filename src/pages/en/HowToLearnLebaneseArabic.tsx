@@ -106,31 +106,29 @@ const HowToLearnLebaneseArabic = () => (
     </p>
 
     <h3>Two 90-minute lessons per week (with a native teacher)</h3>
-    <p>Each 90-minute lesson breaks down like this:</p>
+    <p>
+      Each 90-minute lesson roughly breaks down like this. It is a way to think
+      about it, not a fixed schedule: every lesson adapts to the group and what
+      it needs that day.
+    </p>
     <ul>
       <li>
-        <strong>0–10 min · Warm-up.</strong> Free conversation in Lebanese only,
-        on last week's topics. Forces active recall before new material lands.
+        <strong>0–15 min · Warm-up and recap.</strong> Free conversation in
+        Lebanese on last lesson's topics, a quick review of the homework and of
+        anything unclear. Mistakes get caught before they solidify.
       </li>
       <li>
-        <strong>10–30 min · Review.</strong> Correct homework, drill last
-        lesson's grammar, and clarify anything unclear. This is where mistakes
-        get caught before they solidify.
+        <strong>15–45 min · New material.</strong> One grammar point and one
+        theme (family, food, directions…) with the new words that go with it.
       </li>
       <li>
-        <strong>30–60 min · New material.</strong> One grammar concept + one
-        theme (family, food, directions…) + ~10 new words. Never more — capacity
-        is the constraint.
+        <strong>45–70 min · Conversation.</strong> Role-plays and dialogues
+        using the new material. This is where it becomes usable.
       </li>
       <li>
-        <strong>60–80 min · Guided practice.</strong> Role-plays, dialogues,
-        listening to a short native clip and answering questions. This is where
-        new material becomes usable.
-      </li>
-      <li>
-        <strong>80–90 min · Homework assignment.</strong> A concrete task for
-        the week — record a 1-minute voice note, write 5 sentences, message the
-        teacher in Lebanese.
+        <strong>70–90 min · Pronunciation feedback.</strong> The sounds that
+        don't exist in English or Romanian, intonation, and a short task for the
+        week.
       </li>
     </ul>
 

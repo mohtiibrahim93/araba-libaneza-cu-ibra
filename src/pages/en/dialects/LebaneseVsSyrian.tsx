@@ -15,7 +15,7 @@ const FAQ = [
   },
   {
     q: "What is the difference between North and South Levantine?",
-    a: "North means Lebanese and Syrian, South means Palestinian and Jordanian. Grammar and most of the vocabulary are shared. What changes is the pronunciation of ق, the colour of the vowels, the intonation, and the shape of negation: the south often adds the -sh suffix (ma baʿrafsh), the north usually does not.",
+    a: "North means Lebanese and Syrian, South means Palestinian and Jordanian. Grammar and about 80–90% of the vocabulary are shared. What changes is the pronunciation of ق, the colour of the vowels, the intonation, and the shape of negation: the south often adds the -sh suffix (ma baʿrafsh), the north usually does not.",
   },
   {
     q: "Why does Lebanese sound so different from Syrian if they are that close?",

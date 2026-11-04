@@ -10,6 +10,8 @@
  * The gtag bootstrap in __root.tsx sets the denied defaults and, before
  * `config`, re-grants a stored "all" so the first page view already counts.
  */
+import { loadMetaPixel, revokeMetaPixel } from "@/lib/metaPixel";
+
 export const CONSENT_KEY = "cookie_consent";
 /** Fired by "Setări cookies" in the footer to reopen the banner. */
 export const OPEN_CONSENT_EVENT = "cookie-consent:open";
@@ -53,10 +55,17 @@ export function saveConsent(choice: ConsentChoice) {
   updateGoogleConsent(choice === "all" ? "granted" : "denied");
   // Withdrawing consent also removes what Analytics and Ads already stored
   // (audit P1 legal #7: the _ga cookies stayed after "essential").
-  if (choice === "essential") deleteGoogleCookies();
+  if (choice === "essential") {
+    deleteGoogleCookies();
+    revokeMetaPixel();
+  }
   // Google's script is fetched only now, on "all" (see the bootstrap in
   // __root.tsx). "essential" never loads it.
-  if (choice === "all") (window as GtagWindow).__loadGtag?.();
+  if (choice === "all") {
+    (window as GtagWindow).__loadGtag?.();
+    // The Meta Pixel follows the same choice (src/lib/metaPixel.ts).
+    loadMetaPixel();
+  }
 }
 
 /** Analytics and Ads cookies: _ga, _ga_<id>, _gid, _gat*, _gcl_* (Ads). */

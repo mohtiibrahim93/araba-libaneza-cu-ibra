@@ -374,7 +374,7 @@ const STATIC_ROUTES: SeoRoute[] = [
     path: "/cursuri-araba-adolescenti",
     title: "Arabă Libaneză pentru Adolescenți | Curs 12–17 ani",
     description:
-      "Adolescenții de 12–17 ani învață arabă libaneză prin conversație, muzică și social media, online sau în București. Lecție de probă gratuită.",
+      "Arabă libaneză pentru 12–17 ani, online sau în București. Cursul nu e încă deschis: cere să fii anunțat. De la 16 ani, grupele de adulți.",
   },
   {
     path: "/blog",
@@ -428,6 +428,13 @@ const STATIC_ROUTES: SeoRoute[] = [
     title: "Levantine vs Peninsular Arabic: Hijazi and Najdi",
     description:
       "Hijazi, Najdi, Yemeni: what is spoken in Saudi Arabia and Yemen, how it differs from Levantine, and how far Lebanese Arabic gets you if you go there.",
+    lang: "en",
+  },
+  {
+    path: "/en/level-check",
+    title: "Free Lebanese Arabic level check with Ibra",
+    description:
+      "Find out your Lebanese Arabic level for free: up to 30 minutes with Ibra, on Zoom or at the centre. Message on WhatsApp, ask for a call or pick a time.",
     lang: "en",
   },
   {
@@ -585,7 +592,7 @@ const STATIC_ROUTES: SeoRoute[] = [
     path: "/en/arabic-for-teenagers",
     title: "Lebanese Arabic Classes for Teenagers | Bucharest & Online",
     description:
-      "Lebanese Arabic classes for ages 12–17 with a native teacher, online or in Bucharest. Build real conversation skills from the first lesson. Free trial.",
+      "Lebanese Arabic for ages 12–17 with a native teacher, online or in Bucharest. Not open yet: ask to be notified. From 16, join the adult groups.",
   },
   {
     path: "/de/arabisch-lernen",
@@ -806,6 +813,7 @@ const LANDING_PAIRS: Array<[string, string]> = [
 const COURSE_PAIRS: Array<[string, string]> = [
   ["/trial", "/en/trial"],
   ["/preturi", "/en/prices"],
+  ["/verificare-nivel", "/en/level-check"],
   ["/booking", "/en/booking"],
   ["/quiz", "/en/quiz"],
   ["/te-ajutam", "/en/find-your-page"],

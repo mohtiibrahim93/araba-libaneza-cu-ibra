@@ -1,9 +1,11 @@
 // GA4 event helpers. Consent is handled by CookieConsentBanner via Google
 // Consent Mode: the gtag bootstrap sets consent "default: denied" and the
 // banner flips it to "granted" when the visitor accepts, so we send events unconditionally and
-// let Consent Mode gate them. Meta Pixel isn't set up yet.
+// let Consent Mode gate them. The Meta Pixel (src/lib/metaPixel.ts) loads only
+// after consent and gets CompleteRegistration and Purchase next to the GA4 events.
 
 import { safeAnalyticsUrl, URL_PARAMS } from "@/lib/analyticsUrl";
+import { trackMeta } from "@/lib/metaPixel";
 
 export function trackEvent(
   eventName: string,
@@ -59,6 +61,7 @@ export function trackGenerateLead(
     page_path: window.location.pathname,
     ...params,
   });
+  trackMeta("CompleteRegistration", { content_name: source });
 }
 
 export interface PurchaseDetails {
@@ -99,6 +102,17 @@ export function trackPurchase({
       },
     ],
   });
+  // Same transaction id as GA4, so Meta also drops a repeat send.
+  trackMeta(
+    "Purchase",
+    {
+      value,
+      currency: (currency || "RON").toUpperCase(),
+      content_name: courseType || "course",
+      content_type: "product",
+    },
+    transactionId,
+  );
 }
 
 // ---------------------------------------------------------------------------

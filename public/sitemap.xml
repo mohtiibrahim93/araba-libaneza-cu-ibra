@@ -300,6 +300,12 @@
     <priority>0.6</priority>
   </url>
   <url>
+    <loc>https://centruldearabalibaneza.com/en/level-check</loc>
+    <lastmod>2026-11-04T12:00:00+00:00</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
     <loc>https://centruldearabalibaneza.com/en/prices</loc>
     <lastmod>2026-11-03T16:14:49+00:00</lastmod>
     <changefreq>monthly</changefreq>

@@ -334,7 +334,7 @@ export const translations = {
     // Cookie consent banner
     cookieTitle: "Cookie-uri",
     cookieMessage:
-      "Folosim cookie-uri esențiale ca site-ul să funcționeze. Cu acordul tău, folosim și cookie-uri de analiză și publicitate (Google Analytics, Google Ads), ca să vedem ce funcționează pe site.",
+      "Folosim cookie-uri esențiale ca site-ul să funcționeze. Cu acordul tău, folosim și cookie-uri de analiză și publicitate (Google Analytics, Google Ads, Meta Pixel), ca să vedem ce funcționează pe site.",
     cookieAcceptAll: "Acceptă toate",
     cookieEssentialOnly: "Doar esențiale",
     cookiePrivacyLink: "Politica de confidențialitate",
@@ -1303,7 +1303,7 @@ export const translations = {
     // Cookie consent banner
     cookieTitle: "Cookies",
     cookieMessage:
-      "We use essential cookies to make the site work. With your consent, we also use analytics and advertising cookies (Google Analytics, Google Ads) to see what works on the site.",
+      "We use essential cookies to make the site work. With your consent, we also use analytics and advertising cookies (Google Analytics, Google Ads, Meta Pixel) to see what works on the site.",
     cookieAcceptAll: "Accept all",
     cookieEssentialOnly: "Essential only",
     cookiePrivacyLink: "Privacy policy",

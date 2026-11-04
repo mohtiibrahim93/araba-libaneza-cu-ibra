@@ -120,7 +120,7 @@ const CursuriAraba = () => (
     <h2>De ce cu profesor nativ</h2>
     <p>
       Pronunția, intonația și expresiile idiomatice nu se învață din manual — se
-      preiau de la un vorbitor nativ. Ibra e libanez, cu peste 5 ani de
+      preiau de la un vorbitor nativ. Ibra e libanez, cu peste 6 ani de
       experiență în predare, iar metoda <strong>Oral First</strong> te pune să
       vorbești din prima lecție, folosind <Link to="/arabizi">arabizi</Link>{" "}
       (scriere cu litere latine) până când alfabetul arab vine natural — nu ai

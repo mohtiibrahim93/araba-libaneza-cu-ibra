@@ -111,8 +111,8 @@ const DialecteArabe = () => (
 
     <h2>Harta dialectelor levantine (shami)</h2>
     <p>
-      Levantina e vorbită nativ de zeci de milioane de oameni în Liban, Siria,
-      Iordania și Palestina. Se împarte în două grupuri apropiate:
+      Levantina e vorbită nativ de peste 40 de milioane de oameni în Liban,
+      Siria, Iordania și Palestina. Se împarte în două grupuri apropiate:
     </p>
 
     <CreditedFigure
@@ -192,8 +192,8 @@ const DialecteArabe = () => (
         instantaneu.
       </li>
       <li>
-        <strong>În rest:</strong> gramatica, structura frazei și cea mai mare
-        parte a vocabularului sunt comune.
+        <strong>În rest:</strong> gramatica, structura frazei și circa 80–90%
+        din vocabular sunt comune.
       </li>
     </ul>
     <p>

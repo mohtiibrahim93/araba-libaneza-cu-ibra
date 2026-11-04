@@ -46,7 +46,7 @@ const BestArabicCourse = () => (
         of it often ends with no conversation. If the people you want to talk to
         are Lebanese, Syrian, Jordanian or Palestinian, learn{" "}
         <strong>Lebanese Arabic (Levantine)</strong> — one dialect, four
-        countries, tens of millions of speakers.
+        countries, over 40 million speakers.
       </p>
       <p>
         Then pick the format by what you need: a small group for motivation and

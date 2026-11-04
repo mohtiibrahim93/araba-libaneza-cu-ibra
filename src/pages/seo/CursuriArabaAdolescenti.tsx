@@ -1,12 +1,11 @@
 import { Link } from "@/components/LocalizedLink";
 import NotifyMeForm from "@/components/NotifyMeForm";
 import LandingLayout from "@/components/seo/LandingLayout";
-import { courseInstances, GROUP_WEEKLY_WORKLOAD } from "@/lib/courseSchema";
 
 const FAQ = [
   {
     q: "De la ce vârstă poate un adolescent să înceapă cursul de arabă?",
-    a: "Grupele pentru adolescenți sunt pentru 12–17 ani. De la 16 ani, adolescenții pot intra direct în grupele de adulți (A1–C2), cu acordul părintelui. Pentru 6–11 ani există cursul separat pentru copii, prin joc (grupe de maximum 6 copii, lecții de 60 de minute, maximum 8 pe lună), dar nu este încă deschis: poți cere să fii anunțat.",
+    a: "Cursul pentru adolescenți (12–17 ani) nu este încă deschis: lasă-ne datele și te anunțăm când pornește. De la 16 ani, adolescenții pot intra deja în grupele de adulți (A1–C2), cu acordul părintelui. Pentru 6–11 ani există cursul separat pentru copii, prin joc (grupe de maximum 6 copii, lecții de 60 de minute, maximum 8 pe lună), dar nu este încă deschis: poți cere să fii anunțat.",
   },
   {
     q: "Ce fel de arabă învață adolescenții?",
@@ -38,7 +37,7 @@ const FAQ = [
   },
   {
     q: "Cum știu dacă i se potrivește înainte să plătesc?",
-    a: "Prin lecția de probă gratuită de 30 de minute, online sau fizic. Cardul se salvează în siguranță doar pentru confirmarea locului; proba rămâne 0 lei, iar dacă după cele 30 de minute nu vrei să continui, nu urmează nimic.",
+    a: "Prin lecția de probă gratuită de 30 de minute, online sau fizic (pentru adolescenții de 16+ care intră în grupele de adulți, sau când pornește cursul pentru adolescenți). Cardul se salvează în siguranță doar pentru confirmarea locului; proba rămâne 0 lei, iar dacă după cele 30 de minute nu vrei să continui, nu urmează nimic.",
   },
 ];
 
@@ -46,15 +45,11 @@ const CursuriArabaAdolescenti = () => (
   <LandingLayout
     slug="cursuri-araba-adolescenti"
     enHref="/en/arabic-for-teenagers"
-    courseInstances={courseInstances({
-      workload: GROUP_WEEKLY_WORKLOAD,
-      repeatFrequency: "Weekly",
-    })}
     title="Cursuri de arabă libaneză pentru adolescenți (12–17 ani) — București și online"
     metaTitle="Arabă Libaneză pentru Adolescenți | Curs 12–17 ani"
-    description="Adolescenții de 12–17 ani învață arabă libaneză prin conversație, muzică și social media, online sau în București. Lecție de probă gratuită."
+    description="Arabă libaneză pentru 12–17 ani, online sau în București. Cursul nu e încă deschis: cere să fii anunțat. De la 16 ani, grupele de adulți."
     crumb="Cursuri arabă adolescenți"
-    lead="Grupe de arabă libaneză gândite pentru adolescenți 12–17 ani: conversație, muzică și limbaj real de social media — nu gramatică tocită. Profesor nativ libanez, fizic în București sau online."
+    lead="Cursul de arabă libaneză pentru adolescenți (12–17 ani) nu este încă deschis: lasă-ne datele și te anunțăm când pornește. De la 16 ani, adolescenții pot intra deja în grupele de adulți, cu acordul părintelui."
     faq={FAQ}
   >
     <p>
@@ -72,6 +67,10 @@ const CursuriArabaAdolescenti = () => (
     <div className="not-prose">
       <ul className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
         {[
+          [
+            "Stare",
+            "încă nedeschis — lasă-ne datele și te anunțăm când pornește",
+          ],
           [
             "Vârsta",
             "12–17 ani (de la 16 ani se poate intra și în grupele de adulți, cu acordul părintelui)",
@@ -106,13 +105,13 @@ const CursuriArabaAdolescenti = () => (
           </li>
         ))}
         <li className="flex items-center rounded-2xl bg-cream p-4">
-          <Link
-            to="/trial"
+          <a
+            href="#lista-asteptare"
             data-cta
             className="inline-flex h-12 w-full items-center justify-center rounded-xl bg-primary px-5 font-semibold text-primary-foreground no-underline transition hover:bg-primary/90"
           >
-            Rezervă lecția de probă gratuită (30 min)
-          </Link>
+            Anunță-mă când pornește
+          </a>
         </li>
       </ul>
     </div>
@@ -129,7 +128,7 @@ const CursuriArabaAdolescenti = () => (
       </li>
       <li>
         <strong>Elevi care vor o a treia limbă</strong> utilă și rară în CV-ul
-        viitor (araba are sute de milioane de vorbitori).
+        viitor (araba are peste 400 de milioane de vorbitori nativi).
       </li>
       <li>
         <strong>Familii mixte</strong> în care un părinte e vorbitor nativ —
@@ -139,11 +138,12 @@ const CursuriArabaAdolescenti = () => (
 
     <h2>Cum arată o lecție</h2>
     <p>
-      90 de minute, ritm alert: 10 min recap, 25 min vocabular și structuri noi
-      prin exemple reale (mesaje, versuri, scene de film), 40 min conversație și
-      joc de rol, 15 min feedback pe pronunție. Fără dictări, fără liste de
-      memorat acasă — temele sunt scurte și audio. Metoda se numește{" "}
-      <strong>Oral First</strong>: vorbești din prima lecție, folosind{" "}
+      90 de minute, ca reper: 15 min de încălzire și recapitulare, 30 min
+      material nou prin exemple reale (mesaje, versuri, scene de film), 25 min
+      conversație și joc de rol, 20 min feedback pe pronunție. Nu e o schemă
+      fixă: lecția se adaptează după grupă și după ce are nevoie. Fără dictări,
+      fără liste de memorat acasă — temele sunt scurte și audio. Metoda se
+      numește <strong>Oral First</strong>: vorbești din prima lecție, folosind{" "}
       <Link to="/arabizi">arabizi</Link>.
     </p>
 
@@ -169,7 +169,7 @@ const CursuriArabaAdolescenti = () => (
           <tr className="border-b border-border/60 align-top">
             <td className="py-2 pr-3 font-semibold">12–15 ani</td>
             <td className="py-2 px-3">
-              Grupă de adolescenți (în formare) sau meditații 1:1
+              Grupă de adolescenți (încă nedeschisă) sau meditații 1:1
             </td>
             <td className="py-2 pl-3">Fizic sau online</td>
           </tr>
@@ -185,9 +185,8 @@ const CursuriArabaAdolescenti = () => (
       </table>
     </div>
     <p>
-      Grupele dedicate 12–15 ani se formează pe măsură ce se strâng 4–8
-      înscrieri. Îți poți rezerva locul mai jos — te anunțăm imediat ce pornește
-      grupa, iar până atunci poți începe cu{" "}
+      Grupele dedicate adolescenților nu sunt încă deschise. Lasă-ne datele mai
+      jos și te anunțăm când pornesc; până atunci poți începe cu{" "}
       <Link to="/meditatii-araba">meditații 1:1</Link>.
     </p>
 
@@ -275,7 +274,7 @@ const CursuriArabaAdolescenti = () => (
 
     <h2>Profesor nativ, în București sau online</h2>
     <p>
-      Ibra este vorbitor nativ de arabă libaneză, cu peste 5 ani de experiență
+      Ibra este vorbitor nativ de arabă libaneză, cu peste 6 ani de experiență
       în predare, și predă în română, engleză, franceză sau arabă — alegi limba
       în care adolescentul se simte confortabil. Lecțiile fizice au loc la
       Raduga Creative Center (Strada Icoanei 80, sector 2), iar cele online pe
@@ -291,7 +290,7 @@ const CursuriArabaAdolescenti = () => (
         finds it without reading the whole page. */}
     <section className="not-prose rounded-3xl bg-brand-green/5 p-5 sm:p-8">
       <span className="mb-2 block text-sm font-bold uppercase tracking-[0.1em] text-brand-green">
-        Grupe în formare
+        Încă nedeschis
       </span>
       <h2
         id="lista-asteptare"
@@ -300,9 +299,10 @@ const CursuriArabaAdolescenti = () => (
         Anunță-mă când pornește grupa
       </h2>
       <p className="mt-2 leading-relaxed text-foreground/80">
-        Grupele dedicate adolescenților (12–17 ani) sunt în formare: pornim o
-        cohortă imediat ce avem suficienți înscriși. Lasă-ți datele și te
-        anunțăm primul, fără nicio obligație. Între timp, poți începe oricând cu{" "}
+        Cursul pentru adolescenți (12–17 ani) nu este încă deschis. Lasă-ți
+        datele și te anunțăm primul când pornește, fără nicio obligație. De la
+        16 ani se poate intra deja în grupele de adulți, cu acordul părintelui.
+        Între timp, poți începe oricând cu{" "}
         <Link to="/meditatii-araba" className="text-primary underline">
           meditații de arabă 1:1
         </Link>

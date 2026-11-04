@@ -23,7 +23,7 @@ const FAQ = [
   },
   {
     q: "Care dialect are mai mulți vorbitori?",
-    a: "Egipteana, de departe: e dialectul Egiptului, cea mai populată țară arabă, cu peste o sută de milioane de locuitori. Levantina, familia din care face parte libaneza, e vorbită nativ de zeci de milioane de oameni în Liban, Siria, Iordania și Palestina.",
+    a: "Egipteana, de departe: e dialectul Egiptului, cea mai populată țară arabă, cu peste o sută de milioane de locuitori. Levantina, familia din care face parte libaneza, e vorbită nativ de peste 40 de milioane de oameni în Liban, Siria, Iordania și Palestina.",
   },
 ];
 

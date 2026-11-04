@@ -3,6 +3,7 @@ import { useLocation } from "@/lib/router-compat";
 import { trackEvent } from "@/lib/tracking";
 import { safeAnalyticsUrl } from "@/lib/analyticsUrl";
 import { readConsent } from "@/lib/cookieConsent";
+import { isMetaPixelLoaded, loadMetaPixel, trackMeta } from "@/lib/metaPixel";
 
 /**
  * Fires a GA4 `page_view` on every SPA route change. Skips the initial mount —
@@ -23,6 +24,8 @@ export function useRouteAnalytics() {
 
     if (firstRun.current) {
       firstRun.current = false;
+      // Meta Pixel: loads (and counts this page) only with consent.
+      if (readConsent() === "all") loadMetaPixel();
       lastPath.current = path;
       lastLocation.current =
         typeof window !== "undefined" ? window.location.href : "";
@@ -37,6 +40,9 @@ export function useRouteAnalytics() {
     // doesn't. __loadGtag ignores repeat calls and refuses a token path itself.
     if (readConsent() === "all") {
       (window as { __loadGtag?: () => void }).__loadGtag?.();
+      // First load counts this page itself; afterwards one PageView per page.
+      if (isMetaPixelLoaded()) trackMeta("PageView");
+      else loadMetaPixel();
     }
 
     const title = typeof document !== "undefined" ? document.title : undefined;
@@ -48,7 +54,8 @@ export function useRouteAnalytics() {
 
     // Later automatic events (scroll, clicks, forms) read these too, so the
     // cleaned values are set, not only passed with this page_view.
-    const gtag = typeof window !== "undefined" ? (window as any).gtag : undefined;
+    const gtag =
+      typeof window !== "undefined" ? (window as any).gtag : undefined;
     if (typeof gtag === "function") {
       gtag("set", {
         page_location: safeAnalyticsUrl(url),

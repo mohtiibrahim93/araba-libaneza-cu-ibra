@@ -88,8 +88,8 @@ const LimbileVorbiteInLiban = () => {
       </h2>
       <p>
         {en
-          ? "Lebanese Arabic (لهجة لبنانية, lahje libnēniyye) is the spoken dialect of Lebanon (a few million inhabitants; estimates differ) and of a diaspora whose size estimates range widely, from about 4 to over 14 million people of Lebanese origin. It's the language of the home, the street, WhatsApp voice notes, Fairuz songs, Lebanese cinema and TV. It belongs to the Levantine Arabic family and is mutually intelligible with Syrian, Palestinian and Jordanian."
-          : "Araba libaneză (لهجة لبنانية, lahje libnēniyye) e dialectul vorbit în Liban (câteva milioane de locuitori; estimările diferă) și într-o diasporă estimată, după sursă, între circa 4 și peste 14 milioane de oameni de origine libaneză. E limba casei, a străzii, a mesajelor vocale de pe WhatsApp, a melodiilor lui Fairuz, a cinematografiei și televiziunii libaneze. Face parte din familia levantină și e reciproc inteligibilă cu siriana, palestiniana și iordaniana."}
+          ? "Lebanese Arabic (لهجة لبنانية, lahje libnēniyye) is the spoken dialect of Lebanon (around 6 million inhabitants, including about 1.5 million Syrians and half a million Palestinians) and of a diaspora estimated at 8–15 million people of Lebanese origin, depending on the source. It's the language of the home, the street, WhatsApp voice notes, Fairuz songs, Lebanese cinema and TV. It belongs to the Levantine Arabic family and is mutually intelligible with Syrian, Palestinian and Jordanian."
+          : "Araba libaneză (لهجة لبنانية, lahje libnēniyye) e dialectul vorbit în Liban (circa 6 milioane de locuitori, dintre care aproximativ 1,5 milioane de sirieni și o jumătate de milion de palestinieni) și într-o diasporă estimată, după sursă, la 8–15 milioane de oameni de origine libaneză. E limba casei, a străzii, a mesajelor vocale de pe WhatsApp, a melodiilor lui Fairuz, a cinematografiei și televiziunii libaneze. Face parte din familia levantină și e reciproc inteligibilă cu siriana, palestiniana și iordaniana."}
       </p>
       <p>
         {en ? (
@@ -129,8 +129,8 @@ const LimbileVorbiteInLiban = () => {
       </h2>
       <p>
         {en
-          ? "Lebanon was under French mandate from 1920 to 1943, and French remains embedded in schooling, law, banking and elite life. French is widely spoken, and it's often mixed casually into Lebanese sentences ('Bonjour, kifak, ça va?' is a real greeting). Many private schools still teach mostly in French."
-          : "Libanul a fost sub mandat francez între 1920 și 1943, iar franceza a rămas ancorată în școli, drept, bancă și viața elitei. Franceza e larg vorbită și e amestecată frecvent în frazele libaneze („Bonjour, kifak, ça va?” e un salut real). Multe școli private predau încă în principal în franceză."}
+          ? "Lebanon was under French mandate from 1920 to 1943, and French remains embedded in schooling, law, banking and elite life. About half of Lebanese speak French fluently, and it's often mixed casually into Lebanese sentences ('Bonjour, kifak, ça va?' is a real greeting). Many private schools still teach mostly in French."
+          : "Libanul a fost sub mandat francez între 1920 și 1943, iar franceza a rămas ancorată în școli, drept, bancă și viața elitei. Aproximativ jumătate dintre libanezi vorbesc fluent franceza, care e amestecată frecvent în frazele libaneze („Bonjour, kifak, ça va?” e un salut real). Multe școli private predau încă în principal în franceză."}
       </p>
 
       <h2>
@@ -140,8 +140,8 @@ const LimbileVorbiteInLiban = () => {
       </h2>
       <p>
         {en
-          ? "Since the 1990s, English has overtaken French among younger generations, especially in business, tech and universities like AUB and LAU. Bilingual (English/Arabic) or trilingual (English/French/Arabic) schooling is now the norm in major cities."
-          : "Din anii '90 încoace, engleza a depășit franceza în rândul generațiilor tinere, mai ales în business, tech și universități ca AUB și LAU. Școlarizarea bilingvă (engleză/arabă) sau trilingvă (engleză/franceză/arabă) e acum norma în orașele mari."}
+          ? "Since the 1990s, English has overtaken French among younger generations, especially in business, tech and universities like AUB and LAU. Around half of Lebanese speak English fluently. Bilingual (English/Arabic) or trilingual (English/French/Arabic) schooling is now the norm in major cities."
+          : "Din anii '90 încoace, engleza a depășit franceza în rândul generațiilor tinere, mai ales în business, tech și universități ca AUB și LAU. Circa jumătate dintre libanezi vorbesc fluent engleza. Școlarizarea bilingvă (engleză/arabă) sau trilingvă (engleză/franceză/arabă) e acum norma în orașele mari."}
       </p>
 
       <h2>
@@ -151,8 +151,8 @@ const LimbileVorbiteInLiban = () => {
       </h2>
       <p>
         {en
-          ? "Lebanon hosts long-established Armenian (mostly in Bourj Hammoud) and Kurdish communities, plus Assyrian/Syriac and Circassian minorities. Their languages are used at home and in community institutions alongside Lebanese Arabic."
-          : "Libanul găzduiește comunități armene bine stabilite (mai ales în Bourj Hammoud) și kurde, plus minorități asiriene/siriace și cerkeze. Limbile lor sunt folosite acasă și în instituțiile comunitare, alături de araba libaneză."}
+          ? "Lebanon hosts long-established Armenian (around 4% of the population, mostly in Bourj Hammoud) and Kurdish communities, plus Assyrian/Syriac and Circassian minorities. Their languages are used at home and in community institutions alongside Lebanese Arabic."
+          : "Libanul găzduiește comunități armene bine stabilite (circa 4% din populație, mai ales în Bourj Hammoud) și kurde, plus minorități asiriene/siriace și cerkeze. Limbile lor sunt folosite acasă și în instituțiile comunitare, alături de araba libaneză."}
       </p>
 
       <InlineCta

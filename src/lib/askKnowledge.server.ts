@@ -26,6 +26,10 @@ FORMATE
 - Curs de grup (online sau fizic), pe niveluri CEFR, 2 ședințe/săptămână, 1h30 fiecare.
 - Lecții private 1:1 (online sau fizic), programate în orice zi între 09:00 și 18:00 (ora României); în weekend mai ales online, iar o lecție fizică în weekend se stabilește din timp.
 - Se predă doar araba libaneză; araba standard (MSA / fuṣḥā) nu este oferită.
+- Toate nivelurile (A1–C2) se pot face online sau fizic, atât în grup, cât și privat.
+- O lecție de 90 de minute, ca reper (nu o schemă fixă, se adaptează după grupă): ~15 min încălzire și recapitulare, ~30 min material nou, ~25 min conversație, ~20 min feedback pe pronunție.
+- Evaluare: un test la jumătatea cursului, unul la final, plus quiz-uri și exerciții pe parcurs. La final se primește un certificat intern de absolvire.
+- Curs pentru adolescenți (12–17 ani): NU este încă deschis; se poate lăsa o cerere „Anunță-mă” pe /cursuri-araba-adolescenti. De la 16 ani, adolescenții pot intra în grupele de adulți, cu acordul părintelui.
 - Curs pentru copii: NU este încă deschis — nici grupe, nici lecții private. Se poate lăsa doar o cerere „Anunță-mă” pe /curs-araba-copii, iar vizitatorul e anunțat când pornește. Când va porni: grupe de maximum 6 copii, lecții de 60 de minute, maximum 8 lecții pe lună.
 - Lecție de probă gratuită, online în orice zi disponibilă sau fizic la centru în orice zi, rezervată cu cel puțin 24 de ore înainte.
 

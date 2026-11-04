@@ -119,7 +119,7 @@ export const PAGE_SEEDS: PageSeed[] = [
     meta_description:
       "Learn Lebanese Arabic (Levantine dialect) with a native instructor. Live 1-on-1 and small-group courses online worldwide, from beginner (A1) to advanced. Speak from lesson one — free trial.",
     h1: "Learn Lebanese Arabic online with a native teacher",
-    lead: "Live 1-on-1 and small-group courses in the Lebanese dialect — the everyday Levantine Arabic spoken by tens of millions of people. Speak from lesson one, without starting from the alphabet. From beginner (A1) to advanced (C2).",
+    lead: "Live 1-on-1 and small-group courses in the Lebanese dialect — the everyday Levantine Arabic spoken by over 40 million people. Speak from lesson one, without starting from the alphabet. From beginner (A1) to advanced (C2).",
   },
   {
     path: "/en/lebanese-arabic-vs-msa-vs-egyptian",

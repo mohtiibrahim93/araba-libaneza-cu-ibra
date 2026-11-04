@@ -23,7 +23,7 @@ const FAQ = [
   },
   {
     q: "Which dialect has more speakers?",
-    a: "Egyptian, by a wide margin: it is the dialect of Egypt, the most populous Arab country, with over a hundred million people. Levantine, the family Lebanese belongs to, is spoken natively by tens of millions of people across Lebanon, Syria, Jordan and Palestine.",
+    a: "Egyptian, by a wide margin: it is the dialect of Egypt, the most populous Arab country, with over a hundred million people. Levantine, the family Lebanese belongs to, is spoken natively by over 40 million people across Lebanon, Syria, Jordan and Palestine.",
   },
 ];
 

@@ -107,6 +107,7 @@ import { Route as EnLearnLebaneseArabicRouteImport } from './routes/en/learn-leb
 import { Route as EnLearnLevantineArabicRouteImport } from './routes/en/learn-levantine-arabic'
 import { Route as EnLebaneseArabicVsMsaVsEgyptianRouteImport } from './routes/en/lebanese-arabic-vs-msa-vs-egyptian'
 import { Route as EnLevantineArabicDialectsMapRouteImport } from './routes/en/levantine-arabic-dialects-map'
+import { Route as EnLevelCheckRouteImport } from './routes/en/level-check'
 import { Route as EnLevelTestRouteImport } from './routes/en/level-test'
 import { Route as EnMyBookingsRouteImport } from './routes/en/my-bookings'
 import { Route as EnPlayRouteImport } from './routes/en/play'
@@ -670,6 +671,11 @@ const EnLevantineArabicDialectsMapRoute =
     path: '/en/levantine-arabic-dialects-map',
     getParentRoute: () => rootRouteImport,
   } as any)
+const EnLevelCheckRoute = EnLevelCheckRouteImport.update({
+  id: '/en/level-check',
+  path: '/en/level-check',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const EnLevelTestRoute = EnLevelTestRouteImport.update({
   id: '/en/level-test',
   path: '/en/level-test',
@@ -983,6 +989,7 @@ export interface FileRoutesByFullPath {
   '/en/learn-levantine-arabic': typeof EnLearnLevantineArabicRoute
   '/en/lebanese-arabic-vs-msa-vs-egyptian': typeof EnLebaneseArabicVsMsaVsEgyptianRoute
   '/en/levantine-arabic-dialects-map': typeof EnLevantineArabicDialectsMapRoute
+  '/en/level-check': typeof EnLevelCheckRoute
   '/en/level-test': typeof EnLevelTestRoute
   '/en/my-bookings': typeof EnMyBookingsRoute
   '/en/play': typeof EnPlayRouteWithChildren
@@ -1124,6 +1131,7 @@ export interface FileRoutesByTo {
   '/en/learn-levantine-arabic': typeof EnLearnLevantineArabicRoute
   '/en/lebanese-arabic-vs-msa-vs-egyptian': typeof EnLebaneseArabicVsMsaVsEgyptianRoute
   '/en/levantine-arabic-dialects-map': typeof EnLevantineArabicDialectsMapRoute
+  '/en/level-check': typeof EnLevelCheckRoute
   '/en/level-test': typeof EnLevelTestRoute
   '/en/my-bookings': typeof EnMyBookingsRoute
   '/en/prices': typeof EnPricesRoute
@@ -1266,6 +1274,7 @@ export interface FileRoutesById {
   '/en/learn-levantine-arabic': typeof EnLearnLevantineArabicRoute
   '/en/lebanese-arabic-vs-msa-vs-egyptian': typeof EnLebaneseArabicVsMsaVsEgyptianRoute
   '/en/levantine-arabic-dialects-map': typeof EnLevantineArabicDialectsMapRoute
+  '/en/level-check': typeof EnLevelCheckRoute
   '/en/level-test': typeof EnLevelTestRoute
   '/en/my-bookings': typeof EnMyBookingsRoute
   '/en/play': typeof EnPlayRouteWithChildren
@@ -1410,6 +1419,7 @@ export interface FileRouteTypes {
     | '/en/learn-levantine-arabic'
     | '/en/lebanese-arabic-vs-msa-vs-egyptian'
     | '/en/levantine-arabic-dialects-map'
+    | '/en/level-check'
     | '/en/level-test'
     | '/en/my-bookings'
     | '/en/play'
@@ -1551,6 +1561,7 @@ export interface FileRouteTypes {
     | '/en/learn-levantine-arabic'
     | '/en/lebanese-arabic-vs-msa-vs-egyptian'
     | '/en/levantine-arabic-dialects-map'
+    | '/en/level-check'
     | '/en/level-test'
     | '/en/my-bookings'
     | '/en/prices'
@@ -1692,6 +1703,7 @@ export interface FileRouteTypes {
     | '/en/learn-levantine-arabic'
     | '/en/lebanese-arabic-vs-msa-vs-egyptian'
     | '/en/levantine-arabic-dialects-map'
+    | '/en/level-check'
     | '/en/level-test'
     | '/en/my-bookings'
     | '/en/play'
@@ -1835,6 +1847,7 @@ export interface RootRouteChildren {
   EnLearnLevantineArabicRoute: typeof EnLearnLevantineArabicRoute
   EnLebaneseArabicVsMsaVsEgyptianRoute: typeof EnLebaneseArabicVsMsaVsEgyptianRoute
   EnLevantineArabicDialectsMapRoute: typeof EnLevantineArabicDialectsMapRoute
+  EnLevelCheckRoute: typeof EnLevelCheckRoute
   EnLevelTestRoute: typeof EnLevelTestRoute
   EnMyBookingsRoute: typeof EnMyBookingsRoute
   EnPlayRoute: typeof EnPlayRouteWithChildren
@@ -2569,6 +2582,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof EnLevantineArabicDialectsMapRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/en/level-check': {
+      id: '/en/level-check'
+      path: '/en/level-check'
+      fullPath: '/en/level-check'
+      preLoaderRoute: typeof EnLevelCheckRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/en/level-test': {
       id: '/en/level-test'
       path: '/en/level-test'
@@ -2995,6 +3015,7 @@ const rootRouteChildren: RootRouteChildren = {
   EnLearnLevantineArabicRoute: EnLearnLevantineArabicRoute,
   EnLebaneseArabicVsMsaVsEgyptianRoute: EnLebaneseArabicVsMsaVsEgyptianRoute,
   EnLevantineArabicDialectsMapRoute: EnLevantineArabicDialectsMapRoute,
+  EnLevelCheckRoute: EnLevelCheckRoute,
   EnLevelTestRoute: EnLevelTestRoute,
   EnMyBookingsRoute: EnMyBookingsRoute,
   EnPlayRoute: EnPlayRouteWithChildren,

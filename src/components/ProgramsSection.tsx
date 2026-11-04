@@ -756,8 +756,8 @@ const ProgramsSection = () => {
               </h3>
               <p className="mx-auto mb-6 max-w-md text-sm text-muted-foreground">
                 {lang === "en"
-                  ? "Group and private lessons adapted for teenagers — same CEFR curriculum, a pace and topics that fit their age. See options or ask us."
-                  : "Cursuri de grup și private adaptate pentru adolescenți — același curriculum CEFR, într-un ritm și cu teme potrivite vârstei. Vezi opțiunile sau întreabă-ne."}
+                  ? "Not open yet: leave your details and we'll let you know when it starts. From 16, teenagers can join the adult groups with a parent's consent."
+                  : "Încă nedeschis: lasă-ne datele și te anunțăm când pornește. De la 16 ani, adolescenții pot intra în grupele de adulți, cu acordul părintelui."}
               </p>
               <div className="flex flex-wrap justify-center gap-3">
                 <Link
@@ -827,7 +827,7 @@ const ProgramsSection = () => {
           {/* The owner's free level check: for whoever would rather talk to
               someone than take a quiz or a test. */}
           <a
-            href="/verificare-nivel"
+            href={lang === "en" ? "/en/level-check" : "/verificare-nivel"}
             className="mt-6 flex flex-col gap-3 rounded-[28px] border border-[#E7E1D6] bg-card px-6 py-6 transition-colors hover:border-brand-green sm:flex-row sm:items-center sm:justify-between sm:px-8 dark:border-border"
           >
             <span>

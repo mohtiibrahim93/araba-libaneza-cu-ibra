@@ -93,8 +93,8 @@ const DeCeInvatamAraba2026 = () => {
       <ul>
         <li>
           {en
-            ? "Hundreds of millions of native speakers across all its varieties."
-            : "Sute de milioane de vorbitori nativi, în toate variantele ei."}
+            ? "Over 400 million native speakers across all its varieties."
+            : "Peste 400 de milioane de vorbitori nativi, în toate variantele ei."}
         </li>
         <li>
           {en
