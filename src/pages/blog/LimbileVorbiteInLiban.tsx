@@ -151,8 +151,8 @@ const LimbileVorbiteInLiban = () => {
       </h2>
       <p>
         {en
-          ? "Lebanon hosts long-established Armenian (around 4% of the population, mostly in Bourj Hammoud) and Kurdish communities, plus Assyrian/Syriac and Circassian minorities. Their languages are used at home and in community institutions alongside Lebanese Arabic."
-          : "Libanul găzduiește comunități armene bine stabilite (circa 4% din populație, mai ales în Bourj Hammoud) și kurde, plus minorități asiriene/siriace și cerkeze. Limbile lor sunt folosite acasă și în instituțiile comunitare, alături de araba libaneză."}
+          ? "Lebanon hosts long-established Armenian (around 4% of the population, mostly in Bourj Hammoud) and Kurdish communities, plus Assyrian/Syriac and Circassian minorities. Most Armenians arrived as refugees from 1921 on and became Lebanese citizens in 1924, under the Treaty of Lausanne and a decree of the French High Commissioner. Their languages are used at home and in community institutions alongside Lebanese Arabic."
+          : "Libanul găzduiește comunități armene bine stabilite (circa 4% din populație, mai ales în Bourj Hammoud) și kurde, plus minorități asiriene/siriace și cerkeze. Majoritatea armenilor au venit ca refugiați din 1921 încoace și au primit cetățenia libaneză în 1924, prin Tratatul de la Lausanne și un decret al Înaltului Comisar francez. Limbile lor sunt folosite acasă și în instituțiile comunitare, alături de araba libaneză."}
       </p>
 
       <InlineCta

@@ -2,8 +2,8 @@
  * A group student's months, one by one (owner, 4 Nov 2026).
  *
  * Each month of the course is paid online (card on the site, recorded by the
- * Stripe webhook as "Card online"), paid outside the site (Revolut, bank
- * transfer, card terminal, cash, another method), granted free ("lună
+ * Stripe webhook as "Card online"), paid outside the site (bank transfer,
+ * card outside the site, cash, another method), granted free ("lună
  * acordată") or unpaid. The months come from registration_payments rows, each
  * covering month_from..month_to.
  *
@@ -18,7 +18,6 @@
 
 export const MONTH_METHODS = [
   "card_online",
-  "revolut",
   "transfer",
   "card_terminal",
   "cash",
@@ -27,9 +26,12 @@ export const MONTH_METHODS = [
 ] as const;
 export type MonthMethod = (typeof MONTH_METHODS)[number];
 
-/** Methods the owner records by hand (everything but Stripe and the grant). */
+/**
+ * Methods the owner records by hand (everything but Stripe and the grant).
+ * A bank is not a method: a Revolut or ING payment is a transfer or a card
+ * (owner, 4 Nov 2026); the note can name the bank.
+ */
 export const MANUAL_METHODS = [
-  "revolut",
   "transfer",
   "card_terminal",
   "cash",
@@ -39,7 +41,6 @@ export type ManualMethod = (typeof MANUAL_METHODS)[number];
 
 export const MONTH_METHOD_LABELS: Record<MonthMethod, string> = {
   card_online: "Card online",
-  revolut: "Revolut",
   transfer: "Transfer bancar",
   card_terminal: "Card (în afara site-ului)",
   cash: "Cash",

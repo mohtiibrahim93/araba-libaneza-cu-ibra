@@ -2,8 +2,9 @@
 --
 -- Each registration_payments row now says which months of the course it
 -- covers (month_from..month_to), and may carry a note. The methods are the
--- ones the owner uses: Revolut, bank transfer, a card terminal, cash, another
--- method, a month granted free ("credit"), and "card_online" for payments made
+-- ones the owner uses: bank transfer, a card outside the site, cash, another
+-- method (a bank such as Revolut is not a method: its payments are transfers
+-- or cards), a month granted free ("credit"), and "card_online" for payments made
 -- on the site through Stripe, which the webhook records itself (stripe_ref
 -- keeps a redelivered event from recording the same money twice).
 --
@@ -29,7 +30,7 @@ alter table public.registration_payments
 alter table public.registration_payments
   add constraint registration_payments_method_check
     check (method in (
-      'cash', 'transfer', 'revolut', 'card_terminal', 'other',
+      'cash', 'transfer', 'card_terminal', 'other',
       'credit', 'card_online'
     )),
   add constraint registration_payments_amount_lei_check
@@ -46,7 +47,15 @@ alter table public.registration_payments
   add constraint registration_payments_note_check
     check (note is null or char_length(note) <= 500);
 
--- Existing rows predate the months: give each the next months in the order
+-- The one row that existed on 4 Nov 2026: Andrada Borches's granted month is
+-- the last month of her course, month 4 (owner, 4 Nov 2026); she pays 1-3.
+update public.registration_payments
+   set month_from = 4, month_to = 4
+ where registration_id = '7cabc8df-1422-4132-934c-291f2bcd0763'
+   and kind = 'credit'
+   and month_from is null;
+
+-- Any other existing rows predate the months: give each the next months in the order
 -- they were recorded (one month each, or every remaining month for "full").
 do $$
 declare
@@ -89,7 +98,7 @@ alter table public.registrations
 alter table public.registrations
   add constraint registrations_payment_method_check
   check (payment_method is null or payment_method = any (array[
-    'cash', 'transfer', 'card', 'paypal', 'revolut', 'card_terminal', 'other'
+    'cash', 'transfer', 'card', 'paypal', 'card_terminal', 'other'
   ]));
 
 comment on column public.registration_payments.month_from is

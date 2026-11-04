@@ -22,7 +22,7 @@ import {
  * (owner, 4 Nov 2026).
  *
  * Each month is paid online (card on the site, recorded by Stripe as "Card
- * online"), paid outside the site (Revolut, bank transfer, card terminal,
+ * online"), paid outside the site (bank transfer, card outside the site,
  * cash, another method), granted free ("Lună acordată") or unpaid. A manual
  * payment stores the method, the amount, the date the money arrived, the
  * month(s) it covers and an optional note (admin-registrations:

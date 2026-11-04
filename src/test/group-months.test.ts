@@ -36,33 +36,45 @@ describe("one rule: Plătit la zi / Neplătit", () => {
     expect(s.status).toBe("unpaid");
   });
 
-  it("Andrada: month 1 granted, month 2 open and not yet due → Plătit la zi", () => {
-    const s = groupMonths({
+  it("Andrada: month 4 granted, months 1–3 hers to pay", () => {
+    // Owner, 4 Nov 2026: the waived month is the last one; her transfer for
+    // month 1 is recorded by the owner in the panel.
+    const granted = [row(4, "credit")];
+    const before = groupMonths({
       total: 4,
       startDate: start,
-      rows: [row(1, "credit")],
+      rows: granted,
       today: "2026-11-04",
     });
-    expect(s.months[0]!.state).toBe("granted");
-    expect(s.months[1]!.state).toBe("unpaid");
-    expect(s.status).toBe("up_to_date");
+    expect(before.months.map((m) => m.state)).toEqual([
+      "unpaid",
+      "unpaid",
+      "unpaid",
+      "granted",
+    ]);
+    expect(before.status).toBe("unpaid");
+    const after = groupMonths({
+      total: 4,
+      startDate: start,
+      rows: [...granted, row(1, "transfer")],
+      today: "2026-11-04",
+    });
+    expect(after.status).toBe("up_to_date");
     // On 7 December month 2 falls due: Neplătit until it is recorded.
     expect(
       groupMonths({
         total: 4,
         startDate: start,
-        rows: [row(1, "credit")],
+        rows: [...granted, row(1, "transfer")],
         today: "2026-12-07",
       }).status,
     ).toBe("unpaid");
     expect(
-      groupMonths({
-        total: 4,
-        startDate: start,
-        rows: [row(1, "credit"), row(2, "revolut")],
-        today: "2026-12-07",
-      }).status,
-    ).toBe("up_to_date");
+      readFileSync(
+        "supabase/migrations/20261104120000_group_payment_months.sql",
+        "utf8",
+      ),
+    ).toContain("set month_from = 4, month_to = 4");
   });
 
   it("Baciu: nothing recorded → Neplătit", () => {
@@ -87,7 +99,7 @@ describe("one rule: Plătit la zi / Neplătit", () => {
     const s = groupMonths({
       total: 4,
       startDate: start,
-      rows: [row(1, "card_online"), row(2, "revolut"), row(3, "credit")],
+      rows: [row(1, "card_online"), row(2, "transfer"), row(3, "credit")],
     });
     expect(s.months.map((m) => m.state)).toEqual([
       "paid_online",
@@ -118,8 +130,9 @@ describe("wired everywhere", () => {
   const read = (p: string) => readFileSync(p, "utf8");
   it("the panel offers the owner's methods and the grant", () => {
     const src = read("supabase/functions/_shared/group-months.ts");
+    // A bank is not a method: Revolut is a transfer or a card (owner, 4 Nov).
+    expect(src).not.toContain('"Revolut"');
     for (const label of [
-      '"Revolut"',
       '"Transfer bancar"',
       '"Card (în afara site-ului)"',
       '"Cash"',
