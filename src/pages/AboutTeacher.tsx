@@ -18,7 +18,7 @@ const COPY = {
     h1: "Profesor nativ Ibra",
     lead: "Arabă libaneză vorbită, predată de un profesor nativ din Liban — online pe Zoom și la centrul din București.",
     courses: "Vezi cursurile",
-    trial: "Lecție de probă gratuită",
+    trial: "Lecție de probă gratuită (0 lei)",
     reviews: "Toate recenziile",
   },
   en: {
@@ -26,7 +26,7 @@ const COPY = {
     h1: "Native teacher Ibra",
     lead: "Spoken Lebanese Arabic, taught by a native teacher from Lebanon — online on Zoom and at our Bucharest centre.",
     courses: "See the courses",
-    trial: "Free trial lesson",
+    trial: "Free trial lesson (0 lei)",
     reviews: "All reviews",
   },
 } as const;
