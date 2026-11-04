@@ -3,13 +3,13 @@ import { useI18n } from "@/lib/i18n";
 import { languageCounterpart } from "@/lib/languageRoutes";
 
 /**
- * "Celelalte comparații" — the five sibling comparisons, at the foot of each one.
+ * "Celelalte comparații" — the eight sibling comparisons, at the foot of each one.
  *
  * Each comparison used to name two or three siblings in its prose, chosen by
  * whoever wrote the page. A live crawl of all 121 sitemap URLs found every
  * spoke sitting at two to four inbound links as a result, in both languages —
  * the thin-linking shape Search Console files under "Discovered, currently not
- * indexed". A complete list on every spoke makes it five siblings each, and it
+ * indexed". A complete list on every spoke makes it eight siblings each, and it
  * is what a reader comparing dialects wants anyway.
  *
  * Addressed by Romanian path throughout, including from the English pages:
@@ -26,6 +26,21 @@ const COMPARISONS = [
     path: "/dialecte-arabe/libaneza-vs-siriana",
     ro: "libaneză vs. siriană",
     en: "Lebanese vs. Syrian",
+  },
+  {
+    path: "/dialecte-arabe/libaneza-vs-palestiniana",
+    ro: "libaneză vs. palestiniană",
+    en: "Lebanese vs. Palestinian",
+  },
+  {
+    path: "/dialecte-arabe/libaneza-vs-iordaniana",
+    ro: "libaneză vs. iordaniană",
+    en: "Lebanese vs. Jordanian",
+  },
+  {
+    path: "/dialecte-arabe/levantina-de-sud",
+    ro: "levantina de sud vs. nord",
+    en: "South vs. north Levantine",
   },
   {
     path: "/dialecte-arabe/levantina-vs-golf",

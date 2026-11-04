@@ -301,6 +301,24 @@ const ArabicDialectsGuide = () => (
         </Link>{" "}
         — Hijazi, Najdi and the Yemeni dialects.
       </li>
+      <li>
+        <Link to="/en/arabic-dialects-guide/lebanese-vs-palestinian-arabic">
+          Lebanese vs Palestinian Arabic
+        </Link>{" "}
+        — the north and the south, one border apart.
+      </li>
+      <li>
+        <Link to="/en/arabic-dialects-guide/lebanese-vs-jordanian-arabic">
+          Lebanese vs Jordanian Arabic
+        </Link>{" "}
+        — urban Amman and the Bedouin accent, in one country.
+      </li>
+      <li>
+        <Link to="/en/arabic-dialects-guide/south-levantine-arabic">
+          South vs North Levantine Arabic
+        </Link>{" "}
+        — the four varieties laid out along the same line.
+      </li>
     </ul>
 
     <h2>MSA vs the dialects</h2>
