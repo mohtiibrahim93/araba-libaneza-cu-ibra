@@ -84,7 +84,7 @@ describe("a lesson given for free", () => {
       ),
     );
     expect(code(read("supabase/functions/booking-create/index.ts"))).toContain(
-      code('reg.payment_status !== "paid" && reg.payment_status !== "free"'),
+      code('reg.payment_status !== "paid" && !(reg.payment_status === "free" && reg.form_type !== "trial")'),
     );
     for (const [fn, row] of [
       ["create-checkout", "regRow"],
