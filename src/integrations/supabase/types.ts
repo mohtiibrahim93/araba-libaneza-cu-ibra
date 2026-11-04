@@ -1192,9 +1192,14 @@ export type Database = {
           id: string
           kind: string
           method: string
+          month_from: number | null
+          month_to: number | null
+          note: string | null
           paid_at: string
+          provider: string | null
           recorded_by: string
           registration_id: string
+          stripe_ref: string | null
         }
         Insert: {
           amount_lei: number
@@ -1202,9 +1207,14 @@ export type Database = {
           id?: string
           kind: string
           method: string
+          month_from?: number | null
+          month_to?: number | null
+          note?: string | null
           paid_at?: string
+          provider?: string | null
           recorded_by: string
           registration_id: string
+          stripe_ref?: string | null
         }
         Update: {
           amount_lei?: number
@@ -1212,9 +1222,14 @@ export type Database = {
           id?: string
           kind?: string
           method?: string
+          month_from?: number | null
+          month_to?: number | null
+          note?: string | null
           paid_at?: string
+          provider?: string | null
           recorded_by?: string
           registration_id?: string
+          stripe_ref?: string | null
         }
         Relationships: [
           {
