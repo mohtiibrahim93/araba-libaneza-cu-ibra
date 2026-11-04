@@ -4467,9 +4467,9 @@ Deno.serve(async (req) => {
             // unpaid is "no payment has been attempted", which is exactly true of
             // a lesson agreed by hand and not yet paid for. Never pending: there
             // is no payment in flight. free when the owner gives it for free.
-            // A trial owes nothing and is not revenue: unpaid, like the site's.
+            // A trial owes nothing and is not revenue: free, like the site's.
             payment_status: trial
-              ? "unpaid"
+              ? "free"
               : free
                 ? "free"
                 : paid

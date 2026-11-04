@@ -223,7 +223,9 @@ Deno.serve(async (req) => {
       !isFree &&
       !internalCall &&
       reg.payment_status !== "paid" &&
-      reg.payment_status !== "free"
+      // A trial is saved as "free" for the trial only; a paid lesson on it
+      // must still be paid.
+      !(reg.payment_status === "free" && reg.form_type !== "trial")
     ) {
       return json({ error: "payment required", code: "payment_required" }, 402);
     }
