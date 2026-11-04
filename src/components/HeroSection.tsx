@@ -1,5 +1,6 @@
 import { useI18n } from "@/lib/i18n";
-import { MessageCircle } from "lucide-react";
+import { Check, MessageCircle } from "lucide-react";
+import NextTrialSlots from "@/components/NextTrialSlots";
 import AnchorLink from "@/components/AnchorLink";
 import HeroConversation from "@/components/HeroConversation";
 import { Link } from "@/components/LocalizedLink";
@@ -37,9 +38,31 @@ const HeroSection = () => {
             <span className="text-primary">{t.heroTitle2}</span>
           </h1>
 
-          <p className="text-lg text-muted-foreground max-w-lg mb-8 leading-relaxed">
+          <p className="text-lg text-muted-foreground max-w-lg mb-5 leading-relaxed">
             {t.heroDesc}
           </p>
+
+          <ul className="mb-8 space-y-1.5">
+            {(lang === "en"
+              ? [
+                  "Arabizi from the first lesson — no alphabet first",
+                  "Curriculum structured A1 → C2",
+                  "Pronunciation of the sounds 2, 3, 5, 7, 8",
+                ]
+              : [
+                  "Arabizi din prima lecție — fără alfabet întâi",
+                  "Curriculum structurat A1 → C2",
+                  "Pronunția sunetelor 2, 3, 5, 7, 8",
+                ]
+            ).map((line) => (
+              <li key={line} className="flex items-start gap-2 text-[15px] text-foreground">
+                <Check className="mt-0.5 h-4 w-4 shrink-0 text-brand-green" aria-hidden="true" />
+                {line}
+              </li>
+            ))}
+          </ul>
+
+          <NextTrialSlots />
 
           <div className="flex flex-col sm:flex-row sm:flex-wrap gap-3 mb-4">
             {/* The free trial is the step a new visitor should take, so it is
