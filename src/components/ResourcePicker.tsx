@@ -170,8 +170,8 @@ const ResourcePicker = ({
           className="inline-block rounded-lg bg-primary px-5 py-2.5 text-sm font-semibold text-primary-foreground no-underline transition hover:bg-primary/90"
         >
           {en
-            ? "Book the free trial lesson"
-            : "Rezervă lecția de probă gratuită"}
+            ? "Book the free trial lesson (0 lei)"
+            : "Rezervă lecția de probă gratuită (0 lei)"}
         </Link>
       </div>
     );

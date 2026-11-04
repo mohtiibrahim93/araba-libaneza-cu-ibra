@@ -155,13 +155,13 @@ const Primele20Expresii = () => {
           en: "Want to pronounce them correctly too?",
         },
         text: {
-          ro: "La o lecție de probă gratuită le auzi de la un vorbitor nativ și le repeți pe loc.",
-          en: "In a free trial lesson you hear them from a native speaker and repeat them on the spot.",
+          ro: "La o lecție de probă gratuită (0 lei) le auzi de la un vorbitor nativ și le repeți pe loc.",
+          en: "In a free trial lesson (0 lei) you hear them from a native speaker and repeat them on the spot.",
         },
         href: "/trial",
         label: {
-          ro: "Rezervă o lecție de probă gratuită",
-          en: "Book a free trial lesson",
+          ro: "Rezervă o lecție de probă gratuită (0 lei)",
+          en: "Book a free trial lesson (0 lei)",
         },
       }}
     >

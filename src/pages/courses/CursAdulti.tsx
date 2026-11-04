@@ -169,8 +169,8 @@ const CursAdulti = () => {
         <div>
           <h2 className="font-display text-2xl font-bold text-foreground">
             {en
-              ? "Not sure yet? Start with the free trial."
-              : "Nu ești sigur? Începe cu lecția gratuită."}
+              ? "Not sure yet? Start with the free trial (0 lei)."
+              : "Nu ești sigur? Începe cu lecția gratuită (0 lei)."}
           </h2>
           <p className="mt-1 text-foreground/75">
             {en
@@ -182,7 +182,7 @@ const CursAdulti = () => {
           to="/trial"
           className="inline-flex h-12 shrink-0 items-center justify-center rounded-xl bg-primary px-6 font-semibold text-primary-foreground transition-colors hover:bg-primary/90"
         >
-          {en ? "Book the free trial →" : "Rezervă lecția gratuită →"}
+          {en ? "Book the free trial (0 lei) →" : "Rezervă lecția gratuită (0 lei) →"}
         </Link>
       </section>
     </CourseLayout>

@@ -194,7 +194,7 @@ const CulturaLibaneza = () => {
       <p>
         {en ? "Curious? Start with a " : "Curios? Începe cu o "}
         <Link to="/trial">
-          {en ? "free trial lesson" : "lecție de probă gratuită"}
+          {en ? "free trial lesson (0 lei)" : "lecție de probă gratuită (0 lei)"}
         </Link>
         {en ? " or see " : " sau vezi "}
         <Link to="/cursuri">{en ? "all the courses" : "toate cursurile"}</Link>.

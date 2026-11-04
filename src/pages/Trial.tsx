@@ -48,7 +48,7 @@ const TrialPage = () => {
       >
         <div className="mx-auto w-full max-w-content">
           <span className="mb-2 block text-sm font-bold uppercase tracking-[0.1em] text-foreground">
-            {en ? "Free lesson" : "Lecție gratuită"}
+            {en ? "Free lesson (0 lei)" : "Lecție gratuită (0 lei)"}
           </span>
           <h1 className="font-display text-display-xl font-bold tracking-tight text-foreground">
             {t.trialPageTitle}

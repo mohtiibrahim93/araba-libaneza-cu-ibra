@@ -243,8 +243,8 @@ const CourseMegaMenu = ({ label, lang, courses, next }: Props) => {
               <>
                 <span className="font-display text-lg font-bold leading-snug text-foreground">
                   {en
-                    ? "The first trial lesson is free."
-                    : "Prima lecție de probă e gratuită."}
+                    ? "The first trial lesson is free (0 lei)."
+                    : "Prima lecție de probă e gratuită (0 lei)."}
                 </span>
                 <Link
                   to="/trial"

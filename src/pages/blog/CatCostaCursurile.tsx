@@ -49,16 +49,16 @@ const CatCostaCursurile = () => {
         en: "How much do Lebanese Arabic courses cost in 2026?",
       }}
       description={{
-        ro: "Prețurile cursurilor de arabă libaneză: grup lunar sau plată integrală cu reducere, lecții private, curs pentru copii și proba gratuită. Fără costuri ascunse.",
-        en: "Lebanese Arabic course prices: monthly group or discounted pay-in-full, private lessons, kids course and the free trial. No hidden fees.",
+        ro: "Prețurile cursurilor de arabă libaneză: grup lunar sau integral cu reducere, lecții private, curs pentru copii și proba gratuită (0 lei). Fără costuri ascunse.",
+        en: "Lebanese Arabic course prices: monthly group or discounted pay-in-full, private lessons, kids course and the free trial (0 lei). No hidden fees.",
       }}
       published="2026-07-16"
       readingMinutes={5}
       faq={FAQ}
       crumb={{ ro: "Cât costă cursurile", en: "Course prices" }}
       lead={{
-        ro: "Grup sau privat, online sau fizic — iată cum se calculează prețul, ce reduceri există și de ce prima lecție e gratuită.",
-        en: "Group or private, online or in person — here's how the price works, what discounts exist and why the first lesson is free.",
+        ro: "Grup sau privat, online sau fizic — iată cum se calculează prețul, ce reduceri există și de ce prima lecție e gratuită (0 lei).",
+        en: "Group or private, online or in person — here's how the price works, what discounts exist and why the first lesson is free (0 lei).",
       }}
     >
       <Tldr
@@ -159,12 +159,12 @@ const CatCostaCursurile = () => {
         .
       </p>
 
-      <h2>{en ? "The trial is free" : "Proba este gratuită"}</h2>
+      <h2>{en ? "The trial is free (0 lei)" : "Proba este gratuită (0 lei)"}</h2>
       <p>
         {en
           ? "You don't have to pay anything to start. The first lesson is a "
           : "Nu trebuie să plătești nimic ca să începi. Prima lecție este o "}
-        <Link to="/trial">{en ? "free trial" : "probă gratuită"}</Link>
+        <Link to="/trial">{en ? "free trial (0 lei)" : "probă gratuită (0 lei)"}</Link>
         {en
           ? " of 30 minutes, with no obligation — you book it online, pick a slot and talk to the teacher. Only after you see how it is do you decide whether to enrol."
           : " de 30 de minute, fără nicio obligație — o rezervi online, îți alegi un interval și vorbești cu profesorul. Abia după ce vezi cum e, decizi dacă te înscrii."}

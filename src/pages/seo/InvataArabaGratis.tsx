@@ -17,7 +17,7 @@ const FAQ = [
   },
   {
     q: "De unde încep dacă nu știu nimic?",
-    a: "Ia cheat-sheet-ul Arabizi ca să poți citi orice notiță, învață primele 20 de expresii, apoi urmează planul de 30 de zile (15–20 min pe zi). După prima lună, o lecție de probă gratuită îți arată exact unde ești și ce ai de corectat.",
+    a: "Ia cheat-sheet-ul Arabizi ca să poți citi orice notiță, învață primele 20 de expresii, apoi urmează planul de 30 de zile (15–20 min pe zi). După prima lună, o lecție de probă gratuită (0 lei) îți arată exact unde ești și ce ai de corectat.",
   },
   {
     q: "Materialele voastre gratuite sunt cu adevărat gratuite?",

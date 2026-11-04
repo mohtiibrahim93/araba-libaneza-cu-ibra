@@ -904,8 +904,8 @@ const NativeScheduler = ({
         </h3>
         <p className="text-sm text-muted-foreground">
           {lang === "ro"
-            ? `Emailul tău are deja o probă gratuită programată sau ținută — proba e doar pentru prima lecție. Poți continua direct cu lecții plătite (${PRICE.privateOnline} lei/lecție) sau scrie-ne pe WhatsApp dacă crezi că e o greșeală.`
-            : `Your email already has a scheduled or completed free trial — the trial is for the first lesson only. You can continue with paid lessons (${PRICE.privateOnline} lei/lesson), or message us on WhatsApp if you think this is a mistake.`}
+            ? `Emailul tău are deja o probă gratuită (0 lei) programată sau ținută — proba e doar pentru prima lecție. Poți continua direct cu lecții plătite (${PRICE.privateOnline} lei/lecție) sau scrie-ne pe WhatsApp dacă crezi că e o greșeală.`
+            : `Your email already has a scheduled or completed free trial (0 lei) — the trial is for the first lesson only. You can continue with paid lessons (${PRICE.privateOnline} lei/lesson), or message us on WhatsApp if you think this is a mistake.`}
         </p>
         <div className="flex flex-col sm:flex-row gap-2">
           <Button asChild className="flex-1">

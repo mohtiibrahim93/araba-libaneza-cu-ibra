@@ -338,8 +338,8 @@ const Navbar = () => {
               className="inline-flex items-center gap-1 rounded-full bg-white/[0.12] px-3 py-1 font-semibold hover:bg-white/20"
             >
               {lang === "en"
-                ? "The first trial lesson is free →"
-                : "Prima lecție de probă e gratuită →"}
+                ? "The first trial lesson is free (0 lei) →"
+                : "Prima lecție de probă e gratuită (0 lei) →"}
             </Link>
           )}
           <span className="hidden items-center gap-1.5 text-white/90 lg:inline-flex">
@@ -477,7 +477,7 @@ const Navbar = () => {
               to="/trial"
               className="hidden xl:inline-flex h-11 items-center rounded-xl bg-primary px-5 text-[15px] font-semibold text-primary-foreground transition-colors hover:bg-primary/90"
             >
-              {lang === "en" ? "Free lesson" : "Lecție gratuită"}
+              {lang === "en" ? "Free lesson (0 lei)" : "Lecție gratuită (0 lei)"}
             </Link>
             <a
               href="/#programs"
@@ -523,7 +523,7 @@ const Navbar = () => {
                 onClick={() => setOpen(false)}
                 className="inline-flex h-11 flex-1 items-center justify-center rounded-xl bg-primary px-5 text-[15px] font-semibold text-primary-foreground"
               >
-                {lang === "en" ? "Free lesson" : "Lecție gratuită"}
+                {lang === "en" ? "Free lesson (0 lei)" : "Lecție gratuită (0 lei)"}
               </Link>
               <a
                 href="/#programs"

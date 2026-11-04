@@ -173,7 +173,7 @@ const LibanezaVsEgipteana = () => (
       au o legătură concretă cu Levantul — familie, partener, colegi, călătorii.
       Dacă nu ești sigur unde te încadrezi, răspunde la câteva întrebări în{" "}
       <Link to="/quiz">chestionarul de orientare</Link> sau începe cu o{" "}
-      <Link to="/trial">lecție de probă gratuită</Link>.
+      <Link to="/trial">lecție de probă gratuită (0 lei)</Link>.
     </p>
     <DialectSiblings current="/dialecte-arabe/libaneza-vs-egipteana" />
   </LandingLayout>

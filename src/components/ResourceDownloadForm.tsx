@@ -130,8 +130,8 @@ const ResourceDownloadForm = ({
             className="inline-block bg-primary text-primary-foreground px-5 py-2.5 rounded-lg font-semibold text-sm no-underline hover:bg-primary/90 transition"
           >
             {en
-              ? "Book the free trial lesson"
-              : "Rezervă lecția de probă gratuită"}
+              ? "Book the free trial lesson (0 lei)"
+              : "Rezervă lecția de probă gratuită (0 lei)"}
           </Link>
           <a
             href={displayFileHref}

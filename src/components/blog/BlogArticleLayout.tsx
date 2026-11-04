@@ -58,13 +58,13 @@ const DEFAULT_CTA = {
     en: "Ready to start speaking Lebanese Arabic?",
   },
   text: {
-    ro: "O lecție de probă gratuită cu profesor nativ — online sau fizic în București.",
-    en: "A free trial lesson with a native teacher — online or in person in Bucharest.",
+    ro: "O lecție de probă gratuită (0 lei) cu profesor nativ — online sau fizic în București.",
+    en: "A free trial lesson (0 lei) with a native teacher — online or in person in Bucharest.",
   },
   href: "/trial",
   label: {
-    ro: "Rezervă o lecție de probă gratuită",
-    en: "Book a free trial lesson",
+    ro: "Rezervă o lecție de probă gratuită (0 lei)",
+    en: "Book a free trial lesson (0 lei)",
   },
 };
 

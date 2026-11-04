@@ -33,8 +33,8 @@ const CTASection = () => {
             </span>
             <h2 className="font-display text-3xl sm:text-4xl lg:text-[2.75rem] font-bold leading-tight tracking-tight text-foreground">
               {en
-                ? "The first trial lesson is free."
-                : "Prima lecție de probă e gratuită."}
+                ? "The first trial lesson is free (0 lei)."
+                : "Prima lecție de probă e gratuită (0 lei)."}
             </h2>
           </div>
           <div className="flex flex-wrap gap-3 md:shrink-0">

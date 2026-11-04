@@ -74,8 +74,8 @@ const PreturiPage = () => {
           </h1>
           <p className="mt-3 max-w-3xl text-lg text-muted-foreground">
             {en
-              ? "All prices are per person, in lei. The first trial lesson is free."
-              : "Toate prețurile sunt de persoană, în lei. Prima lecție de probă e gratuită."}{" "}
+              ? "All prices are per person, in lei. The first trial lesson is free (0 lei)."
+              : "Toate prețurile sunt de persoană, în lei. Prima lecție de probă e gratuită (0 lei)."}{" "}
             {t.priceSurchargeNote}
           </p>
 
@@ -84,7 +84,7 @@ const PreturiPage = () => {
             {[
               {
                 Icon: Gift,
-                title: en ? "Free trial" : "Lecție de probă",
+                title: en ? "Free trial (0 lei)" : "Lecție de probă",
                 price: "0 lei",
                 sub: "30 min",
                 href: "/trial",
@@ -382,7 +382,7 @@ const PreturiPage = () => {
                 to="/trial"
                 className="mt-auto text-sm font-semibold text-brand-green hover:underline"
               >
-                {en ? "Book the free trial →" : "Rezervă lecția gratuită →"}
+                {en ? "Book the free trial (0 lei) →" : "Rezervă lecția gratuită (0 lei) →"}
               </Link>
             </div>
             <div
@@ -473,7 +473,7 @@ const PreturiPage = () => {
               to="/trial"
               className="inline-flex h-12 shrink-0 items-center justify-center rounded-xl bg-white px-6 font-semibold text-brand-green transition-opacity hover:opacity-90"
             >
-              {en ? "Book the free trial →" : "Rezervă lecția gratuită →"}
+              {en ? "Book the free trial (0 lei) →" : "Rezervă lecția gratuită (0 lei) →"}
             </Link>
           </section>
         </div>

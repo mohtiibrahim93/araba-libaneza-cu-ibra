@@ -39,7 +39,7 @@ export const translations = {
     heroTitle2: "Trăiește cultura.",
     heroDesc:
       "În București și online, cu Ibra, profesor nativ din Liban. Scrii cum auzi, în Arabizi, și vorbești din prima lecție.",
-    heroCta: "Rezervă lecția gratuită de probă",
+    heroCta: "Rezervă lecția gratuită de probă (0 lei)",
     heroExplore: "Programează o discuție",
     heroTrialCta: "Vezi cursurile",
     heroCheck1: "Profesor nativ",
@@ -222,7 +222,7 @@ export const translations = {
       "Tot ce ne întreabă cursanții înainte să se înscrie — despre preț și orar, despre cât durează până vorbești, despre diferența dintre libaneză și araba standard, și despre gramatică. Dacă nu găsești răspunsul aici, scrie-ne.",
     faqPageBackHome: "Înapoi la pagina principală",
     faqStillQuestions: "Nu ai găsit ce căutai?",
-    faqStillQuestionsCta: "Rezervă o lecție de probă gratuită",
+    faqStillQuestionsCta: "Rezervă o lecție de probă gratuită (0 lei)",
 
     // Contact/CTA
     ctaBadge: "Contactează-ne",
@@ -454,13 +454,13 @@ export const translations = {
     bookingIntroTitle: "Ultimul pas: rezervă-ți sesiunea gratuită de probă",
     bookingIntroDesc:
       "30 de minute cu Ibra — vorbim despre obiectivele tale și îți răspund la întrebări. Prima sesiune este gratuită.",
-    trialPageTitle: "Lecție gratuită de probă",
+    trialPageTitle: "Lecție gratuită de probă (0 lei)",
     // "Fără obligații" stopped being the whole truth when the scheduler grew a
     // Stripe card confirmation: the visitor met the card only after clicking
     // through, which is the worst place to learn about it. Say it up front.
     trialPageSubtitle:
       "30 de minute, 0 lei. Îți confirmi locul cu cardul, fără nicio plată. Online oricând, sau fizic în București, rezervat cu cel puțin 24 de ore înainte.",
-    trialPageSeoTitle: "Lecție gratuită de arabă libaneză | Ibra",
+    trialPageSeoTitle: "Lecție gratuită (0 lei) de arabă libaneză | Ibra",
     trialPageSeoDesc:
       "Rezervă o lecție gratuită de 30 de minute cu Ibra. Proba costă 0 lei; locul se confirmă cu cardul, fără plată.",
     // Explanatory copy below the form. /trial was 67 words of visible text —
@@ -477,9 +477,9 @@ export const translations = {
       "Nu e un test de gramatică și nu îți dă o notă — pentru asta există testul de nivel, cu 24 de întrebări. Chestionarul de aici alege doar formatul de curs; nivelul final se confirmă oricum în lecția de probă, în conversație cu Ibra.",
     quizAfterH2: "După ce termini",
     quizAfterP:
-      "Primești o recomandare cu pagina cursului potrivit și poți merge direct la lecția de probă gratuită. Nimic nu se trimite automat și nu ești înscris la nimic: recomandarea e doar un punct de plecare.",
+      "Primești o recomandare cu pagina cursului potrivit și poți merge direct la lecția de probă gratuită (0 lei). Nimic nu se trimite automat și nu ești înscris la nimic: recomandarea e doar un punct de plecare.",
     bookingLandingWhichH2: "Care variantă ți se potrivește",
-    bookingLandingTrialH3: "Începe cu proba gratuită dacă…",
+    bookingLandingTrialH3: "Începe cu proba gratuită (0 lei) dacă…",
     bookingLandingTrialLi1:
       "nu ai mai studiat cu noi și vrei să vezi cum arată o lecție;",
     bookingLandingTrialLi2:
@@ -499,7 +499,7 @@ export const translations = {
     bookingLandingPricesP:
       "Grupa pornește de la {groupOnline} lei/lună online, respectiv {groupFizic} lei/lună fizic — prețul crește pe măsură ce urci în nivel. Lecțiile private sunt {priv} lei ședința de 60 de minute online ({privFizic} lei fizic), cu −15% la pachetul de 20 de lecții. Plata se face lunar sau integral; plata integrală a cursului are −15%. Proba rămâne 0 lei; cardul se salvează în siguranță doar pentru confirmarea locului.",
     bookingLandingWhichP:
-      "Dacă nu ai mai studiat cu noi, începe cu proba gratuită: 30 de minute în care ne cunoaștem, îți răspund la întrebări și stabilim de unde pornești. Dacă știi deja ce vrei — grupă, lecții 1:1 sau curs pentru copii — mergi direct la înscriere.",
+      "Dacă nu ai mai studiat cu noi, începe cu proba gratuită (0 lei): 30 de minute în care ne cunoaștem, îți răspund la întrebări și stabilim de unde pornești. Dacă știi deja ce vrei — grupă, lecții 1:1 sau curs pentru copii — mergi direct la înscriere.",
     bookingLandingWhereH2: "Unde au loc lecțiile",
     bookingLandingWhereP:
       "Online pe Zoom, de oriunde, sau fizic la Raduga Creative Center, Strada Icoanei 80, București. Proba fizică se programează în orice zi, cu cel puțin 24 de ore înainte; online, în orice zi cu locuri libere.",
@@ -532,10 +532,10 @@ export const translations = {
 
     trialFormSubmitting: "Se salvează…",
     trialFormCta: "Continuă spre programare",
-    trialQuizCta: "Vrei o lecție gratuită de probă mai întâi?",
+    trialQuizCta: "Vrei o lecție gratuită de probă (0 lei) mai întâi?",
     trialFunnelTitle: "Pâlnie de conversie probă",
     trialFunnelSubtitle:
-      "Vezi cum trec leadii de la proba gratuită la înscrierea plătită.",
+      "Vezi cum trec leadii de la proba gratuită (0 lei) la înscrierea plătită.",
     trialFunnelStepRegistered: "Înscrieri probă",
     trialFunnelStepBooked: "Slot programat",
     trialFunnelStepAttended: "Probă susținută",
@@ -611,9 +611,9 @@ export const translations = {
     homeSeoDescription: HOME_META.ro.description,
     // Booking page (per-type)
     bookingPageTitlePaid: "Programează-ți lecția",
-    bookingPageTitleTrial: "Lecție gratuită de probă",
+    bookingPageTitleTrial: "Lecție gratuită de probă (0 lei)",
     bookingPageSeoTitlePaid: "Programează-ți lecția",
-    bookingPageSeoTitleTrial: "Lecție gratuită de probă",
+    bookingPageSeoTitleTrial: "Lecție gratuită de probă (0 lei)",
     bookingPageSubtitlePaid:
       "Alege un slot disponibil. Vei primi confirmarea pe email.",
     bookingPageSubtitleTrial:
@@ -759,7 +759,7 @@ export const translations = {
     comparePrivateStudents: "1",
     compareKidsStudents: "max. 6",
     compareGroupFlexibility:
-      "Fix: 2 lecții de 90 min pe săptămână — orele fiecărei grupe le vezi la înscriere",
+      "Fix: 2 lecții de 90 min pe săptămână — fiecare grupă are propriile zile și ore, iar unde a ajuns fiecare grupă în desfășurare vezi live pe site",
     comparePrivateFlexibility: "Flexibil (tu alegi)",
     compareKidsFlexibility: "Fix: max. 8 lecții de 60 min pe lună",
     compareGroupFormat: "Online & Fizic",
@@ -1027,7 +1027,7 @@ export const translations = {
     heroTitle2: "Live the culture.",
     heroDesc:
       "In Bucharest and online, with Ibra, a native teacher from Lebanon. You write what you hear, in Arabizi, and speak from the first lesson.",
-    heroCta: "Book the free trial lesson",
+    heroCta: "Book the free trial lesson (0 lei)",
     heroExplore: "Schedule a chat",
     heroTrialCta: "See the courses",
     heroCheck1: "Native teacher",
@@ -1199,7 +1199,7 @@ export const translations = {
       "Everything students ask before they enrol — price and schedule, how long it takes before you can hold a conversation, how Lebanese differs from Modern Standard Arabic, and how the grammar works. If your question isn't here, write to us.",
     faqPageBackHome: "Back to the homepage",
     faqStillQuestions: "Didn't find what you were looking for?",
-    faqStillQuestionsCta: "Book a free trial lesson",
+    faqStillQuestionsCta: "Book a free trial lesson (0 lei)",
 
     ctaBadge: "Get In Touch",
     ctaTitle: "Ready to Start Your Journey?",
@@ -1413,13 +1413,13 @@ export const translations = {
     kidsDepositFailedDesc:
       "Your registration was recorded, but the deposit payment could not be started. You can retry or reach us on WhatsApp.",
     kidsDepositRetryCta: "Retry deposit payment",
-    bookingIntroTitle: "Last step: book your free trial session",
+    bookingIntroTitle: "Last step: book your free trial (0 lei) session",
     bookingIntroDesc:
       "30 minutes with Ibra — we'll discuss your goals and answer your questions. The first session is free.",
-    trialPageTitle: "Free trial lesson",
+    trialPageTitle: "Free trial lesson (0 lei)",
     trialPageSubtitle:
       "30 minutes, 0 lei. You confirm the spot with your card, with nothing charged. Online any day, or in person in Bucharest, booked at least 24 hours ahead.",
-    trialPageSeoTitle: "Free trial lesson — Lebanese Arabic",
+    trialPageSeoTitle: "Free trial lesson (0 lei) — Lebanese Arabic",
     trialPageSeoDesc:
       "Book a free 30-minute lesson with Ibra. The trial is 0 lei; your card confirms the spot, with no payment.",
     schedulerPhysicalTrialWeekend:
@@ -1432,9 +1432,9 @@ export const translations = {
       "It is not a grammar test and it does not grade you — the 24-question level test does that. This questionnaire only picks the course format; your final level is confirmed in the trial lesson, in conversation with Ibra.",
     quizAfterH2: "After you finish",
     quizAfterP:
-      "You get a recommendation pointing at the right course page, and you can go straight to the free trial lesson. Nothing is submitted automatically and you are not enrolled in anything: the recommendation is a starting point.",
+      "You get a recommendation pointing at the right course page, and you can go straight to the free trial lesson (0 lei). Nothing is submitted automatically and you are not enrolled in anything: the recommendation is a starting point.",
     bookingLandingWhichH2: "Which one suits you",
-    bookingLandingTrialH3: "Start with the free trial if…",
+    bookingLandingTrialH3: "Start with the free trial (0 lei) if…",
     bookingLandingTrialLi1:
       "you have not studied with us and want to see what a lesson is like;",
     bookingLandingTrialLi2:
@@ -1454,7 +1454,7 @@ export const translations = {
     bookingLandingPricesP:
       "Groups start at {groupOnline} lei/month online, or {groupFizic} lei/month in person — the price rises with the level. Private lessons are {priv} lei per 60-minute session online ({privFizic} lei in person), with −15% on a package of 20. You pay monthly or in full; paying for the whole course upfront takes −15% off. The trial remains 0 lei; your card is stored securely only to confirm the spot.",
     bookingLandingWhichP:
-      "If you have not studied with us before, start with the free trial: 30 minutes to meet, answer your questions and work out where you begin. If you already know what you want — a group, 1:1 lessons, or a course for children — go straight to enrolment.",
+      "If you have not studied with us before, start with the free trial (0 lei): 30 minutes to meet, answer your questions and work out where you begin. If you already know what you want — a group, 1:1 lessons, or a course for children — go straight to enrolment.",
     bookingLandingWhereH2: "Where lessons happen",
     bookingLandingWhereP:
       "Online over Zoom from anywhere, or in person at Raduga Creative Center, Strada Icoanei 80, Bucharest. In-person trials are on any day, booked at least 24 hours ahead; online, any day with a free slot.",
@@ -1476,7 +1476,7 @@ export const translations = {
     trialHowLi4:
       "Confirm your spot with your card through Stripe — 0 lei now — and get a confirmation email with the meeting details.",
     trialRulesH2: "Worth knowing",
-    trialRulesLi1: "The trial lesson is free and is offered once per person.",
+    trialRulesLi1: "The trial lesson is free (0 lei) and is offered once per person.",
     trialRulesLi2:
       "Book it at least 12 hours ahead and at most 30 days in advance.",
     trialRulesLi3:
@@ -1485,10 +1485,10 @@ export const translations = {
 
     trialFormSubmitting: "Saving…",
     trialFormCta: "Continue to scheduling",
-    trialQuizCta: "Want a free trial lesson first?",
+    trialQuizCta: "Want a free trial lesson (0 lei) first?",
     trialFunnelTitle: "Trial conversion funnel",
     trialFunnelSubtitle:
-      "Track how leads move from free trial to paid enrollment.",
+      "Track how leads move from free trial (0 lei) to paid enrollment.",
     trialFunnelStepRegistered: "Trial signups",
     trialFunnelStepBooked: "Slot booked",
     trialFunnelStepAttended: "Trial attended",
@@ -1561,9 +1561,9 @@ export const translations = {
     homeSeoDescription: HOME_META.en.description,
     // Booking page (per-type)
     bookingPageTitlePaid: "Book your lesson",
-    bookingPageTitleTrial: "Free trial lesson",
+    bookingPageTitleTrial: "Free trial lesson (0 lei)",
     bookingPageSeoTitlePaid: "Book Your Lesson",
-    bookingPageSeoTitleTrial: "Free Trial Lesson",
+    bookingPageSeoTitleTrial: "Free Trial Lesson (0 lei)",
     bookingPageSubtitlePaid:
       "Pick an available slot. You'll receive a confirmation email.",
     bookingPageSubtitleTrial:
@@ -1707,7 +1707,7 @@ export const translations = {
     comparePrivateStudents: "1",
     compareKidsStudents: "max. 6",
     compareGroupFlexibility:
-      "Fixed: two 90-minute lessons a week — each group's times are shown when you sign up",
+      "Fixed: two 90-minute lessons a week — each group has its own days and times, and where each running group has got to is shown live on the site",
     comparePrivateFlexibility: "Flexible (you choose)",
     compareKidsFlexibility: "Fixed: up to 8 lessons of 60 min a month",
     compareGroupFormat: "Online & In-person",

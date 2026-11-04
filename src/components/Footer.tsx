@@ -218,8 +218,8 @@ const Footer = () => {
                 className="hover:text-foreground transition-colors"
               >
                 {lang === "en"
-                  ? "Free trial lesson"
-                  : "Lecție de probă gratuită"}
+                  ? "Free trial lesson (0 lei)"
+                  : "Lecție de probă gratuită (0 lei)"}
               </Link>
             </li>
             <li>

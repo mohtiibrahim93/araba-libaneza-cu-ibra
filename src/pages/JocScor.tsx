@@ -54,7 +54,7 @@ const COPY = {
     levelDisclaimer:
       "Sugestia este orientativă: măsoară citirea și recunoașterea, nu ascultarea sau vorbirea. Grupa se confirmă într-o conversație cu Ibra.",
     ctaCourse: "Vezi cursul potrivit",
-    ctaTrial: "Lecție de probă gratuită",
+    ctaTrial: "Lecție de probă gratuită (0 lei)",
     altH2: "Vrei un răspuns mai precis?",
     altP: "Testul de nivel clasic are 24 de întrebări scrise și verifică mai atent gramatica, nu doar vocabularul. Durează circa 15 minute.",
     altCta: "Fă testul de nivel",
@@ -86,7 +86,7 @@ const COPY = {
     levelDisclaimer:
       "The suggestion is indicative: it measures reading and recognition, not listening or speaking. Group placement is confirmed in a conversation with Ibra.",
     ctaCourse: "See the right course",
-    ctaTrial: "Free trial lesson",
+    ctaTrial: "Free trial lesson (0 lei)",
     altH2: "Want a sharper answer?",
     altP: "The classic level test has 24 written questions and checks grammar more carefully, not just vocabulary. It takes about 15 minutes.",
     altCta: "Take the level test",

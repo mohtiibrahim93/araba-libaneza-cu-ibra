@@ -9,11 +9,11 @@ const FAQ = [
   },
   {
     q: "Sunt cursuri de arabă în București pentru începători?",
-    a: "Da, nivelul A1 pornește de la zero — nu ai nevoie de nicio cunoștință prealabilă. Grupa A1 fizică în desfășurare are lecții luni la 19:00 și miercuri la 18:30 (grupa A2: marți și joi, 19:00–20:30); noile grupe A1 online sunt deschise — datele le vezi pe pagina A1. Vezi și pagina „arabă pentru începători” pentru ce anume înveți în primele luni.",
+    a: "Da, nivelul A1 pornește de la zero — nu ai nevoie de nicio cunoștință prealabilă. Fiecare grupă are propriile zile și ore, iar unde a ajuns fiecare grupă în desfășurare vezi live pe pagina nivelului; noile grupe A1 online sunt deschise — datele le vezi pe pagina A1. Vezi și pagina „arabă pentru începători” pentru ce anume înveți în primele luni.",
   },
   {
     q: "Cât costă un curs de arabă în București?",
-    a: "500 lei/lună online sau 700 lei/lună fizic (2 lecții de 90 min pe săptămână). Cu 15% reducere la plata integrală a nivelului. Meditațiile 1:1 costă 150 lei/lecție online și 210 lei fizic. Prima lecție de probă este gratuită.",
+    a: "500 lei/lună online sau 700 lei/lună fizic (2 lecții de 90 min pe săptămână). Cu 15% reducere la plata integrală a nivelului. Meditațiile 1:1 costă 150 lei/lecție online și 210 lei fizic. Prima lecție de probă este gratuită (0 lei).",
   },
   {
     q: "Există și cursuri de arabă pentru copii în București?",
@@ -86,8 +86,8 @@ const CursuriArabaBucuresti = () => (
       slug="cursuri-araba-bucuresti"
       enHref="/en/arabic-classes-near-me"
       title="Cursuri de arabă libaneză în București — profesor nativ, grupe mici"
-      metaTitle="Cursuri Arabă București 2026 | Prima Lecție Gratuită"
-      description="Cursuri de arabă în București, str. Icoanei 80: grupe mici A1–C2 de la 700 lei/lună, meditații 1:1 și curs pentru copii. Prima lecție de probă e gratuită."
+      metaTitle="Cursuri Arabă București 2026 | Prima Lecție Gratuită (0 lei)"
+      description="Cursuri de arabă în București, str. Icoanei 80: grupe mici A1–C2 de la 700 lei/lună, meditații 1:1 și curs pentru copii. Proba e gratuită (0 lei)."
       crumb="Cursuri de arabă libaneză București"
       lead="Cursuri de arabă libaneză în București cu profesor nativ, la Raduga Creative Center (Str. Icoanei 80, sector 2). Grupe mici, niveluri A1–C2, adulți și copii."
       faq={FAQ}
@@ -135,7 +135,7 @@ const CursuriArabaBucuresti = () => (
           <strong>
             <Link to="/cursuri/grup">Curs de grup adulți A1–C2</Link>
           </strong>{" "}
-          — 2 lecții/săpt., seara (19:00–20:30), grupe de max. 8. De la 700
+          — 2 lecții/săpt., zilele și orele diferă de la grupă la grupă, grupe de max. 8. De la 700
           lei/lună fizic.
         </li>
         <li>
@@ -178,7 +178,7 @@ const CursuriArabaBucuresti = () => (
       </p>
 
       <p>
-        Începe cu o <Link to="/trial">lecție de probă gratuită de 30 min</Link>,
+        Începe cu o <Link to="/trial">lecție de probă gratuită (0 lei) de 30 min</Link>,
         fizic la sală sau online.
       </p>
     </LandingLayout>

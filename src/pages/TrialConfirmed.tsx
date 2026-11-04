@@ -99,8 +99,8 @@ const TrialConfirmed = () => {
           />
           <h1 className="font-display text-display-md font-bold tracking-tight text-foreground">
             {en
-              ? "Your free trial lesson is booked"
-              : "Lecția de probă gratuită e rezervată"}
+              ? "Your free trial lesson (0 lei) is booked"
+              : "Lecția de probă gratuită (0 lei) e rezervată"}
           </h1>
           <p className="mt-3 text-muted-foreground">
             {en
@@ -117,8 +117,8 @@ const TrialConfirmed = () => {
             <CalendarCheck className="h-5 w-5" aria-hidden="true" />,
             en ? "What" : "Ce",
             en
-              ? `Free trial lesson with Ibra${Number.isFinite(minutes) && minutes > 0 ? ` · ${minutes} min` : ""}`
-              : `Lecție de probă gratuită cu Ibra${Number.isFinite(minutes) && minutes > 0 ? ` · ${minutes} min` : ""}`,
+              ? `Free trial lesson (0 lei) with Ibra${Number.isFinite(minutes) && minutes > 0 ? ` · ${minutes} min` : ""}`
+              : `Lecție de probă gratuită (0 lei) cu Ibra${Number.isFinite(minutes) && minutes > 0 ? ` · ${minutes} min` : ""}`,
           )}
           {dateLabel &&
             timeLabel &&

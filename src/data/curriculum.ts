@@ -51,9 +51,10 @@ const RO: CurriculumLevel[] = [
     hours: 48,
     trackLabel: "Vorbit",
     schedule: [
-      "Fizic: grupa de luni la 19:00 și miercuri la 18:30 (Strada Icoanei 80) e în desfășurare",
+      "Fizic: o grupă e în desfășurare (Strada Icoanei 80)",
       "Online: grupe noi, în română și în engleză",
-      "Unde a ajuns fiecare grupă în desfășurare vezi pe site, pe pagina nivelului, la „Grupe în desfășurare”",
+      "Fiecare grupă are propriile zile și ore, afișate la grupa respectivă",
+      "Unde a ajuns fiecare grupă în desfășurare vezi live pe site, pe pagina nivelului, la „Grupe în desfășurare”",
       "Examen final inclus",
     ],
     intro: [
@@ -111,9 +112,10 @@ const RO: CurriculumLevel[] = [
     hours: 84,
     trackLabel: "Vorbit",
     schedule: [
-      "Fizic: grupa de marți și joi 19:00–20:30 (Strada Icoanei 80) e în desfășurare · 56 de lecții",
+      "Fizic: o grupă e în desfășurare (Strada Icoanei 80) · 56 de lecții",
       "Online: cohortă în curând — data și programul se anunță",
-      "Unde a ajuns fiecare grupă în desfășurare vezi pe site, pe pagina nivelului, la „Grupe în desfășurare”",
+      "Fiecare grupă are propriile zile și ore, afișate la grupa respectivă",
+      "Unde a ajuns fiecare grupă în desfășurare vezi live pe site, pe pagina nivelului, la „Grupe în desfășurare”",
       "Rulează în paralel cu A1 · Examen final inclus",
     ],
     intro: [
@@ -494,9 +496,10 @@ const EN: CurriculumLevel[] = [
     hours: 48,
     trackLabel: "Spoken",
     schedule: [
-      "In person: the Monday 19:00 & Wednesday 18:30 group (Strada Icoanei 80) is in progress",
+      "In person: a group is in progress (Strada Icoanei 80)",
       "Online: new groups, taught in Romanian and in English",
-      "Where each running group has got to is shown on the site, on the level page, under \"Groups in progress\"",
+      "Each group has its own days and times, shown with that group",
+      "Where each running group has got to is shown live on the site, on the level page, under \"Groups in progress\"",
       "Final exam included",
     ],
     intro: [
@@ -554,9 +557,10 @@ const EN: CurriculumLevel[] = [
     hours: 84,
     trackLabel: "Spoken",
     schedule: [
-      "In person: the Tuesday & Thursday 19:00–20:30 group (Strada Icoanei 80) is in progress · 56 lessons",
+      "In person: a group is in progress (Strada Icoanei 80) · 56 lessons",
       "Online: cohort opening soon — date and schedule to be announced",
-      "Where each running group has got to is shown on the site, on the level page, under \"Groups in progress\"",
+      "Each group has its own days and times, shown with that group",
+      "Where each running group has got to is shown live on the site, on the level page, under \"Groups in progress\"",
       "Runs in parallel with A1 · Final exam included",
     ],
     intro: [

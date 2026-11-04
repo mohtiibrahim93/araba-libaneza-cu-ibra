@@ -40,9 +40,9 @@ const COPY = {
       "În browserul tău, pe acest dispozitiv. Nu e un cont: nu se sincronizează între telefon și laptop și nu îl vede nimeni altcineva. Dacă schimbi dispozitivul, folosește controlul de transfer din joc — descarci progresul ca fișier și îl încarci înapoi.",
     courseH2: "Jocul nu ține loc de curs",
     courseP:
-      "Exersezi singur vocabular și structuri, și atât. Pronunția, conversația și corectarea în timp real cer un profesor. Dacă vrei să vorbești, nu doar să recunoști cuvinte, începe cu o lecție de probă gratuită.",
+      "Exersezi singur vocabular și structuri, și atât. Pronunția, conversația și corectarea în timp real cer un profesor. Dacă vrei să vorbești, nu doar să recunoști cuvinte, începe cu o lecție de probă gratuită (0 lei).",
     ctaCourses: "Vezi cursurile",
-    ctaTrial: "Lecție de probă gratuită",
+    ctaTrial: "Lecție de probă gratuită (0 lei)",
     levelH2: "Verifică-ți nivelul în joc",
     levelP:
       "24 de întrebări în trei secțiuni, fără cronometru. La final primești o recomandare orientativă A1, A2 sau B1 și cursul potrivit. Nu evaluează ascultarea sau vorbirea — grupa se stabilește în conversație cu Ibra.",
@@ -69,9 +69,9 @@ const COPY = {
       "In your own browser, on this device. It is not an account: it does not sync between your phone and your laptop, and nobody else can see it. If you switch devices, use the transfer control inside the game — you download your progress as a file and load it back.",
     courseH2: "The game is not a substitute for a course",
     courseP:
-      "You practise vocabulary and structures on your own, and that is all it does. Pronunciation, conversation and being corrected as you speak need a teacher. If you want to speak rather than just recognise words, start with a free trial lesson.",
+      "You practise vocabulary and structures on your own, and that is all it does. Pronunciation, conversation and being corrected as you speak need a teacher. If you want to speak rather than just recognise words, start with a free trial lesson (0 lei).",
     ctaCourses: "See the courses",
-    ctaTrial: "Free trial lesson",
+    ctaTrial: "Free trial lesson (0 lei)",
     levelH2: "Check your level in the game",
     levelP:
       "24 questions in three sections, with no timer. At the end you get an indicative A1, A2 or B1 recommendation and the right course. It does not assess listening or speaking — group placement is confirmed in a conversation with Ibra.",

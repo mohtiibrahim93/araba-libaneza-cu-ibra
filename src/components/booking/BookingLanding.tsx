@@ -57,7 +57,7 @@ const BookingLanding = () => {
     {
       id: "proba",
       Icon: Gift,
-      title: en ? "Free trial lesson" : "Lecție de probă gratuită",
+      title: en ? "Free trial lesson (0 lei)" : "Lecție de probă gratuită (0 lei)",
       meta: en ? "30 min · 0 lei" : "30 min · 0 lei",
       text: en
         ? "We meet, you ask anything, and we find your level. Online any day, in person with 24 hours’ notice."

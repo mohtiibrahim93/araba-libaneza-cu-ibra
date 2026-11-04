@@ -62,11 +62,11 @@ export const FAQ_CONTENT: Record<"ro" | "en", { groups: FAQGroup[] }> = {
           },
           {
             q: "Cât durează lecțiile, cât de des sunt și în ce format (online sau fizic)?",
-            a: "Cursurile de grup au 2 lecții de 90 de minute pe săptămână, seara. Poți alege fizic (Raduga Creative Center, București) sau online pe Zoom. Lecțiile private se programează flexibil, inclusiv în weekend.",
+            a: "Cursurile de grup au 2 lecții de 90 de minute pe săptămână; fiecare grupă are propriile zile și ore. Poți alege fizic (Raduga Creative Center, București) sau online pe Zoom. Lecțiile private se programează flexibil, inclusiv în weekend.",
           },
           {
             q: "Cât costă, ce politică de anulare aveți și există o lecție de probă?",
-            a: "Prețurile sunt transparente, fără costuri ascunse — plată lunară sau integrală (cu 15% reducere). Anularea cu cel puțin 7 zile înainte de start îți aduce banii înapoi integral; după start, rambursarea e proporțională cu lecțiile rămase, minus o taxă administrativă de 10%. Prima lecție este o probă gratuită de 30 de minute.",
+            a: "Prețurile sunt transparente, fără costuri ascunse — plată lunară sau integrală (cu 15% reducere). Anularea cu cel puțin 7 zile înainte de start îți aduce banii înapoi integral; după start, rambursarea e proporțională cu lecțiile rămase, minus o taxă administrativă de 10%. Prima lecție este o probă gratuită (0 lei) de 30 de minute.",
           },
           {
             q: "Aveți recenzii de la cursanți și cât de repede se văd rezultatele?",
@@ -74,7 +74,7 @@ export const FAQ_CONTENT: Record<"ro" | "en", { groups: FAQGroup[] }> = {
           },
           {
             q: "La ce semnale de alarmă să fiu atent când aleg un profesor de arabă?",
-            a: "Evită: un vorbitor nativ fără experiență de predare (a ști o limbă nu înseamnă a o preda), lecții generice fără adaptare la nivelul tău, și costuri ascunse sau program rigid fără lecție de probă. Cel mai sigur test rămâne o lecție de probă gratuită.",
+            a: "Evită: un vorbitor nativ fără experiență de predare (a ști o limbă nu înseamnă a o preda), lecții generice fără adaptare la nivelul tău, și costuri ascunse sau program rigid fără lecție de probă. Cel mai sigur test rămâne o lecție de probă gratuită (0 lei).",
           },
         ],
       },
@@ -195,7 +195,7 @@ export const FAQ_CONTENT: Record<"ro" | "en", { groups: FAQGroup[] }> = {
           },
           {
             q: "Ce opțiuni de orar sunt pentru oameni care lucrează?",
-            a: "Cursurile de grup au 2 lecții de 90 de minute pe săptămână, seara. Lecțiile private se programează flexibil, inclusiv weekend, în funcție de disponibilitatea ta.",
+            a: "Cursurile de grup au 2 lecții de 90 de minute pe săptămână; fiecare grupă are propriile zile și ore. Lecțiile private se programează flexibil, inclusiv weekend, în funcție de disponibilitatea ta.",
           },
           {
             q: "Cât costă și există planuri de plată?",
@@ -299,11 +299,11 @@ export const FAQ_CONTENT: Record<"ro" | "en", { groups: FAQGroup[] }> = {
           },
           {
             q: "How long and how often are lessons, and in what format (online or in person)?",
-            a: "Group courses are two 90-minute lessons per week, in the evening. You can choose in person (Raduga Creative Center, Bucharest) or online via Zoom. Private lessons are scheduled flexibly, including weekends.",
+            a: "Group courses are two 90-minute lessons per week; each group has its own days and times. You can choose in person (Raduga Creative Center, Bucharest) or online via Zoom. Private lessons are scheduled flexibly, including weekends.",
           },
           {
             q: "How much does it cost, what's the cancellation policy, and is there a trial lesson?",
-            a: "Prices are transparent with no hidden fees — monthly or pay-in-full (with a 15% discount). Cancel at least 7 days before the start for a full refund; after the start, the refund is proportional to the remaining lessons, minus a 10% administrative fee. The first lesson is a free 30-minute trial.",
+            a: "Prices are transparent with no hidden fees — monthly or pay-in-full (with a 15% discount). Cancel at least 7 days before the start for a full refund; after the start, the refund is proportional to the remaining lessons, minus a 10% administrative fee. The first lesson is a free 30-minute trial (0 lei).",
           },
           {
             q: "Do you have student reviews, and how quickly will I see results?",
@@ -311,7 +311,7 @@ export const FAQ_CONTENT: Record<"ro" | "en", { groups: FAQGroup[] }> = {
           },
           {
             q: "What red flags should I watch for when choosing an Arabic tutor?",
-            a: "Avoid: a native speaker with no teaching experience (knowing a language isn't the same as teaching it), generic one-size-fits-all lessons, and hidden fees or rigid scheduling with no trial. The safest test is always a free trial lesson.",
+            a: "Avoid: a native speaker with no teaching experience (knowing a language isn't the same as teaching it), generic one-size-fits-all lessons, and hidden fees or rigid scheduling with no trial. The safest test is always a free trial lesson (0 lei).",
           },
         ],
       },
@@ -432,7 +432,7 @@ export const FAQ_CONTENT: Record<"ro" | "en", { groups: FAQGroup[] }> = {
           },
           {
             q: "What schedule options exist for working people?",
-            a: "Group classes are two 90-minute lessons per week, in the evening. Private lessons are scheduled flexibly, including weekends, based on your availability.",
+            a: "Group classes are two 90-minute lessons per week; each group has its own days and times. Private lessons are scheduled flexibly, including weekends, based on your availability.",
           },
           {
             q: "How much does it cost, and are there payment plans?",

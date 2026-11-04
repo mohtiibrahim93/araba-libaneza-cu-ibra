@@ -9,7 +9,7 @@ const FAQ = [
   },
   {
     q: "Cât costă un curs de arabă?",
-    a: "Cursurile de grup pornesc de la 500 lei/lună (2 lecții de 90 de minute pe săptămână), cu 15% reducere la plata integrală a nivelului. Lecțiile private costă 150 lei/lecție online și 210 lei fizic (60 min), cu reducere automată: −15% de la 20 de lecții. Prima lecție de probă este gratuită.",
+    a: "Cursurile de grup pornesc de la 500 lei/lună (2 lecții de 90 de minute pe săptămână), cu 15% reducere la plata integrală a nivelului. Lecțiile private costă 150 lei/lecție online și 210 lei fizic (60 min), cu reducere automată: −15% de la 20 de lecții. Prima lecție de probă este gratuită (0 lei).",
   },
   {
     q: "Pot începe de la zero, fără să știu nimic?",
@@ -195,7 +195,7 @@ const CursuriAraba = () => (
         cum alegi cel mai bun curs de arabă
       </Link>
       . Sau începi direct cu{" "}
-      <Link to="/trial">lecția de probă gratuită de 30 de minute</Link>.
+      <Link to="/trial">lecția de probă gratuită (0 lei) de 30 de minute</Link>.
     </p>
   </LandingLayout>
 );

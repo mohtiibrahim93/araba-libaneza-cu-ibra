@@ -241,7 +241,7 @@ const CatDureaza = () => {
         </Link>
         {en ? " (~15 minutes) or a " : " (~15 minute) sau o "}
         <Link to="/trial">
-          {en ? "free trial lesson" : "lecție de probă gratuită"}
+          {en ? "free trial lesson (0 lei)" : "lecție de probă gratuită (0 lei)"}
         </Link>
         {en
           ? " — the teacher tells you exactly where it's best to start."

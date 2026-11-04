@@ -148,7 +148,7 @@ const WhySection = () => {
             to="/trial"
             className="inline-flex h-12 shrink-0 items-center justify-center rounded-xl bg-white px-6 font-semibold text-brand-green transition-opacity hover:opacity-90"
           >
-            {en ? "Book the free trial →" : "Rezervă lecția gratuită →"}
+            {en ? "Book the free trial (0 lei) →" : "Rezervă lecția gratuită (0 lei) →"}
           </Link>
         </div>
       </div>

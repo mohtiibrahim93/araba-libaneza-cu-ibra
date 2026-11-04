@@ -49,7 +49,7 @@ Ai observat „Kifak?” vs „Kifik?”. În libaneză, când te adresezi cuiva
 
 ## Exersează cu cineva real
 
-Salutările se învață cel mai bine spunându-le, nu citindu-le. La o [lecție de probă gratuită](/trial) le pronunți cu profesorul și pornești o primă conversație scurtă. Vezi și [primele 20 de expresii libaneze](/blog/primele-20-de-expresii-libaneze) ca să continui.`,
+Salutările se învață cel mai bine spunându-le, nu citindu-le. La o [lecție de probă gratuită (0 lei)](/trial) le pronunți cu profesorul și pornești o primă conversație scurtă. Vezi și [primele 20 de expresii libaneze](/blog/primele-20-de-expresii-libaneze) ca să continui.`,
     en: `Greetings are your first interaction in any language — and in Lebanese they're warm and expressive. The good news: a handful of phrases take you a long way. Here are the most common ones, with [Arabizi](/blog/ce-este-arabizi) pronunciation and Arabic script.
 
 ## The essential phrases
@@ -76,14 +76,14 @@ In 'saba7' and 'el kheir' there are guttural sounds specific to Arabic. The numb
 
 ## Practise with a real person
 
-Greetings are learned best by saying them, not reading them. In a [free trial lesson](/trial) you pronounce them with the teacher and start a first short conversation. See also the [first 20 Lebanese phrases](/blog/primele-20-de-expresii-libaneze) to continue.`,
+Greetings are learned best by saying them, not reading them. In a [free trial lesson (0 lei)](/trial) you pronounce them with the teacher and start a first short conversation. See also the [first 20 Lebanese phrases](/blog/primele-20-de-expresii-libaneze) to continue.`,
   },
 
   "cat-costa-cursurile-de-araba-libaneza": {
     lead_ro:
-      "Grup sau privat, online sau fizic — iată cum se calculează prețul, ce reduceri există și de ce prima lecție e gratuită.",
+      "Grup sau privat, online sau fizic — iată cum se calculează prețul, ce reduceri există și de ce prima lecție e gratuită (0 lei).",
     lead_en:
-      "Group or private, online or in person — here's how the price works, what discounts exist and why the first lesson is free.",
+      "Group or private, online or in person — here's how the price works, what discounts exist and why the first lesson is free (0 lei).",
     ro: `Una dintre primele întrebări firești când vrei să înveți o limbă nouă este „cât costă?”. La Centrul de Arabă Libaneză prețurile sunt transparente și depind de un singur lucru: formatul pe care îl alegi. Mai jos ai toate opțiunile.
 
 ## Cursuri de grup (adulți, A1–C2)
@@ -103,9 +103,9 @@ Dacă vrei ritm personalizat sau un program flexibil, lecțiile private costă *
 
 Cursul pentru copii este un program interactiv, bazat pe joc, fizic, la centru. Momentan nu avem cursuri pentru copii — lasă-ți datele și te anunțăm. Vezi [cursul pentru copii](/cursuri/copii).
 
-## Proba este gratuită
+## Proba este gratuită (0 lei)
 
-Nu trebuie să plătești nimic ca să începi. Prima lecție este o [probă gratuită](/trial) de 30 de minute, fără nicio obligație — o rezervi online, îți alegi un interval și vorbești cu profesorul. Abia după ce vezi cum e, decizi dacă te înscrii.
+Nu trebuie să plătești nimic ca să începi. Prima lecție este o [probă gratuită (0 lei)](/trial) de 30 de minute, fără nicio obligație — o rezervi online, îți alegi un interval și vorbești cu profesorul. Abia după ce vezi cum e, decizi dacă te înscrii.
 
 ## Există costuri ascunse?
 
@@ -129,9 +129,9 @@ If you want a personalized pace or a flexible schedule, private lessons cost **1
 
 The kids course is an interactive, game-based program, in person at the centre. We don't have kids' courses at the moment — leave your details and we'll let you know. See the [kids course](/cursuri/copii).
 
-## The trial is free
+## The trial is free (0 lei)
 
-You don't have to pay anything to start. The first lesson is a [free trial](/trial) of 30 minutes, with no obligation — you book it online, pick a slot and talk to the teacher. Only after you see how it is do you decide whether to enrol.
+You don't have to pay anything to start. The first lesson is a [free trial (0 lei)](/trial) of 30 minutes, with no obligation — you book it online, pick a slot and talk to the teacher. Only after you see how it is do you decide whether to enrol.
 
 ## Are there hidden costs?
 
@@ -176,7 +176,7 @@ No. Audio materials and support are included. You can pay by card (securely, via
 - Lecții generice, la fel pentru toată lumea, fără adaptare.
 - Costuri ascunse sau program rigid, fără lecție de probă.
 
-Cel mai simplu test? O [lecție de probă gratuită](/trial) — vezi direct metoda, pui întrebările de mai sus și decizi în cunoștință de cauză.`,
+Cel mai simplu test? O [lecție de probă gratuită (0 lei)](/trial) — vezi direct metoda, pui întrebările de mai sus și decizi în cunoștință de cauză.`,
     en: `A good teacher is the difference between quitting after three lessons and speaking with confidence. Before you choose, it's worth asking a few clear questions. Here they are, grouped, with our answers to each.
 
 ## About experience and language
@@ -210,7 +210,7 @@ Cel mai simplu test? O [lecție de probă gratuită](/trial) — vezi direct met
 - Generic lessons, the same for everyone, with no adaptation.
 - Hidden fees or rigid scheduling, with no trial lesson.
 
-The simplest test? A [free trial lesson](/trial) — you see the method directly, ask the questions above and decide with full information.`,
+The simplest test? A [free trial lesson (0 lei)](/trial) — you see the method directly, ask the questions above and decide with full information.`,
   },
 
   "cat-dureaza-sa-inveti-araba-libaneza": {
@@ -245,7 +245,7 @@ Pentru a te descurca într-o călătorie în Liban — saluturi, restaurant, tax
 
 ## Cum afli de unde pornești
 
-Dacă știi deja câteva cuvinte, poți sări peste A1. Fă [testul de nivel gratuit](/test-de-nivel) (~15 minute) sau o [lecție de probă gratuită](/trial) — profesorul îți spune exact de unde e cel mai bine să începi.`,
+Dacă știi deja câteva cuvinte, poți sări peste A1. Fă [testul de nivel gratuit](/test-de-nivel) (~15 minute) sau o [lecție de probă gratuită (0 lei)](/trial) — profesorul îți spune exact de unde e cel mai bine să începi.`,
     en: `'How long?' is the question everyone wants a simple answer to. The honest truth: it depends on how far you want to go and how often you practise. The good news for Lebanese is that, being a spoken dialect, you start communicating from the first lessons — you don't wait months to say something useful.
 
 ## Duration per level
@@ -273,7 +273,7 @@ To get by on a trip to Lebanon — greetings, restaurant, taxi, shopping — lev
 
 ## How to find your starting point
 
-If you already know a few words, you can skip A1. Take the [free level test](/test-de-nivel) (~15 minutes) or a [free trial lesson](/trial) — the teacher tells you exactly where it's best to start.`,
+If you already know a few words, you can skip A1. Take the [free level test](/test-de-nivel) (~15 minutes) or a [free trial lesson (0 lei)](/trial) — the teacher tells you exactly where it's best to start.`,
   },
 
   "alfabetul-arab-pentru-incepatori": {
@@ -466,7 +466,7 @@ Muzica libaneză merge de la marea **Fairuz** (vocea dimineților libaneze) pân
 
 Araba libaneză este un [dialect viu](/blog/araba-libaneza-vs-araba-standard), nu araba clasică din manuale. Cuvintele au poveste, umor și context. Când înveți cu un profesor nativ, primești și cultura odată cu limba — de asta cursurile noastre includ expresii reale, obiceiuri și felul autentic în care se vorbește pe străzile Beirutului.
 
-Curios? Începe cu o [lecție de probă gratuită](/trial) sau vezi [toate cursurile](/cursuri).`,
+Curios? Începe cu o [lecție de probă gratuită (0 lei)](/trial) sau vezi [toate cursurile](/cursuri).`,
     en: `You don't just learn a language — you step into a culture. Lebanon is a small Mediterranean country, but with enormous cultural density: a meeting point between East and West, with thousands of years of history. Here's what gives Lebanese culture its charm.
 
 ## Hospitality, above all
@@ -492,7 +492,7 @@ Lebanese music ranges from the great **Fairuz** (the voice of Lebanese mornings)
 
 Lebanese Arabic is a [living dialect](/blog/araba-libaneza-vs-araba-standard), not the classical Arabic of textbooks. Words carry story, humour and context. When you learn with a native teacher, you get the culture along with the language — that's why our courses include real expressions, customs and the authentic way people speak on the streets of Beirut.
 
-Curious? Start with a [free trial lesson](/trial) or see [all the courses](/cursuri).`,
+Curious? Start with a [free trial lesson (0 lei)](/trial) or see [all the courses](/cursuri).`,
   },
 
   "araba-pentru-copii-ghidul-parintilor": {
@@ -1045,7 +1045,7 @@ Not sure where you'd start? Take the [free level test](/test-de-nivel) (~15 minu
 
 ## Exersează-le cu voce tare
 
-Numerele se prind cel mai repede când le spui pe bune — numeri restul, spui ora, dai numărul de telefon. La o [lecție de probă gratuită](/trial) le exersezi cu un profesor nativ, iar apoi poți continua cu [primele 20 de expresii libaneze](/blog/primele-20-de-expresii-libaneze).`,
+Numerele se prind cel mai repede când le spui pe bune — numeri restul, spui ora, dai numărul de telefon. La o [lecție de probă gratuită (0 lei)](/trial) le exersezi cu un profesor nativ, iar apoi poți continua cu [primele 20 de expresii libaneze](/blog/primele-20-de-expresii-libaneze).`,
     en: `Numbers are among the first things you actually use in a new language — prices, time, phone numbers, your age. The good news: in Lebanese you only need a handful to get by. Here they are, with [Arabizi](/blog/ce-este-arabizi) pronunciation and Arabic script.
 
 ## 0 to 10
@@ -1086,6 +1086,6 @@ Between 21 and 99, Lebanese says the unit first, then the ten: 21 is 'wa7ad w 3e
 
 ## Practise them out loud
 
-Numbers stick fastest when you say them for real — counting change, telling the time, giving your phone number. In a [free trial lesson](/trial) you practise them with a native teacher, and you can continue with the [first 20 Lebanese phrases](/blog/primele-20-de-expresii-libaneze).`,
+Numbers stick fastest when you say them for real — counting change, telling the time, giving your phone number. In a [free trial lesson (0 lei)](/trial) you practise them with a native teacher, and you can continue with the [first 20 Lebanese phrases](/blog/primele-20-de-expresii-libaneze).`,
   },
 };

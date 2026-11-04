@@ -280,7 +280,7 @@ const HowToLearnLebaneseArabic = () => (
 
     <h2>The single best step you can take today</h2>
     <p>
-      Book a free 30-minute trial lesson with a native Lebanese teacher. You'll
+      Book a free 30-minute trial lesson (0 lei) with a native Lebanese teacher. You'll
       learn your first five phrases, hear the sound of the dialect, and get a
       personalised recommendation on where to start based on your goal (family,
       travel, business, heritage). The trial remains 0 LEI and carries no

@@ -148,7 +148,7 @@ const LevantinaVsIrakiana = () => (
       </li>
       <li>
         <strong>Nu știi de unde începi</strong> →{" "}
-        <Link to="/trial">lecția de probă gratuită</Link> clarifică în 30 de
+        <Link to="/trial">lecția de probă gratuită (0 lei)</Link> clarifică în 30 de
         minute.
       </li>
     </ul>

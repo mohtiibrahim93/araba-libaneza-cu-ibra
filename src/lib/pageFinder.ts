@@ -251,7 +251,7 @@ export const COURSE_PICKS: Recommendation[] = [
   },
   {
     to: "/trial",
-    label: { ro: "Lecție de probă gratuită", en: "Free trial lesson" },
+    label: { ro: "Lecție de probă gratuită (0 lei)", en: "Free trial lesson (0 lei)" },
     note: { ro: "30 de minute, 0 lei", en: "30 minutes, 0 LEI" },
   },
 ];

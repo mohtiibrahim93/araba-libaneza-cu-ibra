@@ -236,7 +236,7 @@ const NumereInLibaneza = () => {
           ? "Numbers stick fastest when you say them for real — counting change, telling the time, giving your phone number. In a "
           : "Numerele se prind cel mai repede când le spui pe bune — numeri restul, spui ora, dai numărul de telefon. La o "}
         <Link to="/trial">
-          {en ? "free trial lesson" : "lecție de probă gratuită"}
+          {en ? "free trial lesson (0 lei)" : "lecție de probă gratuită (0 lei)"}
         </Link>
         {en
           ? " you practise them with a native teacher, and you can continue with the "

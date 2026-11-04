@@ -22,7 +22,7 @@ const FAQ = [
   },
   {
     q: "How much do teen Arabic classes cost?",
-    a: `Same as the adult groups: from ${PRICE.groupFromOnline} LEI / month for a group (2 × 90-minute lessons per week), or ${PRICE.privateOnline} LEI online / ${PRICE.privateFizic} LEI in person per 60-minute private lesson, with −15% on a package of 20. The first 30-minute trial lesson is free.`,
+    a: `Same as the adult groups: from ${PRICE.groupFromOnline} LEI / month for a group (2 × 90-minute lessons per week), or ${PRICE.privateOnline} LEI online / ${PRICE.privateFizic} LEI in person per 60-minute private lesson, with −15% on a package of 20. The first 30-minute trial lesson is free (0 lei).`,
   },
 ];
 

@@ -13,18 +13,18 @@ const FAQ = [
   },
   {
     q: "How much do the classes cost?",
-    a: `Group courses: ${PRICE.groupFromOnline} LEI / month online, ${PRICE.groupFromFizic} LEI / month in person in Bucharest (~€100 / €140). Private 1-on-1 lessons: ${PRICE.privateOnline} LEI online / ${PRICE.privateFizic} LEI in person, per 60 min (~€30 / €42). First 30-minute trial lesson is free.`,
+    a: `Group courses: ${PRICE.groupFromOnline} LEI / month online, ${PRICE.groupFromFizic} LEI / month in person in Bucharest (~€100 / €140). Private 1-on-1 lessons: ${PRICE.privateOnline} LEI online / ${PRICE.privateFizic} LEI in person, per 60 min (~€30 / €42). First 30-minute trial lesson is free (0 lei).`,
   },
   {
     q: "When do the classes run?",
-    a: "Group courses run on a fixed schedule, two 90-minute lessons a week; each group's days and times are shown when you sign up. The in-person groups running now meet Monday at 19:00 & Wednesday at 18:30 (A1), and Tuesday & Thursday 19:00–20:30 (A2). Private lessons are scheduled around your calendar.",
+    a: "Group courses run on a fixed schedule, two 90-minute lessons a week; each group has its own days and times, shown with that group, and where each running group has got to is shown live on its level page. Private lessons are scheduled around your calendar.",
   },
   {
     q: "Which dialect do you teach?",
     a: "Lebanese Arabic, a variety of Levantine Arabic that is understood across Lebanon, Syria, Jordan and Palestine (over 40 million native speakers). We teach Lebanese Arabic only: Modern Standard Arabic (MSA / Fusha) is not offered.",
   },
   {
-    q: "Is there a free trial?",
+    q: "Is there a free trial (0 lei)?",
     a: "Yes — a free 30-minute trial lesson with a native teacher. A secure card confirmation holds the spot, but the trial remains 0 LEI, with no obligation or auto-enrolment.",
   },
 ];
@@ -35,7 +35,7 @@ const ArabicClassesNearMe = () => (
     roHref="/cursuri-araba-bucuresti"
     title="Arabic classes near me — Bucharest & online worldwide"
     metaTitle="Arabic Classes Near Me — Bucharest & Online | Native Teacher"
-    description="Arabic classes in Bucharest or live online with a native Lebanese teacher. Small groups, CEFR A1–C2, practical conversation, free trial. From €100/month."
+    description="Arabic classes in Bucharest or live online with a native Lebanese teacher. Small groups, CEFR A1–C2, real conversation, free trial (0 lei). From €100/month."
     crumb="Arabic classes near me"
     lead="In-person Arabic classes in Bucharest and live online classes worldwide, taught by a native Lebanese teacher. Small groups (max 6 students online, 8 in person), CEFR-aligned A1–C2, or private 1-on-1 if you prefer."
   >
@@ -46,8 +46,8 @@ const ArabicClassesNearMe = () => (
     <ul>
       <li>
         <strong>In-person in Bucharest:</strong> Strada Icoanei 80, sector 2 —
-        the groups running now meet Monday at 19:00 & Wednesday at 18:30 (A1),
-        and Tuesday & Thursday 19:00–20:30 (A2).
+        A1 and A2 groups are running now. Each group has its own days and
+        times, and where each one has got to is shown live on its level page.
       </li>
       <li>
         <strong>Live online, worldwide:</strong> over Zoom, two 90-minute
@@ -107,7 +107,7 @@ const ArabicClassesNearMe = () => (
     </p>
 
     <p>
-      <Link to="/trial">Book the free 30-minute trial</Link> — you'll meet Ibra,
+      <Link to="/trial">Book the free 30-minute trial (0 lei)</Link> — you'll meet Ibra,
       see the method live, and decide whether in-person or online fits your life
       better.
     </p>

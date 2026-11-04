@@ -293,7 +293,7 @@ const CumAlegiProfesor = () => {
       <p>
         {en ? "The simplest test? A " : "Cel mai simplu test? O "}
         <Link to="/trial">
-          {en ? "free trial lesson" : "lecție de probă gratuită"}
+          {en ? "free trial lesson (0 lei)" : "lecție de probă gratuită (0 lei)"}
         </Link>
         {en
           ? " — you see the method directly, ask the questions above and decide with full information."
