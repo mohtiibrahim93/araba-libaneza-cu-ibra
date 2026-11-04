@@ -32,9 +32,8 @@ export const ONLINE_PRICES = {
   privateLesson: 150,
   /** Kids private 1:1 lesson (online). */
   kidsPrivateLesson: 150,
-  /** Kids group — monthly fee per child, minimum 4. The same online and in
-   *  person: the one course without the +40% in-centre markup (owner, 4 Nov
-   *  2026: 500 lei a month in person). */
+  /** Kids group — monthly fee per child, minimum 4 (online). In person takes
+   *  the same +40% as every other course. */
   kidsGroupMonthly: 500,
 };
 
@@ -140,8 +139,9 @@ export const PRICE = {
   /** Private 1:1 lesson, 60 minutes, online / in person. */
   privateOnline: ONLINE_PRICES.privateLesson,
   privateFizic: physicalPrice(ONLINE_PRICES.privateLesson),
-  /** Kids group, per child per month — the same online and in person. */
+  /** Kids group, per child per month (online). */
   kidsMonthly: ONLINE_PRICES.kidsGroupMonthly,
+  kidsMonthlyFizic: physicalPrice(ONLINE_PRICES.kidsGroupMonthly),
   /** A missed free trial is charged the price of a private lesson. */
   noShowFee: ONLINE_PRICES.privateLesson,
 } as const;

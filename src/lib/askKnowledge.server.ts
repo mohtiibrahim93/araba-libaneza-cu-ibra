@@ -37,7 +37,7 @@ PREȚURI (LEI; prețul fizic e cu 40% peste cel online)
 Grup, abonament lunar:
 ${(["A1", "A2", "B1", "B2", "C1", "C2"] as const).map((l) => `- ${groupLine(l)}`).join("\n")}
 Lecție privată: online ${ONLINE_PRICES.privateLesson} LEI, fizic ${physicalPrice(ONLINE_PRICES.privateLesson)} LEI per lecție. Reducere la pachet: -15% de la 20 de lecții (singura reducere la lecțiile private). Grup: -15% la plata integrală a cursului (online sau fizic).
-Copii (cursul nu este încă deschis; prețurile de mai jos sunt cele anunțate pentru când pornește, nu se poate plăti sau înscrie acum): lecție privată online ${ONLINE_PRICES.kidsPrivateLesson} LEI, fizic ${physicalPrice(ONLINE_PRICES.kidsPrivateLesson)} LEI; grup ${ONLINE_PRICES.kidsGroupMonthly} LEI/lună/copil, la fel online și fizic (grupe de maximum 6 copii, lecții de 60 de minute, maximum 8 lecții pe lună).
+Copii (cursul nu este încă deschis; prețurile de mai jos sunt cele anunțate pentru când pornește, nu se poate plăti sau înscrie acum): lecție privată online ${ONLINE_PRICES.kidsPrivateLesson} LEI, fizic ${physicalPrice(ONLINE_PRICES.kidsPrivateLesson)} LEI; grup online ${ONLINE_PRICES.kidsGroupMonthly} LEI/lună/copil, fizic ${physicalPrice(ONLINE_PRICES.kidsGroupMonthly)} LEI/lună/copil (grupe de maximum 6 copii, lecții de 60 de minute, maximum 8 lecții pe lună).
 
 NIVELURI (CEFR)
 A1 — 32 lecții, 48 h, vorbit. A2 — 56 lecții, 84 h. B1 — 72 lecții, 108 h. B2 — 72 lecții, 108 h. C1 — 72 lecții, 108 h, vorbit + scris. C2 — 72 lecții, 108 h, module tematice.

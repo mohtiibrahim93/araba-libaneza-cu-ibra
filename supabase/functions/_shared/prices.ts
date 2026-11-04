@@ -142,11 +142,11 @@ export function groupMonthsFor(level: string | null | undefined): number {
 // ---------------------------------------------------------------------------
 // Kids group course pricing
 //
-// Kids in this app = group course, 3 months, 500 LEI / month, online or in
-// person alike: the one course without the +40% in-centre markup (owner, 4 Nov
-// 2026). The group is not open yet; this is the shape it takes when it is.
-// No CEFR level, no price split by format, no volume discount. Mirrors the
-// price card displayed on the site (500 / month, 1.500 total, 1.275 LEI with
+// Kids in this app = group course, 3 months, 500 LEI / month online and the
+// usual +40% in person. The group is not open yet; this is the shape it takes
+// when it is.
+// No CEFR level, no online/fizic split, no volume discount. Mirrors the price
+// card displayed on the site (500 / month online, 1.500 total, 1.275 LEI with
 // the -15% upfront discount).
 // ---------------------------------------------------------------------------
 
@@ -159,11 +159,16 @@ export const KIDS_GROUP_MONTHS = 3;
 /**
  * Kids group monthly unit amount, in bani.
  *
- * The same online and in person (owner, 4 Nov 2026: 500 lei a month in
- * person), so the format is accepted but does not change the amount.
+ * Takes the same +40% in person as every other course. Format comes from the
+ * registration row; an unknown value falls back to online, the cheaper of the
+ * two, so a data gap can never overcharge.
  */
-export function kidsGroupMonthlyUnitAmount(_format?: string | null): number {
-  return KIDS_GROUP_MONTHLY * 100;
+export function kidsGroupMonthlyUnitAmount(format?: string | null): number {
+  const ron =
+    format === "fizic"
+      ? round10(KIDS_GROUP_MONTHLY * PHYSICAL_MULTIPLIER)
+      : KIDS_GROUP_MONTHLY;
+  return ron * 100;
 }
 
 /**
