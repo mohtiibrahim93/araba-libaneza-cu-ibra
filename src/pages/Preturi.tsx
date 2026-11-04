@@ -48,7 +48,7 @@ const PreturiPage = () => {
   const priv = ONLINE_PRICES.privateLesson;
   const privPack = (unit: number) =>
     Math.round(unit * PRIVATE_PACKAGE_SIZE * (1 - PRIVATE_PACKAGE_DISCOUNT));
-  const kidsFizic = physicalPrice(ONLINE_PRICES.kidsGroupMonthly);
+  const kidsFizic = ONLINE_PRICES.kidsGroupMonthly;
   const kidsDeposit = Math.round(kidsFizic * 0.25);
 
   const card = "rounded-3xl border border-[#E7E1D6] bg-card dark:border-border";

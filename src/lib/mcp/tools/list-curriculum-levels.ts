@@ -9,7 +9,7 @@ const LEVELS = [
     hours: 48,
     track: "Spoken",
     schedule:
-      "In person: Mon & Wed 19:00–20:30 group, 2 Sep – 21 Dec 2026 (32 lessons), Strada Icoanei 80 · in progress · Online: the Sat 12:00–13:30 / Sun 17:30–19:00 group is in progress and full; new online groups taught in Romanian and in English, max 6 each, are open for registration — dates on /cursuri/grup/a1",
+      "In person: Mon 19:00 & Wed 18:30 group, 2 Sep – 21 Dec 2026 (32 lessons), Strada Icoanei 80 · in progress · Online: the Sat 12:00–13:30 / Sun 17:30–19:00 group is in progress and full; new online groups taught in Romanian and in English, max 6 each, are open for registration — dates on /cursuri/grup/a1",
   },
   {
     id: "a2",

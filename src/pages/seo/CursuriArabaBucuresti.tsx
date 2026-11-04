@@ -9,7 +9,7 @@ const FAQ = [
   },
   {
     q: "Sunt cursuri de arabă în București pentru începători?",
-    a: "Da, nivelul A1 pornește de la zero — nu ai nevoie de nicio cunoștință prealabilă. Grupa A1 fizică în desfășurare are lecții luni și miercuri, 19:00–20:30 (grupa A2: marți și joi, la aceeași oră); noile grupe A1 online sunt deschise — datele le vezi pe pagina A1. Vezi și pagina „arabă pentru începători” pentru ce anume înveți în primele luni.",
+    a: "Da, nivelul A1 pornește de la zero — nu ai nevoie de nicio cunoștință prealabilă. Grupa A1 fizică în desfășurare are lecții luni la 19:00 și miercuri la 18:30 (grupa A2: marți și joi, 19:00–20:30); noile grupe A1 online sunt deschise — datele le vezi pe pagina A1. Vezi și pagina „arabă pentru începători” pentru ce anume înveți în primele luni.",
   },
   {
     q: "Cât costă un curs de arabă în București?",

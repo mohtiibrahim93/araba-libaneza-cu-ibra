@@ -70,9 +70,9 @@ export const courseMenu = (lang: "ro" | "en"): NavLink[] =>
 export const resourceMenu = (lang: "ro" | "en"): NavLink[] =>
   lang === "en"
     ? [
-        // The game is Romanian-only, so the English label says so rather than
-        // sending a reader to a page they cannot use without warning.
-        { to: "/joc", label: "The Yalla game (in Romanian)" },
+        // The game follows the site language (cards, drills, notes and level
+        // test), so the English menu points at its English page.
+        { to: "/en/play", label: "The Yalla game" },
         { to: "/en/learn-lebanese-arabic", label: "Learn Lebanese Arabic" },
         { to: "/en/how-to-learn-lebanese-arabic", label: "How to learn it" },
         {

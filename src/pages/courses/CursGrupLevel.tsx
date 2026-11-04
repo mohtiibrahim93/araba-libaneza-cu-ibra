@@ -576,8 +576,8 @@ const CursGrupLevel = () => {
                   <p className="text-sm text-muted-foreground mb-4">
                     {cohortStarted
                       ? lang === "en"
-                        ? "Until the course's last month, you can join a running group: message Ibra and you'll catch up on the lessons you missed together, free of charge. Where each group is, and until which lesson you can join, is shown in \"Groups in progress\" above. Or leave your details and we'll email you when the next group in this format opens."
-                        : "Până în ultima lună a cursului poți intra într-o grupă care a început: scrie-i lui Ibra și recuperați împreună, gratuit, lecțiile pierdute. Unde a ajuns fiecare grupă și până la ce lecție te poți alătura vezi mai sus, la „Grupe în desfășurare”. Sau lasă-ți datele și te anunțăm când pornește următoarea grupă în acest format."
+                        ? "Until the course's last month, you can join a running group on request: message Ibra and you'll catch up on the lessons you missed together, for a 200 lei catch-up fee. Where each group is, and until which lesson you can join, is shown in \"Groups in progress\" above. Or leave your details and we'll email you when the next group in this format opens."
+                        : "Până în ultima lună a cursului poți intra la cerere într-o grupă care a început: scrie-i lui Ibra și recuperați împreună lecțiile pierdute, cu o taxă de recuperare de 200 lei. Unde a ajuns fiecare grupă și până la ce lecție te poți alătura vezi mai sus, la „Grupe în desfășurare”. Sau lasă-ți datele și te anunțăm când pornește următoarea grupă în acest format."
                       : available
                         ? t.levelPageRegisterDesc
                         : t.levelPageInPrepDesc}

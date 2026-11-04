@@ -17,7 +17,7 @@ const FAQ = [
   },
   {
     q: "When do the classes run?",
-    a: "Group courses run on a fixed schedule, two 90-minute lessons a week; each group's days and times are shown when you sign up. The in-person groups running now meet Monday & Wednesday (A1) and Tuesday & Thursday (A2), 19:00–20:30. Private lessons are scheduled around your calendar.",
+    a: "Group courses run on a fixed schedule, two 90-minute lessons a week; each group's days and times are shown when you sign up. The in-person groups running now meet Monday at 19:00 & Wednesday at 18:30 (A1), and Tuesday & Thursday 19:00–20:30 (A2). Private lessons are scheduled around your calendar.",
   },
   {
     q: "Which dialect do you teach?",
@@ -46,8 +46,8 @@ const ArabicClassesNearMe = () => (
     <ul>
       <li>
         <strong>In-person in Bucharest:</strong> Strada Icoanei 80, sector 2 —
-        the groups running now meet Monday & Wednesday (A1) and Tuesday &
-        Thursday (A2), 19:00–20:30.
+        the groups running now meet Monday at 19:00 & Wednesday at 18:30 (A1),
+        and Tuesday & Thursday 19:00–20:30 (A2).
       </li>
       <li>
         <strong>Live online, worldwide:</strong> over Zoom, two 90-minute

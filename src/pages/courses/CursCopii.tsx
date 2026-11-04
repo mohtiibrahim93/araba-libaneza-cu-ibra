@@ -24,7 +24,7 @@ const CursCopii = () => {
   // in-person prices are shown — the online figures used to sit next to them.
   const en = lang === "en";
   const privFizic = physicalPrice(ONLINE_PRICES.kidsPrivateLesson);
-  const grpFizic = physicalPrice(ONLINE_PRICES.kidsGroupMonthly);
+  const grpFizic = ONLINE_PRICES.kidsGroupMonthly;
   const deposit = Math.round(grpFizic * 0.25);
   const soon = en ? "Coming soon" : "În curând";
   const card = "rounded-3xl border border-[#E7E1D6] bg-card dark:border-border";

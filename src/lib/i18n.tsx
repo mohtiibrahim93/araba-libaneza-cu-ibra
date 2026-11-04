@@ -444,9 +444,9 @@ export const translations = {
     capForming: "Grup în formare — primii {n} cursanți confirmă startul",
     kidsWaitlistTitle: "Lista de așteptare — Curs Copii",
     kidsWaitlistDesc:
-      "Grupa începe doar la minimum 4 copii. Plătește un avans rambursabil de 175 LEI (25%) ca să-ți păstrăm locul. Restul de 525 LEI se achită la startul cursului.",
+      "Grupa începe doar la minimum 4 copii. Plătește un avans rambursabil de 125 LEI (25%) ca să-ți păstrăm locul. Restul de 375 LEI se achită la startul cursului.",
     kidsWaitlistCheckbox:
-      "Vreau să plătesc avansul de 175 LEI acum (rambursabil dacă grupa nu pornește)",
+      "Vreau să plătesc avansul de 125 LEI acum (rambursabil dacă grupa nu pornește)",
     kidsWaitlistRedirect: "Te redirecționez către plata securizată Stripe…",
     kidsDepositFailedDesc:
       "Înscrierea ta a fost înregistrată, dar plata avansului nu a putut fi inițiată. Poți încerca din nou sau ne poți contacta pe WhatsApp.",
@@ -754,7 +754,7 @@ export const translations = {
     compareKidsLabel: "Copii",
     compareGroupPrice: `${PRICE.groupFromOnline}–${formatLei(PRICE.groupToOnline)} LEI / lună`,
     comparePrivatePrice: `${PRICE.privateOnline} LEI online · ${PRICE.privateFizic} LEI fizic / ședință`,
-    compareKidsPrice: `${PRICE.kidsMonthly} LEI online · ${PRICE.kidsMonthlyFizic} LEI fizic / copil`,
+    compareKidsPrice: `${PRICE.kidsMonthly} LEI / copil, online sau fizic`,
     compareGroupStudents: "online max. 6 (min. 3) · fizic max. 8 (min. 4)",
     comparePrivateStudents: "1",
     compareKidsStudents: "max. 6",
@@ -1406,9 +1406,9 @@ export const translations = {
     capForming: "Group forming — the first {n} students confirm the start",
     kidsWaitlistTitle: "Waitlist — Kids Course",
     kidsWaitlistDesc:
-      "The group starts only with a minimum of 4 children. Pay a refundable 175 LEI (25%) deposit to reserve your spot. The remaining 525 LEI is paid when the course starts.",
+      "The group starts only with a minimum of 4 children. Pay a refundable 125 LEI (25%) deposit to reserve your spot. The remaining 375 LEI is paid when the course starts.",
     kidsWaitlistCheckbox:
-      "I want to pay the 175 LEI deposit now (refundable if the group doesn't start)",
+      "I want to pay the 125 LEI deposit now (refundable if the group doesn't start)",
     kidsWaitlistRedirect: "Redirecting to secure Stripe checkout…",
     kidsDepositFailedDesc:
       "Your registration was recorded, but the deposit payment could not be started. You can retry or reach us on WhatsApp.",
@@ -1702,7 +1702,7 @@ export const translations = {
     compareKidsLabel: "Kids",
     compareGroupPrice: `${PRICE.groupFromOnline}–${formatLei(PRICE.groupToOnline, "en")} LEI / month`,
     comparePrivatePrice: `${PRICE.privateOnline} LEI online · ${PRICE.privateFizic} LEI in person / session`,
-    compareKidsPrice: `${PRICE.kidsMonthly} LEI online · ${PRICE.kidsMonthlyFizic} LEI in person / child`,
+    compareKidsPrice: `${PRICE.kidsMonthly} LEI / child, online or in person`,
     compareGroupStudents: "online max. 6 (min. 3) · fizic max. 8 (min. 4)",
     comparePrivateStudents: "1",
     compareKidsStudents: "max. 6",

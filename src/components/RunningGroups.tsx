@@ -23,8 +23,8 @@ import {
  * meeting links.
  *
  * And whether someone can still join (the owner's rule): yes until the last
- * month, by talking to Ibra, with the missed lessons caught up free of charge
- * and more intensively the later they join; not in the last month.
+ * month, on request (by talking to Ibra), with a 200 lei fee to catch up the
+ * missed lessons, more intensively the later they join; not in the last month.
  *
  * Renders nothing until there is something true to show.
  */
@@ -85,7 +85,7 @@ const COPY = {
     all: "Calendarul complet",
     hide: "Ascunde calendarul",
     joinOpen: (last: number) =>
-      `Te mai poți alătura până la lecția ${last}. Lecțiile pierdute le recuperăm împreună, gratuit, într-un ritm mai intens cu cât intri mai târziu.`,
+      `Te mai poți alătura până la lecția ${last}, la cerere. Lecțiile pierdute le recuperăm împreună, într-un ritm mai intens cu cât intri mai târziu; recuperarea costă 200 lei.`,
     joinCta: "Scrie-i lui Ibra",
     joinClosed:
       "Grupa e în ultima lună, așa că nu se mai poate intra. Te așteptăm la următoarea grupă.",
@@ -100,7 +100,7 @@ const COPY = {
     all: "Full calendar",
     hide: "Hide calendar",
     joinOpen: (last: number) =>
-      `You can still join until lesson ${last}. We catch up the lessons you missed together, free of charge, at a faster pace the later you join.`,
+      `You can still join until lesson ${last}, on request. We catch up the lessons you missed together, at a faster pace the later you join; the catch-up costs 200 lei.`,
     joinCta: "Message Ibra",
     joinClosed:
       "This group is in its last month, so it can't be joined any more. See you in the next group.",

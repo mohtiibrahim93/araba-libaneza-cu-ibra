@@ -57,8 +57,11 @@ const Footer = () => {
               </Link>
             </li>
             <li>
+              {/* /curs-araba-copii has no English twin, so in English it fell
+                  back to /en/learn-lebanese-arabic, a third link to the same
+                  page; the English kids course page is the right target. */}
               <Link
-                to="/curs-araba-copii"
+                to={lang === "en" ? "/en/courses/children" : "/curs-araba-copii"}
                 className="hover:text-foreground transition-colors"
               >
                 {lang === "en"
@@ -247,15 +250,20 @@ const Footer = () => {
             {lang === "en" ? "More in English" : "English"}
           </p>
           <ul className="space-y-3 text-sm leading-relaxed text-muted-foreground">
-            <li>
-              <Link
-                to="/en/learn-lebanese-arabic"
-                className="hover:text-foreground transition-colors"
-                hrefLang="en"
-              >
-                Learn Lebanese Arabic
-              </Link>
-            </li>
+            {/* In English the Guides column already links this page (its
+                overview link resolves here) and the FAQ, so they are listed
+                here only on the Romanian side, where nothing else does. */}
+            {lang !== "en" && (
+              <li>
+                <Link
+                  to="/en/learn-lebanese-arabic"
+                  className="hover:text-foreground transition-colors"
+                  hrefLang="en"
+                >
+                  Learn Lebanese Arabic
+                </Link>
+              </li>
+            )}
             <li>
               <Link
                 to="/en/how-to-learn-lebanese-arabic"
@@ -301,15 +309,17 @@ const Footer = () => {
                 Lebanese vs MSA vs Egyptian
               </Link>
             </li>
-            <li>
-              <Link
-                to="/en/faq"
-                className="hover:text-foreground transition-colors"
-                hrefLang="en"
-              >
-                Lebanese Arabic FAQ
-              </Link>
-            </li>
+            {lang !== "en" && (
+              <li>
+                <Link
+                  to="/en/faq"
+                  className="hover:text-foreground transition-colors"
+                  hrefLang="en"
+                >
+                  Lebanese Arabic FAQ
+                </Link>
+              </li>
+            )}
             <li>
               <Link
                 to="/de/arabisch-lernen"

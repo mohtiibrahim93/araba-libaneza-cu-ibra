@@ -51,8 +51,8 @@ const RO: CurriculumLevel[] = [
     hours: 48,
     trackLabel: "Vorbit",
     schedule: [
-      "Fizic: grupa de luni și miercuri 19:00–20:30 (Strada Icoanei 80) e în desfășurare",
-      "Online: grupe noi, în română și în engleză — datele și locurile libere le vezi la înscriere",
+      "Fizic: grupa de luni la 19:00 și miercuri la 18:30 (Strada Icoanei 80) e în desfășurare",
+      "Online: grupe noi, în română și în engleză",
       "Examen final inclus",
     ],
     intro: [
@@ -492,8 +492,8 @@ const EN: CurriculumLevel[] = [
     hours: 48,
     trackLabel: "Spoken",
     schedule: [
-      "In person: the Monday & Wednesday 19:00–20:30 group (Strada Icoanei 80) is in progress",
-      "Online: new groups, taught in Romanian and in English — dates and free places are shown when you sign up",
+      "In person: the Monday 19:00 & Wednesday 18:30 group (Strada Icoanei 80) is in progress",
+      "Online: new groups, taught in Romanian and in English",
       "Final exam included",
     ],
     intro: [

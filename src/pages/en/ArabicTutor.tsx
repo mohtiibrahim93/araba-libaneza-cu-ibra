@@ -72,7 +72,7 @@ const ArabicTutor = () => (
         minutes one-to-one, with {Math.round(PRIVATE_PACKAGE_DISCOUNT * 100)}%
         off a package of {PRIVATE_PACKAGE_SIZE} lessons — no subscription, no
         minimum term. The tutor is <strong>Ibra</strong>, a native Lebanese
-        speaker teaching from Bucharest for more than five years, live over
+        speaker teaching from Bucharest with 6+ years of teaching experience, live over
         video anywhere in the world or in person at Strada Icoanei 80. Lessons
         cover CEFR A1 to C2 in Lebanese Arabic — the Levantine dialect of
         Lebanon, Syria, Jordan and Palestine — and you speak in the first one,
