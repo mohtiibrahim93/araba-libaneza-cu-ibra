@@ -5,6 +5,8 @@ import { seoMeta } from "@/lib/seoHead";
 import { HOME_META } from "@/lib/pageMeta";
 import Navbar from "@/components/Navbar";
 import HeroSection from "@/components/HeroSection";
+import HomeTrustStrip from "@/components/HomeTrustStrip";
+import CurriculumPreview from "@/components/CurriculumPreview";
 import ArabiziShowcase from "@/components/ArabiziShowcase";
 import WhySection from "@/components/WhySection";
 import ResourcesTeaser from "@/components/ResourcesTeaser";
@@ -278,6 +280,7 @@ const PageContent = () => {
       <Navbar />
       <main id="main-content">
         <HeroSection />
+        <HomeTrustStrip />
         <Suspense
           fallback={<div className="min-h-[18rem]" aria-hidden="true" />}
         >
@@ -295,6 +298,7 @@ const PageContent = () => {
         >
           <ProgramsSection />
         </Suspense>
+        <CurriculumPreview />
         <FAQSection />
         <ResourcesTeaser />
         <CTASection />

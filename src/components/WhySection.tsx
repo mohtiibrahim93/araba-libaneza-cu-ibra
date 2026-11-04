@@ -1,5 +1,8 @@
 import {
+  Briefcase,
   Ear,
+  HeartHandshake,
+  Sprout,
   MapPin,
   MessagesSquare,
   Mic,
@@ -135,18 +138,35 @@ const WhySection = () => {
           ))}
         </ol>
 
-        <div className="mt-8 flex flex-col gap-5 rounded-3xl bg-brand-green px-6 py-6 text-white sm:px-8 md:flex-row md:items-center md:justify-between">
-          <p className="max-w-3xl text-base leading-relaxed text-white/90">
-            <strong className="text-white">
-              {en ? "Who is it for? " : "Pentru cine? "}
-            </strong>
-            {en
-              ? "Lebanese roots, a Lebanese partner or family, or work: official papers are in Standard Arabic, but daily life happens in dialect."
-              : "Rădăcini libaneze, partener sau familie din Liban, ori carieră: actele oficiale sunt în araba standard, dar viața de zi cu zi e în dialect."}
-          </p>
+        <div className="mt-8 flex flex-col gap-5 rounded-3xl bg-brand-green px-6 py-6 text-white sm:px-8">
+          <h3 className="font-display text-lg font-bold text-white">
+            {en ? "Who is it for?" : "Pentru cine?"}
+          </h3>
+          <ul className="grid gap-3 sm:grid-cols-3">
+            {(en
+              ? [
+                  { Icon: Sprout, title: "Lebanese roots", text: "" },
+                  { Icon: HeartHandshake, title: "A Lebanese partner or family", text: "" },
+                  { Icon: Briefcase, title: "Work", text: "Official papers are in Standard Arabic, but daily life happens in dialect." },
+                ]
+              : [
+                  { Icon: Sprout, title: "Rădăcini libaneze", text: "" },
+                  { Icon: HeartHandshake, title: "Partener sau familie din Liban", text: "" },
+                  { Icon: Briefcase, title: "Carieră", text: "Actele oficiale sunt în araba standard, dar viața de zi cu zi e în dialect." },
+                ]
+            ).map(({ Icon, title, text }) => (
+              <li key={title} className="flex items-start gap-3 rounded-2xl bg-white/10 p-4">
+                <Icon className="mt-0.5 h-5 w-5 shrink-0 text-white" aria-hidden="true" />
+                <div>
+                  <p className="font-semibold text-white">{title}</p>
+                  {text && <p className="mt-1 text-sm leading-relaxed text-white/85">{text}</p>}
+                </div>
+              </li>
+            ))}
+          </ul>
           <Link
             to="/trial"
-            className="inline-flex h-12 shrink-0 items-center justify-center rounded-xl bg-white px-6 font-semibold text-brand-green transition-opacity hover:opacity-90"
+            className="inline-flex h-12 shrink-0 self-start items-center justify-center rounded-xl bg-white px-6 font-semibold text-brand-green transition-opacity hover:opacity-90"
           >
             {en ? "Book the free trial →" : "Rezervă lecția gratuită →"}
           </Link>
