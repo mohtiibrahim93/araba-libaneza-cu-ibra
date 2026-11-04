@@ -138,7 +138,11 @@ describe("checkout, booking and webhook use it", () => {
   it("no longer promises a confirmed spot before the booking exists", () => {
     const index = read("src/pages/Index.tsx");
     expect(index).not.toContain("locul tău la proba gratuită e confirmat");
-    expect(index).toContain("Confirmarea programării vine pe email");
+    // The saved-card return lands on TrialConfirmed, which says the
+    // confirmation comes by email.
+    expect(read("src/pages/TrialConfirmed.tsx")).toContain(
+      "În câteva minute primești pe email confirmarea",
+    );
   });
 });
 

@@ -104,24 +104,9 @@ const PageContent = () => {
 
     // Return from the 0-lei trial card-on-file Stripe setup page.
     const trialCard = params.get("trial_card");
-    if (trialCard === "saved") {
-      toast.success(
-        lang === "en"
-          ? "Card saved — nothing was charged. Your confirmation arrives by email in a few minutes."
-          : "Cardul a fost salvat — nu s-a încasat nimic. Confirmarea programării vine pe email în câteva minute.",
-        { duration: 10000 },
-      );
-      // The trial is booked by the webhook once the card is saved, so the
-      // browser never sees booking-create for it: this return is the trial
-      // conversion. (It used to be a non-standard "TrialCardSaved" event, and
-      // trial_booking_complete had stopped firing for website trials.)
-      trackEvent("trial_booking_complete", {
-        event_type: "trial",
-        source: "card_saved",
-      });
-      // Keep the page it came back to (/en stays /en; audit P3 i18n #4).
-      window.history.replaceState({}, "", window.location.pathname);
-    } else if (trialCard === "canceled") {
+    // "saved" is no longer used: Stripe returns a saved card to
+    // /proba-confirmata (TrialConfirmed.tsx), which counts the trial.
+    if (trialCard === "canceled") {
       // The card IS the booking now: nothing is reserved until it is saved, so
       // this can no longer promise the slot still stands.
       toast.info(

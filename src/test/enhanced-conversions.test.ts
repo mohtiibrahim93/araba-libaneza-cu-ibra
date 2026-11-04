@@ -63,3 +63,20 @@ describe("user_data", () => {
     );
   });
 });
+
+describe("trial_booking_complete from booking-create (owner, 4 Nov 2026)", () => {
+  it("sets user_data from the request body before the event", () => {
+    const src = readFileSync("src/lib/tracking.ts", "utf8");
+    expect(src).toContain("body?.student_email");
+    expect(src).toContain("body?.student_phone");
+    expect(
+      src.indexOf('if (bookingType === "trial") setUserData(bookingUser)'),
+    ).toBeLessThan(src.indexOf('? "trial_booking_complete"'));
+  });
+
+  it("the dead ?trial_card=saved branch is gone from the homepage", () => {
+    const index = readFileSync("src/pages/Index.tsx", "utf8");
+    expect(index).not.toContain('trialCard === "saved"');
+    expect(index).not.toContain("trial_booking_complete");
+  });
+});

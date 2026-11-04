@@ -164,8 +164,10 @@ describe("Google's script waits for consent", () => {
   });
 
   it("counts a saved trial card as the trial conversion", () => {
+    // Stripe returns a saved card to TrialConfirmed (the homepage's old
+    // ?trial_card=saved branch was dead and is gone, owner 4 Nov 2026).
     const index = readFileSync(
-      resolve(process.cwd(), "src/pages/Index.tsx"),
+      resolve(process.cwd(), "src/pages/TrialConfirmed.tsx"),
       "utf8",
     );
     expect(code(index)).toContain(

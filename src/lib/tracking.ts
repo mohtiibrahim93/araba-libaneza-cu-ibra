@@ -295,6 +295,8 @@ export function initContactClickTracking() {
           : input.url;
     const isBookingCreate = url.includes("/functions/v1/booking-create");
     let bookingType: string | undefined;
+    // For user_data only; never put into an event parameter.
+    let bookingUser: UserData | undefined;
 
     if (isBookingCreate) {
       try {
@@ -304,9 +306,18 @@ export function initContactClickTracking() {
             : input instanceof Request
               ? await input.clone().text()
               : "";
-        bookingType = rawBody ? JSON.parse(rawBody)?.event_type : undefined;
+        const body = rawBody ? JSON.parse(rawBody) : undefined;
+        bookingType = body?.event_type;
+        // Field names as NativeScheduler sends them to booking-create.
+        bookingUser = {
+          email:
+            typeof body?.student_email === "string" ? body.student_email : null,
+          phone:
+            typeof body?.student_phone === "string" ? body.student_phone : null,
+        };
       } catch {
         bookingType = undefined;
+        bookingUser = undefined;
       }
     }
 
@@ -318,6 +329,7 @@ export function initContactClickTracking() {
         .json()
         .then((payload) => {
           if (!payload?.ok) return;
+          if (bookingType === "trial") setUserData(bookingUser);
           trackEvent(
             bookingType === "trial"
               ? "trial_booking_complete"
