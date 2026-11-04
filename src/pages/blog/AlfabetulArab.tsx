@@ -311,6 +311,19 @@ const AlfabetulArab = () => {
         </Link>
         .
       </p>
+
+      <InlineCta
+        title={{
+          ro: "Începe cu vorbirea, nu cu literele",
+          en: "Start with speaking, not letters",
+        }}
+        text={{
+          ro: "Rezervă o lecție gratuită de 30 de minute de arabă libaneză cu profesor nativ — online sau fizic în București.",
+          en: "Book a free 30-minute Lebanese Arabic lesson with a native teacher — online or in person in Bucharest.",
+        }}
+        href="/trial"
+        label={{ ro: "Rezervă lecția gratuită", en: "Book the free lesson" }}
+      />
     </BlogArticleLayout>
   );
 };
