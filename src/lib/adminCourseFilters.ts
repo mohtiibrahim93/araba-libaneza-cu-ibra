@@ -1,4 +1,5 @@
 import type { Registration } from "@/components/admin/types";
+import { displayPaymentStatus } from "@/components/admin/types";
 
 export const courseFilterKeys = [
   "format",
