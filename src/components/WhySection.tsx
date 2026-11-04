@@ -1,5 +1,8 @@
 import {
+  Briefcase,
   Ear,
+  HeartHandshake,
+  Sprout,
   MapPin,
   MessagesSquare,
   Mic,
@@ -163,7 +166,7 @@ const WhySection = () => {
           </ul>
           <Link
             to="/trial"
-            className="inline-flex h-12 shrink-0 items-center justify-center rounded-xl bg-white px-6 font-semibold text-brand-green transition-opacity hover:opacity-90"
+            className="inline-flex h-12 shrink-0 self-start items-center justify-center rounded-xl bg-white px-6 font-semibold text-brand-green transition-opacity hover:opacity-90"
           >
             {en ? "Book the free trial →" : "Rezervă lecția gratuită →"}
           </Link>
