@@ -37,6 +37,12 @@ const EN_FOR_RO: Record<string, string> = {
     "/en/arabic-dialects-guide/levantine-vs-maghrebi-arabic",
   "/dialecte-arabe/levantina-vs-peninsulara":
     "/en/arabic-dialects-guide/levantine-vs-peninsular-arabic",
+  "/dialecte-arabe/libaneza-vs-palestiniana":
+    "/en/arabic-dialects-guide/lebanese-vs-palestinian-arabic",
+  "/dialecte-arabe/libaneza-vs-iordaniana":
+    "/en/arabic-dialects-guide/lebanese-vs-jordanian-arabic",
+  "/dialecte-arabe/levantina-de-sud":
+    "/en/arabic-dialects-guide/south-levantine-arabic",
   "/ce-araba-sa-inveti": "/en/lebanese-arabic-vs-msa-vs-egyptian",
   // Resources / method
   // These three point at the resources article, which now has an English URL
@@ -59,6 +65,8 @@ const EN_FOR_RO: Record<string, string> = {
   "/test-de-nivel": "/en/level-test",
   "/te-ajutam": "/en/find-your-page",
   "/contact": "/en/contact",
+  "/despre-noi": "/en/about-us",
+  "/recenzii": "/en/reviews",
   "/rezervari": "/en/my-bookings",
   "/privacy": "/en/privacy",
   "/stergere-date": "/en/data-deletion",
@@ -140,6 +148,12 @@ const RO_FOR_EN: Record<string, string> = {
     "/dialecte-arabe/levantina-vs-maghrebina",
   "/en/arabic-dialects-guide/levantine-vs-peninsular-arabic":
     "/dialecte-arabe/levantina-vs-peninsulara",
+  "/en/arabic-dialects-guide/lebanese-vs-palestinian-arabic":
+    "/dialecte-arabe/libaneza-vs-palestiniana",
+  "/en/arabic-dialects-guide/lebanese-vs-jordanian-arabic":
+    "/dialecte-arabe/libaneza-vs-iordaniana",
+  "/en/arabic-dialects-guide/south-levantine-arabic":
+    "/dialecte-arabe/levantina-de-sud",
   "/en/arabic-classes-near-me": "/cursuri-araba-bucuresti",
   "/en/lebanese-arabic-vs-msa-vs-egyptian": "/ce-araba-sa-inveti",
   "/en/how-to-learn-lebanese-arabic": "/blog/cum-inveti-araba-libaneza",
@@ -154,6 +168,8 @@ const RO_FOR_EN: Record<string, string> = {
   "/en/level-test": "/test-de-nivel",
   "/en/find-your-page": "/te-ajutam",
   "/en/contact": "/contact",
+  "/en/about-us": "/despre-noi",
+  "/en/reviews": "/recenzii",
   "/en/my-bookings": "/rezervari",
   "/en/privacy": "/privacy",
   "/en/data-deletion": "/stergere-date",

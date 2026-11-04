@@ -25,6 +25,7 @@ import { Route as CursuriArabaRouteImport } from './routes/cursuri-araba'
 import { Route as CursuriArabaAdolescentiRouteImport } from './routes/cursuri-araba-adolescenti'
 import { Route as CursuriArabaBucurestiRouteImport } from './routes/cursuri-araba-bucuresti'
 import { Route as CursuriLimbaArabaRouteImport } from './routes/cursuri-limba-araba'
+import { Route as DespreNoiRouteImport } from './routes/despre-noi'
 import { Route as FaraAlfabetArabRouteImport } from './routes/fara-alfabet-arab'
 import { Route as IntrebariFrecventeRouteImport } from './routes/intrebari-frecvente'
 import { Route as InvataArabaRouteImport } from './routes/invata-araba'
@@ -38,6 +39,7 @@ import { Route as PreturiRouteImport } from './routes/preturi'
 import { Route as PrivacyRouteImport } from './routes/privacy'
 import { Route as ProbaConfirmataRouteImport } from './routes/proba-confirmata'
 import { Route as QuizRouteImport } from './routes/quiz'
+import { Route as RecenziiRouteImport } from './routes/recenzii'
 import { Route as ResurseRouteImport } from './routes/resurse'
 import { Route as RezervariRouteImport } from './routes/rezervari'
 import { Route as StergereDateRouteImport } from './routes/stergere-date'
@@ -86,13 +88,17 @@ import { Route as CursuriPrivateRouteImport } from './routes/cursuri/private'
 import { Route as CursuriTineriRouteImport } from './routes/cursuri/tineri'
 import { Route as DeArabischLernenRouteImport } from './routes/de/arabisch-lernen'
 import { Route as DialecteArabeIndexRouteImport } from './routes/dialecte-arabe/index'
+import { Route as DialecteArabeLevantinaDeSudRouteImport } from './routes/dialecte-arabe/levantina-de-sud'
 import { Route as DialecteArabeLevantinaVsGolfRouteImport } from './routes/dialecte-arabe/levantina-vs-golf'
 import { Route as DialecteArabeLevantinaVsIrakianaRouteImport } from './routes/dialecte-arabe/levantina-vs-irakiana'
 import { Route as DialecteArabeLevantinaVsMaghrebinaRouteImport } from './routes/dialecte-arabe/levantina-vs-maghrebina'
 import { Route as DialecteArabeLevantinaVsPeninsularaRouteImport } from './routes/dialecte-arabe/levantina-vs-peninsulara'
 import { Route as DialecteArabeLibanezaVsEgipteanaRouteImport } from './routes/dialecte-arabe/libaneza-vs-egipteana'
+import { Route as DialecteArabeLibanezaVsIordanianaRouteImport } from './routes/dialecte-arabe/libaneza-vs-iordaniana'
+import { Route as DialecteArabeLibanezaVsPalestinianaRouteImport } from './routes/dialecte-arabe/libaneza-vs-palestiniana'
 import { Route as DialecteArabeLibanezaVsSirianaRouteImport } from './routes/dialecte-arabe/libaneza-vs-siriana'
 import { Route as EnIndexRouteImport } from './routes/en/index'
+import { Route as EnAboutUsRouteImport } from './routes/en/about-us'
 import { Route as EnArabicClassesNearMeRouteImport } from './routes/en/arabic-classes-near-me'
 import { Route as EnArabicForTeenagersRouteImport } from './routes/en/arabic-for-teenagers'
 import { Route as EnArabicTutorRouteImport } from './routes/en/arabic-tutor'
@@ -114,6 +120,7 @@ import { Route as EnPlayRouteImport } from './routes/en/play'
 import { Route as EnPricesRouteImport } from './routes/en/prices'
 import { Route as EnPrivacyRouteImport } from './routes/en/privacy'
 import { Route as EnQuizRouteImport } from './routes/en/quiz'
+import { Route as EnReviewsRouteImport } from './routes/en/reviews'
 import { Route as EnTermsRouteImport } from './routes/en/terms'
 import { Route as EnTrialRouteImport } from './routes/en/trial'
 import { Route as EnTrialConfirmedRouteImport } from './routes/en/trial-confirmed'
@@ -129,11 +136,14 @@ import { Route as CursuriGrupIndexRouteImport } from './routes/cursuri/grup/inde
 import { Route as CursuriGrupLevelRouteImport } from './routes/cursuri/grup/$level'
 import { Route as EnArabicDialectsGuideIndexRouteImport } from './routes/en/arabic-dialects-guide/index'
 import { Route as EnArabicDialectsGuideLebaneseVsEgyptianArabicRouteImport } from './routes/en/arabic-dialects-guide/lebanese-vs-egyptian-arabic'
+import { Route as EnArabicDialectsGuideLebaneseVsJordanianArabicRouteImport } from './routes/en/arabic-dialects-guide/lebanese-vs-jordanian-arabic'
+import { Route as EnArabicDialectsGuideLebaneseVsPalestinianArabicRouteImport } from './routes/en/arabic-dialects-guide/lebanese-vs-palestinian-arabic'
 import { Route as EnArabicDialectsGuideLebaneseVsSyrianArabicRouteImport } from './routes/en/arabic-dialects-guide/lebanese-vs-syrian-arabic'
 import { Route as EnArabicDialectsGuideLevantineVsGulfArabicRouteImport } from './routes/en/arabic-dialects-guide/levantine-vs-gulf-arabic'
 import { Route as EnArabicDialectsGuideLevantineVsIraqiArabicRouteImport } from './routes/en/arabic-dialects-guide/levantine-vs-iraqi-arabic'
 import { Route as EnArabicDialectsGuideLevantineVsMaghrebiArabicRouteImport } from './routes/en/arabic-dialects-guide/levantine-vs-maghrebi-arabic'
 import { Route as EnArabicDialectsGuideLevantineVsPeninsularArabicRouteImport } from './routes/en/arabic-dialects-guide/levantine-vs-peninsular-arabic'
+import { Route as EnArabicDialectsGuideSouthLevantineArabicRouteImport } from './routes/en/arabic-dialects-guide/south-levantine-arabic'
 import { Route as EnBlogIndexRouteImport } from './routes/en/blog/index'
 import { Route as EnBlogSlugRouteImport } from './routes/en/blog/$slug'
 import { Route as EnBlogLearnLebaneseArabicRouteImport } from './routes/en/blog/learn-lebanese-arabic'
@@ -231,6 +241,11 @@ const CursuriLimbaArabaRoute = CursuriLimbaArabaRouteImport.update({
   path: '/cursuri-limba-araba',
   getParentRoute: () => rootRouteImport,
 } as any)
+const DespreNoiRoute = DespreNoiRouteImport.update({
+  id: '/despre-noi',
+  path: '/despre-noi',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const FaraAlfabetArabRoute = FaraAlfabetArabRouteImport.update({
   id: '/fara-alfabet-arab',
   path: '/fara-alfabet-arab',
@@ -294,6 +309,11 @@ const ProbaConfirmataRoute = ProbaConfirmataRouteImport.update({
 const QuizRoute = QuizRouteImport.update({
   id: '/quiz',
   path: '/quiz',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const RecenziiRoute = RecenziiRouteImport.update({
+  id: '/recenzii',
+  path: '/recenzii',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ResurseRoute = ResurseRouteImport.update({
@@ -557,6 +577,12 @@ const DialecteArabeIndexRoute = DialecteArabeIndexRouteImport.update({
   path: '/dialecte-arabe/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const DialecteArabeLevantinaDeSudRoute =
+  DialecteArabeLevantinaDeSudRouteImport.update({
+    id: '/dialecte-arabe/levantina-de-sud',
+    path: '/dialecte-arabe/levantina-de-sud',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 const DialecteArabeLevantinaVsGolfRoute =
   DialecteArabeLevantinaVsGolfRouteImport.update({
     id: '/dialecte-arabe/levantina-vs-golf',
@@ -587,6 +613,18 @@ const DialecteArabeLibanezaVsEgipteanaRoute =
     path: '/dialecte-arabe/libaneza-vs-egipteana',
     getParentRoute: () => rootRouteImport,
   } as any)
+const DialecteArabeLibanezaVsIordanianaRoute =
+  DialecteArabeLibanezaVsIordanianaRouteImport.update({
+    id: '/dialecte-arabe/libaneza-vs-iordaniana',
+    path: '/dialecte-arabe/libaneza-vs-iordaniana',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const DialecteArabeLibanezaVsPalestinianaRoute =
+  DialecteArabeLibanezaVsPalestinianaRouteImport.update({
+    id: '/dialecte-arabe/libaneza-vs-palestiniana',
+    path: '/dialecte-arabe/libaneza-vs-palestiniana',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 const DialecteArabeLibanezaVsSirianaRoute =
   DialecteArabeLibanezaVsSirianaRouteImport.update({
     id: '/dialecte-arabe/libaneza-vs-siriana',
@@ -596,6 +634,11 @@ const DialecteArabeLibanezaVsSirianaRoute =
 const EnIndexRoute = EnIndexRouteImport.update({
   id: '/en/',
   path: '/en/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const EnAboutUsRoute = EnAboutUsRouteImport.update({
+  id: '/en/about-us',
+  path: '/en/about-us',
   getParentRoute: () => rootRouteImport,
 } as any)
 const EnArabicClassesNearMeRoute = EnArabicClassesNearMeRouteImport.update({
@@ -706,6 +749,11 @@ const EnQuizRoute = EnQuizRouteImport.update({
   path: '/en/quiz',
   getParentRoute: () => rootRouteImport,
 } as any)
+const EnReviewsRoute = EnReviewsRouteImport.update({
+  id: '/en/reviews',
+  path: '/en/reviews',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const EnTermsRoute = EnTermsRouteImport.update({
   id: '/en/terms',
   path: '/en/terms',
@@ -783,6 +831,18 @@ const EnArabicDialectsGuideLebaneseVsEgyptianArabicRoute =
     path: '/en/arabic-dialects-guide/lebanese-vs-egyptian-arabic',
     getParentRoute: () => rootRouteImport,
   } as any)
+const EnArabicDialectsGuideLebaneseVsJordanianArabicRoute =
+  EnArabicDialectsGuideLebaneseVsJordanianArabicRouteImport.update({
+    id: '/en/arabic-dialects-guide/lebanese-vs-jordanian-arabic',
+    path: '/en/arabic-dialects-guide/lebanese-vs-jordanian-arabic',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const EnArabicDialectsGuideLebaneseVsPalestinianArabicRoute =
+  EnArabicDialectsGuideLebaneseVsPalestinianArabicRouteImport.update({
+    id: '/en/arabic-dialects-guide/lebanese-vs-palestinian-arabic',
+    path: '/en/arabic-dialects-guide/lebanese-vs-palestinian-arabic',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 const EnArabicDialectsGuideLebaneseVsSyrianArabicRoute =
   EnArabicDialectsGuideLebaneseVsSyrianArabicRouteImport.update({
     id: '/en/arabic-dialects-guide/lebanese-vs-syrian-arabic',
@@ -811,6 +871,12 @@ const EnArabicDialectsGuideLevantineVsPeninsularArabicRoute =
   EnArabicDialectsGuideLevantineVsPeninsularArabicRouteImport.update({
     id: '/en/arabic-dialects-guide/levantine-vs-peninsular-arabic',
     path: '/en/arabic-dialects-guide/levantine-vs-peninsular-arabic',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const EnArabicDialectsGuideSouthLevantineArabicRoute =
+  EnArabicDialectsGuideSouthLevantineArabicRouteImport.update({
+    id: '/en/arabic-dialects-guide/south-levantine-arabic',
+    path: '/en/arabic-dialects-guide/south-levantine-arabic',
     getParentRoute: () => rootRouteImport,
   } as any)
 const EnBlogIndexRoute = EnBlogIndexRouteImport.update({
@@ -913,6 +979,7 @@ export interface FileRoutesByFullPath {
   '/cursuri-araba-adolescenti': typeof CursuriArabaAdolescentiRoute
   '/cursuri-araba-bucuresti': typeof CursuriArabaBucurestiRoute
   '/cursuri-limba-araba': typeof CursuriLimbaArabaRoute
+  '/despre-noi': typeof DespreNoiRoute
   '/fara-alfabet-arab': typeof FaraAlfabetArabRoute
   '/intrebari-frecvente': typeof IntrebariFrecventeRoute
   '/invata-araba': typeof InvataArabaRoute
@@ -926,6 +993,7 @@ export interface FileRoutesByFullPath {
   '/privacy': typeof PrivacyRoute
   '/proba-confirmata': typeof ProbaConfirmataRoute
   '/quiz': typeof QuizRoute
+  '/recenzii': typeof RecenziiRoute
   '/resurse': typeof ResurseRoute
   '/rezervari': typeof RezervariRoute
   '/stergere-date': typeof StergereDateRoute
@@ -969,12 +1037,16 @@ export interface FileRoutesByFullPath {
   '/cursuri/private': typeof CursuriPrivateRoute
   '/cursuri/tineri': typeof CursuriTineriRoute
   '/de/arabisch-lernen': typeof DeArabischLernenRoute
+  '/dialecte-arabe/levantina-de-sud': typeof DialecteArabeLevantinaDeSudRoute
   '/dialecte-arabe/levantina-vs-golf': typeof DialecteArabeLevantinaVsGolfRoute
   '/dialecte-arabe/levantina-vs-irakiana': typeof DialecteArabeLevantinaVsIrakianaRoute
   '/dialecte-arabe/levantina-vs-maghrebina': typeof DialecteArabeLevantinaVsMaghrebinaRoute
   '/dialecte-arabe/levantina-vs-peninsulara': typeof DialecteArabeLevantinaVsPeninsularaRoute
   '/dialecte-arabe/libaneza-vs-egipteana': typeof DialecteArabeLibanezaVsEgipteanaRoute
+  '/dialecte-arabe/libaneza-vs-iordaniana': typeof DialecteArabeLibanezaVsIordanianaRoute
+  '/dialecte-arabe/libaneza-vs-palestiniana': typeof DialecteArabeLibanezaVsPalestinianaRoute
   '/dialecte-arabe/libaneza-vs-siriana': typeof DialecteArabeLibanezaVsSirianaRoute
+  '/en/about-us': typeof EnAboutUsRoute
   '/en/arabic-classes-near-me': typeof EnArabicClassesNearMeRoute
   '/en/arabic-for-teenagers': typeof EnArabicForTeenagersRoute
   '/en/arabic-tutor': typeof EnArabicTutorRoute
@@ -996,6 +1068,7 @@ export interface FileRoutesByFullPath {
   '/en/prices': typeof EnPricesRoute
   '/en/privacy': typeof EnPrivacyRoute
   '/en/quiz': typeof EnQuizRoute
+  '/en/reviews': typeof EnReviewsRoute
   '/en/terms': typeof EnTermsRoute
   '/en/trial': typeof EnTrialRoute
   '/en/trial-confirmed': typeof EnTrialConfirmedRoute
@@ -1015,11 +1088,14 @@ export interface FileRoutesByFullPath {
   '/cursuri/curs/$slug': typeof CursuriCursSlugRoute
   '/cursuri/grup/$level': typeof CursuriGrupLevelRoute
   '/en/arabic-dialects-guide/lebanese-vs-egyptian-arabic': typeof EnArabicDialectsGuideLebaneseVsEgyptianArabicRoute
+  '/en/arabic-dialects-guide/lebanese-vs-jordanian-arabic': typeof EnArabicDialectsGuideLebaneseVsJordanianArabicRoute
+  '/en/arabic-dialects-guide/lebanese-vs-palestinian-arabic': typeof EnArabicDialectsGuideLebaneseVsPalestinianArabicRoute
   '/en/arabic-dialects-guide/lebanese-vs-syrian-arabic': typeof EnArabicDialectsGuideLebaneseVsSyrianArabicRoute
   '/en/arabic-dialects-guide/levantine-vs-gulf-arabic': typeof EnArabicDialectsGuideLevantineVsGulfArabicRoute
   '/en/arabic-dialects-guide/levantine-vs-iraqi-arabic': typeof EnArabicDialectsGuideLevantineVsIraqiArabicRoute
   '/en/arabic-dialects-guide/levantine-vs-maghrebi-arabic': typeof EnArabicDialectsGuideLevantineVsMaghrebiArabicRoute
   '/en/arabic-dialects-guide/levantine-vs-peninsular-arabic': typeof EnArabicDialectsGuideLevantineVsPeninsularArabicRoute
+  '/en/arabic-dialects-guide/south-levantine-arabic': typeof EnArabicDialectsGuideSouthLevantineArabicRoute
   '/en/blog/$slug': typeof EnBlogSlugRoute
   '/en/blog/learn-lebanese-arabic': typeof EnBlogLearnLebaneseArabicRoute
   '/en/courses/adults': typeof EnCoursesAdultsRoute
@@ -1056,6 +1132,7 @@ export interface FileRoutesByTo {
   '/cursuri-araba-adolescenti': typeof CursuriArabaAdolescentiRoute
   '/cursuri-araba-bucuresti': typeof CursuriArabaBucurestiRoute
   '/cursuri-limba-araba': typeof CursuriLimbaArabaRoute
+  '/despre-noi': typeof DespreNoiRoute
   '/fara-alfabet-arab': typeof FaraAlfabetArabRoute
   '/intrebari-frecvente': typeof IntrebariFrecventeRoute
   '/invata-araba': typeof InvataArabaRoute
@@ -1068,6 +1145,7 @@ export interface FileRoutesByTo {
   '/privacy': typeof PrivacyRoute
   '/proba-confirmata': typeof ProbaConfirmataRoute
   '/quiz': typeof QuizRoute
+  '/recenzii': typeof RecenziiRoute
   '/resurse': typeof ResurseRoute
   '/rezervari': typeof RezervariRoute
   '/stergere-date': typeof StergereDateRoute
@@ -1111,12 +1189,16 @@ export interface FileRoutesByTo {
   '/cursuri/private': typeof CursuriPrivateRoute
   '/cursuri/tineri': typeof CursuriTineriRoute
   '/de/arabisch-lernen': typeof DeArabischLernenRoute
+  '/dialecte-arabe/levantina-de-sud': typeof DialecteArabeLevantinaDeSudRoute
   '/dialecte-arabe/levantina-vs-golf': typeof DialecteArabeLevantinaVsGolfRoute
   '/dialecte-arabe/levantina-vs-irakiana': typeof DialecteArabeLevantinaVsIrakianaRoute
   '/dialecte-arabe/levantina-vs-maghrebina': typeof DialecteArabeLevantinaVsMaghrebinaRoute
   '/dialecte-arabe/levantina-vs-peninsulara': typeof DialecteArabeLevantinaVsPeninsularaRoute
   '/dialecte-arabe/libaneza-vs-egipteana': typeof DialecteArabeLibanezaVsEgipteanaRoute
+  '/dialecte-arabe/libaneza-vs-iordaniana': typeof DialecteArabeLibanezaVsIordanianaRoute
+  '/dialecte-arabe/libaneza-vs-palestiniana': typeof DialecteArabeLibanezaVsPalestinianaRoute
   '/dialecte-arabe/libaneza-vs-siriana': typeof DialecteArabeLibanezaVsSirianaRoute
+  '/en/about-us': typeof EnAboutUsRoute
   '/en/arabic-classes-near-me': typeof EnArabicClassesNearMeRoute
   '/en/arabic-for-teenagers': typeof EnArabicForTeenagersRoute
   '/en/arabic-tutor': typeof EnArabicTutorRoute
@@ -1137,6 +1219,7 @@ export interface FileRoutesByTo {
   '/en/prices': typeof EnPricesRoute
   '/en/privacy': typeof EnPrivacyRoute
   '/en/quiz': typeof EnQuizRoute
+  '/en/reviews': typeof EnReviewsRoute
   '/en/terms': typeof EnTermsRoute
   '/en/trial': typeof EnTrialRoute
   '/en/trial-confirmed': typeof EnTrialConfirmedRoute
@@ -1156,11 +1239,14 @@ export interface FileRoutesByTo {
   '/cursuri/curs/$slug': typeof CursuriCursSlugRoute
   '/cursuri/grup/$level': typeof CursuriGrupLevelRoute
   '/en/arabic-dialects-guide/lebanese-vs-egyptian-arabic': typeof EnArabicDialectsGuideLebaneseVsEgyptianArabicRoute
+  '/en/arabic-dialects-guide/lebanese-vs-jordanian-arabic': typeof EnArabicDialectsGuideLebaneseVsJordanianArabicRoute
+  '/en/arabic-dialects-guide/lebanese-vs-palestinian-arabic': typeof EnArabicDialectsGuideLebaneseVsPalestinianArabicRoute
   '/en/arabic-dialects-guide/lebanese-vs-syrian-arabic': typeof EnArabicDialectsGuideLebaneseVsSyrianArabicRoute
   '/en/arabic-dialects-guide/levantine-vs-gulf-arabic': typeof EnArabicDialectsGuideLevantineVsGulfArabicRoute
   '/en/arabic-dialects-guide/levantine-vs-iraqi-arabic': typeof EnArabicDialectsGuideLevantineVsIraqiArabicRoute
   '/en/arabic-dialects-guide/levantine-vs-maghrebi-arabic': typeof EnArabicDialectsGuideLevantineVsMaghrebiArabicRoute
   '/en/arabic-dialects-guide/levantine-vs-peninsular-arabic': typeof EnArabicDialectsGuideLevantineVsPeninsularArabicRoute
+  '/en/arabic-dialects-guide/south-levantine-arabic': typeof EnArabicDialectsGuideSouthLevantineArabicRoute
   '/en/blog/$slug': typeof EnBlogSlugRoute
   '/en/blog/learn-lebanese-arabic': typeof EnBlogLearnLebaneseArabicRoute
   '/en/courses/adults': typeof EnCoursesAdultsRoute
@@ -1198,6 +1284,7 @@ export interface FileRoutesById {
   '/cursuri-araba-adolescenti': typeof CursuriArabaAdolescentiRoute
   '/cursuri-araba-bucuresti': typeof CursuriArabaBucurestiRoute
   '/cursuri-limba-araba': typeof CursuriLimbaArabaRoute
+  '/despre-noi': typeof DespreNoiRoute
   '/fara-alfabet-arab': typeof FaraAlfabetArabRoute
   '/intrebari-frecvente': typeof IntrebariFrecventeRoute
   '/invata-araba': typeof InvataArabaRoute
@@ -1211,6 +1298,7 @@ export interface FileRoutesById {
   '/privacy': typeof PrivacyRoute
   '/proba-confirmata': typeof ProbaConfirmataRoute
   '/quiz': typeof QuizRoute
+  '/recenzii': typeof RecenziiRoute
   '/resurse': typeof ResurseRoute
   '/rezervari': typeof RezervariRoute
   '/stergere-date': typeof StergereDateRoute
@@ -1254,12 +1342,16 @@ export interface FileRoutesById {
   '/cursuri/private': typeof CursuriPrivateRoute
   '/cursuri/tineri': typeof CursuriTineriRoute
   '/de/arabisch-lernen': typeof DeArabischLernenRoute
+  '/dialecte-arabe/levantina-de-sud': typeof DialecteArabeLevantinaDeSudRoute
   '/dialecte-arabe/levantina-vs-golf': typeof DialecteArabeLevantinaVsGolfRoute
   '/dialecte-arabe/levantina-vs-irakiana': typeof DialecteArabeLevantinaVsIrakianaRoute
   '/dialecte-arabe/levantina-vs-maghrebina': typeof DialecteArabeLevantinaVsMaghrebinaRoute
   '/dialecte-arabe/levantina-vs-peninsulara': typeof DialecteArabeLevantinaVsPeninsularaRoute
   '/dialecte-arabe/libaneza-vs-egipteana': typeof DialecteArabeLibanezaVsEgipteanaRoute
+  '/dialecte-arabe/libaneza-vs-iordaniana': typeof DialecteArabeLibanezaVsIordanianaRoute
+  '/dialecte-arabe/libaneza-vs-palestiniana': typeof DialecteArabeLibanezaVsPalestinianaRoute
   '/dialecte-arabe/libaneza-vs-siriana': typeof DialecteArabeLibanezaVsSirianaRoute
+  '/en/about-us': typeof EnAboutUsRoute
   '/en/arabic-classes-near-me': typeof EnArabicClassesNearMeRoute
   '/en/arabic-for-teenagers': typeof EnArabicForTeenagersRoute
   '/en/arabic-tutor': typeof EnArabicTutorRoute
@@ -1281,6 +1373,7 @@ export interface FileRoutesById {
   '/en/prices': typeof EnPricesRoute
   '/en/privacy': typeof EnPrivacyRoute
   '/en/quiz': typeof EnQuizRoute
+  '/en/reviews': typeof EnReviewsRoute
   '/en/terms': typeof EnTermsRoute
   '/en/trial': typeof EnTrialRoute
   '/en/trial-confirmed': typeof EnTrialConfirmedRoute
@@ -1300,11 +1393,14 @@ export interface FileRoutesById {
   '/cursuri/curs/$slug': typeof CursuriCursSlugRoute
   '/cursuri/grup/$level': typeof CursuriGrupLevelRoute
   '/en/arabic-dialects-guide/lebanese-vs-egyptian-arabic': typeof EnArabicDialectsGuideLebaneseVsEgyptianArabicRoute
+  '/en/arabic-dialects-guide/lebanese-vs-jordanian-arabic': typeof EnArabicDialectsGuideLebaneseVsJordanianArabicRoute
+  '/en/arabic-dialects-guide/lebanese-vs-palestinian-arabic': typeof EnArabicDialectsGuideLebaneseVsPalestinianArabicRoute
   '/en/arabic-dialects-guide/lebanese-vs-syrian-arabic': typeof EnArabicDialectsGuideLebaneseVsSyrianArabicRoute
   '/en/arabic-dialects-guide/levantine-vs-gulf-arabic': typeof EnArabicDialectsGuideLevantineVsGulfArabicRoute
   '/en/arabic-dialects-guide/levantine-vs-iraqi-arabic': typeof EnArabicDialectsGuideLevantineVsIraqiArabicRoute
   '/en/arabic-dialects-guide/levantine-vs-maghrebi-arabic': typeof EnArabicDialectsGuideLevantineVsMaghrebiArabicRoute
   '/en/arabic-dialects-guide/levantine-vs-peninsular-arabic': typeof EnArabicDialectsGuideLevantineVsPeninsularArabicRoute
+  '/en/arabic-dialects-guide/south-levantine-arabic': typeof EnArabicDialectsGuideSouthLevantineArabicRoute
   '/en/blog/$slug': typeof EnBlogSlugRoute
   '/en/blog/learn-lebanese-arabic': typeof EnBlogLearnLebaneseArabicRoute
   '/en/courses/adults': typeof EnCoursesAdultsRoute
@@ -1343,6 +1439,7 @@ export interface FileRouteTypes {
     | '/cursuri-araba-adolescenti'
     | '/cursuri-araba-bucuresti'
     | '/cursuri-limba-araba'
+    | '/despre-noi'
     | '/fara-alfabet-arab'
     | '/intrebari-frecvente'
     | '/invata-araba'
@@ -1356,6 +1453,7 @@ export interface FileRouteTypes {
     | '/privacy'
     | '/proba-confirmata'
     | '/quiz'
+    | '/recenzii'
     | '/resurse'
     | '/rezervari'
     | '/stergere-date'
@@ -1399,12 +1497,16 @@ export interface FileRouteTypes {
     | '/cursuri/private'
     | '/cursuri/tineri'
     | '/de/arabisch-lernen'
+    | '/dialecte-arabe/levantina-de-sud'
     | '/dialecte-arabe/levantina-vs-golf'
     | '/dialecte-arabe/levantina-vs-irakiana'
     | '/dialecte-arabe/levantina-vs-maghrebina'
     | '/dialecte-arabe/levantina-vs-peninsulara'
     | '/dialecte-arabe/libaneza-vs-egipteana'
+    | '/dialecte-arabe/libaneza-vs-iordaniana'
+    | '/dialecte-arabe/libaneza-vs-palestiniana'
     | '/dialecte-arabe/libaneza-vs-siriana'
+    | '/en/about-us'
     | '/en/arabic-classes-near-me'
     | '/en/arabic-for-teenagers'
     | '/en/arabic-tutor'
@@ -1426,6 +1528,7 @@ export interface FileRouteTypes {
     | '/en/prices'
     | '/en/privacy'
     | '/en/quiz'
+    | '/en/reviews'
     | '/en/terms'
     | '/en/trial'
     | '/en/trial-confirmed'
@@ -1445,11 +1548,14 @@ export interface FileRouteTypes {
     | '/cursuri/curs/$slug'
     | '/cursuri/grup/$level'
     | '/en/arabic-dialects-guide/lebanese-vs-egyptian-arabic'
+    | '/en/arabic-dialects-guide/lebanese-vs-jordanian-arabic'
+    | '/en/arabic-dialects-guide/lebanese-vs-palestinian-arabic'
     | '/en/arabic-dialects-guide/lebanese-vs-syrian-arabic'
     | '/en/arabic-dialects-guide/levantine-vs-gulf-arabic'
     | '/en/arabic-dialects-guide/levantine-vs-iraqi-arabic'
     | '/en/arabic-dialects-guide/levantine-vs-maghrebi-arabic'
     | '/en/arabic-dialects-guide/levantine-vs-peninsular-arabic'
+    | '/en/arabic-dialects-guide/south-levantine-arabic'
     | '/en/blog/$slug'
     | '/en/blog/learn-lebanese-arabic'
     | '/en/courses/adults'
@@ -1486,6 +1592,7 @@ export interface FileRouteTypes {
     | '/cursuri-araba-adolescenti'
     | '/cursuri-araba-bucuresti'
     | '/cursuri-limba-araba'
+    | '/despre-noi'
     | '/fara-alfabet-arab'
     | '/intrebari-frecvente'
     | '/invata-araba'
@@ -1498,6 +1605,7 @@ export interface FileRouteTypes {
     | '/privacy'
     | '/proba-confirmata'
     | '/quiz'
+    | '/recenzii'
     | '/resurse'
     | '/rezervari'
     | '/stergere-date'
@@ -1541,12 +1649,16 @@ export interface FileRouteTypes {
     | '/cursuri/private'
     | '/cursuri/tineri'
     | '/de/arabisch-lernen'
+    | '/dialecte-arabe/levantina-de-sud'
     | '/dialecte-arabe/levantina-vs-golf'
     | '/dialecte-arabe/levantina-vs-irakiana'
     | '/dialecte-arabe/levantina-vs-maghrebina'
     | '/dialecte-arabe/levantina-vs-peninsulara'
     | '/dialecte-arabe/libaneza-vs-egipteana'
+    | '/dialecte-arabe/libaneza-vs-iordaniana'
+    | '/dialecte-arabe/libaneza-vs-palestiniana'
     | '/dialecte-arabe/libaneza-vs-siriana'
+    | '/en/about-us'
     | '/en/arabic-classes-near-me'
     | '/en/arabic-for-teenagers'
     | '/en/arabic-tutor'
@@ -1567,6 +1679,7 @@ export interface FileRouteTypes {
     | '/en/prices'
     | '/en/privacy'
     | '/en/quiz'
+    | '/en/reviews'
     | '/en/terms'
     | '/en/trial'
     | '/en/trial-confirmed'
@@ -1586,11 +1699,14 @@ export interface FileRouteTypes {
     | '/cursuri/curs/$slug'
     | '/cursuri/grup/$level'
     | '/en/arabic-dialects-guide/lebanese-vs-egyptian-arabic'
+    | '/en/arabic-dialects-guide/lebanese-vs-jordanian-arabic'
+    | '/en/arabic-dialects-guide/lebanese-vs-palestinian-arabic'
     | '/en/arabic-dialects-guide/lebanese-vs-syrian-arabic'
     | '/en/arabic-dialects-guide/levantine-vs-gulf-arabic'
     | '/en/arabic-dialects-guide/levantine-vs-iraqi-arabic'
     | '/en/arabic-dialects-guide/levantine-vs-maghrebi-arabic'
     | '/en/arabic-dialects-guide/levantine-vs-peninsular-arabic'
+    | '/en/arabic-dialects-guide/south-levantine-arabic'
     | '/en/blog/$slug'
     | '/en/blog/learn-lebanese-arabic'
     | '/en/courses/adults'
@@ -1627,6 +1743,7 @@ export interface FileRouteTypes {
     | '/cursuri-araba-adolescenti'
     | '/cursuri-araba-bucuresti'
     | '/cursuri-limba-araba'
+    | '/despre-noi'
     | '/fara-alfabet-arab'
     | '/intrebari-frecvente'
     | '/invata-araba'
@@ -1640,6 +1757,7 @@ export interface FileRouteTypes {
     | '/privacy'
     | '/proba-confirmata'
     | '/quiz'
+    | '/recenzii'
     | '/resurse'
     | '/rezervari'
     | '/stergere-date'
@@ -1683,12 +1801,16 @@ export interface FileRouteTypes {
     | '/cursuri/private'
     | '/cursuri/tineri'
     | '/de/arabisch-lernen'
+    | '/dialecte-arabe/levantina-de-sud'
     | '/dialecte-arabe/levantina-vs-golf'
     | '/dialecte-arabe/levantina-vs-irakiana'
     | '/dialecte-arabe/levantina-vs-maghrebina'
     | '/dialecte-arabe/levantina-vs-peninsulara'
     | '/dialecte-arabe/libaneza-vs-egipteana'
+    | '/dialecte-arabe/libaneza-vs-iordaniana'
+    | '/dialecte-arabe/libaneza-vs-palestiniana'
     | '/dialecte-arabe/libaneza-vs-siriana'
+    | '/en/about-us'
     | '/en/arabic-classes-near-me'
     | '/en/arabic-for-teenagers'
     | '/en/arabic-tutor'
@@ -1710,6 +1832,7 @@ export interface FileRouteTypes {
     | '/en/prices'
     | '/en/privacy'
     | '/en/quiz'
+    | '/en/reviews'
     | '/en/terms'
     | '/en/trial'
     | '/en/trial-confirmed'
@@ -1729,11 +1852,14 @@ export interface FileRouteTypes {
     | '/cursuri/curs/$slug'
     | '/cursuri/grup/$level'
     | '/en/arabic-dialects-guide/lebanese-vs-egyptian-arabic'
+    | '/en/arabic-dialects-guide/lebanese-vs-jordanian-arabic'
+    | '/en/arabic-dialects-guide/lebanese-vs-palestinian-arabic'
     | '/en/arabic-dialects-guide/lebanese-vs-syrian-arabic'
     | '/en/arabic-dialects-guide/levantine-vs-gulf-arabic'
     | '/en/arabic-dialects-guide/levantine-vs-iraqi-arabic'
     | '/en/arabic-dialects-guide/levantine-vs-maghrebi-arabic'
     | '/en/arabic-dialects-guide/levantine-vs-peninsular-arabic'
+    | '/en/arabic-dialects-guide/south-levantine-arabic'
     | '/en/blog/$slug'
     | '/en/blog/learn-lebanese-arabic'
     | '/en/courses/adults'
@@ -1771,6 +1897,7 @@ export interface RootRouteChildren {
   CursuriArabaAdolescentiRoute: typeof CursuriArabaAdolescentiRoute
   CursuriArabaBucurestiRoute: typeof CursuriArabaBucurestiRoute
   CursuriLimbaArabaRoute: typeof CursuriLimbaArabaRoute
+  DespreNoiRoute: typeof DespreNoiRoute
   FaraAlfabetArabRoute: typeof FaraAlfabetArabRoute
   IntrebariFrecventeRoute: typeof IntrebariFrecventeRoute
   InvataArabaRoute: typeof InvataArabaRoute
@@ -1784,6 +1911,7 @@ export interface RootRouteChildren {
   PrivacyRoute: typeof PrivacyRoute
   ProbaConfirmataRoute: typeof ProbaConfirmataRoute
   QuizRoute: typeof QuizRoute
+  RecenziiRoute: typeof RecenziiRoute
   ResurseRoute: typeof ResurseRoute
   RezervariRoute: typeof RezervariRoute
   StergereDateRoute: typeof StergereDateRoute
@@ -1827,12 +1955,16 @@ export interface RootRouteChildren {
   CursuriPrivateRoute: typeof CursuriPrivateRoute
   CursuriTineriRoute: typeof CursuriTineriRoute
   DeArabischLernenRoute: typeof DeArabischLernenRoute
+  DialecteArabeLevantinaDeSudRoute: typeof DialecteArabeLevantinaDeSudRoute
   DialecteArabeLevantinaVsGolfRoute: typeof DialecteArabeLevantinaVsGolfRoute
   DialecteArabeLevantinaVsIrakianaRoute: typeof DialecteArabeLevantinaVsIrakianaRoute
   DialecteArabeLevantinaVsMaghrebinaRoute: typeof DialecteArabeLevantinaVsMaghrebinaRoute
   DialecteArabeLevantinaVsPeninsularaRoute: typeof DialecteArabeLevantinaVsPeninsularaRoute
   DialecteArabeLibanezaVsEgipteanaRoute: typeof DialecteArabeLibanezaVsEgipteanaRoute
+  DialecteArabeLibanezaVsIordanianaRoute: typeof DialecteArabeLibanezaVsIordanianaRoute
+  DialecteArabeLibanezaVsPalestinianaRoute: typeof DialecteArabeLibanezaVsPalestinianaRoute
   DialecteArabeLibanezaVsSirianaRoute: typeof DialecteArabeLibanezaVsSirianaRoute
+  EnAboutUsRoute: typeof EnAboutUsRoute
   EnArabicClassesNearMeRoute: typeof EnArabicClassesNearMeRoute
   EnArabicForTeenagersRoute: typeof EnArabicForTeenagersRoute
   EnArabicTutorRoute: typeof EnArabicTutorRoute
@@ -1854,6 +1986,7 @@ export interface RootRouteChildren {
   EnPricesRoute: typeof EnPricesRoute
   EnPrivacyRoute: typeof EnPrivacyRoute
   EnQuizRoute: typeof EnQuizRoute
+  EnReviewsRoute: typeof EnReviewsRoute
   EnTermsRoute: typeof EnTermsRoute
   EnTrialRoute: typeof EnTrialRoute
   EnTrialConfirmedRoute: typeof EnTrialConfirmedRoute
@@ -1871,11 +2004,14 @@ export interface RootRouteChildren {
   CursuriCursSlugRoute: typeof CursuriCursSlugRoute
   CursuriGrupLevelRoute: typeof CursuriGrupLevelRoute
   EnArabicDialectsGuideLebaneseVsEgyptianArabicRoute: typeof EnArabicDialectsGuideLebaneseVsEgyptianArabicRoute
+  EnArabicDialectsGuideLebaneseVsJordanianArabicRoute: typeof EnArabicDialectsGuideLebaneseVsJordanianArabicRoute
+  EnArabicDialectsGuideLebaneseVsPalestinianArabicRoute: typeof EnArabicDialectsGuideLebaneseVsPalestinianArabicRoute
   EnArabicDialectsGuideLebaneseVsSyrianArabicRoute: typeof EnArabicDialectsGuideLebaneseVsSyrianArabicRoute
   EnArabicDialectsGuideLevantineVsGulfArabicRoute: typeof EnArabicDialectsGuideLevantineVsGulfArabicRoute
   EnArabicDialectsGuideLevantineVsIraqiArabicRoute: typeof EnArabicDialectsGuideLevantineVsIraqiArabicRoute
   EnArabicDialectsGuideLevantineVsMaghrebiArabicRoute: typeof EnArabicDialectsGuideLevantineVsMaghrebiArabicRoute
   EnArabicDialectsGuideLevantineVsPeninsularArabicRoute: typeof EnArabicDialectsGuideLevantineVsPeninsularArabicRoute
+  EnArabicDialectsGuideSouthLevantineArabicRoute: typeof EnArabicDialectsGuideSouthLevantineArabicRoute
   EnBlogSlugRoute: typeof EnBlogSlugRoute
   EnBlogLearnLebaneseArabicRoute: typeof EnBlogLearnLebaneseArabicRoute
   EnCoursesAdultsRoute: typeof EnCoursesAdultsRoute
@@ -2008,6 +2144,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof CursuriLimbaArabaRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/despre-noi': {
+      id: '/despre-noi'
+      path: '/despre-noi'
+      fullPath: '/despre-noi'
+      preLoaderRoute: typeof DespreNoiRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/fara-alfabet-arab': {
       id: '/fara-alfabet-arab'
       path: '/fara-alfabet-arab'
@@ -2097,6 +2240,13 @@ declare module '@tanstack/react-router' {
       path: '/quiz'
       fullPath: '/quiz'
       preLoaderRoute: typeof QuizRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/recenzii': {
+      id: '/recenzii'
+      path: '/recenzii'
+      fullPath: '/recenzii'
+      preLoaderRoute: typeof RecenziiRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/resurse': {
@@ -2435,6 +2585,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DialecteArabeIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/dialecte-arabe/levantina-de-sud': {
+      id: '/dialecte-arabe/levantina-de-sud'
+      path: '/dialecte-arabe/levantina-de-sud'
+      fullPath: '/dialecte-arabe/levantina-de-sud'
+      preLoaderRoute: typeof DialecteArabeLevantinaDeSudRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/dialecte-arabe/levantina-vs-golf': {
       id: '/dialecte-arabe/levantina-vs-golf'
       path: '/dialecte-arabe/levantina-vs-golf'
@@ -2470,6 +2627,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DialecteArabeLibanezaVsEgipteanaRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/dialecte-arabe/libaneza-vs-iordaniana': {
+      id: '/dialecte-arabe/libaneza-vs-iordaniana'
+      path: '/dialecte-arabe/libaneza-vs-iordaniana'
+      fullPath: '/dialecte-arabe/libaneza-vs-iordaniana'
+      preLoaderRoute: typeof DialecteArabeLibanezaVsIordanianaRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/dialecte-arabe/libaneza-vs-palestiniana': {
+      id: '/dialecte-arabe/libaneza-vs-palestiniana'
+      path: '/dialecte-arabe/libaneza-vs-palestiniana'
+      fullPath: '/dialecte-arabe/libaneza-vs-palestiniana'
+      preLoaderRoute: typeof DialecteArabeLibanezaVsPalestinianaRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/dialecte-arabe/libaneza-vs-siriana': {
       id: '/dialecte-arabe/libaneza-vs-siriana'
       path: '/dialecte-arabe/libaneza-vs-siriana'
@@ -2482,6 +2653,13 @@ declare module '@tanstack/react-router' {
       path: '/en'
       fullPath: '/en/'
       preLoaderRoute: typeof EnIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/en/about-us': {
+      id: '/en/about-us'
+      path: '/en/about-us'
+      fullPath: '/en/about-us'
+      preLoaderRoute: typeof EnAboutUsRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/en/arabic-classes-near-me': {
@@ -2631,6 +2809,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof EnQuizRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/en/reviews': {
+      id: '/en/reviews'
+      path: '/en/reviews'
+      fullPath: '/en/reviews'
+      preLoaderRoute: typeof EnReviewsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/en/terms': {
       id: '/en/terms'
       path: '/en/terms'
@@ -2736,6 +2921,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof EnArabicDialectsGuideLebaneseVsEgyptianArabicRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/en/arabic-dialects-guide/lebanese-vs-jordanian-arabic': {
+      id: '/en/arabic-dialects-guide/lebanese-vs-jordanian-arabic'
+      path: '/en/arabic-dialects-guide/lebanese-vs-jordanian-arabic'
+      fullPath: '/en/arabic-dialects-guide/lebanese-vs-jordanian-arabic'
+      preLoaderRoute: typeof EnArabicDialectsGuideLebaneseVsJordanianArabicRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/en/arabic-dialects-guide/lebanese-vs-palestinian-arabic': {
+      id: '/en/arabic-dialects-guide/lebanese-vs-palestinian-arabic'
+      path: '/en/arabic-dialects-guide/lebanese-vs-palestinian-arabic'
+      fullPath: '/en/arabic-dialects-guide/lebanese-vs-palestinian-arabic'
+      preLoaderRoute: typeof EnArabicDialectsGuideLebaneseVsPalestinianArabicRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/en/arabic-dialects-guide/lebanese-vs-syrian-arabic': {
       id: '/en/arabic-dialects-guide/lebanese-vs-syrian-arabic'
       path: '/en/arabic-dialects-guide/lebanese-vs-syrian-arabic'
@@ -2769,6 +2968,13 @@ declare module '@tanstack/react-router' {
       path: '/en/arabic-dialects-guide/levantine-vs-peninsular-arabic'
       fullPath: '/en/arabic-dialects-guide/levantine-vs-peninsular-arabic'
       preLoaderRoute: typeof EnArabicDialectsGuideLevantineVsPeninsularArabicRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/en/arabic-dialects-guide/south-levantine-arabic': {
+      id: '/en/arabic-dialects-guide/south-levantine-arabic'
+      path: '/en/arabic-dialects-guide/south-levantine-arabic'
+      fullPath: '/en/arabic-dialects-guide/south-levantine-arabic'
+      preLoaderRoute: typeof EnArabicDialectsGuideSouthLevantineArabicRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/en/blog/': {
@@ -2928,6 +3134,7 @@ const rootRouteChildren: RootRouteChildren = {
   CursuriArabaAdolescentiRoute: CursuriArabaAdolescentiRoute,
   CursuriArabaBucurestiRoute: CursuriArabaBucurestiRoute,
   CursuriLimbaArabaRoute: CursuriLimbaArabaRoute,
+  DespreNoiRoute: DespreNoiRoute,
   FaraAlfabetArabRoute: FaraAlfabetArabRoute,
   IntrebariFrecventeRoute: IntrebariFrecventeRoute,
   InvataArabaRoute: InvataArabaRoute,
@@ -2941,6 +3148,7 @@ const rootRouteChildren: RootRouteChildren = {
   PrivacyRoute: PrivacyRoute,
   ProbaConfirmataRoute: ProbaConfirmataRoute,
   QuizRoute: QuizRoute,
+  RecenziiRoute: RecenziiRoute,
   ResurseRoute: ResurseRoute,
   RezervariRoute: RezervariRoute,
   StergereDateRoute: StergereDateRoute,
@@ -2993,6 +3201,7 @@ const rootRouteChildren: RootRouteChildren = {
   CursuriPrivateRoute: CursuriPrivateRoute,
   CursuriTineriRoute: CursuriTineriRoute,
   DeArabischLernenRoute: DeArabischLernenRoute,
+  DialecteArabeLevantinaDeSudRoute: DialecteArabeLevantinaDeSudRoute,
   DialecteArabeLevantinaVsGolfRoute: DialecteArabeLevantinaVsGolfRoute,
   DialecteArabeLevantinaVsIrakianaRoute: DialecteArabeLevantinaVsIrakianaRoute,
   DialecteArabeLevantinaVsMaghrebinaRoute:
@@ -3000,7 +3209,12 @@ const rootRouteChildren: RootRouteChildren = {
   DialecteArabeLevantinaVsPeninsularaRoute:
     DialecteArabeLevantinaVsPeninsularaRoute,
   DialecteArabeLibanezaVsEgipteanaRoute: DialecteArabeLibanezaVsEgipteanaRoute,
+  DialecteArabeLibanezaVsIordanianaRoute:
+    DialecteArabeLibanezaVsIordanianaRoute,
+  DialecteArabeLibanezaVsPalestinianaRoute:
+    DialecteArabeLibanezaVsPalestinianaRoute,
   DialecteArabeLibanezaVsSirianaRoute: DialecteArabeLibanezaVsSirianaRoute,
+  EnAboutUsRoute: EnAboutUsRoute,
   EnArabicClassesNearMeRoute: EnArabicClassesNearMeRoute,
   EnArabicForTeenagersRoute: EnArabicForTeenagersRoute,
   EnArabicTutorRoute: EnArabicTutorRoute,
@@ -3022,6 +3236,7 @@ const rootRouteChildren: RootRouteChildren = {
   EnPricesRoute: EnPricesRoute,
   EnPrivacyRoute: EnPrivacyRoute,
   EnQuizRoute: EnQuizRoute,
+  EnReviewsRoute: EnReviewsRoute,
   EnTermsRoute: EnTermsRoute,
   EnTrialRoute: EnTrialRoute,
   EnTrialConfirmedRoute: EnTrialConfirmedRoute,
@@ -3040,6 +3255,10 @@ const rootRouteChildren: RootRouteChildren = {
   CursuriGrupLevelRoute: CursuriGrupLevelRoute,
   EnArabicDialectsGuideLebaneseVsEgyptianArabicRoute:
     EnArabicDialectsGuideLebaneseVsEgyptianArabicRoute,
+  EnArabicDialectsGuideLebaneseVsJordanianArabicRoute:
+    EnArabicDialectsGuideLebaneseVsJordanianArabicRoute,
+  EnArabicDialectsGuideLebaneseVsPalestinianArabicRoute:
+    EnArabicDialectsGuideLebaneseVsPalestinianArabicRoute,
   EnArabicDialectsGuideLebaneseVsSyrianArabicRoute:
     EnArabicDialectsGuideLebaneseVsSyrianArabicRoute,
   EnArabicDialectsGuideLevantineVsGulfArabicRoute:
@@ -3050,6 +3269,8 @@ const rootRouteChildren: RootRouteChildren = {
     EnArabicDialectsGuideLevantineVsMaghrebiArabicRoute,
   EnArabicDialectsGuideLevantineVsPeninsularArabicRoute:
     EnArabicDialectsGuideLevantineVsPeninsularArabicRoute,
+  EnArabicDialectsGuideSouthLevantineArabicRoute:
+    EnArabicDialectsGuideSouthLevantineArabicRoute,
   EnBlogSlugRoute: EnBlogSlugRoute,
   EnBlogLearnLebaneseArabicRoute: EnBlogLearnLebaneseArabicRoute,
   EnCoursesAdultsRoute: EnCoursesAdultsRoute,

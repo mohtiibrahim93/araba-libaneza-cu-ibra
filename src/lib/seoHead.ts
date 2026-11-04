@@ -142,6 +142,32 @@ const STATIC_ROUTES: SeoRoute[] = [
     lang: "en",
   },
   {
+    path: "/despre-noi",
+    title: "Despre noi — Profesor nativ Ibra | Arabă libaneză",
+    description:
+      "Ibra, profesor nativ din Liban: experiență, metodă conversațională fără alfabet arab și recenzii. Cursuri online pe Zoom și în București.",
+  },
+  {
+    path: "/en/about-us",
+    title: "About us — Native teacher Ibra | Lebanese Arabic",
+    description:
+      "Ibra, a native teacher from Lebanon: experience, a conversation-first method without the Arabic alphabet, and reviews. Online on Zoom and in Bucharest.",
+    lang: "en",
+  },
+  {
+    path: "/recenzii",
+    title: "Recenzii cursanți — Arabă libaneză cu Ibra",
+    description:
+      "Ce spun cursanții care au învățat arabă libaneză cu Ibra: recenzii reale de la lecții online și din București.",
+  },
+  {
+    path: "/en/reviews",
+    title: "Student reviews — Lebanese Arabic with Ibra",
+    description:
+      "What students who learned Lebanese Arabic with Ibra say: real reviews from online lessons and our Bucharest centre.",
+    lang: "en",
+  },
+  {
     path: "/rezervari",
     title: "Rezervările mele — Arabă Libaneză cu Ibra",
     description:
@@ -301,7 +327,7 @@ const STATIC_ROUTES: SeoRoute[] = [
     description:
       "Ghid clar al dialectelor arabe: levantin, egiptean, din Golf, maghrebin și irakian. Vezi cine pe cine înțelege și ce dialect merită învățat.",
   },
-  // The six dialect comparisons, one level below /dialecte-arabe. Nested in the
+  // The nine dialect comparisons, one level below /dialecte-arabe. Nested in the
   // URL because the hierarchy is real: /ce-araba-sa-inveti decides, the survey
   // maps the families, each comparison takes one pair in depth.
   {
@@ -339,6 +365,24 @@ const STATIC_ROUTES: SeoRoute[] = [
     title: "Araba Levantină vs Araba din Peninsula Arabică",
     description:
       "Hijazi, najdi, yemenită: ce se vorbește în Arabia Saudită și Yemen, prin ce diferă de levantină și cât te ajută libaneza dacă ajungi acolo.",
+  },
+  {
+    path: "/dialecte-arabe/libaneza-vs-palestiniana",
+    title: "Araba Libaneză vs Palestiniană: Ce Schimbă Accentul",
+    description:
+      "Libaneză sau palestiniană? Pronunție, negație cu -sh, cuvinte de zi cu zi și cât de ușor treci de la una la alta. Ghid de la un profesor nativ libanez.",
+  },
+  {
+    path: "/dialecte-arabe/libaneza-vs-iordaniana",
+    title: "Araba Libaneză vs Iordaniană: Diferențe și Asemănări",
+    description:
+      "Cât de diferită e araba din Iordania de cea libaneză? Amman, accent beduin, negație cu -sh și ce înțelegi dacă înveți libaneza. Ghid practic, pe înțeles.",
+  },
+  {
+    path: "/dialecte-arabe/levantina-de-sud",
+    title: "Levantina de Sud vs Nord: Cele 4 Accente Shami",
+    description:
+      "Nord sau sud? Libaneză și siriană în nord, palestiniană și iordaniană în sud. Diferențele de pronunție, negație și vocabular — și pe care s-o înveți.",
   },
   {
     path: "/ce-araba-sa-inveti",
@@ -386,20 +430,20 @@ const STATIC_ROUTES: SeoRoute[] = [
   // ones the Romanian URLs render; only the URL and this head differ.
   // English twins of the remaining bilingual pages. The components already
   // carry both languages; these give the English side an address.
-  // English twins of the six dialect comparisons, nested under the guide the
+  // English twins of the nine dialect comparisons, nested under the guide the
   // same way the Romanian ones are nested under /dialecte-arabe.
   {
     path: "/en/arabic-dialects-guide/lebanese-vs-egyptian-arabic",
-    title: "Lebanese vs Egyptian Arabic: Every Difference",
+    title: "Lebanese vs Egyptian Arabic: Differences & Which to Learn",
     description:
-      "Lebanese or Egyptian Arabic? Compare pronunciation, grammar and vocabulary, see the same sentence in both, and get a straight answer on which to learn.",
+      "The same sentence in Lebanese and Egyptian Arabic, side by side: pronunciation, grammar and everyday words, plus a straight answer on which to learn first.",
     lang: "en",
   },
   {
     path: "/en/arabic-dialects-guide/lebanese-vs-syrian-arabic",
-    title: "Lebanese vs Syrian, Palestinian and Jordanian Arabic",
+    title: "Lebanese vs Syrian Arabic: How Different Are They?",
     description:
-      "How different is Lebanese from Syrian, Palestinian and Jordanian Arabic? Pronunciation, negation, vocabulary, and what learning one gets you in the others.",
+      "Lebanese and Syrian Arabic are close, but not identical. See the real differences in sounds, words and phrases, side by side, from a native Lebanese teacher.",
     lang: "en",
   },
   {
@@ -428,6 +472,27 @@ const STATIC_ROUTES: SeoRoute[] = [
     title: "Levantine vs Peninsular Arabic: Hijazi and Najdi",
     description:
       "Hijazi, Najdi, Yemeni: what is spoken in Saudi Arabia and Yemen, how it differs from Levantine, and how far Lebanese Arabic gets you if you go there.",
+    lang: "en",
+  },
+  {
+    path: "/en/arabic-dialects-guide/lebanese-vs-palestinian-arabic",
+    title: "Lebanese vs Palestinian Arabic: What Actually Differs",
+    description:
+      "Lebanese or Palestinian Arabic? The qaf, the -sh negation, everyday words and how easily one dialect carries you into the other. By a native teacher.",
+    lang: "en",
+  },
+  {
+    path: "/en/arabic-dialects-guide/lebanese-vs-jordanian-arabic",
+    title: "Lebanese vs Jordanian Arabic: The Real Differences",
+    description:
+      "How far is Jordanian Arabic from Lebanese? Amman speech, the Bedouin g, the -sh negation and what learning Lebanese gets you in Jordan.",
+    lang: "en",
+  },
+  {
+    path: "/en/arabic-dialects-guide/south-levantine-arabic",
+    title: "South vs North Levantine Arabic: The Four Accents",
+    description:
+      "North or south? Lebanese and Syrian in the north, Palestinian and Jordanian in the south. The differences in sound, negation and words — and what to learn.",
     lang: "en",
   },
   {
@@ -802,6 +867,18 @@ const LANDING_PAIRS: Array<[string, string]> = [
     "/dialecte-arabe/levantina-vs-peninsulara",
     "/en/arabic-dialects-guide/levantine-vs-peninsular-arabic",
   ],
+  [
+    "/dialecte-arabe/libaneza-vs-palestiniana",
+    "/en/arabic-dialects-guide/lebanese-vs-palestinian-arabic",
+  ],
+  [
+    "/dialecte-arabe/libaneza-vs-iordaniana",
+    "/en/arabic-dialects-guide/lebanese-vs-jordanian-arabic",
+  ],
+  [
+    "/dialecte-arabe/levantina-de-sud",
+    "/en/arabic-dialects-guide/south-levantine-arabic",
+  ],
   ["/intrebari-frecvente", "/en/faq"],
   ["/joc", "/en/play"],
   ["/joc/scor", "/en/play/score"],
@@ -818,6 +895,8 @@ const COURSE_PAIRS: Array<[string, string]> = [
   ["/quiz", "/en/quiz"],
   ["/te-ajutam", "/en/find-your-page"],
   ["/contact", "/en/contact"],
+  ["/despre-noi", "/en/about-us"],
+  ["/recenzii", "/en/reviews"],
   ["/rezervari", "/en/my-bookings"],
   ["/privacy", "/en/privacy"],
   ["/stergere-date", "/en/data-deletion"],

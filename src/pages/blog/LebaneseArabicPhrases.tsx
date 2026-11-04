@@ -12,43 +12,18 @@ const GROUPS: { titleEn: string; titleRo: string; rows: Row[] }[] = [
     titleRo: "Salut și politețe",
     rows: [
       { arabizi: "mar7aba", arabic: "مرحبا", en: "hi", ro: "bună" },
-      {
-        arabizi: "ahla w sahla",
-        arabic: "أهلا وسهلا",
-        en: "welcome",
-        ro: "bine ai venit",
-      },
-      {
-        arabizi: "kifak / kifik",
-        arabic: "كيفك",
-        en: "how are you (m/f)",
-        ro: "ce faci (m/f)",
-      },
-      {
-        arabizi: "mniih, hamdillah",
-        arabic: "منيح، الحمد لله",
-        en: "fine, thank God",
-        ro: "bine, slavă Domnului",
-      },
-      { arabizi: "shukran", arabic: "شكرا", en: "thank you", ro: "mulțumesc" },
+      { arabizi: "ahla w sahla", arabic: "أهلا وسهلا", en: "welcome", ro: "bine ai venit" },
+      { arabizi: "kifak / kifik", arabic: "كيفك", en: "how are you (m/f)", ro: "ce faci (m/f)" },
+      { arabizi: "mnii7, l7amdilla", arabic: "منيح، الحمد لله", en: "fine, thank God", ro: "bine, slavă Domnului" },
       {
         arabizi: "3afwan",
         arabic: "عفوا",
-        en: "you're welcome",
-        ro: "cu plăcere",
+        en: "you're welcome / sorry / pardon (\"ahlan\" or \"ahla w sahla\" also work as \"you're welcome\")",
+        ro: "cu plăcere / scuze / pardon (și „ahlan” sau „ahla w sahla” merg ca „cu plăcere”)",
       },
-      {
-        arabizi: "law sama7et / sama7te",
-        arabic: "لو سمحت",
-        en: "please (m/f)",
-        ro: "te rog (m/f)",
-      },
-      {
-        arabizi: "3an iznak",
-        arabic: "عن إذنك",
-        en: "excuse me",
-        ro: "scuză-mă",
-      },
+      { arabizi: "shukran", arabic: "شكرا", en: "thank you", ro: "mulțumesc" },
+      { arabizi: "law sama7et / sama7te", arabic: "لو سمحت", en: "please (m/f)", ro: "te rog (m/f)" },
+      { arabizi: "3an eznak", arabic: "عن إذنك", en: "excuse me", ro: "scuză-mă" },
       { arabizi: "yalla bye", arabic: "يلا باي", en: "bye", ro: "pa" },
     ],
   },
@@ -56,78 +31,28 @@ const GROUPS: { titleEn: string; titleRo: string; rows: Row[] }[] = [
     titleEn: "Introducing yourself",
     titleRo: "Prezentare",
     rows: [
-      {
-        arabizi: "ismi ...",
-        arabic: "اسمي ...",
-        en: "my name is ...",
-        ro: "numele meu este ...",
-      },
-      {
-        arabizi: "ana min ...",
-        arabic: "أنا من ...",
-        en: "I'm from ...",
-        ro: "sunt din ...",
-      },
-      {
-        arabizi: "ana 3aayesh bi Bucharest",
-        arabic: "أنا عايش ببوخارست",
-        en: "I live in Bucharest",
-        ro: "locuiesc în București",
-      },
-      {
-        arabizi: "b7ib el 3arabe",
-        arabic: "بحب العربي",
-        en: "I like Arabic",
-        ro: "îmi place araba",
-      },
-      {
-        arabizi: "3am et3allam 3arabe",
-        arabic: "عم أتعلم عربي",
-        en: "I'm learning Arabic",
-        ro: "învăț arabă",
-      },
+      { arabizi: "esme ...", arabic: "اسمي ...", en: "my name is ...", ro: "numele meu este ..." },
+      { arabizi: "ana men ...", arabic: "أنا من ...", en: "I'm from ...", ro: "sunt din ..." },
+      { arabizi: "ana 3aayesh b bu5arest", arabic: "أنا عايش ببوخارست", en: "I live in Bucharest", ro: "trăiesc în București" },
+      { arabizi: "b7ebb el 3arabe", arabic: "بحب العربي", en: "I like Arabic", ro: "îmi place araba" },
+      { arabizi: "3am bet3allam 3arabe", arabic: "عم بتعلم عربي", en: "I'm learning Arabic", ro: "învăț arabă" },
     ],
   },
   {
     titleEn: "Café, restaurant, taxi",
     titleRo: "Cafenea, restaurant, taxi",
     rows: [
+      { arabizi: "baddi ahwe, law sama7et", arabic: "بدي قهوة، لو سمحت", en: "I'd like a coffee, please", ro: "vreau o cafea, te rog" },
       {
-        arabizi: "baddi ahwe, law sama7et",
-        arabic: "بدي قهوة، لو سمحت",
-        en: "I'd like a coffee, please",
-        ro: "vreau o cafea, te rog",
+        arabizi: "b2adde hayda? / hayde? (f) / hol? (pl) · adde se3ro? / se3ra? (f) / se3ron? (pl)",
+        arabic: "بقدّي هيدا؟ / هيدي؟ / هول؟ · قدّي سعرو؟ / سعرا؟ / سعرن؟",
+        en: "how much is this? (m / f / plural) · what's its price?",
+        ro: "cât costă asta? (m / f / plural) · cât e prețul?",
       },
-      {
-        arabizi: "bikam hayda?",
-        arabic: "بكم هيدا؟",
-        en: "how much is this?",
-        ro: "cât costă asta?",
-      },
-      {
-        arabizi: "el 7saab, law sama7et",
-        arabic: "الحساب، لو سمحت",
-        en: "the bill, please",
-        ro: "nota, te rog",
-      },
-      {
-        arabizi: "lawein ...?",
-        arabic: "لوين ...؟",
-        en: "where to ...?",
-        ro: "către ...?",
-      },
-      {
-        arabizi: "3al yamin / 3al shmeel",
-        arabic: "عاليمين / عالشمال",
-        en: "on the right / on the left",
-        ro: "la dreapta / la stânga",
-      },
-      {
-        arabizi: "dughri",
-        arabic: "دغري",
-        en: "straight ahead",
-        ro: "drept înainte",
-      },
+      { arabizi: "el 7seeb law sama7et / el 7seeb eza betriid", arabic: "الحساب لو سمحت / الحساب إذا بتريد", en: "the bill, please", ro: "nota, te rog" },
+      { arabizi: "la wen?", arabic: "لوين؟", en: "where to?", ro: "către unde? încotro?" },
+      { arabizi: "3al yamiin / 3al shmeel", arabic: "عاليمين / عالشمال", en: "on the right / on the left", ro: "la dreapta / la stânga" },
+      { arabizi: "de8re / du8re", arabic: "دغري", en: "straight ahead", ro: "drept înainte" },
       { arabizi: "hon", arabic: "هون", en: "here", ro: "aici" },
     ],
   },
@@ -135,56 +60,26 @@ const GROUPS: { titleEn: string; titleRo: string; rows: Row[] }[] = [
     titleEn: "Small talk & feelings",
     titleRo: "Smalltalk și sentimente",
     rows: [
-      {
-        arabizi: "shu 3am ta3mel?",
-        arabic: "شو عم تعمل؟",
-        en: "what are you doing?",
-        ro: "ce faci?",
-      },
-      {
-        arabizi: "wein raye7?",
-        arabic: "وين رايح؟",
-        en: "where are you going?",
-        ro: "unde te duci?",
-      },
-      { arabizi: "mabsoot", arabic: "مبسوط", en: "happy", ro: "fericit" },
-      { arabizi: "ta3ban", arabic: "تعبان", en: "tired", ro: "obosit" },
-      { arabizi: "jou3an", arabic: "جوعان", en: "hungry", ro: "flămând" },
-      {
-        arabizi: "ma fi mushkile",
-        arabic: "ما في مشكلة",
-        en: "no problem",
-        ro: "nicio problemă",
-      },
-      { arabizi: "akid", arabic: "أكيد", en: "sure / definitely", ro: "sigur" },
-      {
-        arabizi: "wallaw",
-        arabic: "ولّاو",
-        en: "come on / no way",
-        ro: "haide / imposibil",
-      },
+      { arabizi: "shu 3am ta3mol? (m) / ta3mle? (f) / ta3mlo? (pl)", arabic: "شو عم تعمل؟ / تعملي؟ / تعملو؟", en: "what are you doing? (m / f / plural)", ro: "ce faci? (m / f / plural)" },
+      { arabizi: "(la) wen raye7? (m) / ray7a? (f)", arabic: "لوين رايح؟ / رايحة؟", en: "where are you going? (m / f)", ro: "unde te duci? (m / f)" },
+      { arabizi: "mabsuut", arabic: "مبسوط", en: "happy", ro: "fericit" },
+      { arabizi: "ta3been", arabic: "تعبان", en: "tired", ro: "obosit" },
+      { arabizi: "ju3aan", arabic: "جوعان", en: "hungry", ro: "flămând" },
+      { arabizi: "ma fi meshkle", arabic: "ما في مشكلة", en: "no problem", ro: "nicio problemă" },
+      { arabizi: "akiid", arabic: "أكيد", en: "sure / definitely", ro: "sigur" },
+      { arabizi: "walaw", arabic: "ولو", en: "come on / no way", ro: "haide / imposibil" },
     ],
   },
   {
     titleEn: "Time & basic questions",
     titleRo: "Timp și întrebări de bază",
     rows: [
-      { arabizi: "eymta?", arabic: "إيمتى؟", en: "when?", ro: "când?" },
-      { arabizi: "lyoum", arabic: "اليوم", en: "today", ro: "azi" },
+      { arabizi: "aymta? / aymtiin?", arabic: "إيمتى؟ / إيمتين؟", en: "when?", ro: "când?" },
+      { arabizi: "liom", arabic: "اليوم", en: "today", ro: "azi" },
       { arabizi: "bukra", arabic: "بكرا", en: "tomorrow", ro: "mâine" },
       { arabizi: "mbeere7", arabic: "مبارح", en: "yesterday", ro: "ieri" },
-      {
-        arabizi: "3ala keef",
-        arabic: "على كيف",
-        en: "at your ease",
-        ro: "cum vrei",
-      },
-      {
-        arabizi: "shu badak?",
-        arabic: "شو بدك؟",
-        en: "what do you want?",
-        ro: "ce vrei?",
-      },
+      { arabizi: "metel ma baddak / 3a raa7tak", arabic: "متل ما بدك / عراحتك", en: "as you like / at your ease", ro: "cum vrei / cum îți convine" },
+      { arabizi: "shu baddak?", arabic: "شو بدك؟", en: "what do you want?", ro: "ce vrei?" },
     ],
   },
 ];
@@ -274,8 +169,8 @@ const LebaneseArabicPhrases = () => {
       </p>
       <p>
         {en
-          ? "Written in arabizi (Latin transliteration) with the Arabic script for reference. Numbers in arabizi replace sounds that don't exist in English: 3 = ع, 7 = ح, 2 = ء, 5 = خ."
-          : "Scrise în arabizi (transliterare latină) cu scrierea arabă pentru referință. Cifrele din arabizi înlocuiesc sunete care nu există în română: 3 = ع, 7 = ح, 2 = ء, 5 = خ."}{" "}
+          ? "Written in arabizi (Latin transliteration) with the Arabic script for reference. Numbers in arabizi replace sounds that don't exist in English: 3 = ع, 7 = ح, 2 = ء, 5 = خ, 8 = غ."
+          : "Scrise în arabizi (transliterare latină) cu scrierea arabă pentru referință. Cifrele din arabizi înlocuiesc sunete care nu există în română: 3 = ع, 7 = ح, 2 = ء, 5 = خ, 8 = غ."}{" "}
         <Link to="/blog/ce-este-arabizi">
           {en ? "More about arabizi." : "Mai multe despre arabizi."}
         </Link>
