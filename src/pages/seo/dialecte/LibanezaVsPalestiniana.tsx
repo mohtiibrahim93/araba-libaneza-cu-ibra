@@ -8,8 +8,8 @@ import DialectSiblings from "@/components/seo/DialectSiblings";
  * Palestinian Arabic, seen from Beirut.
  *
  * The Syrian page already carries the four-way comparison; this one takes the
- * southern pair on its own, because „familia mea e din Ramallah" and „familia
- * mea e din Damasc" sunt două întrebări diferite cu care vine un cursant.
+ * southern pair on its own, because „familia mea e din Ramallah” and „familia
+ * mea e din Damasc” sunt două întrebări diferite cu care vine un cursant.
  * Tabelul păstrează criteriile și ordinea din celelalte pagini, ca setul să se
  * citească ca un singur instrument, nu ca șase pagini scrise de șase mâini.
  */
@@ -20,7 +20,7 @@ const FAQ = [
   },
   {
     q: "Dacă învăț libaneza, vorbesc cu un palestinian?",
-    a: "Da. Un vorbitor de libaneză poartă conversații normale la Ramallah, Ierusalim sau Nablus. Ajustările sunt mici: sufixul -sh la negație, „hāla" în loc de „halla2" pentru „acum" și câteva zeci de cuvinte locale.",
+    a: "Da. Un vorbitor de libaneză poartă conversații normale la Ramallah, Ierusalim sau Nablus. Ajustările sunt mici: sufixul -sh la negație, „hāla” în loc de „halla2” pentru „acum” și câteva zeci de cuvinte locale.",
   },
   {
     q: "Palestiniana e o singură vorbire?",
@@ -28,7 +28,7 @@ const FAQ = [
   },
   {
     q: "Ce cuvinte se schimbă cel mai des între libaneză și palestiniană?",
-    a: "„Vreau": baddi în libaneză, biddi în palestiniană. „Acum": halla2 față de hāla. „Acesta": hāda față de hādhīri. „Foarte": ktīr față de kthīr. „Bine, ok": ṭayyib sau zyēn față de tamām.",
+    a: "„Vreau”: baddi în libaneză, biddi în palestiniană. „Acum”: halla2 față de hāla. „Acesta”: hāda față de hādhīri. „Foarte”: ktīr față de kthīr. „Bine, ok”: ṭayyib sau zyēn față de tamām.",
   },
   {
     q: "Merită să învăț palestiniana în loc de libaneza?",
@@ -53,7 +53,7 @@ const LibanezaVsPalestiniana = () => (
       Libaneza și palestiniana sunt <strong>două variante ale levantinei</strong>{" "}
       (shami): libaneza aparține grupului de nord, palestiniana celui de sud.
       Același prefix <em>b-</em> pentru prezent, același <em>baddi / biddi</em>{" "}
-      pentru „vreau", aceleași pronume, aceeași construcție a negației.
+      pentru „vreau”, aceleași pronume, aceeași construcție a negației.
       Diferența audibilă stă în trei lucruri: palestiniana adaugă des sufixul{" "}
       <em>-sh</em> la negație (<em>ma baʿrafsh</em>), nu închide vocala ā spre ē
       (deci <em>kān</em>, nu <em>kēn</em>) și are un alt strat de cuvinte
@@ -73,7 +73,7 @@ const LibanezaVsPalestiniana = () => (
         ],
         [
           "Litera ق",
-          "Oprire glotală: ʾalb („inimă").",
+          "Oprire glotală: ʾalb („inimă”).",
           "Oprire glotală în orașe; k tare în sate; k mai moale, spre č, în sudul zonei și în Gaza.",
         ],
         [
@@ -144,7 +144,7 @@ const LibanezaVsPalestiniana = () => (
       apropiată de libaneză și de siriana din Damasc: aceeași oprire glotală
       pentru ق, aceeași intonație. În vorbirea de sat, qaf-ul revine la un{" "}
       <em>k</em> tare, iar în partea de sud a zonei și în Gaza un <em>k</em>
-      iese mai moale, spre <em>č</em> („ch"). La toate se adaugă stratul
+      iese mai moale, spre <em>č</em> („ch”). La toate se adaugă stratul
       local de împrumuturi: turcă din secolele otomane, engleză din mandat și
       din școală, ebraică din contactul de zi cu zi. Pentru un cursant, consecința
       e simplă: înveți o bază levantină și ajustezi vocabularul după zona

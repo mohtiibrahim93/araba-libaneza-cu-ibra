@@ -8,7 +8,7 @@ import DialectSiblings from "@/components/seo/DialectSiblings";
  * The south–north line inside Levantine, on its own page.
  *
  * The four-way comparison (libaneza-vs-siriana) answers „cât de diferite
- * sunt cele patru". This one answers the question a learner asks before
+ * sunt cele patru”. This one answers the question a learner asks before
  * that: which side of the line they are learning, and what changes when
  * they cross it. Criteria and their order follow the other comparison
  * pages so the set stays one instrument.
@@ -54,7 +54,7 @@ const LevantinaDeSud = () => (
       Damasc, Alep). <strong>Levantina de sud</strong> = palestiniană +
       iordaniană (Ierusalim, Ramallah, Gaza, Amman, Irbid). Gramatica e
       comună: același prefix <em>b-</em> pentru prezent, același{" "}
-      <em>baddi / biddi</em> pentru „vreau", aceleași pronume. Ce se schimbă
+      <em>baddi / biddi</em> pentru „vreau”, aceleași pronume. Ce se schimbă
       e un sufix de negație, pronunția lui <strong>ق</strong>, culoarea
       vocalelor și intonația.
     </p>

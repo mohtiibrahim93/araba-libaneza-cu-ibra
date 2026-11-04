@@ -10,7 +10,7 @@ import DialectSiblings from "@/components/seo/DialectSiblings";
  * Jordan is the Levantine variety that sits closest to the Gulf and to the
  * desert register, so the page carries three columns instead of two: urban
  * Amman and Bedouin speech really are two different answers to „cum se
- * vorbește în Iordania". Criteria and their order follow the other
+ * vorbește în Iordania”. Criteria and their order follow the other
  * comparison pages so the set stays one instrument.
  */
 const FAQ = [
@@ -28,7 +28,7 @@ const FAQ = [
   },
   {
     q: "Ce cuvinte se schimbă cel mai des între libaneză și iordaniană?",
-    a: "„Vreau": baddi față de biddi. „Acum": halla2 față de hēla. „Acesta": hāda față de hādhīri. „Foarte": ktīr față de kthīr. „De unde": mnēn față de min wēn. „Ok": ṭayyib față de tamām.",
+    a: "„Vreau”: baddi față de biddi. „Acum”: halla2 față de hēla. „Acesta”: hāda față de hādhīri. „Foarte”: ktīr față de kthīr. „De unde”: mnēn față de min wēn. „Ok”: ṭayyib față de tamām.",
   },
   {
     q: "Iordaniana e mai aproape de libaneză sau de araba din Golf?",
@@ -53,7 +53,7 @@ const LibanezaVsIordaniana = () => (
       Iordaniana e <strong>levantină de sud</strong>, la fel ca palestiniana,
       iar libaneza e <strong>levantină de nord</strong>. Ce înveți la un curs
       de libaneză se aude aproape la fel în Amman: același <em>b-</em> pentru
-      prezent, același <em>biddi</em> pentru „vreau", aceleași pronume. Ce se
+      prezent, același <em>biddi</em> pentru „vreau”, aceleași pronume. Ce se
       schimbă e negația (sufixul <em>-sh</em>), pronunția lui{" "}
       <strong>ق</strong> și câteva cuvinte de zi cu zi. Iar în Iordania însăși
       ai două vorbiri: urbană, apropiată de cea palestiniană, și beduină, cu
@@ -86,7 +86,7 @@ const LibanezaVsIordaniana = () => (
           "Litera ك",
           "Rămâne k: kēn.",
           "Rămâne k: kān.",
-          "Despre č („ch") în multe cuvinte.",
+          "Despre č („ch”) în multe cuvinte.",
         ],
         [
           "Vocala ā",
