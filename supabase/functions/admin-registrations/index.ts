@@ -35,6 +35,12 @@ import {
   TRIAL_NO_SHOW_FEE_BANI,
 } from "../_shared/prices.ts";
 import { sendTemplateEmail } from "../_shared/managed-email.ts";
+import {
+  groupMonths,
+  monthsToCover,
+  MANUAL_METHODS,
+  type MonthPaymentRow,
+} from "../_shared/group-months.ts";
 import { notifyGoogleCancellations } from "../_shared/calendar-cancel-emails.ts";
 import { verifyRegistrationSignature } from "../_shared/registration-access.ts";
 import {
@@ -1134,18 +1140,23 @@ Deno.serve(async (req) => {
     // Read-only course overview. Occupancy remains owned by the existing RPC;
     // payment counts only describe registrations with recorded payment states.
     if (action === "course_overview") {
-      const [cohorts, registrations, manual, occupancy] = await Promise.all([
-        readAll(
-          "group_cohorts",
-          "id,form_type,course_type,title_ro,level,format,age_category,teaching_language,start_date,end_date,schedule_label_ro,status,max_seats,manual_offset",
-        ),
-        readAll(
-          "registrations",
-          "cohort_id,payment_status,refunded_at,lead_status",
-        ),
-        readAll("manual_signups", "cohort_id,count"),
-        supabase.rpc("get_cohort_signup_counts"),
-      ]);
+      const [cohorts, registrations, manual, occupancy, paymentRows] =
+        await Promise.all([
+          readAll(
+            "group_cohorts",
+            "id,form_type,course_type,title_ro,level,format,age_category,teaching_language,start_date,end_date,schedule_label_ro,status,max_seats,manual_offset",
+          ),
+          readAll(
+            "registrations",
+            "id,cohort_id,form_type,level,months_total,payment_status,refunded_at,lead_status,anonymized_at",
+          ),
+          readAll("manual_signups", "cohort_id,count"),
+          supabase.rpc("get_cohort_signup_counts"),
+          readAll(
+            "registration_payments",
+            "id,registration_id,kind,method,amount_lei,paid_at,month_from,month_to",
+          ),
+        ]);
       if (occupancy.error) throw occupancy.error;
       const seats = new Map(
         (occupancy.data ?? []).map(
@@ -1166,6 +1177,33 @@ Deno.serve(async (req) => {
             : r.payment_status || "unspecified";
           payments[state] = (payments[state] ?? 0) + 1;
         }
+        // "Plătit la zi" / "Neplătit": the month rule the student sheet and
+        // Acasă use (_shared/group-months.ts). Not counted: refunded, erased,
+        // incomplete forms and students the owner has given up on.
+        const months = { up_to_date: 0, unpaid: 0 };
+        if (c.form_type === "group")
+          for (const r of regs) {
+            if (r.refunded_at || r.anonymized_at) continue;
+            if (r.payment_status === "refunded") continue;
+            if (
+              ["incomplete", "no_response", "not_suitable", "spam"].includes(
+                r.lead_status as string,
+              )
+            )
+              continue;
+            const level = String(c.level ?? r.level ?? "A1").toUpperCase();
+            const summary = groupMonths({
+              total:
+                r.months_total ??
+                GROUP_MONTHS[level as keyof typeof GROUP_MONTHS] ??
+                GROUP_MONTHS.A1,
+              startDate: c.start_date ?? null,
+              rows: (paymentRows.data ?? []).filter(
+                (p) => p.registration_id === r.id,
+              ) as MonthPaymentRow[],
+            });
+            months[summary.status] += 1;
+          }
         return {
           ...c,
           taken:
@@ -1179,6 +1217,7 @@ Deno.serve(async (req) => {
             .filter((r) => r.cohort_id === c.id)
             .reduce((sum: number, r) => sum + Number(r.count), 0),
           payments,
+          month_status: months,
         };
       });
       return jsonResponse({ data });
@@ -3408,7 +3447,8 @@ Deno.serve(async (req) => {
           .select(
             "id, created_at, name, phone, email, form_type, level, format, payment_status, lead_status",
           )
-          .in("form_type", ["group", "private", "kids"])
+          // Group students follow the month rule below, not payment_status.
+          .in("form_type", ["private", "kids"])
           // free: nothing is owed (a lesson given for free).
           .not("payment_status", "in", '("paid","refunded","free")')
           .is("anonymized_at", null)
@@ -3467,9 +3507,20 @@ Deno.serve(async (req) => {
       // is, so a later request from them can be read against it. Filtered here
       // rather than in SQL: lead_status may be NULL, and NOT IN drops NULLs.
       const DROPPED_LEADS = ["no_response", "not_suitable", "spam"];
-      const owing = (unpaid ?? []).filter(
-        (r) => !DROPPED_LEADS.includes(r.lead_status as string),
-      );
+      // Group students: owing when a month due so far is neither paid nor
+      // granted (_shared/group-months.ts), the rule the student sheet and the
+      // group cards use. A paid first month no longer hides an unpaid third.
+      const groupOwing = await groupStudentsOwing(supabase, {
+        snoozeBefore: new Date(now).toISOString(),
+        staleAfter,
+      });
+      const owing = [...(unpaid ?? []), ...groupOwing]
+        .filter((r) => !DROPPED_LEADS.includes(r.lead_status as string))
+        .sort(
+          (x, y) =>
+            Date.parse(x.created_at as string) -
+            Date.parse(y.created_at as string),
+        );
       if (cohortErr) throw cohortErr;
 
       const days = (iso: string) =>
@@ -4887,6 +4938,9 @@ Deno.serve(async (req) => {
     // money moves: amount 0, method "credit", and payment_status is left as it
     // is (it tracks the money).
     if (action === "record_group_payment") {
+      // One payment, month by month (owner, 4 Nov 2026): which months it
+      // covers, how it was paid, how much, when it arrived and an optional
+      // note. "credit" is a month granted free: no money, not revenue.
       const kind =
         body.kind === "full"
           ? "full"
@@ -4898,19 +4952,34 @@ Deno.serve(async (req) => {
       const method =
         kind === "credit"
           ? "credit"
-          : body.method === "cash" || body.method === "transfer"
-            ? body.method
+          : (MANUAL_METHODS as readonly string[]).includes(String(body.method))
+            ? String(body.method)
             : null;
       const amount = kind === "credit" ? 0 : Number(body.amount_lei);
+      const note =
+        typeof body.note === "string" && body.note.trim()
+          ? body.note.trim().slice(0, 500)
+          : null;
+      const todayStr = new Date().toISOString().slice(0, 10);
+      const paidOn =
+        typeof body.paid_on === "string" &&
+        /^\d{4}-\d{2}-\d{2}$/.test(body.paid_on)
+          ? body.paid_on
+          : null;
       if (
         typeof id !== "string" ||
         !kind ||
         !method ||
         !Number.isFinite(amount) ||
-        (kind !== "credit" && (amount <= 0 || amount > 100000))
+        (kind !== "credit" && (amount <= 0 || amount > 100000)) ||
+        (kind !== "credit" && !paidOn) ||
+        (paidOn !== null && paidOn > todayStr)
       )
         return jsonResponse(
-          { error: "Alege luna sau integral, cash sau transfer, și suma." },
+          {
+            error:
+              "Alege lunile, metoda, suma și data în care ai primit banii (nu în viitor).",
+          },
           400,
         );
       const { data: reg, error: regErr } = await supabase
@@ -4929,13 +4998,15 @@ Deno.serve(async (req) => {
       if (reg.refunded_at)
         return jsonResponse({ error: "Înscrierea a fost rambursată." }, 409);
       let level = reg.level as string | null;
+      let startDate: string | null = null;
       if (reg.cohort_id) {
         const { data: c } = await supabase
           .from("group_cohorts")
-          .select("level")
+          .select("level, start_date")
           .eq("id", reg.cohort_id)
           .maybeSingle();
         level = (c?.level as string | null) ?? level;
+        startDate = (c?.start_date as string | null) ?? null;
       }
       const total =
         (reg.months_total as number | null) ??
@@ -4943,11 +5014,49 @@ Deno.serve(async (req) => {
           (level ?? "A1").toUpperCase() as keyof typeof GROUP_MONTHS
         ] ??
         GROUP_MONTHS.A1;
-      const paidSoFar = Number(reg.months_paid ?? 0);
-      if (paidSoFar >= total)
-        return jsonResponse({ error: "Toate lunile sunt deja plătite." }, 409);
-      const monthsPaid = kind === "full" ? total : paidSoFar + 1;
-      const paidAt = new Date().toISOString();
+      const { data: existing, error: rowsErr } = await supabase
+        .from("registration_payments")
+        .select("kind, method, amount_lei, paid_at, month_from, month_to, note")
+        .eq("registration_id", id);
+      if (rowsErr) throw rowsErr;
+      const before = groupMonths({
+        total,
+        startDate,
+        rows: (existing ?? []) as MonthPaymentRow[],
+      });
+      if (before.nextUncovered === null)
+        return jsonResponse(
+          { error: "Toate lunile sunt deja acoperite." },
+          409,
+        );
+      // "full" covers every month and is offered only before any is covered.
+      const from =
+        kind === "full"
+          ? 1
+          : Number.isInteger(Number(body.month_from))
+            ? Number(body.month_from)
+            : before.nextUncovered;
+      const count =
+        kind === "full"
+          ? total
+          : kind === "credit"
+            ? 1
+            : Math.max(1, Math.floor(Number(body.months ?? 1)) || 1);
+      const range = monthsToCover(before, from, count);
+      if (!range)
+        return jsonResponse(
+          {
+            error:
+              kind === "full"
+                ? "Integral se poate înregistra doar când nicio lună nu e acoperită."
+                : "Una dintre aceste luni e deja plătită sau acordată.",
+          },
+          409,
+        );
+      // The date the money arrived, at noon so no time zone moves the day.
+      const paidAt = paidOn
+        ? `${paidOn}T12:00:00.000Z`
+        : new Date().toISOString();
       const { error: insErr } = await supabase
         .from("registration_payments")
         .insert({
@@ -4957,11 +5066,17 @@ Deno.serve(async (req) => {
           amount_lei: Math.round(amount * 100) / 100,
           recorded_by: callerEmail!,
           paid_at: paidAt,
+          month_from: range.from,
+          month_to: range.to,
+          note,
         });
       if (insErr) throw insErr;
+      const covered = before.covered + (range.to - range.from + 1);
       const { error: updErr } = await supabase
         .from("registrations")
         .update({
+          // payment_status tracks the money (AGENTS.md): a granted month moves
+          // none, so it leaves the status as it is.
           ...(kind === "credit"
             ? {}
             : {
@@ -4970,12 +5085,11 @@ Deno.serve(async (req) => {
                 payment_method: method,
               }),
           months_total: total,
-          months_paid: monthsPaid,
+          months_paid: covered,
           lead_status: "converted",
           followup_snoozed_until: null,
         })
-        .eq("id", id)
-        .eq("months_paid", reg.months_paid ?? 0);
+        .eq("id", id);
       if (updErr) throw updErr;
       await supabase.from("audit_logs").insert({
         actor: callerEmail!,
@@ -4985,14 +5099,19 @@ Deno.serve(async (req) => {
           kind,
           method,
           amount_lei: amount,
-          months_paid: monthsPaid,
+          month_from: range.from,
+          month_to: range.to,
+          paid_on: paidOn,
+          note,
+          months_paid: covered,
           months_total: total,
-          at: paidAt,
         },
       });
       return jsonResponse({
         success: true,
-        months_paid: monthsPaid,
+        month_from: range.from,
+        month_to: range.to,
+        months_paid: covered,
         months_total: total,
       });
     }
@@ -5654,21 +5773,22 @@ Deno.serve(async (req) => {
         .filter((r) => r.form_type === "group")
         .map((r) => r.id);
       if (groupIds.length) {
-        const rows: Array<{
-          registration_id: string;
-          kind: string;
-          amount_lei: number;
-        }> = [];
+        const rows: Array<MonthPaymentRow & { registration_id: string }> = [];
+        let readOk = true;
         for (let offset = 0; offset < groupIds.length; offset += 100) {
           const result = await supabase
             .from("registration_payments")
-            .select("registration_id, kind, amount_lei")
-            .in("registration_id", groupIds.slice(offset, offset + 100));
+            .select(
+              "registration_id, kind, method, amount_lei, paid_at, month_from, month_to, note",
+            )
+            .in("registration_id", groupIds.slice(offset, offset + 100))
+            .order("paid_at", { ascending: true });
           if (result.error) {
             rows.length = 0;
+            readOk = false;
             break;
           }
-          rows.push(...(result.data ?? []));
+          rows.push(...((result.data ?? []) as typeof rows));
         }
         for (const p of rows) {
           const r = data.find((x) => x.id === p.registration_id);
@@ -5682,6 +5802,27 @@ Deno.serve(async (req) => {
           r.payment_plan =
             p.kind === "full" ? "full" : (r.payment_plan ?? "monthly");
         }
+        // Month by month, and the one status every screen uses
+        // (_shared/group-months.ts).
+        if (readOk)
+          for (const r of data) {
+            if (r.form_type !== "group") continue;
+            const level = (
+              (r.cohort?.level as string | null) ??
+              (r.level as string | null) ??
+              "A1"
+            ).toUpperCase() as keyof typeof GROUP_MONTHS;
+            const own = rows.filter((p) => p.registration_id === r.id);
+            r.payment_rows = own;
+            r.payment_months = groupMonths({
+              total:
+                (r.months_total as number | null) ??
+                GROUP_MONTHS[level] ??
+                GROUP_MONTHS.A1,
+              startDate: (r.cohort?.start_date as string | null) ?? null,
+              rows: own,
+            });
+          }
       }
       // Older manual private bookings used the default source='form'. Their
       // existing audit record proves the origin without changing stored rows.
@@ -5793,3 +5934,90 @@ Deno.serve(async (req) => {
     return jsonResponse({ error: "Internal server error" }, 500);
   }
 });
+
+/** Group cohorts whose students can still owe a month. */
+const COHORT_OPEN_FOR_PAYMENT = [
+  "forming",
+  "minimum_reached",
+  "confirmed",
+  "full",
+  "in_progress",
+];
+
+/**
+ * Group students with a month due and neither paid nor granted. Students of a
+ * live group are checked however long ago they signed up; one with no group
+ * only within the same 30 days as the other lists.
+ */
+// deno-lint-ignore no-explicit-any
+async function groupStudentsOwing(
+  supabase: any,
+  opts: { snoozeBefore: string; staleAfter: string },
+): Promise<Array<Record<string, unknown>>> {
+  const { data: regs, error } = await supabase
+    .from("registrations")
+    .select(
+      "id, created_at, name, phone, email, form_type, level, format, payment_status, lead_status, cohort_id, months_total",
+    )
+    .eq("form_type", "group")
+    .is("anonymized_at", null)
+    .is("refunded_at", null)
+    .neq("payment_status", "refunded")
+    .or(
+      `followup_snoozed_until.is.null,followup_snoozed_until.lt."${opts.snoozeBefore}"`,
+    )
+    .limit(500);
+  if (error) throw error;
+  const list = (regs ?? []) as Array<Record<string, any>>;
+  if (!list.length) return [];
+  const cohortIds = [
+    ...new Set(list.map((r) => r.cohort_id).filter(Boolean)),
+  ] as string[];
+  const cohorts = new Map<string, Record<string, any>>();
+  for (let i = 0; i < cohortIds.length; i += 100) {
+    const { data, error: cErr } = await supabase
+      .from("group_cohorts")
+      .select("id, level, format, start_date, status")
+      .in("id", cohortIds.slice(i, i + 100));
+    if (cErr) throw cErr;
+    for (const c of data ?? []) cohorts.set(c.id, c);
+  }
+  const candidates = list.filter((r) => {
+    const c = r.cohort_id ? cohorts.get(r.cohort_id) : null;
+    return c
+      ? COHORT_OPEN_FOR_PAYMENT.includes(c.status)
+      : r.created_at >= opts.staleAfter;
+  });
+  const rows: Array<MonthPaymentRow & { registration_id: string }> = [];
+  for (let i = 0; i < candidates.length; i += 100) {
+    const { data, error: pErr } = await supabase
+      .from("registration_payments")
+      .select(
+        "registration_id, kind, method, amount_lei, paid_at, month_from, month_to, note",
+      )
+      .in(
+        "registration_id",
+        candidates.slice(i, i + 100).map((r) => r.id),
+      );
+    if (pErr) throw pErr;
+    rows.push(...(data ?? []));
+  }
+  return candidates.filter((r) => {
+    const c = r.cohort_id ? cohorts.get(r.cohort_id) : null;
+    const level = String(c?.level ?? r.level ?? "A1").toUpperCase();
+    const summary = groupMonths({
+      total:
+        r.months_total ??
+        GROUP_MONTHS[level as keyof typeof GROUP_MONTHS] ??
+        GROUP_MONTHS.A1,
+      startDate: c?.start_date ?? null,
+      rows: rows.filter((p) => p.registration_id === r.id),
+    });
+    r.month_status = summary.status;
+    r.payment_months = summary;
+    r.cohort = c
+      ? { level: c.level, format: c.format, start_date: c.start_date }
+      : null;
+    return summary.status === "unpaid";
+  });
+}

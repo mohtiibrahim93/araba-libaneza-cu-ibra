@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import GroupPayment from "./GroupPayment";
+import GroupPayment, { groupMonthStatusLabel } from "./GroupPayment";
 import MoveToCohort from "./MoveToCohort";
 import * as DialogPrimitive from "@radix-ui/react-dialog";
 import { Gamepad2, Loader2, Mail, MessageCircle, Phone, X } from "lucide-react";
@@ -346,10 +346,15 @@ const PersonSheet = ({
                     <div className="flex flex-col gap-1.5 text-sm text-muted-foreground">
                       Plată
                       <span className="flex h-12 items-center rounded-xl bg-muted px-3 text-base font-semibold text-foreground">
-                        {person.payment_status
-                          ? (paymentStatusLabels[person.payment_status] ??
-                            person.payment_status)
-                          : "—"}
+                        {/* A group student: the month rule (Plătit la zi /
+                            Neplătit), the same as the group card and Acasă. */}
+                        {person.form_type === "group" &&
+                        person.payment_status !== "refunded"
+                          ? groupMonthStatusLabel(person)
+                          : person.payment_status
+                            ? (paymentStatusLabels[person.payment_status] ??
+                              person.payment_status)
+                            : "—"}
                         {partialRefundNote(person) && (
                           <span className="ml-2 text-sm font-normal text-muted-foreground">
                             · {partialRefundNote(person)}

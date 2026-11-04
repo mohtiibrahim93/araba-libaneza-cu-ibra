@@ -27,6 +27,8 @@ export interface CourseSummary extends RegistrationCohort {
   incomplete_count: number;
   manual_signup_count: number;
   payments: Record<string, number>;
+  /** The month rule (Plătit la zi / Neplătit), as on the student sheet. */
+  month_status?: { up_to_date: number; unpaid: number };
 }
 const descriptor = (c: CourseSummary) =>
   describeRegistrationCourse({ cohort: c });
@@ -185,22 +187,37 @@ export default function CourseOverviewAdmin({
                   </p>
                   <div
                     className="flex flex-wrap gap-x-3 gap-y-1 text-xs"
-                    aria-label="Plăți înregistrate"
+                    aria-label="Plăți"
                   >
-                    {Object.entries({
-                      paid: 0,
-                      unpaid: 0,
-                      pending: 0,
-                      failed: 0,
-                      refunded: 0,
-                      ...c.payments,
-                    }).map(([status, count]) => (
-                      <span key={status}>
-                        {paymentStatusLabels[status] ??
-                          (status === "unspecified" ? "Nespecificat" : status)}
-                        : {count}
-                      </span>
-                    ))}
+                    {c.form_type === "group" && c.month_status ? (
+                      <>
+                        <span>Plătit la zi: {c.month_status.up_to_date}</span>
+                        <span>Neplătit: {c.month_status.unpaid}</span>
+                        {(c.payments["refunded"] ?? 0) > 0 && (
+                          <span>
+                            {paymentStatusLabels["refunded"] ?? "Rambursat"}:{" "}
+                            {c.payments["refunded"]}
+                          </span>
+                        )}
+                      </>
+                    ) : (
+                      Object.entries({
+                        paid: 0,
+                        unpaid: 0,
+                        pending: 0,
+                        failed: 0,
+                        refunded: 0,
+                        ...c.payments,
+                      }).map(([status, count]) => (
+                        <span key={status}>
+                          {paymentStatusLabels[status] ??
+                            (status === "unspecified"
+                              ? "Nespecificat"
+                              : status)}
+                          : {count}
+                        </span>
+                      ))
+                    )}
                   </div>
                   <p className="text-xs text-muted-foreground">
                     Numărătoare manuală: {c.manual_signup_count} · Ajustare de

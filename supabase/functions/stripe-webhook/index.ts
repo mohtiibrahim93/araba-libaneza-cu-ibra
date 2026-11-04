@@ -1,6 +1,7 @@
 import { serve } from "https://deno.land/std@0.190.0/http/server.ts";
 import Stripe from "https://esm.sh/stripe@18.5.0";
 import { flagOverCapacity } from "../_shared/group-holds.ts";
+import { recordOnlineGroupMonths } from "../_shared/group-online-months.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2.57.2";
 import { buildCorsHeaders } from "../_shared/cors.ts";
 import { sendTemplateEmail } from "../_shared/managed-email.ts";
@@ -445,6 +446,7 @@ serve(async (req) => {
             : session.subscription?.id;
         let monthsTotal: number | null = null;
         let monthsPaid: number | null = null;
+        let paidInvoiceList: Stripe.Invoice[] = [];
         if (session.mode === "subscription" && subId) {
           const rawMonths = Number.parseInt(
             String(session.metadata?.months_total ?? ""),
@@ -480,6 +482,7 @@ serve(async (req) => {
               limit: 100,
             });
             monthsPaid = Math.max(1, paidInvoices.data.length);
+            paidInvoiceList = paidInvoices.data;
           } catch (listErr) {
             console.warn(
               "could not count paid invoices, defaulting months_paid:",
@@ -524,6 +527,34 @@ serve(async (req) => {
         // on Stripe's page is a lesson nobody else could take.
         if (updated && session.metadata?.course_type === "private") {
           await bookPrivateLessons(supabase, updated, session.metadata ?? {});
+        }
+        // Group months paid on the site, as "Card online" (owner, 4 Nov
+        // 2026). A one-time payment is the whole course; its ref is the
+        // payment intent, the same one payment_intent.succeeded would use.
+        if (updated?.form_type === "group") {
+          if (subId)
+            await recordOnlineGroupMonths(
+              supabase,
+              updated.id,
+              paidInvoiceList.map(invoiceAsPayment),
+              "one_month_each",
+            );
+          else
+            await recordOnlineGroupMonths(
+              supabase,
+              updated.id,
+              [
+                {
+                  ref:
+                    (typeof session.payment_intent === "string"
+                      ? session.payment_intent
+                      : session.payment_intent?.id) ?? sessionId,
+                  amountLei: (session.amount_total ?? 0) / 100,
+                  paidAt: new Date().toISOString(),
+                },
+              ],
+              "whole_course",
+            );
         }
         // A group payment is accepted even when it came after its seat hold
         // ran out and the group filled up meanwhile; the owner is told
@@ -623,8 +654,21 @@ serve(async (req) => {
         ) {
           await bookPrivateLessons(supabase, updated, intent.metadata ?? {});
         }
-        if (updated?.form_type === "group")
+        if (updated?.form_type === "group") {
+          await recordOnlineGroupMonths(
+            supabase,
+            updated.id,
+            [
+              {
+                ref: intent.id,
+                amountLei: (intent.amount_received || intent.amount) / 100,
+                paidAt: new Date().toISOString(),
+              },
+            ],
+            "whole_course",
+          );
           await flagOverCapacity(supabase, updated.id);
+        }
         break;
       }
 
@@ -684,6 +728,18 @@ serve(async (req) => {
           console.error("Failed to record invoice.paid:", updateError);
           throw updateError;
         }
+        // Each paid invoice is one month, "Card online".
+        for (const row of (paidRows ?? []) as {
+          id: string;
+          form_type: string | null;
+        }[])
+          if (row.form_type === "group")
+            await recordOnlineGroupMonths(
+              supabase,
+              row.id,
+              [invoiceAsPayment(invoice)],
+              "one_month_each",
+            );
         // The first month is when the seat is taken; later months change
         // nothing about the group's size.
         if (monthsPaid === 1)
@@ -878,3 +934,13 @@ serve(async (req) => {
     });
   }
 });
+
+/** A paid Stripe invoice as one month's online payment. */
+function invoiceAsPayment(inv: Stripe.Invoice) {
+  const paidAt = inv.status_transitions?.paid_at ?? inv.created;
+  return {
+    ref: inv.id ?? `invoice-${paidAt}`,
+    amountLei: (inv.amount_paid ?? 0) / 100,
+    paidAt: new Date(paidAt * 1000).toISOString(),
+  };
+}

@@ -77,7 +77,9 @@ function admin(longHistory = false) {
       "../_shared/calendar-reconciliation.ts": {},
       "../_shared/cohort-sessions.ts": {},
       "../_shared/refund.ts": {},
-      "../_shared/prices.ts": {},
+      "../_shared/prices.ts": {
+        GROUP_MONTHS: { A1: 4, A2: 7, B1: 9, B2: 9, C1: 9, C2: 9 },
+      },
       "../_shared/managed-email.ts": {},
       "../_shared/registration-access.ts": {},
     },

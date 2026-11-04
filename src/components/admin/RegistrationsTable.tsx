@@ -182,6 +182,14 @@ const paymentBadge = (r: Registration) => {
 const paymentStatusBadge = (r: Registration) => {
   if (r.payment_status === "refunded")
     return badge("bg-muted text-muted-foreground", "Rambursat");
+  // A group student: the month rule, as on the sheet and the group card.
+  if (r.form_type === "group" && r.payment_months)
+    return r.payment_months.status === "up_to_date"
+      ? badge(
+          "bg-emerald-500/10 text-emerald-700 dark:text-emerald-400",
+          "Plătit la zi",
+        )
+      : badge("bg-red-500/10 text-red-700 dark:text-red-400", "Neplătit");
   switch (r.payment_status) {
     case "paid":
       return badge(

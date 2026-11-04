@@ -269,15 +269,35 @@ export default function FormingCohortsAdmin({
                       ? ` (+${c.incomplete_count} incomplete)`
                       : ""}
                   </span>
-                  {payments.map((s) => (
-                    <span key={s} className="rounded-md bg-muted/60 px-2 py-1">
-                      <strong>{c.payments[s]}</strong>{" "}
-                      {(
-                        paymentStatusLabels[s] ??
-                        (s === "unspecified" ? "Nespecificat" : s)
-                      ).toLowerCase()}
-                    </span>
-                  ))}
+                  {c.form_type === "group" && c.month_status ? (
+                    <>
+                      <span className="rounded-md bg-emerald-500/10 px-2 py-1">
+                        <strong>{c.month_status.up_to_date}</strong> plătit la
+                        zi
+                      </span>
+                      <span className="rounded-md bg-red-500/10 px-2 py-1">
+                        <strong>{c.month_status.unpaid}</strong> neplătit
+                      </span>
+                    </>
+                  ) : null}
+                  {payments
+                    .filter(
+                      (s) =>
+                        !(c.form_type === "group" && c.month_status) ||
+                        s === "refunded",
+                    )
+                    .map((s) => (
+                      <span
+                        key={s}
+                        className="rounded-md bg-muted/60 px-2 py-1"
+                      >
+                        <strong>{c.payments[s]}</strong>{" "}
+                        {(
+                          paymentStatusLabels[s] ??
+                          (s === "unspecified" ? "Nespecificat" : s)
+                        ).toLowerCase()}
+                      </span>
+                    ))}
                 </div>
                 {(c.manual_offset ?? 0) + c.manual_signup_count > 0 && (
                   <p className="text-xs text-muted-foreground">

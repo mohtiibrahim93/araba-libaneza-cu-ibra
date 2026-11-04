@@ -4,6 +4,7 @@ import {
   groupPaymentSummary,
   groupPrices,
 } from "@/components/admin/GroupPayment";
+import { groupMonths } from "../../supabase/functions/_shared/group-months";
 
 // Owner, 1 Nov 2026: a group course paid in cash or by transfer is recorded as
 // one month or the whole course (-15%), with the amount received.
@@ -30,29 +31,39 @@ describe("group payment prices", () => {
   });
 });
 
+// Owner, 4 Nov 2026: months are tracked one by one (src/test/group-months.test.ts).
+const summary = (rows: Array<[number, string]>, offline = 0) =>
+  groupPaymentSummary({
+    id: "r",
+    name: "x",
+    months_total: 4,
+    offline_paid_lei: offline || null,
+    payment_months: groupMonths({
+      total: 4,
+      startDate: "2026-11-07",
+      rows: rows.map(([m, method]) => ({
+        kind: method === "credit" ? "credit" : "month",
+        method,
+        amount_lei: method === "credit" ? 0 : 500,
+        paid_at: "2026-11-03T12:00:00Z",
+        month_from: m,
+        month_to: m,
+      })),
+    }),
+  });
+
 describe("what the admin shows", () => {
-  it("monthly progress and the total received", () => {
+  it("months covered and the total received outside the site", () => {
     expect(
-      groupPaymentSummary({
-        id: "r",
-        name: "x",
-        months_paid: 2,
-        months_total: 4,
-        offline_paid_lei: 1000,
-        payment_plan: "monthly",
-      }),
-    ).toBe("Lunar 2/4 luni · 1.000 lei");
-    expect(
-      groupPaymentSummary({
-        id: "r",
-        name: "x",
-        months_paid: 4,
-        months_total: 4,
-        offline_paid_lei: 1700,
-        payment_plan: "full",
-      }),
-    ).toBe("Integral · 1.700 lei");
-    expect(groupPaymentSummary({ id: "r", name: "x" })).toBeNull();
+      summary(
+        [
+          [1, "cash"],
+          [2, "transfer"],
+        ],
+        1000,
+      ),
+    ).toBe("2/4 luni acoperite · 1.000 lei primiți în afara site-ului");
+    expect(summary([])).toBeNull();
   });
 });
 
@@ -64,7 +75,8 @@ describe("server and database", () => {
     );
     const action = src.slice(src.indexOf('action === "record_group_payment"'));
     expect(action).toMatch(/\.from\("registration_payments"\)\s*\.insert\(/);
-    expect(action).toContain("months_paid: monthsPaid");
+    expect(action).toContain("months_paid: covered");
+    expect(action).toContain("month_from: range.from");
     expect(action).toContain('action: "record_group_payment"');
   });
 
@@ -84,16 +96,16 @@ describe("server and database", () => {
 describe("a month given by agreement", () => {
   it("shows in the months, not in the lei", () => {
     expect(
-      groupPaymentSummary({
-        id: "r",
-        name: "x",
-        months_paid: 2,
-        months_total: 4,
-        offline_paid_lei: 500,
-        credit_months: 1,
-        payment_plan: "monthly",
-      }),
-    ).toBe("Lunar 2/4 luni · 500 lei · 1 lună acordată");
+      summary(
+        [
+          [1, "credit"],
+          [2, "cash"],
+        ],
+        500,
+      ),
+    ).toBe(
+      "2/4 luni acoperite · 1 acordată · 500 lei primiți în afara site-ului",
+    );
   });
 
   it("is stored with no amount and leaves payment_status alone", () => {

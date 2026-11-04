@@ -1,3 +1,4 @@
+import type { GroupMonthsSummary } from "../../../supabase/functions/_shared/group-months";
 export type LeadStatus =
   // Step 1 of the trial form was submitted but no slot was ever chosen, so the
   // trial is NOT booked. Kept as a record, but it is not a real lead and must
@@ -80,6 +81,8 @@ export interface Registration {
   credit_months?: number | null;
   /** "full" once the whole course was paid in one go, else "monthly". */
   payment_plan?: "monthly" | "full" | null;
+  /** Group course, month by month (supabase/functions/_shared/group-months.ts). */
+  payment_months?: GroupMonthsSummary | null;
   canceled_at?: string | null;
   refunded_amount?: number | null;
   /** Kids seat deposit, kept apart from payment_status (the course's money). */
