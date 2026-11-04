@@ -11,6 +11,8 @@ import {
 import {
   MANUAL_METHODS,
   MONTH_METHOD_LABELS,
+  PROVIDER_METHODS,
+  PROVIDERS,
   MONTH_STATUS_LABELS,
   groupMonths,
   type GroupMonthsSummary,
@@ -23,7 +25,7 @@ import {
  *
  * Each month is paid online (card on the site, recorded by Stripe as "Card
  * online"), paid outside the site (bank transfer, card outside the site,
- * cash, another method), granted free ("Lună acordată") or unpaid. A manual
+ * PayPal, cash, another method; a transfer or card can name its bank), granted free ("Lună acordată") or unpaid. A manual
  * payment stores the method, the amount, the date the money arrived, the
  * month(s) it covers and an optional note (admin-registrations:
  * record_group_payment). The status ("Plătit la zi" / "Neplătit") comes from
@@ -129,6 +131,11 @@ export default function GroupPayment({
   const [amount, setAmount] = useState(String(monthly));
   const [paidOn, setPaidOn] = useState(todayIso());
   const [note, setNote] = useState("");
+  // Which bank or app a transfer or card went through; "" = not said.
+  const [provider, setProvider] = useState("");
+  const [otherBank, setOtherBank] = useState(false);
+  const takesProvider =
+    method !== null && (PROVIDER_METHODS as readonly string[]).includes(method);
   const [saving, setSaving] = useState(false);
 
   // Consecutive open months from `from`: how many one payment can cover.
@@ -178,6 +185,8 @@ export default function GroupPayment({
         months: kind === "month" ? count : 1,
         paid_on: kind === "credit" ? null : paidOn,
         note: note.trim() || null,
+        provider:
+          kind !== "credit" && takesProvider ? provider.trim() || null : null,
       });
       if (error || data?.error)
         throw new Error(data?.error || "Plata nu a putut fi salvată.");
@@ -193,6 +202,8 @@ export default function GroupPayment({
       });
       setEditing(false);
       setNote("");
+      setProvider("");
+      setOtherBank(false);
       onDone?.();
     } catch (err) {
       toast({
@@ -249,7 +260,7 @@ export default function GroupPayment({
                   : `De plătit din ${fmtDate(m.dueFrom)}`
                 : m.state === "granted"
                   ? "Lună acordată · fără plată"
-                  : `${MONTH_METHOD_LABELS[m.method!]} · ${fmtDate(m.paid_at)}`}
+                  : `${MONTH_METHOD_LABELS[m.method!]}${m.provider ? ` (${m.provider})` : ""} · ${fmtDate(m.paid_at)}`}
               {m.note ? ` · ${m.note}` : ""}
             </span>
           </li>
@@ -367,13 +378,71 @@ export default function GroupPayment({
                     type="button"
                     role="radio"
                     aria-checked={method === m}
-                    onClick={() => setMethod(m)}
+                    onClick={() => {
+                      setMethod(m);
+                      if (
+                        !(PROVIDER_METHODS as readonly string[]).includes(m)
+                      ) {
+                        setProvider("");
+                        setOtherBank(false);
+                      }
+                    }}
                     className={chip(method === m)}
                   >
                     {MONTH_METHOD_LABELS[m]}
                   </button>
                 ))}
               </div>
+              {takesProvider && (
+                <div className="space-y-2">
+                  <div
+                    className="flex flex-wrap gap-2"
+                    role="radiogroup"
+                    aria-label="Prin ce bancă (opțional)"
+                  >
+                    <span className="self-center text-xs text-muted-foreground">
+                      Prin (opțional):
+                    </span>
+                    {PROVIDERS.map((p) => (
+                      <button
+                        key={p}
+                        type="button"
+                        role="radio"
+                        aria-checked={!otherBank && provider === p}
+                        onClick={() => {
+                          setOtherBank(false);
+                          setProvider(provider === p ? "" : p);
+                        }}
+                        className={chip(!otherBank && provider === p)}
+                      >
+                        {p}
+                      </button>
+                    ))}
+                    <button
+                      type="button"
+                      role="radio"
+                      aria-checked={otherBank}
+                      onClick={() => {
+                        setOtherBank(!otherBank);
+                        setProvider("");
+                      }}
+                      className={chip(otherBank)}
+                    >
+                      Altă bancă
+                    </button>
+                  </div>
+                  {otherBank && (
+                    <input
+                      aria-label="Numele băncii"
+                      placeholder="Numele băncii"
+                      value={provider}
+                      maxLength={60}
+                      onChange={(e) => setProvider(e.target.value)}
+                      className="h-11 w-full max-w-xs rounded-xl border border-input bg-background px-3"
+                    />
+                  )}
+                </div>
+              )}
               <div className="flex flex-wrap items-center gap-3">
                 <label className="flex items-center gap-2">
                   Suma primită

@@ -130,13 +130,15 @@ describe("wired everywhere", () => {
   const read = (p: string) => readFileSync(p, "utf8");
   it("the panel offers the owner's methods and the grant", () => {
     const src = read("supabase/functions/_shared/group-months.ts");
-    // A bank is not a method: Revolut is a transfer or a card (owner, 4 Nov).
-    expect(src).not.toContain('"Revolut"');
+    // A bank is not a method: Revolut is a transfer or a card (owner, 4 Nov);
+    // it is offered as the bank beside them (see the test below).
+    expect(src).not.toContain('revolut: "Revolut"');
     for (const label of [
       '"Transfer bancar"',
       '"Card (în afara site-ului)"',
       '"Cash"',
       '"Altă metodă"',
+      '"PayPal"',
       '"Card online"',
       '"Lună acordată"',
     ])
@@ -165,5 +167,25 @@ describe("wired everywhere", () => {
     expect(
       read("supabase/migrations/20261104120000_group_payment_months.sql"),
     ).toContain("registration_payments_stripe_ref_key");
+  });
+});
+
+describe("bank beside the method (owner, 4 Nov 2026)", () => {
+  it("a transfer or card can name its bank; other methods cannot", async () => {
+    const { cleanProvider, MANUAL_METHODS, PROVIDERS } =
+      await import("../../supabase/functions/_shared/group-months");
+    expect(cleanProvider("transfer", "  Revolut ")).toBe("Revolut");
+    expect(cleanProvider("card_terminal", "ING")).toBe("ING");
+    expect(cleanProvider("cash", "Revolut")).toBeNull();
+    expect(cleanProvider("transfer", "   ")).toBeNull();
+    expect(MANUAL_METHODS).toContain("paypal");
+    expect(MANUAL_METHODS).not.toContain("revolut");
+    expect(PROVIDERS).toEqual([
+      "Revolut",
+      "ING",
+      "Banca Transilvania",
+      "UniCredit",
+      "bunq",
+    ]);
   });
 });

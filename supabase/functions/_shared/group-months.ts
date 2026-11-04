@@ -19,6 +19,7 @@
 export const MONTH_METHODS = [
   "card_online",
   "transfer",
+  "paypal",
   "card_terminal",
   "cash",
   "other",
@@ -33,15 +34,37 @@ export type MonthMethod = (typeof MONTH_METHODS)[number];
  */
 export const MANUAL_METHODS = [
   "transfer",
+  "paypal",
   "card_terminal",
   "cash",
   "other",
 ] as const;
 export type ManualMethod = (typeof MANUAL_METHODS)[number];
 
+/** Methods that can say which bank or app the money went through. */
+export const PROVIDER_METHODS = ["transfer", "card_terminal"] as const;
+
+/** The banks offered as one tap; anything else is typed ("Altă bancă"). */
+export const PROVIDERS = [
+  "Revolut",
+  "ING",
+  "Banca Transilvania",
+  "UniCredit",
+  "bunq",
+] as const;
+
+/** Trimmed, at most 60 characters, and only for a transfer or a card. */
+export function cleanProvider(method: string, raw: unknown): string | null {
+  if (!(PROVIDER_METHODS as readonly string[]).includes(method)) return null;
+  if (typeof raw !== "string") return null;
+  const p = raw.trim().slice(0, 60);
+  return p || null;
+}
+
 export const MONTH_METHOD_LABELS: Record<MonthMethod, string> = {
   card_online: "Card online",
   transfer: "Transfer bancar",
+  paypal: "PayPal",
   card_terminal: "Card (în afara site-ului)",
   cash: "Cash",
   other: "Altă metodă",
@@ -56,6 +79,7 @@ export interface MonthPaymentRow {
   month_from: number | null;
   month_to: number | null;
   note?: string | null;
+  provider?: string | null;
 }
 
 export type MonthState = "paid_online" | "paid_offline" | "granted" | "unpaid";
@@ -69,6 +93,8 @@ export interface GroupMonth {
   method?: MonthMethod | undefined;
   paid_at?: string | undefined;
   note?: string | null | undefined;
+  /** Bank or app of a transfer or outside card payment, e.g. "Revolut". */
+  provider?: string | null | undefined;
 }
 
 export interface GroupMonthsSummary {
@@ -153,7 +179,14 @@ export function groupMonths(input: {
           : method === "card_online"
             ? "paid_online"
             : "paid_offline",
-      ...(row ? { method, paid_at: row.paid_at, note: row.note ?? null } : {}),
+      ...(row
+        ? {
+            method,
+            paid_at: row.paid_at,
+            note: row.note ?? null,
+            provider: row.provider ?? null,
+          }
+        : {}),
     });
   }
   const dueMonths = months.filter((m) => m.due);

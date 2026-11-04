@@ -39,6 +39,7 @@ import {
   groupMonths,
   monthsToCover,
   MANUAL_METHODS,
+  cleanProvider,
   type MonthPaymentRow,
 } from "../_shared/group-months.ts";
 import { notifyGoogleCancellations } from "../_shared/calendar-cancel-emails.ts";
@@ -4960,6 +4961,7 @@ Deno.serve(async (req) => {
         typeof body.note === "string" && body.note.trim()
           ? body.note.trim().slice(0, 500)
           : null;
+      const provider = method ? cleanProvider(method, body.provider) : null;
       const todayStr = new Date().toISOString().slice(0, 10);
       const paidOn =
         typeof body.paid_on === "string" &&
@@ -5016,7 +5018,9 @@ Deno.serve(async (req) => {
         GROUP_MONTHS.A1;
       const { data: existing, error: rowsErr } = await supabase
         .from("registration_payments")
-        .select("kind, method, amount_lei, paid_at, month_from, month_to, note")
+        .select(
+          "kind, method, amount_lei, paid_at, month_from, month_to, note, provider",
+        )
         .eq("registration_id", id);
       if (rowsErr) throw rowsErr;
       const before = groupMonths({
@@ -5069,6 +5073,7 @@ Deno.serve(async (req) => {
           month_from: range.from,
           month_to: range.to,
           note,
+          provider,
         });
       if (insErr) throw insErr;
       const covered = before.covered + (range.to - range.from + 1);
@@ -5103,6 +5108,7 @@ Deno.serve(async (req) => {
           month_to: range.to,
           paid_on: paidOn,
           note,
+          provider,
           months_paid: covered,
           months_total: total,
         },
@@ -5779,7 +5785,7 @@ Deno.serve(async (req) => {
           const result = await supabase
             .from("registration_payments")
             .select(
-              "registration_id, kind, method, amount_lei, paid_at, month_from, month_to, note",
+              "registration_id, kind, method, amount_lei, paid_at, month_from, month_to, note, provider",
             )
             .in("registration_id", groupIds.slice(offset, offset + 100))
             .order("paid_at", { ascending: true });
@@ -5993,7 +5999,7 @@ async function groupStudentsOwing(
     const { data, error: pErr } = await supabase
       .from("registration_payments")
       .select(
-        "registration_id, kind, method, amount_lei, paid_at, month_from, month_to, note",
+        "registration_id, kind, method, amount_lei, paid_at, month_from, month_to, note, provider",
       )
       .in(
         "registration_id",
