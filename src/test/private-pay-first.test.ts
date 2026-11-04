@@ -54,7 +54,7 @@ describe("a private lesson is booked only once paid", () => {
     // Paid, or made free by the owner (a make-up lesson): nothing else books.
     expect(code(src)).toContain(
       code(
-        'if (!isFree && !internalCall && reg.payment_status !== "paid" && reg.payment_status !== "free")',
+        'if (!isFree && !internalCall && reg.payment_status !== "paid" && !(reg.payment_status === "free" && reg.form_type !== "trial"))',
       ),
     );
     expect(src).toContain('code: "payment_required"');
