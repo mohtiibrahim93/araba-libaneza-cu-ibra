@@ -37,6 +37,12 @@ import {
   priceFor,
 } from "@/lib/pricing";
 import { groupPagePath, levelPagePath } from "@/lib/groupPage";
+import posterA1Online2 from "@/assets/poster_a1_online_grupa_2_7_noiembrie.png.asset.json";
+
+// Owner-supplied posters per group, by slug (a group's own image_url wins).
+const GROUP_POSTERS: Record<string, string> = {
+  "a1-online-romana-grupa-2-7-noiembrie-2026": posterA1Online2.url,
+};
 
 const BASE_URL = "https://centruldearabalibaneza.com";
 const WHATSAPP_URL = "https://wa.me/40763124514";
@@ -151,6 +157,8 @@ const CourseDetail = () => {
           c.format === "fizic" ? "fizic" : "online",
         )
       : null;
+  const posterUrl =
+    c.image_url || (c.slug ? GROUP_POSTERS[c.slug] : undefined) || null;
   const sessionN = c.session_count ?? fb.sessionCount;
   const hoursN = c.total_hours ?? fb.totalHours;
   const cf = (base: string): string | undefined => {
@@ -364,6 +372,12 @@ const CourseDetail = () => {
         <meta property="og:title" content={title} />
         <meta property="og:description" content={desc} />
         <meta property="og:url" content={url} />
+        {posterUrl && (
+          <meta property="og:image" content={`${BASE_URL}${posterUrl}`} />
+        )}
+        {posterUrl && (
+          <meta name="twitter:image" content={`${BASE_URL}${posterUrl}`} />
+        )}
         <meta
           property="og:locale"
           content={lang === "en" ? "en_US" : "ro_RO"}
@@ -435,6 +449,19 @@ const CourseDetail = () => {
               </p>
             )}
           </header>
+
+          {posterUrl && !closed && (
+            <img
+              src={posterUrl}
+              alt={
+                lang === "en"
+                  ? `Poster: ${title}`
+                  : `Afiș: ${title}`
+              }
+              className="mb-8 w-full max-w-md rounded-2xl border border-border shadow-sm"
+              loading="lazy"
+            />
+          )}
 
           {closed && (
             <div
