@@ -86,7 +86,7 @@ const LibanezaVsIordaniana = () => (
           "Litera ك",
           "Rămâne k: kēn.",
           "Rămâne k: kān.",
-          "Despre č („ch”) în multe cuvinte.",
+          "Adesea č („ch”) în multe cuvinte.",
         ],
         [
           "Vocala ā",
