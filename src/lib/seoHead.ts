@@ -434,16 +434,16 @@ const STATIC_ROUTES: SeoRoute[] = [
   // same way the Romanian ones are nested under /dialecte-arabe.
   {
     path: "/en/arabic-dialects-guide/lebanese-vs-egyptian-arabic",
-    title: "Lebanese vs Egyptian Arabic: Every Difference",
+    title: "Lebanese vs Egyptian Arabic: Differences & Which to Learn",
     description:
-      "Lebanese or Egyptian Arabic? Compare pronunciation, grammar and vocabulary, see the same sentence in both, and get a straight answer on which to learn.",
+      "The same sentence in Lebanese and Egyptian Arabic, side by side: pronunciation, grammar and everyday words, plus a straight answer on which to learn first.",
     lang: "en",
   },
   {
     path: "/en/arabic-dialects-guide/lebanese-vs-syrian-arabic",
-    title: "Lebanese vs Syrian, Palestinian and Jordanian Arabic",
+    title: "Lebanese vs Syrian Arabic: How Different Are They?",
     description:
-      "How different is Lebanese from Syrian, Palestinian and Jordanian Arabic? Pronunciation, negation, vocabulary, and what learning one gets you in the others.",
+      "Lebanese and Syrian Arabic are close, but not identical. See the real differences in sounds, words and phrases, side by side, from a native Lebanese teacher.",
     lang: "en",
   },
   {

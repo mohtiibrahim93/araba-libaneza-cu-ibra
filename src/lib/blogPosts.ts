@@ -249,11 +249,11 @@ export const BLOG_POSTS: BlogPostMeta[] = [
   {
     slug: "alfabetul-arab-pentru-incepatori",
     title: {
-      ro: "Alfabetul arab: cele 28 de litere, cu pronunție în română",
+      ro: "Alfabetul Arab Tradus în Română: Toate cele 28 de Litere",
       en: "The Arabic Alphabet: 28 Letters and How to Pronounce Them",
     },
     description: {
-      ro: "Tabel cu cele 28 de litere arabe, pronunția în română, formele la început/mijloc/sfârșit și scrierea dreapta-la-stânga. Plus cum vorbești fără alfabet.",
+      ro: "Tabel cu literele arabe și pronunția lor în română, cum se schimbă forma în cuvânt și scrierea de la dreapta la stânga. Explicat de un profesor nativ.",
       en: "All 28 Arabic letters with their names and sounds: right-to-left writing, how letters change shape in a word, and the sounds English does not have (ح, ع, ق).",
     },
     published: "2026-07-16",
