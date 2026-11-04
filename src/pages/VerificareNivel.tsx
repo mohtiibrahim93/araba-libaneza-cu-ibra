@@ -79,11 +79,11 @@ const COPY = {
       ],
       calendar: [
         "Alege o oră",
-        "Ore libere în zilele lucrătoare, între 12:00 și 13:00.",
+        "Ore libere în orice zi, între 09:00 și 18:00.",
       ],
     } as Record<Way, [string, string]>,
     calendarNote:
-      "Aici apar doar orele libere dintre 12:00 și 13:00, în zilele lucrătoare. Dacă nu ți se potrivește niciuna, scrie-i lui Ibra pe WhatsApp. Alege Online (Zoom) sau Fizic (la centru) în formular.",
+      "Aici apar orele libere dintre 09:00 și 18:00, în orice zi. În weekend verificarea e mai ales online; pentru una la centru în weekend, scrie-i lui Ibra din timp. Dacă nu ți se potrivește nicio oră, scrie-i pe WhatsApp. Alege Online (Zoom) sau Fizic (la centru) în formular.",
     name: "Nume",
     phone: "Telefon",
     email: "Email (opțional)",
@@ -155,11 +155,11 @@ const COPY = {
       ],
       calendar: [
         "Pick a time",
-        "Free times on weekdays, between 12:00 and 13:00.",
+        "Free times on any day, between 09:00 and 18:00.",
       ],
     } as Record<Way, [string, string]>,
     calendarNote:
-      "Only the free times between 12:00 and 13:00 on weekdays show here. If none suits you, message Ibra on WhatsApp. Choose Online (Zoom) or In person (at the center) in the form.",
+      "Free times between 09:00 and 18:00, on any day, show here. At weekends the check is mostly online; for one at the centre at the weekend, message Ibra in advance. If no time suits you, message him on WhatsApp. Choose Online (Zoom) or In person (at the centre) in the form.",
     name: "Name",
     phone: "Phone",
     email: "Email (optional)",

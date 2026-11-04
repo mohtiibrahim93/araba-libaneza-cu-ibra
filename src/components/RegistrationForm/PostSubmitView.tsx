@@ -1,5 +1,3 @@
-import { PRICE } from "@/lib/pricing";
-import { useState } from "react";
 import { useI18n } from "@/lib/i18n";
 import {
   CheckCircle2,
@@ -9,14 +7,10 @@ import {
   RotateCcw,
   Loader2,
   AlertTriangle,
-  Gift,
-  ArrowLeft,
-  ArrowRight,
   Mail,
   CalendarCheck,
 } from "lucide-react";
 import PaymentInstructions from "@/components/PaymentInstructions";
-import NativeScheduler from "@/components/NativeScheduler";
 import type { SubmittedData } from "./types";
 
 const WHATSAPP_URL = "https://wa.me/40763124514";
@@ -35,10 +29,7 @@ interface Props {
  * Post-submit confirmation view.
  *
  * UX:
- *   - Private  → an explicit two-card choice: free trial (first lesson only,
- *                enforced server-side per email) vs. pay for lessons. Both
- *                paths are equally visible — the paid option used to be a
- *                near-invisible text link that owners/students kept missing.
+ *   - Private  → never shown: a private sign-up goes straight to payment.
  *   - Group    → payment instructions (no trial).
  *   - Kids     → contact-only confirmation (paid manually or via deposit redirect).
  */
@@ -51,13 +42,8 @@ const PostSubmitView = ({
   onRetryDepositCheckout,
 }: Props) => {
   const { t, lang } = useI18n();
-  // Private only: explicit choice between the free first-lesson trial and
-  // paying directly. Starts unchosen so both options are equally visible.
-  const [privateChoice, setPrivateChoice] = useState<"trial" | "pay" | null>(
-    null,
-  );
-
-  const isPrivate = data.courseType === "private";
+  // A private sign-up never reaches this screen: RegistrationFormSection
+  // takes it straight to payment. Group and kids only.
   const isGroup = data.courseType === "group";
   // Kids "pay to enroll" path: full group (not the deposit-only fallback).
   // We show payment when they were NOT redirected to the deposit checkout.
@@ -65,10 +51,7 @@ const PostSubmitView = ({
   const isKidsDeposit =
     data.courseType === "kids" && data.waitlistDeposit === true;
 
-  const showPrivateChoice = isPrivate && privateChoice === null;
-  const showPrivateTrial = isPrivate && privateChoice === "trial";
-  const showPayment =
-    isGroup || isKidsPay || (isPrivate && privateChoice === "pay");
+  const showPayment = isGroup || isKidsPay;
 
   return (
     <section
@@ -145,34 +128,10 @@ const PostSubmitView = ({
                   </li>
                 </>
               )}
-              {showPrivateChoice && (
-                <li className="flex items-start gap-3 text-sm text-foreground">
-                  <span className="flex-shrink-0 w-6 h-6 rounded-full bg-primary/10 text-xs font-semibold flex items-center justify-center text-primary">
-                    2
-                  </span>
-                  <span className="flex items-center gap-2">
-                    <CreditCard className="w-4 h-4 text-primary" />
-                    {lang === "ro"
-                      ? "Alege mai jos: probă gratuită sau plătește lecțiile direct."
-                      : "Choose below: free trial or pay for lessons directly."}
-                  </span>
-                </li>
-              )}
             </ol>
           </div>
         </div>
 
-        {/* Payment card (group, or private when user opted to pay directly) */}
-        {isPrivate && privateChoice === "pay" && (
-          <button
-            type="button"
-            onClick={() => setPrivateChoice(null)}
-            className="inline-flex items-center gap-1 text-xs text-muted-foreground hover:text-foreground"
-          >
-            <ArrowLeft className="w-3.5 h-3.5" />
-            {lang === "ro" ? "Înapoi la opțiuni" : "Back to options"}
-          </button>
-        )}
         {showPayment && !isKidsDeposit && (
           <PaymentInstructions
             courseType={data.courseType as "group" | "private" | "kids"}
@@ -208,92 +167,6 @@ const PostSubmitView = ({
               )}
               {t.kidsDepositRetryCta}
             </button>
-          </div>
-        )}
-
-        {/* Private: explicit choice — free first-lesson trial vs. paying. */}
-        {showPrivateChoice && (
-          <div className="grid sm:grid-cols-2 gap-4">
-            <button
-              type="button"
-              onClick={() => setPrivateChoice("trial")}
-              className="text-left bg-background rounded-2xl border-2 border-border hover:border-primary p-6 shadow-xs transition-colors group"
-            >
-              <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center mb-3">
-                <Gift className="w-5 h-5 text-primary" />
-              </div>
-              <h3 className="font-bold text-foreground group-hover:text-primary transition-colors">
-                {lang === "ro"
-                  ? "E prima ta lecție la noi?"
-                  : "Is this your first lesson with us?"}
-              </h3>
-              <p className="text-sm text-muted-foreground mt-1">
-                {lang === "ro"
-                  ? "Programează o probă gratuită — o singură dată de persoană, îți confirmi locul cu cardul (0 lei)."
-                  : "Book a free trial — once per person, confirm your spot with your card (0 lei charged)."}
-              </p>
-              <span className="mt-4 inline-flex items-center gap-2 rounded-lg bg-primary text-primary-foreground px-4 py-2 text-sm font-semibold group-hover:bg-primary/90 transition-colors">
-                {lang === "ro"
-                  ? "Programează proba gratuită"
-                  : "Book the free trial"}
-                <ArrowRight className="w-4 h-4" />
-              </span>
-            </button>
-            <button
-              type="button"
-              onClick={() => setPrivateChoice("pay")}
-              className="text-left bg-background rounded-2xl border-2 border-border hover:border-primary p-6 shadow-xs transition-colors group"
-            >
-              <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center mb-3">
-                <CreditCard className="w-5 h-5 text-primary" />
-              </div>
-              <h3 className="font-bold text-foreground group-hover:text-primary transition-colors">
-                {lang === "ro"
-                  ? "Ai mai învățat cu noi?"
-                  : "Have you studied with us before?"}
-              </h3>
-              <p className="text-sm text-muted-foreground mt-1">
-                {lang === "ro"
-                  ? `Plătește lecțiile direct — ${PRICE.privateOnline} lei/lecție online (${PRICE.privateFizic} lei fizic), −15% la 20 de lecții.`
-                  : `Pay for your lessons directly — ${PRICE.privateOnline} lei/lesson online (${PRICE.privateFizic} lei in person), −15% for 20 lessons.`}
-              </p>
-              <span className="mt-4 inline-flex items-center gap-2 rounded-lg bg-primary text-primary-foreground px-4 py-2 text-sm font-semibold group-hover:bg-primary/90 transition-colors">
-                {lang === "ro" ? "Plătește lecțiile" : "Pay for lessons"}
-                <ArrowRight className="w-4 h-4" />
-              </span>
-            </button>
-          </div>
-        )}
-
-        {/* Free trial booking — native scheduler. */}
-        {showPrivateTrial && (
-          <div className="bg-background rounded-2xl border border-border p-6 sm:p-8 shadow-xs">
-            <button
-              type="button"
-              onClick={() => setPrivateChoice(null)}
-              className="inline-flex items-center gap-1 text-xs text-muted-foreground hover:text-foreground mb-4"
-            >
-              <ArrowLeft className="w-3.5 h-3.5" />
-              {lang === "ro" ? "Înapoi la opțiuni" : "Back to options"}
-            </button>
-            <div className="flex items-start gap-3 mb-4">
-              <div className="flex-shrink-0 w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center">
-                <CheckCircle2 className="w-5 h-5 text-primary" />
-              </div>
-              <div>
-                <h3 className="text-lg font-bold text-foreground">
-                  {t.bookingIntroTitle}
-                </h3>
-                <p className="text-sm text-muted-foreground mt-1">
-                  {t.bookingIntroDesc}
-                </p>
-              </div>
-            </div>
-            <NativeScheduler
-              eventType="trial"
-              prefill={{ name: data.name, email: data.email }}
-              registrationId={data.registrationId}
-            />
           </div>
         )}
 

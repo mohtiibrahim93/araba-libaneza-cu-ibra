@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
+import { subscribeToTables } from "@/lib/sharedRealtime";
 
 export interface KidsSlot {
   id: string;
@@ -69,23 +70,14 @@ export function useKidsSlots() {
     };
     void load();
 
-    const channel = supabase
-      .channel(`kids-slot-updates-${Math.random().toString(36).slice(2)}`)
-      .on(
-        "postgres_changes",
-        { event: "*", schema: "public", table: "registrations" },
-        load,
-      )
-      .on(
-        "postgres_changes",
-        { event: "*", schema: "public", table: "kids_class_slots" },
-        load,
-      )
-      .subscribe();
+    const unsubscribe = subscribeToTables(
+      ["registrations", "kids_class_slots"],
+      () => void load(),
+    );
 
     return () => {
       active = false;
-      supabase.removeChannel(channel);
+      unsubscribe();
     };
   }, []);
 

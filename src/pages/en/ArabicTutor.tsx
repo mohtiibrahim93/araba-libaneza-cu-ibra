@@ -159,8 +159,9 @@ const ArabicTutor = () => (
     <p>
       Primary focus: <Link to="/en/learn-lebanese-arabic">Lebanese Arabic</Link>
       , which gives you comprehension across the whole Levantine region
-      (Lebanon, Syria, Jordan, Palestine). Optional MSA / Fusha for reading and
-      formal contexts. For the wider dialect landscape, see the{" "}
+      (Lebanon, Syria, Jordan, Palestine). We teach Lebanese Arabic only: Modern
+      Standard Arabic (MSA / Fusha) is not offered. For the wider dialect
+      landscape, see the{" "}
       <Link to="/en/arabic-dialects-guide">Arabic dialects guide</Link>.
     </p>
 

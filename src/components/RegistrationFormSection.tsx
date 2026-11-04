@@ -167,24 +167,13 @@ const RegistrationFormSection = ({
   // redirect waits behind the email-code step instead of failing with a 403.
   const [depositNeedsVerify, setDepositNeedsVerify] = useState(false);
 
-  // Kids: online is only available from age 10+. Parse the first integer we
-  // find in the free-text field ("8 ani", "8", "10 years" all work). If no
-  // number yet, keep both options open — we only lock down once we know age.
-  const parsedChildAge = (() => {
-    const m = childAge.match(/\d+/);
-    return m ? Number.parseInt(m[0], 10) : NaN;
-  })();
-  const kidsOnlineAllowed =
-    courseType !== "kids" ||
-    Number.isNaN(parsedChildAge) ||
-    parsedChildAge >= 10;
+  // Kids: in person only for now (the online option comes later, see
+  // t.kidsFormatNote), whatever the child's age.
+  const kidsOnlineAllowed = courseType !== "kids";
 
-  // If the user picked online first and then entered an age <10, force fizic.
   useEffect(() => {
-    if (courseType === "kids" && !kidsOnlineAllowed && format === "online") {
-      setFormat("fizic");
-    }
-  }, [courseType, kidsOnlineAllowed, format]);
+    if (courseType === "kids" && format === "online") setFormat("fizic");
+  }, [courseType, format]);
 
   /* Restore draft from sessionStorage on mount */
   useEffect(() => {

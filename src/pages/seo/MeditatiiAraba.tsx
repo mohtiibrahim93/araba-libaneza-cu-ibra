@@ -113,10 +113,11 @@ const MeditatiiAraba = () => (
     <p>
       Dacă cauți <strong>meditații de arabă în București</strong>, lecțiile
       fizice au loc la Raduga Creative Center, Strada Icoanei 80 (sector 2),
-      aproape de metroul Piața Romană (M2) și Ștefan cel Mare (M1). Orarul se
-      stabilește împreună: dimineața (09:00–12:00), la prânz sau seara
-      (18:00–21:00), inclusiv sâmbătă. Dacă stai în alt sector sau în alt oraș,
-      varianta online pe Zoom are exact același conținut și preț.
+      aproape de metroul Piața Romană (M2) și Ștefan cel Mare (M1). Lecțiile
+      private se programează între 09:00 și 18:00, în orice zi; în weekend sunt
+      mai ales online, iar pentru o lecție la centru în weekend anunță-ne din
+      timp. Dacă stai în alt sector sau în alt oraș, varianta online pe Zoom are
+      exact același conținut și preț.
     </p>
 
     <h2>

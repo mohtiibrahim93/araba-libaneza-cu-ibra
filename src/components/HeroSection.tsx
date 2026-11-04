@@ -4,14 +4,20 @@ import AnchorLink from "@/components/AnchorLink";
 import HeroConversation from "@/components/HeroConversation";
 import { Link } from "@/components/LocalizedLink";
 
-const WHATSAPP_URL =
-  "https://wa.me/40763124514?text=" +
-  encodeURIComponent(
-    "Salut! Sunt interesat(ă) de cursurile de arabă libaneză.",
-  );
+// The pre-filled message follows the reader's language.
+const WHATSAPP_URL = {
+  ro:
+    "https://wa.me/40763124514?text=" +
+    encodeURIComponent(
+      "Salut! Sunt interesat(ă) de cursurile de arabă libaneză.",
+    ),
+  en:
+    "https://wa.me/40763124514?text=" +
+    encodeURIComponent("Hi! I'm interested in your Lebanese Arabic courses."),
+} as const;
 
 const HeroSection = () => {
-  const { t } = useI18n();
+  const { t, lang } = useI18n();
 
   return (
     <section className="pt-28 pb-16 px-gutter bg-cream">
@@ -54,7 +60,7 @@ const HeroSection = () => {
           </div>
 
           <a
-            href={WHATSAPP_URL}
+            href={WHATSAPP_URL[lang === "en" ? "en" : "ro"]}
             target="_blank"
             rel="noopener noreferrer"
             className="tap-target inline-flex min-h-11 items-center gap-1.5 text-sm text-muted-foreground hover:text-foreground transition-colors"

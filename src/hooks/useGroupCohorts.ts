@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import type { Cohort, CohortStatus } from "@/lib/cohortTypes";
 import { fallbackCohorts } from "@/data/fallbackGroups";
+import { subscribeToTables } from "@/lib/sharedRealtime";
 
 export type { Cohort, CohortStatus } from "@/lib/cohortTypes";
 
@@ -117,28 +118,14 @@ export function useGroupCohorts(
     };
     void load();
 
-    const channel = supabase
-      .channel(`cohort-updates-${Math.random().toString(36).slice(2)}`)
-      .on(
-        "postgres_changes",
-        { event: "*", schema: "public", table: "registrations" },
-        load,
-      )
-      .on(
-        "postgres_changes",
-        { event: "*", schema: "public", table: "group_cohorts" },
-        load,
-      )
-      .on(
-        "postgres_changes",
-        { event: "*", schema: "public", table: "manual_signups" },
-        load,
-      )
-      .subscribe();
+    const unsubscribe = subscribeToTables(
+      ["registrations", "group_cohorts", "manual_signups"],
+      () => void load(),
+    );
 
     return () => {
       active = false;
-      supabase.removeChannel(channel);
+      unsubscribe();
     };
   }, [formType, level, format, teachingLanguage]);
 

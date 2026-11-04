@@ -115,9 +115,14 @@ const InlinePrivatePay = ({
 };
 
 const TZ = "Europe/Bucharest";
-const WHATSAPP_FALLBACK =
+// The pre-filled message follows the reader's language.
+const whatsappFallback = (lang: string) =>
   "https://wa.me/40763124514?text=" +
-  encodeURIComponent("Salut! Vreau să rezerv o lecție.");
+  encodeURIComponent(
+    lang === "en"
+      ? "Hi! I'd like to book a lesson."
+      : "Salut! Vreau să rezerv o lecție.",
+  );
 
 type EventType = "trial" | "paid" | "verificare-nivel";
 type Format = "online" | "physical";
@@ -927,7 +932,7 @@ const NativeScheduler = ({
           )}
           <Button asChild variant="outline" className="flex-1">
             <a
-              href={WHATSAPP_FALLBACK}
+              href={whatsappFallback(lang)}
               target="_blank"
               rel="noopener noreferrer"
             >
@@ -1131,7 +1136,7 @@ const NativeScheduler = ({
           {t.bookingPlaceholder}
         </p>
         <a
-          href={WHATSAPP_FALLBACK}
+          href={whatsappFallback(lang)}
           target="_blank"
           rel="noopener noreferrer"
           className="inline-flex items-center gap-2 px-4 py-2 text-sm font-semibold rounded-lg bg-primary text-primary-foreground hover:bg-primary/90 transition-colors"
@@ -1314,7 +1319,7 @@ const NativeScheduler = ({
           {t.schedulerNoSlots30d}
         </p>
         <a
-          href={WHATSAPP_FALLBACK}
+          href={whatsappFallback(lang)}
           target="_blank"
           rel="noopener noreferrer"
           className="inline-flex items-center gap-2 px-4 py-2 text-sm font-semibold rounded-lg bg-primary text-primary-foreground hover:bg-primary/90"

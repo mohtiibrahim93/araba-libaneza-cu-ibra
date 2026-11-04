@@ -21,7 +21,7 @@ const FAQ = [
   },
   {
     q: "Which dialect do you teach?",
-    a: "Lebanese Arabic, a variety of Levantine Arabic that is understood across Lebanon, Syria, Jordan and Palestine (~30 million native speakers). Optional Modern Standard Arabic (MSA / Fusha) is available on top for students who need it for reading or exams.",
+    a: "Lebanese Arabic, a variety of Levantine Arabic that is understood across Lebanon, Syria, Jordan and Palestine (~30 million native speakers). We teach Lebanese Arabic only: Modern Standard Arabic (MSA / Fusha) is not offered.",
   },
   {
     q: "Is there a free trial?",

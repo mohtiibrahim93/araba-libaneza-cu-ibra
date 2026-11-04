@@ -64,6 +64,8 @@ export interface SeoRoute {
   type?: "website" | "article";
   /** ISO publish date; blog posts only (drives article:published_time + JSON-LD). */
   published?: string;
+  /** ISO date of the last content change; blog posts only. Defaults to published. */
+  modified?: string;
 }
 
 const STATIC_ROUTES: SeoRoute[] = [
@@ -709,6 +711,7 @@ export function allSeoRoutes(): SeoRoute[] {
     description: p.description.ro,
     type: "article" as const,
     published: p.published,
+    ...(p.updated ? { modified: p.updated } : {}),
     // A post that consolidates into another keeps its URL but points its
     // canonical at the survivor, so the two stop competing for one query.
     ...(p.canonicalTo ? { canonical: `/blog/${p.canonicalTo}` } : {}),
@@ -725,6 +728,7 @@ export function allSeoRoutes(): SeoRoute[] {
     description: p.description.en,
     type: "article" as const,
     published: p.published,
+    ...(p.updated ? { modified: p.updated } : {}),
     lang: "en" as const,
     ...(p.canonicalTo ? { canonical: `/en/blog/${p.canonicalTo}` } : {}),
   }));
@@ -1015,6 +1019,13 @@ export function seoHead(path: string, opts?: SeoHeadOptions): HeadResult {
         content: route.published,
       });
     }
+    if (route.modified) {
+      meta.push({
+        ...RH,
+        property: "article:modified_time",
+        content: route.modified,
+      });
+    }
     meta.push({
       ...RH,
       property: "article:author",
@@ -1028,7 +1039,7 @@ export function seoHead(path: string, opts?: SeoHeadOptions): HeadResult {
         headline: route.title,
         description: route.description,
         datePublished: route.published,
-        dateModified: route.published,
+        dateModified: route.modified ?? route.published,
         inLanguage: lang,
         mainEntityOfPage: canonicalHref,
         image: socialImage,

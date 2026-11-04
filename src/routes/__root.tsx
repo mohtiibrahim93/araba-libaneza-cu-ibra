@@ -367,6 +367,10 @@ function RootComponent() {
 
 function RootErrorComponent({ error, reset }: ErrorComponentProps) {
   const router = useRouter();
+  // This page may render outside the language provider, so the address
+  // decides: /en is English, everything else Romanian.
+  const pathname = router.state.location.pathname;
+  const en = pathname === "/en" || pathname.startsWith("/en/");
 
   console.error(error);
   useEffect(() => {
@@ -376,10 +380,13 @@ function RootErrorComponent({ error, reset }: ErrorComponentProps) {
   return (
     <div className="min-h-screen flex flex-col items-center justify-center bg-background text-foreground px-6">
       <div className="max-w-md w-full text-center space-y-4">
-        <h1 className="text-2xl font-bold">This page didn't load</h1>
+        <h1 className="text-2xl font-bold">
+          {en ? "This page didn't load" : "Pagina nu s-a încărcat"}
+        </h1>
         <p className="text-muted-foreground">
-          Something went wrong on our end. You can try again or head back to the
-          homepage.
+          {en
+            ? "Something went wrong on our end. You can try again or head back to the homepage."
+            : "A apărut o eroare la noi. Poți încerca din nou sau te poți întoarce la pagina principală."}
         </p>
         <div className="flex items-center justify-center gap-3 pt-2">
           <button
@@ -390,13 +397,13 @@ function RootErrorComponent({ error, reset }: ErrorComponentProps) {
               reset();
             }}
           >
-            Try again
+            {en ? "Try again" : "Încearcă din nou"}
           </button>
           <a
-            href="/"
+            href={en ? "/en" : "/"}
             className="inline-flex items-center justify-center rounded-md border border-border bg-background px-4 py-2 text-sm font-medium hover:bg-muted"
           >
-            Go home
+            {en ? "Go home" : "Pagina principală"}
           </a>
         </div>
       </div>

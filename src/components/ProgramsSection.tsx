@@ -25,15 +25,22 @@ import YallaGameBand from "@/components/YallaGameBand";
 
 const wa = (msg: string) =>
   "https://wa.me/40763124514?text=" + encodeURIComponent(msg);
-const WA_GROUP = wa(
-  "Salut! Vreau să mă înscriu la cursul de grup de arabă libaneză.",
-);
-const WA_PRIVATE = wa(
-  "Salut! Sunt interesat(ă) de lecții private de arabă libaneză.",
-);
-const WA_KIDS = wa(
-  "Salut! Sunt interesat(ă) de cursul de arabă libaneză pentru copii.",
-);
+// Pre-filled WhatsApp messages, in the reader's language.
+const WA_TEXT = {
+  ro: {
+    group: "Salut! Vreau să mă înscriu la cursul de grup de arabă libaneză.",
+    private: "Salut! Sunt interesat(ă) de lecții private de arabă libaneză.",
+    kids: "Salut! Sunt interesat(ă) de cursul de arabă libaneză pentru copii.",
+    teens:
+      "Salut! Sunt interesat(ă) de cursul de arabă libaneză pentru adolescenți.",
+  },
+  en: {
+    group: "Hi! I'd like to join a Lebanese Arabic group course.",
+    private: "Hi! I'm interested in private Lebanese Arabic lessons.",
+    kids: "Hi! I'm interested in the Lebanese Arabic course for children.",
+    teens: "Hi! I'm interested in the Lebanese Arabic course for teenagers.",
+  },
+} as const;
 
 // Card look shared by every tab: white card (photo kept) on the cream band, green label,
 // serif title, prices as big numbers (the "Ibra, sharpened" design).
@@ -59,6 +66,7 @@ type Level = (typeof LEVELS)[number];
 
 const ProgramsSection = () => {
   const { t, lang } = useI18n();
+  const waText = WA_TEXT[lang === "en" ? "en" : "ro"];
   const [inlineForm, setInlineForm] = useState<
     null | "group" | "private" | "kids" | "kids-private"
   >(null);
@@ -362,7 +370,7 @@ const ProgramsSection = () => {
                             {t.groupRegister}
                           </button>
                           <a
-                            href={WA_GROUP}
+                            href={wa(waText.group)}
                             target="_blank"
                             rel="noopener noreferrer"
                             className="mt-2 inline-flex items-center justify-center gap-1.5 w-full text-xs text-muted-foreground hover:text-primary transition-colors"
@@ -468,7 +476,7 @@ const ProgramsSection = () => {
                             {t.privateRegisterV2}
                           </button>
                           <a
-                            href={WA_PRIVATE}
+                            href={wa(waText.private)}
                             target="_blank"
                             rel="noopener noreferrer"
                             className="mt-2 inline-flex items-center justify-center gap-1.5 w-full text-xs text-muted-foreground hover:text-primary transition-colors"
@@ -583,7 +591,7 @@ const ProgramsSection = () => {
                               : "Detalii · anunță-mă"}
                           </Link>
                           <a
-                            href={WA_KIDS}
+                            href={wa(waText.kids)}
                             target="_blank"
                             rel="noopener noreferrer"
                             className="mt-2 inline-flex items-center justify-center gap-1.5 w-full text-xs text-muted-foreground hover:text-primary transition-colors"
@@ -720,7 +728,7 @@ const ProgramsSection = () => {
                             {lang === "en" ? "Notify me" : "Anunță-mă"}
                           </Link>
                           <a
-                            href={WA_KIDS}
+                            href={wa(waText.kids)}
                             target="_blank"
                             rel="noopener noreferrer"
                             className="mt-2 inline-flex items-center justify-center gap-1.5 w-full text-xs text-muted-foreground hover:text-primary transition-colors"
@@ -761,9 +769,7 @@ const ProgramsSection = () => {
                     : "Vezi cursurile pentru adolescenți"}
                 </Link>
                 <a
-                  href={wa(
-                    "Salut! Sunt interesat(ă) de cursul de arabă libaneză pentru adolescenți.",
-                  )}
+                  href={wa(waText.teens)}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="rounded-lg border border-border px-5 py-2.5 text-sm font-semibold text-foreground hover:bg-muted"

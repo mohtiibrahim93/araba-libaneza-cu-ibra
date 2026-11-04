@@ -23,7 +23,7 @@ const FAQ = [
   },
   {
     q: "Welches Arabisch lernt man hier — Hocharabisch oder Dialekt?",
-    a: "Wir unterrichten libanesisches Arabisch (levantinischer Dialekt), also die gesprochene Sprache aus dem Libanon, Syrien, Jordanien und Palästina. Hocharabisch (MSA / Fusha) ist die formelle Schriftsprache — kaum jemand spricht sie zu Hause. Wenn du wirklich reden willst, ist der Dialekt der schnellste Weg. MSA können wir später ergänzen, wenn du lesen oder formell schreiben möchtest.",
+    a: "Wir unterrichten libanesisches Arabisch (levantinischer Dialekt), also die gesprochene Sprache aus dem Libanon, Syrien, Jordanien und Palästina. Hocharabisch (MSA / Fusha) ist die formelle Schriftsprache — kaum jemand spricht sie zu Hause. Wenn du wirklich reden willst, ist der Dialekt der schnellste Weg. Hocharabisch bieten wir nicht an: Wir unterrichten nur libanesisches Arabisch.",
   },
   {
     q: "Wie lange dauert es, Arabisch zu lernen?",
@@ -65,7 +65,7 @@ const breadcrumbJsonLd = {
   "@context": "https://schema.org",
   "@type": "BreadcrumbList",
   itemListElement: [
-    { "@type": "ListItem", position: 1, name: "Home", item: `${BASE}/` },
+    { "@type": "ListItem", position: 1, name: "Home", item: `${BASE}/en` },
     { "@type": "ListItem", position: 2, name: "Arabisch lernen", item: URL },
   ],
 };
@@ -102,7 +102,8 @@ const ArabischLernen = () => (
           aria-label="Breadcrumb"
           className="text-sm text-muted-foreground mb-6"
         >
-          <Link to="/" className="hover:text-primary">
+          {/* There is no German site; the English one is the closest. */}
+          <Link to="/en" className="hover:text-primary">
             Home
           </Link>
           <ChevronRight
@@ -191,7 +192,8 @@ const ArabischLernen = () => (
             geschriebene, formelle Sprache — in Nachrichten, Gesetzen,
             religiösen Texten. Zu Hause spricht sie niemand. Wenn dein Ziel
             echtes Sprechen ist, ist der libanesische Dialekt der kürzere Weg.
-            MSA kannst du später für Lesen und formelles Schreiben dazulernen.
+            Wir unterrichten nur libanesisches Arabisch, Hocharabisch bieten wir
+            nicht an.
           </p>
 
           <h2>Kursformate</h2>
@@ -275,14 +277,19 @@ const ArabischLernen = () => (
           </p>
           <div className="flex flex-col sm:flex-row gap-3 justify-center">
             <Link
-              to="/trial"
+              to="/en/trial"
               data-cta
               className="inline-block bg-primary text-primary-foreground px-gutter py-3 rounded-lg font-semibold hover:bg-primary/90 transition"
             >
               Probestunde buchen
             </Link>
             <a
-              href="https://wa.me/40763124514"
+              href={
+                "https://wa.me/40763124514?text=" +
+                encodeURIComponent(
+                  "Hallo! Ich interessiere mich für eure Kurse in libanesischem Arabisch.",
+                )
+              }
               target="_blank"
               rel="noopener noreferrer"
               className="inline-flex items-center justify-center gap-2 border border-border px-gutter py-3 rounded-lg font-semibold text-foreground hover:bg-muted transition"

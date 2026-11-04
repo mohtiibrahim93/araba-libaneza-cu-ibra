@@ -415,6 +415,18 @@ const Footer = () => {
               </Link>
             </li>
             <li>
+              <a
+                href="https://reclamatiisal.anpc.ro/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="hover:text-foreground transition-colors"
+              >
+                {lang === "en"
+                  ? "ANPC – dispute resolution (SAL)"
+                  : "ANPC – SAL"}
+              </a>
+            </li>
+            <li>
               <button
                 type="button"
                 onClick={() =>

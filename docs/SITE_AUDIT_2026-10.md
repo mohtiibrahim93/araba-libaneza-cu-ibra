@@ -50,6 +50,21 @@ re-checked on 26 Oct against main and the live site.
     English, #9 notes label and an honest message when a time is not offered
     in person).
   - P1 legal: owner and lawyer.
+- DONE 4 Nov 2026 (owner answers): one set of hours, 09:00–18:00 every day,
+  weekends mostly online, in person by arrangement (private lessons; groups
+  keep their own schedule); MSA is not offered (FAQ, English pages, German
+  page, assistant); ANPC SAL link in the footer and Terms section 10.
+- DONE 4 Nov 2026, P3: a11y #5 heading order on /invata-araba-gratis; SEO #3
+  dateModified (an article's `updated` date in src/lib/blogPosts.ts, set by
+  hand when its content changes); i18n #2 WhatsApp texts, the logo label, the
+  error page and the game frame title in English; i18n #3 the German page
+  leads to /en and /en/trial and no longer promises MSA; code #4 drizzle
+  pinned, #7 one shared realtime channel (src/lib/sharedRealtime.ts), #11
+  GroupOverview, the private branch of PostSubmitView and the kids "online
+  10+" rule removed, #12 stale comments, #14 HANDOFF no longer exists.
+  Still open: code #9 (two auth-email hooks: Lovable platform files, left as
+  they are), SEO #6 (English blog slugs: renaming 46 URLs without
+  server-side 301s would lose their search history), code #13 (03x numbers).
 - Everything else below is still open unless marked.
 - DONE One group registration from 11 Oct (A1 in person) had no group attached
   (`cohort_id` null), so it could not pay. Resolved (confirmed by the owner, 30 Oct).

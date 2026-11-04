@@ -158,7 +158,7 @@ const BlogArticleLayout = ({
     headline: resolvedMetaTitle,
     description: resolvedMetaDescription,
     datePublished: published,
-    dateModified: published,
+    dateModified: registryPost?.updated ?? published,
     inLanguage: lang === "en" ? "en" : "ro",
     mainEntityOfPage: url,
     image: socialImage,

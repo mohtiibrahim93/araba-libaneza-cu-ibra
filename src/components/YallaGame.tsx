@@ -10,9 +10,10 @@
  * Same origin is what makes the rest work: the microphone grant below, the
  * game's relative asset paths, and its localStorage progress all depend on it.
  *
- * Progress lives in the visitor's own browser — this is deliberately not an
- * account. Nothing here syncs across devices, and the page must not imply it
- * does; the game's own transfer control is how a learner moves progress.
+ * Progress lives in the visitor's own browser. A visitor needs no account;
+ * a student who signs in also gets it kept in step with the account across
+ * devices (src/lib/studentSync.ts). Without signing in, the game's own
+ * transfer control is how a learner moves progress.
  */
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useCardOverrides, type CardOverrides } from "@/hooks/useCardOverrides";
@@ -39,11 +40,23 @@ const COPY = {
   en: { open: "Open full screen", label: "Yalla — Lebanese Arabic game" },
 } as const;
 
-const TITLES: Record<NonNullable<YallaGameProps["mode"]>, string> = {
-  journey: "Yalla — joacă și învață",
-  placement: "Yalla — orientare, versiune pilot",
-  speaking: "Yalla — exersează cu voce tare",
-  exports: "Yalla — exporturi",
+// The frame's accessible name, in the reader's language.
+const TITLES: Record<
+  "ro" | "en",
+  Record<NonNullable<YallaGameProps["mode"]>, string>
+> = {
+  ro: {
+    journey: "Yalla — joacă și învață",
+    placement: "Yalla — orientare, versiune pilot",
+    speaking: "Yalla — exersează cu voce tare",
+    exports: "Yalla — exporturi",
+  },
+  en: {
+    journey: "Yalla — play and learn",
+    placement: "Yalla — placement, pilot version",
+    speaking: "Yalla — practise out loud",
+    exports: "Yalla — exports",
+  },
 };
 
 const YallaGame = ({
@@ -262,7 +275,7 @@ const YallaGame = ({
         ref={frameRef}
         key={`${mode}-${lang}-${focus ? "focus" : "full"}-${version}`}
         src={mounted ? src : undefined}
-        title={TITLES[mode]}
+        title={TITLES[lang][mode]}
         allow="microphone 'self'"
         className="block h-[78dvh] min-h-[38rem] max-h-[56rem] w-full border-0 bg-card"
       />

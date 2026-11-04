@@ -11,6 +11,14 @@ export interface BlogPostMeta {
   title: Localized;
   description: Localized;
   published: string; // ISO date
+  /**
+   * ISO date of the last real change to the article's content, when there was
+   * one after publishing. Set it by hand when an article is rewritten or
+   * corrected; it becomes dateModified and article:modified_time. Left out, the
+   * article has not changed since it was published, and dateModified is the
+   * publish date (a code refactor is not a content change).
+   */
+  updated?: string;
   readingMinutes: number;
   tag: Localized;
   /**

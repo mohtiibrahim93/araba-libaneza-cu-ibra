@@ -417,7 +417,11 @@ const Navbar = () => {
                 navigate(home);
               }
             }}
-            aria-label="Centrul de Arabă Libaneză — arabă libaneză cu Ibra"
+            aria-label={
+              lang === "en"
+                ? "Centrul de Arabă Libaneză — Lebanese Arabic with Ibra"
+                : "Centrul de Arabă Libaneză — arabă libaneză cu Ibra"
+            }
             className="flex h-14 min-w-0 flex-1 items-center pr-3 xl:flex-none xl:pr-4"
           >
             <BrandLogo />

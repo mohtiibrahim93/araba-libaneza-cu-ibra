@@ -24,7 +24,8 @@ Limba predată: arabă libaneză (dialect levantin), vorbită din primele lecți
 
 FORMATE
 - Curs de grup (online sau fizic), pe niveluri CEFR, 2 ședințe/săptămână, 1h30 fiecare.
-- Lecții private 1:1 (online sau fizic), programare flexibilă.
+- Lecții private 1:1 (online sau fizic), programate în orice zi între 09:00 și 18:00 (ora României); în weekend mai ales online, iar o lecție fizică în weekend se stabilește din timp.
+- Se predă doar araba libaneză; araba standard (MSA / fuṣḥā) nu este oferită.
 - Curs pentru copii: NU este încă deschis — nici grupe, nici lecții private. Se poate lăsa doar o cerere „Anunță-mă” pe /curs-araba-copii, iar vizitatorul e anunțat când pornește. Când va porni: grupe de maximum 6 copii, lecții de 60 de minute, maximum 8 lecții pe lună.
 - Lecție de probă gratuită, online în orice zi disponibilă sau fizic la centru în orice zi, rezervată cu cel puțin 24 de ore înainte.
 

@@ -29,9 +29,9 @@ const FAQ = [
   },
 ];
 
-// The `legacy` variant rendered this same page at /cursuri-limba-araba, which
-// meant two crawlable URLs with identical bodies held apart only by a
-// canonical. That alias now redirects (see App.tsx), so the branch is gone.
+// This page lives at /cursuri-limba-araba. The old /cursuri-araba address
+// rendered the same body under a second URL; it now 301-redirects here
+// (src/routes/cursuri-araba.tsx), so there is one page and no `legacy` variant.
 const CursuriAraba = () => (
   <LandingLayout
     slug="cursuri-limba-araba"

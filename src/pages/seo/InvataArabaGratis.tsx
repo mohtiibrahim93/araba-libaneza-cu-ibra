@@ -48,6 +48,7 @@ const InvataArabaGratis = () => (
       resource="100-expresii-libaneze"
       source="/invata-araba-gratis"
       idPrefix="exp100"
+      headingLevel={2}
       fileHref="/100-expresii-libaneze.pdf"
       title="Pachetul de start: 100 de expresii libaneze esențiale (PDF)"
       description="Salut, prezentare, restaurant, taxi, cumpărături, familie și urări — fiecare expresie în arabizi, cu traducere în română. Îl primești pe email în câteva secunde."

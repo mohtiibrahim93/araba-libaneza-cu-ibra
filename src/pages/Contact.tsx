@@ -75,7 +75,8 @@ const COPY = {
     emailLabel: "Email",
     center: "Centrul din București",
     hours: "Program de răspuns",
-    hoursNote: "Luni–duminică, 10:00–21:00 (ora României).",
+    hoursNote:
+      "Luni–duminică, 09:00–18:00 (ora României). În weekend lecțiile sunt mai ales online; pentru o lecție la centru în weekend, anunță-ne din timp.",
     errName: "Te rugăm să scrii numele.",
     errEmail: "Te rugăm să scrii un email valid.",
     errPhone: "Numărul de telefon nu pare valid.",
@@ -112,7 +113,8 @@ const COPY = {
     emailLabel: "Email",
     center: "The Bucharest centre",
     hours: "Reply hours",
-    hoursNote: "Monday–Sunday, 10:00–21:00 (Romania time).",
+    hoursNote:
+      "Monday–Sunday, 09:00–18:00 (Romania time). At weekends lessons are mostly online; for a lesson at the centre at the weekend, let us know in advance.",
     errName: "Please tell us your name.",
     errEmail: "Please enter a valid email address.",
     errPhone: "That phone number doesn't look valid.",

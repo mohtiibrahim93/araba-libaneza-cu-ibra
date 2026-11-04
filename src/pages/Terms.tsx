@@ -56,6 +56,10 @@ const content = {
           "EUID: ROONRC.J2025046577002",
         ],
       ],
+      [
+        "10. Soluționarea litigiilor",
+        "Dacă apare o nemulțumire, scrie-ne mai întâi la marhaba@centruldearabalibaneza.com și căutăm împreună o soluție. Ca și consumator, poți apela și la Autoritatea Națională pentru Protecția Consumatorilor (ANPC), inclusiv la soluționarea alternativă a litigiilor (SAL): reclamatiisal.anpc.ro.",
+      ],
     ],
   },
   en: {
@@ -111,6 +115,10 @@ const content = {
           "Trade Register No.: J2025046577002",
           "EUID: ROONRC.J2025046577002",
         ],
+      ],
+      [
+        "10. Dispute resolution",
+        "If something goes wrong, write to us first at marhaba@centruldearabalibaneza.com and we will look for a solution together. As a consumer, you can also turn to the Romanian National Authority for Consumer Protection (ANPC), including its alternative dispute resolution (SAL) service: reclamatiisal.anpc.ro.",
       ],
     ],
   },

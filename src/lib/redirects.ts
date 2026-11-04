@@ -6,7 +6,7 @@
 // end. This map redirects them to the closest real page instead.
 //
 // Keys must be lowercase, without a trailing slash. Values must be real routes
-// declared in src/App.tsx (a hash target lands on the matching homepage
+// declared under src/routes/ (a hash target lands on the matching homepage
 // section).
 
 const ALIASES: Record<string, string> = {

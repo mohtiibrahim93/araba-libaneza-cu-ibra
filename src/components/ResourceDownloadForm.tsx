@@ -21,6 +21,12 @@ export interface ResourceDownloadFormProps {
   fileHref: string;
   /** Suffix for input ids so multiple forms can live on the same page. */
   idPrefix?: string;
+  /**
+   * Level of the form's title. 3 by default (the form sits inside a section);
+   * 2 where it comes before the page's first h2, so the outline does not jump
+   * from h1 to h3.
+   */
+  headingLevel?: 2 | 3;
 }
 
 /**
@@ -34,7 +40,9 @@ const ResourceDownloadForm = ({
   description,
   fileHref,
   idPrefix = resource,
+  headingLevel = 3,
 }: ResourceDownloadFormProps) => {
+  const Heading = headingLevel === 2 ? "h2" : "h3";
   const { toast } = useToast();
   const { lang } = useI18n();
   const en = lang === "en";
@@ -142,10 +150,10 @@ const ResourceDownloadForm = ({
       className="rounded-xl border border-border bg-muted/30 p-6 space-y-4 not-prose"
     >
       <div className="space-y-1">
-        <h3 className="font-display text-xl font-bold text-foreground flex items-center gap-2">
+        <Heading className="font-display text-xl font-bold text-foreground flex items-center gap-2">
           <Download className="w-5 h-5 text-primary shrink-0" aria-hidden />
           {displayTitle}
-        </h3>
+        </Heading>
         <p className="text-sm text-muted-foreground">{displayDescription}</p>
       </div>
 

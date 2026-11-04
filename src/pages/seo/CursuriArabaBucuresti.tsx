@@ -58,18 +58,21 @@ const CursuriArabaBucuresti = () => (
             { "@type": "City", name: "București" },
             { "@type": "AdministrativeArea", name: "Ilfov" },
           ],
+          // One set of hours everywhere (owner, 4 Nov 2026): every day 09:00–18:00.
           openingHoursSpecification: [
             {
               "@type": "OpeningHoursSpecification",
-              dayOfWeek: ["Monday", "Wednesday"],
-              opens: "19:00",
-              closes: "20:30",
-            },
-            {
-              "@type": "OpeningHoursSpecification",
-              dayOfWeek: "Saturday",
-              opens: "10:00",
-              closes: "12:00",
+              dayOfWeek: [
+                "Monday",
+                "Tuesday",
+                "Wednesday",
+                "Thursday",
+                "Friday",
+                "Saturday",
+                "Sunday",
+              ],
+              opens: "09:00",
+              closes: "18:00",
             },
           ],
           // No aggregateRating — see the note in Index.tsx. The Preply rating is
