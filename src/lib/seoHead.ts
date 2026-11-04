@@ -142,6 +142,32 @@ const STATIC_ROUTES: SeoRoute[] = [
     lang: "en",
   },
   {
+    path: "/despre-noi",
+    title: "Despre noi — Profesor nativ Ibra | Arabă libaneză",
+    description:
+      "Ibra, profesor nativ din Liban: experiență, metodă conversațională fără alfabet arab și recenzii. Cursuri online pe Zoom și în București.",
+  },
+  {
+    path: "/en/about-us",
+    title: "About us — Native teacher Ibra | Lebanese Arabic",
+    description:
+      "Ibra, a native teacher from Lebanon: experience, a conversation-first method without the Arabic alphabet, and reviews. Online on Zoom and in Bucharest.",
+    lang: "en",
+  },
+  {
+    path: "/recenzii",
+    title: "Recenzii cursanți — Arabă libaneză cu Ibra",
+    description:
+      "Ce spun cursanții care au învățat arabă libaneză cu Ibra: recenzii reale de la lecții online și din București.",
+  },
+  {
+    path: "/en/reviews",
+    title: "Student reviews — Lebanese Arabic with Ibra",
+    description:
+      "What students who learned Lebanese Arabic with Ibra say: real reviews from online lessons and our Bucharest centre.",
+    lang: "en",
+  },
+  {
     path: "/rezervari",
     title: "Rezervările mele — Arabă Libaneză cu Ibra",
     description:
@@ -818,6 +844,8 @@ const COURSE_PAIRS: Array<[string, string]> = [
   ["/quiz", "/en/quiz"],
   ["/te-ajutam", "/en/find-your-page"],
   ["/contact", "/en/contact"],
+  ["/despre-noi", "/en/about-us"],
+  ["/recenzii", "/en/reviews"],
   ["/rezervari", "/en/my-bookings"],
   ["/privacy", "/en/privacy"],
   ["/stergere-date", "/en/data-deletion"],

@@ -195,6 +195,22 @@ const Footer = () => {
             </li>
             <li>
               <Link
+                to={lang === "en" ? "/en/about-us" : "/despre-noi"}
+                className="hover:text-foreground transition-colors"
+              >
+                {lang === "en" ? "About the teacher" : "Despre profesor"}
+              </Link>
+            </li>
+            <li>
+              <Link
+                to={lang === "en" ? "/en/reviews" : "/recenzii"}
+                className="hover:text-foreground transition-colors"
+              >
+                {lang === "en" ? "Reviews" : "Recenzii"}
+              </Link>
+            </li>
+            <li>
+              <Link
                 to={lang === "en" ? "/en/my-bookings" : "/rezervari"}
                 className="hover:text-foreground transition-colors"
               >

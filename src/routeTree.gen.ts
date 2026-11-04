@@ -25,6 +25,7 @@ import { Route as CursuriArabaRouteImport } from './routes/cursuri-araba'
 import { Route as CursuriArabaAdolescentiRouteImport } from './routes/cursuri-araba-adolescenti'
 import { Route as CursuriArabaBucurestiRouteImport } from './routes/cursuri-araba-bucuresti'
 import { Route as CursuriLimbaArabaRouteImport } from './routes/cursuri-limba-araba'
+import { Route as DespreNoiRouteImport } from './routes/despre-noi'
 import { Route as FaraAlfabetArabRouteImport } from './routes/fara-alfabet-arab'
 import { Route as IntrebariFrecventeRouteImport } from './routes/intrebari-frecvente'
 import { Route as InvataArabaRouteImport } from './routes/invata-araba'
@@ -38,6 +39,7 @@ import { Route as PreturiRouteImport } from './routes/preturi'
 import { Route as PrivacyRouteImport } from './routes/privacy'
 import { Route as ProbaConfirmataRouteImport } from './routes/proba-confirmata'
 import { Route as QuizRouteImport } from './routes/quiz'
+import { Route as RecenziiRouteImport } from './routes/recenzii'
 import { Route as ResurseRouteImport } from './routes/resurse'
 import { Route as RezervariRouteImport } from './routes/rezervari'
 import { Route as StergereDateRouteImport } from './routes/stergere-date'
@@ -93,6 +95,7 @@ import { Route as DialecteArabeLevantinaVsPeninsularaRouteImport } from './route
 import { Route as DialecteArabeLibanezaVsEgipteanaRouteImport } from './routes/dialecte-arabe/libaneza-vs-egipteana'
 import { Route as DialecteArabeLibanezaVsSirianaRouteImport } from './routes/dialecte-arabe/libaneza-vs-siriana'
 import { Route as EnIndexRouteImport } from './routes/en/index'
+import { Route as EnAboutUsRouteImport } from './routes/en/about-us'
 import { Route as EnArabicClassesNearMeRouteImport } from './routes/en/arabic-classes-near-me'
 import { Route as EnArabicForTeenagersRouteImport } from './routes/en/arabic-for-teenagers'
 import { Route as EnArabicTutorRouteImport } from './routes/en/arabic-tutor'
@@ -114,6 +117,7 @@ import { Route as EnPlayRouteImport } from './routes/en/play'
 import { Route as EnPricesRouteImport } from './routes/en/prices'
 import { Route as EnPrivacyRouteImport } from './routes/en/privacy'
 import { Route as EnQuizRouteImport } from './routes/en/quiz'
+import { Route as EnReviewsRouteImport } from './routes/en/reviews'
 import { Route as EnTermsRouteImport } from './routes/en/terms'
 import { Route as EnTrialRouteImport } from './routes/en/trial'
 import { Route as EnTrialConfirmedRouteImport } from './routes/en/trial-confirmed'
@@ -231,6 +235,11 @@ const CursuriLimbaArabaRoute = CursuriLimbaArabaRouteImport.update({
   path: '/cursuri-limba-araba',
   getParentRoute: () => rootRouteImport,
 } as any)
+const DespreNoiRoute = DespreNoiRouteImport.update({
+  id: '/despre-noi',
+  path: '/despre-noi',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const FaraAlfabetArabRoute = FaraAlfabetArabRouteImport.update({
   id: '/fara-alfabet-arab',
   path: '/fara-alfabet-arab',
@@ -294,6 +303,11 @@ const ProbaConfirmataRoute = ProbaConfirmataRouteImport.update({
 const QuizRoute = QuizRouteImport.update({
   id: '/quiz',
   path: '/quiz',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const RecenziiRoute = RecenziiRouteImport.update({
+  id: '/recenzii',
+  path: '/recenzii',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ResurseRoute = ResurseRouteImport.update({
@@ -598,6 +612,11 @@ const EnIndexRoute = EnIndexRouteImport.update({
   path: '/en/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const EnAboutUsRoute = EnAboutUsRouteImport.update({
+  id: '/en/about-us',
+  path: '/en/about-us',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const EnArabicClassesNearMeRoute = EnArabicClassesNearMeRouteImport.update({
   id: '/en/arabic-classes-near-me',
   path: '/en/arabic-classes-near-me',
@@ -704,6 +723,11 @@ const EnPrivacyRoute = EnPrivacyRouteImport.update({
 const EnQuizRoute = EnQuizRouteImport.update({
   id: '/en/quiz',
   path: '/en/quiz',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const EnReviewsRoute = EnReviewsRouteImport.update({
+  id: '/en/reviews',
+  path: '/en/reviews',
   getParentRoute: () => rootRouteImport,
 } as any)
 const EnTermsRoute = EnTermsRouteImport.update({
@@ -913,6 +937,7 @@ export interface FileRoutesByFullPath {
   '/cursuri-araba-adolescenti': typeof CursuriArabaAdolescentiRoute
   '/cursuri-araba-bucuresti': typeof CursuriArabaBucurestiRoute
   '/cursuri-limba-araba': typeof CursuriLimbaArabaRoute
+  '/despre-noi': typeof DespreNoiRoute
   '/fara-alfabet-arab': typeof FaraAlfabetArabRoute
   '/intrebari-frecvente': typeof IntrebariFrecventeRoute
   '/invata-araba': typeof InvataArabaRoute
@@ -926,6 +951,7 @@ export interface FileRoutesByFullPath {
   '/privacy': typeof PrivacyRoute
   '/proba-confirmata': typeof ProbaConfirmataRoute
   '/quiz': typeof QuizRoute
+  '/recenzii': typeof RecenziiRoute
   '/resurse': typeof ResurseRoute
   '/rezervari': typeof RezervariRoute
   '/stergere-date': typeof StergereDateRoute
@@ -975,6 +1001,7 @@ export interface FileRoutesByFullPath {
   '/dialecte-arabe/levantina-vs-peninsulara': typeof DialecteArabeLevantinaVsPeninsularaRoute
   '/dialecte-arabe/libaneza-vs-egipteana': typeof DialecteArabeLibanezaVsEgipteanaRoute
   '/dialecte-arabe/libaneza-vs-siriana': typeof DialecteArabeLibanezaVsSirianaRoute
+  '/en/about-us': typeof EnAboutUsRoute
   '/en/arabic-classes-near-me': typeof EnArabicClassesNearMeRoute
   '/en/arabic-for-teenagers': typeof EnArabicForTeenagersRoute
   '/en/arabic-tutor': typeof EnArabicTutorRoute
@@ -996,6 +1023,7 @@ export interface FileRoutesByFullPath {
   '/en/prices': typeof EnPricesRoute
   '/en/privacy': typeof EnPrivacyRoute
   '/en/quiz': typeof EnQuizRoute
+  '/en/reviews': typeof EnReviewsRoute
   '/en/terms': typeof EnTermsRoute
   '/en/trial': typeof EnTrialRoute
   '/en/trial-confirmed': typeof EnTrialConfirmedRoute
@@ -1056,6 +1084,7 @@ export interface FileRoutesByTo {
   '/cursuri-araba-adolescenti': typeof CursuriArabaAdolescentiRoute
   '/cursuri-araba-bucuresti': typeof CursuriArabaBucurestiRoute
   '/cursuri-limba-araba': typeof CursuriLimbaArabaRoute
+  '/despre-noi': typeof DespreNoiRoute
   '/fara-alfabet-arab': typeof FaraAlfabetArabRoute
   '/intrebari-frecvente': typeof IntrebariFrecventeRoute
   '/invata-araba': typeof InvataArabaRoute
@@ -1068,6 +1097,7 @@ export interface FileRoutesByTo {
   '/privacy': typeof PrivacyRoute
   '/proba-confirmata': typeof ProbaConfirmataRoute
   '/quiz': typeof QuizRoute
+  '/recenzii': typeof RecenziiRoute
   '/resurse': typeof ResurseRoute
   '/rezervari': typeof RezervariRoute
   '/stergere-date': typeof StergereDateRoute
@@ -1117,6 +1147,7 @@ export interface FileRoutesByTo {
   '/dialecte-arabe/levantina-vs-peninsulara': typeof DialecteArabeLevantinaVsPeninsularaRoute
   '/dialecte-arabe/libaneza-vs-egipteana': typeof DialecteArabeLibanezaVsEgipteanaRoute
   '/dialecte-arabe/libaneza-vs-siriana': typeof DialecteArabeLibanezaVsSirianaRoute
+  '/en/about-us': typeof EnAboutUsRoute
   '/en/arabic-classes-near-me': typeof EnArabicClassesNearMeRoute
   '/en/arabic-for-teenagers': typeof EnArabicForTeenagersRoute
   '/en/arabic-tutor': typeof EnArabicTutorRoute
@@ -1137,6 +1168,7 @@ export interface FileRoutesByTo {
   '/en/prices': typeof EnPricesRoute
   '/en/privacy': typeof EnPrivacyRoute
   '/en/quiz': typeof EnQuizRoute
+  '/en/reviews': typeof EnReviewsRoute
   '/en/terms': typeof EnTermsRoute
   '/en/trial': typeof EnTrialRoute
   '/en/trial-confirmed': typeof EnTrialConfirmedRoute
@@ -1198,6 +1230,7 @@ export interface FileRoutesById {
   '/cursuri-araba-adolescenti': typeof CursuriArabaAdolescentiRoute
   '/cursuri-araba-bucuresti': typeof CursuriArabaBucurestiRoute
   '/cursuri-limba-araba': typeof CursuriLimbaArabaRoute
+  '/despre-noi': typeof DespreNoiRoute
   '/fara-alfabet-arab': typeof FaraAlfabetArabRoute
   '/intrebari-frecvente': typeof IntrebariFrecventeRoute
   '/invata-araba': typeof InvataArabaRoute
@@ -1211,6 +1244,7 @@ export interface FileRoutesById {
   '/privacy': typeof PrivacyRoute
   '/proba-confirmata': typeof ProbaConfirmataRoute
   '/quiz': typeof QuizRoute
+  '/recenzii': typeof RecenziiRoute
   '/resurse': typeof ResurseRoute
   '/rezervari': typeof RezervariRoute
   '/stergere-date': typeof StergereDateRoute
@@ -1260,6 +1294,7 @@ export interface FileRoutesById {
   '/dialecte-arabe/levantina-vs-peninsulara': typeof DialecteArabeLevantinaVsPeninsularaRoute
   '/dialecte-arabe/libaneza-vs-egipteana': typeof DialecteArabeLibanezaVsEgipteanaRoute
   '/dialecte-arabe/libaneza-vs-siriana': typeof DialecteArabeLibanezaVsSirianaRoute
+  '/en/about-us': typeof EnAboutUsRoute
   '/en/arabic-classes-near-me': typeof EnArabicClassesNearMeRoute
   '/en/arabic-for-teenagers': typeof EnArabicForTeenagersRoute
   '/en/arabic-tutor': typeof EnArabicTutorRoute
@@ -1281,6 +1316,7 @@ export interface FileRoutesById {
   '/en/prices': typeof EnPricesRoute
   '/en/privacy': typeof EnPrivacyRoute
   '/en/quiz': typeof EnQuizRoute
+  '/en/reviews': typeof EnReviewsRoute
   '/en/terms': typeof EnTermsRoute
   '/en/trial': typeof EnTrialRoute
   '/en/trial-confirmed': typeof EnTrialConfirmedRoute
@@ -1343,6 +1379,7 @@ export interface FileRouteTypes {
     | '/cursuri-araba-adolescenti'
     | '/cursuri-araba-bucuresti'
     | '/cursuri-limba-araba'
+    | '/despre-noi'
     | '/fara-alfabet-arab'
     | '/intrebari-frecvente'
     | '/invata-araba'
@@ -1356,6 +1393,7 @@ export interface FileRouteTypes {
     | '/privacy'
     | '/proba-confirmata'
     | '/quiz'
+    | '/recenzii'
     | '/resurse'
     | '/rezervari'
     | '/stergere-date'
@@ -1405,6 +1443,7 @@ export interface FileRouteTypes {
     | '/dialecte-arabe/levantina-vs-peninsulara'
     | '/dialecte-arabe/libaneza-vs-egipteana'
     | '/dialecte-arabe/libaneza-vs-siriana'
+    | '/en/about-us'
     | '/en/arabic-classes-near-me'
     | '/en/arabic-for-teenagers'
     | '/en/arabic-tutor'
@@ -1426,6 +1465,7 @@ export interface FileRouteTypes {
     | '/en/prices'
     | '/en/privacy'
     | '/en/quiz'
+    | '/en/reviews'
     | '/en/terms'
     | '/en/trial'
     | '/en/trial-confirmed'
@@ -1486,6 +1526,7 @@ export interface FileRouteTypes {
     | '/cursuri-araba-adolescenti'
     | '/cursuri-araba-bucuresti'
     | '/cursuri-limba-araba'
+    | '/despre-noi'
     | '/fara-alfabet-arab'
     | '/intrebari-frecvente'
     | '/invata-araba'
@@ -1498,6 +1539,7 @@ export interface FileRouteTypes {
     | '/privacy'
     | '/proba-confirmata'
     | '/quiz'
+    | '/recenzii'
     | '/resurse'
     | '/rezervari'
     | '/stergere-date'
@@ -1547,6 +1589,7 @@ export interface FileRouteTypes {
     | '/dialecte-arabe/levantina-vs-peninsulara'
     | '/dialecte-arabe/libaneza-vs-egipteana'
     | '/dialecte-arabe/libaneza-vs-siriana'
+    | '/en/about-us'
     | '/en/arabic-classes-near-me'
     | '/en/arabic-for-teenagers'
     | '/en/arabic-tutor'
@@ -1567,6 +1610,7 @@ export interface FileRouteTypes {
     | '/en/prices'
     | '/en/privacy'
     | '/en/quiz'
+    | '/en/reviews'
     | '/en/terms'
     | '/en/trial'
     | '/en/trial-confirmed'
@@ -1627,6 +1671,7 @@ export interface FileRouteTypes {
     | '/cursuri-araba-adolescenti'
     | '/cursuri-araba-bucuresti'
     | '/cursuri-limba-araba'
+    | '/despre-noi'
     | '/fara-alfabet-arab'
     | '/intrebari-frecvente'
     | '/invata-araba'
@@ -1640,6 +1685,7 @@ export interface FileRouteTypes {
     | '/privacy'
     | '/proba-confirmata'
     | '/quiz'
+    | '/recenzii'
     | '/resurse'
     | '/rezervari'
     | '/stergere-date'
@@ -1689,6 +1735,7 @@ export interface FileRouteTypes {
     | '/dialecte-arabe/levantina-vs-peninsulara'
     | '/dialecte-arabe/libaneza-vs-egipteana'
     | '/dialecte-arabe/libaneza-vs-siriana'
+    | '/en/about-us'
     | '/en/arabic-classes-near-me'
     | '/en/arabic-for-teenagers'
     | '/en/arabic-tutor'
@@ -1710,6 +1757,7 @@ export interface FileRouteTypes {
     | '/en/prices'
     | '/en/privacy'
     | '/en/quiz'
+    | '/en/reviews'
     | '/en/terms'
     | '/en/trial'
     | '/en/trial-confirmed'
@@ -1771,6 +1819,7 @@ export interface RootRouteChildren {
   CursuriArabaAdolescentiRoute: typeof CursuriArabaAdolescentiRoute
   CursuriArabaBucurestiRoute: typeof CursuriArabaBucurestiRoute
   CursuriLimbaArabaRoute: typeof CursuriLimbaArabaRoute
+  DespreNoiRoute: typeof DespreNoiRoute
   FaraAlfabetArabRoute: typeof FaraAlfabetArabRoute
   IntrebariFrecventeRoute: typeof IntrebariFrecventeRoute
   InvataArabaRoute: typeof InvataArabaRoute
@@ -1784,6 +1833,7 @@ export interface RootRouteChildren {
   PrivacyRoute: typeof PrivacyRoute
   ProbaConfirmataRoute: typeof ProbaConfirmataRoute
   QuizRoute: typeof QuizRoute
+  RecenziiRoute: typeof RecenziiRoute
   ResurseRoute: typeof ResurseRoute
   RezervariRoute: typeof RezervariRoute
   StergereDateRoute: typeof StergereDateRoute
@@ -1833,6 +1883,7 @@ export interface RootRouteChildren {
   DialecteArabeLevantinaVsPeninsularaRoute: typeof DialecteArabeLevantinaVsPeninsularaRoute
   DialecteArabeLibanezaVsEgipteanaRoute: typeof DialecteArabeLibanezaVsEgipteanaRoute
   DialecteArabeLibanezaVsSirianaRoute: typeof DialecteArabeLibanezaVsSirianaRoute
+  EnAboutUsRoute: typeof EnAboutUsRoute
   EnArabicClassesNearMeRoute: typeof EnArabicClassesNearMeRoute
   EnArabicForTeenagersRoute: typeof EnArabicForTeenagersRoute
   EnArabicTutorRoute: typeof EnArabicTutorRoute
@@ -1854,6 +1905,7 @@ export interface RootRouteChildren {
   EnPricesRoute: typeof EnPricesRoute
   EnPrivacyRoute: typeof EnPrivacyRoute
   EnQuizRoute: typeof EnQuizRoute
+  EnReviewsRoute: typeof EnReviewsRoute
   EnTermsRoute: typeof EnTermsRoute
   EnTrialRoute: typeof EnTrialRoute
   EnTrialConfirmedRoute: typeof EnTrialConfirmedRoute
@@ -2008,6 +2060,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof CursuriLimbaArabaRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/despre-noi': {
+      id: '/despre-noi'
+      path: '/despre-noi'
+      fullPath: '/despre-noi'
+      preLoaderRoute: typeof DespreNoiRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/fara-alfabet-arab': {
       id: '/fara-alfabet-arab'
       path: '/fara-alfabet-arab'
@@ -2097,6 +2156,13 @@ declare module '@tanstack/react-router' {
       path: '/quiz'
       fullPath: '/quiz'
       preLoaderRoute: typeof QuizRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/recenzii': {
+      id: '/recenzii'
+      path: '/recenzii'
+      fullPath: '/recenzii'
+      preLoaderRoute: typeof RecenziiRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/resurse': {
@@ -2484,6 +2550,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof EnIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/en/about-us': {
+      id: '/en/about-us'
+      path: '/en/about-us'
+      fullPath: '/en/about-us'
+      preLoaderRoute: typeof EnAboutUsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/en/arabic-classes-near-me': {
       id: '/en/arabic-classes-near-me'
       path: '/en/arabic-classes-near-me'
@@ -2629,6 +2702,13 @@ declare module '@tanstack/react-router' {
       path: '/en/quiz'
       fullPath: '/en/quiz'
       preLoaderRoute: typeof EnQuizRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/en/reviews': {
+      id: '/en/reviews'
+      path: '/en/reviews'
+      fullPath: '/en/reviews'
+      preLoaderRoute: typeof EnReviewsRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/en/terms': {
@@ -2928,6 +3008,7 @@ const rootRouteChildren: RootRouteChildren = {
   CursuriArabaAdolescentiRoute: CursuriArabaAdolescentiRoute,
   CursuriArabaBucurestiRoute: CursuriArabaBucurestiRoute,
   CursuriLimbaArabaRoute: CursuriLimbaArabaRoute,
+  DespreNoiRoute: DespreNoiRoute,
   FaraAlfabetArabRoute: FaraAlfabetArabRoute,
   IntrebariFrecventeRoute: IntrebariFrecventeRoute,
   InvataArabaRoute: InvataArabaRoute,
@@ -2941,6 +3022,7 @@ const rootRouteChildren: RootRouteChildren = {
   PrivacyRoute: PrivacyRoute,
   ProbaConfirmataRoute: ProbaConfirmataRoute,
   QuizRoute: QuizRoute,
+  RecenziiRoute: RecenziiRoute,
   ResurseRoute: ResurseRoute,
   RezervariRoute: RezervariRoute,
   StergereDateRoute: StergereDateRoute,
@@ -3001,6 +3083,7 @@ const rootRouteChildren: RootRouteChildren = {
     DialecteArabeLevantinaVsPeninsularaRoute,
   DialecteArabeLibanezaVsEgipteanaRoute: DialecteArabeLibanezaVsEgipteanaRoute,
   DialecteArabeLibanezaVsSirianaRoute: DialecteArabeLibanezaVsSirianaRoute,
+  EnAboutUsRoute: EnAboutUsRoute,
   EnArabicClassesNearMeRoute: EnArabicClassesNearMeRoute,
   EnArabicForTeenagersRoute: EnArabicForTeenagersRoute,
   EnArabicTutorRoute: EnArabicTutorRoute,
@@ -3022,6 +3105,7 @@ const rootRouteChildren: RootRouteChildren = {
   EnPricesRoute: EnPricesRoute,
   EnPrivacyRoute: EnPrivacyRoute,
   EnQuizRoute: EnQuizRoute,
+  EnReviewsRoute: EnReviewsRoute,
   EnTermsRoute: EnTermsRoute,
   EnTrialRoute: EnTrialRoute,
   EnTrialConfirmedRoute: EnTrialConfirmedRoute,
