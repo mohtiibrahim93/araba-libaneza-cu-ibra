@@ -397,7 +397,7 @@
     "syn-context-syn-0fecf2ea7211": {
       "answer": "Uff! Ma b7ebb eshte8el bel weekend.",
       "wrongAnswers": [
-        "Tameem! El ba7er huwe el maken el mofaddal 3ande.",
+        "Tameem! El ba7er huwwe el maken el mofaddal 3ande.",
         "Meeshe. Yalla, b7akiike hal esbuu3.",
         "Iza et ta2es mni7, 3al ba7er."
       ]
@@ -963,7 +963,7 @@
       "wrongAnswers": [
         "B7akiike hal esbuu3.",
         "Uff! Ma b7ebb eshte8el bel weekend.",
-        "Tameem! El ba7er huwe el maken el mofaddal 3ande."
+        "Tameem! El ba7er huwwe el maken el mofaddal 3ande."
       ],
       "expressionIDs": [
         "syn-4162e36eafea"
@@ -1004,7 +1004,7 @@
       "answer": "B7akiike hal esbuu3.",
       "wrongAnswers": [
         "Uff! Ma b7ebb eshte8el bel weekend.",
-        "Tameem! El ba7er huwe el maken el mofaddal 3ande.",
+        "Tameem! El ba7er huwwe el maken el mofaddal 3ande.",
         "Iza et ta2es mni7, 3al ba7er."
       ],
       "expressionIDs": [
@@ -1306,7 +1306,7 @@
     "syn-context-syn-66e4064dce20": {
       "answer": "Mjawwaz walla a3zab?",
       "wrongAnswers": [
-        "Esma Reem. Hiyye il-zghiire.",
+        "Esma Reem. Heyye il-zghiire.",
         "Shu esmo 5ayyak?",
         "Jedde w sitte"
       ]
@@ -1430,7 +1430,7 @@
     "syn-context-syn-7336e33d4bf1": {
       "answer": "Re7et 3as suu2 w shtareet shwayyet 8raad.",
       "wrongAnswers": [
-        "Ana kameen! Bass aklti el-mfaddale hiyye el-kebbe.",
+        "Ana kameen! Bass aklti el-mfaddale heyye el-kebbe.",
         "Re7t 3a-s-su2 mbeere7.",
         "Kam sar lak hon?"
       ]
@@ -2032,7 +2032,7 @@
       "answer": "3ande 5ayy waa7ad",
       "wrongAnswers": [
         "Mjawwaz walla a3zab?",
-        "Esma Reem. Hiyye il-zghiire.",
+        "Esma Reem. Heyye il-zghiire.",
         "Shu esmo 5ayyak?"
       ]
     },
@@ -2123,11 +2123,14 @@
       ]
     },
     "syn-context-syn-b075a2b0e163": {
-      "answer": "Ana kameen! Bass aklti el-mfaddale hiyye el-kebbe.",
+      "answer": "Ana kameen! Bass aklti el-mfaddale heyye el-kebbe.",
       "wrongAnswers": [
         "Re7t 3a-s-su2 mbeere7.",
         "Kam sar lak hon?",
         "Meeshe! Bshufak hon."
+      ],
+      "expressionIDs": [
+        "syn-b075a2b0e163"
       ]
     },
     "syn-context-syn-b08f17a3d9c5": {
@@ -2403,7 +2406,7 @@
       "wrongAnswers": [
         "3ande 5ayy waa7ad",
         "Mjawwaz walla a3zab?",
-        "Esma Reem. Hiyye il-zghiire."
+        "Esma Reem. Heyye il-zghiire."
       ]
     },
     "syn-context-syn-d3a28ada9a8b": {
@@ -2423,11 +2426,14 @@
       ]
     },
     "syn-context-syn-d45335ca7ecc": {
-      "answer": "Esma Reem. Hiyye il-zghiire.",
+      "answer": "Esma Reem. Heyye il-zghiire.",
       "wrongAnswers": [
         "Shu esmo 5ayyak?",
         "Jedde w sitte",
         "Ana 3ande e5t wa7de bass."
+      ],
+      "expressionIDs": [
+        "syn-d45335ca7ecc"
       ]
     },
     "syn-context-syn-d56463eaf234": {
@@ -2760,7 +2766,7 @@
       "wrongAnswers": [
         "7elo! Shu bta3mle bel sherke?",
         "Re7et 3as suu2 w shtareet shwayyet 8raad.",
-        "Ana kameen! Bass aklti el-mfaddale hiyye el-kebbe."
+        "Ana kameen! Bass aklti el-mfaddale heyye el-kebbe."
       ]
     },
     "syn-context-syn-fb87f2fe9e57": {
@@ -2780,7 +2786,7 @@
       ]
     },
     "syn-context-syn-fceca554f261": {
-      "answer": "Tameem! El ba7er huwe el maken el mofaddal 3ande.",
+      "answer": "Tameem! El ba7er huwwe el maken el mofaddal 3ande.",
       "wrongAnswers": [
         "Meeshe. Yalla, b7akiike hal esbuu3.",
         "Iza et ta2es mni7, 3al ba7er.",
@@ -3955,7 +3961,7 @@
     "syn-context-syn-8296c850f547": {
       "wrongAnswers": [
         "Re7et 3as suu2 w shtareet shwayyet 8raad.",
-        "Ana kameen! Bass aklti el-mfaddale hiyye el-kebbe.",
+        "Ana kameen! Bass aklti el-mfaddale heyye el-kebbe.",
         "Re7t 3a-s-su2 mbeere7."
       ],
       "answer": "7elo! Shu bta3mle bel sherke?",
@@ -4042,6 +4048,13 @@
     },
     "syn-rule-9-1": {
       "answer": "ba3den"
+    },
+    "xqf538a64b0bb5": {
+      "answer": "Heyye mabsuuta.",
+      "wrongAnswers": [
+        "Heyye mabsuut.",
+        "Huwwe mabsuuta."
+      ]
     }
   },
   "expressionOverrides": {
@@ -5074,7 +5087,13 @@
       "canonicalArabizi": "Addesh sarlak 3am teshte8el huniik?"
     },
     "syn-b075a2b0e163": {
-      "canonicalArabizi": "Ana kameen! Bass aklti el-mfaddale hiyye el-kebbe."
+      "canonicalArabizi": "Ana kameen! Bass aklti el-mfaddale heyye el-kebbe.",
+      "variants": [
+        {
+          "value": "Ana kameen! Bass aklti el-mfaddale hiyye el-kebbe.",
+          "kind": "spelling"
+        }
+      ]
     },
     "syn-b08f17a3d9c5": {
       "canonicalArabizi": "Be23od bel bet."
@@ -5212,7 +5231,13 @@
       "canonicalArabizi": "Filem amerkene, bass mish ktiir 7elo."
     },
     "syn-d45335ca7ecc": {
-      "canonicalArabizi": "Esma Reem. Hiyye il-zghiire."
+      "canonicalArabizi": "Esma Reem. Heyye il-zghiire.",
+      "variants": [
+        {
+          "value": "Esma Reem. Hiyye il-zghiire.",
+          "kind": "spelling"
+        }
+      ]
     },
     "syn-d56463eaf234": {
       "canonicalArabizi": "La2, 2ariib. 3asher d2eeye2 bel sayyara."
@@ -5400,7 +5425,7 @@
       "canonicalArabizi": "Allo Ziad! Shu 3am ta3mel?"
     },
     "syn-fceca554f261": {
-      "canonicalArabizi": "Tameem! El ba7er huwe el maken el mofaddal 3ande.",
+      "canonicalArabizi": "Tameem! El ba7er huwwe el maken el mofaddal 3ande.",
       "variants": [
         {
           "value": "Tameem! El ba7er huwe el ma7al el mofaddal 3ande.",
@@ -5408,6 +5433,10 @@
         },
         {
           "value": "Tameem! El ba7er huwe el makan el mofaddal 3ande.",
+          "kind": "spelling"
+        },
+        {
+          "value": "Tameem! El ba7er huwe el maken el mofaddal 3ande.",
           "kind": "spelling"
         }
       ]
@@ -6129,6 +6158,1029 @@
     },
     "syn-52caff56351c": {
       "canonicalArabizi": "momken ba3den"
+    },
+    "cf790e765f49d": {
+      "canonicalArabizi": "Henne",
+      "variants": [
+        {
+          "value": "Hinne",
+          "kind": "spelling"
+        }
+      ]
+    },
+    "c039cd41010b1": {
+      "canonicalArabizi": "Heyye badda",
+      "variants": [
+        {
+          "value": "Hiyye badda",
+          "kind": "spelling"
+        }
+      ]
+    },
+    "x61638ce9203c": {
+      "canonicalArabizi": "heyye",
+      "variants": [
+        {
+          "value": "hiyye",
+          "kind": "spelling"
+        }
+      ]
+    },
+    "x71ad630f2cda": {
+      "canonicalArabizi": "Henne",
+      "variants": [
+        {
+          "value": "Hinne",
+          "kind": "spelling"
+        }
+      ]
+    },
+    "xc46ba769620c": {
+      "canonicalArabizi": "heyye akalet",
+      "variants": [
+        {
+          "value": "hiyye akalet",
+          "kind": "spelling"
+        }
+      ]
+    },
+    "xff1e19e3ca79": {
+      "canonicalArabizi": "heyye btekol",
+      "variants": [
+        {
+          "value": "hiyye btekol",
+          "kind": "spelling"
+        }
+      ]
+    },
+    "x1e393fd13b7d": {
+      "canonicalArabizi": "heyye 3am tekol",
+      "variants": [
+        {
+          "value": "hiyye 3am tekol",
+          "kind": "spelling"
+        }
+      ]
+    },
+    "xbbd36a31694c": {
+      "canonicalArabizi": "heyye 7a tekol",
+      "variants": [
+        {
+          "value": "hiyye 7a tekol",
+          "kind": "spelling"
+        }
+      ]
+    },
+    "x302acf222109": {
+      "canonicalArabizi": "heyye eekle",
+      "variants": [
+        {
+          "value": "hiyye eekle",
+          "kind": "spelling"
+        }
+      ]
+    },
+    "x85c298c5fab7": {
+      "canonicalArabizi": "Henne akalo",
+      "variants": [
+        {
+          "value": "Hinne akalo",
+          "kind": "spelling"
+        }
+      ]
+    },
+    "xa0fc58fbbc06": {
+      "canonicalArabizi": "Henne byeklo",
+      "variants": [
+        {
+          "value": "Hinne byeklo",
+          "kind": "spelling"
+        }
+      ]
+    },
+    "xc640bb032516": {
+      "canonicalArabizi": "Henne 3am yeklo",
+      "variants": [
+        {
+          "value": "Hinne 3am yeklo",
+          "kind": "spelling"
+        }
+      ]
+    },
+    "xc6ae585b0f43": {
+      "canonicalArabizi": "Henne 7a yeklo",
+      "variants": [
+        {
+          "value": "Hinne 7a yeklo",
+          "kind": "spelling"
+        }
+      ]
+    },
+    "x1afa23619640": {
+      "canonicalArabizi": "Henne ekliin",
+      "variants": [
+        {
+          "value": "Hinne ekliin",
+          "kind": "spelling"
+        }
+      ]
+    },
+    "x3161923fbb0c": {
+      "canonicalArabizi": "heyye 7ket",
+      "variants": [
+        {
+          "value": "hiyye 7ket",
+          "kind": "spelling"
+        }
+      ]
+    },
+    "x0220119b5103": {
+      "canonicalArabizi": "heyye bt7ke",
+      "variants": [
+        {
+          "value": "hiyye bt7ke",
+          "kind": "spelling"
+        }
+      ]
+    },
+    "x84d865460e9e": {
+      "canonicalArabizi": "heyye 3am te7ke",
+      "variants": [
+        {
+          "value": "hiyye 3am te7ke",
+          "kind": "spelling"
+        }
+      ]
+    },
+    "xc26076e75cb2": {
+      "canonicalArabizi": "heyye 7a t7ke",
+      "variants": [
+        {
+          "value": "hiyye 7a t7ke",
+          "kind": "spelling"
+        }
+      ]
+    },
+    "x7e95983d2bda": {
+      "canonicalArabizi": "heyye 7ekye",
+      "variants": [
+        {
+          "value": "hiyye 7ekye",
+          "kind": "spelling"
+        }
+      ]
+    },
+    "xe142af9804a3": {
+      "canonicalArabizi": "Henne 7eko",
+      "variants": [
+        {
+          "value": "Hinne 7eko",
+          "kind": "spelling"
+        }
+      ]
+    },
+    "x16fa4ba89086": {
+      "canonicalArabizi": "Henne by7ko",
+      "variants": [
+        {
+          "value": "Hinne by7ko",
+          "kind": "spelling"
+        }
+      ]
+    },
+    "x98739391d05d": {
+      "canonicalArabizi": "Henne 3am ye7ko",
+      "variants": [
+        {
+          "value": "Hinne 3am ye7ko",
+          "kind": "spelling"
+        }
+      ]
+    },
+    "x259812059be2": {
+      "canonicalArabizi": "Henne 7a y7ko",
+      "variants": [
+        {
+          "value": "Hinne 7a y7ko",
+          "kind": "spelling"
+        }
+      ]
+    },
+    "x1f17c722d627": {
+      "canonicalArabizi": "Henne 7ekyiin",
+      "variants": [
+        {
+          "value": "Hinne 7ekyiin",
+          "kind": "spelling"
+        }
+      ]
+    },
+    "x745ae678b057": {
+      "canonicalArabizi": "heyye Talfanet",
+      "variants": [
+        {
+          "value": "hiyye Talfanet",
+          "kind": "spelling"
+        }
+      ]
+    },
+    "x66a943421c8d": {
+      "canonicalArabizi": "heyye bttlfn",
+      "variants": [
+        {
+          "value": "hiyye bttlfn",
+          "kind": "spelling"
+        }
+      ]
+    },
+    "x1179b871e3b5": {
+      "canonicalArabizi": "heyye 3am ttlfn",
+      "variants": [
+        {
+          "value": "hiyye 3am ttlfn",
+          "kind": "spelling"
+        }
+      ]
+    },
+    "x26028a5dd217": {
+      "canonicalArabizi": "heyye 7a ttlfn",
+      "variants": [
+        {
+          "value": "hiyye 7a ttlfn",
+          "kind": "spelling"
+        }
+      ]
+    },
+    "xd2305ba84551": {
+      "canonicalArabizi": "heyye mtalfne",
+      "variants": [
+        {
+          "value": "hiyye mtalfne",
+          "kind": "spelling"
+        }
+      ]
+    },
+    "x140788b7f249": {
+      "canonicalArabizi": "Henne tlfano",
+      "variants": [
+        {
+          "value": "Hinne tlfano",
+          "kind": "spelling"
+        }
+      ]
+    },
+    "x7d062aafcf2e": {
+      "canonicalArabizi": "Henne bytlfno",
+      "variants": [
+        {
+          "value": "Hinne bytlfno",
+          "kind": "spelling"
+        }
+      ]
+    },
+    "x19960b12786f": {
+      "canonicalArabizi": "Henne 3am ytlfno",
+      "variants": [
+        {
+          "value": "Hinne 3am ytlfno",
+          "kind": "spelling"
+        }
+      ]
+    },
+    "xdffe987095ac": {
+      "canonicalArabizi": "Henne 7a ytlfno",
+      "variants": [
+        {
+          "value": "Hinne 7a ytlfno",
+          "kind": "spelling"
+        }
+      ]
+    },
+    "x98da091eb53e": {
+      "canonicalArabizi": "Henne mtalfniin",
+      "variants": [
+        {
+          "value": "Hinne mtalfniin",
+          "kind": "spelling"
+        }
+      ]
+    },
+    "x26ba48bb72ec": {
+      "canonicalArabizi": "heyye sht8let",
+      "variants": [
+        {
+          "value": "hiyye sht8let",
+          "kind": "spelling"
+        }
+      ]
+    },
+    "x5bef59a178fc": {
+      "canonicalArabizi": "heyye btsht8el",
+      "variants": [
+        {
+          "value": "hiyye btsht8el",
+          "kind": "spelling"
+        }
+      ]
+    },
+    "xc5c79e5969fc": {
+      "canonicalArabizi": "heyye 3am tesht8l",
+      "variants": [
+        {
+          "value": "hiyye 3am tesht8l",
+          "kind": "spelling"
+        }
+      ]
+    },
+    "x21c456b866a8": {
+      "canonicalArabizi": "heyye 7a tesht8el",
+      "variants": [
+        {
+          "value": "hiyye 7a tesht8el",
+          "kind": "spelling"
+        }
+      ]
+    },
+    "x1b4e6e7049b6": {
+      "canonicalArabizi": "heyye she8le",
+      "variants": [
+        {
+          "value": "hiyye she8le",
+          "kind": "spelling"
+        }
+      ]
+    },
+    "xf2b0061c6639": {
+      "canonicalArabizi": "Henne sht8lo",
+      "variants": [
+        {
+          "value": "Hinne sht8lo",
+          "kind": "spelling"
+        }
+      ]
+    },
+    "x3cb6c99afc5f": {
+      "canonicalArabizi": "Henne bysht8lo",
+      "variants": [
+        {
+          "value": "Hinne bysht8lo",
+          "kind": "spelling"
+        }
+      ]
+    },
+    "x969f86b7fec9": {
+      "canonicalArabizi": "Henne 3am yesht8lo",
+      "variants": [
+        {
+          "value": "Hinne 3am yesht8lo",
+          "kind": "spelling"
+        }
+      ]
+    },
+    "x00bdc900bd6a": {
+      "canonicalArabizi": "Henne 7a yesht8lo",
+      "variants": [
+        {
+          "value": "Hinne 7a yesht8lo",
+          "kind": "spelling"
+        }
+      ]
+    },
+    "x8ced933ad482": {
+      "canonicalArabizi": "Henne she8liin",
+      "variants": [
+        {
+          "value": "Hinne she8liin",
+          "kind": "spelling"
+        }
+      ]
+    },
+    "x2a0d189abe26": {
+      "canonicalArabizi": "heyye 3atet",
+      "variants": [
+        {
+          "value": "hiyye 3atyet",
+          "kind": "spelling"
+        },
+        {
+          "value": "hiyye 3atet",
+          "kind": "spelling"
+        }
+      ]
+    },
+    "x7f41474a5108": {
+      "canonicalArabizi": "heyye bt3te",
+      "variants": [
+        {
+          "value": "hiyye bt3te",
+          "kind": "spelling"
+        }
+      ]
+    },
+    "xf5f66f2589ee": {
+      "canonicalArabizi": "heyye 3am ta3te",
+      "variants": [
+        {
+          "value": "hiyye 3am ta3te",
+          "kind": "spelling"
+        }
+      ]
+    },
+    "x3458c3e1f408": {
+      "canonicalArabizi": "heyye 7a te3te",
+      "variants": [
+        {
+          "value": "hiyye 7a te3te",
+          "kind": "spelling"
+        }
+      ]
+    },
+    "xda3e3add6f6c": {
+      "canonicalArabizi": "heyye 3atye",
+      "variants": [
+        {
+          "value": "hiyye 3atye",
+          "kind": "spelling"
+        }
+      ]
+    },
+    "xbd3479cc5d15": {
+      "canonicalArabizi": "Henne 3ato",
+      "variants": [
+        {
+          "value": "Hinne 3atyo",
+          "kind": "spelling"
+        },
+        {
+          "value": "Hinne 3ato",
+          "kind": "spelling"
+        }
+      ]
+    },
+    "x7e861e573d4b": {
+      "canonicalArabizi": "Henne by3to",
+      "variants": [
+        {
+          "value": "Hinne by3to",
+          "kind": "spelling"
+        }
+      ]
+    },
+    "x177c08b3070c": {
+      "canonicalArabizi": "Henne 3am ya3to",
+      "variants": [
+        {
+          "value": "Hinne 3am ya3to",
+          "kind": "spelling"
+        }
+      ]
+    },
+    "x22014aab972b": {
+      "canonicalArabizi": "Henne 7a ya3to",
+      "variants": [
+        {
+          "value": "Hinne 7a ya3to",
+          "kind": "spelling"
+        }
+      ]
+    },
+    "xadcddb9f011b": {
+      "canonicalArabizi": "Henne 3atyiin",
+      "variants": [
+        {
+          "value": "Hinne 3atyiin",
+          "kind": "spelling"
+        }
+      ]
+    },
+    "x49d83b1f2f30": {
+      "canonicalArabizi": "heyye 2elet",
+      "variants": [
+        {
+          "value": "hiyye 2elet",
+          "kind": "spelling"
+        }
+      ]
+    },
+    "x8c9809a14a2b": {
+      "canonicalArabizi": "heyye bt2ul",
+      "variants": [
+        {
+          "value": "hiyye bt2ul",
+          "kind": "spelling"
+        }
+      ]
+    },
+    "xc61b1a0c121f": {
+      "canonicalArabizi": "heyye 3am t2ul",
+      "variants": [
+        {
+          "value": "hiyye 3am t2ul",
+          "kind": "spelling"
+        }
+      ]
+    },
+    "xec75b4a25fce": {
+      "canonicalArabizi": "heyye 7a t2ul",
+      "variants": [
+        {
+          "value": "hiyye 7a t2ul",
+          "kind": "spelling"
+        }
+      ]
+    },
+    "xd79825541170": {
+      "canonicalArabizi": "heyye 2ayle",
+      "variants": [
+        {
+          "value": "hiyye 2eyle",
+          "kind": "spelling"
+        },
+        {
+          "value": "hiyye 2ayle",
+          "kind": "spelling"
+        }
+      ]
+    },
+    "x15c14f67c953": {
+      "canonicalArabizi": "Henne 2elo",
+      "variants": [
+        {
+          "value": "Hinne 2elo",
+          "kind": "spelling"
+        }
+      ]
+    },
+    "x2fe1b0a8a88e": {
+      "canonicalArabizi": "Henne by2ulo",
+      "variants": [
+        {
+          "value": "Hinne by2ulo",
+          "kind": "spelling"
+        }
+      ]
+    },
+    "x50f769850cae": {
+      "canonicalArabizi": "Henne 3am y2ulo",
+      "variants": [
+        {
+          "value": "Hinne 3am y2ulo",
+          "kind": "spelling"
+        }
+      ]
+    },
+    "xe27fe12992c9": {
+      "canonicalArabizi": "Henne 7a y2ulo",
+      "variants": [
+        {
+          "value": "Hinne 7a y2ulo",
+          "kind": "spelling"
+        }
+      ]
+    },
+    "xe0078183fc6c": {
+      "canonicalArabizi": "Henne 2ayliin",
+      "variants": [
+        {
+          "value": "Hinne 2eyliin",
+          "kind": "spelling"
+        },
+        {
+          "value": "Hinne 2ayliin",
+          "kind": "spelling"
+        }
+      ]
+    },
+    "x500870ba9a61": {
+      "canonicalArabizi": "heyye Daraset",
+      "variants": [
+        {
+          "value": "hiyye Daraset",
+          "kind": "spelling"
+        }
+      ]
+    },
+    "x136e37b57e4f": {
+      "canonicalArabizi": "heyye btedros",
+      "variants": [
+        {
+          "value": "hiyye btedros",
+          "kind": "spelling"
+        }
+      ]
+    },
+    "x7deda0b4a2de": {
+      "canonicalArabizi": "heyye 3am tedros",
+      "variants": [
+        {
+          "value": "hiyye 3am tedros",
+          "kind": "spelling"
+        }
+      ]
+    },
+    "x2cae9ba1deee": {
+      "canonicalArabizi": "heyye 7a tdros",
+      "variants": [
+        {
+          "value": "hiyye 7a tdros",
+          "kind": "spelling"
+        }
+      ]
+    },
+    "xe98ce961ebba": {
+      "canonicalArabizi": "heyye derse",
+      "variants": [
+        {
+          "value": "hiyye derse",
+          "kind": "spelling"
+        }
+      ]
+    },
+    "x33e34cb53c0a": {
+      "canonicalArabizi": "Henne Daraso",
+      "variants": [
+        {
+          "value": "Hinne Daraso",
+          "kind": "spelling"
+        }
+      ]
+    },
+    "x5289d37d4cbf": {
+      "canonicalArabizi": "Henne byederso",
+      "variants": [
+        {
+          "value": "Hinne byederso",
+          "kind": "spelling"
+        }
+      ]
+    },
+    "xebb210bd5588": {
+      "canonicalArabizi": "Henne 3am yederso",
+      "variants": [
+        {
+          "value": "Hinne 3am yederso",
+          "kind": "spelling"
+        }
+      ]
+    },
+    "xa9a44135e792": {
+      "canonicalArabizi": "Henne 7a ydrso",
+      "variants": [
+        {
+          "value": "Hinne 7a ydrso",
+          "kind": "spelling"
+        }
+      ]
+    },
+    "xd3d26e0aad41": {
+      "canonicalArabizi": "Henne dersiin",
+      "variants": [
+        {
+          "value": "Hinne dersiin",
+          "kind": "spelling"
+        }
+      ]
+    },
+    "x2ff050165382": {
+      "canonicalArabizi": "heyye 3erfet",
+      "variants": [
+        {
+          "value": "hiyye 3erfet",
+          "kind": "spelling"
+        }
+      ]
+    },
+    "x5c101d9ea626": {
+      "canonicalArabizi": "heyye bta3ref",
+      "variants": [
+        {
+          "value": "hiyye bta3ref",
+          "kind": "spelling"
+        }
+      ]
+    },
+    "xcfb2db3dd914": {
+      "canonicalArabizi": "heyye 3am ta3ref",
+      "variants": [
+        {
+          "value": "hiyye 3am ta3ref",
+          "kind": "spelling"
+        }
+      ]
+    },
+    "x031a7f6f381e": {
+      "canonicalArabizi": "heyye 7a ta3ref",
+      "variants": [
+        {
+          "value": "hiyye 7a ta3ref",
+          "kind": "spelling"
+        }
+      ]
+    },
+    "x1b9855a81253": {
+      "canonicalArabizi": "heyye 3erfe",
+      "variants": [
+        {
+          "value": "hiyye 3erfe",
+          "kind": "spelling"
+        }
+      ]
+    },
+    "xfabec988f0fa": {
+      "canonicalArabizi": "Henne 3erfo",
+      "variants": [
+        {
+          "value": "Hinne 3erfo",
+          "kind": "spelling"
+        }
+      ]
+    },
+    "x1d3301f43a2d": {
+      "canonicalArabizi": "Henne bya3rfo",
+      "variants": [
+        {
+          "value": "Hinne bya3rfo",
+          "kind": "spelling"
+        }
+      ]
+    },
+    "x3ac993f6346d": {
+      "canonicalArabizi": "Henne 3am ya3rfo",
+      "variants": [
+        {
+          "value": "Hinne 3am ya3rfo",
+          "kind": "spelling"
+        }
+      ]
+    },
+    "x7b7a3ddbf4c0": {
+      "canonicalArabizi": "Henne 7a ya3rfo",
+      "variants": [
+        {
+          "value": "Hinne 7a ya3rfo",
+          "kind": "spelling"
+        }
+      ]
+    },
+    "x32d5c05f429f": {
+      "canonicalArabizi": "Henne 3erfiin",
+      "variants": [
+        {
+          "value": "Hinne 3erfiin",
+          "kind": "spelling"
+        }
+      ]
+    },
+    "x223e9e981090": {
+      "canonicalArabizi": "heyye 3emlet",
+      "variants": [
+        {
+          "value": "hiyye 3emlet",
+          "kind": "spelling"
+        }
+      ]
+    },
+    "x8911614fcebc": {
+      "canonicalArabizi": "heyye bta3mol",
+      "variants": [
+        {
+          "value": "hiyye bta3mol",
+          "kind": "spelling"
+        }
+      ]
+    },
+    "x3de0b243e1f9": {
+      "canonicalArabizi": "heyye 3am ta3mol",
+      "variants": [
+        {
+          "value": "hiyye 3am ta3mol",
+          "kind": "spelling"
+        }
+      ]
+    },
+    "x89d9bd105151": {
+      "canonicalArabizi": "heyye 7a ta3mol",
+      "variants": [
+        {
+          "value": "hiyye 7a ta3mol",
+          "kind": "spelling"
+        }
+      ]
+    },
+    "xfc650f4f34a7": {
+      "canonicalArabizi": "heyye 3emle",
+      "variants": [
+        {
+          "value": "hiyye 3amle",
+          "kind": "spelling"
+        },
+        {
+          "value": "hiyye 3emle",
+          "kind": "spelling"
+        }
+      ]
+    },
+    "x24a9a0d3793b": {
+      "canonicalArabizi": "Henne 3emlo",
+      "variants": [
+        {
+          "value": "Hinne 3emlo",
+          "kind": "spelling"
+        }
+      ]
+    },
+    "x8f24f6917987": {
+      "canonicalArabizi": "Henne bya3mlo",
+      "variants": [
+        {
+          "value": "Hinne bya3mlo",
+          "kind": "spelling"
+        }
+      ]
+    },
+    "xbdabd8e16210": {
+      "canonicalArabizi": "Henne 3am ya3mlo",
+      "variants": [
+        {
+          "value": "Hinne 3am ya3mlo",
+          "kind": "spelling"
+        }
+      ]
+    },
+    "xdac7a3479eb8": {
+      "canonicalArabizi": "Henne 7a ya3mlo",
+      "variants": [
+        {
+          "value": "Hinne 7a ya3mlo",
+          "kind": "spelling"
+        }
+      ]
+    },
+    "x6930ba100482": {
+      "canonicalArabizi": "Henne 3emliin",
+      "variants": [
+        {
+          "value": "Hinne 3amliin",
+          "kind": "spelling"
+        },
+        {
+          "value": "Hinne 3emliin",
+          "kind": "spelling"
+        }
+      ]
+    },
+    "x103099e1f520": {
+      "canonicalArabizi": "heyye sewet",
+      "variants": [
+        {
+          "value": "hiyye sewet",
+          "kind": "spelling"
+        }
+      ]
+    },
+    "x7342e7246a48": {
+      "canonicalArabizi": "heyye btsewe",
+      "variants": [
+        {
+          "value": "hiyye btsewe",
+          "kind": "spelling"
+        }
+      ]
+    },
+    "x5608069b0d7b": {
+      "canonicalArabizi": "heyye 3am tsewe",
+      "variants": [
+        {
+          "value": "hiyye 3am tsewe",
+          "kind": "spelling"
+        }
+      ]
+    },
+    "x32767f2c544a": {
+      "canonicalArabizi": "heyye 7a tsewe",
+      "variants": [
+        {
+          "value": "hiyye 7a tsewe",
+          "kind": "spelling"
+        }
+      ]
+    },
+    "x0d48eaf7dd9a": {
+      "canonicalArabizi": "heyye mseweye",
+      "variants": [
+        {
+          "value": "hiyye mseweye",
+          "kind": "spelling"
+        }
+      ]
+    },
+    "x1dd3f6e77bb8": {
+      "canonicalArabizi": "Henne sewo",
+      "variants": [
+        {
+          "value": "Hinne sewo",
+          "kind": "spelling"
+        }
+      ]
+    },
+    "x58c81bfabc74": {
+      "canonicalArabizi": "Henne bysewo",
+      "variants": [
+        {
+          "value": "Hinne bysewo",
+          "kind": "spelling"
+        }
+      ]
+    },
+    "xcbad1f656b6d": {
+      "canonicalArabizi": "Henne 3am ysewo",
+      "variants": [
+        {
+          "value": "Hinne 3am ysewo",
+          "kind": "spelling"
+        }
+      ]
+    },
+    "x7c487e085b51": {
+      "canonicalArabizi": "Henne 7a ysewo",
+      "variants": [
+        {
+          "value": "Hinne 7a ysewo",
+          "kind": "spelling"
+        }
+      ]
+    },
+    "xec3a50091182": {
+      "canonicalArabizi": "Henne msewyeen",
+      "variants": [
+        {
+          "value": "Hinne msewyeen",
+          "kind": "spelling"
+        }
+      ]
+    },
+    "x5ec0ce46bfa8": {
+      "canonicalArabizi": "Henne",
+      "variants": [
+        {
+          "value": "Hinne",
+          "kind": "spelling"
+        }
+      ]
+    },
+    "xd0019cbc24fe": {
+      "canonicalArabizi": "Heyye badda",
+      "variants": [
+        {
+          "value": "Hiyye badda",
+          "kind": "spelling"
+        }
+      ]
+    },
+    "xbefbd20c7bcf": {
+      "canonicalArabizi": "heyye bteshrab",
+      "variants": [
+        {
+          "value": "hiyye bteshrab",
+          "kind": "spelling"
+        }
+      ]
+    },
+    "x20131f0fffdf": {
+      "canonicalArabizi": "heyye daraset",
+      "variants": [
+        {
+          "value": "hiyye daraset",
+          "kind": "spelling"
+        }
+      ]
+    },
+    "xd2019a2907e0": {
+      "canonicalArabizi": "heyye bterte7",
+      "variants": [
+        {
+          "value": "hiyye bterte7",
+          "kind": "spelling"
+        }
+      ]
+    },
+    "xe24b85748565": {
+      "canonicalArabizi": "Heyye 3anda tannoura 7elwe",
+      "variants": [
+        {
+          "value": "Hiyye 3anda tannoura 7elwe",
+          "kind": "spelling"
+        }
+      ]
+    },
+    "x1d700f36ad0e": {
+      "canonicalArabizi": "Heyye ray7a 3al madrase",
+      "variants": [
+        {
+          "value": "Hiyye ray7a 3al madrase",
+          "kind": "spelling"
+        }
+      ]
     }
   },
   "unitExpressionAdditions": [
