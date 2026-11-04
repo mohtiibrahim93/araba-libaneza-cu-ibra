@@ -252,6 +252,24 @@ const DialecteArabe = () => (
         </Link>{" "}
         — hijazi, najdi și dialectele yemenite.
       </li>
+      <li>
+        <Link to="/dialecte-arabe/libaneza-vs-palestiniana">
+          Libaneza vs. palestiniana
+        </Link>{" "}
+        — nordul și sudul, la o frontieră distanță.
+      </li>
+      <li>
+        <Link to="/dialecte-arabe/libaneza-vs-iordaniana">
+          Libaneza vs. iordaniana
+        </Link>{" "}
+        — Ammanul urban și accentul beduin, în aceeași țară.
+      </li>
+      <li>
+        <Link to="/dialecte-arabe/levantina-de-sud">
+          Levantina de sud vs. nord
+        </Link>{" "}
+        — cele patru variante, așezate pe aceeași linie.
+      </li>
     </ul>
 
     <h2>Unde stă araba libaneză</h2>
