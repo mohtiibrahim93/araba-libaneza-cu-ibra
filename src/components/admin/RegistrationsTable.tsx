@@ -44,6 +44,7 @@ import {
   studentLabel,
 } from "./types";
 import type { LeadStatus, Registration } from "./types";
+import { displayPaymentStatus } from "./types";
 import RegistrationCourse, {
   registrationFormatLabel,
 } from "./RegistrationCourse";
@@ -190,7 +191,7 @@ const paymentStatusBadge = (r: Registration) => {
           "Plătit la zi",
         )
       : badge("bg-red-500/10 text-red-700 dark:text-red-400", "Neplătit");
-  switch (r.payment_status) {
+  switch (displayPaymentStatus(r)) {
     case "paid":
       return badge(
         "bg-emerald-500/10 text-emerald-700 dark:text-emerald-400",

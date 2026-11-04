@@ -1,4 +1,5 @@
 import type { Registration } from "@/components/admin/types";
+import { displayPaymentStatus } from "@/components/admin/types";
 
 export const courseFilterKeys = [
   "format",
@@ -30,6 +31,7 @@ export function describeRegistrationCourse(
       | "teaching_language"
       | "refunded_at"
       | "payment_status"
+      | "form_type"
     >
   >,
 ): CourseFilters {
@@ -41,7 +43,7 @@ export function describeRegistrationCourse(
     level: known(c ? c.level : r.level),
     teachingLanguage: known(c ? c.teaching_language : r.teaching_language),
     status: known(c?.status),
-    payment: r.refunded_at ? "refunded" : known(r.payment_status),
+    payment: r.refunded_at ? "refunded" : known(displayPaymentStatus(r)),
   };
 }
 export function matchesCourseFilters(

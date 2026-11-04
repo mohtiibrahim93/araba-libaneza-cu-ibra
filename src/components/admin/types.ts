@@ -188,6 +188,24 @@ export const paymentStatusLabels: Record<string, string> = {
 };
 
 /**
+ * The payment state the admin shows. A free trial ("Probă gratuită") owes
+ * nothing, so one with no payment attempt reads "Gratuit", not "Neplătit".
+ * A trial with a saved card or a no-show fee keeps its own status.
+ * (Owner's request, 4 November 2026.)
+ */
+export function displayPaymentStatus(r: {
+  form_type?: string | null;
+  payment_status?: string | null;
+}): string | null | undefined {
+  if (
+    r.form_type === "trial" &&
+    (!r.payment_status || r.payment_status === "unpaid")
+  )
+    return "free";
+  return r.payment_status;
+}
+
+/**
  * A partial refund: the money arrived and part of it went back. The status
  * stays what it was (usually "Plătit": the student keeps their lessons) and
  * the amount is shown next to it. Only a full refund is `refunded`.
