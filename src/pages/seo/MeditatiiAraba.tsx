@@ -26,7 +26,7 @@ const MeditatiiAraba = () => (
     enHref="/en/arabic-tutor"
     title="Meditații de arabă libaneză 1:1 — București și online"
     metaTitle="Meditații Arabă 1:1 București & Online | de la 150 lei/oră"
-    description="Meditații de arabă libaneză 1:1 cu profesor nativ, în București sau online: 150 lei/lecție online, 210 lei fizic (60 min). Proba e gratuită (0 lei)."
+    description="Meditații de arabă libaneză 1:1 cu profesor nativ, în București sau online: 150 lei/lecție online, 210 lei fizic (60 min). Prima lecție de probă e gratuită."
     crumb="Meditații arabă libaneză"
     lead="Meditații 1:1 de arabă libaneză cu profesor nativ, adaptate obiectivului tău — călătorie, familie, examen sau conversație. Fizic în București sau online, program flexibil, preț transparent."
     faq={FAQ}
@@ -94,7 +94,7 @@ const MeditatiiAraba = () => (
     <p>
       Prima lecție de probă (30 min) este gratuită. Rezervi direct din{" "}
       <Link to="/cursuri/private">pagina de lecții private</Link> sau începi cu{" "}
-      <Link to="/trial">proba gratuită (0 lei) de 30 min</Link>.
+      <Link to="/trial">proba gratuită de 30 min</Link>.
     </p>
 
     <h2>Cum arată o meditație tipică</h2>

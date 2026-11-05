@@ -198,7 +198,7 @@ const LibanezaVsIordaniana = () => (
       Scrii totul în <Link to="/arabizi">arabizi</Link>, ca să vorbești din
       prima lecție, iei materialele din{" "}
       <Link to="/resurse">pagina de resurse</Link> și încerci o{" "}
-      <Link to="/trial">lecție de probă gratuită (0 lei)</Link> cu profesor nativ.
+      <Link to="/trial">lecție de probă gratuită</Link> cu profesor nativ.
     </p>
     <DialectSiblings current="/dialecte-arabe/libaneza-vs-iordaniana" />
   </LandingLayout>

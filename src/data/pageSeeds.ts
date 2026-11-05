@@ -58,7 +58,7 @@ export const PAGE_SEEDS: PageSeed[] = [
     path: "/cursuri-araba",
     meta_title: "Cursuri de Arabă Libaneză cu Profesor Nativ | A1–C2",
     meta_description:
-      "Alege cursul de arabă libaneză potrivit: grupe A1–C2, lecții 1:1 sau cursuri pentru copii, în București și online. Începi cu o probă gratuită (0 lei).",
+      "Alege cursul de arabă libaneză potrivit: grupe A1–C2, lecții 1:1 sau cursuri pentru copii, în București și online. Începi cu o probă gratuită.",
     h1: "Cursuri de limbă arabă (libaneză) — București și online, toate nivelurile",
     lead: "Toate formatele într-un singur loc: grupe pe niveluri (A1–C2), lecții private 1:1 și curs pentru copii — cu profesor nativ, fizic în București sau online.",
   },
@@ -67,7 +67,7 @@ export const PAGE_SEEDS: PageSeed[] = [
     meta_title:
       "Cursuri de Arabă Libaneză București — Adulți, Copii, 1:1 | Sector 2",
     meta_description:
-      "Cursuri de arabă libaneză în București cu profesor nativ. Grupe mici pentru adulți și copii, niveluri A1–C2. Lecție de probă gratuită (0 lei).",
+      "Cursuri de arabă libaneză în București cu profesor nativ. Grupe mici pentru adulți și copii, niveluri A1–C2. Lecție de probă gratuită.",
     h1: "Cursuri de arabă libaneză în București — profesor nativ, grupe mici",
     lead: "Cursuri de arabă libaneză în București cu profesor nativ, la Raduga Creative Center (Str. Icoanei 80, sector 2). Grupe mici, niveluri A1–C2, adulți și copii.",
   },
@@ -84,7 +84,7 @@ export const PAGE_SEEDS: PageSeed[] = [
     path: "/en/arabic-classes-near-me",
     meta_title: "Arabic Classes Near Me — Bucharest & Online | Native Teacher",
     meta_description:
-      "Arabic classes with a native Lebanese teacher — in person in Bucharest (Strada Icoanei 80) or live online worldwide. Small groups, CEFR A1–C2, free trial (0 lei). From €100/month.",
+      "Arabic classes with a native Lebanese teacher — in person in Bucharest (Strada Icoanei 80) or live online worldwide. Small groups, CEFR A1–C2, free trial. From €100/month.",
     h1: "Arabic classes near me — Bucharest & online worldwide",
     lead: "In-person Arabic classes in Bucharest and live online classes worldwide, taught by a native Lebanese teacher. Small groups (max 6 students online, 8 in person), CEFR-aligned A1–C2, or private 1-on-1 if you prefer.",
   },
@@ -101,7 +101,7 @@ export const PAGE_SEEDS: PageSeed[] = [
     path: "/en/arabic-tutor",
     meta_title: "Arabic Tutor Online — 1-on-1 Lessons | Native Teacher",
     meta_description:
-      "Private Arabic tutor online — 1-on-1 lessons with a native Lebanese teacher (6+ years experience). CEFR A1–C2, flexible schedule, free trial (0 lei). €30 / 90 min.",
+      "Private Arabic tutor online — 1-on-1 lessons with a native Lebanese teacher (6+ years experience). CEFR A1–C2, flexible schedule, free trial. €30 / 90 min.",
     h1: "Arabic tutor online — private 1-on-1 lessons with a native teacher",
     lead: "Private Arabic tutoring with a native Lebanese teacher — live 1-on-1 lessons online worldwide, or in person in Bucharest. Personalized pace, real conversation from day one.",
   },
@@ -115,9 +115,9 @@ export const PAGE_SEEDS: PageSeed[] = [
   },
   {
     path: "/en/learn-lebanese-arabic",
-    meta_title: "Learn Lebanese Arabic Online | Native Teacher, Free Trial (0 lei)",
+    meta_title: "Learn Lebanese Arabic Online | Native Teacher, Free Trial",
     meta_description:
-      "Learn Lebanese Arabic (Levantine dialect) with a native instructor. Live 1-on-1 and small-group courses online worldwide, from beginner (A1) to advanced. Speak from lesson one — free trial (0 lei).",
+      "Learn Lebanese Arabic (Levantine dialect) with a native instructor. Live 1-on-1 and small-group courses online worldwide, from beginner (A1) to advanced. Speak from lesson one — free trial.",
     h1: "Learn Lebanese Arabic online with a native teacher",
     lead: "Live 1-on-1 and small-group courses in the Lebanese dialect — the everyday Levantine Arabic spoken by over 40 million people. Speak from lesson one, without starting from the alphabet. From beginner (A1) to advanced (C2).",
   },
@@ -149,7 +149,7 @@ export const PAGE_SEEDS: PageSeed[] = [
     path: "/meditatii-araba",
     meta_title:
       "Meditații Arabă Libaneză 1:1 cu Profesor Nativ | București & Online",
-    meta_description: `Meditații de arabă libaneză cu profesor nativ libanez, 1:1, ritm personalizat. Fizic în București sau online pe Zoom. ${PRICE.privateOnline} lei/lecție online, ${PRICE.privateFizic} lei fizic, primă lecție gratuită (0 lei).`,
+    meta_description: `Meditații de arabă libaneză cu profesor nativ libanez, 1:1, ritm personalizat. Fizic în București sau online pe Zoom. ${PRICE.privateOnline} lei/lecție online, ${PRICE.privateFizic} lei fizic, primă lecție gratuită.`,
     h1: "Meditații de arabă libaneză 1:1 — profesor nativ, program flexibil",
     lead: "Meditații 1:1 de arabă libaneză cu profesor nativ, adaptate obiectivului tău — călătorie, familie, examen sau conversație. Fizic în București sau online, program flexibil.",
   },

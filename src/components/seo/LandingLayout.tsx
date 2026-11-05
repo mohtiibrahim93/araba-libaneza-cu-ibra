@@ -279,7 +279,7 @@ const LandingLayout = ({
 
             <div className="mt-16 rounded-3xl bg-brand-green p-6 md:p-10 text-center space-y-4">
               <h2 className="font-display text-2xl font-bold text-white md:text-3xl">
-                Începe cu o lecție de probă gratuită (0 lei)
+                Începe cu o lecție de probă gratuită
               </h2>
               <p className="text-white/85">
                 30 de minute cu profesor nativ — online sau fizic în București.
@@ -290,7 +290,7 @@ const LandingLayout = ({
                   to="/trial"
                   className="inline-flex h-12 items-center justify-center bg-white text-brand-green px-6 rounded-xl font-semibold hover:opacity-90 transition"
                 >
-                  Rezervă proba gratuită (0 lei)
+                  Rezervă proba gratuită
                 </Link>
                 <Link
                   to="/test-de-nivel"

@@ -47,19 +47,19 @@ export const HOME_META: Record<"ro" | "en", PageMeta> = {
   ro: {
     title: "Arabă Libaneză cu Ibra — Profesor Nativ în București",
     description:
-      "Ibra, profesor nativ de arabă libaneză: cine sunt, cum predau, ce grupe încep acum și resurse gratuite ca să începi. Prima lecție de probă e gratuită (0 lei).",
+      "Ibra, profesor nativ de arabă libaneză: cine sunt, cum predau, ce grupe încep acum și resurse gratuite ca să începi. Prima lecție de probă e gratuită.",
   },
   en: {
     title: "Lebanese Arabic with Ibra — Native Teacher, Bucharest",
     description:
-      "Ibra is a native Lebanese Arabic teacher in Bucharest, teaching adults, teenagers and children in person or online. The first trial lesson is free (0 lei).",
+      "Ibra is a native Lebanese Arabic teacher in Bucharest, teaching adults, teenagers and children in person or online. The first trial lesson is free.",
   },
 };
 
 export const CURSURI_ARABA_META: PageMeta = {
   title: "Cursuri Arabă Libaneză A1–C2 | Prețuri și Niveluri",
   description:
-    "Toate cursurile de arabă libaneză într-un loc: grupe A1–C2, lecții private 1:1 și curs pentru copii, cu prețuri afișate. Probă gratuită (0 lei) de 30 de minute.",
+    "Toate cursurile de arabă libaneză într-un loc: grupe A1–C2, lecții private 1:1 și curs pentru copii, cu prețuri afișate. Probă gratuită de 30 de minute.",
 };
 
 /**

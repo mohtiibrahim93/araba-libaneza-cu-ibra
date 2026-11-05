@@ -44,8 +44,10 @@ describe("the rest of that corner", () => {
     // offset starts at md, which is where `hidden md:flex` puts them.
     const banner = read("src/components/CookieConsentBanner.tsx");
     expect(banner).toContain("md:bottom-32");
+    // Since 5 Nov 2026 the call icon and WhatsApp share one row, lower than
+    // the old two-pill stack, so the same offset still clears them.
     expect(read("src/components/WhatsAppButton.tsx")).toContain(
-      "hidden flex-col items-end gap-2 md:flex",
+      "hidden flex-row items-center gap-2 md:flex",
     );
   });
 });

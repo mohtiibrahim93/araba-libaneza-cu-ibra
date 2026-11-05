@@ -122,7 +122,7 @@ const Resurse = () => (
         .
       </li>
       <li>
-        <Link to="/trial">Lecția de probă gratuită (0 lei)</Link> — 30 min cu profesor
+        <Link to="/trial">Lecția de probă gratuită</Link> — 30 min cu profesor
         nativ.
       </li>
     </ul>

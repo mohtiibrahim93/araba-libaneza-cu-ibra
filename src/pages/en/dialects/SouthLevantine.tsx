@@ -182,7 +182,7 @@ const SouthLevantine = () => (
       <Link to="/en/blog/lebanese-arabic-learning-resources">
         resources article
       </Link>
-      , and the <Link to="/en/trial">free trial lesson (0 lei)</Link> is with a native
+      , and the <Link to="/en/trial">free trial lesson</Link> is with a native
       teacher.
     </p>
     <DialectSiblings current="/en/arabic-dialects-guide/south-levantine-arabic" />

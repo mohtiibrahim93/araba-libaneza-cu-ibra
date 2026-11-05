@@ -22,7 +22,7 @@ const COPY = {
     lead: "Ce spun cei care au învățat arabă libaneză cu Ibra.",
     google: "Vezi recenziile pe Google",
     write: "Lasă o recenzie pe Google",
-    trial: "Lecție de probă gratuită (0 lei)",
+    trial: "Lecție de probă gratuită",
     about: "Despre profesor",
   },
   en: {
@@ -31,7 +31,7 @@ const COPY = {
     lead: "What people who learned Lebanese Arabic with Ibra say.",
     google: "See our reviews on Google",
     write: "Leave a review on Google",
-    trial: "Free trial lesson (0 lei)",
+    trial: "Free trial lesson",
     about: "About the teacher",
   },
 } as const;

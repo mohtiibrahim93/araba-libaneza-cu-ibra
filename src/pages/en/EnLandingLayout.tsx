@@ -256,7 +256,7 @@ const EnLandingLayout = ({
 
             <div className="mt-16 rounded-xl border border-border bg-primary/5 p-6 md:p-8 text-center space-y-4">
               <h2 className="font-display text-2xl font-bold text-foreground">
-                Start with a free trial lesson (0 lei)
+                Start with a free trial lesson
               </h2>
               <p className="text-muted-foreground">
                 30 minutes with a native teacher — online worldwide or in person
@@ -267,7 +267,7 @@ const EnLandingLayout = ({
                   to="/trial"
                   className="inline-block bg-primary text-primary-foreground px-6 py-3 rounded-lg font-semibold hover:bg-primary/90 transition"
                 >
-                  Book a free trial (0 lei)
+                  Book a free trial
                 </Link>
                 <Link
                   to="/en/learn-lebanese-arabic"

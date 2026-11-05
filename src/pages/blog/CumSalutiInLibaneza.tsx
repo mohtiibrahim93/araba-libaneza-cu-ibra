@@ -204,7 +204,7 @@ const CumSalutiInLibaneza = () => {
           ? "Greetings are learned best by saying them, not reading them. In a "
           : "Salutările se învață cel mai bine spunându-le, nu citindu-le. La o "}
         <Link to="/trial">
-          {en ? "free trial lesson (0 lei)" : "lecție de probă gratuită (0 lei)"}
+          {en ? "free trial lesson" : "lecție de probă gratuită"}
         </Link>
         {en
           ? " you pronounce them with the teacher and start a first short conversation. See also the "

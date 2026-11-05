@@ -27,11 +27,11 @@ const FAQ = [
   },
   {
     q: "How do you personalise lessons to my level and goals?",
-    a: "The free trial (0 lei) doubles as a level check and goal-setting session — travel, family, work, exam prep, kids, religious reading — and every lesson from there uses vocabulary and scenarios tailored to what you actually need. The material bends to fit you, not the other way around.",
+    a: "The free trial doubles as a level check and goal-setting session — travel, family, work, exam prep, kids, religious reading — and every lesson from there uses vocabulary and scenarios tailored to what you actually need. The material bends to fit you, not the other way around.",
   },
   {
     q: "How much does 1-on-1 tutoring cost?",
-    a: "150 LEI online / 210 LEI in person per 60-minute lesson (~€30 / €42), with an automatic package discount: 15% off 20 lessons. The first 30-minute trial lesson is free (0 lei). No subscription, no lock-in.",
+    a: "150 LEI online / 210 LEI in person per 60-minute lesson (~€30 / €42), with an automatic package discount: 15% off 20 lessons. The first 30-minute trial lesson is free. No subscription, no lock-in.",
   },
   {
     q: "What is your cancellation and rescheduling policy?",
@@ -43,7 +43,7 @@ const FAQ = [
   },
   {
     q: "Do you offer a trial lesson?",
-    a: "Yes — a free 30-minute trial (0 lei). We assess your current level, understand your goal (travel, family, exam, business, kids), and you decide whether the method fits before committing.",
+    a: "Yes — a free 30-minute trial. We assess your current level, understand your goal (travel, family, exam, business, kids), and you decide whether the method fits before committing.",
   },
   {
     q: "How do you track progress?",
@@ -61,7 +61,7 @@ const ArabicTutor = () => (
     roHref="/meditatii-araba"
     title="Arabic tutor online — private 1-on-1 lessons with a native teacher"
     metaTitle="Arabic Tutor Online — 1-on-1 Lessons | Native Teacher"
-    description="Private Lebanese Arabic tutor — 1-on-1 with a native teacher, 6+ years experience. CEFR A1–C2, free trial (0 lei). 150 LEI online / 210 LEI in person, 60 min."
+    description="Private Lebanese Arabic tutor — 1-on-1 lessons with a native teacher, 6+ years experience. CEFR A1–C2, free trial. 150 LEI online / 210 LEI in person, 60 min."
     crumb="Arabic tutor"
     lead="Private Arabic tutoring with a native Lebanese teacher — live 1-on-1 lessons online worldwide, or in person in Bucharest. Personalized pace, real conversation from day one."
     faq={FAQ}

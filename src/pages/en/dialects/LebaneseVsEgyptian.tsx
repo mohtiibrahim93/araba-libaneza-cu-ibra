@@ -171,7 +171,7 @@ const LebaneseVsEgyptian = () => (
       teacher from Lebanon, because most of our students have a concrete tie to
       the Levant: family, a partner, colleagues, travel. If you are not sure
       where you fit, the <Link to="/en/quiz">course finder</Link> takes a
-      minute, and the <Link to="/en/trial">trial lesson is free (0 lei)</Link>.
+      minute, and the <Link to="/en/trial">trial lesson is free</Link>.
     </p>
     <DialectSiblings current="/en/arabic-dialects-guide/lebanese-vs-egyptian-arabic" />
   </EnLandingLayout>

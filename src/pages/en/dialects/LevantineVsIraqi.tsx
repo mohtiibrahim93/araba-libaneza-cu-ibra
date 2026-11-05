@@ -143,7 +143,7 @@ const LevantineVsIraqi = () => (
       </li>
       <li>
         <strong>You don't know where to start</strong> → the{" "}
-        <Link to="/en/trial">free trial lesson (0 lei)</Link> settles it in 30 minutes.
+        <Link to="/en/trial">free trial lesson</Link> settles it in 30 minutes.
       </li>
     </ul>
     <DialectSiblings current="/en/arabic-dialects-guide/levantine-vs-iraqi-arabic" />

@@ -12,4 +12,7 @@ export interface SubmittedData {
   waitlistDeposit?: boolean | undefined;
   cohortId?: string | null | undefined;
   kidsSlotId?: string | null | undefined;
+  /** Cash at the centre, bank transfer and PayPal are offered for in-person
+   *  courses only; online courses are paid by card (owner, 5 Nov 2026). */
+  format?: FormatType | undefined;
 }

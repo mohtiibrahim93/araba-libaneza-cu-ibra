@@ -358,7 +358,7 @@ const CursGrupLevel = () => {
                   to="/trial"
                   className="inline-flex h-12 items-center justify-center rounded-xl border border-[#E7E1D6] bg-card px-6 font-semibold text-foreground transition-colors hover:bg-background dark:border-border"
                 >
-                  {lang === "en" ? "Free trial lesson (0 lei)" : "Lecție gratuită (0 lei)"}
+                  {lang === "en" ? "Free trial lesson" : "Lecție gratuită"}
                 </Link>
               </div>
               {LEVEL_POSTERS[slug] && availableFormats.length > 0 && (

@@ -48,8 +48,8 @@ export const LEVEL_TITLE_EN: Record<GroupLevel, string> = {
  * to a crawler that does not run JavaScript and this to one that does.
  */
 export const LEVEL_A1_DESCRIPTION: Record<"ro" | "en", string> = {
-  ro: "Învață araba libaneză la nivel A1, în București sau online. Vorbești din primele lecții cu profesor nativ. Înscrie-te la o lecție de probă gratuită (0 lei).",
-  en: "Beginner (A1) Lebanese Arabic group course — in person in Bucharest (Strada Icoanei 80) or online. Speak from lesson one. 2 × 90 min a week. Free trial (0 lei).",
+  ro: "Învață araba libaneză la nivel A1, în București sau online. Vorbești din primele lecții cu profesor nativ. Înscrie-te la o lecție de probă gratuită.",
+  en: "Beginner (A1) Lebanese Arabic group course — in person in Bucharest (Strada Icoanei 80) or online. Speak from lesson one. Two 90-min sessions/week. Free trial.",
 };
 
 export const levelTitle = (level: string, lang: string): string => {

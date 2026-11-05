@@ -42,7 +42,7 @@ export const COPY = {
     reset: "New conversation",
     emptyTitle: "What would you like to know?",
     emptyDesc:
-      "Prices, levels, schedule, kids' courses or the free trial lesson (0 lei).",
+      "Prices, levels, schedule, kids' courses or the free trial lesson.",
     placeholder: "Type your question…",
     thinking: "Thinking…",
     loading: "Loading…",

@@ -286,7 +286,7 @@ const CeArabaSaInveti = () => (
     <p>
       Dă <Link to="/test-de-nivel">testul de nivel</Link> (~15 minute), descarcă{" "}
       <Link to="/invata-araba-gratis">materialele gratuite</Link> și rezervă o{" "}
-      <Link to="/trial">lecție de probă gratuită (0 lei)</Link> cu profesor nativ. Dacă
+      <Link to="/trial">lecție de probă gratuită</Link> cu profesor nativ. Dacă
       vrei un cadru fix, grupele A1 pornesc periodic — detalii la{" "}
       <Link to="/cursuri/grup">cursurile de grup</Link>.
     </p>

@@ -394,7 +394,7 @@ const GroupResults = ({
             to="/trial"
             className="rounded-lg border border-border px-5 py-2.5 text-sm font-semibold text-foreground hover:bg-muted"
           >
-            {lang === "en" ? "Book a free trial (0 lei)" : "Probă gratuită (0 lei)"}
+            {lang === "en" ? "Book a free trial" : "Probă gratuită"}
           </Link>
         </div>
       </div>

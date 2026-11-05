@@ -22,7 +22,7 @@ const FAQ = [
   },
   {
     q: "How much should a good Arabic course cost?",
-    a: "In Bucharest a serious group course runs 450–600 LEI per month and a private lesson 130–200 LEI per hour. Ours: 500 LEI / month for groups (2 × 90 min per week) and 150 LEI online / 210 LEI in person per 60-minute private lesson, with 15% off a package of 20. The first 30-minute trial lesson is free (0 lei).",
+    a: "In Bucharest a serious group course runs 450–600 LEI per month and a private lesson 130–200 LEI per hour. Ours: 500 LEI / month for groups (2 × 90 min per week) and 150 LEI online / 210 LEI in person per 60-minute private lesson, with 15% off a package of 20. The first 30-minute trial lesson is free.",
   },
 ];
 
@@ -220,11 +220,11 @@ const BestArabicCourse = () => (
       (ages 6–11, not running at the moment) and{" "}
       <Link to="/en/arabic-for-teenagers">teen groups (12–17)</Link>. We're not
       the right fit if you need strictly Modern Standard Arabic for an academic
-      exam — we'll tell you that plainly during the free trial (0 lei).
+      exam — we'll tell you that plainly during the free trial.
     </p>
     <p>
       The fastest way to find out whether it fits:{" "}
-      <Link to="/trial">the free 30-minute trial lesson (0 lei)</Link>.
+      <Link to="/trial">the free 30-minute trial lesson</Link>.
     </p>
   </EnLandingLayout>
 );

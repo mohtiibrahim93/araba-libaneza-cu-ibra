@@ -254,7 +254,7 @@ const CursGrup = () => {
         </div>
         <p className="text-xs text-muted-foreground mb-8 max-w-2xl">
           {lang === "en"
-            ? "All prices are per person. Two 90-minute lessons a week. Monthly payment stops automatically at the end of the level; paying the whole level upfront takes 15% off. The first 30-minute trial lesson is free (0 lei)."
+            ? "All prices are per person. Two 90-minute lessons a week. Monthly payment stops automatically at the end of the level; paying the whole level upfront takes 15% off. The first 30-minute trial lesson is free."
             : "Prețurile sunt de persoană. Două lecții de 90 de minute pe săptămână. Plata lunară se oprește automat la finalul nivelului; plata integrală a nivelului are 15% reducere. Prima lecție de probă, de 30 de minute, este gratuită."}
         </p>
 

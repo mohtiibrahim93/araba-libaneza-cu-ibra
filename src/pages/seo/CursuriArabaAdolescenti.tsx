@@ -267,7 +267,7 @@ const CursuriArabaAdolescenti = () => (
       </li>
       <li>
         <strong>Cum verific dacă i se potrivește?</strong> Cu{" "}
-        <Link to="/trial">lecția de probă gratuită (0 lei) de 30 de minute</Link>,
+        <Link to="/trial">lecția de probă gratuită de 30 de minute</Link>,
         înainte de orice plată. Dacă nu i se potrivește, nu urmează nimic.
       </li>
     </ul>

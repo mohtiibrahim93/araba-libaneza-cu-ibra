@@ -70,13 +70,13 @@ const GramaticaArabaLibaneza = () => {
           en: "Want to practise this with a native teacher?",
         },
         text: {
-          ro: "Rezervă o lecție de probă gratuită (0 lei) de 30 de minute — online sau în București.",
-          en: "Book a free 30-minute trial lesson (0 lei) — online or in Bucharest.",
+          ro: "Rezervă o lecție de probă gratuită de 30 de minute — online sau în București.",
+          en: "Book a free 30-minute trial lesson — online or in Bucharest.",
         },
         href: "/trial",
         label: {
-          ro: "Rezervă lecția de probă gratuită (0 lei)",
-          en: "Book the free trial lesson (0 lei)",
+          ro: "Rezervă lecția de probă gratuită",
+          en: "Book the free trial lesson",
         },
       }}
     >

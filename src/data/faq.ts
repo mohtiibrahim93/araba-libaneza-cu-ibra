@@ -66,7 +66,7 @@ export const FAQ_CONTENT: Record<"ro" | "en", { groups: FAQGroup[] }> = {
           },
           {
             q: "Cât costă, ce politică de anulare aveți și există o lecție de probă?",
-            a: "Prețurile sunt transparente, fără costuri ascunse — plată lunară sau integrală (cu 15% reducere). Anularea cu cel puțin 7 zile înainte de start îți aduce banii înapoi integral; după start, rambursarea e proporțională cu lecțiile rămase, minus o taxă administrativă de 10%. Prima lecție este o probă gratuită (0 lei) de 30 de minute.",
+            a: "Prețurile sunt transparente, fără costuri ascunse — plată lunară sau integrală (cu 15% reducere). Anularea cu cel puțin 7 zile înainte de start îți aduce banii înapoi integral; după start, rambursarea e proporțională cu lecțiile rămase, minus o taxă administrativă de 10%. Prima lecție este o probă gratuită de 30 de minute.",
           },
           {
             q: "Aveți recenzii de la cursanți și cât de repede se văd rezultatele?",
@@ -74,7 +74,7 @@ export const FAQ_CONTENT: Record<"ro" | "en", { groups: FAQGroup[] }> = {
           },
           {
             q: "La ce semnale de alarmă să fiu atent când aleg un profesor de arabă?",
-            a: "Evită: un vorbitor nativ fără experiență de predare (a ști o limbă nu înseamnă a o preda), lecții generice fără adaptare la nivelul tău, și costuri ascunse sau program rigid fără lecție de probă. Cel mai sigur test rămâne o lecție de probă gratuită (0 lei).",
+            a: "Evită: un vorbitor nativ fără experiență de predare (a ști o limbă nu înseamnă a o preda), lecții generice fără adaptare la nivelul tău, și costuri ascunse sau program rigid fără lecție de probă. Cel mai sigur test rămâne o lecție de probă gratuită.",
           },
         ],
       },
@@ -200,7 +200,7 @@ export const FAQ_CONTENT: Record<"ro" | "en", { groups: FAQGroup[] }> = {
           {
             q: "Cât costă și există planuri de plată?",
             featured: true,
-            a: "Poți alege plata integrală (cu reducere de 15%) sau plata lunară. Acceptăm card, transfer bancar, cash și PayPal, în LEI, EUR sau USD. Prețurile exacte le vezi în secțiunea Prețuri.",
+            a: "Poți alege plata integrală (cu reducere de 15%) sau plata lunară. Cursurile online se plătesc cu cardul; la cursurile fizice acceptăm și transfer bancar, cash și PayPal, în LEI, EUR sau USD. Prețurile exacte le vezi în secțiunea Prețuri.",
           },
           {
             q: "Există lecție de probă?",
@@ -303,7 +303,7 @@ export const FAQ_CONTENT: Record<"ro" | "en", { groups: FAQGroup[] }> = {
           },
           {
             q: "How much does it cost, what's the cancellation policy, and is there a trial lesson?",
-            a: "Prices are transparent with no hidden fees — monthly or pay-in-full (with a 15% discount). Cancel at least 7 days before the start for a full refund; after the start, the refund is proportional to the remaining lessons, minus a 10% administrative fee. The first lesson is a free 30-minute trial (0 lei).",
+            a: "Prices are transparent with no hidden fees — monthly or pay-in-full (with a 15% discount). Cancel at least 7 days before the start for a full refund; after the start, the refund is proportional to the remaining lessons, minus a 10% administrative fee. The first lesson is a free 30-minute trial.",
           },
           {
             q: "Do you have student reviews, and how quickly will I see results?",
@@ -311,7 +311,7 @@ export const FAQ_CONTENT: Record<"ro" | "en", { groups: FAQGroup[] }> = {
           },
           {
             q: "What red flags should I watch for when choosing an Arabic tutor?",
-            a: "Avoid: a native speaker with no teaching experience (knowing a language isn't the same as teaching it), generic one-size-fits-all lessons, and hidden fees or rigid scheduling with no trial. The safest test is always a free trial lesson (0 lei).",
+            a: "Avoid: a native speaker with no teaching experience (knowing a language isn't the same as teaching it), generic one-size-fits-all lessons, and hidden fees or rigid scheduling with no trial. The safest test is always a free trial lesson.",
           },
         ],
       },
@@ -437,7 +437,7 @@ export const FAQ_CONTENT: Record<"ro" | "en", { groups: FAQGroup[] }> = {
           {
             q: "How much does it cost, and are there payment plans?",
             featured: true,
-            a: "You can pay in full (with a 15% discount) or monthly. We accept card, bank transfer, cash, and PayPal, in LEI, EUR, or USD. Exact prices are on the Pricing section.",
+            a: "You can pay in full (with a 15% discount) or monthly. Online courses are paid by card; for in-person courses we also accept bank transfer, cash and PayPal, in LEI, EUR or USD. Exact prices are on the Pricing section.",
           },
           {
             q: "Is there a trial lesson?",

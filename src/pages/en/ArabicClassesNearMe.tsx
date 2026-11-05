@@ -13,7 +13,7 @@ const FAQ = [
   },
   {
     q: "How much do the classes cost?",
-    a: `Group courses: ${PRICE.groupFromOnline} LEI / month online, ${PRICE.groupFromFizic} LEI / month in person in Bucharest (~€100 / €140). Private 1-on-1 lessons: ${PRICE.privateOnline} LEI online / ${PRICE.privateFizic} LEI in person, per 60 min (~€30 / €42). First 30-minute trial lesson is free (0 lei).`,
+    a: `Group courses: ${PRICE.groupFromOnline} LEI / month online, ${PRICE.groupFromFizic} LEI / month in person in Bucharest (~€100 / €140). Private 1-on-1 lessons: ${PRICE.privateOnline} LEI online / ${PRICE.privateFizic} LEI in person, per 60 min (~€30 / €42). First 30-minute trial lesson is free.`,
   },
   {
     q: "When do the classes run?",
@@ -24,7 +24,7 @@ const FAQ = [
     a: "Lebanese Arabic, a variety of Levantine Arabic that is understood across Lebanon, Syria, Jordan and Palestine (over 40 million native speakers). We teach Lebanese Arabic only: Modern Standard Arabic (MSA / Fusha) is not offered.",
   },
   {
-    q: "Is there a free trial (0 lei)?",
+    q: "Is there a free trial?",
     a: "Yes — a free 30-minute trial lesson with a native teacher. A secure card confirmation holds the spot, but the trial remains 0 LEI, with no obligation or auto-enrolment.",
   },
 ];
@@ -35,7 +35,7 @@ const ArabicClassesNearMe = () => (
     roHref="/cursuri-araba-bucuresti"
     title="Arabic classes near me — Bucharest & online worldwide"
     metaTitle="Arabic Classes Near Me — Bucharest & Online | Native Teacher"
-    description="Arabic classes in Bucharest or live online with a native Lebanese teacher. Small groups, CEFR A1–C2, real conversation, free trial (0 lei). From €100/month."
+    description="Arabic classes in Bucharest or live online with a native Lebanese teacher. Small groups, CEFR A1–C2, practical conversation, free trial. From €100/month."
     crumb="Arabic classes near me"
     lead="In-person Arabic classes in Bucharest and live online classes worldwide, taught by a native Lebanese teacher. Small groups (max 6 students online, 8 in person), CEFR-aligned A1–C2, or private 1-on-1 if you prefer."
   >
@@ -107,7 +107,7 @@ const ArabicClassesNearMe = () => (
     </p>
 
     <p>
-      <Link to="/trial">Book the free 30-minute trial (0 lei)</Link> — you'll meet Ibra,
+      <Link to="/trial">Book the free 30-minute trial</Link> — you'll meet Ibra,
       see the method live, and decide whether in-person or online fits your life
       better.
     </p>

@@ -32,7 +32,7 @@ const FAQ = [
   },
   {
     q: "How much do Lebanese Arabic courses cost?",
-    a: "Group courses start at 500 LEI / month (≈ €100) online, with monthly or full-payment options (15% discount for the full level). Private 1-on-1 lessons are 150 LEI / lesson online (≈ €30) and 210 LEI in person. A 30-minute trial lesson is free (0 lei).",
+    a: "Group courses start at 500 LEI / month (≈ €100) online, with monthly or full-payment options (15% discount for the full level). Private 1-on-1 lessons are 150 LEI / lesson online (≈ €30) and 210 LEI in person. A 30-minute trial lesson is free.",
   },
   {
     q: "Is Levantine Arabic the same as Lebanese Arabic?",
@@ -61,7 +61,7 @@ const LearnLebaneseArabic = () => (
     slug="learn-lebanese-arabic"
     title="Learn Lebanese Arabic online — the Levantine dialect, with a native teacher"
     metaTitle="Learn Lebanese Arabic Online | Native Teacher & Free Trial"
-    description="Learn Lebanese (Levantine) Arabic online with a native teacher. Live 1-on-1 and small-group lessons from A1 to C2. Speak from lesson one—free trial (0 lei)."
+    description="Learn Lebanese (Levantine) Arabic online with a native teacher. Live 1-on-1 and small-group lessons from A1 to C2. Speak from lesson one—book a free trial."
     crumb="Learn Lebanese Arabic"
     lead="Live 1-on-1 and small-group courses in Lebanese — the Levantine (Shami) Arabic spoken by over 40 million people across Lebanon, Syria, Jordan and Palestine. Speak from lesson one, without starting from the alphabet. From beginner (A1) to advanced (C2)."
     faq={FAQ}
@@ -81,7 +81,7 @@ const LearnLebaneseArabic = () => (
         from {ONLINE_PRICES.groupMonthly.A1} RON a month, and private 1-on-1
         lessons are {ONLINE_PRICES.privateLesson} RON for 60 minutes. In-person
         courses cost {Math.round((PHYSICAL_MULTIPLIER - 1) * 100)}% more than
-        online. The first 30-minute trial lesson is free (0 lei).
+        online. The first 30-minute trial lesson is free.
       </p>
       <p>
         Reading and writing the Arabic script is optional and comes later:
@@ -347,7 +347,7 @@ const LearnLebaneseArabic = () => (
 
     <h2>Start learning Lebanese Arabic today</h2>
     <p>
-      Book a free 30-minute trial lesson (0 lei). Your card securely confirms the spot,
+      Book a free 30-minute trial lesson. Your card securely confirms the spot,
       but the trial remains 0 LEI. Join, chat, and see if the method fits you —
       online worldwide or in person in Bucharest.
     </p>
@@ -357,7 +357,7 @@ const LearnLebaneseArabic = () => (
         data-cta
         className="inline-flex items-center gap-2 rounded-lg bg-primary text-primary-foreground px-5 py-3 text-sm font-semibold hover:bg-primary/90 transition-colors"
       >
-        Book a free trial lesson (0 lei)
+        Book a free trial lesson
       </Link>
       <a
         href="https://wa.me/40763124514"

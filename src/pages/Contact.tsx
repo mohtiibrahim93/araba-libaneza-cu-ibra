@@ -84,8 +84,8 @@ const COPY = {
     errGdpr: "Te rugăm să accepți politica de confidențialitate.",
     errSend:
       "Mesajul nu a putut fi trimis. Încearcă din nou sau scrie-ne pe WhatsApp.",
-    alt: "Preferi să vorbim direct? Rezervă o lecție de probă gratuită (0 lei).",
-    altCta: "Lecție de probă gratuită (0 lei)",
+    alt: "Preferi să vorbim direct? Rezervă o lecție de probă gratuită.",
+    altCta: "Lecție de probă gratuită",
     reviewLead:
       "Ai învățat cu noi? O recenzie pe Google îi ajută pe alții să ne găsească.",
     reviewCta: "Lasă-ne o recenzie pe Google",
@@ -122,8 +122,8 @@ const COPY = {
     errGdpr: "Please accept the privacy policy.",
     errSend:
       "The message couldn't be sent. Please try again, or message us on WhatsApp.",
-    alt: "Rather talk in person? Book a free trial lesson (0 lei).",
-    altCta: "Free trial lesson (0 lei)",
+    alt: "Rather talk in person? Book a free trial lesson.",
+    altCta: "Free trial lesson",
     reviewLead: "Learned with us? A Google review helps others find us.",
     reviewCta: "Leave us a review on Google",
   },

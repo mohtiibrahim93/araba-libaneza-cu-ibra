@@ -16,7 +16,9 @@ const ScrollToTop = () => {
     <button
       onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
       aria-label="Scroll to top"
-      className="fixed bottom-6 left-6 z-50 hidden h-10 w-10 items-center justify-center rounded-full bg-primary text-primary-foreground shadow-lg transition-transform hover:scale-110 active:scale-95 md:flex"
+      // Right side, just above the WhatsApp row: bottom-left belongs to the
+      // "Întreabă despre cursuri" button, which this arrow used to cover.
+      className="fixed bottom-[5.25rem] right-6 z-50 hidden h-10 w-10 items-center justify-center rounded-full bg-primary text-primary-foreground shadow-lg transition-transform hover:scale-110 active:scale-95 md:flex"
     >
       <ArrowUp className="w-5 h-5" />
     </button>

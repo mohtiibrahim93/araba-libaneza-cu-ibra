@@ -86,7 +86,7 @@ const fmt = (iso: string) =>
   });
 
 const EVENT_LABEL: Record<string, string> = {
-  trial: "Probă gratuită (0 lei)",
+  trial: "Probă gratuită",
   paid: "Lecție privată",
 };
 

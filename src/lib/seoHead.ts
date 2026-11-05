@@ -111,7 +111,7 @@ const STATIC_ROUTES: SeoRoute[] = [
   {
     path: "/preturi",
     title: "Prețuri cursuri arabă libaneză | Grup, private, probă",
-    description: `Toate prețurile: grup A1–C2 de la ${PRICE.groupFromOnline} lei/lună online, lecții private ${PRICE.privateOnline} lei, −15% la plata integrală sau la 20 de lecții. Prima lecție e gratuită (0 lei).`,
+    description: `Toate prețurile: grup A1–C2 de la ${PRICE.groupFromOnline} lei/lună online, lecții private ${PRICE.privateOnline} lei, −15% la plata integrală sau la 20 de lecții. Prima lecție e gratuită.`,
   },
   {
     path: "/te-ajutam",
@@ -265,13 +265,13 @@ const STATIC_ROUTES: SeoRoute[] = [
     path: "/araba-online",
     title: "Cursuri de Arabă Libaneză Online | Profesor Nativ",
     description:
-      "Cursuri live de arabă libaneză online cu profesor nativ. Grupe A1–C2 și lecții private 1:1. Vorbești din primele lecții. Probă gratuită (0 lei).",
+      "Cursuri live de arabă libaneză online cu profesor nativ. Grupe A1–C2 și lecții private 1:1. Vorbești din primele lecții. Probă gratuită.",
     canonical: "/cursuri-limba-araba",
   },
   {
     path: "/meditatii-araba",
     title: `Meditații Arabă 1:1 București & Online | de la ${PRICE.privateOnline} lei/oră`,
-    description: `Meditații de arabă libaneză 1:1 cu profesor nativ, în București sau online: ${PRICE.privateOnline} lei/lecție online, ${PRICE.privateFizic} lei fizic (60 min). Proba e gratuită (0 lei).`,
+    description: `Meditații de arabă libaneză 1:1 cu profesor nativ, în București sau online: ${PRICE.privateOnline} lei/lecție online, ${PRICE.privateFizic} lei fizic (60 min). Prima lecție de probă e gratuită.`,
   },
   {
     path: "/intrebari-frecvente",
@@ -288,8 +288,8 @@ const STATIC_ROUTES: SeoRoute[] = [
   },
   {
     path: "/cursuri-araba-bucuresti",
-    title: "Cursuri Arabă București 2026 | Prima Lecție Gratuită (0 lei)",
-    description: `Cursuri de arabă în București, str. Icoanei 80: grupe mici A1–C2 de la ${PRICE.groupFromFizic} lei/lună, meditații 1:1 și curs pentru copii. Proba e gratuită (0 lei).`,
+    title: "Cursuri Arabă București 2026 | Prima Lecție Gratuită",
+    description: `Cursuri de arabă în București, str. Icoanei 80: grupe mici A1–C2 de la ${PRICE.groupFromFizic} lei/lună, meditații 1:1 și curs pentru copii. Prima lecție de probă e gratuită.`,
   },
   {
     path: "/curs-araba-copii",
@@ -505,7 +505,7 @@ const STATIC_ROUTES: SeoRoute[] = [
   {
     path: "/en/prices",
     title: "Lebanese Arabic course prices | Group, private, trial",
-    description: `All prices: group courses A1–C2 from ${PRICE.groupFromOnline} lei a month online, private lessons ${PRICE.privateOnline} lei, −15% when paying in full or for 20 lessons. The trial is free (0 lei).`,
+    description: `All prices: group courses A1–C2 from ${PRICE.groupFromOnline} lei a month online, private lessons ${PRICE.privateOnline} lei, −15% when paying in full or for 20 lessons. The first lesson is free.`,
     lang: "en",
   },
   {
@@ -519,7 +519,7 @@ const STATIC_ROUTES: SeoRoute[] = [
     path: "/en/booking",
     title: "Book a Lesson — Lebanese Arabic with Ibra",
     description:
-      "Book a free 30-minute trial (0 lei) or enrol on a Lebanese Arabic course with a native teacher — online, or in person in Bucharest. The trial remains free.",
+      "Book a free 30-minute trial lesson or enrol on a Lebanese Arabic course with a native teacher — online, or in person in Bucharest. The trial remains free.",
     lang: "en",
   },
   {
@@ -560,7 +560,7 @@ const STATIC_ROUTES: SeoRoute[] = [
   {
     path: "/en/courses/group",
     title: "Lebanese Arabic Group Course (A1–C2) — Online & Bucharest",
-    description: `Small-group Lebanese Arabic classes with a native teacher. Levels A1 to C2, max 6 online, 8 in person, from ${PRICE.groupFromOnline} LEI a month. Free trial lesson (0 lei).`,
+    description: `Small-group Lebanese Arabic classes with a native teacher. Levels A1 to C2, max 6 online, 8 in person, from ${PRICE.groupFromOnline} LEI a month. Free trial lesson.`,
     lang: "en",
   },
   {
@@ -594,7 +594,7 @@ const STATIC_ROUTES: SeoRoute[] = [
     path: "/en/learn-lebanese-arabic",
     title: "Learn Lebanese Arabic Online | Native Teacher & Free Trial",
     description:
-      "Learn Lebanese (Levantine) Arabic online with a native teacher. Live 1-on-1 and small-group lessons from A1 to C2. Speak from lesson one—free trial (0 lei).",
+      "Learn Lebanese (Levantine) Arabic online with a native teacher. Live 1-on-1 and small-group lessons from A1 to C2. Speak from lesson one—book a free trial.",
   },
   {
     path: "/en/learn-levantine-arabic",
@@ -607,7 +607,7 @@ const STATIC_ROUTES: SeoRoute[] = [
   {
     path: "/en/arabic-tutor",
     title: "Arabic Tutor Online — 1-on-1 Lessons | Native Teacher",
-    description: `Private Lebanese Arabic tutor — 1-on-1 with a native teacher, 6+ years experience. CEFR A1–C2, free trial (0 lei). ${PRICE.privateOnline} LEI online / ${PRICE.privateFizic} LEI in person, 60 min.`,
+    description: `Private Lebanese Arabic tutor — 1-on-1 lessons with a native teacher, 6+ years experience. CEFR A1–C2, free trial. ${PRICE.privateOnline} LEI online / ${PRICE.privateFizic} LEI in person, 60 min.`,
   },
   {
     path: "/en/faq",
@@ -633,7 +633,7 @@ const STATIC_ROUTES: SeoRoute[] = [
     path: "/en/arabic-classes-near-me",
     title: "Arabic Classes Near Me — Bucharest & Online | Native Teacher",
     description:
-      "Arabic classes in Bucharest or live online with a native Lebanese teacher. Small groups, CEFR A1–C2, real conversation, free trial (0 lei). From €100/month.",
+      "Arabic classes in Bucharest or live online with a native Lebanese teacher. Small groups, CEFR A1–C2, practical conversation, free trial. From €100/month.",
   },
   {
     path: "/en/lebanese-arabic-vs-msa-vs-egyptian",
@@ -677,15 +677,15 @@ const STATIC_ROUTES: SeoRoute[] = [
   },
   {
     path: "/trial",
-    title: "Lecție gratuită (0 lei) de arabă libaneză | Ibra",
+    title: "Lecție gratuită de arabă libaneză | Ibra",
     description:
-      "Rezervă o lecție de probă gratuită (0 lei) de arabă libaneză cu profesor nativ — online sau fizic în București. Fără nicio obligație.",
+      "Rezervă o lecție de probă gratuită de arabă libaneză cu profesor nativ — online sau fizic în București. Fără nicio obligație.",
   },
   {
     path: "/booking",
     title: "Rezervă o lecție — Arabă Libaneză cu Ibra",
     description:
-      "Rezervă o lecție de probă gratuită (0 lei) de 30 de minute sau înscrie-te la un curs de arabă libaneză cu profesor nativ — online sau fizic în București.",
+      "Rezervă o lecție de probă gratuită de 30 de minute sau înscrie-te la un curs de arabă libaneză cu profesor nativ — online sau fizic în București.",
   },
   {
     path: "/quiz",

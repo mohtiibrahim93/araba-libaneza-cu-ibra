@@ -75,14 +75,18 @@ const WhatsAppButton = () => {
   }, [context, en]);
 
   return (
-    <div className="fixed bottom-6 right-6 z-50 hidden flex-col items-end gap-2 md:flex">
+    // One row: a round call icon beside the WhatsApp pill. The number used to
+    // be a second pill stacked on top, which took twice the corner; it stays
+    // in the label and the tooltip.
+    <div className="fixed bottom-6 right-6 z-50 hidden flex-row items-center gap-2 md:flex">
       <a
         href={PHONE_URL}
         aria-label={en ? `Call ${DISPLAY_NUMBER}` : `Sună la ${DISPLAY_NUMBER}`}
-        className="inline-flex items-center gap-2 rounded-full border border-border bg-background px-4 py-2 text-xs font-semibold text-foreground shadow-lg transition-transform hover:scale-105 active:scale-95"
+        title={DISPLAY_NUMBER}
+        className="inline-flex h-11 w-11 items-center justify-center rounded-full border border-border bg-background text-foreground shadow-lg transition-transform hover:scale-105 active:scale-95"
       >
-        <Phone className="h-4 w-4 text-primary" />
-        <span>{DISPLAY_NUMBER}</span>
+        <Phone className="h-4 w-4 text-primary" aria-hidden="true" />
+        <span className="sr-only">{DISPLAY_NUMBER}</span>
       </a>
       <a
         href={whatsappUrl}

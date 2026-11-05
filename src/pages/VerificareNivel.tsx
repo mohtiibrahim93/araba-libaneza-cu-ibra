@@ -61,7 +61,7 @@ const COPY = {
     ],
     notTrial:
       "Nu e lecția de probă: aici doar îți verificăm nivelul. Dacă vrei să vezi cum arată o lecție,",
-    notTrialLink: "rezervă lecția de probă gratuită (0 lei)",
+    notTrialLink: "rezervă lecția de probă gratuită",
     script:
       "Partea scrisă e în arabizi, pentru că toate cursurile folosesc deocamdată arabizi.",
     waysH2: "Cum vrei să o programezi?",
@@ -137,7 +137,7 @@ const COPY = {
     ],
     notTrial:
       "This is not the trial lesson: we only check your level here. If you want to see what a lesson looks like,",
-    notTrialLink: "book the free trial lesson (0 lei)",
+    notTrialLink: "book the free trial lesson",
     script:
       "The written part is in Arabizi, because all the courses use Arabizi for now.",
     waysH2: "How would you like to book it?",

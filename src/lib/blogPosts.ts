@@ -239,8 +239,8 @@ export const BLOG_POSTS: BlogPostMeta[] = [
       en: "How much do Lebanese Arabic courses cost in 2026?",
     },
     description: {
-      ro: "Prețurile cursurilor de arabă libaneză: grup lunar sau integral cu reducere, lecții private, curs pentru copii și proba gratuită (0 lei). Fără costuri ascunse.",
-      en: "Lebanese Arabic course prices: monthly group or discounted pay-in-full, private lessons, kids course and the free trial (0 lei). No hidden fees.",
+      ro: "Prețurile cursurilor de arabă libaneză: grup lunar sau plată integrală cu reducere, lecții private, curs pentru copii și proba gratuită. Fără costuri ascunse.",
+      en: "Lebanese Arabic course prices: monthly group or discounted pay-in-full, private lessons, kids course and the free trial. No hidden fees.",
     },
     published: "2026-07-16",
     readingMinutes: 5,

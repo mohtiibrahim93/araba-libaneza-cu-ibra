@@ -579,6 +579,7 @@ const RegistrationFormSection = ({
         waitlistDeposit: courseType === "kids" && payDeposit,
         cohortId: courseType === "group" ? cohortId : null,
         kidsSlotId: courseType === "kids" ? kidsSlotId : null,
+        format: format || undefined,
       });
       setSubmitted(true);
       sessionStorage.removeItem(STORAGE_KEY);
