@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
 import {
   canStillJoin,
+  catchUpFee,
   joinClosesAfter,
   lessonNumber,
   planRemaining,
@@ -157,12 +158,30 @@ describe("planning the rest of a course", () => {
 });
 
 describe("joining a running group", () => {
-  it("is open until the last month starts (lesson 24 of 32)", () => {
+  it("stays open through month 3 of 4, month 4 of 7, and month 5 of 9", () => {
+    // A1: 32 lessons, 4 months. Closed once month 3 has ended (lesson 24).
     expect(joinClosesAfter(32)).toBe(24);
-    expect(canStillJoin(14, 32)).toBe(true);
     expect(canStillJoin(23, 32)).toBe(true);
     expect(canStillJoin(24, 32)).toBe(false);
-    expect(joinClosesAfter(56)).toBe(48);
+    // A2: 56 lessons, 7 months. Closed after month 4 (lesson 32).
+    expect(joinClosesAfter(56)).toBe(32);
+    expect(canStillJoin(31, 56)).toBe(true);
+    expect(canStillJoin(32, 56)).toBe(false);
+    // B1–C2: 72 lessons, 9 months. Closed after month 5 (lesson 40).
+    expect(joinClosesAfter(72)).toBe(40);
+    expect(canStillJoin(39, 72)).toBe(true);
+    expect(canStillJoin(40, 72)).toBe(false);
+  });
+
+  it("charges 200 lei for up to 4 missed lessons, then 500 per month started", () => {
+    expect(catchUpFee(0)).toBe(0);
+    expect(catchUpFee(1)).toBe(200);
+    expect(catchUpFee(4)).toBe(200);
+    expect(catchUpFee(5)).toBe(500);
+    expect(catchUpFee(8)).toBe(500);
+    expect(catchUpFee(9)).toBe(1_000);
+    expect(catchUpFee(16)).toBe(1_000);
+    expect(catchUpFee(17)).toBe(1_500);
   });
 });
 

@@ -113,19 +113,51 @@ export function planRemaining(input: {
   return out;
 }
 
+/** A group month is 8 lessons (classes run twice a week). */
+export const LESSONS_PER_MONTH = 8;
+
+/** How many months a course of `total` lessons runs. */
+export function courseMonths(total: number): number {
+  return Math.ceil(total / LESSONS_PER_MONTH);
+}
+
 /**
- * Whether someone can still join a running group (the owner's rule, October
- * 2026): yes until the last month starts — lesson total − 8, i.e. lesson 24 of
- * a 32-lesson course — with the missed lessons caught up free of charge. In
- * the last month there is not enough time left to catch up.
+ * Last month during which someone can still join a running group.
+ *
+ * Half the course, plus one month: month 3 of a 4-month course (A1), month 4
+ * of a 7-month course (A2), month 5 of a 9-month course (B1–C2). After that
+ * month ends, the group is closed to new students.
+ */
+export function lastJoinableMonth(total: number): number {
+  const months = courseMonths(total);
+  return Math.min(months, Math.max(1, Math.floor(months / 2) + 1));
+}
+
+/**
+ * Whether someone can still join a running group: yes through the end of
+ * `lastJoinableMonth`, no once that month's lessons are done.
  */
 export function canStillJoin(lessonsDone: number, total: number): boolean {
-  return lessonsDone < total - 8;
+  if (total <= 0) return false;
+  return lessonsDone < joinClosesAfter(total);
 }
 
 /** The last lesson after which joining closes. */
 export function joinClosesAfter(total: number): number {
-  return Math.max(0, total - 8);
+  return lastJoinableMonth(total) * LESSONS_PER_MONTH;
+}
+
+/**
+ * What a late joiner pays to catch up the lessons the group has already had.
+ *
+ * Up to 4 missed lessons: 200 lei. After that, 500 lei for each month started
+ * (8 lessons), so one month is 500, two months 1,000, and so on. The fee pays
+ * for as much time with the teacher as the catch-up needs.
+ */
+export function catchUpFee(lessonsMissed: number): number {
+  if (lessonsMissed <= 0) return 0;
+  if (lessonsMissed <= 4) return 200;
+  return Math.ceil(lessonsMissed / LESSONS_PER_MONTH) * 500;
 }
 
 /**
