@@ -9,6 +9,7 @@ import {
 import { supabase } from "@/integrations/supabase/client";
 import { useI18n } from "@/lib/i18n";
 import { WHATSAPP_CONTACT_URL } from "@/lib/social";
+import { groupMonthlyPrice } from "@/lib/pricing";
 import {
   canStillJoin,
   catchUpFee,
@@ -23,10 +24,11 @@ import {
  * calendar on request. Only dates and lesson numbers are public; no names, no
  * meeting links.
  *
- * And whether someone can still join (the owner's rule): on request, through
- * month 3 of a 4-month course, month 4 of a 7-month course, month 5 of a
- * 9-month course. Catch-up is 200 lei for at most 4 missed lessons, otherwise
- * 500 lei per month started, with as much time with Ibra as the catch-up needs.
+ * And whether someone can still join (the owner's rule): on request, until 4
+ * months have been missed and never in the last month (month 3 of A1, month 4
+ * of a longer course). Catch-up is 200 lei for at most 4 missed lessons,
+ * otherwise that group's monthly price per month started, with as much time
+ * with Ibra as the catch-up needs.
  *
  * Renders nothing until there is something true to show.
  */
@@ -86,10 +88,10 @@ const COPY = {
     next: "Următoarele lecții",
     all: "Calendarul complet",
     hide: "Ascunde calendarul",
-    joinOpen: (last: number, done: number, fee: string) =>
+    joinOpen: (last: number, done: number, fee: string, monthly: string) =>
       done <= 0
         ? `Te mai poți alătura până la lecția ${last}, la cerere.`
-        : `Te mai poți alătura până la lecția ${last}, la cerere. Ai pierdut ${done} lecții: recuperarea costă ${fee} lei (200 lei pentru cel mult 4 lecții, apoi 500 lei pe fiecare lună începută). Recuperăm împreună, cât timp e nevoie.`,
+        : `Te mai poți alătura până la lecția ${last}, la cerere. Ai pierdut ${done} lecții: recuperarea costă ${fee} lei (200 lei pentru cel mult 4 lecții, apoi ${monthly} lei pe fiecare lună începută). Recuperăm împreună, cât timp e nevoie.`,
     joinCta: "Scrie-i lui Ibra",
     joinClosed:
       "Grupa a trecut de lecția la care se mai poate intra. Te așteptăm la următoarea grupă.",
@@ -103,10 +105,10 @@ const COPY = {
     next: "Next lessons",
     all: "Full calendar",
     hide: "Hide calendar",
-    joinOpen: (last: number, done: number, fee: string) =>
+    joinOpen: (last: number, done: number, fee: string, monthly: string) =>
       done <= 0
         ? `You can still join until lesson ${last}, on request.`
-        : `You can still join until lesson ${last}, on request. You have missed ${done} lessons: the catch-up costs ${fee} lei (200 lei for at most 4 lessons, then 500 lei for each month started). We catch up together for as long as it takes.`,
+        : `You can still join until lesson ${last}, on request. You have missed ${done} lessons: the catch-up costs ${fee} lei (200 lei for at most 4 lessons, then ${monthly} lei for each month started). We catch up together for as long as it takes.`,
     joinCta: "Message Ibra",
     joinClosed:
       "This group is past the lesson where you can still join. See you in the next group.",
@@ -274,7 +276,11 @@ const RunningGroups = ({
                       {c.joinOpen(
                         joinClosesAfter(total),
                         done,
-                        catchUpFee(done).toLocaleString(
+                        catchUpFee(
+                          done,
+                          groupMonthlyPrice(g.level, g.format),
+                        ).toLocaleString(lang === "en" ? "en-GB" : "ro-RO"),
+                        groupMonthlyPrice(g.level, g.format).toLocaleString(
                           lang === "en" ? "en-GB" : "ro-RO",
                         ),
                       )}

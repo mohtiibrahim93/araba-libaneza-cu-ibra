@@ -37,6 +37,18 @@ export const ONLINE_PRICES = {
   kidsGroupMonthly: 500,
 };
 
+/** Monthly group price for a level and format. Unknown level falls back to A1;
+ *  an unknown format falls back to online, so a gap never overcharges. */
+export function groupMonthlyPrice(
+  level: string | null | undefined,
+  format: string | null | undefined,
+): number {
+  const key = (level ?? "").toUpperCase() as LevelType;
+  const online =
+    ONLINE_PRICES.groupMonthly[key] ?? ONLINE_PRICES.groupMonthly.A1;
+  return priceFor(online, format === "fizic" ? "fizic" : "online");
+}
+
 /**
  * Number of monthly charges for a group course, per CEFR level (display side).
  *

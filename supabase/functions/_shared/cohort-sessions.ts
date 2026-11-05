@@ -121,16 +121,19 @@ export function courseMonths(total: number): number {
   return Math.ceil(total / LESSONS_PER_MONTH);
 }
 
+/** At most this many months can be missed before a group closes to new students. */
+export const MAX_MISSED_MONTHS = 4;
+
 /**
  * Last month during which someone can still join a running group.
  *
- * Half the course, plus one month: month 3 of a 4-month course (A1), month 4
- * of a 7-month course (A2), month 5 of a 9-month course (B1–C2). After that
- * month ends, the group is closed to new students.
+ * At most 4 months missed, and never the last month of the course: month 3 of
+ * a 4-month course (A1), month 4 of a 7-month course (A2) and of a 9-month
+ * course (B1–C2). After that month ends, the group is closed.
  */
 export function lastJoinableMonth(total: number): number {
   const months = courseMonths(total);
-  return Math.min(months, Math.max(1, Math.floor(months / 2) + 1));
+  return Math.max(0, Math.min(MAX_MISSED_MONTHS, months - 1));
 }
 
 /**
@@ -150,14 +153,17 @@ export function joinClosesAfter(total: number): number {
 /**
  * What a late joiner pays to catch up the lessons the group has already had.
  *
- * Up to 4 missed lessons: 200 lei. After that, 500 lei for each month started
- * (8 lessons), so one month is 500, two months 1,000, and so on. The fee pays
- * for as much time with the teacher as the catch-up needs.
+ * Up to 4 missed lessons: 200 lei, whatever the group costs. After that, the
+ * group's own monthly price for each month started (8 lessons): 500 lei for
+ * A1 online, 700 lei for A1 in person, 600 lei for A2 online, and so on.
+ * `monthlyRon` is that price. The fee pays for as much time with the teacher
+ * as the catch-up needs.
  */
-export function catchUpFee(lessonsMissed: number): number {
+export function catchUpFee(lessonsMissed: number, monthlyRon: number): number {
   if (lessonsMissed <= 0) return 0;
   if (lessonsMissed <= 4) return 200;
-  return Math.ceil(lessonsMissed / LESSONS_PER_MONTH) * 500;
+  const month = monthlyRon > 0 ? monthlyRon : 500;
+  return Math.ceil(lessonsMissed / LESSONS_PER_MONTH) * month;
 }
 
 /**
