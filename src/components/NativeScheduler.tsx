@@ -380,16 +380,18 @@ const NativeScheduler = ({
         {lang === "ro" ? (
           <>
             Poți anula sau reprograma gratuit cu cel puțin 24 de ore înainte.
-            Dacă nu te prezinți sau anulezi mai târziu de 24 de ore, se
-            încasează de pe card <strong>{PRICE.noShowFee} lei</strong>, cât o
-            lecție privată. Taxa poate fi rambursată dacă o contești.
+            Dacă anulezi cu mai puțin de 24 de ore înainte, sau nu te prezinți,
+            se încasează <strong>{PRICE.noShowFee} lei</strong>, pentru că ora
+            a fost rezervată pentru tine. Dacă a apărut o urgență reală,
+            scrie-ne pe WhatsApp și vedem cazul.
           </>
         ) : (
           <>
-            You can cancel or reschedule free of charge at least 24 hours ahead.
-            If you do not show up, or cancel later than 24 hours,{" "}
-            <strong>{PRICE.noShowFee} lei</strong> is charged to your card — the
-            price of a private lesson. The fee may be refunded if you appeal it.
+            You can cancel or reschedule free of charge at least 24 hours
+            before. If you cancel less than 24 hours before, or you do not show
+            up, <strong>{PRICE.noShowFee} lei</strong> is charged, because the
+            time was kept for you. If a real emergency came up, write to us on
+            WhatsApp and we will look at that case.
           </>
         )}
       </div>
@@ -397,22 +399,23 @@ const NativeScheduler = ({
       <div className="rounded-lg border border-amber-500/40 bg-amber-500/10 p-3 text-xs leading-relaxed text-amber-700 dark:text-amber-400">
         {lang === "ro" ? (
           <>
-            <strong>Înainte să alegi ora:</strong> proba costă 0 lei, dar la
-            final îți confirmi locul cu cardul prin Stripe (nu se încasează
-            nimic acum). Poți anula sau reprograma gratuit cu cel puțin 24 de
-            ore înainte. Dacă nu te prezinți sau anulezi mai târziu de 24 de
-            ore, se încasează de pe card <strong>{PRICE.noShowFee} lei</strong>,
-            cât o lecție privată. Taxa poate fi rambursată dacă o contești.
+            <strong>Înainte să alegi ora:</strong> proba costă 0 lei. Cardul
+            doar îți ține locul, nu se încasează nimic. Poți anula sau
+            reprograma gratuit cu cel puțin 24 de ore înainte. Dacă anulezi cu
+            mai puțin de 24 de ore înainte, sau nu te prezinți, se încasează{" "}
+            <strong>{PRICE.noShowFee} lei</strong>, pentru că ora a fost
+            rezervată pentru tine. Dacă a apărut o urgență reală, scrie-ne pe
+            WhatsApp și vedem cazul.
           </>
         ) : (
           <>
-            <strong>Before you pick a time:</strong> the trial costs 0 lei, but
-            at the end you confirm your spot with your card through Stripe
-            (nothing is charged now). You can cancel or reschedule free of
-            charge at least 24 hours ahead. If you do not show up, or cancel
-            later than 24 hours, <strong>{PRICE.noShowFee} lei</strong> is
-            charged to your card — the price of a private lesson. The fee may be
-            refunded if you appeal it.
+            <strong>Before you pick a time:</strong> the trial costs 0 lei.
+            Your card only holds the spot; nothing is charged. You can cancel
+            or reschedule free of charge at least 24 hours before. If you
+            cancel less than 24 hours before, or you do not show up,{" "}
+            <strong>{PRICE.noShowFee} lei</strong> is charged, because the time
+            was kept for you. If a real emergency came up, write to us on
+            WhatsApp and we will look at that case.
           </>
         )}
       </div>
