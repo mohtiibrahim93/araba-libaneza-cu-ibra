@@ -158,16 +158,16 @@ describe("planning the rest of a course", () => {
 });
 
 describe("joining a running group", () => {
-  it("closes after 4 missed months, and never in the last month", () => {
-    // A1: 32 lessons, 4 months. The last month is closed, so month 3.
-    expect(joinClosesAfter(32)).toBe(24);
-    expect(canStillJoin(23, 32)).toBe(true);
-    expect(canStillJoin(24, 32)).toBe(false);
+  it("closes a 4-month course after month 2, and a longer course after month 4", () => {
+    // A1: 32 lessons, 4 months. Two months must still be left, so month 2.
+    expect(joinClosesAfter(32)).toBe(16);
+    expect(canStillJoin(15, 32)).toBe(true);
+    expect(canStillJoin(16, 32)).toBe(false);
     // A2: 56 lessons, 7 months. The 4-month cap binds first.
     expect(joinClosesAfter(56)).toBe(32);
     expect(canStillJoin(31, 56)).toBe(true);
     expect(canStillJoin(32, 56)).toBe(false);
-    // B1–C2: 72 lessons, 9 months. Same cap: month 4, not month 5.
+    // B1–C2: 72 lessons, 9 months. Same cap: month 4.
     expect(joinClosesAfter(72)).toBe(32);
     expect(canStillJoin(31, 72)).toBe(true);
     expect(canStillJoin(32, 72)).toBe(false);

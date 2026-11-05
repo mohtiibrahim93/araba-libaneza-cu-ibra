@@ -24,11 +24,11 @@ import {
  * calendar on request. Only dates and lesson numbers are public; no names, no
  * meeting links.
  *
- * And whether someone can still join (the owner's rule): on request, until 4
- * months have been missed and never in the last month (month 3 of A1, month 4
- * of a longer course). Catch-up is 200 lei for at most 4 missed lessons,
- * otherwise that group's monthly price per month started, with as much time
- * with Ibra as the catch-up needs.
+ * And whether someone can still join (the owner's rule): on request, until the
+ * end of month 2 on a 4-month course, and until 4 months have been missed on a
+ * longer course. Catch-up is 200 lei for at most 4 missed lessons, otherwise
+ * that group's monthly price per month started, with as much time with Ibra as
+ * the catch-up needs.
  *
  * Renders nothing until there is something true to show.
  */

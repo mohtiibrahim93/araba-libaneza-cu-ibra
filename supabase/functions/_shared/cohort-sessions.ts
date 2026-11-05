@@ -127,13 +127,18 @@ export const MAX_MISSED_MONTHS = 4;
 /**
  * Last month during which someone can still join a running group.
  *
- * At most 4 months missed, and never the last month of the course: month 3 of
- * a 4-month course (A1), month 4 of a 7-month course (A2) and of a 9-month
- * course (B1–C2). After that month ends, the group is closed.
+ * A 4-month course (A1) closes at the end of month 2, so two months with the
+ * group are still left. A longer course closes after 4 missed months, and
+ * never in its last month: month 4 of a 7-month course (A2) and of a 9-month
+ * course (B1–C2).
  */
 export function lastJoinableMonth(total: number): number {
   const months = courseMonths(total);
-  return Math.max(0, Math.min(MAX_MISSED_MONTHS, months - 1));
+  const monthsStillLeft = months <= 4 ? 2 : 1;
+  return Math.max(
+    0,
+    Math.min(MAX_MISSED_MONTHS, months - monthsStillLeft),
+  );
 }
 
 /**
