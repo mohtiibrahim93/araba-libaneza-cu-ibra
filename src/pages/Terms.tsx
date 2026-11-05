@@ -17,7 +17,7 @@ const content = {
       ],
       [
         "3. Înscriere și plăți",
-        "Înscrierea se face prin formularele de pe site sau prin WhatsApp. Prețurile sunt în lei și sunt cele de pe pagina Prețuri. Cursurile de grup se plătesc online cu cardul, prin Stripe: lunar (abonament care se oprește singur după ultima lună) sau integral în avans, cu 15% reducere. Lecțiile private se plătesc la rezervare. Cursurile fizice se pot plăti și cash la centru, prin transfer bancar sau prin PayPal; cursurile online se plătesc cu cardul. O plată online începută și neterminată păstrează locul în grupă cel mult 2 ore; după aceea locul se eliberează, iar înscrierea poate fi reluată cât timp mai sunt locuri. Într-o grupă care a început deja se poate intra la cerere, până în ultima lună a cursului; recuperarea lecțiilor pierdute costă 200 lei.",
+        "Înscrierea se face prin formularele de pe site sau prin WhatsApp. Prețurile sunt în lei și sunt cele de pe pagina Prețuri. Cursurile de grup se plătesc online cu cardul, prin Stripe: lunar (abonament care se oprește singur după ultima lună) sau integral în avans, cu 15% reducere. Lecțiile private se plătesc la rezervare. Plata cash sau prin transfer bancar e posibilă prin înțelegere directă cu noi. O plată online începută și neterminată păstrează locul în grupă cel mult 2 ore; după aceea locul se eliberează, iar înscrierea poate fi reluată cât timp mai sunt locuri. Într-o grupă care a început deja se poate intra la cerere, până în ultima lună a cursului; recuperarea lecțiilor pierdute costă 200 lei.",
       ],
       [
         "4. Anulare și rambursare",
@@ -77,7 +77,7 @@ const content = {
       ],
       [
         "3. Registration and payments",
-        "Registration is completed through the forms on the website or via WhatsApp. Prices are in lei, as listed on the Prices page. Group courses are paid online by card through Stripe: monthly (a subscription that stops by itself after the last month) or in full upfront, with a 15% discount. Private lessons are paid when booked. In-person courses can also be paid in cash at the centre, by bank transfer or via PayPal; online courses are paid by card. An online payment that is started and not finished holds the place in the group for at most 2 hours; after that the place is released, and the registration can be resumed while places remain. A group that has already started can be joined on request, until the course's last month; catching up the missed lessons costs 200 lei.",
+        "Registration is completed through the forms on the website or via WhatsApp. Prices are in lei, as listed on the Prices page. Group courses are paid online by card through Stripe: monthly (a subscription that stops by itself after the last month) or in full upfront, with a 15% discount. Private lessons are paid when booked. Cash or bank transfer is possible by direct agreement with us. An online payment that is started and not finished holds the place in the group for at most 2 hours; after that the place is released, and the registration can be resumed while places remain. A group that has already started can be joined on request, until the course's last month; catching up the missed lessons costs 200 lei.",
       ],
       [
         "4. Cancellation and refund",

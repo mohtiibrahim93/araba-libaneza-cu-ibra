@@ -109,7 +109,7 @@ Nu trebuie să plătești nimic ca să începi. Prima lecție este o [probă gra
 
 ## Există costuri ascunse?
 
-Nu. Materialele audio și suportul sunt incluse. Plătești cu cardul (securizat, prin Stripe); la cursurile fizice și prin transfer bancar, cash sau PayPal, în lei, euro sau dolari (USD). Dacă anulezi cu cel puțin 7 zile înainte de începerea cursului, primești banii înapoi integral; după începerea cursului, rambursarea e proporțională cu lecțiile rămase, minus o taxă administrativă de 10%.`,
+Nu. Materialele audio și suportul sunt incluse. Plătești cu cardul (securizat, prin Stripe), prin transfer bancar, cash sau PayPal, în lei, euro sau dolari (USD). Dacă anulezi cu cel puțin 7 zile înainte de începerea cursului, primești banii înapoi integral; după începerea cursului, rambursarea e proporțională cu lecțiile rămase, minus o taxă administrativă de 10%.`,
     en: `One of the first natural questions when you want to learn a new language is 'how much?'. At the Lebanese Arabic Center prices are transparent and depend on one thing: the format you choose. Here are all the options.
 
 ## Group courses (adults, A1–C2)
@@ -135,7 +135,7 @@ You don't have to pay anything to start. The first lesson is a [free trial](/tri
 
 ## Are there hidden costs?
 
-No. Audio materials and support are included. You pay by card (securely, via Stripe); for in-person courses also by bank transfer, cash or PayPal, in lei, euros or US dollars. If you cancel at least 7 days before the course starts, you get a full refund; after it starts, the refund is proportional to the remaining lessons, minus a 10% administrative fee.`,
+No. Audio materials and support are included. You can pay by card (securely, via Stripe), bank transfer, cash or PayPal, in lei, euros or US dollars. If you cancel at least 7 days before the course starts, you get a full refund; after it starts, the refund is proportional to the remaining lessons, minus a 10% administrative fee.`,
   },
 
   "cum-alegi-profesor-de-araba": {

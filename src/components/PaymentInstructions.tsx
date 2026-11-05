@@ -29,10 +29,9 @@ interface PaymentInstructionsProps {
   quantity?: number | undefined;
   /** Group / kids only: monthly subscription vs. pay the whole course upfront. */
   plan?: "monthly" | "full" | undefined;
-  /** Cash at the centre, bank transfer and PayPal are offered for in-person
-   *  courses only; online is card only (owner, 5 Nov 2026). Unknown format
-   *  shows card only. */
-  format?: "fizic" | "online" | undefined;
+  /** Romanian (+40) phone number. Cash at the centre is offered only then;
+   *  card, transfer and PayPal to everyone (owner, 5 Nov 2026). */
+  inRomania?: boolean | undefined;
 }
 
 const PaymentInstructions = ({
@@ -43,7 +42,7 @@ const PaymentInstructions = ({
   quantity,
   plan,
   paid,
-  format,
+  inRomania,
 }: PaymentInstructionsProps) => {
   const { t } = useI18n();
   const navigate = useNavigate();
@@ -95,72 +94,72 @@ const PaymentInstructions = ({
         </div>
       )}
 
-      {format === "fizic" && (
-        <div className="border-t border-border pt-4">
-          <button
-            type="button"
-            onClick={() => setShowAlternatives((s) => !s)}
-            className="w-full flex items-center justify-between text-sm font-medium text-foreground hover:text-primary transition-colors"
-          >
-            <span>
-              {showAlternatives
-                ? t.paymentAlternativesHide
-                : t.paymentAlternativesToggle}
-            </span>
-            <ChevronDown
-              className={`w-4 h-4 transition-transform ${showAlternatives ? "rotate-180" : ""}`}
-            />
-          </button>
+      <div className="border-t border-border pt-4">
+        <button
+          type="button"
+          onClick={() => setShowAlternatives((s) => !s)}
+          className="w-full flex items-center justify-between text-sm font-medium text-foreground hover:text-primary transition-colors"
+        >
+          <span>
+            {showAlternatives
+              ? t.paymentAlternativesHide
+              : t.paymentAlternativesToggle}
+          </span>
+          <ChevronDown
+            className={`w-4 h-4 transition-transform ${showAlternatives ? "rotate-180" : ""}`}
+          />
+        </button>
 
-          {showAlternatives && (
-            <div className="mt-4 space-y-3">
-              {/* Cash, transfer and PayPal all stay on offer. What they do not
+        {showAlternatives && (
+          <div className="mt-4 space-y-3">
+            {/* Cash, transfer and PayPal all stay on offer. What they do not
                 do is hold the place on their own: the card clears in seconds,
                 the other three clear when Ibra has seen the money. Listing
                 them with no word on that read as "any of these and you are
                 in", which for a group with a seat cap is not true. */}
-              {!paid && (
-                <p
-                  role="status"
-                  className="rounded-xl border border-amber-300/70 bg-amber-50 px-4 py-3 text-sm leading-relaxed text-amber-900 dark:border-amber-500/30 dark:bg-amber-500/10 dark:text-amber-200"
-                >
-                  {t.paymentAlternativesUnpaid}
-                  {(courseType === "group" || courseType === "kids") &&
-                    ` ${t.paymentAlternativesUnpaidSeat}`}
-                </p>
-              )}
-              <ul className="space-y-2.5">
+            {!paid && (
+              <p
+                role="status"
+                className="rounded-xl border border-amber-300/70 bg-amber-50 px-4 py-3 text-sm leading-relaxed text-amber-900 dark:border-amber-500/30 dark:bg-amber-500/10 dark:text-amber-200"
+              >
+                {t.paymentAlternativesUnpaid}
+                {(courseType === "group" || courseType === "kids") &&
+                  ` ${t.paymentAlternativesUnpaidSeat}`}
+              </p>
+            )}
+            <ul className="space-y-2.5">
+              {inRomania && (
                 <li className="flex items-start gap-3 text-sm text-foreground">
                   <Banknote className="w-4 h-4 text-primary flex-shrink-0 mt-0.5" />
                   <span>{t.paymentCash}</span>
                 </li>
-                <li className="flex items-start gap-3 text-sm text-foreground">
-                  <Building2 className="w-4 h-4 text-primary flex-shrink-0 mt-0.5" />
-                  <span>
-                    {t.paymentTransfer} — {t.paymentIban}
-                  </span>
-                </li>
-                <li className="flex items-start gap-3 text-sm text-foreground">
-                  <CreditCard className="w-4 h-4 text-primary flex-shrink-0 mt-0.5" />
-                  <span>{t.paymentPaypal}</span>
-                </li>
-              </ul>
-              <p className="text-xs text-muted-foreground italic">
-                {t.paymentNote}
-              </p>
-              <a
-                href={WHATSAPP_URL}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 px-4 py-2 text-sm font-semibold rounded-lg bg-[#0F7A3F] text-white hover:bg-[#0c6533] transition-colors"
-              >
-                <MessageCircle className="w-4 h-4" />
-                {t.paymentWhatsapp}
-              </a>
-            </div>
-          )}
-        </div>
-      )}
+              )}
+              <li className="flex items-start gap-3 text-sm text-foreground">
+                <Building2 className="w-4 h-4 text-primary flex-shrink-0 mt-0.5" />
+                <span>
+                  {t.paymentTransfer} — {t.paymentIban}
+                </span>
+              </li>
+              <li className="flex items-start gap-3 text-sm text-foreground">
+                <CreditCard className="w-4 h-4 text-primary flex-shrink-0 mt-0.5" />
+                <span>{t.paymentPaypal}</span>
+              </li>
+            </ul>
+            <p className="text-xs text-muted-foreground italic">
+              {t.paymentNote}
+            </p>
+            <a
+              href={WHATSAPP_URL}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-2 px-4 py-2 text-sm font-semibold rounded-lg bg-[#0F7A3F] text-white hover:bg-[#0c6533] transition-colors"
+            >
+              <MessageCircle className="w-4 h-4" />
+              {t.paymentWhatsapp}
+            </a>
+          </div>
+        )}
+      </div>
     </div>
   );
 };

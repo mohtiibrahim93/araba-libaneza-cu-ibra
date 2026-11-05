@@ -579,7 +579,7 @@ const RegistrationFormSection = ({
         waitlistDeposit: courseType === "kids" && payDeposit,
         cohortId: courseType === "group" ? cohortId : null,
         kidsSlotId: courseType === "kids" ? kidsSlotId : null,
-        format: format || undefined,
+        inRomania: phone.replace(/[\s\-().]/g, "").startsWith("+40"),
       });
       setSubmitted(true);
       sessionStorage.removeItem(STORAGE_KEY);

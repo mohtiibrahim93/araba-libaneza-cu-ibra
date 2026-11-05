@@ -200,7 +200,7 @@ export const FAQ_CONTENT: Record<"ro" | "en", { groups: FAQGroup[] }> = {
           {
             q: "Cât costă și există planuri de plată?",
             featured: true,
-            a: "Poți alege plata integrală (cu reducere de 15%) sau plata lunară. Cursurile online se plătesc cu cardul; la cursurile fizice acceptăm și transfer bancar, cash și PayPal, în LEI, EUR sau USD. Prețurile exacte le vezi în secțiunea Prețuri.",
+            a: "Poți alege plata integrală (cu reducere de 15%) sau plata lunară. Acceptăm card, transfer bancar, cash și PayPal, în LEI, EUR sau USD. Prețurile exacte le vezi în secțiunea Prețuri.",
           },
           {
             q: "Există lecție de probă?",
@@ -437,7 +437,7 @@ export const FAQ_CONTENT: Record<"ro" | "en", { groups: FAQGroup[] }> = {
           {
             q: "How much does it cost, and are there payment plans?",
             featured: true,
-            a: "You can pay in full (with a 15% discount) or monthly. Online courses are paid by card; for in-person courses we also accept bank transfer, cash and PayPal, in LEI, EUR or USD. Exact prices are on the Pricing section.",
+            a: "You can pay in full (with a 15% discount) or monthly. We accept card, bank transfer, cash, and PayPal, in LEI, EUR, or USD. Exact prices are on the Pricing section.",
           },
           {
             q: "Is there a trial lesson?",

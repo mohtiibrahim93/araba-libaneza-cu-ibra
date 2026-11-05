@@ -430,7 +430,7 @@ const PreturiPage = () => {
                     : "Cu cardul, online, securizat prin Stripe (card, Apple Pay sau Google Pay)."}
                 </li>
                 <li>
-                  {en ? "For in-person courses, also: " : "La cursurile fizice, și: "}
+                  {en ? "Or: " : "Sau: "}
                   {t.paymentCash}; {t.paymentTransfer.toLowerCase()};{" "}
                   {t.paymentPaypal}. {t.paymentNote}
                 </li>

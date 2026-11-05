@@ -140,7 +140,7 @@ const PostSubmitView = ({
             registrationId={data.registrationId}
             quantity={data.quantity}
             plan={data.groupPlan}
-            format={data.format}
+            inRomania={data.inRomania}
           />
         )}
 
