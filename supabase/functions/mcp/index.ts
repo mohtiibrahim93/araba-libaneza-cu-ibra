@@ -74,7 +74,7 @@ var LEVELS = [
     lessons: 32,
     hours: 48,
     track: "Spoken",
-    schedule: "In person: Mon 19:00 & Wed 18:30 group, 2 Sep \u2013 21 Dec 2026 (32 lessons), Strada Icoanei 80 \xB7 in progress \xB7 Online: the Sat 12:00\u201313:30 / Sun 17:30\u201319:00 group is in progress and full; new online groups taught in Romanian and in English, max 6 each, are open for registration \u2014 dates on /cursuri/grup/a1"
+    schedule: "In person at Strada Icoanei 80: Monday 19:00 and Wednesday 18:30, 32 lessons. If everything goes as planned, lesson 32 is on Monday 21 December 2026. Online: Saturday 12:00–13:30 and Sunday 17:30–19:00, 32 lessons. If everything goes as planned, lesson 32 is on Sunday 20 December 2026. Both dates are estimates: holidays and other events may push them later. Live progress is on the level page, under Groups in progress (Grupe în desfășurare) at /cursuri/grup/a1: if lesson 16 is done, it shows 16 of 32."
   },
   {
     id: "a2",
@@ -82,7 +82,7 @@ var LEVELS = [
     lessons: 56,
     hours: 84,
     track: "Spoken",
-    schedule: "In person: Tue & Thu 19:00\u201320:30, 1 Sep 2026 \u2013 11 Mar 2027 (56 lessons), Strada Icoanei 80 \xB7 runs in parallel with A1 \xB7 in progress"
+    schedule: "In person at Strada Icoanei 80: Tuesday and Thursday at 19:00, 56 lessons (7 months). If everything goes as planned, lesson 56 is on Tuesday 16 March 2027. That date is an estimate: holidays and other events may push it later. Live progress is on the level page, under Groups in progress (Grupe în desfășurare) at /cursuri/grup/a2: if lesson 18 is done, it shows 18 of 56."
   },
   {
     id: "b1",
@@ -90,7 +90,7 @@ var LEVELS = [
     lessons: 72,
     hours: 108,
     track: "Spoken \xB7 optional Arabic-script writing if the whole group wants it",
-    schedule: "~9 months \xB7 opens after A2 \u2014 future enrollment"
+    schedule: "~9 months (72 lessons). Opens after A2. No group is running yet, so there is no end date. Once it starts, live progress is on the level page under Groups in progress."
   },
   {
     id: "b2",
@@ -98,7 +98,7 @@ var LEVELS = [
     lessons: 72,
     hours: 108,
     track: "Spoken \xB7 optional Arabic-script writing if the whole group wants it",
-    schedule: "~9 months \xB7 opens after B1 \u2014 future enrollment"
+    schedule: "~9 months (72 lessons). Opens after B1. No group is running yet, so there is no end date. Once it starts, live progress is on the level page under Groups in progress."
   },
   {
     id: "c1",
@@ -106,7 +106,7 @@ var LEVELS = [
     lessons: 72,
     hours: 108,
     track: "Spoken + Written",
-    schedule: "~9 months \xB7 opens after B2 \u2014 future enrollment"
+    schedule: "~9 months (72 lessons). Opens after B2. No group is running yet, so there is no end date. Once it starts, live progress is on the level page under Groups in progress."
   },
   {
     id: "c2",
@@ -114,7 +114,7 @@ var LEVELS = [
     lessons: 72,
     hours: 108,
     track: "Thematic modules",
-    schedule: "~9 months \xB7 opens after C1 \u2014 future enrollment"
+    schedule: "~9 months (72 lessons). Opens after C1. No group is running yet, so there is no end date. Once it starts, live progress is on the level page under Groups in progress."
   }
 ];
 var list_curriculum_levels_default = defineTool2({

@@ -9,7 +9,7 @@ const LEVELS = [
     hours: 48,
     track: "Spoken",
     schedule:
-      "In person: Mon 19:00 & Wed 18:30 group, 2 Sep – 21 Dec 2026 (32 lessons), Strada Icoanei 80 · in progress · Online: the Sat 12:00–13:30 / Sun 17:30–19:00 group is in progress and full; new online groups taught in Romanian and in English, max 6 each, are open for registration — dates on /cursuri/grup/a1",
+      "In person at Strada Icoanei 80: Monday 19:00 and Wednesday 18:30, 32 lessons. If everything goes as planned, lesson 32 is on Monday 21 December 2026. Online: Saturday 12:00–13:30 and Sunday 17:30–19:00, 32 lessons. If everything goes as planned, lesson 32 is on Sunday 20 December 2026. Both dates are estimates: holidays and other events may push them later. Live progress is on the level page, under Groups in progress (Grupe în desfășurare) at /cursuri/grup/a1: if lesson 16 is done, it shows 16 of 32.",
   },
   {
     id: "a2",
@@ -18,7 +18,7 @@ const LEVELS = [
     hours: 84,
     track: "Spoken",
     schedule:
-      "In person: Tue & Thu 19:00–20:30, 1 Sep 2026 – 11 Mar 2027 (56 lessons), Strada Icoanei 80 · runs in parallel with A1 · in progress",
+      "In person at Strada Icoanei 80: Tuesday and Thursday at 19:00, 56 lessons (7 months). If everything goes as planned, lesson 56 is on Tuesday 16 March 2027. That date is an estimate: holidays and other events may push it later. Live progress is on the level page, under Groups in progress (Grupe în desfășurare) at /cursuri/grup/a2: if lesson 18 is done, it shows 18 of 56.",
   },
   {
     id: "b1",
@@ -27,7 +27,8 @@ const LEVELS = [
     hours: 108,
     track:
       "Spoken · optional Arabic-script writing if the whole group wants it",
-    schedule: "~9 months · opens after A2 — future enrollment",
+    schedule:
+      "~9 months (72 lessons) · opens after A2. No group is running yet, so there is no end date. Once it starts, live progress is on the level page under Groups in progress.",
   },
   {
     id: "b2",
@@ -36,7 +37,8 @@ const LEVELS = [
     hours: 108,
     track:
       "Spoken · optional Arabic-script writing if the whole group wants it",
-    schedule: "~9 months · opens after B1 — future enrollment",
+    schedule:
+      "~9 months (72 lessons) · opens after B1. No group is running yet, so there is no end date. Once it starts, live progress is on the level page under Groups in progress.",
   },
   {
     id: "c1",
@@ -44,7 +46,7 @@ const LEVELS = [
     lessons: 72,
     hours: 108,
     track: "Spoken + Written",
-    schedule: "~9 months · opens after B2 — future enrollment",
+    schedule: "~9 months (72 lessons) · opens after B2. No group is running yet, so there is no end date. Once it starts, live progress is on the level page under Groups in progress.",
   },
   {
     id: "c2",
@@ -52,7 +54,7 @@ const LEVELS = [
     lessons: 72,
     hours: 108,
     track: "Thematic modules",
-    schedule: "~9 months · opens after C1 — future enrollment",
+    schedule: "~9 months (72 lessons) · opens after C1. No group is running yet, so there is no end date. Once it starts, live progress is on the level page under Groups in progress.",
   },
 ];
 
