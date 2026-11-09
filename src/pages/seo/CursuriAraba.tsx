@@ -36,7 +36,6 @@ const CursuriAraba = () => (
   <LandingLayout
     slug="cursuri-limba-araba"
     enHref="/en/learn-lebanese-arabic"
-    deHref="/de/arabisch-lernen"
     title="Cursuri de limbă arabă (libaneză) — București și online, toate nivelurile"
     metaTitle={CURSURI_ARABA_META.title}
     description={CURSURI_ARABA_META.description}

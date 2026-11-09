@@ -32,15 +32,17 @@ describe("Terms: company details (owner's text, 27 October 2026)", () => {
 });
 
 describe("Terms: monthly group refunds", () => {
-  it("carries the worked example the calculation is tested against", () => {
-    // src/test/group-refund.test.ts asserts the same numbers.
-    for (const figure of ["500 lei/lun", "8 lec", "337,50 lei", "450 lei"])
+  it("carries the worked example of the refund policy", () => {
+    // Owner's policy of 8 November 2026: lesson 1 is a test lesson,
+    // after lesson 2 the month becomes credit or private lessons.
+    for (const figure of ["500 lei/lun", "8 lec", "437,50 lei", "312,50 lei", "150 lei"])
       expect(terms).toContain(figure);
     for (const figure of [
       "500 lei/month",
       "8 lessons",
-      "337.50 lei",
-      "450 lei",
+      "437.50 lei",
+      "312.50 lei",
+      "150 lei",
     ])
       expect(terms).toContain(figure);
   });

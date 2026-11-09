@@ -19,12 +19,6 @@ describe("owner facts, 4 Nov 2026", () => {
     }
   });
 
-  it("no page offers MSA, the German one included", () => {
-    expect(read("src/pages/de/ArabischLernen.tsx")).not.toContain(
-      "MSA können wir später ergänzen",
-    );
-  });
-
   it("the footer links to ANPC's dispute platform, and the terms name it", () => {
     expect(read("src/components/Footer.tsx")).toContain(
       "https://reclamatiisal.anpc.ro/",
@@ -53,11 +47,6 @@ describe("i18n on English and German pages", () => {
     );
   });
 
-  it("the German page leads to the English trial, not the Romanian one", () => {
-    const de = read("src/pages/de/ArabischLernen.tsx");
-    expect(de).toContain('to="/en/trial"');
-    expect(de).not.toContain('to="/trial"');
-  });
 });
 
 describe("SEO and accessibility", () => {

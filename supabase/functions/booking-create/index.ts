@@ -36,7 +36,7 @@ import {
   packageTitle,
   type PackageLessonRow,
 } from "../_shared/package-lessons.ts";
-import { syncPackageTitles } from "../_shared/package-titles.ts";
+import { seriesOf, syncPackageTitles } from "../_shared/package-titles.ts";
 
 interface CreateBody {
   event_type: string;
@@ -185,7 +185,7 @@ Deno.serve(async (req) => {
     // Verify the registration exists (FK will catch it too, but fail early with a clearer error).
     const { data: reg } = await supabase
       .from("registrations")
-      .select("id, email, payment_status, quantity, form_type")
+      .select("id, email, payment_status, quantity, form_type, student_id")
       .eq("id", body.registration_id)
       .maybeSingle();
     // Preserve only the existing trusted webhook booking path. Unknown and
@@ -540,8 +540,9 @@ Deno.serve(async (req) => {
       ? packageNumbers([...packageRows, inserted]).get(inserted.id)
       : undefined;
     const packageTotal = Math.max(bought, lessonsUsed(packageRows) + 1);
+    const series = lessonNumber ? await seriesOf(supabase, reg) : 1;
     const summary = lessonNumber
-      ? packageTitle(body.student_name, lessonNumber, packageTotal)
+      ? packageTitle(body.student_name, lessonNumber, packageTotal, series)
       : `${et.name_ro} — ${body.student_name}`;
     const description = [
       `Student: ${body.student_name}`,

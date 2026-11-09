@@ -301,8 +301,11 @@ export default function FormingCohortsAdmin({
                 </div>
                 {(c.manual_offset ?? 0) + c.manual_signup_count > 0 && (
                   <p className="text-xs text-muted-foreground">
-                    Din locurile ocupate, adăugate de mână:{" "}
-                    {(c.manual_offset ?? 0) + c.manual_signup_count}.
+                    Din locurile ocupate,{" "}
+                    {(c.manual_offset ?? 0) + c.manual_signup_count} sunt doar
+                    un număr, fără cursant anume — de aceea nu apar ca
+                    înscrieri. Asociază fiecare cursant din fișa lui („Asociază
+                    la o grupă”) și scade numărul din „Ajustare locuri”.
                   </p>
                 )}
                 <div className="flex flex-wrap gap-2">

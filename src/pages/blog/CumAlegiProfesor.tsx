@@ -203,8 +203,8 @@ const CumAlegiProfesor = () => {
           </Link>
           .
           {en
-            ? " Cancel at least 7 days before the start for a full refund; after the start, the refund is proportional to the remaining lessons, minus a 10% administrative fee."
-            : " Anularea cu cel puțin 7 zile înainte de start îți aduce banii înapoi integral; după start, rambursarea e proporțională cu lecțiile rămase, minus o taxă administrativă de 10%."}
+            ? " Cancel at least 7 days before the start and you get your money back, minus the Stripe fee; after the first lesson you pay only for the lessons held; after the second lesson, the current month becomes credit (6 months) or private lessons, and future months not yet started are refunded."
+            : " Anularea cu cel puțin 7 zile înainte de start îți aduce banii înapoi, minus comisionul Stripe; după prima lecție plătești doar lecțiile ținute; după a doua lecție, luna în curs devine credit (6 luni) sau lecții private, iar lunile viitoare neîncepute se returnează."}
         </li>
         <li>
           <strong>

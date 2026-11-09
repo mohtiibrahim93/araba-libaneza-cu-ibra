@@ -109,7 +109,7 @@ Nu trebuie să plătești nimic ca să începi. Prima lecție este o [probă gra
 
 ## Există costuri ascunse?
 
-Nu. Materialele audio și suportul sunt incluse. Plătești cu cardul (securizat, prin Stripe), prin transfer bancar, cash sau PayPal, în lei, euro sau dolari (USD). Dacă anulezi cu cel puțin 7 zile înainte de începerea cursului, primești banii înapoi integral; după începerea cursului, rambursarea e proporțională cu lecțiile rămase, minus o taxă administrativă de 10%.`,
+Nu. Materialele audio și suportul sunt incluse. Plătești cu cardul (securizat, prin Stripe), prin transfer bancar, cash sau PayPal, în lei, euro sau dolari (USD). Anularea cu cel puțin 7 zile înainte de start îți aduce banii înapoi, minus comisionul Stripe; după prima lecție plătești doar lecțiile ținute; după a doua lecție, luna în curs devine credit (6 luni) sau lecții private, iar lunile viitoare neîncepute se returnează.`,
     en: `One of the first natural questions when you want to learn a new language is 'how much?'. At the Lebanese Arabic Center prices are transparent and depend on one thing: the format you choose. Here are all the options.
 
 ## Group courses (adults, A1–C2)
@@ -135,7 +135,7 @@ You don't have to pay anything to start. The first lesson is a [free trial (0 le
 
 ## Are there hidden costs?
 
-No. Audio materials and support are included. You can pay by card (securely, via Stripe), bank transfer, cash or PayPal, in lei, euros or US dollars. If you cancel at least 7 days before the course starts, you get a full refund; after it starts, the refund is proportional to the remaining lessons, minus a 10% administrative fee.`,
+No. Audio materials and support are included. You can pay by card (securely, via Stripe), bank transfer, cash or PayPal, in lei, euros or US dollars. Cancel at least 7 days before the start and you get your money back, minus the Stripe fee; after the first lesson you pay only for the lessons held; after the second lesson, the current month becomes credit (6 months) or private lessons, and future months not yet started are refunded.`,
   },
 
   "cum-alegi-profesor-de-araba": {
@@ -161,7 +161,7 @@ No. Audio materials and support are included. You can pay by card (securely, via
 
 - **Cât durează și cât de des?** 90 de minute, de 2 ori pe săptămână la grup; flexibil la privat.
 - **Online sau fizic?** Ambele — fizic în București sau online prin Zoom.
-- **Cât costă și care e politica de anulare?** Transparent, fără costuri ascunse — vezi [detaliile de preț](/blog/cat-costa-cursurile-de-araba-libaneza). Anularea cu cel puțin 7 zile înainte de start îți aduce banii înapoi integral; după start, rambursarea e proporțională cu lecțiile rămase, minus o taxă administrativă de 10%.
+- **Cât costă și care e politica de anulare?** Transparent, fără costuri ascunse — vezi [detaliile de preț](/blog/cat-costa-cursurile-de-araba-libaneza). Anularea cu cel puțin 7 zile înainte de start îți aduce banii înapoi, minus comisionul Stripe; după prima lecție plătești doar lecțiile ținute; după a doua lecție, luna în curs devine credit (6 luni) sau lecții private, iar lunile viitoare neîncepute se returnează.
 - **Oferi o lecție de probă?** Da — prima lecție e [gratuită, fără obligații](/trial).
 
 ## Despre potrivire și rezultate
@@ -195,7 +195,7 @@ Cel mai simplu test? O [lecție de probă gratuită (0 lei)](/trial) — vezi di
 
 - **How long and how often?** 90 minutes, twice a week for groups; flexible for private.
 - **Online or in person?** Both — in person in Bucharest or online via Zoom.
-- **How much, and what's the cancellation policy?** Transparent, no hidden fees — see the [pricing details](/blog/cat-costa-cursurile-de-araba-libaneza). Cancel at least 7 days before the start for a full refund; after the start, the refund is proportional to the remaining lessons, minus a 10% administrative fee.
+- **How much, and what's the cancellation policy?** Transparent, no hidden fees — see the [pricing details](/blog/cat-costa-cursurile-de-araba-libaneza). Cancel at least 7 days before the start and you get your money back, minus the Stripe fee; after the first lesson you pay only for the lessons held; after the second lesson, the current month becomes credit (6 months) or private lessons, and future months not yet started are refunded.
 - **Do you offer a trial lesson?** Yes — the first lesson is [free, with no obligation](/trial).
 
 ## About fit and results

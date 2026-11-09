@@ -1,8 +1,8 @@
-import { createFileRoute } from "@tanstack/react-router";
-import { seoHead } from "@/lib/seoHead";
-import DeArabischLernen from "@/pages/de/ArabischLernen";
+import { createFileRoute, redirect } from "@tanstack/react-router";
 
+// The German page was removed on 8 November 2026 (no German site yet).
 export const Route = createFileRoute("/de/arabisch-lernen")({
-  head: () => seoHead("/de/arabisch-lernen"),
-  component: DeArabischLernen,
+  beforeLoad: () => {
+    throw redirect({ href: "/cursuri-limba-araba", statusCode: 301 });
+  },
 });

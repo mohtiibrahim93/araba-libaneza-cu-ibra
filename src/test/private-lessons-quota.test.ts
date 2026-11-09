@@ -16,7 +16,7 @@ describe("paid lessons are capped at the quantity bought", () => {
   // tested in package-lessons.test.ts): kept, taken and lost lessons count.
   it("counts the package's lessons by the owner's rule against registrations.quantity", () => {
     expect(src).toContain(
-      '.select("id, email, payment_status, quantity, form_type")',
+      '.select("id, email, payment_status, quantity, form_type, student_id")',
     );
     expect(src).toContain(
       '.select("id, start_at, status, event_type_slug, trial_outcome")',

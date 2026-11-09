@@ -1,36 +1,32 @@
 // Monthly group subscription — what a cancellation gives back. Owner's rule,
-// 27 October 2026. Mirrors the "Grupe cu plată lunară" part of the published
-// Terms (src/pages/Terms.tsx, section 4); if one changes, change both.
-// Dependency-free on purpose, like refund.ts, so it is unit-tested outside Deno.
+// 8 November 2026 (replaces the 10% fee and the 7-day window of 27 October).
+// Mirrors the published Terms (src/pages/Terms.tsx, section 4); if one
+// changes, change both. Dependency-free on purpose, like refund.ts, so it is
+// unit-tested outside Deno.
 //
 // Cancelling always stops every future monthly charge. On top of that:
 //
 //   Before the course starts (by the calendar date in Bucharest):
-//     - 7 or more days before the start date → the month(s) already paid are
-//       refunded in full;
-//     - less than 7 days before → refunded minus the 10% administrative fee.
-//   After the course has started:
-//     - the month now being paid for is refunded for the lessons of that month
-//       not yet held, minus 10% — only if the cancellation comes within 7 days
-//       (day 7 included) of that month's charge, or of the start date when
-//       that month was paid before the course began; later, nothing for it;
-//     - months before the current one are never refunded.
+//     everything already paid comes back, minus only the processing fee
+//     Stripe kept (7+ days before, and also later: no lesson is held yet).
+//   Within the first two lessons of the course (the test week):
+//     the current month comes back for its lessons not yet held, minus the
+//     Stripe fee.
+//   After the second lesson:
+//     the current month is not refunded in money; its lessons not yet held
+//     become credit (6 months, or private lessons). Earlier months never
+//     come back.
 //
 // "The lessons of that month" are the cohort's real lessons (cohort_sessions,
 // read from the owner's Google Calendar) that fall in the billing period the
 // charge paid for: from that charge to the next one.
 //
-// Worked example (the one in the Terms): 500 lei a month, 8 lessons a month.
-//   cancelled 10 days before the start            → 500.00 back
-//   cancelled 3 days before the start             → 500 - 50 = 450.00 back
-//   charged on the 1st, cancelled on the 5th after 2 of the month's 8 lessons:
-//     6 lessons not yet held: 500 x 6/8 = 375.00, fee 37.50 → 337.50 back
-//   same, cancelled on the 12th (11 days after the charge) → 0 for that month
+// Worked example: 500 lei a month, 8 lessons a month, Stripe fee 10 lei.
+//   cancelled before the start                   → 500 - 10 = 490.00 back
+//   after lesson 1: 7 not held, 500 x 7/8 = 437.50 → 427.50 back
+//   after lesson 3: 5 not held → 312.50 credit, nothing back in money
 
-import { ADMIN_FEE_RATE, FULL_REFUND_DAYS } from "./refund.ts";
-
-/** Days after a month's charge within which that month is still refundable. */
-export const MONTH_REFUND_WINDOW_DAYS = 7;
+import { FULL_REFUND_DAYS, TEST_LESSONS } from "./refund.ts";
 
 export const BUCHAREST_TZ = "Europe/Bucharest";
 
@@ -41,6 +37,8 @@ export interface GroupCharge {
   amountBani: number;
   /** Already refunded on this charge, in bani. */
   refundedBani?: number;
+  /** The processing fee Stripe kept on this charge, in bani. Unknown = 0. */
+  stripeFeeBani?: number;
   /** When the charge was made, ISO. */
   chargedAt: string;
 }
@@ -65,7 +63,7 @@ export type GroupCancelCase =
   | "before_start_full"
   | "before_start_fee"
   | "current_month"
-  | "outside_window"
+  | "credit"
   | "nothing_paid";
 
 export interface GroupRefundLine {
@@ -79,8 +77,8 @@ export interface GroupCancelBreakdown {
   cancelDate: string;
   /** Whole calendar days from the cancellation to the start; null without a start date. */
   daysBeforeStart: number | null;
-  /** Whole calendar days since the current month's charge; null before the start. */
-  daysSinceCharge: number | null;
+  /** Lessons of the course held so far (after the start only). */
+  courseLessonsHeld: number;
   /** Billing period of the current month, ISO; null before the start. */
   periodStart: string | null;
   periodEnd: string | null;
@@ -90,8 +88,11 @@ export interface GroupCancelBreakdown {
   lessonsNotHeld: number;
   /** What the money being looked at amounts to, in bani. */
   chargedBani: number;
-  /** The part of it that is refundable before the fee. */
+  /** The part of it that is refundable before the Stripe fee. */
   eligibleBani: number;
+  /** Unused lessons of the current month kept as credit, not money. */
+  creditBani: number;
+  /** The Stripe processing fee kept back. */
   feeBani: number;
   refundBani: number;
   /** One line per Stripe charge to refund. */
@@ -130,6 +131,9 @@ const addOneMonth = (iso: string): string => {
 const remaining = (c: GroupCharge) =>
   Math.max(0, Math.round(c.amountBani) - Math.round(c.refundedBani ?? 0));
 
+const feeOf = (c: GroupCharge) =>
+  Math.max(0, Math.round(Number(c.stripeFeeBani) || 0));
+
 /**
  * Applies the owner's rule. Pure: the same numbers give the same answer.
  * Every amount is in bani and rounded to whole bani.
@@ -151,7 +155,7 @@ export function computeGroupCancelRefund(
   const empty = {
     cancelDate,
     daysBeforeStart,
-    daysSinceCharge: null,
+    courseLessonsHeld: 0,
     periodStart: null,
     periodEnd: null,
     lessonsInMonth: 0,
@@ -159,30 +163,34 @@ export function computeGroupCancelRefund(
     lessonsNotHeld: 0,
     chargedBani: 0,
     eligibleBani: 0,
+    creditBani: 0,
     feeBani: 0,
     refundBani: 0,
     refunds: [] as GroupRefundLine[],
   };
   if (charges.length === 0) return { case: "nothing_paid", ...empty };
 
-  // Before the start: nothing has been held, so everything paid is the
-  // "first month" the rule speaks of.
+  // Before the start: nothing has been held, everything paid comes back
+  // minus what Stripe kept.
   if (daysBeforeStart !== null && daysBeforeStart > 0) {
-    const full = daysBeforeStart >= FULL_REFUND_DAYS;
     const refunds: GroupRefundLine[] = [];
     let charged = 0;
     let fee = 0;
     for (const c of charges) {
       const amount = remaining(c);
       if (amount <= 0) continue;
-      const lineFee = full ? 0 : Math.round(amount * ADMIN_FEE_RATE);
+      const lineFee = Math.min(feeOf(c), amount);
       charged += amount;
       fee += lineFee;
-      refunds.push({ paymentId: c.paymentId, amountBani: amount - lineFee });
+      if (amount - lineFee > 0)
+        refunds.push({ paymentId: c.paymentId, amountBani: amount - lineFee });
     }
     return {
       ...empty,
-      case: full ? "before_start_full" : "before_start_fee",
+      case:
+        daysBeforeStart >= FULL_REFUND_DAYS
+          ? "before_start_full"
+          : "before_start_fee",
       chargedBani: charged,
       eligibleBani: charged,
       feeBani: fee,
@@ -191,7 +199,7 @@ export function computeGroupCancelRefund(
     };
   }
 
-  // Started (or no start date known): only the month now paid for can come back.
+  // Started (or no start date known): only the month now paid for counts.
   const current = charges[charges.length - 1]!;
   const periodStart = current.chargedAt;
   const periodEnd =
@@ -201,46 +209,38 @@ export function computeGroupCancelRefund(
       : addOneMonth(periodStart);
   const startMs = Date.parse(periodStart);
   const endMs = Date.parse(periodEnd);
-  const inMonth = input.sessionStarts
+  const times = input.sessionStarts
     .map((s) => Date.parse(s))
-    .filter((t) => Number.isFinite(t) && t >= startMs && t < endMs);
+    .filter((t) => Number.isFinite(t));
+  const inMonth = times.filter((t) => t >= startMs && t < endMs);
   const held = inMonth.filter((t) => t <= cancelMs).length;
   const notHeld = inMonth.length - held;
-  // The 7 days run from the month's charge. A month paid before the course
-  // started counts from the start date instead (owner, 27 October 2026):
-  // otherwise someone who paid three weeks early could not get anything back
-  // even on the first day of lessons.
-  const chargeDate = bucharestDate(periodStart);
-  const windowFrom =
-    input.courseStartDate && input.courseStartDate > chargeDate
-      ? input.courseStartDate
-      : chargeDate;
-  const daysSinceCharge = calendarDaysBetween(windowFrom, cancelDate);
+  const courseLessonsHeld = times.filter((t) => t <= cancelMs).length;
   const amount = remaining(current);
+  const eligible =
+    inMonth.length > 0 ? Math.round((amount * notHeld) / inMonth.length) : 0;
 
   const base = {
     ...empty,
-    daysSinceCharge,
+    courseLessonsHeld,
     periodStart,
     periodEnd,
     lessonsInMonth: inMonth.length,
     lessonsHeld: held,
     lessonsNotHeld: notHeld,
     chargedBani: amount,
+    eligibleBani: eligible,
   };
 
-  if (daysSinceCharge > MONTH_REFUND_WINDOW_DAYS) {
-    return { ...base, case: "outside_window" };
+  if (courseLessonsHeld > TEST_LESSONS) {
+    return { ...base, case: "credit", creditBani: eligible };
   }
 
-  const eligible =
-    inMonth.length > 0 ? Math.round((amount * notHeld) / inMonth.length) : 0;
-  const fee = Math.round(eligible * ADMIN_FEE_RATE);
+  const fee = Math.min(feeOf(current), eligible);
   const refund = eligible - fee;
   return {
     ...base,
     case: "current_month",
-    eligibleBani: eligible,
     feeBani: fee,
     refundBani: refund,
     refunds:

@@ -200,8 +200,28 @@ export const Route = createFileRoute("/api/public/bookings-access")({
             { status: 503 },
           );
         }
+        // The student's own enrolments and recorded payments. Matched on the
+        // address the private link was sent to, never anything else.
+        const emailFilter = escapeIlike(access.email);
+        const { data: regs, error: regError } = await supabaseAdmin
+          .from("registrations")
+          .select(
+            "id,form_type,level,created_at,payment_status,paid_at,months_total,months_paid,subscription_status,refunded_amount,registration_payments(amount_lei,paid_at,kind,method)",
+          )
+          .or(`email.ilike.${emailFilter},contact_email.ilike.${emailFilter}`)
+          .is("anonymized_at", null)
+          .order("created_at", { ascending: false });
+        if (regError)
+          console.error("[bookings-access] registration lookup failed", regError);
+        const registrations = (regs ?? []).map(
+          ({ registration_payments, ...r }) => ({
+            ...r,
+            payments: registration_payments ?? [],
+          }),
+        );
         return Response.json({
           bookings: data ?? [],
+          registrations,
           expires_at: new Date(access.exp * 1000).toISOString(),
         });
       },

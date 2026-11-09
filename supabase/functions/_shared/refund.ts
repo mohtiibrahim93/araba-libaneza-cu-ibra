@@ -3,28 +3,32 @@
 // changes, change both. Dependency-free on purpose so it can be unit-tested
 // outside Deno, like prices.ts.
 //
-// The rule, in three tiers:
+// Owner's rule, 8 November 2026 (replaces the old 10% administrative fee):
 //
-//   1. Cancelled 7 or more days BEFORE the course starts → full refund.
-//   2. Cancelled less than 7 days before the start, course not begun yet →
-//      the whole course price minus a 10% administrative fee.
-//   3. Course already started → lessons already taken are not refundable.
-//      Of the value that remains, 10% is kept as the administrative fee and
-//      the rest is returned.
+//   1. Cancelled 7 or more days BEFORE the start → everything paid comes
+//      back, minus only the processing fee Stripe kept.
+//   2. Less than 7 days before, or within the first two lessons → the lessons
+//      already held are kept (pro rata) plus the Stripe fee; the rest comes
+//      back. Lesson 1 works as a test lesson.
+//   3. After the second lesson → the month now running is not refunded in
+//      money: its unused lessons become credit (valid 6 months, or private
+//      lessons at the private-lesson price). Months not started yet come
+//      back, minus the Stripe fee.
 //
-// Worked example the policy is written against — a 2000 lei course of 32
-// lessons, cancelled after 5 lessons:
-//   price per lesson  2000 / 32      =   62.50
-//   taken (kept)      62.50 x  5     =  312.50
-//   remaining         62.50 x 27     = 1687.50
-//   fee (10%)         1687.50 x 0.10 =  168.75
-//   refunded          1687.50 - 168.75 = 1518.75
+// Worked example — a 2000 lei course of 32 lessons (8 a month), Stripe fee
+// 30 lei:
+//   1 lesson taken:  kept 62.50, refunded 2000 - 62.50 - 30 = 1907.50
+//   5 lessons taken: month 1 (500) stays — 312.50 used, 187.50 credit —
+//                    months 2–4 (1500) refunded minus 30 = 1470.00
 
-/** Administrative fee kept on any cancellation past the 7-day window. */
-export const ADMIN_FEE_RATE = 0.1;
-
-/** Days before the start date up to which a cancellation is refunded in full. */
+/** Days before the start date up to which nothing but the Stripe fee is kept. */
 export const FULL_REFUND_DAYS = 7;
+
+/** Lessons up to which a started course is still refunded in money. */
+export const TEST_LESSONS = 2;
+
+/** Lessons in one paid month of a group course. */
+export const LESSONS_PER_MONTH = 8;
 
 /**
  * Lessons in a full group course, per CEFR level. Mirrors `lessons` in
@@ -39,7 +43,7 @@ export const COURSE_LESSONS: Record<string, number> = {
   C2: 72,
 };
 
-export type RefundTier = "full" | "fee-only" | "pro-rata";
+export type RefundTier = "full" | "fee-only" | "pro-rata" | "credit";
 
 export interface RefundInput {
   /** What the student actually paid, in bani (RON x100). */
@@ -52,6 +56,13 @@ export interface RefundInput {
   courseStartsAt?: string | null;
   /** When the cancellation was requested, ISO. Defaults to now. */
   cancelledAt?: string | null;
+  /** The processing fee Stripe kept on the payment, in bani. Unknown = 0. */
+  stripeFeeBani?: number | null;
+  /**
+   * Lessons in one paid month. Omit for private lessons, which have no
+   * monthly rule: their unused lessons always come back.
+   */
+  lessonsPerMonth?: number | null;
 }
 
 export interface RefundBreakdown {
@@ -62,9 +73,11 @@ export interface RefundBreakdown {
   lessonsRemaining: number;
   /** Value of the lessons already taken — never refunded. */
   nonRefundableBani: number;
-  /** Value of the lessons still to come, before the fee. */
+  /** Value of the lessons still to come. */
   remainingValueBani: number;
-  /** The 10% administrative fee, or 0 in the full-refund tier. */
+  /** Unused lessons of the running month, kept as credit, not money. */
+  creditBani: number;
+  /** The Stripe processing fee kept back. */
   feeBani: number;
   /** What to actually send back through Stripe. */
   refundBani: number;
@@ -72,19 +85,14 @@ export interface RefundBreakdown {
 
 const DAY_MS = 86_400_000;
 
-/** Round to whole bani, away from zero, so no half-bani ever escapes. */
 const round = (n: number): number => Math.round(n);
 
 const clamp = (n: number, lo: number, hi: number): number =>
   Math.min(hi, Math.max(lo, n));
 
 /**
- * Applies the published refund policy. Pure: give it the same numbers and it
- * gives the same answer, which is what makes it testable and auditable.
- *
- * Deliberately conservative on bad input — a nonsensical lesson count falls
- * back to treating the course as untouched rather than silently refunding
- * less than the student is owed.
+ * Applies the published refund policy. Pure, so it is testable and auditable.
+ * Always: nonRefundable + credit + fee + refund = paid.
  */
 export function computeRefund(input: RefundInput): RefundBreakdown {
   const paid = Math.max(0, Math.round(input.paidBani));
@@ -95,60 +103,54 @@ export function computeRefund(input: RefundInput): RefundBreakdown {
   const taken =
     total > 0 ? clamp(Math.floor(input.lessonsTaken ?? 0), 0, total) : 0;
   const remainingLessons = total > 0 ? total - taken : 0;
-
-  const pricePerLessonBani = total > 0 ? paid / total : 0;
-  const nonRefundableBani = total > 0 ? round((paid * taken) / total) : 0;
-  const remainingValueBani = paid - nonRefundableBani;
+  const valueOf = (lessons: number) =>
+    total > 0 ? round((paid * lessons) / total) : 0;
+  const stripeFee = Math.max(0, Math.round(Number(input.stripeFeeBani) || 0));
 
   const cancelledMs = Date.parse(input.cancelledAt ?? new Date().toISOString());
   const startMs = input.courseStartsAt ? Date.parse(input.courseStartsAt) : NaN;
-  const hasStartDate = Number.isFinite(startMs);
-  const daysBeforeStart = hasStartDate
+  const daysBeforeStart = Number.isFinite(startMs)
     ? Math.floor((startMs - cancelledMs) / DAY_MS)
     : null;
 
-  // Tier 1 — cancelled early enough that nothing has been committed.
-  if (daysBeforeStart !== null && daysBeforeStart >= FULL_REFUND_DAYS) {
+  const finish = (
+    tier: RefundTier,
+    nonRefundableBani: number,
+    creditBani: number,
+  ): RefundBreakdown => {
+    const back = Math.max(0, paid - nonRefundableBani - creditBani);
+    const feeBani = Math.min(stripeFee, back);
     return {
-      tier: "full",
+      tier,
       daysBeforeStart,
-      pricePerLessonBani: round(pricePerLessonBani),
+      pricePerLessonBani: total > 0 ? round(paid / total) : 0,
       lessonsRemaining: remainingLessons,
-      nonRefundableBani: 0,
-      remainingValueBani: paid,
-      feeBani: 0,
-      refundBani: paid,
-    };
-  }
-
-  // Tier 2 — late, but the course has not begun, so no lesson is consumed yet.
-  const started = daysBeforeStart !== null ? daysBeforeStart < 0 : taken > 0;
-  if (!started) {
-    const feeBani = round(paid * ADMIN_FEE_RATE);
-    return {
-      tier: "fee-only",
-      daysBeforeStart,
-      pricePerLessonBani: round(pricePerLessonBani),
-      lessonsRemaining: total > 0 ? total : 0,
-      nonRefundableBani: 0,
-      remainingValueBani: paid,
+      nonRefundableBani,
+      remainingValueBani: paid - nonRefundableBani,
+      creditBani,
       feeBani,
-      refundBani: paid - feeBani,
+      refundBani: back - feeBani,
     };
-  }
-
-  // Tier 3 — under way. Lessons taken are gone; 10% of the rest is the fee.
-  const feeBani = round(remainingValueBani * ADMIN_FEE_RATE);
-  return {
-    tier: "pro-rata",
-    daysBeforeStart,
-    pricePerLessonBani: round(pricePerLessonBani),
-    lessonsRemaining: remainingLessons,
-    nonRefundableBani,
-    remainingValueBani,
-    feeBani,
-    refundBani: remainingValueBani - feeBani,
   };
+
+  if (daysBeforeStart !== null && daysBeforeStart >= FULL_REFUND_DAYS)
+    return finish("full", 0, 0);
+
+  const started = daysBeforeStart !== null ? daysBeforeStart < 0 : taken > 0;
+  if (!started) return finish("fee-only", 0, 0);
+
+  const perMonth =
+    input.lessonsPerMonth && input.lessonsPerMonth > 0
+      ? Math.floor(input.lessonsPerMonth)
+      : 0;
+  if (taken <= TEST_LESSONS || perMonth === 0)
+    return finish("pro-rata", valueOf(taken), 0);
+
+  // After the second lesson the running month stays: used lessons are kept,
+  // its unused lessons become credit; the months after it come back.
+  const monthEnd = Math.min(total, Math.ceil(taken / perMonth) * perMonth);
+  const nonRefundable = valueOf(taken);
+  return finish("credit", nonRefundable, valueOf(monthEnd) - nonRefundable);
 }
 
 /** Formats bani as a Romanian lei string, e.g. 151875 → "1.518,75 lei". */

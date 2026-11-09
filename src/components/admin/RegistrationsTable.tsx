@@ -55,16 +55,17 @@ export interface CancelPreview {
     | "before_start_full"
     | "before_start_fee"
     | "current_month"
-    | "outside_window"
+    | "credit"
     | "nothing_paid";
   cancelDate: string;
   daysBeforeStart: number | null;
-  daysSinceCharge: number | null;
+  courseLessonsHeld: number;
   lessonsInMonth: number;
   lessonsHeld: number;
   lessonsNotHeld: number;
   chargedBani: number;
   eligibleBani: number;
+  creditBani: number;
   feeBani: number;
   refundBani: number;
   needs_lessons: boolean;
@@ -80,26 +81,23 @@ const lei = (bani: number) =>
 export function cancelPreviewLines(p: CancelPreview): string[] {
   switch (p.case) {
     case "before_start_full":
-      return [
-        `Cursul nu a început: anulare cu ${p.daysBeforeStart} zile înainte de start (7+ zile).`,
-        `Plătit: ${lei(p.chargedBani)} → se rambursează integral.`,
-      ];
     case "before_start_fee":
       return [
-        `Cursul nu a început: anulare cu ${p.daysBeforeStart} ${p.daysBeforeStart === 1 ? "zi" : "zile"} înainte de start (sub 7 zile).`,
-        `Plătit: ${lei(p.chargedBani)} − taxa de 10% (${lei(p.feeBani)}).`,
+        `Cursul nu a început: anulare cu ${p.daysBeforeStart} ${p.daysBeforeStart === 1 ? "zi" : "zile"} înainte de start.`,
+        `Plătit: ${lei(p.chargedBani)} − comisionul Stripe (${lei(p.feeBani)}).`,
       ];
     case "current_month":
       return [
-        `Luna curentă: ${p.daysSinceCharge} ${p.daysSinceCharge === 1 ? "zi" : "zile"} de la plată sau de la începerea cursului (în fereastra de 7 zile).`,
+        `Primele două lecții ale cursului (ținute până acum: ${p.courseLessonsHeld}).`,
         `Lecții în luna asta: ${p.lessonsInMonth} · ținute: ${p.lessonsHeld} · rămase: ${p.lessonsNotHeld}.`,
-        `${lei(p.chargedBani)} × ${p.lessonsNotHeld}/${p.lessonsInMonth} = ${lei(p.eligibleBani)} − taxa de 10% (${lei(p.feeBani)}).`,
+        `${lei(p.chargedBani)} × ${p.lessonsNotHeld}/${p.lessonsInMonth} = ${lei(p.eligibleBani)} − comisionul Stripe (${lei(p.feeBani)}).`,
         "Lunile anterioare nu se rambursează.",
       ];
-    case "outside_window":
+    case "credit":
       return [
-        `Luna curentă: ${p.daysSinceCharge} zile de la plată sau de la începerea cursului (peste 7 zile): nu se rambursează.`,
-        "Lunile anterioare nu se rambursează.",
+        `După lecția 2 (ținute până acum: ${p.courseLessonsHeld}): luna curentă nu se rambursează în bani.`,
+        `Credit pentru cursant: ${lei(p.creditBani)} (${p.lessonsNotHeld} lecții rămase) — valabil 6 luni sau lecții private la 150 lei. Notează-l separat.`,
+        "Lunile viitoare nu se mai încasează.",
       ];
     case "nothing_paid":
       return ["Nu există nicio lună plătită."];
@@ -109,11 +107,13 @@ export function cancelPreviewLines(p: CancelPreview): string[] {
 /** What supabase/functions/_shared/refund.ts works out for one cancellation. */
 export interface RefundPreview {
   /** "no-show-fee": the trial's no-show fee, given back in full. */
-  tier: "full" | "fee-only" | "pro-rata" | "no-show-fee";
+  tier: "full" | "fee-only" | "pro-rata" | "credit" | "no-show-fee";
   daysBeforeStart: number | null;
   lessonsRemaining: number;
   nonRefundableBani: number;
   remainingValueBani: number;
+  /** Unused lessons of the running month, owed as credit, not money. */
+  creditBani?: number;
   feeBani: number;
   refundBani: number;
   refund_label: string;
@@ -328,15 +328,23 @@ const RefundControl = ({
                   <p className="text-xs text-muted-foreground">
                     {REFUND_TIER_LABEL[preview.tier]}
                   </p>
-                  {preview.tier === "pro-rata" && (
+                  {preview.tier !== "no-show-fee" && (
                     <p className="text-xs text-muted-foreground">
                       Nerambursabil (lecții făcute):{" "}
                       {(preview.nonRefundableBani / 100).toLocaleString(
                         "ro-RO",
                       )}{" "}
-                      lei · taxă 10%:{" "}
+                      lei · comision Stripe:{" "}
                       {(preview.feeBani / 100).toLocaleString("ro-RO")} lei ·
                       lecții rămase: {preview.lessonsRemaining}
+                    </p>
+                  )}
+                  {!!preview.creditBani && (
+                    <p className="text-xs text-foreground">
+                      Credit pentru cursant (nu bani):{" "}
+                      {(preview.creditBani / 100).toLocaleString("ro-RO")} lei —
+                      valabil 6 luni sau lecții private la 150 lei. Notează-l
+                      separat.
                     </p>
                   )}
                 </>
@@ -401,10 +409,13 @@ const RefundControl = ({
 };
 
 const REFUND_TIER_LABEL: Record<RefundPreview["tier"], string> = {
-  full: "Anulare cu 7+ zile înainte de start — rambursare integrală",
-  "fee-only": "Anulare sub 7 zile, cursul nu a început — se reține taxa de 10%",
+  full: "Anulare cu 7+ zile înainte de start — totul înapoi, minus comisionul Stripe",
+  "fee-only":
+    "Anulare sub 7 zile, cursul nu a început — totul înapoi, minus comisionul Stripe",
   "pro-rata":
-    "Cursul a început — lecțiile făcute nu se rambursează, din rest se reține 10%",
+    "Primele două lecții — se rețin lecțiile făcute și comisionul Stripe, restul înapoi",
+  credit:
+    "După lecția 2 — luna în curs devine credit, lunile neîncepute înapoi minus comisionul Stripe",
   "no-show-fee":
     "Taxa de neprezentare la proba gratuită — se rambursează integral (contestație acceptată)",
 };

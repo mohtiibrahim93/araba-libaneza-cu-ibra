@@ -2,71 +2,92 @@ import { describe, expect, it } from "vitest";
 import { readFileSync } from "node:fs";
 import { resolve } from "node:path";
 import {
-  ADMIN_FEE_RATE,
   COURSE_LESSONS,
   FULL_REFUND_DAYS,
+  LESSONS_PER_MONTH,
   computeRefund,
   formatBani,
 } from "../../supabase/functions/_shared/refund";
 import { getCurriculum } from "@/data/curriculum";
 
-// The course the policy is written against: 500 lei/month x 4 months = 2000 lei
-// over 32 lessons.
-const COURSE = { paidBani: 200_000, totalLessons: 32 };
+// Owner's rule, 8 November 2026. A course paid in full: 2000 lei over 32
+// lessons, 8 a month; Stripe kept 30 lei.
+const COURSE = {
+  paidBani: 200_000,
+  totalLessons: 32,
+  stripeFeeBani: 3_000,
+  lessonsPerMonth: LESSONS_PER_MONTH,
+};
 const START = "2026-10-01T17:00:00.000Z";
+const STARTED = "2026-10-15T17:00:00.000Z";
 
-describe("refund policy (supabase/functions/_shared/refund.ts)", () => {
+describe("refund policy for a course paid in full", () => {
   it("keeps the lesson totals in step with the curriculum", () => {
-    // Curriculum ids are lowercase ("a2"), the refund table's keys uppercase.
-    // Comparing them raw skipped every level, so B1–C2 had drifted to 70/80.
     const levels = getCurriculum("ro");
     expect(levels.length).toBeGreaterThan(0);
-    for (const level of levels) {
+    for (const level of levels)
       expect(COURSE_LESSONS[level.id.toUpperCase()], level.id).toBe(
         level.lessons,
       );
-    }
   });
 
-  it("refunds in full 7 or more days before the start", () => {
+  it("7+ days before the start: everything back minus only the Stripe fee", () => {
     const r = computeRefund({
       ...COURSE,
       lessonsTaken: 0,
       courseStartsAt: START,
-      cancelledAt: "2026-09-24T17:00:00.000Z", // exactly 7 days
+      cancelledAt: "2026-09-24T17:00:00.000Z",
     });
     expect(r.tier).toBe("full");
     expect(r.daysBeforeStart).toBe(FULL_REFUND_DAYS);
-    expect(r.feeBani).toBe(0);
-    expect(r.refundBani).toBe(200_000);
+    expect(r.feeBani).toBe(3_000);
+    expect(r.refundBani).toBe(197_000);
   });
 
-  it("keeps only the 10% fee when cancelled late but before the first lesson", () => {
+  it("less than 7 days before the start: also everything back minus the Stripe fee", () => {
     const r = computeRefund({
       ...COURSE,
       lessonsTaken: 0,
       courseStartsAt: START,
-      cancelledAt: "2026-09-29T17:00:00.000Z", // 2 days before
+      cancelledAt: "2026-09-29T17:00:00.000Z",
     });
-    expect(r.tier).toBe("fee-only");
-    expect(r.feeBani).toBe(20_000); // 200 lei
-    expect(r.refundBani).toBe(180_000); // 1800 lei
+    expect(r.refundBani).toBe(197_000);
   });
 
-  it("matches the worked example: 2000 lei, 32 lessons, 5 taken", () => {
+  it("after lesson 1 (test lesson): only that lesson and the Stripe fee are kept", () => {
+    const r = computeRefund({
+      ...COURSE,
+      lessonsTaken: 1,
+      courseStartsAt: START,
+      cancelledAt: STARTED,
+    });
+    expect(r.tier).toBe("pro-rata");
+    expect(r.nonRefundableBani).toBe(6_250); // 62.50 lei
+    expect(r.creditBani).toBe(0);
+    expect(r.refundBani).toBe(190_750); // 2000 - 62.50 - 30
+  });
+
+  it("after lesson 2 the money still comes back for the unused lessons", () => {
+    const r = computeRefund({
+      ...COURSE,
+      lessonsTaken: 2,
+      courseStartsAt: START,
+      cancelledAt: STARTED,
+    });
+    expect(r.refundBani).toBe(200_000 - 12_500 - 3_000);
+  });
+
+  it("after lesson 3: the running month becomes credit, later months come back", () => {
     const r = computeRefund({
       ...COURSE,
       lessonsTaken: 5,
       courseStartsAt: START,
-      cancelledAt: "2026-10-15T17:00:00.000Z",
+      cancelledAt: STARTED,
     });
-    expect(r.tier).toBe("pro-rata");
-    expect(r.pricePerLessonBani).toBe(6_250); // 62.50 lei
-    expect(r.lessonsRemaining).toBe(27);
-    expect(r.nonRefundableBani).toBe(31_250); // 312.50 lei
-    expect(r.remainingValueBani).toBe(168_750); // 1687.50 lei
-    expect(r.feeBani).toBe(16_875); // 168.75 lei
-    expect(r.refundBani).toBe(151_875); // 1518.75 lei
+    expect(r.tier).toBe("credit");
+    expect(r.nonRefundableBani).toBe(31_250); // 312.50 used
+    expect(r.creditBani).toBe(18_750); // 187.50 credit
+    expect(r.refundBani).toBe(147_000); // 1500 - 30
   });
 
   it("never lets the parts drift from the total", () => {
@@ -75,50 +96,37 @@ describe("refund policy (supabase/functions/_shared/refund.ts)", () => {
         ...COURSE,
         lessonsTaken: taken,
         courseStartsAt: START,
-        cancelledAt: "2026-10-15T17:00:00.000Z",
+        cancelledAt: STARTED,
       });
-      expect(r.nonRefundableBani + r.feeBani + r.refundBani).toBe(
-        COURSE.paidBani,
-      );
+      expect(
+        r.nonRefundableBani + r.creditBani + r.feeBani + r.refundBani,
+      ).toBe(COURSE.paidBani);
       expect(r.refundBani).toBeGreaterThanOrEqual(0);
-      expect(r.refundBani).toBeLessThanOrEqual(COURSE.paidBani);
     }
   });
 
-  it("refunds nothing once every lesson has been delivered", () => {
+  it("refunds nothing in the last month once lesson 2 has passed", () => {
     const r = computeRefund({
       ...COURSE,
-      lessonsTaken: 32,
+      lessonsTaken: 26,
       courseStartsAt: START,
-      cancelledAt: "2027-02-01T17:00:00.000Z",
+      cancelledAt: "2027-01-20T17:00:00.000Z",
     });
     expect(r.refundBani).toBe(0);
-    expect(r.nonRefundableBani).toBe(200_000);
+    expect(r.feeBani).toBe(0);
+    expect(r.creditBani).toBe(37_500); // 6 lessons left in month 4
   });
 
-  it("clamps a lesson count that overshoots the course", () => {
+  it("private lessons: unused lessons always come back, minus the Stripe fee", () => {
     const r = computeRefund({
-      ...COURSE,
-      lessonsTaken: 99,
-      courseStartsAt: START,
-      cancelledAt: "2027-02-01T17:00:00.000Z",
-    });
-    expect(r.lessonsRemaining).toBe(0);
-    expect(r.refundBani).toBe(0);
-  });
-
-  it("falls back to the fee-only tier when there is no start date and no lesson taken", () => {
-    const r = computeRefund({
-      ...COURSE,
-      lessonsTaken: 0,
+      paidBani: 45_000, // 3 x 150 lei
+      totalLessons: 3,
+      lessonsTaken: 2,
       courseStartsAt: null,
+      stripeFeeBani: 800,
     });
-    expect(r.tier).toBe("fee-only");
-    expect(r.refundBani).toBe(180_000);
-  });
-
-  it("charges the fee stated in the Terms", () => {
-    expect(ADMIN_FEE_RATE).toBe(0.1);
+    expect(r.tier).toBe("pro-rata");
+    expect(r.refundBani).toBe(15_000 - 800);
   });
 
   it("formats bani the way the admin displays money", () => {
@@ -149,9 +157,10 @@ describe("the admin refund button applies the policy", () => {
     expect(call![0]).toContain("breakdown.refundBani");
   });
 
-  it("computes that amount with computeRefund", () => {
+  it("computes that amount with computeRefund and the real Stripe fee", () => {
     expect(handler).toContain('from "../_shared/refund.ts"');
     expect(handler).toContain("computeRefund(");
+    expect(handler).toContain("balance_transaction");
   });
 
   it("offers a preview so the number is seen before the money moves", () => {

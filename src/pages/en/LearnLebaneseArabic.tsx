@@ -67,7 +67,6 @@ const LearnLebaneseArabic = () => (
     faq={FAQ}
     courseSchema
     roHref="/cursuri-limba-araba"
-    deHref="/de/arabisch-lernen"
   >
     <DirectAnswer question="How do you learn Lebanese Arabic?">
       <p>

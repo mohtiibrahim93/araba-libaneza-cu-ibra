@@ -20,6 +20,13 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { toast } from "sonner";
 import { WHATSAPP_CONTACT_URL } from "@/lib/social";
+import {
+  courseText,
+  monthsText,
+  paymentStatusText,
+  totalPaidLei,
+  type MyRegistration,
+} from "@/lib/myPayments";
 
 type Lang = "ro" | "en";
 type BookingStatus = "confirmed" | "cancelled" | "rescheduled" | "completed";
@@ -155,6 +162,7 @@ const MyBookings = ({ lang }: { lang: Lang }) => {
   const [invalid, setInvalid] = useState(false);
   const [bookings, setBookings] = useState<BookingRow[]>([]);
   const [cancellingId, setCancellingId] = useState<string | null>(null);
+  const [registrations, setRegistrations] = useState<MyRegistration[]>([]);
 
   const loadBookings = async () => {
     if (!token) return;
@@ -165,8 +173,12 @@ const MyBookings = ({ lang }: { lang: Lang }) => {
         `/api/public/bookings-access?token=${encodeURIComponent(token)}`,
       );
       if (!response.ok) throw new Error("invalid");
-      const body = (await response.json()) as { bookings?: BookingRow[] };
+      const body = (await response.json()) as {
+        bookings?: BookingRow[];
+        registrations?: MyRegistration[];
+      };
       setBookings(body.bookings ?? []);
+      setRegistrations(body.registrations ?? []);
     } catch {
       setInvalid(true);
       setBookings([]);
@@ -453,6 +465,75 @@ const MyBookings = ({ lang }: { lang: Lang }) => {
                         </a>
                       </Button>
                     </div>
+                  )}
+                </article>
+              );
+            })}
+          </section>
+        )}
+
+        {token && !loading && !invalid && registrations.length > 0 && (
+          <section className="mt-12 space-y-5">
+            <h2 className="font-display text-2xl font-bold text-foreground">
+              {lang === "ro" ? "Înscrieri și plăți" : "Enrolments and payments"}
+            </h2>
+            {registrations.map((reg) => {
+              const total = totalPaidLei(reg);
+              const months = monthsText(reg, lang);
+              return (
+                <article
+                  key={reg.id}
+                  className="rounded-2xl border border-border bg-card p-5 sm:p-6"
+                >
+                  <div className="flex flex-wrap items-start justify-between gap-3">
+                    <div>
+                      <h3 className="font-display text-lg font-bold text-foreground">
+                        {courseText(reg.form_type, lang)}
+                        {reg.level ? ` · ${reg.level}` : ""}
+                      </h3>
+                      <p className="mt-1 text-sm text-muted-foreground">
+                        {(lang === "ro" ? "Înscris pe " : "Enrolled on ") +
+                          new Intl.DateTimeFormat(
+                            lang === "ro" ? "ro-RO" : "en-GB",
+                            { timeZone: "Europe/Bucharest", dateStyle: "long" },
+                          ).format(new Date(reg.created_at))}
+                      </p>
+                    </div>
+                    <span className="rounded-full bg-secondary px-3 py-1 text-xs font-semibold text-secondary-foreground">
+                      {paymentStatusText(reg.payment_status, lang)}
+                    </span>
+                  </div>
+                  <div className="mt-3 space-y-1 text-sm text-muted-foreground">
+                    {total > 0 && (
+                      <p>
+                        {(lang === "ro" ? "Total plătit: " : "Total paid: ") +
+                          `${total} lei`}
+                      </p>
+                    )}
+                    {months && <p>{months}</p>}
+                    {reg.refunded_amount ? (
+                      <p>
+                        {(lang === "ro" ? "Rambursat: " : "Refunded: ") +
+                          `${reg.refunded_amount / 100} lei`}
+                      </p>
+                    ) : null}
+                  </div>
+                  {reg.payments.length > 0 && (
+                    <ul className="mt-3 divide-y divide-border text-sm">
+                      {reg.payments.map((p, i) => (
+                        <li key={i} className="flex justify-between py-2">
+                          <span className="text-muted-foreground">
+                            {new Intl.DateTimeFormat(
+                              lang === "ro" ? "ro-RO" : "en-GB",
+                              { timeZone: "Europe/Bucharest", dateStyle: "medium" },
+                            ).format(new Date(p.paid_at))}
+                          </span>
+                          <span className="font-medium text-foreground">
+                            {Number(p.amount_lei)} lei
+                          </span>
+                        </li>
+                      ))}
+                    </ul>
                   )}
                 </article>
               );

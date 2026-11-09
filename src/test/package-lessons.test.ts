@@ -80,7 +80,7 @@ describe("the rule is applied everywhere", () => {
 
   it("titles a package lesson with its number and renumbers on changes", () => {
     expect(create).toContain(
-      code("packageTitle(body.student_name, lessonNumber, packageTotal)"),
+      code("packageTitle(body.student_name, lessonNumber, packageTotal, series)"),
     );
     expect(
       manage.split(
@@ -219,5 +219,21 @@ describe("handoff extras (30 October 2026)", () => {
     expect(admin).toContain(
       code('if (action === "sync_all_package_titles") {'),
     );
+  });
+});
+
+describe("private package series (owner, 8 Nov 2026)", () => {
+  it("names the second package Serie 2", async () => {
+    const { packageTitle: t, packageSeries } = await import(
+      "../../supabase/functions/_shared/package-lessons"
+    );
+    expect(t("Ioan", 3, 20, 2)).toBe("Ioan - Araba libaneza Serie 2- L3/20");
+    expect(t("Ioan", 3, 20, 1)).toBe("Ioan - Araba libaneza- L3/20");
+    const regs = [
+      { id: "b", created_at: "2026-11-01T00:00:00Z" },
+      { id: "a", created_at: "2026-09-01T00:00:00Z" },
+    ];
+    expect(packageSeries(regs, "a")).toBe(1);
+    expect(packageSeries(regs, "b")).toBe(2);
   });
 });
