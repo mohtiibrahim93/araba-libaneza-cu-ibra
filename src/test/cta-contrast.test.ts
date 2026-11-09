@@ -17,7 +17,6 @@ import { resolve } from "node:path";
 const WRAPPERS = [
   "src/components/blog/BlogArticleLayout.tsx",
   "src/components/seo/LandingLayout.tsx",
-  "src/pages/de/ArabischLernen.tsx",
   "src/pages/en/EnLandingLayout.tsx",
 ];
 
@@ -33,7 +32,6 @@ describe("call-to-action buttons keep their own colours", () => {
       "src/components/blog/ArticleKit.tsx",
       "src/pages/seo/CursuriArabaAdolescenti.tsx",
       "src/pages/en/LearnLebaneseArabic.tsx",
-      "src/pages/de/ArabischLernen.tsx",
     ];
     for (const f of files) {
       const src = readFileSync(resolve(process.cwd(), f), "utf8");

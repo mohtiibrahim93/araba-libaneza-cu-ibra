@@ -1,9 +1,11 @@
 /**
- * The one hreflang cluster that spans three languages.
+ * The learn-Arabic hreflang cluster. It used to span three languages; the
+ * German page was removed on 8 November 2026 (owner: no German site yet) and
+ * now redirects to the Romanian member.
  *
  * Every other annotated page is a plain reciprocal RO/EN pair (see
  * landingAnnotations in scripts/seoPrerender.ts). This group is the exception:
- * /de/arabisch-lernen exists to catch German searches and names Romanian and
+ * /de/arabisch-lernen used to catch German searches and named Romanian and
  * English alternates, but neither named it back, so a crawl reported "Some
  * pages don't include hreflang links to all the other pages of the group". A
  * cluster is only honoured when every member links to every other member.
@@ -17,7 +19,6 @@
 export const LEARN_CLUSTER = {
   ro: "/cursuri-limba-araba",
   en: "/en/learn-lebanese-arabic",
-  de: "/de/arabisch-lernen",
 } as const;
 
 /** Romanian is x-default: it is the site's primary language. */

@@ -62,6 +62,7 @@ import CohortCalendarNames from "@/components/admin/CohortCalendarNames";
 import CapacitiesAdmin from "@/components/CapacitiesAdmin";
 import ManualSignupsAdmin from "@/components/ManualSignupsAdmin";
 import ManualStudentForm from "@/components/admin/ManualStudentForm";
+import GroupStatusQuick from "@/components/admin/GroupStatusQuick";
 import CohortsAdmin from "@/components/admin/CohortsAdmin";
 import CourseOverviewAdmin from "@/components/admin/CourseOverviewAdmin";
 import FormingCohortsAdmin from "@/components/admin/FormingCohortsAdmin";
@@ -1384,6 +1385,7 @@ const Admin = () => {
 
         {/* ── Grupe: capacitate, contoare manuale, cohorte, cereri ─────── */}
         <TabsContent value="cohorts" className="mt-0 space-y-6">
+          <GroupStatusQuick />
           <FormingCohortsAdmin onShowRegistrations={showGroupRegistrations} />
           <CohortSessionsAdmin key={calendarNamesVersion} />
           <CohortCalendarNames

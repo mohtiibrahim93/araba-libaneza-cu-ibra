@@ -377,11 +377,20 @@ const PersonSheet = ({
                   {person.form_type === "group" && (
                     <GroupPayment row={person} onDone={onChanged} />
                   )}
-                  {person.form_type === "group" && (
+                  {!person.anonymized_at && (
                     <MoveToCohort
                       registrationId={person.id}
                       currentCohortId={person.cohort_id}
                       onDone={onChanged}
+                      person={
+                        person.form_type === "group"
+                          ? undefined
+                          : {
+                              name: person.name,
+                              phone: person.phone,
+                              email: person.email,
+                            }
+                      }
                     />
                   )}
 

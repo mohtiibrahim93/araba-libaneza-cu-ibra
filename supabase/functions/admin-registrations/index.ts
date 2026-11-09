@@ -21,10 +21,30 @@ import {
 } from "../_shared/cohort-sessions.ts";
 import {
   COURSE_LESSONS,
+  LESSONS_PER_MONTH,
   computeRefund,
   formatBani,
   type RefundBreakdown,
 } from "../_shared/refund.ts";
+
+/**
+ * The processing fee Stripe kept on a payment, in bani (owner's rule,
+ * 8 November 2026: refunds keep back only what Stripe kept). 0 when Stripe
+ * does not report it, so the student is never charged a guessed fee.
+ */
+async function stripeFeeFor(stripe: Stripe, intentId: string): Promise<number> {
+  try {
+    const intent = await stripe.paymentIntents.retrieve(intentId, {
+      expand: ["latest_charge.balance_transaction"],
+    });
+    // deno-lint-ignore no-explicit-any
+    const fee = (intent as any).latest_charge?.balance_transaction?.fee;
+    return Number.isFinite(Number(fee)) ? Math.max(0, Number(fee)) : 0;
+  } catch (e) {
+    console.error("[admin-registrations] Stripe fee read failed", e);
+    return 0;
+  }
+}
 import {
   computeGroupCancelRefund,
   type GroupCharge,
@@ -255,6 +275,7 @@ async function noShowFeeRefundFor(
       lessonsRemaining: 0,
       nonRefundableBani: 0,
       remainingValueBani: remaining,
+      creditBani: 0,
       feeBani: 0,
       refundBani: remaining,
     },
@@ -322,6 +343,9 @@ async function refundInputsFor(
       totalLessons,
       lessonsTaken,
       courseStartsAt,
+      stripeFeeBani: await stripeFeeFor(stripe, paymentIntentId),
+      // Private lessons have no monthly rule: unused ones always come back.
+      lessonsPerMonth: formType === "private" ? null : LESSONS_PER_MONTH,
     }),
   };
 }
@@ -538,6 +562,34 @@ Deno.serve(async (req) => {
           error: "Nu am putut încărca progresul elevilor",
         });
       }
+      // Every account shows, also those who never played yet (owner, 9 Nov
+      // 2026): auth users without a progress row join with zero progress.
+      const seen = new Set((rows ?? []).map((r: { user_id: string }) => r.user_id));
+      const extra: Array<Record<string, unknown>> = [];
+      for (let page = 1; page <= 10; page++) {
+        const { data: list, error: listErr } =
+          await supabase.auth.admin.listUsers({ page, perPage: 200 });
+        if (listErr) {
+          console.error("[admin-registrations] listUsers failed", listErr);
+          break;
+        }
+        for (const u of list.users) {
+          if (seen.has(u.id)) continue;
+          extra.push({
+            user_id: u.id,
+            email: u.email ?? null,
+            placement: null,
+            xp: 0,
+            rounds: 0,
+            items_seen: 0,
+            last_played_at: null,
+            created_at: u.created_at,
+            updated_at: u.created_at,
+          });
+        }
+        if (list.users.length < 200) break;
+      }
+      if (rows) rows.push(...(extra as typeof rows));
       const emails = Array.from(
         new Set(
           (rows ?? [])
@@ -3065,7 +3117,19 @@ Deno.serve(async (req) => {
         let pageToken: string | undefined;
         // Google's search matches words; the plain words of the name find
         // every lesson whatever dashes and spaces the title was typed with.
-        const q = normTitle(prefix);
+        // Search twice: with the plain words and with the name as typed
+        // (diacritics kept). Google does not always treat "araba" and
+        // "arabă" as the same word.
+        const typed = prefix
+          .toLowerCase()
+          .replace(/[^\p{L}\p{N}]+/gu, " ")
+          .trim();
+        const queries = Array.from(new Set([normTitle(prefix), typed])).filter(
+          Boolean,
+        );
+        const seenIds = new Set<string>();
+        for (const q of queries) {
+        pageToken = undefined;
         do {
           const qs = new URLSearchParams({
             q,
@@ -3091,9 +3155,46 @@ Deno.serve(async (req) => {
               error: `Google Calendar a refuzat citirea (${res.status}).`,
             });
           }
-          events.push(...(page.items ?? []));
+          for (const item of page.items ?? []) {
+            if (item?.id && !seenIds.has(item.id)) {
+              seenIds.add(item.id);
+              events.push(item);
+            }
+          }
           pageToken = page.nextPageToken;
         } while (pageToken);
+        }
+
+        // Lessons saved here but missing from the search (a lesson just
+        // created is often not searchable yet): read each one directly and
+        // treat it as gone only when Google says it was deleted.
+        const confirmedGone = new Set<string>();
+        {
+          const { data: saved } = await supabase
+            .from("cohort_sessions")
+            .select("google_event_id")
+            .eq("cohort_id", c.id);
+          for (const row of saved ?? []) {
+            const id = row.google_event_id as string | null;
+            if (!id || seenIds.has(id)) continue;
+            const r = await fetch(
+              `${GCAL_GATEWAY}/calendars/primary/events/${encodeURIComponent(id)}`,
+              { headers: gHeaders },
+            );
+            if (r.status === 404 || r.status === 410) {
+              confirmedGone.add(id);
+              continue;
+            }
+            const ev = await r.json().catch(() => null);
+            if (!r.ok || !ev) continue;
+            if (ev.status === "cancelled") {
+              confirmedGone.add(id);
+              continue;
+            }
+            seenIds.add(id);
+            events.push(ev);
+          }
+        }
 
         const lessons = events
           .map((e) => ({ e, n: lessonNumber(e.summary, prefix) }))
@@ -3116,20 +3217,16 @@ Deno.serve(async (req) => {
             .upsert(rows, { onConflict: "google_event_id" });
           if (upErr) throw upErr;
         }
-        // Lessons removed from the calendar (a break, a cancellation) leave here too.
-        const keep = rows.map((r) => r.google_event_id);
-        let del = supabase
-          .from("cohort_sessions")
-          .delete()
-          .eq("cohort_id", c.id);
-        if (keep.length)
-          del = del.not(
-            "google_event_id",
-            "in",
-            `(${keep.map((k) => `"${k}"`).join(",")})`,
-          );
-        const { error: delErr } = await del;
-        if (delErr) throw delErr;
+        // Lessons removed from the calendar (a break, a cancellation) leave
+        // here too, but only those Google confirmed as deleted.
+        if (confirmedGone.size) {
+          const { error: delErr } = await supabase
+            .from("cohort_sessions")
+            .delete()
+            .eq("cohort_id", c.id)
+            .in("google_event_id", Array.from(confirmedGone));
+          if (delErr) throw delErr;
+        }
 
         const last = lessons.reduce<(typeof lessons)[number] | null>(
           (a, b) =>
@@ -5569,6 +5666,7 @@ Deno.serve(async (req) => {
           paymentId,
           amountBani: inv.amount_paid,
           refundedBani,
+          stripeFeeBani: await stripeFeeFor(stripe, paymentId),
           chargedAt: new Date(paidAtUnix * 1000).toISOString(),
         });
       }

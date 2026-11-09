@@ -659,13 +659,6 @@ const STATIC_ROUTES: SeoRoute[] = [
     description:
       "Lebanese Arabic for ages 12–17 with a native teacher, online or in Bucharest. Groups coming soon: ask to be notified. From 16, join the adult groups.",
   },
-  {
-    path: "/de/arabisch-lernen",
-    lang: "de",
-    title: "Arabisch lernen online — Libanesisch mit Muttersprachler",
-    description:
-      "Arabisch lernen online — libanesischer Dialekt mit Muttersprachler. Sprich ab Lektion eins. Einzel- & Gruppenkurse, A1–C2. Kostenlose Probestunde.",
-  },
   // Retired alias, like the four below it. It was the only one without
   // noindex, which also made it the only indexable page missing from the
   // sitemap — an inconsistency, not a decision.
@@ -1077,15 +1070,11 @@ export function seoHead(path: string, opts?: SeoHeadOptions): HeadResult {
   if (pair && !route.canonical) {
     alt("ro", BASE + pair.ro);
     alt("en", BASE + pair.en);
-    // One group also has a German member.
-    if (isLearnClusterPath(route.path)) alt("de", BASE + LEARN_CLUSTER.de);
     alt("x-default", BASE + pair.ro);
   } else if (isLearnClusterPath(route.path) && !route.canonical) {
-    // The German page is not part of an RO/EN annotation pair, but it is a full
-    // member of the cluster.
+    // A cluster member that is not in an RO/EN annotation pair.
     alt("ro", BASE + LEARN_CLUSTER.ro);
     alt("en", BASE + LEARN_CLUSTER.en);
-    alt("de", BASE + LEARN_CLUSTER.de);
     alt("x-default", BASE + LEARN_X_DEFAULT);
   }
 

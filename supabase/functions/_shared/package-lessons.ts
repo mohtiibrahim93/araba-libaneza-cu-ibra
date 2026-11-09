@@ -51,9 +51,33 @@ export function lessonsUsed(rows: PackageLessonRow[]): number {
   return rows.filter(countsAgainstPackage).length;
 }
 
-/** The Google Calendar title the owner chose: "Ioan - Araba libaneza- L3/10". */
-export function packageTitle(name: string, n: number, total: number): string {
-  return `${name.trim()} - Araba libaneza- ${packageLessonLabel(n, total)}`;
+/**
+ * The Google Calendar title the owner chose: "Ioan - Araba libaneza- L3/10".
+ * From the student's second package on (owner, 8 Nov 2026) the series is
+ * named: "Ioan - Araba libaneza Serie 2- L3/20".
+ */
+export function packageTitle(
+  name: string,
+  n: number,
+  total: number,
+  series = 1,
+): string {
+  const s = series > 1 ? ` Serie ${series}` : "";
+  return `${name.trim()} - Araba libaneza${s}- ${packageLessonLabel(n, total)}`;
+}
+
+/** Which package of the student this is: 1 for the first, 2 for the next… */
+export function packageSeries(
+  regs: { id: string; created_at: string }[],
+  registrationId: string,
+): number {
+  const sorted = [...regs].sort(
+    (a, b) =>
+      Date.parse(a.created_at) - Date.parse(b.created_at) ||
+      a.id.localeCompare(b.id),
+  );
+  const i = sorted.findIndex((r) => r.id === registrationId);
+  return i < 0 ? 1 : i + 1;
 }
 
 /** The short label the panel and the emails show: "L3/10". */

@@ -2,22 +2,21 @@ import { describe, expect, it } from "vitest";
 import { readFileSync } from "node:fs";
 import { resolve } from "node:path";
 import {
-  MONTH_REFUND_WINDOW_DAYS,
   bucharestDate,
   calendarDaysBetween,
   computeGroupCancelRefund,
 } from "../../supabase/functions/_shared/group-refund";
 
-// The worked example in the Terms: 500 lei a month, 8 lessons a month.
+// Owner's rule, 8 November 2026: 500 lei a month, 8 lessons, Stripe kept 10 lei.
 const MONTH = 50_000;
-// Course starts Monday 2 November 2026; charged on 1 November.
+const FEE = 1_000;
 const START_DATE = "2026-11-02";
 const charge = (chargedAt: string, amountBani = MONTH, id = "ch_1") => ({
   paymentId: id,
   amountBani,
+  stripeFeeBani: FEE,
   chargedAt,
 });
-// Eight lessons in November, two a week, 18:00 Bucharest (16:00 UTC).
 const NOVEMBER = [
   "2026-11-02T16:00:00Z",
   "2026-11-04T16:00:00Z",
@@ -27,11 +26,6 @@ const NOVEMBER = [
   "2026-11-18T16:00:00Z",
   "2026-11-23T16:00:00Z",
   "2026-11-25T16:00:00Z",
-];
-const DECEMBER = [
-  "2026-12-02T16:00:00Z",
-  "2026-12-07T16:00:00Z",
-  "2026-12-09T16:00:00Z",
 ];
 
 describe("Bucharest calendar dates", () => {
@@ -50,44 +44,54 @@ describe("Bucharest calendar dates", () => {
   });
 });
 
-describe("cancelling a monthly group before the course starts", () => {
-  it("refunds the first month in full 7 or more days before", () => {
+describe("cancelling a monthly group", () => {
+  it("7+ days before the start: the month back minus only the Stripe fee", () => {
     const r = computeGroupCancelRefund({
       charges: [charge("2026-10-20T10:00:00Z")],
       courseStartDate: START_DATE,
       sessionStarts: NOVEMBER,
-      cancelledAt: "2026-10-26T10:00:00Z", // 7 days before
+      cancelledAt: "2026-10-26T10:00:00Z",
     });
     expect(r.case).toBe("before_start_full");
-    expect(r.daysBeforeStart).toBe(7);
-    expect(r.feeBani).toBe(0);
-    expect(r.refundBani).toBe(50_000);
-    expect(r.refunds).toEqual([{ paymentId: "ch_1", amountBani: 50_000 }]);
+    expect(r.refundBani).toBe(49_000);
+    expect(r.refunds).toEqual([{ paymentId: "ch_1", amountBani: 49_000 }]);
   });
 
-  it("keeps 10% less than 7 days before", () => {
+  it("2 days before the start: still back minus only the Stripe fee", () => {
     const r = computeGroupCancelRefund({
       charges: [charge("2026-10-20T10:00:00Z")],
       courseStartDate: START_DATE,
       sessionStarts: NOVEMBER,
-      cancelledAt: "2026-10-30T10:00:00Z", // 3 days before
+      cancelledAt: "2026-10-31T10:00:00Z",
     });
-    expect(r.case).toBe("before_start_fee");
-    expect(r.daysBeforeStart).toBe(3);
-    expect(r.feeBani).toBe(5_000);
-    expect(r.refundBani).toBe(45_000);
+    expect(r.refundBani).toBe(49_000);
   });
 
-  it("decides 'before' by the Bucharest date, not UTC", () => {
-    // 22:30 UTC on 25 Oct is already 26 Oct in Bucharest: 7 days, full.
+  it("after lesson 1: 7 of 8 lessons back minus the Stripe fee", () => {
     const r = computeGroupCancelRefund({
-      charges: [charge("2026-10-20T10:00:00Z")],
+      charges: [charge("2026-11-01T10:00:00Z")],
       courseStartDate: START_DATE,
       sessionStarts: NOVEMBER,
-      cancelledAt: "2026-10-25T22:30:00Z",
+      currentPeriodEnd: "2026-12-01T10:00:00Z",
+      cancelledAt: "2026-11-03T10:00:00Z",
     });
-    expect(r.cancelDate).toBe("2026-10-26");
-    expect(r.case).toBe("before_start_full");
+    expect(r.case).toBe("current_month");
+    expect(r.eligibleBani).toBe(43_750);
+    expect(r.refundBani).toBe(42_750); // 437.50 - 10
+  });
+
+  it("after lesson 3: no money back, the 5 unused lessons become credit", () => {
+    const r = computeGroupCancelRefund({
+      charges: [charge("2026-11-01T10:00:00Z")],
+      courseStartDate: START_DATE,
+      sessionStarts: NOVEMBER,
+      currentPeriodEnd: "2026-12-01T10:00:00Z",
+      cancelledAt: "2026-11-10T10:00:00Z",
+    });
+    expect(r.case).toBe("credit");
+    expect(r.refundBani).toBe(0);
+    expect(r.refunds).toEqual([]);
+    expect(r.creditBani).toBe(31_250); // 312.50 lei
   });
 
   it("does not refund what was already refunded", () => {
@@ -95,143 +99,17 @@ describe("cancelling a monthly group before the course starts", () => {
       charges: [{ ...charge("2026-10-20T10:00:00Z"), refundedBani: 10_000 }],
       courseStartDate: START_DATE,
       sessionStarts: NOVEMBER,
-      cancelledAt: "2026-10-22T10:00:00Z",
+      cancelledAt: "2026-10-26T10:00:00Z",
     });
-    expect(r.refundBani).toBe(40_000);
-  });
-});
-
-describe("cancelling a monthly group after the course started", () => {
-  it("is the Terms example: charged on the 1st, cancelled on the 5th after 2 of 8 lessons", () => {
-    const r = computeGroupCancelRefund({
-      charges: [charge("2026-11-01T08:00:00Z")],
-      courseStartDate: "2026-11-01",
-      sessionStarts: [...NOVEMBER, ...DECEMBER],
-      currentPeriodEnd: "2026-12-01T08:00:00Z",
-      cancelledAt: "2026-11-05T09:00:00Z",
-    });
-    expect(r.case).toBe("current_month");
-    expect(r.daysSinceCharge).toBe(4);
-    expect(r.lessonsInMonth).toBe(8);
-    expect(r.lessonsHeld).toBe(2);
-    expect(r.lessonsNotHeld).toBe(6);
-    expect(r.eligibleBani).toBe(37_500);
-    expect(r.feeBani).toBe(3_750);
-    expect(r.refundBani).toBe(33_750);
-    expect(r.refunds).toEqual([{ paymentId: "ch_1", amountBani: 33_750 }]);
-  });
-
-  it("refunds nothing for that month more than 7 days after its charge", () => {
-    const r = computeGroupCancelRefund({
-      charges: [charge("2026-11-01T08:00:00Z")],
-      courseStartDate: "2026-11-01",
-      sessionStarts: NOVEMBER,
-      currentPeriodEnd: "2026-12-01T08:00:00Z",
-      cancelledAt: "2026-11-12T09:00:00Z",
-    });
-    expect(r.case).toBe("outside_window");
-    expect(r.daysSinceCharge).toBe(11);
-    expect(r.refundBani).toBe(0);
-    expect(r.refunds).toEqual([]);
-  });
-
-  it("still refunds on the 7th day after the charge", () => {
-    const r = computeGroupCancelRefund({
-      charges: [charge("2026-11-01T08:00:00Z")],
-      courseStartDate: "2026-11-01",
-      sessionStarts: NOVEMBER,
-      currentPeriodEnd: "2026-12-01T08:00:00Z",
-      cancelledAt: "2026-11-08T09:00:00Z",
-    });
-    expect(r.daysSinceCharge).toBe(MONTH_REFUND_WINDOW_DAYS);
-    expect(r.case).toBe("current_month");
-    // Held by then: 2, 4 Nov. Six left.
-    expect(r.refundBani).toBe(33_750);
-  });
-
-  it("never refunds earlier months, only the current one", () => {
-    const r = computeGroupCancelRefund({
-      charges: [
-        charge("2026-11-01T08:00:00Z", MONTH, "ch_nov"),
-        charge("2026-12-01T08:00:00Z", MONTH, "ch_dec"),
-      ],
-      courseStartDate: "2026-11-02",
-      sessionStarts: [...NOVEMBER, ...DECEMBER],
-      currentPeriodEnd: "2027-01-01T08:00:00Z",
-      cancelledAt: "2026-12-03T09:00:00Z",
-    });
-    expect(r.case).toBe("current_month");
-    // December holds 3 known lessons; 1 held (2 Dec), 2 left.
-    expect(r.lessonsInMonth).toBe(3);
-    expect(r.lessonsNotHeld).toBe(2);
-    expect(r.refunds.map((l) => l.paymentId)).toEqual(["ch_dec"]);
-    expect(r.eligibleBani).toBe(33_333);
-    expect(r.feeBani).toBe(3_333);
-    expect(r.refundBani).toBe(30_000);
-  });
-
-  it("counts lessons from the real sessions, whatever their number", () => {
-    // A month with a break: only 5 lessons, 1 held.
-    const r = computeGroupCancelRefund({
-      charges: [charge("2026-11-01T08:00:00Z")],
-      courseStartDate: "2026-11-02",
-      sessionStarts: NOVEMBER.slice(0, 5),
-      currentPeriodEnd: "2026-12-01T08:00:00Z",
-      cancelledAt: "2026-11-03T09:00:00Z",
-    });
-    expect(r.lessonsInMonth).toBe(5);
-    expect(r.lessonsNotHeld).toBe(4);
-    expect(r.refundBani).toBe(36_000); // 500 x 4/5 = 400, minus 40
-  });
-
-  it("counts the 7 days from the start date when the month was paid before it", () => {
-    // Paid on 10 Oct for a course starting 2 Nov, cancelled 5 Nov after two
-    // lessons: 3 days after the start, so the month's unheld lessons come back.
-    const r = computeGroupCancelRefund({
-      charges: [charge("2026-10-10T08:00:00Z")],
-      courseStartDate: "2026-11-02",
-      sessionStarts: NOVEMBER,
-      currentPeriodEnd: "2026-11-10T08:00:00Z",
-      cancelledAt: "2026-11-05T09:00:00Z",
-    });
-    expect(r.case).toBe("current_month");
-    expect(r.daysSinceCharge).toBe(3);
-    // The paid period 10 Oct - 10 Nov holds 3 lessons (2, 4, 9 Nov); 2 held.
-    expect(r.lessonsInMonth).toBe(3);
-    expect(r.lessonsNotHeld).toBe(1);
-    expect(r.eligibleBani).toBe(16_667); // 500 x 1/3
-    expect(r.feeBani).toBe(1_667);
-    expect(r.refundBani).toBe(15_000);
-    // Ten days after the start it is outside the window.
-    const late = computeGroupCancelRefund({
-      charges: [charge("2026-10-10T08:00:00Z")],
-      courseStartDate: "2026-11-02",
-      sessionStarts: NOVEMBER,
-      currentPeriodEnd: "2026-11-10T08:00:00Z",
-      cancelledAt: "2026-11-12T09:00:00Z",
-    });
-    expect(late.case).toBe("outside_window");
-  });
-
-  it("treats the start day itself as started", () => {
-    const r = computeGroupCancelRefund({
-      charges: [charge("2026-11-01T08:00:00Z")],
-      courseStartDate: "2026-11-02",
-      sessionStarts: NOVEMBER,
-      currentPeriodEnd: "2026-12-01T08:00:00Z",
-      cancelledAt: "2026-11-02T09:00:00Z",
-    });
-    expect(r.case).toBe("current_month");
-    expect(r.lessonsNotHeld).toBe(8);
-    expect(r.refundBani).toBe(45_000);
+    expect(r.refundBani).toBe(39_000);
   });
 
   it("returns nothing when nothing was paid", () => {
     const r = computeGroupCancelRefund({
       charges: [],
-      courseStartDate: "2026-11-02",
+      courseStartDate: START_DATE,
       sessionStarts: NOVEMBER,
-      cancelledAt: "2026-11-05T09:00:00Z",
+      cancelledAt: "2026-10-26T10:00:00Z",
     });
     expect(r.case).toBe("nothing_paid");
     expect(r.refundBani).toBe(0);

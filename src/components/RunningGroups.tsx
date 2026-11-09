@@ -15,6 +15,12 @@ import {
   catchUpFee,
   joinClosesAfter,
 } from "../../supabase/functions/_shared/cohort-sessions";
+import {
+  groupNumberFromTitle,
+  groupTitle,
+  isRunningCohort,
+  startLabel,
+} from "@/lib/runningGroupTitle";
 
 /**
  * "Grupe în desfășurare" on a level page (October 2026).
@@ -43,8 +49,13 @@ interface RunningCohort {
   id: string;
   level: string | null;
   format: string | null;
+  status: string;
+  start_date: string;
+  teaching_language: string;
   cohort_calendar:
-    { total_lessons: number } | Array<{ total_lessons: number }> | null;
+    | { total_lessons: number; calendar_title: string }
+    | Array<{ total_lessons: number; calendar_title: string }>
+    | null;
   schedule_label_ro: string | null;
   schedule_label_en: string | null;
 }
@@ -57,9 +68,9 @@ type Untyped = {
         k: string,
         v: string,
       ) => {
-        eq: (
+        order: (
           k: string,
-          v: string,
+          o: { ascending: boolean },
         ) => Promise<{ data: RunningCohort[] | null; error: unknown }>;
       };
       in: (
@@ -82,8 +93,12 @@ const COPY = {
   ro: {
     title: "Grupe în desfășurare",
     lead: "Unde a ajuns fiecare grupă, din calendarul lui Ibra.",
-    online: "online",
-    fizic: "la centru",
+    online: "Online",
+    fizic: "Fizic",
+    langRo: "română",
+    langEn: "engleză",
+    group: (n: number) => `grupa ${n}`,
+    since: (d: string) => `din ${d}`,
     lessonOf: (n: number, t: number) => `Lecția ${n} din ${t}`,
     next: "Următoarele lecții",
     all: "Calendarul complet",
@@ -99,8 +114,12 @@ const COPY = {
   en: {
     title: "Groups in progress",
     lead: "Where each group has got to, from Ibra's calendar.",
-    online: "online",
-    fizic: "in person",
+    online: "Online",
+    fizic: "In person",
+    langRo: "Romanian",
+    langEn: "English",
+    group: (n: number) => `Group ${n}`,
+    since: (d: string) => `since ${d}`,
     lessonOf: (n: number, t: number) => `Lesson ${n} of ${t}`,
     next: "Next lessons",
     all: "Full calendar",
@@ -133,14 +152,22 @@ const RunningGroups = ({
   useEffect(() => {
     let cancelled = false;
     void (async () => {
-      const { data: cs, error } = await db()
+      // All cohorts of the level; the public group number comes from the
+      // admin/calendar name ("… Grupa 2"), so it matches what the owner
+      // calls the group. Groups whose name has no number show none.
+      const { data: all, error } = await db()
         .from("group_cohorts")
         .select(
-          "id, level, format, schedule_label_ro, schedule_label_en, cohort_calendar(total_lessons)",
+          "id, level, format, status, start_date, teaching_language, schedule_label_ro, schedule_label_en, cohort_calendar(total_lessons, calendar_title)",
         )
         .eq("level", level)
-        .eq("status", "in_progress");
-      if (error || !cs?.length || cancelled) return;
+        .order("start_date", { ascending: true });
+      if (error || !all?.length || cancelled) return;
+      const today = new Date().toLocaleDateString("en-CA", { timeZone: TZ });
+      const cs = all.filter((g) =>
+        isRunningCohort(g.status, g.start_date, today),
+      );
+      if (!cs.length || cancelled) return;
       const { data: ss } = await db()
         .from("cohort_sessions")
         .select("id, cohort_id, lesson_number, starts_at, ends_at")
@@ -150,7 +177,7 @@ const RunningGroups = ({
         )
         .order("starts_at", { ascending: true });
       if (cancelled) return;
-      setCohorts(cs);
+      setCohorts(all);
       setSessions(ss ?? []);
     })();
     return () => {
@@ -158,7 +185,10 @@ const RunningGroups = ({
     };
   }, [level]);
 
-  const shown = cohorts.filter((g) =>
+  const today = new Date().toLocaleDateString("en-CA", { timeZone: TZ });
+  const shown = cohorts.filter(
+    (g) =>
+      isRunningCohort(g.status, g.start_date, today) &&
     sessions.some((s) => s.cohort_id === g.id),
   );
   if (shown.length === 0) return null;
@@ -201,6 +231,7 @@ const RunningGroups = ({
           const label =
             lang === "en" ? g.schedule_label_en : g.schedule_label_ro;
           const joinable = canStillJoin(done, total);
+          const groupNo = groupNumberFromTitle(link?.calendar_title ?? null);
           return (
             <article
               key={g.id}
@@ -208,7 +239,13 @@ const RunningGroups = ({
             >
               <div>
                 <p className="font-semibold text-foreground">
-                  {level} · {g.format === "online" ? c.online : c.fizic}
+                  {groupTitle([
+                    level,
+                    g.format === "online" ? c.online : c.fizic,
+                    g.teaching_language === "en" ? c.langEn : c.langRo,
+                    groupNo !== null ? c.group(groupNo) : null,
+                    c.since(startLabel(g.start_date, lang)),
+                  ])}
                 </p>
                 {label && (
                   <p className="text-sm text-muted-foreground">{label}</p>

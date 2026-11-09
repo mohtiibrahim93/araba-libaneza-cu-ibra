@@ -14,6 +14,7 @@ import { invokeAdmin } from "@/lib/adminAuth";
 import { toast } from "@/hooks/use-toast";
 import { cn } from "@/lib/utils";
 import { buildWhatsAppUrl } from "@/lib/whatsapp";
+import { trialReminderText } from "@/lib/trialReminder";
 import { formTypeLabels, paymentStatusLabels, meetingLabel } from "./types";
 import { Empty, ErrorNote, Loading } from "./ui";
 import { TrialOutcomeControl } from "@/components/admin/TrialOutcome";
@@ -1036,6 +1037,28 @@ const TodayAdmin = ({
                         >
                           Modifică
                         </button>
+                        {l.event_type_slug === "trial" && l.student_phone && (
+                          <a
+                            href={buildWhatsAppUrl(
+                              l.student_phone,
+                              trialReminderText({
+                                name: l.student_name,
+                                startAt: l.start_at,
+                                format: l.format,
+                                meetLink: l.meet_link,
+                              }),
+                            )}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            aria-label={`Trimite reminder WhatsApp lui ${l.student_name}`}
+                            className={cn(
+                              rowBtn,
+                              "border border-border hover:border-brand-green/60",
+                            )}
+                          >
+                            Reminder
+                          </a>
+                        )}
                         {l.meet_link && (
                           <a
                             href={l.meet_link}

@@ -28,7 +28,10 @@ export default function MoveToCohort({
   registrationId,
   currentCohortId,
   onDone,
+  person,
 }: {
+  /** Set for a non-group student (trial, private…): enrols them in a group as a new sign-up. */
+  person?: { name: string; phone: string | null; email: string | null } | undefined;
   registrationId: string;
   currentCohortId: string | null | undefined;
   onDone?: (() => void) | undefined;
@@ -62,12 +65,25 @@ export default function MoveToCohort({
         success?: boolean;
         error?: string;
         code?: string;
-      }>({
-        action: "move_to_cohort",
-        id: registrationId,
-        cohort_id: target,
-        ...(force ? { force: true } : {}),
-      });
+      }>(
+        person
+          ? {
+              action: "add_manual_registration",
+              name: person.name,
+              phone: person.phone ?? "",
+              email: person.email ?? "",
+              cohort_id: target,
+              source: "direct",
+              paid: false,
+              notes: "Asociat din fișa cursantului",
+            }
+          : {
+              action: "move_to_cohort",
+              id: registrationId,
+              cohort_id: target,
+              ...(force ? { force: true } : {}),
+            },
+      );
       if (error) throw error;
       if (data?.code === "cohort_full" && !force) {
         if (
@@ -79,7 +95,7 @@ export default function MoveToCohort({
         return;
       }
       if (data?.error) throw new Error(data.error);
-      toast({ title: "Mutat în grupa nouă" });
+      toast({ title: person ? "Adăugat în grupă" : "Mutat în grupa nouă" });
       setOpen(false);
       onDone?.();
     } catch (err) {
@@ -99,14 +115,14 @@ export default function MoveToCohort({
         onClick={() => setOpen(true)}
         className="inline-flex min-h-11 items-center rounded-xl border border-border px-4 text-sm font-semibold hover:border-brand-green/60"
       >
-        Mută în altă grupă
+        {person ? "Asociază la o grupă" : "Mută în altă grupă"}
       </button>
     );
 
   return (
     <fieldset className="space-y-3 rounded-xl border border-border p-3 text-sm">
       <legend className="px-1 text-xs font-semibold text-muted-foreground">
-        Mută în altă grupă
+        {person ? "Asociază la o grupă" : "Mută în altă grupă"}
       </legend>
       <select
         aria-label="Grupa nouă"
@@ -125,7 +141,9 @@ export default function MoveToCohort({
         ))}
       </select>
       <p className="text-xs text-muted-foreground">
-        Plățile rămân la el. Nivelul, formatul și limba se iau de la grupa nouă.
+        {person
+          ? "Se creează o înscriere la grupă (neplătită). Lecțiile și plățile actuale rămân neschimbate."
+          : "Plățile rămân la el. Nivelul, formatul și limba se iau de la grupa nouă."}
       </p>
       <div className="flex flex-wrap gap-2">
         <button
@@ -134,7 +152,7 @@ export default function MoveToCohort({
           onClick={() => void move(false)}
           className="inline-flex min-h-11 items-center rounded-xl bg-primary px-4 font-semibold text-primary-foreground disabled:opacity-60"
         >
-          {saving ? "Se mută…" : "Mută"}
+          {saving ? "Se salvează…" : person ? "Asociază" : "Mută"}
         </button>
         <button
           type="button"

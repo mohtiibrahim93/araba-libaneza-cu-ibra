@@ -84,7 +84,12 @@ describe("trial no-show fee", () => {
   });
 
   it("is told to the visitor before booking and in the Terms", () => {
-    const scheduler = read("src/components/NativeScheduler.tsx");
+    // JSX text wraps across source lines; the browser renders each line
+    // break as a space, so compare the sentence with whitespace collapsed.
+    const scheduler = read("src/components/NativeScheduler.tsx").replace(
+      /\s+/g,
+      " ",
+    );
     expect(scheduler).toContain(
       "Dacă anulezi cu mai puțin de 24 de ore înainte, sau nu te prezinți",
     );

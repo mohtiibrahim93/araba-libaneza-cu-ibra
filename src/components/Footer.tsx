@@ -336,15 +336,6 @@ const Footer = () => {
                 </Link>
               </li>
             )}
-            <li>
-              <Link
-                to="/de/arabisch-lernen"
-                className="hover:text-foreground transition-colors"
-                hrefLang="de"
-              >
-                Arabisch lernen
-              </Link>
-            </li>
           </ul>
         </div>
 

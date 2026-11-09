@@ -1,5 +1,22 @@
 import { GCAL_GATEWAY } from "./booking.ts";
-import { packageNumbers, packageTitle } from "./package-lessons.ts";
+import {
+  packageNumbers,
+  packageSeries,
+  packageTitle,
+} from "./package-lessons.ts";
+
+/** The student's package number among their private sign-ups (1, 2, …). */
+// deno-lint-ignore no-explicit-any
+export async function seriesOf(db: any, reg: any): Promise<number> {
+  if (!reg?.student_id) return 1;
+  const { data } = await db
+    .from("registrations")
+    .select("id, created_at")
+    .eq("student_id", reg.student_id)
+    .eq("form_type", "private")
+    .is("anonymized_at", null);
+  return packageSeries(data ?? [], reg.id);
+}
 
 /**
  * A lesson's number in its private package ({ n: 3, total: 10 }), or null
@@ -53,10 +70,11 @@ export async function syncPackageTitles(
   try {
     const { data: reg } = await db
       .from("registrations")
-      .select("id, form_type, quantity")
+      .select("id, form_type, quantity, student_id")
       .eq("id", registrationId)
       .maybeSingle();
     if (!reg || reg.form_type !== "private") return;
+    const series = await seriesOf(db, reg);
     const { data: rows } = await db
       .from("bookings")
       .select(
@@ -85,7 +103,7 @@ export async function syncPackageTitles(
             "Content-Type": "application/json",
           },
           body: JSON.stringify({
-            summary: packageTitle(b.student_name ?? "", n, total),
+            summary: packageTitle(b.student_name ?? "", n, total, series),
           }),
         },
       );

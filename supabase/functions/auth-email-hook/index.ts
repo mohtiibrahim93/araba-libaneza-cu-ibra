@@ -246,7 +246,11 @@ async function handleWebhook(req: Request): Promise<Response> {
   const emailType = payload.data.action_type;
   console.log("Received auth event", {
     emailType,
-    email: payload.data.email,
+    // Masked: logs are not the place for personal data (GDPR).
+    email: String(payload.data.email ?? "").replace(
+      /^(.).*(@.*)$/,
+      "$1***$2",
+    ),
     run_id,
   });
 

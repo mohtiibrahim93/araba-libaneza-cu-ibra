@@ -395,13 +395,6 @@ const STATIC_ROUTES: Route[] = [
     description:
       "Lebanese Arabic classes for ages 11–17 with a native teacher, online or in Bucharest. Build real conversation skills from the first lesson. Free trial.",
   },
-  {
-    path: "/de/arabisch-lernen",
-    lang: "de",
-    title: "Arabisch lernen online — Libanesisch mit Muttersprachler",
-    description:
-      "Arabisch lernen online — libanesischer Dialekt mit Muttersprachler. Sprich ab Lektion eins. Einzel- & Gruppenkurse, A1–C2. Kostenlose Probestunde.",
-  },
   // Retired alias, like the four below it. It was the only one without
   // noindex, which also made it the only indexable page missing from the
   // sitemap — an inconsistency, not a decision.
@@ -990,20 +983,12 @@ function renderRoute(
     inject +=
       `    <link ${RH} rel="alternate" hreflang="ro" href="${escAttr(BASE + pair.ro)}" />\n` +
       `    <link ${RH} rel="alternate" hreflang="en" href="${escAttr(BASE + pair.en)}" />\n`;
-    // One group also has a German member. Emitting it here keeps the static
-    // head identical to what the layouts render, which is what the reciprocity
-    // guard below compares.
-    if (isLearnClusterPath(route.path)) {
-      inject += `    <link ${RH} rel="alternate" hreflang="de" href="${escAttr(BASE + LEARN_CLUSTER.de)}" />\n`;
-    }
     inject += `    <link ${RH} rel="alternate" hreflang="x-default" href="${escAttr(BASE + pair.ro)}" />\n`;
   } else if (isLearnClusterPath(route.path) && !route.canonical) {
-    // The German page is not part of an RO/EN annotation pair, so it never
-    // reaches the branch above — but it is a full member of the cluster.
+    // A cluster member that is not in an RO/EN annotation pair.
     inject +=
       `    <link ${RH} rel="alternate" hreflang="ro" href="${escAttr(BASE + LEARN_CLUSTER.ro)}" />\n` +
       `    <link ${RH} rel="alternate" hreflang="en" href="${escAttr(BASE + LEARN_CLUSTER.en)}" />\n` +
-      `    <link ${RH} rel="alternate" hreflang="de" href="${escAttr(BASE + LEARN_CLUSTER.de)}" />\n` +
       `    <link ${RH} rel="alternate" hreflang="x-default" href="${escAttr(BASE + LEARN_X_DEFAULT)}" />\n`;
   }
   // FAQPage, emitted into the static head.
