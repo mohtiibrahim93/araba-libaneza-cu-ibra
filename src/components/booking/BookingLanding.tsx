@@ -100,7 +100,7 @@ const BookingLanding = () => {
     "mb-4 flex items-center gap-3 font-display text-xl font-bold text-foreground";
   const stepNo =
     "inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-brand-green text-sm font-bold text-white";
-  const card = "rounded-3xl border border-[#E7E1D6] bg-card dark:border-border";
+  const card = "rounded-3xl border border-hairline bg-card dark:border-border";
   const primaryBtn =
     "inline-flex h-12 items-center justify-center rounded-xl bg-primary px-6 font-semibold text-primary-foreground transition-colors hover:bg-primary/90";
 
@@ -317,7 +317,7 @@ const BookingLanding = () => {
                                 "flex h-full w-full flex-col gap-1 rounded-2xl border p-4 text-left transition focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary",
                                 active
                                   ? "border-brand-green bg-brand-green/5 ring-2 ring-brand-green"
-                                  : "border-[#E7E1D6] hover:border-brand-green/50 dark:border-border",
+                                  : "border-hairline hover:border-brand-green/50 dark:border-border",
                                 c.full && "cursor-not-allowed opacity-60",
                               )}
                             >

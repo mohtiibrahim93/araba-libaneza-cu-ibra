@@ -61,6 +61,11 @@
   /* Brand: deep cedar green + warm cream (7ki Lebnene lockup & section bands) */
   --color-brand-green: hsl(var(--brand-green));
   --color-cream: hsl(var(--cream));
+  /* Public site: warm card hairline, top bar, its gold text, WhatsApp pill. */
+  --color-hairline: hsl(var(--hairline));
+  --color-top-bar: hsl(var(--top-bar));
+  --color-top-bar-gold: hsl(var(--top-bar-gold));
+  --color-whatsapp: hsl(var(--whatsapp));
   --color-admin-nav: hsl(var(--admin-nav));
   --color-admin-nav-fg: hsl(var(--admin-nav-fg));
   --color-admin-nav-muted: hsl(var(--admin-nav-muted));
@@ -153,6 +158,14 @@
   --brand-green: 152 42% 22%;
   --cream: 40 33% 96%;
 
+  /* Public site colours that were typed as hex in the menu, the Why section,
+     the landing layout and the booking page (9 Nov 2026). Same colours:
+     #E7E1D6, the brand green (#163a2a in dark mode), #F3DDA8, #0F7A3F. */
+  --hairline: 38.8 26.2% 87.3%;
+  --top-bar: 152 42% 22%;
+  --top-bar-gold: 42.4 75.8% 80.6%;
+  --whatsapp: 146.9 78.1% 26.9%;
+
   --secondary: 220 14% 96%;
   --secondary-foreground: 220 14% 10%;
 
@@ -234,6 +247,8 @@
   /* Brand tokens lighten in dark mode so they stay legible on dark surfaces. */
   --brand-green: 152 35% 58%;
   --cream: 220 14% 13%;
+  --hairline: 220 14% 20%;
+  --top-bar: 153.3 45% 15.7%;
 
   --secondary: 220 14% 16%;
   --secondary-foreground: 0 0% 98%;

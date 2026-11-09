@@ -312,7 +312,7 @@ const Navbar = () => {
           contact, booking, theme and language. Folds away once scrolled. */}
       <div
         className={cn(
-          "overflow-hidden bg-brand-green text-white transition-[height] duration-200 dark:bg-[#163a2a]",
+          "overflow-hidden bg-top-bar text-white transition-[height] duration-200",
           scrolled ? "h-0" : "h-11 sm:h-[38px]",
         )}
         aria-hidden={scrolled || undefined}
@@ -327,7 +327,7 @@ const Navbar = () => {
               <span className="hidden sm:inline">
                 {lang === "en" ? "Next course:" : "Următorul curs:"}
               </span>
-              <span className="text-[#F3DDA8]">{nextLabel}</span>
+              <span className="text-top-bar-gold">{nextLabel}</span>
               <span className="hidden sm:inline">· {seatsLabel}</span>
               <span aria-hidden="true">→</span>
             </Link>
@@ -363,7 +363,7 @@ const Navbar = () => {
               rel="noopener noreferrer"
               tabIndex={scrolled ? -1 : undefined}
               aria-label="WhatsApp"
-              className="tap-target inline-flex h-9 items-center gap-1.5 rounded-full bg-[#0F7A3F] px-2.5 sm:h-7 font-semibold text-white transition-opacity hover:opacity-90 sm:px-3"
+              className="tap-target inline-flex h-9 items-center gap-1.5 rounded-full bg-whatsapp px-2.5 sm:h-7 font-semibold text-white transition-opacity hover:opacity-90 sm:px-3"
             >
               <MessageCircle className="h-3.5 w-3.5" aria-hidden="true" />
               <span className="hidden sm:inline">WhatsApp</span>

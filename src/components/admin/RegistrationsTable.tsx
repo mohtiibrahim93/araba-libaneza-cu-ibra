@@ -239,9 +239,10 @@ const RefundControl = ({
 }) => {
   const [reason, setReason] = useState("");
   const [open, setOpen] = useState(false);
-  // How many lessons the student actually attended. The policy keeps those and
-  // refunds the rest minus 10%, so this is the one number the owner has to
-  // supply — nothing in the system knows it.
+  // How many lessons the student actually attended. The refund depends on it
+  // (supabase/functions/_shared/refund.ts: lessons held and the Stripe fee are
+  // kept, and after lesson 2 the running month becomes credit), so this is the
+  // one number the owner has to supply — nothing in the system knows it.
   const [lessonsTaken, setLessonsTaken] = useState(0);
   const [preview, setPreview] = useState<RefundPreview | null>(null);
   const [loadingPreview, setLoadingPreview] = useState(false);

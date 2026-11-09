@@ -2796,6 +2796,15 @@ Deno.serve(async (req) => {
             ),
           ).slice(0, 60)
         : undefined;
+      // Who was on the list before, so anyone taken off it also leaves the
+      // group's lessons (owner, 9 Nov 2026).
+      const { data: prevLink } = members
+        ? await supabase
+            .from("cohort_calendar")
+            .select("members")
+            .eq("cohort_id", cohortId)
+            .maybeSingle()
+        : { data: null };
       const { error: upErr } = await supabase.from("cohort_calendar").upsert(
         {
           cohort_id: cohortId,
@@ -2806,7 +2815,92 @@ Deno.serve(async (req) => {
         { onConflict: "cohort_id" },
       );
       if (upErr) throw upErr;
-      return jsonResponse({ success: true });
+
+      // A student taken off the group's list stops seeing its lessons at
+      // once: they are removed from every lesson still to come in Google
+      // Calendar, and from the group's latest lesson, whose guests the next
+      // lessons added are copied from. Quiet update (sendUpdates=none): no
+      // email goes to the student.
+      const removed = members
+        ? Array.from(
+            new Set(
+              ((prevLink?.members ?? []) as string[]).map((e) =>
+                e.trim().toLowerCase(),
+              ),
+            ),
+          ).filter((e) => e && !members.includes(e))
+        : [];
+      if (!removed.length) return jsonResponse({ success: true });
+
+      const lovableKey = Deno.env.get("LOVABLE_API_KEY");
+      const gcalKey = Deno.env.get("GOOGLE_CALENDAR_API_KEY");
+      if (!lovableKey || !gcalKey) {
+        return jsonResponse({
+          success: true,
+          removed: removed.length,
+          warning:
+            "Lista e salvată, dar Google Calendar nu e conectat: scoate-i manual din lecțiile din calendar.",
+        });
+      }
+      const gHeaders = {
+        Authorization: `Bearer ${lovableKey}`,
+        "X-Connection-Api-Key": gcalKey,
+        "Content-Type": "application/json",
+      };
+      const { data: sessions, error: sesErr } = await supabase
+        .from("cohort_sessions")
+        .select("lesson_number, ends_at, google_event_id")
+        .eq("cohort_id", cohortId)
+        .not("google_event_id", "is", null);
+      if (sesErr) throw sesErr;
+      const lastLesson = Math.max(
+        0,
+        ...(sessions ?? []).map((x: { lesson_number: number }) => x.lesson_number),
+      );
+      const nowMs = Date.now();
+      const targets = (sessions ?? []).filter(
+        (x: { lesson_number: number; ends_at: string }) =>
+          Date.parse(x.ends_at) > nowMs || x.lesson_number === lastLesson,
+      );
+      let updated = 0;
+      const failed: number[] = [];
+      for (const x of targets as Array<{
+        lesson_number: number;
+        google_event_id: string;
+      }>) {
+        const eventPath = encodeURIComponent(x.google_event_id);
+        const res = await fetch(
+          `${GCAL_GATEWAY}/calendars/primary/events/${eventPath}`,
+          { headers: gHeaders },
+        );
+        const ev = await res.json().catch(() => null);
+        if (!res.ok || !ev) {
+          if (res.status !== 404 && res.status !== 410)
+            failed.push(x.lesson_number);
+          continue;
+        }
+        const attendees = (ev.attendees ?? []) as Array<{ email?: string }>;
+        const keep = attendees.filter(
+          (a) => !(a.email && removed.includes(a.email.toLowerCase())),
+        );
+        if (keep.length === attendees.length) continue;
+        const patch = await fetch(
+          `${GCAL_GATEWAY}/calendars/primary/events/${eventPath}?sendUpdates=none`,
+          {
+            method: "PATCH",
+            headers: gHeaders,
+            body: JSON.stringify({ attendees: keep }),
+          },
+        );
+        if (patch.ok) updated++;
+        else failed.push(x.lesson_number);
+      }
+      return jsonResponse({
+        success: true,
+        removed: removed.length,
+        lessons_updated: updated,
+        failed_lessons: failed,
+      });
     }
 
     // Renames every lesson of a group in Google Calendar to the new name
@@ -3469,9 +3563,9 @@ Deno.serve(async (req) => {
         });
       }
 
+      // No email address in the log (GDPR): the action and counts are enough.
       console.log(
         "[sync_cohort_sessions]",
-        callerEmail,
         addRemaining ? "add_remaining" : "read",
         results
           .map(

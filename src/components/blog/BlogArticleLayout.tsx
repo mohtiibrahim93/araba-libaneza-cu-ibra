@@ -328,7 +328,11 @@ const BlogArticleLayout = ({
               <p className="flex items-center gap-2.5 text-sm text-muted-foreground">
                 <img
                   src={instructorPhotoWebp}
-                  alt=""
+                  alt={
+                    lang === "en"
+                      ? "Ibra, Lebanese Arabic teacher"
+                      : "Ibra, profesor de arabă libaneză"
+                  }
                   width={32}
                   height={32}
                   className="h-8 w-8 rounded-full object-cover"
@@ -392,7 +396,11 @@ const BlogArticleLayout = ({
             <aside className="mt-12 flex items-center gap-4 rounded-2xl bg-cream p-5 sm:p-6">
               <img
                 src={instructorPhotoWebp}
-                alt=""
+                alt={
+                  lang === "en"
+                    ? "Ibra, Lebanese Arabic teacher"
+                    : "Ibra, profesor de arabă libaneză"
+                }
                 width={64}
                 height={64}
                 loading="lazy"

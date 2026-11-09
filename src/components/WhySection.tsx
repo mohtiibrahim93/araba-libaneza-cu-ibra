@@ -120,7 +120,7 @@ const WhySection = () => {
           {cards.map(({ Icon, title, text }, i) => (
             <li
               key={title}
-              className="flex flex-col gap-3 rounded-3xl border border-[#E7E1D6] bg-card p-6 sm:p-7 dark:border-border"
+              className="flex flex-col gap-3 rounded-3xl border border-hairline bg-card p-6 sm:p-7 dark:border-border"
             >
               <div className="flex items-center justify-between">
                 <span className="inline-flex h-11 w-11 items-center justify-center rounded-2xl bg-brand-green/10 text-brand-green">

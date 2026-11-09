@@ -185,7 +185,9 @@ Deno.serve(async (req) => {
     // Verify the registration exists (FK will catch it too, but fail early with a clearer error).
     const { data: reg } = await supabase
       .from("registrations")
-      .select("id, email, payment_status, quantity, form_type, student_id")
+      .select(
+        "id, email, contact_email, payment_status, quantity, form_type, student_id",
+      )
       .eq("id", body.registration_id)
       .maybeSingle();
     // Preserve only the existing trusted webhook booking path. Unknown and
@@ -200,6 +202,16 @@ Deno.serve(async (req) => {
       );
     }
     if (!reg) return json({ error: "registration not found" }, 404);
+
+    // The booking mails and invites only the address saved on the
+    // registration (owner, 9 Nov 2026), never the student_email in the
+    // request: a request could otherwise send a confirmation, or a calendar
+    // invitation, to any address. The contact address comes first, as in the
+    // admin's own mail.
+    const savedEmail = String(reg.contact_email || reg.email || "").trim();
+    if (!savedEmail) {
+      return json({ error: "registration has no email" }, 400);
+    }
 
     const { data: et } = await supabase
       .from("booking_event_types")
@@ -276,7 +288,7 @@ Deno.serve(async (req) => {
       const { data: usedBy, error: usedErr } = await supabase.rpc(
         "trial_already_used",
         {
-          p_email: body.student_email,
+          p_email: savedEmail,
           p_card_fingerprint: cardFingerprint,
         },
       );
@@ -469,7 +481,7 @@ Deno.serve(async (req) => {
         start_at: startISO,
         end_at: endISO,
         student_name: body.student_name,
-        student_email: body.student_email,
+        student_email: savedEmail,
         student_phone: body.student_phone ?? null,
         format,
         notes: body.notes ?? null,
@@ -546,7 +558,7 @@ Deno.serve(async (req) => {
       : `${et.name_ro} — ${body.student_name}`;
     const description = [
       `Student: ${body.student_name}`,
-      `Email: ${body.student_email}`,
+      `Email: ${savedEmail}`,
       body.student_phone ? `Telefon: ${body.student_phone}` : null,
       `Format: ${format === "online" ? "Online" : "Fizic"}`,
       onlineLink ? `Zoom: ${onlineLink}` : null,
@@ -563,7 +575,7 @@ Deno.serve(async (req) => {
       description,
       startISO,
       endISO,
-      attendeeEmail: body.student_email,
+      attendeeEmail: savedEmail,
       attendeeName: body.student_name,
       withMeet: false,
     });
@@ -609,7 +621,7 @@ Deno.serve(async (req) => {
     if (!quiet)
       sendBookingEmail(
         "booking-confirmation",
-        body.student_email,
+        savedEmail,
         {
           name: body.student_name,
           whenLabel: withLessonNumber(
@@ -632,7 +644,7 @@ Deno.serve(async (req) => {
         {
           eventName: et.name_ro,
           studentName: body.student_name,
-          studentEmail: body.student_email,
+          studentEmail: savedEmail,
           studentPhone: body.student_phone ?? null,
           format: format === "online" ? "online" : "fizic",
           whenLabel: withLessonNumber(

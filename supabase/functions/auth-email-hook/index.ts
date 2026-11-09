@@ -244,15 +244,9 @@ async function handleWebhook(req: Request): Promise<Response> {
   // The email action type is in payload.data.action_type (e.g., "signup", "recovery")
   // payload.type is the hook event type ("auth")
   const emailType = payload.data.action_type;
-  console.log("Received auth event", {
-    emailType,
-    // Masked: logs are not the place for personal data (GDPR).
-    email: String(payload.data.email ?? "").replace(
-      /^(.).*(@.*)$/,
-      "$1***$2",
-    ),
-    run_id,
-  });
+  // No address in the log, not even masked: logs are not the place for
+  // personal data (GDPR). The address is in email_send_log if it is needed.
+  console.log("Received auth event", { emailType, run_id });
 
   const EmailTemplate = EMAIL_TEMPLATES[emailType];
   if (!EmailTemplate) {

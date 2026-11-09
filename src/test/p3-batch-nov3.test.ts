@@ -47,7 +47,11 @@ describe("P3 fixes", () => {
   it("contrast: WhatsApp pill and top-bar gold (a11y #1)", () => {
     const nav = read("src/components/Navbar.tsx");
     expect(nav).not.toContain("bg-[#25D366]");
-    expect(nav).toContain("text-[#F3DDA8]");
+    // The gold is a colour setting since 9 Nov 2026; same value as #F3DDA8.
+    expect(nav).toContain("text-top-bar-gold");
+    expect(read("src/styles.css")).toContain(
+      "--top-bar-gold: 42.4 75.8% 80.6%;",
+    );
   });
 
   it("reduced motion stops decorative pulses (a11y #7)", () => {

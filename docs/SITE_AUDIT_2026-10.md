@@ -5,6 +5,22 @@ re-checked on 26 Oct against main and the live site.
 
 ## Status (update this block as items close)
 
+- DONE 9 Nov 2026 (handoff of 9 Nov, on main): Lovable's 12 editor commits of
+  5–8 Nov merged into main (they had never reached GitHub). Owner decisions:
+  the 8 Nov refund rule stands (Stripe fee kept; after lesson 2 the running
+  month becomes 6-month credit or private lessons at 150 lei; future months
+  come back to the card), and the manual WhatsApp reminder button for trials
+  stays. Built: no email address in auth-email-hook or sync logs; booking-create
+  mails and invites only the address saved on the registration
+  (contact_email, else email); taking a student off a group's calendar list
+  removes them from the group's lessons still to come (quietly, no email);
+  kids sign-up says "in person only, 6–11" first; /de/arabisch-lernen → 301 to
+  /; colour settings (hairline, top-bar, top-bar-gold, whatsapp) replace the
+  hex in the menu, Why section, landing layout and booking page; the two
+  photos of Ibra on blog articles have a description.
+  OPEN: "article under review" waits for the owner to name the dialect drafts
+  (none is marked in the code); Lovable must sync to main, publish, and deploy
+  mcp, admin-registrations and booking-create (+ auth-email-hook).
 - DONE P0-1 Stripe webhook lost events on failure: fixed (26b81146).
 - DONE P0-2 sign-up emails: admin alert restored for anonymous sign-ups,
   student confirmation sent after checkout email verification (d86573e6).

@@ -1104,8 +1104,8 @@ const RegistrationFormSection = ({
             </h3>
             <p className="mb-4 text-sm text-muted-foreground">
               {lang === "en"
-                ? "Groups of up to 6 children, 60-minute lessons, up to 8 lessons a month. Leave your details and we'll let you know when they start."
-                : "Grupe de maximum 6 copii, lecții de 60 de minute, maximum 8 lecții pe lună. Lasă-ne datele și te anunțăm când pornesc."}
+                ? "In person only, at the centre in Bucharest, for children aged 6–11. Groups of up to 6 children, 60-minute lessons, up to 8 lessons a month. Leave your details and we'll let you know when they start."
+                : "Doar fizic, la centru, în București, pentru copii de 6–11 ani. Grupe de maximum 6 copii, lecții de 60 de minute, maximum 8 lecții pe lună. Lasă-ne datele și te anunțăm când pornesc."}
             </p>
             <NotifyMeForm
               context="kids_group"

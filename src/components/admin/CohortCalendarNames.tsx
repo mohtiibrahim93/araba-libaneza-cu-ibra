@@ -149,7 +149,13 @@ const CohortCalendarNames = ({ onChanged }: { onChanged?: () => void }) => {
             : "."),
       );
     }
-    const { data, error: err } = await invokeAdmin<{ error?: string }>({
+    const { data, error: err } = await invokeAdmin<{
+      error?: string;
+      removed?: number;
+      lessons_updated?: number;
+      failed_lessons?: number[];
+      warning?: string;
+    }>({
       action: "upsert_cohort_calendar",
       cohort_id: g.id,
       calendar_title: d.title.trim(),
@@ -159,6 +165,17 @@ const CohortCalendarNames = ({ onChanged }: { onChanged?: () => void }) => {
     setBusy(null);
     if (err || data?.error)
       return setError(data?.error ?? "Nu am putut salva.");
+    // Someone taken off the list is also taken off the group's lessons still
+    // to come (and its latest one), without an email to them.
+    if (data?.warning) setError(data.warning);
+    else if (data?.removed)
+      setNote(
+        `${data.removed === 1 ? "Un cursant scos" : `${data.removed} cursanți scoși`} din grupă: ` +
+          `${data.lessons_updated ?? 0} lecții actualizate în Google Calendar, fără email trimis` +
+          (data.failed_lessons?.length
+            ? `; nu s-au putut actualiza: L${data.failed_lessons.join(", L")}.`
+            : "."),
+      );
     await load();
     onChanged?.();
   };

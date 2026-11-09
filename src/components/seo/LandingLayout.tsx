@@ -265,7 +265,7 @@ const LandingLayout = ({
                       {faq.map(({ q, a }) => (
                         <div
                           key={q}
-                          className="rounded-2xl border border-[#E7E1D6] bg-card p-5 dark:border-border"
+                          className="rounded-2xl border border-hairline bg-card p-5 dark:border-border"
                         >
                           <h3 className="font-semibold text-foreground">{q}</h3>
                           <p className="text-sm mt-1">{a}</p>
