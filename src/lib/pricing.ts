@@ -38,11 +38,20 @@ export const ONLINE_PRICES = {
 };
 
 /** Monthly group price for a level and format. Unknown level falls back to A1;
- *  an unknown format falls back to online, so a gap never overcharges. */
+ *  an unknown format falls back to online, so a gap never overcharges.
+ *
+ *  `ownPrice` is the price set on the group itself (group_cohorts.price_lei,
+ *  "Preț (LEI)" in the admin's group editor). A group that has one keeps it
+ *  whatever the list says: the two in-person groups that started in September
+ *  2026 run at 500 lei (A1) and 600 lei (A2) a month, while the list price of
+ *  an in-person group stays 700 and 840 (owner, 11 Nov 2026). */
 export function groupMonthlyPrice(
   level: string | null | undefined,
   format: string | null | undefined,
+  ownPrice?: number | string | null,
 ): number {
+  const own = ownPrice == null || ownPrice === "" ? NaN : Number(ownPrice);
+  if (Number.isFinite(own) && own > 0) return own;
   const key = (level ?? "").toUpperCase() as LevelType;
   const online =
     ONLINE_PRICES.groupMonthly[key] ?? ONLINE_PRICES.groupMonthly.A1;

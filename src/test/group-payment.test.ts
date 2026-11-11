@@ -5,6 +5,8 @@ import {
   groupPrices,
 } from "@/components/admin/GroupPayment";
 import { groupMonths } from "../../supabase/functions/_shared/group-months";
+import { catchUpFee } from "../../supabase/functions/_shared/cohort-sessions";
+import { groupMonthlyPrice } from "@/lib/pricing";
 
 // Owner, 1 Nov 2026: a group course paid in cash or by transfer is recorded as
 // one month or the whole course (-15%), with the amount received.
@@ -125,5 +127,63 @@ describe("a month given by agreement", () => {
     expect(sql).toContain(
       "(kind = 'credit' and method = 'credit' and amount_lei = 0)",
     );
+  });
+});
+
+// Owner, 11 Nov 2026: the two in-person groups that started in September 2026
+// run at 500 lei (A1) and 600 lei (A2) a month. The price list does not
+// change: a group's own price (group_cohorts.price_lei) applies to that group
+// only.
+describe("a group's own monthly price", () => {
+  it("leaves the list price alone when the group has none", () => {
+    expect(groupMonthlyPrice("A1", "fizic")).toBe(700);
+    expect(groupMonthlyPrice("A2", "fizic")).toBe(840);
+    expect(groupMonthlyPrice("A1", "fizic", null)).toBe(700);
+    expect(groupMonthlyPrice("A1", "fizic", 0)).toBe(700);
+    expect(groupMonthlyPrice("A1", "fizic", "")).toBe(700);
+  });
+
+  it("wins over the list for that group", () => {
+    expect(groupMonthlyPrice("A1", "fizic", 500)).toBe(500);
+    expect(groupMonthlyPrice("A2", "fizic", 600)).toBe(600);
+    expect(groupMonthlyPrice("A2", "fizic", "600")).toBe(600);
+  });
+
+  it("is what the catch-up of a running group is counted from", () => {
+    // 20 lessons missed = 3 months started.
+    expect(catchUpFee(20, groupMonthlyPrice("A2", "fizic"))).toBe(2_520);
+    expect(catchUpFee(20, groupMonthlyPrice("A2", "fizic", 600))).toBe(1_800);
+    // At most 4 lessons missed stays 200 lei whatever the group costs.
+    expect(catchUpFee(4, groupMonthlyPrice("A2", "fizic", 600))).toBe(200);
+  });
+
+  it("is what the admin's payment amounts start from", () => {
+    const p = groupPrices({
+      id: "r",
+      name: "x",
+      level: "A1",
+      cohort: { level: "A1", format: "fizic", price_lei: 500 },
+    });
+    expect(p).toEqual({ monthly: 500, months: 4, full: 1700 });
+    const a2 = groupPrices({
+      id: "r",
+      name: "x",
+      level: "A2",
+      cohort: { level: "A2", format: "fizic", price_lei: 600 },
+    });
+    expect(a2.monthly).toBe(600);
+    expect(a2.months).toBe(7);
+  });
+
+  it("reaches both places from the group's row", () => {
+    const panel = readFileSync("src/components/RunningGroups.tsx", "utf8");
+    expect(panel).toContain(
+      "groupMonthlyPrice(g.level, g.format, g.price_lei)",
+    );
+    const admin = readFileSync(
+      "supabase/functions/admin-registrations/index.ts",
+      "utf8",
+    );
+    expect(admin).toContain("price_lei: c.price_lei ?? null");
   });
 });

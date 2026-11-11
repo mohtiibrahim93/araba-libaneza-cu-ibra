@@ -41,6 +41,8 @@ export interface RegistrationCohort {
   end_date: string | null;
   schedule_label_ro: string | null;
   status: string;
+  /** The group's own monthly price, when it differs from the list. */
+  price_lei?: number | null;
 }
 
 export interface Registration {

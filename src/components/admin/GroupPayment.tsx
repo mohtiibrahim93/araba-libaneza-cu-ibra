@@ -40,6 +40,8 @@ export interface GroupPaymentRow {
     level: string | null;
     format: string | null;
     start_date?: string | null;
+    /** The group's own monthly price, when it differs from the list. */
+    price_lei?: number | null;
   } | null;
   months_paid?: number | null;
   months_total?: number | null;
@@ -56,10 +58,16 @@ export function groupPrices(r: GroupPaymentRow) {
     "A1") as Level;
   const format =
     (r.cohort?.format ?? r.format) === "fizic" ? "fizic" : "online";
-  const monthly = priceFor(
-    ONLINE_PRICES.groupMonthly[level] ?? ONLINE_PRICES.groupMonthly.A1,
-    format,
-  );
+  // A group with its own price (the admin's "Preț (LEI)") keeps it; otherwise
+  // the list price for its level and format.
+  const own = Number(r.cohort?.price_lei);
+  const monthly =
+    Number.isFinite(own) && own > 0
+      ? own
+      : priceFor(
+          ONLINE_PRICES.groupMonthly[level] ?? ONLINE_PRICES.groupMonthly.A1,
+          format,
+        );
   const months = GROUP_COURSE_MONTHS[level] ?? GROUP_COURSE_MONTHS.A1;
   const full = Math.round(monthly * months * (1 - GROUP_FULL_COURSE_DISCOUNT));
   return { monthly, months, full };

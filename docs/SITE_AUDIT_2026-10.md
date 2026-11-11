@@ -33,6 +33,15 @@ re-checked on 26 Oct against main and the live site.
   deploy admin-registrations, auth-email-hook, booking-create, booking-manage,
   booking-reminders, calendar-sync, mcp. No database migration is pending
   (last recorded: 20261104150000).
+- OWNER, 11 Nov 2026: the two in-person groups running since September are
+  500 lei (A1) and 600 lei (A2) a month; the price list stays 700 / 840 in
+  person. BUILT, not live: a group's own price (group_cohorts.price_lei,
+  "Preț (LEI)" in the group editor) replaces the list price for that group in
+  the catch-up cost of "Grupe în desfășurare" and in the admin's payment
+  amounts; the level page no longer quotes the list price as "this group's"
+  price. OPEN: write 500 and 600 on the two groups (no value is set yet); the
+  card checkout still charges the list price by level and format (payment
+  code, not touched).
 - DONE P0-1 Stripe webhook lost events on failure: fixed (26b81146).
 - DONE P0-2 sign-up emails: admin alert restored for anonymous sign-ups,
   student confirmation sent after checkout email verification (d86573e6).

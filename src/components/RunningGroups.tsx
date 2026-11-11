@@ -52,6 +52,8 @@ interface RunningCohort {
   status: string;
   start_date: string;
   teaching_language: string;
+  /** The group's own monthly price, when it differs from the list. */
+  price_lei: number | null;
   cohort_calendar:
     | { total_lessons: number; calendar_title: string }
     | Array<{ total_lessons: number; calendar_title: string }>
@@ -158,7 +160,7 @@ const RunningGroups = ({
       const { data: all, error } = await db()
         .from("group_cohorts")
         .select(
-          "id, level, format, status, start_date, teaching_language, schedule_label_ro, schedule_label_en, cohort_calendar(total_lessons, calendar_title)",
+          "id, level, format, status, start_date, teaching_language, price_lei, schedule_label_ro, schedule_label_en, cohort_calendar(total_lessons, calendar_title)",
         )
         .eq("level", level)
         .order("start_date", { ascending: true });
@@ -315,11 +317,13 @@ const RunningGroups = ({
                         done,
                         catchUpFee(
                           done,
-                          groupMonthlyPrice(g.level, g.format),
+                          groupMonthlyPrice(g.level, g.format, g.price_lei),
                         ).toLocaleString(lang === "en" ? "en-GB" : "ro-RO"),
-                        groupMonthlyPrice(g.level, g.format).toLocaleString(
-                          lang === "en" ? "en-GB" : "ro-RO",
-                        ),
+                        groupMonthlyPrice(
+                          g.level,
+                          g.format,
+                          g.price_lei,
+                        ).toLocaleString(lang === "en" ? "en-GB" : "ro-RO"),
                       )}
                     </p>
                     <a

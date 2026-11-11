@@ -5954,7 +5954,7 @@ Deno.serve(async (req) => {
           const result = await supabase
             .from("group_cohorts")
             .select(
-              "id,title_ro,level,format,age_category,teaching_language,start_date,end_date,schedule_label_ro,status",
+              "id,title_ro,level,format,age_category,teaching_language,start_date,end_date,schedule_label_ro,status,price_lei",
             )
             .in("id", cohortIds.slice(offset, offset + 100));
           if (result.error) throw result.error;
@@ -6175,7 +6175,7 @@ async function groupStudentsOwing(
   for (let i = 0; i < cohortIds.length; i += 100) {
     const { data, error: cErr } = await supabase
       .from("group_cohorts")
-      .select("id, level, format, start_date, status")
+      .select("id, level, format, start_date, status, price_lei")
       .in("id", cohortIds.slice(i, i + 100));
     if (cErr) throw cErr;
     for (const c of data ?? []) cohorts.set(c.id, c);
@@ -6214,7 +6214,12 @@ async function groupStudentsOwing(
     r.month_status = summary.status;
     r.payment_months = summary;
     r.cohort = c
-      ? { level: c.level, format: c.format, start_date: c.start_date }
+      ? {
+          level: c.level,
+          format: c.format,
+          start_date: c.start_date,
+          price_lei: c.price_lei ?? null,
+        }
       : null;
     return summary.status === "unpaid";
   });

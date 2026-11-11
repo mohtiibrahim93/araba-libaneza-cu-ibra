@@ -113,6 +113,10 @@ const CourseDetailsEditor = ({ value, onChange }: Props) => {
             value={value.price_lei ?? ""}
             onChange={(e) => onChange({ price_lei: numOrNull(e.target.value) })}
           />
+          <p className="mt-1 text-[11px] leading-snug text-muted-foreground">
+            Pentru o grupă: prețul ei lunar, doar dacă diferă de listă. Gol =
+            prețul din listă.
+          </p>
         </div>
         <div>
           <Label className="text-xs">Data finalizării</Label>
