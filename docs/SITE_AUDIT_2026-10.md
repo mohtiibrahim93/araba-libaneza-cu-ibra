@@ -19,8 +19,20 @@ re-checked on 26 Oct against main and the live site.
   hex in the menu, Why section, landing layout and booking page; the two
   photos of Ibra on blog articles have a description.
   OPEN: "article under review" waits for the owner to name the dialect drafts
-  (none is marked in the code); Lovable must sync to main, publish, and deploy
-  mcp, admin-registrations and booking-create (+ auth-email-hook).
+  (none is marked in the code).
+- VERIFIED 11 Nov 2026: main holds every change of Lovable's 5–8 Nov commits
+  (110 changed blocks checked one by one) and Lovable's 9 Nov platform update
+  to src/integrations/supabase/previewAuthStorage.ts. NOT LIVE: Lovable's
+  editor is still on its own history (23cfae2f) and has pulled nothing from
+  GitHub since e3ce69c0 (4 Nov, 23:30 UTC); the live site and the live `mcp`
+  function are Lovable's version, so nothing pushed to GitHub since 5 Nov is
+  live (payment note 24–48 h and cash rule, "(0 lei)" undone, "Pentru cine?",
+  floating buttons, catch-up fee by missed lessons, trial screen text,
+  assistant end dates, and the 9 Nov items above). The 8 Nov refund rule is
+  live (it was made in Lovable). Once the editor is on main: publish, and
+  deploy admin-registrations, auth-email-hook, booking-create, booking-manage,
+  booking-reminders, calendar-sync, mcp. No database migration is pending
+  (last recorded: 20261104150000).
 - DONE P0-1 Stripe webhook lost events on failure: fixed (26b81146).
 - DONE P0-2 sign-up emails: admin alert restored for anonymous sign-ups,
   student confirmation sent after checkout email verification (d86573e6).
