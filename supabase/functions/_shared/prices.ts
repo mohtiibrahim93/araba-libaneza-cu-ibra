@@ -84,11 +84,24 @@ const round10 = (n: number): number => Math.round(n / 10) * 10;
  * would let the charged amount be manipulated. Unknown/missing values fall
  * back to the cheapest option (A1, online) so a data gap can never
  * overcharge a student.
+ *
+ * `ownPriceRon` is the price set on the group itself (group_cohorts.price_lei,
+ * whole RON a month), read from the group the registration row points at —
+ * never from the request. A group that has one is charged it whatever the
+ * table says: the two in-person groups that started in September 2026 run at
+ * 500 (A1) and 600 (A2) lei a month while the table says 700 and 840 (owner,
+ * 11 Nov 2026). Read it with groupOwnPrice (registration-plan.ts), which
+ * refuses to continue if the group cannot be read, so a failed lookup can
+ * never fall back to a higher table price.
  */
 export function groupMonthlyUnitAmount(
   level: string | null | undefined,
   format: string | null | undefined,
+  ownPriceRon?: number | string | null,
 ): number {
+  const own =
+    ownPriceRon == null || ownPriceRon === "" ? NaN : Number(ownPriceRon);
+  if (Number.isFinite(own) && own > 0) return Math.round(own * 100);
   const lvl = (level ?? "").toUpperCase() as GroupLevel;
   const monthlyRon = GROUP_MONTHLY_ONLINE[lvl] ?? GROUP_MONTHLY_ONLINE.A1;
   const withFormat =
@@ -115,13 +128,15 @@ export function privateLessonUnitAmount(format?: string | null): number {
 /**
  * Full-course amount in bani for a group registration that pays upfront in one
  * charge instead of the monthly subscription: the whole course (monthly ×
- * course-months) less GROUP_FULL_COURSE_DISCOUNT. Level+format come from the row.
+ * course-months) less GROUP_FULL_COURSE_DISCOUNT. Level+format come from the row;
+ * `ownPriceRon` is the group's own monthly price, as in groupMonthlyUnitAmount.
  */
 export function groupFullCourseUnitAmount(
   level: string | null | undefined,
   format: string | null | undefined,
+  ownPriceRon?: number | string | null,
 ): number {
-  const monthly = groupMonthlyUnitAmount(level, format);
+  const monthly = groupMonthlyUnitAmount(level, format, ownPriceRon);
   return Math.round(
     monthly * groupMonthsFor(level) * (1 - GROUP_FULL_COURSE_DISCOUNT),
   );

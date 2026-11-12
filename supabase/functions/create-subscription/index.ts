@@ -1,5 +1,9 @@
 import { groupEnrolmentError } from "../_shared/group-enrolment.ts";
-import { applyPlanChange, planOptions } from "../_shared/registration-plan.ts";
+import {
+  applyPlanChange,
+  groupOwnPrice,
+  planOptions,
+} from "../_shared/registration-plan.ts";
 import { serve } from "https://deno.land/std@0.190.0/http/server.ts";
 import Stripe from "https://esm.sh/stripe@18.5.0";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2.57.2";
@@ -129,7 +133,9 @@ serve(async (req) => {
     // (changePlan, written to the row first); a pay-in-full row is charged by
     // create-payment-intent, so this function refuses it and names the plan.
     const plan = await applyPlanChange(supabaseAdmin, regRow, changePlan);
-    const options = planOptions(regRow);
+    // A group with its own monthly price is charged that price.
+    const ownPrice = await groupOwnPrice(supabaseAdmin, regRow);
+    const options = planOptions(regRow, ownPrice);
     if (plan !== "monthly") {
       return new Response(
         JSON.stringify({
@@ -162,7 +168,7 @@ serve(async (req) => {
     const isKids = regRow.form_type === "kids";
     const monthlyUnitAmount = isKids
       ? kidsGroupMonthlyUnitAmount(regRow.format)
-      : groupMonthlyUnitAmount(regRow.level, regRow.format);
+      : groupMonthlyUnitAmount(regRow.level, regRow.format, ownPrice);
     const monthsTotal = isKids
       ? KIDS_GROUP_MONTHS
       : groupMonthsFor(regRow.level);

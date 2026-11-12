@@ -39,9 +39,19 @@ re-checked on 26 Oct against main and the live site.
   "Preț (LEI)" in the group editor) replaces the list price for that group in
   the catch-up cost of "Grupe în desfășurare" and in the admin's payment
   amounts; the level page no longer quotes the list price as "this group's"
-  price. OPEN: write 500 and 600 on the two groups (no value is set yet); the
-  card checkout still charges the list price by level and format (payment
-  code, not touched).
+  price. DONE 12 Nov: 500 and 600 written on the two groups (price_lei), on
+  the owner's instruction. BUILT 12 Nov, not live (owner: a student of these
+  groups who pays follows the group's own price): the card checkout charges a
+  group's own price when it has one (prices.ts, registration-plan.ts
+  groupOwnPrice, create-subscription, create-payment-intent,
+  create-checkout-session, create-checkout); a failed lookup stops the payment
+  instead of charging the list price. KNOWN LIMITS, not changed: a sign-up
+  already marked paid cannot pay a later month by card (the site answers
+  "already paid"), and a card subscription always runs the full course length
+  from the day it starts, also for a group already under way.
+  OPEN: the owner's existing students of the two in-person groups are to be
+  added as sign-ups by Claude after a dry run (names, emails, phones and
+  months paid from the owner).
 - DONE P0-1 Stripe webhook lost events on failure: fixed (26b81146).
 - DONE P0-2 sign-up emails: admin alert restored for anonymous sign-ups,
   student confirmation sent after checkout email verification (d86573e6).

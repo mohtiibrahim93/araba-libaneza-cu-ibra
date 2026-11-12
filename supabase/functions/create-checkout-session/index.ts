@@ -1,6 +1,7 @@
 import { groupEnrolmentError } from "../_shared/group-enrolment.ts";
 import {
   applyPlanChange,
+  groupOwnPrice,
   hasPlan,
   planOptions,
 } from "../_shared/registration-plan.ts";
@@ -117,11 +118,13 @@ serve(async (req) => {
     const plan = hasPlan(reg.form_type)
       ? await applyPlanChange(supabaseAdmin, reg, changePlan)
       : null;
+    // A group with its own monthly price is charged that price.
+    const ownPrice = await groupOwnPrice(supabaseAdmin, reg);
     if (quote === true) {
       return new Response(
         JSON.stringify({
           plan,
-          planOptions: plan ? planOptions(reg) : null,
+          planOptions: plan ? planOptions(reg, ownPrice) : null,
         }),
         {
           status: 200,
@@ -380,7 +383,7 @@ serve(async (req) => {
       const monthly =
         courseType === "kids"
           ? kidsGroupMonthlyUnitAmount(reg.format)
-          : groupMonthlyUnitAmount(reg.level, reg.format);
+          : groupMonthlyUnitAmount(reg.level, reg.format, ownPrice);
       // No volume discount on the monthly plan: the only group discount is for
       // paying the whole course upfront (create-payment-intent).
       const unitAmount = monthly;
@@ -441,7 +444,7 @@ serve(async (req) => {
       const isPrivate = courseType === "private";
       const finalAmount =
         courseType === "group"
-          ? groupFullCourseUnitAmount(reg.level, reg.format)
+          ? groupFullCourseUnitAmount(reg.level, reg.format, ownPrice)
           : courseType === "kids"
             ? kidsGroupFullCourseUnitAmount(reg.format)
             : Math.round(

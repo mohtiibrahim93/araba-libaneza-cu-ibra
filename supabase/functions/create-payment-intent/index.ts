@@ -1,6 +1,7 @@
 import { groupEnrolmentError } from "../_shared/group-enrolment.ts";
 import {
   applyPlanChange,
+  groupOwnPrice,
   hasPlan,
   planOptions,
 } from "../_shared/registration-plan.ts";
@@ -117,8 +118,10 @@ serve(async (req) => {
     const plan = rowHasPlan
       ? await applyPlanChange(supabaseAdmin, regRow, changePlan)
       : null;
+    // A group with its own monthly price is charged that price.
+    const ownPrice = await groupOwnPrice(supabaseAdmin, regRow);
     const planFields = rowHasPlan
-      ? { plan, planOptions: planOptions(regRow) }
+      ? { plan, planOptions: planOptions(regRow, ownPrice) }
       : {};
     if (rowHasPlan && plan !== "full") {
       return new Response(
@@ -214,7 +217,7 @@ serve(async (req) => {
     // flat monthly (no level, physical-only).
     const unitAmount =
       courseType === "group"
-        ? groupMonthlyUnitAmount(regRow.level, regRow.format)
+        ? groupMonthlyUnitAmount(regRow.level, regRow.format, ownPrice)
         : courseType === "kids"
           ? kidsGroupMonthlyUnitAmount(regRow.format)
           : privateLessonUnitAmount(regRow.format);
@@ -247,7 +250,7 @@ serve(async (req) => {
     // All from the server price table, so display and charge cannot drift.
     const finalAmount =
       courseType === "group"
-        ? groupFullCourseUnitAmount(regRow.level, regRow.format)
+        ? groupFullCourseUnitAmount(regRow.level, regRow.format, ownPrice)
         : courseType === "kids"
           ? kidsGroupFullCourseUnitAmount(regRow.format)
           : Math.round(

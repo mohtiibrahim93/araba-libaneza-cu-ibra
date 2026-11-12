@@ -1,4 +1,5 @@
 import { groupEnrolmentError } from "../_shared/group-enrolment.ts";
+import { groupOwnPrice } from "../_shared/registration-plan.ts";
 import { serve } from "https://deno.land/std@0.190.0/http/server.ts";
 import Stripe from "https://esm.sh/stripe@18.5.0";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2.57.2";
@@ -69,6 +70,8 @@ serve(async (req) => {
       format: string | null;
       quantity: number | null;
     } | null = null;
+    // The group's own monthly price, when the registration's group has one.
+    let ownPrice: number | null = null;
     if (registrationId) {
       if (
         typeof registrationId !== "string" ||
@@ -159,6 +162,7 @@ serve(async (req) => {
         });
       }
       existingReg = regRow;
+      ownPrice = await groupOwnPrice(adminClient, regRow);
     }
 
     const stripe = new Stripe(Deno.env.get("STRIPE_SECRET_KEY") || "", {
@@ -215,7 +219,11 @@ serve(async (req) => {
       );
       const unitAmount =
         courseType === "group"
-          ? groupMonthlyUnitAmount(existingReg?.level, existingReg?.format)
+          ? groupMonthlyUnitAmount(
+              existingReg?.level,
+              existingReg?.format,
+              ownPrice,
+            )
           : privateLessonUnitAmount(existingReg?.format);
       // Only private lessons have a volume discount (20 -> -15%).
       // A `group && quantity >= 3 -> 0.9` branch used to live here, left over
