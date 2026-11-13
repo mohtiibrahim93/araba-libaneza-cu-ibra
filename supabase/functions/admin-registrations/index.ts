@@ -1381,7 +1381,7 @@ Deno.serve(async (req) => {
         "telefon",
         "other",
       ];
-      const PAY_METHODS = ["cash", "transfer", "card", "paypal"];
+      const PAY_METHODS = ["cash", "transfer", "card", "paypal", "center"];
       const {
         name,
         phone,

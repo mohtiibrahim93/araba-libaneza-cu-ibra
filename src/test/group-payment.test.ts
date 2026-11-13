@@ -187,3 +187,54 @@ describe("a group's own monthly price", () => {
     expect(admin).toContain("price_lei: c.price_lei ?? null");
   });
 });
+
+// Owner, 13 Nov 2026: students of the in-person groups pay the centre
+// (Raduga), not the school. The owner records "Plătit la centru".
+describe("paid at the centre", () => {
+  it("is a method the owner can choose, with its own label", async () => {
+    const m = await import("../../supabase/functions/_shared/group-months");
+    expect(m.MANUAL_METHODS).toContain("center");
+    expect(m.MONTH_METHODS).toContain("center");
+    expect(m.MONTH_METHOD_LABELS.center).toBe("Plătit la centru");
+    // Not a bank transfer or a card of ours: no bank to name.
+    expect(m.PROVIDER_METHODS).not.toContain("center");
+    expect(m.cleanProvider("center", "Revolut")).toBeNull();
+  });
+
+  it("counts as a paid month like any other payment outside the site", () => {
+    const s = groupMonths({
+      total: 4,
+      startDate: "2026-09-02",
+      today: "2026-11-13",
+      rows: [
+        {
+          kind: "month",
+          method: "center",
+          amount_lei: 1500,
+          paid_at: "2026-11-13T12:00:00.000Z",
+          month_from: 1,
+          month_to: 3,
+        },
+      ],
+    });
+    expect(s.status).toBe("up_to_date");
+    expect(s.covered).toBe(3);
+    expect(s.months[0]?.state).toBe("paid_offline");
+  });
+
+  it("is accepted by the database and by the manual sign-up", () => {
+    const sql = readFileSync(
+      "supabase/migrations/20261113120000_payment_method_center.sql",
+      "utf8",
+    );
+    expect(sql).toContain("registration_payments_method_check");
+    expect(sql).toContain("registrations_payment_method_check");
+    expect(sql.match(/'center'/g)?.length).toBe(2);
+    expect(
+      readFileSync("supabase/functions/admin-registrations/index.ts", "utf8"),
+    ).toContain('["cash", "transfer", "card", "paypal", "center"]');
+    expect(
+      readFileSync("src/components/admin/ManualStudentForm.tsx", "utf8"),
+    ).toContain('["center", "Plătit la centru"]');
+  });
+});

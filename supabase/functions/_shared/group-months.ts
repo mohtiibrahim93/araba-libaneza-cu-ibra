@@ -22,6 +22,7 @@ export const MONTH_METHODS = [
   "paypal",
   "card_terminal",
   "cash",
+  "center",
   "other",
   "credit",
 ] as const;
@@ -31,12 +32,17 @@ export type MonthMethod = (typeof MONTH_METHODS)[number];
  * Methods the owner records by hand (everything but Stripe and the grant).
  * A bank is not a method: a Revolut or ING payment is a transfer or a card
  * (owner, 4 Nov 2026); the note can name the bank.
+ *
+ * "center" (owner, 13 Nov 2026): the student paid the centre, Raduga, where
+ * the in-person groups run — in cash or by card there, which the school does
+ * not see, so it is recorded as paid at the centre and nothing more.
  */
 export const MANUAL_METHODS = [
   "transfer",
   "paypal",
   "card_terminal",
   "cash",
+  "center",
   "other",
 ] as const;
 export type ManualMethod = (typeof MANUAL_METHODS)[number];
@@ -67,6 +73,7 @@ export const MONTH_METHOD_LABELS: Record<MonthMethod, string> = {
   paypal: "PayPal",
   card_terminal: "Card (în afara site-ului)",
   cash: "Cash",
+  center: "Plătit la centru",
   other: "Altă metodă",
   credit: "Lună acordată",
 };

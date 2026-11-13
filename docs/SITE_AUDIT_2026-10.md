@@ -52,6 +52,15 @@ re-checked on 26 Oct against main and the live site.
   OPEN: the owner's existing students of the two in-person groups are to be
   added as sign-ups by Claude after a dry run (names, emails, phones and
   months paid from the owner).
+- OWNER, 13 Nov 2026: students of the in-person groups pay the centre
+  (Raduga), not the school. BUILT, not live: payment method "Plătit la
+  centru" (`center`) in the admin's payment panel and manual sign-up;
+  migration 20261113120000_payment_method_center.sql is written, NOT applied.
+  Card payments for groups already under way stay as they are (owner: in
+  person pays at the centre; online may pay on the site or by transfer).
+  Sign-ups to add after the owner confirms the dry run, with no email to the
+  students: the first A1 group (24 Mar–25 Jun 2026, in person, finished), A1
+  in person from 2 Sep, A2 in person from 1 Sep, A1 online from 15 Aug.
 - DONE P0-1 Stripe webhook lost events on failure: fixed (26b81146).
 - DONE P0-2 sign-up emails: admin alert restored for anonymous sign-ups,
   student confirmation sent after checkout email verification (d86573e6).

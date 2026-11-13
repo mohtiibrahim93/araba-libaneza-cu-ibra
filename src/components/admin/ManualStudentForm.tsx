@@ -40,6 +40,7 @@ const METHODS: [string, string][] = [
   ["transfer", "Transfer bancar"],
   ["card", "Card"],
   ["paypal", "PayPal"],
+  ["center", "Plătit la centru"],
 ];
 const ACTIVE = [
   "forming",
