@@ -61,6 +61,34 @@ re-checked on 26 Oct against main and the live site.
   Sign-ups to add after the owner confirms the dry run, with no email to the
   students: the first A1 group (24 Mar–25 Jun 2026, in person, finished), A1
   in person from 2 Sep, A2 in person from 1 Sep, A1 online from 15 Aug.
+- DONE 13 Nov 2026 (database only; the owner confirmed the dry run; no email
+  sent): the existing students of the three running groups are sign-ups now,
+  15 sign-ups and 15 payments in all (A1 in person from 2 Sep: 3 added;
+  A2 in person from 1 Sep: 3; A1 online from 15 Aug: 9, of whom 4 left the
+  group). No names or amounts are kept in this file: the repository is
+  public; the admin holds them.
+  Conventions used: no phone numbers (the owner adds them later); payments
+  dated the day they were recorded, with the note "înregistrat retroactiv";
+  centre payments stored as method `other` with the note "Plătit la centru"
+  until the `center` method is live, then to be switched (the one earlier
+  cash row of that group too); online payments as `transfer`; a student who
+  left has canceled_at set and months_total = the months paid; sign-up date =
+  the group's start date; recorded_by "import Claude 13.11.2026". The old
+  seat adjustment (manual_offset 5 / 4 / 10) is 0 on the three groups, so
+  seats are counted from named students: 4/10, 3/10 and 5/10.
+- BUILT 13 Nov 2026, not live: "Retras" (admin action set_withdrawn, a button
+  on the student sheet, the label in the list and the payment panel; skipped
+  by the owing list and the per-group counts); a "Grupe încheiate" section in
+  the admin's group overview for finished or cancelled groups.
+- OPEN, waiting on the owner: (1) the first A1 group (24 Mar–25 Jun 2026,
+  in person, finished): needs the course price and what those who left paid,
+  because a payment row needs an amount and without one every student of it
+  would show "Neplătit"; (2) the English A1 online group to 9 Jan 2027, Sat
+  and Sun 14:00–15:30: it overlaps the Romanian online group (Sat
+  14:00–15:30, Sun 15:00–16:30) until about 7 Mar 2027; (3) two people who
+  are not students are still guests on the calendar lessons of two groups;
+  (4) docs/HANDOFF_2026-11-04.md and docs/CHROME_VERIFY_2026-11-03.md name
+  two students, one with payment details, in this public repository.
 - DONE P0-1 Stripe webhook lost events on failure: fixed (26b81146).
 - DONE P0-2 sign-up emails: admin alert restored for anonymous sign-ups,
   student confirmation sent after checkout email verification (d86573e6).
