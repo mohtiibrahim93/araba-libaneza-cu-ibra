@@ -29,6 +29,8 @@ export interface CourseSummary extends RegistrationCohort {
   payments: Record<string, number>;
   /** The month rule (Plătit la zi / Neplătit), as on the student sheet. */
   month_status?: { up_to_date: number; unpaid: number };
+  /** Students who left the group ("Retras"); not in the two counts above. */
+  withdrawn_count?: number;
 }
 const descriptor = (c: CourseSummary) =>
   describeRegistrationCourse({ cohort: c });
@@ -193,6 +195,9 @@ export default function CourseOverviewAdmin({
                       <>
                         <span>Plătit la zi: {c.month_status.up_to_date}</span>
                         <span>Neplătit: {c.month_status.unpaid}</span>
+                        {(c.withdrawn_count ?? 0) > 0 && (
+                          <span>Retrași: {c.withdrawn_count}</span>
+                        )}
                         {(c.payments["refunded"] ?? 0) > 0 && (
                           <span>
                             {paymentStatusLabels["refunded"] ?? "Rambursat"}:{" "}

@@ -46,6 +46,8 @@ const ACTION_LABELS: Record<string, string> = {
   anonymize: "Anonimizare (GDPR)",
   refund: "Rambursare",
   cancel_subscription: "Anulare abonament",
+  mark_withdrawn: "Marcat retras din grupă",
+  unmark_withdrawn: "Retragere anulată",
   update_status: "Schimbare status",
   reschedule_booking: "Mutare lecție",
   update_booking_details: "Lecție modificată",

@@ -183,6 +183,9 @@ const paymentBadge = (r: Registration) => {
 const paymentStatusBadge = (r: Registration) => {
   if (r.payment_status === "refunded")
     return badge("bg-muted text-muted-foreground", "Rambursat");
+  // A student who left the group: "Retras", whatever the months say.
+  if ((r.form_type === "group" || r.form_type === "kids") && r.canceled_at)
+    return badge("bg-muted text-muted-foreground", "Retras");
   // A group student: the month rule, as on the sheet and the group card.
   if (r.form_type === "group" && r.payment_months)
     return r.payment_months.status === "up_to_date"

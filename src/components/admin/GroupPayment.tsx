@@ -31,7 +31,12 @@ import {
  * record_group_payment). The status ("Plătit la zi" / "Neplătit") comes from
  * supabase/functions/_shared/group-months.ts, the rule every screen uses.
  */
+/** A student who left the group: nothing more is owed (owner, 13 Nov 2026). */
+export const WITHDRAWN_LABEL = "Retras";
+
 export interface GroupPaymentRow {
+  /** Set when the student left the group ("Retras"). */
+  canceled_at?: string | null;
   id: string;
   name: string;
   level?: string | null;
@@ -84,8 +89,9 @@ export function monthsOf(r: GroupPaymentRow): GroupMonthsSummary {
   });
 }
 
-/** "Plătit la zi" / "Neplătit" for a group student. */
+/** "Plătit la zi" / "Neplătit" for a group student; "Retras" once they left. */
 export function groupMonthStatusLabel(r: GroupPaymentRow): string {
+  if (r.canceled_at) return WITHDRAWN_LABEL;
   return MONTH_STATUS_LABELS[monthsOf(r).status];
 }
 
@@ -232,12 +238,14 @@ export default function GroupPayment({
       <div className="flex flex-wrap items-center gap-2">
         <span
           className={`rounded-full px-2.5 py-1 text-xs font-semibold ${
-            s.status === "up_to_date"
-              ? "bg-emerald-500/10 text-emerald-700 dark:text-emerald-400"
-              : "bg-red-500/10 text-red-700 dark:text-red-400"
+            row.canceled_at
+              ? "bg-muted text-muted-foreground"
+              : s.status === "up_to_date"
+                ? "bg-emerald-500/10 text-emerald-700 dark:text-emerald-400"
+                : "bg-red-500/10 text-red-700 dark:text-red-400"
           }`}
         >
-          {MONTH_STATUS_LABELS[s.status]}
+          {row.canceled_at ? WITHDRAWN_LABEL : MONTH_STATUS_LABELS[s.status]}
         </span>
         {groupPaymentSummary(row) && (
           <span className="text-muted-foreground">

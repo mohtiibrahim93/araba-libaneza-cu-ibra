@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import GroupPayment, { groupMonthStatusLabel } from "./GroupPayment";
 import MoveToCohort from "./MoveToCohort";
+import GroupWithdraw from "./GroupWithdraw";
 import * as DialogPrimitive from "@radix-ui/react-dialog";
 import { Gamepad2, Loader2, Mail, MessageCircle, Phone, X } from "lucide-react";
 import { invokeAdmin } from "@/lib/adminAuth";
@@ -205,7 +206,11 @@ const PersonSheet = ({
           when: person.refunded_at,
         },
         person.canceled_at && {
-          what: "Abonament anulat",
+          // With a card subscription it was cancelled; otherwise the student
+          // simply left the group.
+          what: person.stripe_subscription_id
+            ? "Abonament anulat"
+            : "Retras din grupă",
           when: person.canceled_at,
         },
         progress?.placement?.date && {
@@ -377,6 +382,16 @@ const PersonSheet = ({
                   {person.form_type === "group" && (
                     <GroupPayment row={person} onDone={onChanged} />
                   )}
+                  {(person.form_type === "group" ||
+                    person.form_type === "kids") &&
+                    !person.anonymized_at &&
+                    !person.stripe_subscription_id && (
+                      <GroupWithdraw
+                        registrationId={person.id}
+                        withdrawn={Boolean(person.canceled_at)}
+                        onDone={onChanged}
+                      />
+                    )}
                   {!person.anonymized_at && (
                     <MoveToCohort
                       registrationId={person.id}

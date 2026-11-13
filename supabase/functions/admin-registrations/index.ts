@@ -1201,7 +1201,7 @@ Deno.serve(async (req) => {
           ),
           readAll(
             "registrations",
-            "id,cohort_id,form_type,level,months_total,payment_status,refunded_at,lead_status,anonymized_at",
+            "id,cohort_id,form_type,level,months_total,payment_status,refunded_at,lead_status,anonymized_at,canceled_at",
           ),
           readAll("manual_signups", "cohort_id,count"),
           supabase.rpc("get_cohort_signup_counts"),
@@ -1238,6 +1238,8 @@ Deno.serve(async (req) => {
           for (const r of regs) {
             if (r.refunded_at || r.anonymized_at) continue;
             if (r.payment_status === "refunded") continue;
+            // A student who left the group ("Retras") owes nothing more.
+            if (r.canceled_at) continue;
             if (
               ["incomplete", "no_response", "not_suitable", "spam"].includes(
                 r.lead_status as string,
@@ -1264,6 +1266,9 @@ Deno.serve(async (req) => {
               ? seats.get(c.id)
               : null,
           registration_count: regs.length,
+          withdrawn_count: regs.filter(
+            (r) => r.canceled_at && !r.anonymized_at,
+          ).length,
           incomplete_count: regs.filter((r) => r.lead_status === "incomplete")
             .length,
           manual_signup_count: (manual.data ?? [])
@@ -1372,6 +1377,62 @@ Deno.serve(async (req) => {
     // registration in the exact group, so they take a seat, show in the list
     // and get the group's emails. Paid → converted; not paid yet → qualified
     // (both hold a place — see get_cohort_signup_counts).
+    // "Retras" (owner, 13 Nov 2026): a student who left a group. The seat is
+    // freed (cohort_seats_taken skips canceled_at) and nothing more is owed.
+    // No refund is made and no email is sent; undoing it puts the student
+    // back. A live card subscription is stopped with "Anulează abonament"
+    // instead, which also stops the charges.
+    if (action === "set_withdrawn") {
+      const withdrawn = body.withdrawn === true;
+      if (typeof id !== "string")
+        return jsonResponse({ error: "Înscriere invalidă." }, 400);
+      const { data: reg, error: regErr } = await supabase
+        .from("registrations")
+        .select(
+          "id, form_type, canceled_at, stripe_subscription_id, subscription_status, anonymized_at",
+        )
+        .eq("id", id)
+        .maybeSingle();
+      if (regErr) throw regErr;
+      if (
+        !reg ||
+        reg.anonymized_at ||
+        (reg.form_type !== "group" && reg.form_type !== "kids")
+      )
+        return jsonResponse(
+          { error: "Doar pentru o înscriere la grupă." },
+          400,
+        );
+      if (reg.stripe_subscription_id) {
+        if (withdrawn && reg.subscription_status !== "canceled")
+          return jsonResponse(
+            {
+              error:
+                "Are abonament cu cardul: folosește „Anulează abonament”, ca să se oprească și plățile.",
+            },
+            409,
+          );
+        if (!withdrawn)
+          return jsonResponse(
+            { error: "Un abonament anulat nu se poate relua de aici." },
+            409,
+          );
+      }
+      if (withdrawn === Boolean(reg.canceled_at))
+        return jsonResponse({ success: true });
+      const { error: updErr } = await supabase
+        .from("registrations")
+        .update({ canceled_at: withdrawn ? new Date().toISOString() : null })
+        .eq("id", id);
+      if (updErr) throw updErr;
+      await supabase.from("audit_logs").insert({
+        actor: callerEmail!,
+        action: withdrawn ? "mark_withdrawn" : "unmark_withdrawn",
+        registration_id: id,
+      });
+      return jsonResponse({ success: true });
+    }
+
     if (action === "add_manual_registration") {
       const MANUAL_SOURCES = [
         "whatsapp",
@@ -6160,6 +6221,8 @@ async function groupStudentsOwing(
     .eq("form_type", "group")
     .is("anonymized_at", null)
     .is("refunded_at", null)
+    // A student who left the group ("Retras") owes nothing more.
+    .is("canceled_at", null)
     .neq("payment_status", "refunded")
     .or(
       `followup_snoozed_until.is.null,followup_snoozed_until.lt."${opts.snoozeBefore}"`,
