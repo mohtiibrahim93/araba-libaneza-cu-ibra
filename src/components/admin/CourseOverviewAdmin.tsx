@@ -32,6 +32,9 @@ export interface CourseSummary extends RegistrationCohort {
   /** Students who left the group ("Retras"); not in the two counts above. */
   withdrawn_count?: number;
 }
+/** A group that is over: finished or cancelled. */
+const ENDED_STATUSES = new Set(["completed", "cancelled"]);
+
 const descriptor = (c: CourseSummary) =>
   describeRegistrationCourse({ cohort: c });
 export default function CourseOverviewAdmin({
@@ -69,6 +72,10 @@ export default function CourseOverviewAdmin({
         (a.start_date ?? "").localeCompare(b.start_date ?? "") ||
         a.id.localeCompare(b.id),
     );
+  // A finished (or cancelled) group keeps its students and payments, in a
+  // section of its own under the running ones (owner, 13 Nov 2026).
+  const ended = visible.filter((c) => ENDED_STATUSES.has(c.status));
+  const current = visible.filter((c) => !ENDED_STATUSES.has(c.status));
   return (
     <section className="space-y-4 rounded-lg border border-border bg-card p-4">
       <div className="flex flex-wrap items-start justify-between gap-2">
@@ -115,137 +122,147 @@ export default function CourseOverviewAdmin({
           {visible.length === 0 ? (
             <p>Nicio grupă pentru filtrele selectate.</p>
           ) : (
-            <div className="grid gap-4 lg:grid-cols-2">
-              {visible.map((c) => (
-                <article
-                  key={c.id}
-                  className="space-y-3 rounded-lg border border-border p-4"
-                >
-                  <div>
-                    <h3 className="font-semibold">{cohortAdminTitle(c)}</h3>
-                    <p className="text-sm">
-                      {c.format === "online"
-                        ? "Online"
-                        : c.format === "fizic"
-                          ? "În persoană"
-                          : "Format nespecificat"}{" "}
-                      ·{" "}
-                      {c.age_category
-                        ? (ageCategoryLabels[c.age_category] ?? c.age_category)
-                        : "Vârstă nespecificată"}{" "}
-                      · {c.level || "Nivel nespecificat"}
-                    </p>
-                    <p className="text-sm">
-                      Predare:{" "}
-                      {c.teaching_language
-                        ? (teachingLanguageLabels[c.teaching_language] ??
-                          c.teaching_language)
-                        : "Nespecificată"}
-                    </p>
-                    <p className="text-sm">
-                      Start: {courseDate(c.start_date)}
-                      {c.end_date ? ` · Final: ${courseDate(c.end_date)}` : ""}
-                    </p>
-                    <p className="text-sm">
-                      {cohortStatusLabels[c.status] ?? c.status}
-                    </p>
-                    {c.schedule_label_ro && (
-                      <p className="text-sm">
-                        {c.schedule_label_ro} · ora României
-                      </p>
-                    )}
-                  </div>
-                  <div className="rounded-md bg-muted/40 p-3 text-sm">
-                    <p>Minim pentru pornire: {minGroupSize(c.max_seats)}</p>
-                    <p>
-                      Locuri ocupate: {c.taken ?? "Nespecificat"} /{" "}
-                      {c.max_seats}
-                    </p>
-                    {c.taken !== null &&
-                      c.manual_signup_count + (c.manual_offset ?? 0) > 0 && (
-                        <p className="text-xs text-muted-foreground">
-                          din care{" "}
-                          {Math.min(
-                            c.taken,
-                            c.manual_signup_count + (c.manual_offset ?? 0),
-                          )}{" "}
-                          doar ca număr, fără un cursant anume
-                        </p>
-                      )}
-                    {c.taken !== null && (
-                      <p>Locuri libere: {Math.max(0, c.max_seats - c.taken)}</p>
-                    )}
-                    {c.taken !== null && c.taken > c.max_seats && (
-                      <p className="text-amber-700">
-                        Peste capacitate: {c.taken - c.max_seats}
-                      </p>
-                    )}
-                  </div>
-                  <p className="text-sm">
-                    Înregistrări: {c.registration_count}
-                    {c.incomplete_count > 0
-                      ? ` (${c.incomplete_count} incomplete)`
-                      : ""}
+            <>
+              {current.length > 0 && (
+                <div className="grid gap-4 lg:grid-cols-2">
+                  {current.map(card)}
+                </div>
+              )}
+              {ended.length > 0 && (
+                <details className="rounded-lg border border-border p-4">
+                  <summary className="cursor-pointer font-semibold">
+                    Grupe încheiate ({ended.length})
+                  </summary>
+                  <p className="mt-1 text-sm text-muted-foreground">
+                    Grupe care s-au terminat sau au fost anulate. Cursanții și
+                    plățile lor rămân aici.
                   </p>
-                  <div
-                    className="flex flex-wrap gap-x-3 gap-y-1 text-xs"
-                    aria-label="Plăți"
-                  >
-                    {c.form_type === "group" && c.month_status ? (
-                      <>
-                        <span>Plătit la zi: {c.month_status.up_to_date}</span>
-                        <span>Neplătit: {c.month_status.unpaid}</span>
-                        {(c.withdrawn_count ?? 0) > 0 && (
-                          <span>Retrași: {c.withdrawn_count}</span>
-                        )}
-                        {(c.payments["refunded"] ?? 0) > 0 && (
-                          <span>
-                            {paymentStatusLabels["refunded"] ?? "Rambursat"}:{" "}
-                            {c.payments["refunded"]}
-                          </span>
-                        )}
-                      </>
-                    ) : (
-                      Object.entries({
-                        paid: 0,
-                        unpaid: 0,
-                        pending: 0,
-                        failed: 0,
-                        refunded: 0,
-                        ...c.payments,
-                      }).map(([status, count]) => (
-                        <span key={status}>
-                          {paymentStatusLabels[status] ??
-                            (status === "unspecified"
-                              ? "Nespecificat"
-                              : status)}
-                          : {count}
-                        </span>
-                      ))
-                    )}
+                  <div className="mt-4 grid gap-4 lg:grid-cols-2">
+                    {ended.map(card)}
                   </div>
-                  <p className="text-xs text-muted-foreground">
-                    Numărătoare manuală: {c.manual_signup_count} · Ajustare de
-                    locuri: {c.manual_offset ?? 0}. Aceste numere nu confirmă
-                    plata.
-                  </p>
-                  {onShowRegistrations && (
-                    <Button
-                      size="sm"
-                      variant="outline"
-                      onClick={() =>
-                        onShowRegistrations(c.id, cohortAdminTitle(c))
-                      }
-                    >
-                      Vezi înscrierile grupei
-                    </Button>
-                  )}
-                </article>
-              ))}
-            </div>
+                </details>
+              )}
+            </>
           )}
         </>
       )}
     </section>
   );
+
+  function card(c: CourseSummary) {
+    return (
+      <article
+        key={c.id}
+        className="space-y-3 rounded-lg border border-border p-4"
+      >
+        <div>
+          <h3 className="font-semibold">{cohortAdminTitle(c)}</h3>
+          <p className="text-sm">
+            {c.format === "online"
+              ? "Online"
+              : c.format === "fizic"
+                ? "În persoană"
+                : "Format nespecificat"}{" "}
+            ·{" "}
+            {c.age_category
+              ? (ageCategoryLabels[c.age_category] ?? c.age_category)
+              : "Vârstă nespecificată"}{" "}
+            · {c.level || "Nivel nespecificat"}
+          </p>
+          <p className="text-sm">
+            Predare:{" "}
+            {c.teaching_language
+              ? (teachingLanguageLabels[c.teaching_language] ??
+                c.teaching_language)
+              : "Nespecificată"}
+          </p>
+          <p className="text-sm">
+            Start: {courseDate(c.start_date)}
+            {c.end_date ? ` · Final: ${courseDate(c.end_date)}` : ""}
+          </p>
+          <p className="text-sm">{cohortStatusLabels[c.status] ?? c.status}</p>
+          {c.schedule_label_ro && (
+            <p className="text-sm">{c.schedule_label_ro} · ora României</p>
+          )}
+        </div>
+        <div className="rounded-md bg-muted/40 p-3 text-sm">
+          <p>Minim pentru pornire: {minGroupSize(c.max_seats)}</p>
+          <p>
+            Locuri ocupate: {c.taken ?? "Nespecificat"} / {c.max_seats}
+          </p>
+          {c.taken !== null &&
+            c.manual_signup_count + (c.manual_offset ?? 0) > 0 && (
+              <p className="text-xs text-muted-foreground">
+                din care{" "}
+                {Math.min(
+                  c.taken,
+                  c.manual_signup_count + (c.manual_offset ?? 0),
+                )}{" "}
+                doar ca număr, fără un cursant anume
+              </p>
+            )}
+          {c.taken !== null && (
+            <p>Locuri libere: {Math.max(0, c.max_seats - c.taken)}</p>
+          )}
+          {c.taken !== null && c.taken > c.max_seats && (
+            <p className="text-amber-700">
+              Peste capacitate: {c.taken - c.max_seats}
+            </p>
+          )}
+        </div>
+        <p className="text-sm">
+          Înregistrări: {c.registration_count}
+          {c.incomplete_count > 0 ? ` (${c.incomplete_count} incomplete)` : ""}
+        </p>
+        <div
+          className="flex flex-wrap gap-x-3 gap-y-1 text-xs"
+          aria-label="Plăți"
+        >
+          {c.form_type === "group" && c.month_status ? (
+            <>
+              <span>Plătit la zi: {c.month_status.up_to_date}</span>
+              <span>Neplătit: {c.month_status.unpaid}</span>
+              {(c.withdrawn_count ?? 0) > 0 && (
+                <span>Retrași: {c.withdrawn_count}</span>
+              )}
+              {(c.payments["refunded"] ?? 0) > 0 && (
+                <span>
+                  {paymentStatusLabels["refunded"] ?? "Rambursat"}:{" "}
+                  {c.payments["refunded"]}
+                </span>
+              )}
+            </>
+          ) : (
+            Object.entries({
+              paid: 0,
+              unpaid: 0,
+              pending: 0,
+              failed: 0,
+              refunded: 0,
+              ...c.payments,
+            }).map(([status, count]) => (
+              <span key={status}>
+                {paymentStatusLabels[status] ??
+                  (status === "unspecified" ? "Nespecificat" : status)}
+                : {count}
+              </span>
+            ))
+          )}
+        </div>
+        <p className="text-xs text-muted-foreground">
+          Numărătoare manuală: {c.manual_signup_count} · Ajustare de locuri:{" "}
+          {c.manual_offset ?? 0}. Aceste numere nu confirmă plata.
+        </p>
+        {onShowRegistrations && (
+          <Button
+            size="sm"
+            variant="outline"
+            onClick={() => onShowRegistrations(c.id, cohortAdminTitle(c))}
+          >
+            Vezi înscrierile grupei
+          </Button>
+        )}
+      </article>
+    );
+  }
 }
