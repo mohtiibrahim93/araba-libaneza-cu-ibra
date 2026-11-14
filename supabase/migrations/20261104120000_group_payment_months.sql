@@ -47,7 +47,7 @@ alter table public.registration_payments
   add constraint registration_payments_note_check
     check (note is null or char_length(note) <= 500);
 
--- The one row that existed on 4 Nov 2026: Andrada Borches's granted month is
+-- The one row that existed on 4 Nov 2026: one student's granted month is
 -- the last month of her course, month 4 (owner, 4 Nov 2026); she pays 1-3.
 update public.registration_payments
    set month_from = 4, month_to = 4

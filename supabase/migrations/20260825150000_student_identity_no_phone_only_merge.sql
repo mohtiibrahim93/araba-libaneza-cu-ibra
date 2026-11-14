@@ -12,7 +12,7 @@
 --   3. otherwise                         -> a new student
 --
 -- So a family sharing one number now yields one student per person, while
--- "Yasmin Kourani" re-registering as "Yasmin Kurani" from the same number is
+-- "Ana Exemplu" re-registering as "Ana Exemplo" from the same number is
 -- still recognised as the same person.
 --
 -- Non-destructive: no rows are deleted or merged, and no existing attribution
@@ -23,7 +23,7 @@ CREATE EXTENSION IF NOT EXISTS fuzzystrmatch WITH SCHEMA extensions;
 
 -- A comparable form of a person's name: lowercase, without Romanian diacritics
 -- or punctuation, whitespace collapsed, and tokens sorted so that
--- "Kourani Yasmin" and "Yasmin Kourani" compare equal (the same person filling
+-- "Exemplu Ana" and "Ana Exemplu" compare equal (the same person filling
 -- the form family-name-first).
 CREATE OR REPLACE FUNCTION public.student_name_key(p_name text)
 RETURNS text

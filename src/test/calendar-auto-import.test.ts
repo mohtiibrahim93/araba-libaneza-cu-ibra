@@ -21,10 +21,10 @@ const config = {
   to: "2026-11-30T00:00:00Z",
 };
 const owner = { email: "owner@example.test", organizer: true, self: true };
-const radu = {
-  id: "ev-radu",
+const dan = {
+  id: "ev-dan",
   summary: "Araba Libaneza-L1/10- Adulti- Fizic- Privat",
-  attendees: [owner, { email: "Radu.Nicolae@example.test" }],
+  attendees: [owner, { email: "Dan.Exemplu@example.test" }],
   start: { dateTime: "2026-11-15T15:30:00+02:00" },
   end: { dateTime: "2026-11-15T16:30:00+02:00" },
 };
@@ -81,7 +81,7 @@ const google = (items: any[]) => {
 describe("the sync picks up lessons put straight into Google", () => {
   it("creates the student from the guest's email and links the lesson, writing nothing to Google", async () => {
     const db = database();
-    const g = google([radu]);
+    const g = google([dan]);
     const out = await mod().reconcileCalendar(db, config, g.request);
     expect(out.imported).toBe(1);
     expect(out.unmatched).toEqual([]);
@@ -90,8 +90,8 @@ describe("the sync picks up lessons put straight into Google", () => {
     expect(reg).toMatchObject({
       form_type: "private",
       source: "admin",
-      name: "Radu Nicolae",
-      email: "radu.nicolae@example.test",
+      name: "Dan Exemplu",
+      email: "dan.exemplu@example.test",
       phone: "",
       quantity: 10,
       payment_status: "unpaid",
@@ -100,7 +100,7 @@ describe("the sync picks up lessons put straight into Google", () => {
     const booking = db.inserts.find((i) => i.table === "bookings")!.payload;
     expect(booking).toMatchObject({
       registration_id: reg.id,
-      google_event_id: "ev-radu",
+      google_event_id: "ev-dan",
       start_at: "2026-11-15T13:30:00.000Z",
       status: "confirmed",
       event_type_slug: "paid",
@@ -125,7 +125,7 @@ describe("the sync picks up lessons put straight into Google", () => {
       config,
       google([
         {
-          ...radu,
+          ...dan,
           id: "ev-ioan",
           summary: "Ioan , lectia 27 araba libaneza- 2/20",
         },
@@ -148,7 +148,7 @@ describe("the sync picks up lessons put straight into Google", () => {
       config,
       google([
         {
-          ...radu,
+          ...dan,
           id: "two-guests",
           attendees: [
             owner,
@@ -157,12 +157,12 @@ describe("the sync picks up lessons put straight into Google", () => {
           ],
         },
         {
-          ...radu,
+          ...dan,
           id: "other-title",
           summary: "Romanian lessson 38 7/20 carlo",
         },
         {
-          ...radu,
+          ...dan,
           id: "no-guest",
           summary: "Edge advisors- consultant financiar job",
           attendees: [owner],
@@ -184,11 +184,11 @@ describe("the sync picks up lessons put straight into Google", () => {
     const out = await mod().reconcileCalendar(
       db,
       config,
-      google([radu]).request,
+      google([dan]).request,
     );
     expect(out.imported).toBe(0);
     expect(out.errors).toEqual([]);
-    expect(out.unmatched.map((e: any) => e.id)).toEqual(["ev-radu"]);
+    expect(out.unmatched.map((e: any) => e.id)).toEqual(["ev-dan"]);
     expect(db.deletes).toContain("registrations");
   });
 });
@@ -199,7 +199,7 @@ describe("names and package sizes", () => {
     expect(
       lessonStudentName(
         "Ioan , lectia 27 araba libaneza- 2/20",
-        "ioanjabre@example.test",
+        "ioan@example.test",
         null,
       ),
     ).toBe("Ioan");
@@ -213,17 +213,17 @@ describe("names and package sizes", () => {
     expect(
       lessonStudentName(
         "Lectia 2 (araba libaneza)",
-        "diana@example.test",
-        "Diana Costache",
+        "ana@example.test",
+        "Ana Exemplu",
       ),
-    ).toBe("Diana Costache");
+    ).toBe("Ana Exemplu");
     expect(
       lessonStudentName(
         "Lectia I (araba libaneza)",
-        "dianacostache04@example.test",
+        "anaexemplu04@example.test",
         null,
       ),
-    ).toBe("Dianacostache");
+    ).toBe("Anaexemplu");
   });
   it("reads the package size from x/N", () => {
     const { lessonPackageSize } = mod();

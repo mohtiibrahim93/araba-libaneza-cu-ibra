@@ -9,8 +9,7 @@ alter table public.cohort_calendar
 comment on column public.cohort_calendar.members is
   'Emails of the group''s students. Invited to every lesson the admin adds to Google Calendar for this group.';
 
--- The owner's first: the student who joined the online A1 group in October.
-update public.cohort_calendar
-set members = array['bandaricaefrem@gmail.com']
-where cohort_id = 'a3856160-b378-4543-aab9-4242765aa835'
-  and not ('bandaricaefrem@gmail.com' = any(members));
+-- When this ran in October 2026 it also put the first student's address on
+-- the online A1 group's list. That one-off data step is not kept here: a
+-- student's email address does not belong in the repository, and the list is
+-- kept in the database, edited from the admin.

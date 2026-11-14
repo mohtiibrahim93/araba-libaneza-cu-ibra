@@ -78,11 +78,11 @@ Rules:
    - The lower panel is "Numere vechi de locuri (fără nume)", with no add form, only a list with delete icons.
 4. **Grupe › Cohorte**: the per-group number field is labelled "Ajustare locuri".
 5. **Toate lecțiile › "Programează o lecție privată"**
-   - The "Cursant existent" list includes "Madalina Benga — … · probă de pe site, fără oră aleasă".
+   - The "Cursant existent" list includes "Mădălina B. — … · probă de pe site, fără oră aleasă".
    - Choosing her selects "Probă gratuită" and hides "Lecție în plus".
    - The 4 lesson types are there: Plătită, Probă gratuită, Recuperare, Bonus.
    - Do not confirm.
-6. **Open a group student's sheet** (for example Andrada Borches):
+6. **Open a group student's sheet** (for example Andrada B.):
    - The payment control button reads "Încasare cash / transfer / lună acordată". Opening it shows a "1 lună acordată (…) · fără plată" option.
    - There is a "Mută în altă grupă" button. Opening it lists groups. Press Renunță.
    - Do not save anything.

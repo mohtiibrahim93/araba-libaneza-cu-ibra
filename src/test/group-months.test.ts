@@ -77,7 +77,7 @@ describe("one rule: Plătit la zi / Neplătit", () => {
     ).toContain("set month_from = 4, month_to = 4");
   });
 
-  it("Baciu: nothing recorded → Neplătit", () => {
+  it("nothing recorded → Neplătit", () => {
     expect(
       groupMonths({ total: 4, startDate: start, rows: [], today: "2026-11-04" })
         .status,

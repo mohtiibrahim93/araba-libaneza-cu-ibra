@@ -611,7 +611,7 @@ export function lessonGuest(
 /**
  * The student's name, editable afterwards in admin: the name the owner wrote
  * at the start of the title ("Ioan , lectia 27…"), else the guest's Google
- * name, else the email's local part ("radu.nicolae" → "Radu Nicolae").
+ * name, else the email's local part ("ana.exemplu" → "Ana Exemplu").
  */
 export function lessonStudentName(
   summary: string,
