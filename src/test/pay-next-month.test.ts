@@ -40,7 +40,9 @@ function fakeDb(
     let op = "select";
     let value: Row | undefined;
     const rows = () =>
-      (tables[table] ?? []).filter((r) => filters.every(([k, v]) => r[k] === v));
+      (tables[table] ?? []).filter((r) =>
+        filters.every(([k, v]) => r[k] === v),
+      );
     const result = async () => {
       const tags = filters.map(([k, v]) => `${k}=${v}`);
       if (op === "insert") {
@@ -162,7 +164,10 @@ function prepare(
   const stripeCalls: string[] = [];
   class FakeStripe {
     customers = {
-      list: async () => (stripeCalls.push("customers.list"), { data: [{ id: "cus_1" }] }),
+      list: async () => (
+        stripeCalls.push("customers.list"),
+        { data: [{ id: "cus_1" }] }
+      ),
       create: async () => ({ id: "cus_new" }),
     };
     paymentIntents = {
@@ -267,14 +272,23 @@ describe("preparing the payment for the next month", () => {
       expect(t.created).toEqual([]);
     }
     const noHeader = prepare(baseTables(), student);
-    expect((await noHeader.call({ registrationId: REG }, false)).status).toBe(404);
+    expect((await noHeader.call({ registrationId: REG }, false)).status).toBe(
+      404,
+    );
   });
 
   it("says why when there is nothing to pay, and charges nothing", async () => {
     const cases: Array<[string, (t: Record<string, Row[]>) => void]> = [
       ["all_paid", (t) => (t["registration_payments"]![0]!["month_to"] = 4)],
-      ["subscription", (t) => (t["registrations"]![0]!["subscription_status"] = "active")],
-      ["withdrawn", (t) => (t["registrations"]![0]!["canceled_at"] = "2026-11-13T19:41:07Z")],
+      [
+        "subscription",
+        (t) => (t["registrations"]![0]!["subscription_status"] = "active"),
+      ],
+      [
+        "withdrawn",
+        (t) =>
+          (t["registrations"]![0]!["canceled_at"] = "2026-11-13T19:41:07Z"),
+      ],
       ["no_group", (t) => (t["group_cohorts"]![0]!["status"] = "cancelled")],
       ["not_group", (t) => (t["registrations"]![0]!["form_type"] = "private")],
     ];
@@ -323,7 +337,11 @@ describe("preparing the payment for the next month", () => {
         currency: "ron",
         client_secret: "y",
         created: 1794000000,
-        metadata: { purpose: "group_month", registration_id: "another", month: "4" },
+        metadata: {
+          purpose: "group_month",
+          registration_id: "another",
+          month: "4",
+        },
       },
     ]);
     const out = await t.call({ registrationId: REG });
@@ -363,12 +381,18 @@ describe("preparing the payment for the next month", () => {
       stripe_ref: "pi_paid",
     });
     expect(
-      (await prepare(recorded, student, [paid(now - 120)]).call({ registrationId: REG }))
-        .status,
+      (
+        await prepare(recorded, student, [paid(now - 120)]).call({
+          registrationId: REG,
+        })
+      ).status,
     ).toBe(200);
     expect(
-      (await prepare(baseTables(), student, [paid(now - 7200)]).call({ registrationId: REG }))
-        .status,
+      (
+        await prepare(baseTables(), student, [paid(now - 7200)]).call({
+          registrationId: REG,
+        })
+      ).status,
     ).toBe(200);
   });
 
@@ -477,7 +501,9 @@ describe("the webhook records a month payment as that month and nothing else", (
     const again = await webhook({ ...succeeded, id: "evt_again" }, tables);
     expect(again.writes.filter((w) => w.op === "insert")).toEqual([]);
     expect(
-      tables["registration_payments"]!.filter((r) => r["stripe_ref"] === "pi_month"),
+      tables["registration_payments"]!.filter(
+        (r) => r["stripe_ref"] === "pi_month",
+      ),
     ).toHaveLength(1);
   });
 
@@ -492,7 +518,11 @@ describe("the webhook records a month payment as that month and nothing else", (
 
   it("a declined month payment leaves the sign-up as it is", async () => {
     const out = await webhook(
-      { id: "evt_f", type: "payment_intent.payment_failed", data: { object: monthIntent } },
+      {
+        id: "evt_f",
+        type: "payment_intent.payment_failed",
+        data: { object: monthIntent },
+      },
       baseTables(),
     );
     expect(out.status).toBe(200);

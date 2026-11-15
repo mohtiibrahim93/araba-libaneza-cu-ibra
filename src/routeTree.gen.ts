@@ -20,6 +20,7 @@ import { Route as CeArabaSaInvetiRouteImport } from './routes/ce-araba-sa-inveti
 import { Route as CelMaiBunCursDeArabaRouteImport } from './routes/cel-mai-bun-curs-de-araba'
 import { Route as CheckoutRouteImport } from './routes/checkout'
 import { Route as ContactRouteImport } from './routes/contact'
+import { Route as ContulMeuRouteImport } from './routes/contul-meu'
 import { Route as CursArabaCopiiRouteImport } from './routes/curs-araba-copii'
 import { Route as CursuriArabaRouteImport } from './routes/cursuri-araba'
 import { Route as CursuriArabaAdolescentiRouteImport } from './routes/cursuri-araba-adolescenti'
@@ -115,6 +116,7 @@ import { Route as EnLebaneseArabicVsMsaVsEgyptianRouteImport } from './routes/en
 import { Route as EnLevantineArabicDialectsMapRouteImport } from './routes/en/levantine-arabic-dialects-map'
 import { Route as EnLevelCheckRouteImport } from './routes/en/level-check'
 import { Route as EnLevelTestRouteImport } from './routes/en/level-test'
+import { Route as EnMyAccountRouteImport } from './routes/en/my-account'
 import { Route as EnMyBookingsRouteImport } from './routes/en/my-bookings'
 import { Route as EnPlayRouteImport } from './routes/en/play'
 import { Route as EnPricesRouteImport } from './routes/en/prices'
@@ -130,6 +132,7 @@ import { Route as PrivateStatusIdRouteImport } from './routes/private-status/$id
 import { Route as AdminPrivateLeadsIdRouteImport } from './routes/admin/private-leads/$id'
 import { Route as ApiPublicBookingsAccessRouteImport } from './routes/api/public/bookings-access'
 import { Route as ApiPublicContactRouteImport } from './routes/api/public/contact'
+import { Route as ApiPublicMyAccountRouteImport } from './routes/api/public/my-account'
 import { Route as BookingManageTokenRouteImport } from './routes/booking/manage/$token'
 import { Route as CursuriCursSlugRouteImport } from './routes/cursuri/curs/$slug'
 import { Route as CursuriGrupIndexRouteImport } from './routes/cursuri/grup/index'
@@ -214,6 +217,11 @@ const CheckoutRoute = CheckoutRouteImport.update({
 const ContactRoute = ContactRouteImport.update({
   id: '/contact',
   path: '/contact',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ContulMeuRoute = ContulMeuRouteImport.update({
+  id: '/contul-meu',
+  path: '/contul-meu',
   getParentRoute: () => rootRouteImport,
 } as any)
 const CursArabaCopiiRoute = CursArabaCopiiRouteImport.update({
@@ -724,6 +732,11 @@ const EnLevelTestRoute = EnLevelTestRouteImport.update({
   path: '/en/level-test',
   getParentRoute: () => rootRouteImport,
 } as any)
+const EnMyAccountRoute = EnMyAccountRouteImport.update({
+  id: '/en/my-account',
+  path: '/en/my-account',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const EnMyBookingsRoute = EnMyBookingsRouteImport.update({
   id: '/en/my-bookings',
   path: '/en/my-bookings',
@@ -797,6 +810,11 @@ const ApiPublicBookingsAccessRoute = ApiPublicBookingsAccessRouteImport.update({
 const ApiPublicContactRoute = ApiPublicContactRouteImport.update({
   id: '/api/public/contact',
   path: '/api/public/contact',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiPublicMyAccountRoute = ApiPublicMyAccountRouteImport.update({
+  id: '/api/public/my-account',
+  path: '/api/public/my-account',
   getParentRoute: () => rootRouteImport,
 } as any)
 const BookingManageTokenRoute = BookingManageTokenRouteImport.update({
@@ -974,6 +992,7 @@ export interface FileRoutesByFullPath {
   '/cel-mai-bun-curs-de-araba': typeof CelMaiBunCursDeArabaRoute
   '/checkout': typeof CheckoutRoute
   '/contact': typeof ContactRoute
+  '/contul-meu': typeof ContulMeuRoute
   '/curs-araba-copii': typeof CursArabaCopiiRoute
   '/cursuri-araba': typeof CursuriArabaRoute
   '/cursuri-araba-adolescenti': typeof CursuriArabaAdolescentiRoute
@@ -1063,6 +1082,7 @@ export interface FileRoutesByFullPath {
   '/en/levantine-arabic-dialects-map': typeof EnLevantineArabicDialectsMapRoute
   '/en/level-check': typeof EnLevelCheckRoute
   '/en/level-test': typeof EnLevelTestRoute
+  '/en/my-account': typeof EnMyAccountRoute
   '/en/my-bookings': typeof EnMyBookingsRoute
   '/en/play': typeof EnPlayRouteWithChildren
   '/en/prices': typeof EnPricesRoute
@@ -1084,6 +1104,7 @@ export interface FileRoutesByFullPath {
   '/admin/private-leads/$id': typeof AdminPrivateLeadsIdRoute
   '/api/public/bookings-access': typeof ApiPublicBookingsAccessRoute
   '/api/public/contact': typeof ApiPublicContactRoute
+  '/api/public/my-account': typeof ApiPublicMyAccountRoute
   '/booking/manage/$token': typeof BookingManageTokenRoute
   '/cursuri/curs/$slug': typeof CursuriCursSlugRoute
   '/cursuri/grup/$level': typeof CursuriGrupLevelRoute
@@ -1127,6 +1148,7 @@ export interface FileRoutesByTo {
   '/cel-mai-bun-curs-de-araba': typeof CelMaiBunCursDeArabaRoute
   '/checkout': typeof CheckoutRoute
   '/contact': typeof ContactRoute
+  '/contul-meu': typeof ContulMeuRoute
   '/curs-araba-copii': typeof CursArabaCopiiRoute
   '/cursuri-araba': typeof CursuriArabaRoute
   '/cursuri-araba-adolescenti': typeof CursuriArabaAdolescentiRoute
@@ -1215,6 +1237,7 @@ export interface FileRoutesByTo {
   '/en/levantine-arabic-dialects-map': typeof EnLevantineArabicDialectsMapRoute
   '/en/level-check': typeof EnLevelCheckRoute
   '/en/level-test': typeof EnLevelTestRoute
+  '/en/my-account': typeof EnMyAccountRoute
   '/en/my-bookings': typeof EnMyBookingsRoute
   '/en/prices': typeof EnPricesRoute
   '/en/privacy': typeof EnPrivacyRoute
@@ -1235,6 +1258,7 @@ export interface FileRoutesByTo {
   '/admin/private-leads/$id': typeof AdminPrivateLeadsIdRoute
   '/api/public/bookings-access': typeof ApiPublicBookingsAccessRoute
   '/api/public/contact': typeof ApiPublicContactRoute
+  '/api/public/my-account': typeof ApiPublicMyAccountRoute
   '/booking/manage/$token': typeof BookingManageTokenRoute
   '/cursuri/curs/$slug': typeof CursuriCursSlugRoute
   '/cursuri/grup/$level': typeof CursuriGrupLevelRoute
@@ -1279,6 +1303,7 @@ export interface FileRoutesById {
   '/cel-mai-bun-curs-de-araba': typeof CelMaiBunCursDeArabaRoute
   '/checkout': typeof CheckoutRoute
   '/contact': typeof ContactRoute
+  '/contul-meu': typeof ContulMeuRoute
   '/curs-araba-copii': typeof CursArabaCopiiRoute
   '/cursuri-araba': typeof CursuriArabaRoute
   '/cursuri-araba-adolescenti': typeof CursuriArabaAdolescentiRoute
@@ -1368,6 +1393,7 @@ export interface FileRoutesById {
   '/en/levantine-arabic-dialects-map': typeof EnLevantineArabicDialectsMapRoute
   '/en/level-check': typeof EnLevelCheckRoute
   '/en/level-test': typeof EnLevelTestRoute
+  '/en/my-account': typeof EnMyAccountRoute
   '/en/my-bookings': typeof EnMyBookingsRoute
   '/en/play': typeof EnPlayRouteWithChildren
   '/en/prices': typeof EnPricesRoute
@@ -1389,6 +1415,7 @@ export interface FileRoutesById {
   '/admin/private-leads/$id': typeof AdminPrivateLeadsIdRoute
   '/api/public/bookings-access': typeof ApiPublicBookingsAccessRoute
   '/api/public/contact': typeof ApiPublicContactRoute
+  '/api/public/my-account': typeof ApiPublicMyAccountRoute
   '/booking/manage/$token': typeof BookingManageTokenRoute
   '/cursuri/curs/$slug': typeof CursuriCursSlugRoute
   '/cursuri/grup/$level': typeof CursuriGrupLevelRoute
@@ -1434,6 +1461,7 @@ export interface FileRouteTypes {
     | '/cel-mai-bun-curs-de-araba'
     | '/checkout'
     | '/contact'
+    | '/contul-meu'
     | '/curs-araba-copii'
     | '/cursuri-araba'
     | '/cursuri-araba-adolescenti'
@@ -1523,6 +1551,7 @@ export interface FileRouteTypes {
     | '/en/levantine-arabic-dialects-map'
     | '/en/level-check'
     | '/en/level-test'
+    | '/en/my-account'
     | '/en/my-bookings'
     | '/en/play'
     | '/en/prices'
@@ -1544,6 +1573,7 @@ export interface FileRouteTypes {
     | '/admin/private-leads/$id'
     | '/api/public/bookings-access'
     | '/api/public/contact'
+    | '/api/public/my-account'
     | '/booking/manage/$token'
     | '/cursuri/curs/$slug'
     | '/cursuri/grup/$level'
@@ -1587,6 +1617,7 @@ export interface FileRouteTypes {
     | '/cel-mai-bun-curs-de-araba'
     | '/checkout'
     | '/contact'
+    | '/contul-meu'
     | '/curs-araba-copii'
     | '/cursuri-araba'
     | '/cursuri-araba-adolescenti'
@@ -1675,6 +1706,7 @@ export interface FileRouteTypes {
     | '/en/levantine-arabic-dialects-map'
     | '/en/level-check'
     | '/en/level-test'
+    | '/en/my-account'
     | '/en/my-bookings'
     | '/en/prices'
     | '/en/privacy'
@@ -1695,6 +1727,7 @@ export interface FileRouteTypes {
     | '/admin/private-leads/$id'
     | '/api/public/bookings-access'
     | '/api/public/contact'
+    | '/api/public/my-account'
     | '/booking/manage/$token'
     | '/cursuri/curs/$slug'
     | '/cursuri/grup/$level'
@@ -1738,6 +1771,7 @@ export interface FileRouteTypes {
     | '/cel-mai-bun-curs-de-araba'
     | '/checkout'
     | '/contact'
+    | '/contul-meu'
     | '/curs-araba-copii'
     | '/cursuri-araba'
     | '/cursuri-araba-adolescenti'
@@ -1827,6 +1861,7 @@ export interface FileRouteTypes {
     | '/en/levantine-arabic-dialects-map'
     | '/en/level-check'
     | '/en/level-test'
+    | '/en/my-account'
     | '/en/my-bookings'
     | '/en/play'
     | '/en/prices'
@@ -1848,6 +1883,7 @@ export interface FileRouteTypes {
     | '/admin/private-leads/$id'
     | '/api/public/bookings-access'
     | '/api/public/contact'
+    | '/api/public/my-account'
     | '/booking/manage/$token'
     | '/cursuri/curs/$slug'
     | '/cursuri/grup/$level'
@@ -1892,6 +1928,7 @@ export interface RootRouteChildren {
   CelMaiBunCursDeArabaRoute: typeof CelMaiBunCursDeArabaRoute
   CheckoutRoute: typeof CheckoutRoute
   ContactRoute: typeof ContactRoute
+  ContulMeuRoute: typeof ContulMeuRoute
   CursArabaCopiiRoute: typeof CursArabaCopiiRoute
   CursuriArabaRoute: typeof CursuriArabaRoute
   CursuriArabaAdolescentiRoute: typeof CursuriArabaAdolescentiRoute
@@ -1981,6 +2018,7 @@ export interface RootRouteChildren {
   EnLevantineArabicDialectsMapRoute: typeof EnLevantineArabicDialectsMapRoute
   EnLevelCheckRoute: typeof EnLevelCheckRoute
   EnLevelTestRoute: typeof EnLevelTestRoute
+  EnMyAccountRoute: typeof EnMyAccountRoute
   EnMyBookingsRoute: typeof EnMyBookingsRoute
   EnPlayRoute: typeof EnPlayRouteWithChildren
   EnPricesRoute: typeof EnPricesRoute
@@ -2000,6 +2038,7 @@ export interface RootRouteChildren {
   AdminPrivateLeadsIdRoute: typeof AdminPrivateLeadsIdRoute
   ApiPublicBookingsAccessRoute: typeof ApiPublicBookingsAccessRoute
   ApiPublicContactRoute: typeof ApiPublicContactRoute
+  ApiPublicMyAccountRoute: typeof ApiPublicMyAccountRoute
   BookingManageTokenRoute: typeof BookingManageTokenRoute
   CursuriCursSlugRoute: typeof CursuriCursSlugRoute
   CursuriGrupLevelRoute: typeof CursuriGrupLevelRoute
@@ -2107,6 +2146,13 @@ declare module '@tanstack/react-router' {
       path: '/contact'
       fullPath: '/contact'
       preLoaderRoute: typeof ContactRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/contul-meu': {
+      id: '/contul-meu'
+      path: '/contul-meu'
+      fullPath: '/contul-meu'
+      preLoaderRoute: typeof ContulMeuRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/curs-araba-copii': {
@@ -2774,6 +2820,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof EnLevelTestRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/en/my-account': {
+      id: '/en/my-account'
+      path: '/en/my-account'
+      fullPath: '/en/my-account'
+      preLoaderRoute: typeof EnMyAccountRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/en/my-bookings': {
       id: '/en/my-bookings'
       path: '/en/my-bookings'
@@ -2877,6 +2930,13 @@ declare module '@tanstack/react-router' {
       path: '/api/public/contact'
       fullPath: '/api/public/contact'
       preLoaderRoute: typeof ApiPublicContactRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/public/my-account': {
+      id: '/api/public/my-account'
+      path: '/api/public/my-account'
+      fullPath: '/api/public/my-account'
+      preLoaderRoute: typeof ApiPublicMyAccountRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/booking/manage/$token': {
@@ -3129,6 +3189,7 @@ const rootRouteChildren: RootRouteChildren = {
   CelMaiBunCursDeArabaRoute: CelMaiBunCursDeArabaRoute,
   CheckoutRoute: CheckoutRoute,
   ContactRoute: ContactRoute,
+  ContulMeuRoute: ContulMeuRoute,
   CursArabaCopiiRoute: CursArabaCopiiRoute,
   CursuriArabaRoute: CursuriArabaRoute,
   CursuriArabaAdolescentiRoute: CursuriArabaAdolescentiRoute,
@@ -3231,6 +3292,7 @@ const rootRouteChildren: RootRouteChildren = {
   EnLevantineArabicDialectsMapRoute: EnLevantineArabicDialectsMapRoute,
   EnLevelCheckRoute: EnLevelCheckRoute,
   EnLevelTestRoute: EnLevelTestRoute,
+  EnMyAccountRoute: EnMyAccountRoute,
   EnMyBookingsRoute: EnMyBookingsRoute,
   EnPlayRoute: EnPlayRouteWithChildren,
   EnPricesRoute: EnPricesRoute,
@@ -3250,6 +3312,7 @@ const rootRouteChildren: RootRouteChildren = {
   AdminPrivateLeadsIdRoute: AdminPrivateLeadsIdRoute,
   ApiPublicBookingsAccessRoute: ApiPublicBookingsAccessRoute,
   ApiPublicContactRoute: ApiPublicContactRoute,
+  ApiPublicMyAccountRoute: ApiPublicMyAccountRoute,
   BookingManageTokenRoute: BookingManageTokenRoute,
   CursuriCursSlugRoute: CursuriCursSlugRoute,
   CursuriGrupLevelRoute: CursuriGrupLevelRoute,

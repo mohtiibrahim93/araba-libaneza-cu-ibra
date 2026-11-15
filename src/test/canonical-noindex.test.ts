@@ -15,7 +15,8 @@ import { objectLiterals } from "./helpers/sourceText";
  * live page at risk from its own alias.
  *
  * Retired aliases keep the canonical and are kept out of the sitemap instead.
- * Genuinely private pages (/stergere-date) keep noindex and have no canonical.
+ * Genuinely private pages (/stergere-date, /contul-meu) keep noindex and have
+ * no canonical.
  */
 const src = readFileSync(resolve(process.cwd(), "src/lib/seoHead.ts"), "utf8");
 
@@ -38,7 +39,14 @@ describe("canonical and noindex are never combined", () => {
       .filter((l) => l.includes("noindex: true"))
       .map((l) => l.match(/path: "([^"]+)"/)?.[1] ?? "?");
     // Private pages only — never a duplicate that should consolidate elsewhere.
-    expect(noindexed).toEqual(["/en/data-deletion", "/stergere-date"]);
+    // The student's account (14 Nov 2026) shows one student's own courses and
+    // payments: private too, with no canonical pointing anywhere else.
+    expect(noindexed).toEqual([
+      "/contul-meu",
+      "/en/my-account",
+      "/en/data-deletion",
+      "/stergere-date",
+    ]);
   });
 
   it("still gives every retired alias a canonical", () => {

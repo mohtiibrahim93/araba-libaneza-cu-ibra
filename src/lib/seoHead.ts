@@ -180,6 +180,23 @@ const STATIC_ROUTES: SeoRoute[] = [
       "Receive a private email link to view, cancel or reschedule your Lebanese Arabic lessons, online or in Bucharest.",
     lang: "en",
   },
+  // The student's account (owner, 14 Nov 2026). What it shows is private and
+  // different for every student, so it is not a page for search results.
+  {
+    path: "/contul-meu",
+    title: "Contul meu — Arabă Libaneză cu Ibra",
+    description:
+      "Intră în contul tău de cursant: vezi cursurile la care ești înscris, lunile plătite și lecțiile rezervate și plătește luna următoare cu cardul.",
+    noindex: true,
+  },
+  {
+    path: "/en/my-account",
+    title: "My account — Lebanese Arabic with Ibra",
+    description:
+      "Sign in to your student account: see the courses you are enrolled in, the months you have paid and your booked lessons, and pay the next month by card.",
+    lang: "en",
+    noindex: true,
+  },
   // Not a listing — a three-step chooser (who it is for, how to attend, group
   // or private) ending on the courses that match. Titled as the tool it is, so
   // it stops reading like a second copy of /cursuri-limba-araba, which is the
@@ -891,6 +908,7 @@ const COURSE_PAIRS: Array<[string, string]> = [
   ["/despre-noi", "/en/about-us"],
   ["/recenzii", "/en/reviews"],
   ["/rezervari", "/en/my-bookings"],
+  ["/contul-meu", "/en/my-account"],
   ["/privacy", "/en/privacy"],
   ["/stergere-date", "/en/data-deletion"],
   ["/terms", "/en/terms"],

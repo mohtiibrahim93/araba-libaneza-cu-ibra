@@ -182,16 +182,48 @@ const COPY = {
   },
 } as const;
 
-/** The sign-in box shown next to the game, the level test and the score. */
+/**
+ * The same sign-in on "Contul meu" (owner, 14 Nov 2026): one account for the
+ * game and for the student's courses and payments, so only the words differ.
+ * It says that game progress is saved too, because it is, once signed in.
+ */
+const ACCOUNT_COPY = {
+  ro: {
+    title: "Intră în contul tău",
+    text: "Folosește adresa de email cu care te-ai înscris. Îți trimitem un link de intrare; nu ai nevoie de parolă.",
+    consent:
+      "Salvăm emailul ca să te recunoaștem; cu același cont se salvează și progresul din joc. Detalii în",
+    signedIn: "Ești în contul",
+    signOutNote: "Ai ieșit din cont.",
+  },
+  en: {
+    title: "Sign in to your account",
+    text: "Use the email address you signed up with. We send you a sign-in link; you need no password.",
+    consent:
+      "We store your email to recognise you; the same account also saves your game progress. Details in the",
+    signedIn: "You are signed in as",
+    signOutNote: "You have signed out.",
+  },
+} as const;
+
+/**
+ * The sign-in box shown next to the game, the level test and the score, and
+ * (purpose="account") at the top of "Contul meu".
+ */
 export const StudentAccountBox = ({
   user,
   syncing,
+  purpose = "progress",
 }: {
   user: User | null;
   syncing: boolean;
+  purpose?: "progress" | "account";
 }) => {
   const { lang } = useI18n();
-  const c = COPY[lang];
+  const c =
+    purpose === "account"
+      ? { ...COPY[lang], ...ACCOUNT_COPY[lang] }
+      : COPY[lang];
   const [email, setEmail] = useState("");
   const [sending, setSending] = useState(false);
   const [sent, setSent] = useState(false);

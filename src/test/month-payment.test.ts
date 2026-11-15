@@ -23,7 +23,9 @@ const reg = (
   subscription_status: null,
   ...over,
 });
-const cohort = (over: Partial<MonthPaymentCohort> = {}): MonthPaymentCohort => ({
+const cohort = (
+  over: Partial<MonthPaymentCohort> = {},
+): MonthPaymentCohort => ({
   status: "in_progress",
   level: "A1",
   format: "fizic",
@@ -139,7 +141,9 @@ describe("who gets no button", () => {
 
   it("a student who left, or was refunded", () => {
     expect(
-      check(reg({ canceled_at: "2026-11-13T19:41:07Z" }), cohort(), [row(1, 1)]),
+      check(reg({ canceled_at: "2026-11-13T19:41:07Z" }), cohort(), [
+        row(1, 1),
+      ]),
     ).toEqual({ ok: false, reason: "withdrawn" });
     expect(
       check(reg({ payment_status: "refunded" }), cohort(), [row(1, 1)]),

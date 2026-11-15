@@ -222,6 +222,14 @@ const Footer = () => {
             </li>
             <li>
               <Link
+                to={lang === "en" ? "/en/my-account" : "/contul-meu"}
+                className="hover:text-foreground transition-colors"
+              >
+                {lang === "en" ? "My account" : "Contul meu"}
+              </Link>
+            </li>
+            <li>
+              <Link
                 to={lang === "en" ? "/en/find-your-page" : "/te-ajutam"}
                 className="hover:text-foreground transition-colors"
               >
