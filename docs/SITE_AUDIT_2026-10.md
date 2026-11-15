@@ -145,9 +145,12 @@ re-checked on 26 Oct against main and the live site.
 - OPEN, waiting on the owner: (1) the first A1 group (24 Mar–25 Jun 2026,
   in person, finished): needs the course price and what those who left paid,
   because a payment row needs an amount and without one every student of it
-  would show "Neplătit"; (2) (a) or (b) above; (3) one student of the 7 Nov
-  group: which month is the granted one (month 4 was the owner's choice on
-  4 Nov; his 14 Nov note says month 1; nothing changed); (4) three students
+  would show "Neplătit"; (2) (a) or (b) above; (3) SETTLED 15 Nov, nothing to
+  change: for the one student of the 7 Nov group who moved from the 15 Aug
+  group, month 1 is the one she paid, she pays months 2 and 3, and month 4
+  is the granted "transfer" month (as the database already has it; the
+  "month 1 stays free" line in the owner's 14 Nov note was not what he
+  meant); (4) three students
   who left the 15 Aug group are still on its student list; (5) "push to
   main" and Lovable's Git link, then publish and deploy.
 - DONE P0-1 Stripe webhook lost events on failure: fixed (26b81146).
