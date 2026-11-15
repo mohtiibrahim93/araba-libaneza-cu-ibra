@@ -29,10 +29,10 @@ re-checked on 26 Oct against main and the live site.
   live (payment note 24–48 h and cash rule, "(0 lei)" undone, "Pentru cine?",
   floating buttons, catch-up fee by missed lessons, trial screen text,
   assistant end dates, and the 9 Nov items above). The 8 Nov refund rule is
-  live (it was made in Lovable). Once the editor is on main: publish, and
-  deploy admin-registrations, auth-email-hook, booking-create, booking-manage,
-  booking-reminders, calendar-sync, mcp. No database migration is pending
-  (last recorded: 20261104150000).
+  live (it was made in Lovable). Once the editor is on main: publish and
+  deploy; the current list of functions and the pending migration are in the
+  "TO GO LIVE" entry of 15 Nov below (last migration recorded in the
+  database: 20261104150000).
 - OWNER, 11 Nov 2026: the two in-person groups running since September are
   500 lei (A1) and 600 lei (A2) a month; the price list stays 700 / 840 in
   person. BUILT, not live: a group's own price (group_cohorts.price_lei,
@@ -134,25 +134,54 @@ re-checked on 26 Oct against main and the live site.
 - OWNER, 14 Nov 2026: students must be able to pay a later month by card on
   the site, and a student account ("my account") is necessary; the tutor
   side is the admin (only the owner). This overrides "do not build a
-  student account" from the 9 Nov handoff. NOT BUILT. Proposed to the owner
-  on 15 Nov: one page with sign-in (email link or Google), the student's
-  groups, months paid and next month due, "pay the next month by card" (one
-  month at a time, at the group's own price, recorded as card online),
-  payments, credit, booked lessons, and Cancel (transfer offered first,
-  refund shown before confirming). Today "Rezervările mele" sends its
-  private link only to an address that has a booked lesson, so a student
-  with only a group sign-up gets nothing.
+  student account" from the 9 Nov handoff.
+  BUILT 15 Nov, not live: "Contul meu" at /contul-meu and /en/my-account
+  (src/pages/MyAccount.tsx, src/lib/myAccount.ts, the server route
+  src/routes/api/public/my-account.ts). Sign-in is the game's (email link or
+  Google); the server asks Supabase Auth whose session it is and returns the
+  sign-ups stored under that confirmed address, nothing read from the
+  request. It shows the student's courses, every month of a group course
+  (paid, granted, due, still to come), payments and booked lessons. Noindex,
+  out of the sitemap, linked from the footer only (a top-menu link waits for
+  the owner's word). "Pay the next month by card": one month at a time, the
+  lowest month still open, at the group's own price
+  (supabase/functions/_shared/month-payment.ts decides; the new function
+  create-month-payment prepares the Stripe payment and writes nothing to the
+  sign-up; stripe-webhook records it as "Card online" for that month and
+  touches nothing else).
+  NOT BUILT yet: Cancel in the account (transfer offered first, refund shown
+  before confirming), credit, and the withdrawal button the law may ask for;
+  all three wait for (a)/(b) and the lawyer. Today "Rezervările mele" still
+  sends its private link only to an address that has a booked lesson.
+- TO GO LIVE (15 Nov 2026), once Lovable's editor is on GitHub's main:
+  publish, and deploy admin-registrations, auth-email-hook, booking-create,
+  booking-manage, booking-reminders, calendar-sync, create-checkout,
+  create-checkout-session, create-month-payment (new), create-payment-intent,
+  create-subscription, mcp, stripe-webhook. Apply migration
+  20261113120000_payment_method_center.sql, then switch the centre payments
+  recorded as `other` + note to `center`. Check on the live site afterwards:
+  sign in on /contul-meu with a real student address, and one real month
+  payment by card.
 - OPEN, waiting on the owner: (1) the first A1 group (24 Mar–25 Jun 2026,
-  in person, finished): needs the course price and what those who left paid,
-  because a payment row needs an amount and without one every student of it
-  would show "Neplătit"; (2) (a) or (b) above; (3) SETTLED 15 Nov, nothing to
+  in person, finished). Owner, 15 Nov: 500 lei a month; some paid the whole
+  course with a discount, some month by month until they left; who paid what
+  is not known. Proposed to him, nothing written: the two who finished as 3
+  months (1,500 lei) each, the seven who left as 1 month (500 lei) each and
+  "Retras"; he corrects any line or says "ok"; (2) (a) or (b) above, explained
+  again on 15 Nov with one example ((b) is what is live and what he chose on
+  9 Nov); (3) SETTLED 15 Nov, nothing to
   change: for the one student of the 7 Nov group who moved from the 15 Aug
   group, month 1 is the one she paid, she pays months 2 and 3, and month 4
   is the granted "transfer" month (as the database already has it; the
   "month 1 stays free" line in the owner's 14 Nov note was not what he
-  meant); (4) three students
-  who left the 15 Aug group are still on its student list; (5) "push to
-  main" and Lovable's Git link, then publish and deploy.
+  meant); (4) DONE 15 Nov: the owner took the three who left off the
+  15 Aug group's lessons in Google Calendar, and the group's list in the
+  admin was set to the guests of its latest lesson (5 students). One person
+  who does not attend is still a guest on the 2 Sep in-person group's
+  lessons of 18 and 23 Nov; the owner removes her in Google Calendar;
+  (5) main was pushed on 15 Nov at the owner's word; Lovable's Git link is
+  still his to check, then publish and deploy; (6) whether "Contul meu" also
+  gets a link in the top menu.
 - DONE P0-1 Stripe webhook lost events on failure: fixed (26b81146).
 - DONE P0-2 sign-up emails: admin alert restored for anonymous sign-ups,
   student confirmation sent after checkout email verification (d86573e6).
