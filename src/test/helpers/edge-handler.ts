@@ -69,10 +69,11 @@ export function loadEdgeHandler(
       // `../_shared/package-titles.ts`) are shared code, not a service
       // boundary: load them as they are, with the same stubs and environment.
       // Their Google calls need keys a test does not set, so they do nothing.
-      // The group refund rule (`../_shared/group-refund.ts`) and the month
-      // rule (`group-months.ts`, `group-online-months.ts`) load the same way.
+      // The group refund rule (`../_shared/group-refund.ts`), the month rule
+      // (`group-months.ts`, `group-online-months.ts`) and the rule for paying
+      // the next month by card (`month-payment.ts`) load the same way.
       if (
-        /^\.\.?\/(_shared\/)?(package-(lessons|titles)|group-(refund|months|online-months))\.ts$/.test(
+        /^\.\.?\/(_shared\/)?(package-(lessons|titles)|group-(refund|months|online-months)|month-payment)\.ts$/.test(
           name,
         )
       )

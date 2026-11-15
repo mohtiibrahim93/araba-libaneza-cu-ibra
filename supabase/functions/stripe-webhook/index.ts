@@ -2,6 +2,7 @@ import { serve } from "https://deno.land/std@0.190.0/http/server.ts";
 import Stripe from "https://esm.sh/stripe@18.5.0";
 import { flagOverCapacity } from "../_shared/group-holds.ts";
 import { recordOnlineGroupMonths } from "../_shared/group-online-months.ts";
+import { GROUP_MONTH_PURPOSE } from "../_shared/month-payment.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2.57.2";
 import { buildCorsHeaders } from "../_shared/cors.ts";
 import { sendTemplateEmail } from "../_shared/managed-email.ts";
@@ -606,6 +607,34 @@ serve(async (req) => {
               .or("no_show_fee_status.is.null,no_show_fee_status.eq.failed");
           break;
         }
+        // One month of a group course, paid from the student's account
+        // (create-month-payment): recorded as "Card online" for the lowest
+        // month still open, and nothing else. The sign-up is already paid, so
+        // its payment_status, seat and confirmation emails are not touched.
+        // This is the only record of the money, so a failure is thrown and
+        // Stripe sends the event again; stripe_ref keeps a repeat from
+        // recording the month twice.
+        if (intent.metadata?.purpose === GROUP_MONTH_PURPOSE) {
+          if (intent.metadata?.registration_id)
+            await recordOnlineGroupMonths(
+              supabase,
+              intent.metadata.registration_id,
+              [
+                {
+                  ref: intent.id,
+                  amountLei: (intent.amount_received || intent.amount) / 100,
+                  paidAt: new Date(event.created * 1000).toISOString(),
+                },
+              ],
+              "one_month_each",
+              { rethrow: true },
+            );
+          else
+            console.error(
+              `Month payment ${intent.id} carries no registration id`,
+            );
+          break;
+        }
         // Subscription-invoice PaymentIntents are handled by invoice.paid (which
         // also advances months_paid); skip them here to avoid double-processing.
         if (intent.invoice) {
@@ -677,6 +706,9 @@ serve(async (req) => {
         // A declined no-show fee is already recorded by the admin action; it
         // says nothing about the student's payments for lessons.
         if (intent.metadata?.purpose === "trial_no_show_fee") break;
+        // A declined month payment (create-month-payment) leaves the sign-up
+        // as it is: the student is enrolled and simply tries the card again.
+        if (intent.metadata?.purpose === GROUP_MONTH_PURPOSE) break;
         const registrationId = intent.metadata?.registration_id;
         const matchColumn = registrationId ? "id" : "stripe_session_id";
         const matchValue = registrationId || intent.id;
@@ -838,10 +870,12 @@ serve(async (req) => {
         // stripe_session_id = the intent id); hosted Checkout uses a session.
         let registrationId: string | null = null;
         let noShowFee = false;
+        let monthPayment = false;
         try {
           const intent = await stripe.paymentIntents.retrieve(intentId);
           registrationId = intent.metadata?.registration_id || null;
           noShowFee = intent.metadata?.purpose === "trial_no_show_fee";
+          monthPayment = intent.metadata?.purpose === GROUP_MONTH_PURPOSE;
         } catch (e) {
           console.warn(`Refund: could not read PaymentIntent ${intentId}`, e);
         }
@@ -891,7 +925,10 @@ serve(async (req) => {
         // only a full refund is "refunded". Amounts are Stripe minor units,
         // like the admin refund. The admin refund already wrote these fields
         // when it started the refund, so this is idempotent for it.
-        const fullyRefunded = charge.amount_refunded >= charge.amount;
+        // One month paid from the student's account is never the whole
+        // sign-up: refunding it records the amount and keeps the sign-up paid.
+        const fullyRefunded =
+          !monthPayment && charge.amount_refunded >= charge.amount;
         const { error: refundErr } = await supabase
           .from("registrations")
           .update({

@@ -23,6 +23,13 @@ export async function recordOnlineGroupMonths(
   registrationId: string,
   payments: OnlinePayment[],
   covers: "one_month_each" | "whole_course",
+  /**
+   * rethrow: for a payment that is recorded nowhere else (one month paid from
+   * the student's account), a failure must reach the webhook so Stripe sends
+   * the event again. The default swallows it, for payments already recorded
+   * on the registration itself.
+   */
+  options: { rethrow?: boolean } = {},
 ): Promise<void> {
   try {
     const { data: reg } = await supabase
@@ -116,5 +123,6 @@ export async function recordOnlineGroupMonths(
     // The payment itself is already recorded on the registration; a failure
     // here must not make Stripe retry the whole event.
     console.error("[group-online-months] could not record months:", err);
+    if (options.rethrow) throw err;
   }
 }
