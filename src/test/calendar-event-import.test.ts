@@ -1,4 +1,4 @@
-import { describe, expect, it } from "vitest";
+import { afterAll, beforeAll, describe, expect, it, vi } from "vitest";
 import { readFileSync } from "node:fs";
 import { resolve } from "node:path";
 import { loadEdgeModule } from "./helpers/edge-handler";
@@ -14,6 +14,16 @@ const mod = () =>
     "supabase/functions/_shared/calendar-reconciliation.ts",
     {},
   ) as any;
+// The lessons below are dated 15 November 2026 and stand for a lesson still
+// to come ("confirmed"); the one dated 11 October stands for a past one. The
+// clock is pinned between the two, so the tests mean the same on any day.
+beforeAll(() => {
+  vi.useFakeTimers({ toFake: ["Date"] });
+  vi.setSystemTime(new Date("2026-11-01T09:00:00Z"));
+});
+afterAll(() => {
+  vi.useRealTimers();
+});
 const config = { lovableKey: "synthetic", calendarKey: "synthetic" };
 const input = {
   eventId: "ev1",
