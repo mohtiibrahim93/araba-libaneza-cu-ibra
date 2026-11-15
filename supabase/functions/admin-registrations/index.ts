@@ -2879,9 +2879,8 @@ Deno.serve(async (req) => {
 
       // A student taken off the group's list stops seeing its lessons at
       // once: they are removed from every lesson still to come in Google
-      // Calendar, and from the group's latest lesson, whose guests the next
-      // lessons added are copied from. Quiet update (sendUpdates=none): no
-      // email goes to the student.
+      // Calendar, and from the group's latest lesson. Quiet update
+      // (sendUpdates=none): no email goes to the student.
       const removed = members
         ? Array.from(
             new Set(
@@ -3159,7 +3158,7 @@ Deno.serve(async (req) => {
      * add_remaining: false = read only (and return the plan as a preview);
      * true = also create the planned events, for one group (cohort_id) or all;
      * lesson_numbers / lesson_limit narrow that to some lessons or the next N.
-     * The new lessons invite the guests of the group's latest lesson plus any
+     * The new lessons invite the students on the group's own list plus any
      * extra_guests (a student who just joined), with Google's usual invite.
      */
     if (action === "sync_cohort_sessions") {
@@ -3167,7 +3166,7 @@ Deno.serve(async (req) => {
       const onlyCohort =
         typeof body.cohort_id === "string" ? body.cohort_id : null;
       // Extra people to invite to the new lessons (a student who just joined),
-      // on top of the guests already on the group's latest lesson.
+      // on top of the students on the group's own list.
       // Add only some of the missing lessons: these numbers, or the next N.
       const lessonNumbers: number[] = Array.isArray(body.lesson_numbers)
         ? (body.lesson_numbers as unknown[])
@@ -3455,16 +3454,12 @@ Deno.serve(async (req) => {
             ownerEmail = cal.id.toLowerCase();
         }
         // Who is invited: the group's own students (permanent, from the
-        // admin), everyone already on its latest lesson, and the extra guests
-        // for just these lessons.
+        // admin) and the extra guests for just these lessons. The guests of
+        // the latest lesson are not copied over (owner's security fix in the
+        // Lovable editor, 14 Nov 2026): copying them kept re-inviting
+        // students who had been taken off the group's list.
         const guests = Array.from(
-          new Set([
-            ...c.members,
-            ...(last?.e.attendees ?? [])
-              .filter((a) => a.email && !a.self && !a.resource)
-              .map((a) => a.email!.toLowerCase()),
-            ...extraGuests,
-          ]),
+          new Set([...c.members, ...extraGuests]),
         ).filter((e) => e !== ownerEmail);
         const attendeeList = [
           ...(ownerEmail

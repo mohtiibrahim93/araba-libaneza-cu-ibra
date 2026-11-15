@@ -334,7 +334,7 @@ const CohortSessionsAdmin = () => {
                   </div>
                   <p className="text-xs text-muted-foreground">
                     {r.guests?.length
-                      ? `Primesc invitație: ${r.guests.length} (cursanții grupei și cei de pe ultima lecție).`
+                      ? `Primesc invitație: ${r.guests.length} (cursanții de pe lista grupei).`
                       : "Nimeni nu e invitat încă: trece cursanții grupei la „Numele grupelor în calendar”."}
                   </p>
                 </>
@@ -367,8 +367,8 @@ const CohortSessionsAdmin = () => {
                   .map((r) => `${r.calendar_title}: ${r.plan.length}`)
                   .join(" · ")}
                 . Fiecare lecție are aceleași zile și ore ca grupa, același loc
-                și link ca ultima lecție, iar invitații ultimei lecții primesc
-                invitația obișnuită de la Google.
+                și link ca ultima lecție, iar cursanții de pe lista fiecărei
+                grupe primesc invitația obișnuită de la Google.
               </AlertDialogDescription>
             </AlertDialogHeader>
           ) : (
@@ -386,10 +386,8 @@ const CohortSessionsAdmin = () => {
                     : `lecțiile ${confirm.lessons[0]?.lesson_number}–${confirm.lessons[confirm.lessons.length - 1]?.lesson_number}, în zilele și orele grupei`}
                   , cu același loc și același link ca ultima lecție.{" "}
                   {confirm.r.members?.length
-                    ? `Primesc invitație cursanții grupei (${confirm.r.members.join(", ")}), cei de pe ultima lecție`
-                    : confirm.r.guests?.length
-                      ? `Primesc invitație cei ${confirm.r.guests.length} de pe ultima lecție`
-                      : "Grupa nu are încă cursanți trecuți în admin"}{" "}
+                    ? `Primesc invitație cursanții de pe lista grupei (${confirm.r.members.join(", ")})`
+                    : "Grupa nu are încă cursanți trecuți în admin"}{" "}
                   și cine scrii mai jos. Le poți muta sau șterge oricând din
                   Google Calendar.
                 </AlertDialogDescription>
