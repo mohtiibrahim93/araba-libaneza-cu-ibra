@@ -80,15 +80,76 @@ re-checked on 26 Oct against main and the live site.
   on the student sheet, the label in the list and the payment panel; skipped
   by the owing list and the per-group counts); a "Grupe încheiate" section in
   the admin's group overview for finished or cancelled groups.
+- DONE 15 Nov 2026 (owner's answers of 14 Nov):
+  - No file names a student in full (owner: mask part of the name; the admin
+    holds the names). Tests use made-up people; notes and migration comments
+    keep a first name and an initial at most; the one student address in a
+    migration file is gone. Older commits still hold the old text.
+  - Database, no notification sent: one student's name corrected on the
+    15 Aug group; the two people who do not attend were taken off the
+    student lists (cohort_calendar.members) of the 15 Aug online group and
+    the 2 Sep in-person group. Lessons already in Google Calendar keep them
+    as guests until removed there.
+  - The English A1 online group starts Sat 9 Jan 2027, Sat and Sun
+    12:00–13:30 (owner's choice; no other group or booked lesson in that
+    slot), estimated end 25 Apr 2027; labels, both meeting rows and the
+    public page follow. Its page address keeps "21-noiembrie-2026" (stored
+    slug, so shared links keep working).
+  - Lovable's editor fixed six security findings on 14 Nov, on its own copy
+    (the two copies still do not sync). Brought into GitHub: new group
+    lessons invite only the group's own list plus that run's extra guests
+    (guests of the latest lesson are no longer copied), with the admin's
+    helper texts corrected; build-config package 2.27.1. GitHub already had
+    its own fix for the booking address and the sign-in log. Lovable said
+    its fixes were not deployed yet.
+- OWNER, 14 Nov 2026, new refund rules (ONLY for sign-ups made after the new
+  Terms are published; earlier students keep their rules and prices; every
+  refund from the student's own price). Decided: 7+ days before the start,
+  everything minus the Stripe fee; under 7 days and up to lesson 2, lessons
+  held and the Stripe fee kept; paid in full, months not started come back
+  at the discounted monthly price minus a 10% "taxă administrativă de
+  anulare" (never "penalty") minus the Stripe fee, never below 0; monthly,
+  cancelling stops future charges and earlier months never come back;
+  credit valid 6 months (later group, another person, or private lessons at
+  150 lei), reminder 30 days before expiry, unused credit refunded at
+  expiry minus the Stripe fee; granted months are tracked apart and are
+  never credit; a lesson counts as held when the student was absent unless
+  the owner marks an extenuating circumstance; lessons cancelled by the
+  centre are rescheduled or refunded; cancelling by the account's Cancel
+  button, by email, or by the owner with written confirmation, dated by the
+  button press or the email; refunds processed within 14 days; a transfer
+  to another group of the same level is offered before any refund; the rule
+  is shown on /preturi and at the pay-in-full checkout.
+  NOT DECIDED (ask the owner): the month in progress after lesson 2:
+  (a) money back minus lessons held, minus 10%, minus the Stripe fee, or
+  (b) the unused lessons become credit.
+  NOT BUILT. Drafted on 15 Nov as a document for the owner and his lawyer
+  (not in this repository): the new section 4 in Romanian and English, the
+  texts for /preturi and the checkout, and a paragraph on the 14-day
+  withdrawal right (OUG 34/2014) marked "needs lawyer review". Do not
+  publish that paragraph as final. To check with the lawyer: inside the 14
+  days the law seems to allow no Stripe fee and no 10%; OUG 18/2026 (from
+  19 June 2026) asks for a withdrawal button with a confirmation step and a
+  confirmation email.
+- OWNER, 14 Nov 2026: students must be able to pay a later month by card on
+  the site, and a student account ("my account") is necessary; the tutor
+  side is the admin (only the owner). This overrides "do not build a
+  student account" from the 9 Nov handoff. NOT BUILT. Proposed to the owner
+  on 15 Nov: one page with sign-in (email link or Google), the student's
+  groups, months paid and next month due, "pay the next month by card" (one
+  month at a time, at the group's own price, recorded as card online),
+  payments, credit, booked lessons, and Cancel (transfer offered first,
+  refund shown before confirming). Today "Rezervările mele" sends its
+  private link only to an address that has a booked lesson, so a student
+  with only a group sign-up gets nothing.
 - OPEN, waiting on the owner: (1) the first A1 group (24 Mar–25 Jun 2026,
   in person, finished): needs the course price and what those who left paid,
   because a payment row needs an amount and without one every student of it
-  would show "Neplătit"; (2) the English A1 online group to 9 Jan 2027, Sat
-  and Sun 14:00–15:30: it overlaps the Romanian online group (Sat
-  14:00–15:30, Sun 15:00–16:30) until about 7 Mar 2027; (3) two people who
-  are not students are still guests on the calendar lessons of two groups;
-  (4) docs/HANDOFF_2026-11-04.md and docs/CHROME_VERIFY_2026-11-03.md name
-  two students, one with payment details, in this public repository.
+  would show "Neplătit"; (2) (a) or (b) above; (3) one student of the 7 Nov
+  group: which month is the granted one (month 4 was the owner's choice on
+  4 Nov; his 14 Nov note says month 1; nothing changed); (4) three students
+  who left the 15 Aug group are still on its student list; (5) "push to
+  main" and Lovable's Git link, then publish and deploy.
 - DONE P0-1 Stripe webhook lost events on failure: fixed (26b81146).
 - DONE P0-2 sign-up emails: admin alert restored for anonymous sign-ups,
   student confirmation sent after checkout email verification (d86573e6).
