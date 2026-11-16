@@ -89,9 +89,10 @@ describe("Terms: refund rules for new sign-ups", () => {
   const read = (p: string) => readFileSync(resolve(process.cwd(), p), "utf8");
 
   it("names one start day, the one the refund arithmetic uses", () => {
-    expect(NEW_REFUND_RULES_FROM).toBe("2026-12-01");
-    expect(refundRulesFromLabel("ro")).toBe("1 decembrie 2026");
-    expect(refundRulesFromLabel("en")).toBe("1 December 2026");
+    // The day the owner approved the text; he wants it in force at once.
+    expect(NEW_REFUND_RULES_FROM).toBe("2026-11-16");
+    expect(refundRulesFromLabel("ro")).toBe("16 noiembrie 2026");
+    expect(refundRulesFromLabel("en")).toBe("16 November 2026");
     // The page takes the day from that constant, never from typed text.
     expect(terms).toContain(
       "regulile de mai jos se aplică înscrierilor făcute începând cu ${FROM.ro}",
@@ -99,7 +100,7 @@ describe("Terms: refund rules for new sign-ups", () => {
     expect(terms).toContain(
       "the rules below apply to sign-ups made from ${FROM.en}",
     );
-    expect(terms).not.toMatch(/1 decembrie 2026|1 December 2026/);
+    expect(terms).not.toMatch(/16 noiembrie 2026|16 November 2026/);
   });
 
   it("states the new rules in Romanian", () => {
@@ -175,18 +176,38 @@ describe("Terms: refund rules for new sign-ups", () => {
     );
   });
 
-  it("promises nothing that does not exist yet", () => {
-    // The Cancel button in the account is not built: the Terms name email and
-    // the school only. The 14-day withdrawal paragraph waits for the lawyer.
-    expect(terms).not.toMatch(/butonul „Anulează”|“Cancel” button/);
+  it("promises no button that does not exist yet", () => {
+    // Neither Cancel nor the withdrawal button is built in the account: the
+    // Terms name email (and the school) until they are.
     expect(terms).not.toMatch(
-      /34\/2014|drept(ul)? (legal )?de retragere|right of withdrawal/i,
+      /butonul „Anulează”|“Cancel” button|butonul „Retrage-te|Withdraw from the contract here/,
+    );
+  });
+
+  it("states the 14-day right of withdrawal, ahead of the other rules", () => {
+    // Written in on the owner's word of 16 November 2026.
+    for (const text of [
+      "Dreptul legal de retragere (14 zile): dacă te-ai înscris și ai plătit online, ai dreptul să te retragi din contract în 14 zile de la data înscrierii, fără să dai un motiv (OUG nr. 34/2014).",
+      "fără comision de procesare și fără taxă administrativă de anulare",
+      "plătești doar lecțiile ținute până la data retragerii, proporțional cu prețul total al cursului",
+      "După cele 14 zile se aplică regulile de anulare de mai jos.",
+      "Legal right of withdrawal (14 days): if you signed up and paid online, you have the right to withdraw from the contract within 14 days of signing up, without giving a reason (Government Emergency Ordinance 34/2014).",
+      "with no processing fee and no administrative cancellation fee kept",
+      "After the 14 days, the cancellation rules below apply.",
+    ])
+      expect(terms, text).toContain(text);
+    // It comes before the rule for cancelling 7 days ahead, in both languages.
+    expect(terms.indexOf("Dreptul legal de retragere")).toBeLessThan(
+      terms.indexOf("Cu cel puțin 7 zile înainte de începerea cursului"),
+    );
+    expect(terms.indexOf("Legal right of withdrawal")).toBeLessThan(
+      terms.indexOf("At least 7 days before the course starts"),
     );
   });
 
   it("shows the paid-in-full rule before payment, from the day it applies", () => {
-    expect(newRefundRulesInForce("2026-11-30")).toBe(false);
-    expect(newRefundRulesInForce("2026-12-01")).toBe(true);
+    expect(newRefundRulesInForce("2026-11-15")).toBe(false);
+    expect(newRefundRulesInForce("2026-11-16")).toBe(true);
     expect(newRefundRulesInForce("2027-03-10")).toBe(true);
     const prices = read("src/pages/Preturi.tsx");
     expect(prices).toContain("newRefundRulesInForce() &&");

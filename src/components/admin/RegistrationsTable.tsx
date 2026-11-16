@@ -52,6 +52,7 @@ import RegistrationCourse, {
 /** What supabase/functions/_shared/group-refund.ts works out for one cancellation. */
 export interface CancelPreview {
   case:
+    | "withdrawal"
     | "before_start_full"
     | "before_start_fee"
     | "current_month"
@@ -80,6 +81,11 @@ const lei = (bani: number) =>
 /** The breakdown, in the owner's words, line by line. */
 export function cancelPreviewLines(p: CancelPreview): string[] {
   switch (p.case) {
+    case "withdrawal":
+      return [
+        "Retragere în primele 14 zile de la înscriere (Termeni, secțiunea 4).",
+        `Plătit: ${lei(p.chargedBani)}. Se returnează fără comision Stripe și fără taxă administrativă de anulare.`,
+      ];
     case "before_start_full":
     case "before_start_fee":
       return [
@@ -107,7 +113,8 @@ export function cancelPreviewLines(p: CancelPreview): string[] {
 /** What supabase/functions/_shared/refund.ts works out for one cancellation. */
 export interface RefundPreview {
   /** "no-show-fee": the trial's no-show fee, given back in full. */
-  tier: "full" | "fee-only" | "pro-rata" | "credit" | "no-show-fee";
+  tier:
+    "withdrawal" | "full" | "fee-only" | "pro-rata" | "credit" | "no-show-fee";
   daysBeforeStart: number | null;
   lessonsRemaining: number;
   nonRefundableBani: number;
@@ -426,6 +433,8 @@ const RefundControl = ({
 };
 
 const REFUND_TIER_LABEL: Record<RefundPreview["tier"], string> = {
+  withdrawal:
+    "Retragere în primele 14 zile de la înscriere — totul înapoi, fără comision Stripe și fără taxă administrativă de anulare",
   full: "Anulare cu 7+ zile înainte de start — totul înapoi, minus comisionul Stripe",
   "fee-only":
     "Anulare sub 7 zile, cursul nu a început — totul înapoi, minus comisionul Stripe",

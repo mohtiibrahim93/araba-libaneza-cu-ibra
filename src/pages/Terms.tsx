@@ -4,7 +4,9 @@ import Footer from "@/components/Footer";
 import { refundRulesFromLabel } from "@/lib/refundRules";
 
 // Section 4 holds the refund rules of 14 November 2026, for sign-ups made
-// from the day below; section 4.1 keeps the rules of 8 November word for word
+// from the day below, and the 14-day right of withdrawal (written in on the
+// owner's word of 16 Nov 2026; refund.ts applies it, WITHDRAWAL_DAYS).
+// Section 4.1 keeps the rules of 8 November word for word
 // for everyone enrolled before it (owner: "students already enrolled keep the
 // Terms and prices they signed up under"). The day comes from the same
 // constant the refund arithmetic uses, so the two cannot disagree.
@@ -31,6 +33,7 @@ const content = {
         "4. Anulare și rambursare",
         [
           `Cui se aplică: regulile de mai jos se aplică înscrierilor făcute începând cu ${FROM.ro}. Dacă te-ai înscris înainte de această dată, pentru tine rămân valabile regulile și prețurile de la data înscrierii tale (secțiunea 4.1). Orice rambursare se calculează din ce ai plătit tu la înscriere, nu din lista de prețuri de acum.`,
+          "Dreptul legal de retragere (14 zile): dacă te-ai înscris și ai plătit online, ai dreptul să te retragi din contract în 14 zile de la data înscrierii, fără să dai un motiv (OUG nr. 34/2014). Ne anunți printr-o declarație clară, pe email la marhaba@centruldearabalibaneza.com, și îți confirmăm primirea pe email, cu data și ora. Îți returnăm toate sumele plătite, în cel mult 14 zile de la data la care ne-ai anunțat, prin aceeași metodă de plată, fără comision de procesare și fără taxă administrativă de anulare. Dacă ai cerut expres ca lecțiile să înceapă înainte să treacă cele 14 zile și te retragi după ce cursul a început, plătești doar lecțiile ținute până la data retragerii, proporțional cu prețul total al cursului. După cele 14 zile se aplică regulile de anulare de mai jos.",
           "Cu cel puțin 7 zile înainte de începerea cursului: primești înapoi tot ce ai plătit, minus doar comisionul de procesare reținut de Stripe.",
           "Cu mai puțin de 7 zile înainte de începere și până la a doua lecție inclusiv: se rețin lecțiile deja ținute (proporțional din ce ai plătit) și comisionul de procesare Stripe, iar restul se returnează. Prima lecție funcționează ca lecție de test: dacă ritmul sau stilul nu ți se potrivesc, plătești doar acea lecție.",
           "După a doua lecție, luna în curs: nu se mai rambursează în bani. Valoarea lecțiilor rămase din acea lună devine credit (vezi „Credit”). Lunile anterioare nu se rambursează.",
@@ -110,6 +113,7 @@ const content = {
         "4. Cancellation and refund",
         [
           `Who this applies to: the rules below apply to sign-ups made from ${FROM.en}. If you signed up before that date, the rules and prices of your sign-up date still apply to you (section 4.1). Every refund is calculated from what you paid when you signed up, not from today's price list.`,
+          "Legal right of withdrawal (14 days): if you signed up and paid online, you have the right to withdraw from the contract within 14 days of signing up, without giving a reason (Government Emergency Ordinance 34/2014). You tell us with a clear statement, by email to marhaba@centruldearabalibaneza.com, and we confirm receipt by email, with the date and time. We refund everything you paid within 14 days of the day you told us, by the same payment method, with no processing fee and no administrative cancellation fee kept. If you expressly asked for lessons to begin before the 14 days were over and you withdraw after the course has started, you pay only for the lessons held up to the withdrawal date, in proportion to the total price of the course. After the 14 days, the cancellation rules below apply.",
           "At least 7 days before the course starts: you get back everything you paid, minus only the processing fee kept by Stripe.",
           "Less than 7 days before the start, up to and including the second lesson: the lessons already held (pro rata from what you paid) and the Stripe processing fee are kept, and the rest is refunded. The first lesson works as a test lesson: if the pace or style does not suit you, you pay only for that lesson.",
           "After the second lesson, the month in progress: it is no longer refunded in money. The value of that month's remaining lessons becomes credit (see “Credit”). Earlier months are not refunded.",

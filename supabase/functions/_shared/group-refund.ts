@@ -26,7 +26,7 @@
 //   after lesson 1: 7 not held, 500 x 7/8 = 437.50 → 427.50 back
 //   after lesson 3: 5 not held → 312.50 credit, nothing back in money
 
-import { FULL_REFUND_DAYS, TEST_LESSONS } from "./refund.ts";
+import { FULL_REFUND_DAYS, TEST_LESSONS, withinWithdrawal } from "./refund.ts";
 
 export const BUCHAREST_TZ = "Europe/Bucharest";
 
@@ -57,9 +57,19 @@ export interface GroupCancelInput {
   currentPeriodEnd?: string | null;
   /** When the cancellation is made, ISO. Defaults to now. */
   cancelledAt?: string | null;
+  /** When the sign-up was made, ISO: the withdrawal period counts from it. */
+  signedUpAt?: string | null;
+  /** Days of the right of withdrawal; omit or 0 under the earlier Terms. */
+  withdrawalDays?: number | null;
+  /**
+   * The student expressly asked for lessons to begin inside the withdrawal
+   * period, so the lessons held are kept. Nothing records that yet.
+   */
+  startedAtRequest?: boolean | null;
 }
 
 export type GroupCancelCase =
+  | "withdrawal"
   | "before_start_full"
   | "before_start_fee"
   | "current_month"
@@ -169,6 +179,49 @@ export function computeGroupCancelRefund(
     refunds: [] as GroupRefundLine[],
   };
   if (charges.length === 0) return { case: "nothing_paid", ...empty };
+
+  // The right of withdrawal (Terms, section 4; refund.ts) comes first: inside
+  // its 14 days everything paid goes back, with no Stripe fee kept. Lessons
+  // held are kept only when the student expressly asked to start early.
+  if (withinWithdrawal(input.signedUpAt, cancelledAt, input.withdrawalDays)) {
+    const latest = charges[charges.length - 1]!;
+    const times = input.sessionStarts
+      .map((s) => Date.parse(s))
+      .filter((t) => Number.isFinite(t));
+    const from = Date.parse(latest.chargedAt);
+    const to = Date.parse(
+      input.currentPeriodEnd && Date.parse(input.currentPeriodEnd) > from
+        ? input.currentPeriodEnd
+        : addOneMonth(latest.chargedAt),
+    );
+    const inMonth = times.filter((t) => t >= from && t < to);
+    const held = inMonth.filter((t) => t <= cancelMs).length;
+    const kept =
+      input.startedAtRequest && inMonth.length > 0
+        ? Math.round((remaining(latest) * held) / inMonth.length)
+        : 0;
+    const refunds: GroupRefundLine[] = [];
+    let charged = 0;
+    for (const c of charges) {
+      const amount = remaining(c);
+      if (amount <= 0) continue;
+      charged += amount;
+      const back = c === latest ? amount - kept : amount;
+      if (back > 0) refunds.push({ paymentId: c.paymentId, amountBani: back });
+    }
+    return {
+      ...empty,
+      case: "withdrawal",
+      courseLessonsHeld: times.filter((t) => t <= cancelMs).length,
+      lessonsInMonth: inMonth.length,
+      lessonsHeld: held,
+      lessonsNotHeld: inMonth.length - held,
+      chargedBani: charged,
+      eligibleBani: charged - kept,
+      refundBani: charged - kept,
+      refunds,
+    };
+  }
 
   // Before the start: nothing has been held, everything paid comes back
   // minus what Stripe kept.

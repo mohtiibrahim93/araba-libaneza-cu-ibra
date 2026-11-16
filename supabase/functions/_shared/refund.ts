@@ -57,12 +57,34 @@ export const CANCEL_FEE_RATE = 0.1;
  * null = not published yet: every sign-up is still on the rule of 8 November.
  * Set it in the same change that publishes section 4 of the Terms.
  *
- * 1 December 2026 (owner said "publish" on 16 November): a day ahead of the
- * text going live, never behind it. The Terms must be on the live site
- * BEFORE this day; if they are not, move the day forward first, or sign-ups
- * made under the earlier Terms would be treated by rules they never saw.
+ * 16 November 2026: the day the owner approved the text; he wants the rules
+ * in force at once, not on a later date. They can only bind someone who
+ * could read them, so if the site is published on a later day than this,
+ * set this to that day in the change that goes live: a sign-up made while
+ * the earlier Terms were still the ones on the site must not be treated by
+ * rules it never saw.
  */
-export const NEW_REFUND_RULES_FROM: string | null = "2026-12-01";
+export const NEW_REFUND_RULES_FROM: string | null = "2026-11-16";
+
+/** The calendar day in Bucharest of an instant, YYYY-MM-DD; null if unreadable. */
+function bucharestDay(iso: string | null | undefined): string | null {
+  if (!iso) return null;
+  const at = Date.parse(iso);
+  if (!Number.isFinite(at)) return null;
+  // en-CA formats as YYYY-MM-DD, so two days compare as text.
+  return new Intl.DateTimeFormat("en-CA", {
+    timeZone: "Europe/Bucharest",
+  }).format(new Date(at));
+}
+
+/** Whether a sign-up was made under the Terms of 14 November 2026. */
+export function underNewRefundRules(
+  signedUpAt: string | null | undefined,
+  rulesFrom: string | null = NEW_REFUND_RULES_FROM,
+): boolean {
+  const day = bucharestDay(signedUpAt);
+  return Boolean(rulesFrom && day && day >= rulesFrom);
+}
 
 /**
  * The share kept as "taxă administrativă de anulare" for a sign-up made at
@@ -72,14 +94,45 @@ export function cancelFeeRateFor(
   signedUpAt: string | null | undefined,
   rulesFrom: string | null = NEW_REFUND_RULES_FROM,
 ): number {
-  if (!rulesFrom || !signedUpAt) return 0;
-  const at = Date.parse(signedUpAt);
-  if (!Number.isFinite(at)) return 0;
-  // en-CA formats as YYYY-MM-DD, so the two dates compare as text.
-  const day = new Intl.DateTimeFormat("en-CA", {
-    timeZone: "Europe/Bucharest",
-  }).format(new Date(at));
-  return day >= rulesFrom ? CANCEL_FEE_RATE : 0;
+  return underNewRefundRules(signedUpAt, rulesFrom) ? CANCEL_FEE_RATE : 0;
+}
+
+/**
+ * The legal right of withdrawal the Terms state (section 4, OUG 34/2014;
+ * written into the Terms on the owner's word, 16 November 2026): within 14
+ * days of signing up online the student may withdraw without a reason and
+ * gets back everything paid, with no Stripe fee and no taxă administrativă
+ * de anulare kept. Lessons already held are kept only when the student
+ * expressly asked for them to begin inside those 14 days.
+ */
+export const WITHDRAWAL_DAYS = 14;
+
+/** The days of that right for a sign-up: 14 under the new Terms, 0 before. */
+export function withdrawalDaysFor(
+  signedUpAt: string | null | undefined,
+  rulesFrom: string | null = NEW_REFUND_RULES_FROM,
+): number {
+  return underNewRefundRules(signedUpAt, rulesFrom) ? WITHDRAWAL_DAYS : 0;
+}
+
+/**
+ * Whether a cancellation falls inside the withdrawal period: on or before
+ * the `days`-th calendar day (Bucharest) after the day of the sign-up.
+ */
+export function withinWithdrawal(
+  signedUpAt: string | null | undefined,
+  cancelledAt: string | null | undefined,
+  days: number | null | undefined,
+): boolean {
+  const from = bucharestDay(signedUpAt);
+  const on = bucharestDay(cancelledAt ?? new Date().toISOString());
+  if (!from || !on || !days || days <= 0) return false;
+  const utc = (d: string) => {
+    const [y = 0, m = 1, day = 1] = d.split("-").map(Number);
+    return Date.UTC(y, m - 1, day);
+  };
+  const passed = Math.round((utc(on) - utc(from)) / 86_400_000);
+  return passed >= 0 && passed <= days;
 }
 
 /**
@@ -95,7 +148,8 @@ export const COURSE_LESSONS: Record<string, number> = {
   C2: 72,
 };
 
-export type RefundTier = "full" | "fee-only" | "pro-rata" | "credit";
+export type RefundTier =
+  "withdrawal" | "full" | "fee-only" | "pro-rata" | "credit";
 
 export interface RefundInput {
   /** What the student actually paid, in bani (RON x100). */
@@ -121,6 +175,19 @@ export interface RefundInput {
    * earlier Terms.
    */
   cancelFeeRate?: number | null;
+  /** When the sign-up was made, ISO: the day the withdrawal period counts from. */
+  signedUpAt?: string | null;
+  /**
+   * Days of the right of withdrawal (withdrawalDaysFor). Omit, or 0, for a
+   * sign-up made under the earlier Terms.
+   */
+  withdrawalDays?: number | null;
+  /**
+   * The student expressly asked for lessons to begin inside the withdrawal
+   * period, so the lessons held are kept. Nothing records such a request yet
+   * (the checkout has no box for it), so callers leave it false.
+   */
+  startedAtRequest?: boolean | null;
 }
 
 export interface RefundBreakdown {
@@ -182,11 +249,12 @@ export function computeRefund(input: RefundInput): RefundBreakdown {
     nonRefundableBani: number,
     creditBani: number,
     cancelFeeRate = 0,
+    keepStripeFee = true,
   ): RefundBreakdown => {
     const back = Math.max(0, paid - nonRefundableBani - creditBani);
     const cancelFeeBani = round(back * clamp(cancelFeeRate, 0, 1));
     const afterCancelFee = back - cancelFeeBani;
-    const feeBani = Math.min(stripeFee, afterCancelFee);
+    const feeBani = keepStripeFee ? Math.min(stripeFee, afterCancelFee) : 0;
     return {
       tier,
       daysBeforeStart,
@@ -200,6 +268,19 @@ export function computeRefund(input: RefundInput): RefundBreakdown {
       refundBani: afterCancelFee - feeBani,
     };
   };
+
+  // The right of withdrawal comes before every other rule: inside its 14
+  // days everything paid goes back, with no fee of any kind kept.
+  if (
+    withinWithdrawal(input.signedUpAt, input.cancelledAt, input.withdrawalDays)
+  )
+    return finish(
+      "withdrawal",
+      input.startedAtRequest ? valueOf(taken) : 0,
+      0,
+      0,
+      false,
+    );
 
   if (daysBeforeStart !== null && daysBeforeStart >= FULL_REFUND_DAYS)
     return finish("full", 0, 0);

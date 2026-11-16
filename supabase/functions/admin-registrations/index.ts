@@ -25,6 +25,7 @@ import {
   cancelFeeRateFor,
   computeRefund,
   formatBani,
+  withdrawalDaysFor,
   type RefundBreakdown,
 } from "../_shared/refund.ts";
 
@@ -351,6 +352,14 @@ async function refundInputsFor(
       // The 10% on months not started is for sign-ups made from the day the
       // new Terms are published; anyone enrolled before keeps their rule.
       cancelFeeRate: cancelFeeRateFor(
+        typeof reg.created_at === "string" ? reg.created_at : null,
+      ),
+      // The right of withdrawal the Terms state: inside 14 days of the
+      // sign-up everything goes back, with no Stripe fee kept. Lessons held
+      // would be kept only on the student's express request to start early,
+      // which nothing records yet (startedAtRequest stays unset).
+      signedUpAt: typeof reg.created_at === "string" ? reg.created_at : null,
+      withdrawalDays: withdrawalDaysFor(
         typeof reg.created_at === "string" ? reg.created_at : null,
       ),
     }),
@@ -5759,7 +5768,7 @@ Deno.serve(async (req) => {
       const { data: reg, error: regError } = await supabase
         .from("registrations")
         .select(
-          "id, form_type, cohort_id, stripe_subscription_id, subscription_status, canceled_at",
+          "id, created_at, form_type, cohort_id, stripe_subscription_id, subscription_status, canceled_at",
         )
         .eq("id", id)
         .maybeSingle();
@@ -5856,6 +5865,9 @@ Deno.serve(async (req) => {
         currentPeriodEnd: periodEndUnix
           ? new Date(periodEndUnix * 1000).toISOString()
           : null,
+        // The right of withdrawal the Terms state, for sign-ups under them.
+        signedUpAt: reg.created_at ?? null,
+        withdrawalDays: withdrawalDaysFor(reg.created_at ?? null),
       });
       // After the start the month's lessons decide the amount; with no
       // lessons known (the calendar not synced) the refund would read 0

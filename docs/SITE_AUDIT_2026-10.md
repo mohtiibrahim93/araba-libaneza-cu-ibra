@@ -130,16 +130,27 @@ re-checked on 26 Oct against main and the live site.
   PUBLISHED IN THE CODE 16 Nov (owner: "okay do it. the terms"), not live
   until Lovable publishes: section 4 of the Terms holds the new rules in
   Romanian and English, and section 4.1 keeps the rules of 8 November word
-  for word for everyone enrolled before. START DAY: 1 December 2026, a day
-  ahead of the text going live and never behind it, so no sign-up made under
-  the earlier Terms can fall under the new ones. THE TERMS MUST BE LIVE
-  BEFORE 1 DECEMBER; if they are not, move NEW_REFUND_RULES_FROM forward
-  first (the Terms, the price page and the checkout all read that one
-  constant). The sentence on /preturi and at the pay-in-full checkout shows
-  by itself from that day (src/lib/refundRules.ts).
-  Left out of the Terms on purpose, to be added when true: the Cancel button
-  in the account (not built; the Terms name email and the school), and the
-  14-day withdrawal paragraph (waits for the lawyer).
+  for word for everyone enrolled before. START DAY: 16 November 2026 (owner,
+  16 Nov: effective at once, not on a later date; it was 1 December for a
+  few hours). The rules can only bind someone who could read them, so ON THE
+  DAY THE SITE IS PUBLISHED, IF THAT DAY IS LATER, SET NEW_REFUND_RULES_FROM
+  TO IT FIRST (the Terms, the price page, the checkout and the refund all
+  read that one constant): a sign-up made while the earlier Terms were still
+  on the site must not be treated by rules it never saw. The sentence on
+  /preturi and at the pay-in-full checkout shows from that day
+  (src/lib/refundRules.ts).
+  THE 14-DAY RIGHT OF WITHDRAWAL is in section 4 on the owner's word of
+  16 Nov ("14 day withdrawal can be written"), and the admin applies it
+  (refund.ts WITHDRAWAL_DAYS, group-refund.ts case "withdrawal"): inside 14
+  days of the sign-up everything paid goes back, with no Stripe fee and no
+  10% kept. Lessons held would be kept only on the student's express request
+  to start early, and NOTHING RECORDS SUCH A REQUEST YET: the checkout has no
+  box for it, so until it has one a withdrawal inside 14 days returns
+  everything, lessons held included. The lawyer's questions are still open
+  (whether the right applies to courses at all; the wording of that box; the
+  withdrawal button OUG 18/2026 may ask for).
+  Left out of the Terms on purpose, to be added when true: the Cancel and
+  withdrawal buttons in the account (not built; the Terms name email).
   NOT BUILT: the credit balance with its reminder email 30 days before
   expiry; at expiry the admin shows a "refund now" button and nothing is
   refunded by itself (owner, 16 Nov); Cancel in the account with the
