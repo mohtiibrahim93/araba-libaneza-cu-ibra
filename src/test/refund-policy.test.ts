@@ -241,7 +241,8 @@ describe("new sign-ups: 10% kept from the months not started", () => {
       resolve(process.cwd(), "src/pages/Terms.tsx"),
       "utf8",
     );
-    const announced = /taxă administrativă de anulare/i.test(terms);
+    // "taxă" or, with the article, "taxa administrativă de anulare".
+    const announced = /tax[ăa] administrativă de anulare/i.test(terms);
     expect(NEW_REFUND_RULES_FROM !== null).toBe(announced);
   });
 

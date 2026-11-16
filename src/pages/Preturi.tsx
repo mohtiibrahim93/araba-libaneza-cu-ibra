@@ -24,6 +24,10 @@ import {
   physicalPrice,
 } from "@/lib/pricing";
 import type { LevelType } from "@/components/RegistrationForm/types";
+import {
+  PAID_IN_FULL_REFUND_NOTE,
+  newRefundRulesInForce,
+} from "@/lib/refundRules";
 
 /**
  * Every price in one place. The menu's "Prețuri" used to jump to the home
@@ -149,6 +153,18 @@ const PreturiPage = () => {
                 ? `Two 90-minute lessons a week. Pay monthly — it stops automatically at the end of the level — or pay the whole level upfront and get ${discountLabel(GROUP_FULL_COURSE_DISCOUNT)}.`
                 : `Două lecții de 90 de minute pe săptămână. Plătești lunar — plata se oprește automat la finalul nivelului — sau plătești tot nivelul în avans, cu ${discountLabel(GROUP_FULL_COURSE_DISCOUNT)}.`}
             </p>
+            {/* The paid-in-full refund rule, shown before payment (owner, 14
+                Nov 2026). Only from the day it applies: a sign-up made before
+                is on the earlier rules, with no 10% kept. */}
+            {newRefundRulesInForce() && (
+              <p className="mt-2 max-w-3xl text-sm text-muted-foreground">
+                {PAID_IN_FULL_REFUND_NOTE.prices[en ? "en" : "ro"]}{" "}
+                <Link to="/terms" className="underline hover:text-foreground">
+                  {PAID_IN_FULL_REFUND_NOTE.termsLink[en ? "en" : "ro"]}
+                </Link>
+                .
+              </p>
+            )}
             <div className={`${card} mt-6 hidden overflow-x-auto md:block`}>
               <table className="w-full min-w-[44rem] text-left text-[15px]">
                 <thead>

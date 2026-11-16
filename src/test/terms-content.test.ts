@@ -1,6 +1,12 @@
 import { describe, expect, it } from "vitest";
 import { readFileSync } from "node:fs";
 import { resolve } from "node:path";
+import { NEW_REFUND_RULES_FROM } from "../../supabase/functions/_shared/refund";
+import {
+  PAID_IN_FULL_REFUND_NOTE,
+  newRefundRulesInForce,
+  refundRulesFromLabel,
+} from "@/lib/refundRules";
 
 const terms = readFileSync(
   resolve(process.cwd(), "src/pages/Terms.tsx"),
@@ -35,7 +41,13 @@ describe("Terms: monthly group refunds", () => {
   it("carries the worked example of the refund policy", () => {
     // Owner's policy of 8 November 2026: lesson 1 is a test lesson,
     // after lesson 2 the month becomes credit or private lessons.
-    for (const figure of ["500 lei/lun", "8 lec", "437,50 lei", "312,50 lei", "150 lei"])
+    for (const figure of [
+      "500 lei/lun",
+      "8 lec",
+      "437,50 lei",
+      "312,50 lei",
+      "150 lei",
+    ])
       expect(terms).toContain(figure);
     for (const figure of [
       "500 lei/month",
@@ -63,5 +75,126 @@ describe("Terms: the trial no-show fee", () => {
     expect(terms).toContain("Taxa poate fi rambursată dacă o contești");
     expect(terms).toContain("150 lei is charged to the card");
     expect(terms).toContain("The fee may be refunded if you appeal it");
+  });
+});
+
+/**
+ * Owner's refund rules of 14 November 2026, published on his word of 16
+ * November. They are for sign-ups made from the day named in section 4; the
+ * rules of 8 November stay on the page, word for word, for everyone enrolled
+ * before ("students already enrolled keep the Terms and prices they signed
+ * up under").
+ */
+describe("Terms: refund rules for new sign-ups", () => {
+  const read = (p: string) => readFileSync(resolve(process.cwd(), p), "utf8");
+
+  it("names one start day, the one the refund arithmetic uses", () => {
+    expect(NEW_REFUND_RULES_FROM).toBe("2026-12-01");
+    expect(refundRulesFromLabel("ro")).toBe("1 decembrie 2026");
+    expect(refundRulesFromLabel("en")).toBe("1 December 2026");
+    // The page takes the day from that constant, never from typed text.
+    expect(terms).toContain(
+      "regulile de mai jos se aplică înscrierilor făcute începând cu ${FROM.ro}",
+    );
+    expect(terms).toContain(
+      "the rules below apply to sign-ups made from ${FROM.en}",
+    );
+    expect(terms).not.toMatch(/1 decembrie 2026|1 December 2026/);
+  });
+
+  it("states the new rules in Romanian", () => {
+    for (const text of [
+      "Orice rambursare se calculează din ce ai plătit tu la înscriere, nu din lista de prețuri de acum.",
+      "minus taxa administrativă de anulare de 10% și comisionul de procesare Stripe",
+      "Suma returnată nu poate fi mai mică de 0.",
+      "2 × 595 = 1.190 lei, minus 10% (119 lei) = 1.071 lei, minus comisionul Stripe.",
+      "După a doua lecție, luna în curs: nu se mai rambursează în bani.",
+      "Credit: este valabil 6 luni.",
+      "îl poți transfera altei persoane sau îl poți transforma în lecții private, la 150 lei lecția",
+      "Cu 30 de zile înainte de expirare îți trimitem un email de reamintire.",
+      "Ce rămâne nefolosit la expirare se returnează în bani, minus comisionul de procesare Stripe.",
+      "o lecție se consideră ținută chiar dacă ai lipsit",
+      "Lecții anulate de noi: se reprogramează sau se returnează în bani.",
+      "înainte de orice rambursare îți propunem mutarea într-o altă grupă de același nivel",
+      "Data anulării este data la care ai trimis emailul.",
+      "procesăm rambursarea în cel mult 14 zile de la anulare",
+    ])
+      expect(terms, text).toContain(text);
+  });
+
+  it("states the same rules in English", () => {
+    for (const text of [
+      "Every refund is calculated from what you paid when you signed up, not from today's price list.",
+      "minus the 10% administrative cancellation fee and the Stripe processing fee",
+      "The refund cannot be less than 0.",
+      "2 × 595 = 1,190 lei, minus 10% (119 lei) = 1,071 lei, minus the Stripe fee.",
+      "After the second lesson, the month in progress: it is no longer refunded in money.",
+      "Credit: it is valid for 6 months.",
+      "transfer it to another person, or turn it into private lessons at 150 lei each",
+      "We send a reminder email 30 days before it expires.",
+      "Anything unused at expiry is refunded in money, minus the Stripe processing fee.",
+      "a lesson counts as held even if you were absent",
+      "Lessons cancelled by us: they are rescheduled or refunded in money.",
+      "before any refund, we offer you a move to another group of the same level",
+      "The cancellation date is the day you sent the email.",
+      "we process the refund within 14 days of the cancellation",
+    ])
+      expect(terms, text).toContain(text);
+  });
+
+  it("keeps the earlier rules, word for word, for everyone enrolled before", () => {
+    expect(terms).toContain(
+      "`4.1 Reguli pentru înscrierile de dinainte de ${FROM.ro}`",
+    );
+    expect(terms).toContain("`4.1 Rules for sign-ups made before ${FROM.en}`");
+    // The one rule that differs: months not started came back in full.
+    expect(terms).toContain(
+      "care nu au început încă se returnează integral pe card, minus comisionul de procesare Stripe.",
+    );
+    expect(terms).toContain(
+      "that have not started yet are refunded in full to your card, minus the Stripe processing fee.",
+    );
+    // The other sections keep their numbers.
+    expect(terms).toContain('"5. Obligațiile cursantului"');
+    expect(terms).toContain('"10. Soluționarea litigiilor"');
+  });
+
+  it("calls the 10% by its one name, in the Terms and wherever it is announced", () => {
+    for (const file of [
+      "src/pages/Terms.tsx",
+      "src/pages/Preturi.tsx",
+      "src/pages/Checkout.tsx",
+      "src/lib/refundRules.ts",
+    ])
+      expect(read(file), file).not.toMatch(/penaliz|penalty|penalit/i);
+    expect(PAID_IN_FULL_REFUND_NOTE.prices.ro).toContain(
+      "taxă administrativă de anulare de 10%",
+    );
+    expect(PAID_IN_FULL_REFUND_NOTE.checkout.ro).toContain(
+      "taxa administrativă de anulare de 10%",
+    );
+  });
+
+  it("promises nothing that does not exist yet", () => {
+    // The Cancel button in the account is not built: the Terms name email and
+    // the school only. The 14-day withdrawal paragraph waits for the lawyer.
+    expect(terms).not.toMatch(/butonul „Anulează”|“Cancel” button/);
+    expect(terms).not.toMatch(
+      /34\/2014|drept(ul)? (legal )?de retragere|right of withdrawal/i,
+    );
+  });
+
+  it("shows the paid-in-full rule before payment, from the day it applies", () => {
+    expect(newRefundRulesInForce("2026-11-30")).toBe(false);
+    expect(newRefundRulesInForce("2026-12-01")).toBe(true);
+    expect(newRefundRulesInForce("2027-03-10")).toBe(true);
+    const prices = read("src/pages/Preturi.tsx");
+    expect(prices).toContain("newRefundRulesInForce() &&");
+    expect(prices).toContain("PAID_IN_FULL_REFUND_NOTE.prices");
+    const checkout = read("src/pages/Checkout.tsx");
+    expect(checkout).toContain("newRefundRulesInForce() &&");
+    expect(checkout).toContain("PAID_IN_FULL_REFUND_NOTE.checkout");
+    // At the checkout it is for a course paid in full only.
+    expect(checkout).toMatch(/!isSubscription &&\s+newRefundRulesInForce\(\)/);
   });
 });

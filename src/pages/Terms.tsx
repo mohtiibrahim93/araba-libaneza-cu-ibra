@@ -1,6 +1,14 @@
 import { useI18n } from "@/lib/i18n";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
+import { refundRulesFromLabel } from "@/lib/refundRules";
+
+// Section 4 holds the refund rules of 14 November 2026, for sign-ups made
+// from the day below; section 4.1 keeps the rules of 8 November word for word
+// for everyone enrolled before it (owner: "students already enrolled keep the
+// Terms and prices they signed up under"). The day comes from the same
+// constant the refund arithmetic uses, so the two cannot disagree.
+const FROM = { ro: refundRulesFromLabel("ro"), en: refundRulesFromLabel("en") };
 
 const content = {
   ro: {
@@ -22,13 +30,31 @@ const content = {
       [
         "4. Anulare și rambursare",
         [
+          `Cui se aplică: regulile de mai jos se aplică înscrierilor făcute începând cu ${FROM.ro}. Dacă te-ai înscris înainte de această dată, pentru tine rămân valabile regulile și prețurile de la data înscrierii tale (secțiunea 4.1). Orice rambursare se calculează din ce ai plătit tu la înscriere, nu din lista de prețuri de acum.`,
+          "Cu cel puțin 7 zile înainte de începerea cursului: primești înapoi tot ce ai plătit, minus doar comisionul de procesare reținut de Stripe.",
+          "Cu mai puțin de 7 zile înainte de începere și până la a doua lecție inclusiv: se rețin lecțiile deja ținute (proporțional din ce ai plătit) și comisionul de procesare Stripe, iar restul se returnează. Prima lecție funcționează ca lecție de test: dacă ritmul sau stilul nu ți se potrivesc, plătești doar acea lecție.",
+          "După a doua lecție, luna în curs: nu se mai rambursează în bani. Valoarea lecțiilor rămase din acea lună devine credit (vezi „Credit”). Lunile anterioare nu se rambursează.",
+          "Curs plătit integral (cu 15% reducere), lunile care nu au început: se returnează la prețul lunar redus (totalul plătit împărțit la numărul de luni ale cursului), minus taxa administrativă de anulare de 10% și comisionul de procesare Stripe. Suma returnată nu poate fi mai mică de 0. Exemplu: A1 fizic, 2.380 lei plătiți (595 lei pe lună). Renunți după 2 luni: 2 × 595 = 1.190 lei, minus 10% (119 lei) = 1.071 lei, minus comisionul Stripe.",
+          "Plată lunară (abonament): anularea oprește întotdeauna toate plățile lunare viitoare. Lunile anterioare nu se rambursează.",
+          "Exemplu, plată lunară: 500 lei pe lună, 8 lecții pe lună (62,50 lei pe lecție). Anulezi cu 10 zile înainte de start: primești 500 lei, minus comisionul Stripe. Renunți după prima lecție: 500 − 62,50 = 437,50 lei, minus comisionul Stripe. Renunți după a treia lecție: luna nu se mai rambursează în bani, iar cele 5 lecții rămase (312,50 lei) devin credit.",
+          "Credit: este valabil 6 luni. Îl poți folosi într-o grupă viitoare, îl poți transfera altei persoane sau îl poți transforma în lecții private, la 150 lei lecția. Cu 30 de zile înainte de expirare îți trimitem un email de reamintire. Ce rămâne nefolosit la expirare se returnează în bani, minus comisionul de procesare Stripe.",
+          "Absențe: o lecție se consideră ținută chiar dacă ai lipsit, cu excepția situațiilor deosebite acceptate de noi. Excepțiile pentru boală sau alte motive serioase se decid de la caz la caz.",
+          "Lecții anulate de noi: se reprogramează sau se returnează în bani.",
+          "Mutare în altă grupă: înainte de orice rambursare îți propunem mutarea într-o altă grupă de același nivel.",
+          "Cum anulezi: printr-un email la marhaba@centruldearabalibaneza.com sau prin noi, cu confirmarea ta scrisă. Data anulării este data la care ai trimis emailul.",
+          "Termen: procesăm rambursarea în cel mult 14 zile de la anulare. Cât durează până apar banii în cont depinde de banca ta.",
+          "Lecția de probă gratuită: proba costă 0 lei, iar cardul se salvează la programare fără să se încaseze nimic. O poți anula sau reprograma gratuit cu cel puțin 24 de ore înainte. Dacă nu te prezinți sau anulezi cu mai puțin de 24 de ore înainte, se încasează de pe card 150 lei, cât o lecție privată. Taxa poate fi rambursată dacă o contești și explici motivul; decidem caz cu caz.",
+        ],
+      ],
+      [
+        `4.1 Reguli pentru înscrierile de dinainte de ${FROM.ro}`,
+        [
           "Cu cel puțin 7 zile înainte de începerea cursului: primești înapoi tot ce ai plătit, minus doar comisionul de procesare reținut de Stripe.",
           "Cu mai puțin de 7 zile înainte de începere și până la finalul primei săptămâni (primele două lecții): se reține contravaloarea lecțiilor deja ținute (proporțional din taxa lunară) și comisionul de procesare Stripe, iar restul lunii se returnează pe card. Prima lecție funcționează ca lecție de test: dacă ritmul sau stilul nu ți se potrivesc, plătești doar acea lecție.",
           "După lecția a doua (din a doua săptămână): luna în curs nu se mai rambursează în bani. Valoarea lecțiilor rămase din acea lună o poți păstra ca credit valabil 6 luni pentru o altă grupă sau un modul următor, sau o poți transforma în lecții private 1:1, la prețul unei lecții private (150 lei). Lunile anterioare nu se rambursează.",
           "Lunile viitoare plătite în avans (sau restul cursului plătit integral) care nu au început încă se returnează integral pe card, minus comisionul de procesare Stripe.",
           "Exemplu: 500 lei/lună, 8 lecții pe lună (62,50 lei pe lecție). Anulezi cu 10 zile înainte de start: primești 500 lei minus comisionul Stripe. Renunți după prima lecție: primești 500 − 62,50 = 437,50 lei, minus comisionul Stripe. Renunți după a treia lecție: luna nu se rambursează, dar cele 5 lecții rămase (312,50 lei) devin credit sau 2 lecții private (300 lei), iar diferența rămâne credit.",
           "Grupe cu plată lunară (abonament): anularea oprește întotdeauna toate plățile lunare viitoare.",
-          "Lecția de probă gratuită: proba costă 0 lei, iar cardul se salvează la programare fără să se încaseze nimic. O poți anula sau reprograma gratuit cu cel puțin 24 de ore înainte. Dacă nu te prezinți sau anulezi cu mai puțin de 24 de ore înainte, se încasează de pe card 150 lei, cât o lecție privată. Taxa poate fi rambursată dacă o contești și explici motivul; decidem caz cu caz.",
         ],
       ],
       [
@@ -83,13 +109,31 @@ const content = {
       [
         "4. Cancellation and refund",
         [
+          `Who this applies to: the rules below apply to sign-ups made from ${FROM.en}. If you signed up before that date, the rules and prices of your sign-up date still apply to you (section 4.1). Every refund is calculated from what you paid when you signed up, not from today's price list.`,
+          "At least 7 days before the course starts: you get back everything you paid, minus only the processing fee kept by Stripe.",
+          "Less than 7 days before the start, up to and including the second lesson: the lessons already held (pro rata from what you paid) and the Stripe processing fee are kept, and the rest is refunded. The first lesson works as a test lesson: if the pace or style does not suit you, you pay only for that lesson.",
+          "After the second lesson, the month in progress: it is no longer refunded in money. The value of that month's remaining lessons becomes credit (see “Credit”). Earlier months are not refunded.",
+          "Course paid in full (15% discount), months not started: they are refunded at the discounted monthly price (the total paid divided by the number of months in the course), minus the 10% administrative cancellation fee and the Stripe processing fee. The refund cannot be less than 0. Example: A1 in person, 2,380 lei paid (595 lei a month). You leave after 2 months: 2 × 595 = 1,190 lei, minus 10% (119 lei) = 1,071 lei, minus the Stripe fee.",
+          "Monthly payment (subscription): cancelling always stops all future monthly charges. Earlier months are not refunded.",
+          "Example, monthly payment: 500 lei a month, 8 lessons a month (62.50 lei a lesson). You cancel 10 days before the start: you get 500 lei back, minus the Stripe fee. You leave after the first lesson: 500 − 62.50 = 437.50 lei, minus the Stripe fee. You leave after the third lesson: the month is no longer refunded in money, and the 5 remaining lessons (312.50 lei) become credit.",
+          "Credit: it is valid for 6 months. You can use it in a later group, transfer it to another person, or turn it into private lessons at 150 lei each. We send a reminder email 30 days before it expires. Anything unused at expiry is refunded in money, minus the Stripe processing fee.",
+          "Absences: a lesson counts as held even if you were absent, except in special situations that we accept. Exceptions for illness or other serious reasons are decided case by case.",
+          "Lessons cancelled by us: they are rescheduled or refunded in money.",
+          "Moving to another group: before any refund, we offer you a move to another group of the same level.",
+          "How to cancel: by email to marhaba@centruldearabalibaneza.com, or through us, with your written confirmation. The cancellation date is the day you sent the email.",
+          "Timing: we process the refund within 14 days of the cancellation. How long the money takes to appear depends on your bank.",
+          "Free trial lesson: the trial costs 0 lei, and your card is saved when you book without anything being charged. You can cancel or reschedule free of charge at least 24 hours ahead. If you do not show up, or cancel less than 24 hours ahead, 150 lei is charged to the card, the price of a private lesson. The fee may be refunded if you appeal it and explain why; we decide case by case.",
+        ],
+      ],
+      [
+        `4.1 Rules for sign-ups made before ${FROM.en}`,
+        [
           "At least 7 days before the course starts: you get back everything you paid, minus only the processing fee kept by Stripe.",
           "Less than 7 days before the start and until the end of the first week (the first two lessons): the lessons already held are kept (pro rata from the monthly fee) together with the Stripe processing fee, and the rest of the month is refunded to your card. The first lesson works as a test lesson: if the pace or style does not suit you, you pay only for that lesson.",
           "After the second lesson (from the second week): the current month is no longer refunded in money. You can keep the value of that month's remaining lessons as credit, valid for 6 months, for another group or the next module, or turn it into private 1:1 lessons at the price of a private lesson (150 lei). Earlier months are not refunded.",
           "Future months paid in advance (or the rest of a course paid in full) that have not started yet are refunded in full to your card, minus the Stripe processing fee.",
           "Example: 500 lei/month, 8 lessons a month (62.50 lei a lesson). You cancel 10 days before the start: you get 500 lei back, minus the Stripe fee. You leave after the first lesson: you get 500 − 62.50 = 437.50 lei, minus the Stripe fee. You leave after the third lesson: the month is not refunded, but the 5 remaining lessons (312.50 lei) become credit or 2 private lessons (300 lei), with the difference kept as credit.",
           "Groups paid monthly (subscription): cancelling always stops all future monthly charges.",
-          "Free trial lesson: the trial costs 0 lei, and your card is saved when you book without anything being charged. You can cancel or reschedule free of charge at least 24 hours ahead. If you do not show up, or cancel less than 24 hours ahead, 150 lei is charged to the card, the price of a private lesson. The fee may be refunded if you appeal it and explain why; we decide case by case.",
         ],
       ],
       [

@@ -124,16 +124,29 @@ re-checked on 26 Oct against main and the live site.
   the unused lessons of the month in progress become credit, which is what
   is live today. The other option, money back minus lessons held, minus
   10%, minus the Stripe fee, may come back later.
-  BUILT 16 Nov, switched off: the 10% on months not started
-  (_shared/refund.ts, cancelFeeRateFor; the admin's refund preview shows it).
-  It starts on NEW_REFUND_RULES_FROM, which is null until section 4 of the
-  Terms is published; set the day in the same change that publishes the
-  text (a test ties the two together).
-  NOT BUILT: section 4 on the site (waits for the owner's word on the
-  text), the sentence on /preturi and at the pay-in-full checkout, the
-  credit balance with its reminder and its refund at expiry, Cancel in the
-  account with the transfer offered first, and the mark for an absence with
-  an extenuating circumstance.
+  BUILT 16 Nov: the 10% on months not started (_shared/refund.ts,
+  cancelFeeRateFor; the admin's refund preview shows it), for sign-ups made
+  from NEW_REFUND_RULES_FROM.
+  PUBLISHED IN THE CODE 16 Nov (owner: "okay do it. the terms"), not live
+  until Lovable publishes: section 4 of the Terms holds the new rules in
+  Romanian and English, and section 4.1 keeps the rules of 8 November word
+  for word for everyone enrolled before. START DAY: 1 December 2026, a day
+  ahead of the text going live and never behind it, so no sign-up made under
+  the earlier Terms can fall under the new ones. THE TERMS MUST BE LIVE
+  BEFORE 1 DECEMBER; if they are not, move NEW_REFUND_RULES_FROM forward
+  first (the Terms, the price page and the checkout all read that one
+  constant). The sentence on /preturi and at the pay-in-full checkout shows
+  by itself from that day (src/lib/refundRules.ts).
+  Left out of the Terms on purpose, to be added when true: the Cancel button
+  in the account (not built; the Terms name email and the school), and the
+  14-day withdrawal paragraph (waits for the lawyer).
+  NOT BUILT: the credit balance with its reminder email 30 days before
+  expiry; at expiry the admin shows a "refund now" button and nothing is
+  refunded by itself (owner, 16 Nov); Cancel in the account with the
+  transfer offered first; the mark for an absence with an extenuating
+  circumstance. The reminder and the expiry refund are promised in the
+  Terms, so they have to exist before the first credit under the new rules
+  is five months old.
   Drafted on 15 Nov as a document for the owner and his lawyer
   (not in this repository): the new section 4 in Romanian and English, the
   texts for /preturi and the checkout, and a paragraph on the 14-day

@@ -56,8 +56,13 @@ export const CANCEL_FEE_RATE = 0.1;
  * that day; a student enrolled before keeps the rules they signed up under.
  * null = not published yet: every sign-up is still on the rule of 8 November.
  * Set it in the same change that publishes section 4 of the Terms.
+ *
+ * 1 December 2026 (owner said "publish" on 16 November): a day ahead of the
+ * text going live, never behind it. The Terms must be on the live site
+ * BEFORE this day; if they are not, move the day forward first, or sign-ups
+ * made under the earlier Terms would be treated by rules they never saw.
  */
-export const NEW_REFUND_RULES_FROM: string | null = null;
+export const NEW_REFUND_RULES_FROM: string | null = "2026-12-01";
 
 /**
  * The share kept as "taxă administrativă de anulare" for a sign-up made at

@@ -18,6 +18,10 @@ import { Button } from "@/components/ui/button";
 import { Loader2, ArrowLeft, CheckCircle2, AlertTriangle } from "lucide-react";
 import { toast } from "sonner";
 import { trackCheckoutStart } from "@/lib/tracking";
+import {
+  PAID_IN_FULL_REFUND_NOTE,
+  newRefundRulesInForce,
+} from "@/lib/refundRules";
 
 type CourseType = "group" | "private" | "kids";
 
@@ -242,6 +246,15 @@ const PaymentForm = ({
         </div>
       )}
       <PaymentElement />
+      {/* A course paid in full: the refund rule, said before the payment
+          (owner, 14 Nov 2026), from the day it applies to new sign-ups. */}
+      {(courseType === "group" || courseType === "kids") &&
+        !isSubscription &&
+        newRefundRulesInForce() && (
+          <p className="text-xs text-muted-foreground">
+            {PAID_IN_FULL_REFUND_NOTE.checkout[english ? "en" : "ro"]}
+          </p>
+        )}
       <Button
         type="submit"
         className="w-full"
