@@ -151,13 +151,24 @@ re-checked on 26 Oct against main and the live site.
   withdrawal button OUG 18/2026 may ask for).
   Left out of the Terms on purpose, to be added when true: the Cancel and
   withdrawal buttons in the account (not built; the Terms name email).
-  NOT BUILT: the credit balance with its reminder email 30 days before
-  expiry; at expiry the admin shows a "refund now" button and nothing is
-  refunded by itself (owner, 16 Nov); Cancel in the account with the
-  transfer offered first; the mark for an absence with an extenuating
-  circumstance. The reminder and the expiry refund are promised in the
-  Terms, so they have to exist before the first credit under the new rules
-  is five months old.
+  CREDIT, BUILT 16 Nov, not live (owner approved the two tables the same
+  day; they exist in the database, server-only: student_credits and
+  student_credit_uses, migration 20261116120000, written to run again
+  without harm). Rules in _shared/credit.ts: six calendar months, what is
+  left = amount minus uses. Admin: Cursanți › Credite (list, add by hand,
+  record a use, pass part of it to another person with the same last day,
+  "Returnează acum" with the sum shown first; back to the card it came
+  from, minus the Stripe fee kept once per payment, or recorded as returned
+  by hand). Nothing is returned by itself (owner, 16 Nov: "refund now
+  button"). A cancellation in the admin that leaves credit writes it by
+  itself, once per sign-up. The student sees it in "Contul meu".
+  NOT BUILT: the reminder email 30 days before expiry (the text has to be
+  shown to the owner first; credit.ts already says when it is due:
+  reminderDue). It is promised in the Terms, so it has to exist before the
+  first credit under the new rules is five months old. Also not built:
+  Cancel in the account with the transfer offered first; the mark for an
+  absence with an extenuating circumstance; the box at checkout for
+  starting lessons inside the 14 days.
   Drafted on 15 Nov as a document for the owner and his lawyer
   (not in this repository): the new section 4 in Romanian and English, the
   texts for /preturi and the checkout, and a paragraph on the 14-day

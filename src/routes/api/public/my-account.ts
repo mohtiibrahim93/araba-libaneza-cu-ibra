@@ -1,7 +1,9 @@
 import { createFileRoute } from "@tanstack/react-router";
 import {
   buildAccount,
+  buildCredits,
   type AccountCohortRow,
+  type AccountCreditRow,
   type AccountRegistrationRow,
 } from "@/lib/myAccount";
 
@@ -106,11 +108,35 @@ export const Route = createFileRoute("/api/public/my-account")({
         if (bookingError)
           console.error("[my-account] booking lookup failed", bookingError);
 
+        // The student's credit (Terms, section 4): the one held under this
+        // address. The tables are newer than the generated types, hence the
+        // untyped handle; only the server can read them at all.
+        const { data: credits, error: creditError } = await (
+          supabaseAdmin as unknown as {
+            from: (table: string) => {
+              select: (columns: string) => {
+                ilike: (
+                  column: string,
+                  value: string,
+                ) => Promise<{ data: unknown; error: unknown }>;
+              };
+            };
+          }
+        )
+          .from("student_credits")
+          .select(
+            "id,amount_lei,origin,created_at,expires_at,refund_at_expiry,reminder_sent_at,student_credit_uses(kind,amount_lei)",
+          )
+          .ilike("holder_email", address);
+        if (creditError)
+          console.error("[my-account] credit lookup failed", creditError);
+
         return Response.json(
           {
             email,
             enrolments: buildAccount(rows, cohorts),
             bookings: bookings ?? [],
+            credits: buildCredits((credits ?? []) as AccountCreditRow[]),
           },
           { headers: noStore },
         );

@@ -18,6 +18,11 @@ import {
   type MonthPaymentRefusal,
 } from "../../supabase/functions/_shared/month-payment";
 import { groupMonthsFor } from "../../supabase/functions/_shared/prices";
+import {
+  creditState,
+  type CreditRow,
+  type CreditUseRow,
+} from "../../supabase/functions/_shared/credit";
 
 export type Lang = "ro" | "en";
 
@@ -237,6 +242,60 @@ export function buildAccount(
         Number(a.left) - Number(b.left) ||
         Date.parse(b.signedUpAt) - Date.parse(a.signedUpAt),
     );
+}
+
+// ---------------------------------------------------------------------------
+// Credit (Terms, section 4)
+// ---------------------------------------------------------------------------
+
+/** A student_credits row with its uses, as the server reads it. */
+export interface AccountCreditRow extends CreditRow {
+  id: string;
+  origin: string;
+  student_credit_uses: CreditUseRow[] | null;
+}
+
+export interface AccountCredit {
+  id: string;
+  remainingLei: number;
+  amountLei: number;
+  /** When it runs out, ISO. */
+  expiresAt: string;
+  /** Still usable, or expired with the rest owed back in money. */
+  status: "active" | "refund_due";
+  daysLeft: number;
+  /** Whole private lessons the rest would pay for. */
+  privateLessons: number;
+}
+
+/**
+ * The credit a student still has: usable, or expired and owed back in money.
+ * Credit that is used up, or that ended under the earlier Terms, is left
+ * out; so are where it came from and every internal detail (the card
+ * payment, notes, who recorded it).
+ */
+export function buildCredits(
+  rows: AccountCreditRow[],
+  now: Date = new Date(),
+): AccountCredit[] {
+  return rows
+    .map((row) => {
+      const state = creditState(row, row.student_credit_uses ?? [], now);
+      return { row, state };
+    })
+    .filter(
+      ({ state }) => state.status === "active" || state.status === "refund_due",
+    )
+    .map(({ row, state }) => ({
+      id: row.id,
+      remainingLei: state.remainingLei,
+      amountLei: state.amountLei,
+      expiresAt: row.expires_at,
+      status: state.status as "active" | "refund_due",
+      daysLeft: state.daysLeft,
+      privateLessons: state.privateLessons,
+    }))
+    .sort((a, b) => Date.parse(a.expiresAt) - Date.parse(b.expiresAt));
 }
 
 // ---------------------------------------------------------------------------

@@ -31,6 +31,7 @@ import {
   formatDay,
   formatLei,
   paymentMonths,
+  type AccountCredit,
   type AccountEnrolment,
   type Lang,
 } from "@/lib/myAccount";
@@ -60,6 +61,7 @@ interface AccountData {
   email: string;
   enrolments: AccountEnrolment[];
   bookings: AccountBooking[];
+  credits?: AccountCredit[];
 }
 
 const COPY = {
@@ -122,6 +124,18 @@ const COPY = {
     join: "Intră la lecție",
     manage: "Reprogramează sau anulează",
     help: "Ai o întrebare despre plăți sau vrei să renunți la un curs?",
+    credit: "Creditul meu",
+    creditUntil: "valabil până pe",
+    creditDays: "zile",
+    creditDay: "zi",
+    creditUse:
+      "Îl poți folosi într-o grupă viitoare, îl poți da altei persoane sau îl poți transforma în lecții private, la 150 lei lecția. Scrie-ne când vrei să îl folosești.",
+    creditLessons: "Ajunge pentru",
+    creditLesson: "lecție privată",
+    creditLessonsWord: "lecții private",
+    creditExpired: "a expirat pe",
+    creditRefund:
+      "Ce a rămas ți se returnează în bani, minus comisionul de procesare Stripe.",
   },
   en: {
     h1: "My account",
@@ -183,6 +197,18 @@ const COPY = {
     join: "Join the lesson",
     manage: "Reschedule or cancel",
     help: "A question about payments, or want to leave a course?",
+    credit: "My credit",
+    creditUntil: "valid until",
+    creditDays: "days",
+    creditDay: "day",
+    creditUse:
+      "You can use it in a later group, give it to another person, or turn it into private lessons at 150 lei each. Message us when you want to use it.",
+    creditLessons: "Enough for",
+    creditLesson: "private lesson",
+    creditLessonsWord: "private lessons",
+    creditExpired: "expired on",
+    creditRefund:
+      "What is left is refunded to you in money, minus the Stripe processing fee.",
   },
 } as const;
 type Copy = (typeof COPY)[Lang];
@@ -739,6 +765,41 @@ const MyAccount = ({ lang }: { lang: Lang }) => {
                 enrolment={e}
                 onPaid={(id, month) => void waitForMonth(id, month)}
               />
+            ))}
+          </section>
+        )}
+
+        {user && data && (data.credits?.length ?? 0) > 0 && (
+          <section className="mt-12 space-y-4">
+            <h2 className="font-display text-2xl font-bold text-foreground">
+              {c.credit}
+            </h2>
+            {data.credits!.map((credit) => (
+              <article key={credit.id} className={card}>
+                <p className="font-display text-lg font-bold text-foreground">
+                  {formatLei(credit.remainingLei, lang)}
+                </p>
+                {credit.status === "active" ? (
+                  <>
+                    <p className="mt-1 text-sm text-muted-foreground">
+                      {c.creditUntil} {formatDay(credit.expiresAt, lang)} (
+                      {credit.daysLeft}{" "}
+                      {credit.daysLeft === 1 ? c.creditDay : c.creditDays})
+                      {credit.privateLessons > 0
+                        ? ` · ${c.creditLessons} ${credit.privateLessons} ${credit.privateLessons === 1 ? c.creditLesson : c.creditLessonsWord}`
+                        : ""}
+                    </p>
+                    <p className="mt-2 text-sm text-muted-foreground">
+                      {c.creditUse}
+                    </p>
+                  </>
+                ) : (
+                  <p className="mt-1 text-sm text-muted-foreground">
+                    {c.creditExpired} {formatDay(credit.expiresAt, lang)}.{" "}
+                    {c.creditRefund}
+                  </p>
+                )}
+              </article>
             ))}
           </section>
         )}

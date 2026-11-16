@@ -3,6 +3,7 @@ import { readFileSync } from "node:fs";
 import { resolve } from "node:path";
 import {
   buildAccount,
+  buildCredits,
   buildEnrolment,
   enrolmentTitle,
   paymentMonths,
@@ -238,6 +239,72 @@ describe("other sign-ups, and the order they come in", () => {
   });
 });
 
+describe("the student's credit", () => {
+  const row = (over: Record<string, unknown> = {}) => ({
+    id: "c1",
+    amount_lei: "312.50",
+    origin: "5 lecții neținute din luna în curs (abonament anulat)",
+    created_at: "2026-11-25T10:00:00.000Z",
+    expires_at: "2027-05-25T10:00:00.000Z",
+    refund_at_expiry: true,
+    reminder_sent_at: null,
+    student_credit_uses: [{ kind: "private", amount_lei: 150 }],
+    ...over,
+  });
+  const now = new Date("2026-12-01T10:00:00.000Z");
+
+  it("shows what is left, until when, and how many private lessons it pays for", () => {
+    expect(buildCredits([row()], now)).toEqual([
+      {
+        id: "c1",
+        remainingLei: 162.5,
+        amountLei: 312.5,
+        expiresAt: "2027-05-25T10:00:00.000Z",
+        status: "active",
+        daysLeft: 175,
+        privateLessons: 1,
+      },
+    ]);
+  });
+
+  it("after expiry, says the rest is owed back; credit used up or ended is not shown", () => {
+    const later = new Date("2027-06-01T10:00:00.000Z");
+    expect(buildCredits([row()], later)).toMatchObject([
+      { status: "refund_due" },
+    ]);
+    expect(buildCredits([row({ refund_at_expiry: false })], later)).toEqual([]);
+    expect(
+      buildCredits(
+        [row({ student_credit_uses: [{ kind: "group", amount_lei: 312.5 }] })],
+        now,
+      ),
+    ).toEqual([]);
+  });
+
+  it("keeps internal details out", () => {
+    const out = JSON.stringify(
+      buildCredits(
+        [
+          row({
+            stripe_payment_id: "pi_secret",
+            note: "a private note",
+            created_by: "owner@example.test",
+            holder_email: "ana@example.test",
+          }),
+        ],
+        now,
+      ),
+    );
+    for (const hidden of [
+      "pi_secret",
+      "private note",
+      "owner@example.test",
+      "lecții neținute",
+    ])
+      expect(out).not.toContain(hidden);
+  });
+});
+
 // ---------------------------------------------------------------------------
 // The server route: who is asking is decided by Auth alone
 // ---------------------------------------------------------------------------
@@ -336,6 +403,12 @@ describe("the account route", () => {
       "student_email",
       "student@example.test",
     ]);
+    // Credit is the one held under the same address.
+    expect(filterOn("student_credits")?.args).toEqual([
+      "holder_email",
+      "student@example.test",
+    ]);
+    expect(body["credits"]).toEqual([]);
     expect(JSON.stringify(state.calls)).not.toContain("victim");
   });
 
