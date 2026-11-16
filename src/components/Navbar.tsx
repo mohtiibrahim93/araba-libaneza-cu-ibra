@@ -15,6 +15,7 @@ import {
   Phone,
   MessageCircle,
   MapPin,
+  User,
 } from "lucide-react";
 import { useLocation, useNavigate } from "@/lib/router-compat";
 import { Link } from "@/components/LocalizedLink";
@@ -376,6 +377,18 @@ const Navbar = () => {
               <Calendar className="h-3.5 w-3.5" aria-hidden="true" />
               {t.navBooking}
             </Link>
+            {/* The student's account, next to Programare (owner, 16 Nov
+                2026). In the band from xl up only: on anything narrower it
+                would cut the "next course" pill short (measured: 33–60px at
+                1024–1100), and there the menu lists it under Programare. */}
+            <Link
+              to={lang === "en" ? "/en/my-account" : "/contul-meu"}
+              tabIndex={scrolled ? -1 : undefined}
+              className="hidden h-7 shrink-0 items-center gap-1.5 whitespace-nowrap rounded-full border border-white/40 px-3 font-semibold text-white transition-colors hover:bg-white/10 xl:inline-flex"
+            >
+              <User className="h-3.5 w-3.5" aria-hidden="true" />
+              {t.navAccount}
+            </Link>
             {isXl && (
               <span
                 className="ml-2 h-3.5 w-px bg-white/30"
@@ -629,6 +642,14 @@ const Navbar = () => {
             >
               <Calendar className="w-4 h-4" aria-hidden="true" />
               {t.navBooking}
+            </Link>
+            <Link
+              to={lang === "en" ? "/en/my-account" : "/contul-meu"}
+              onClick={() => setOpen(false)}
+              className="text-base font-medium text-foreground/90 hover:text-foreground transition-colors py-3 min-h-12 flex items-center gap-2"
+            >
+              <User className="w-4 h-4" aria-hidden="true" />
+              {t.navAccount}
             </Link>
             <Link
               to={lang === "en" ? "/en/blog" : "/blog"}

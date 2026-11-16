@@ -393,6 +393,23 @@ describe("the page is on the site in both languages, and private", () => {
     }
   });
 
+  it("is in the top band next to Programare on wide screens, and in the phone menu", () => {
+    // Owner, 16 Nov 2026. In the band only from xl up: narrower, it would cut
+    // the "next course" pill short; there the menu lists it under Programare.
+    const nav = read("src/components/Navbar.tsx");
+    const account = 'to={lang === "en" ? "/en/my-account" : "/contul-meu"}';
+    const booking = 'to={lang === "en" ? "/en/booking" : "/booking"}';
+    expect(nav.split(account).length - 1).toBe(2);
+    const inBand = nav.indexOf(account);
+    expect(inBand).toBeGreaterThan(nav.indexOf(booking));
+    const bandLink = nav.slice(inBand, inBand + 400);
+    expect(bandLink).toContain("hidden");
+    expect(bandLink).toContain("xl:inline-flex");
+    const inMenu = nav.lastIndexOf(account);
+    expect(inMenu).toBeGreaterThan(nav.lastIndexOf(booking));
+    expect(nav.slice(inMenu, inMenu + 400)).toContain("setOpen(false)");
+  });
+
   it("is linked from the footer and uses the game's sign-in", () => {
     expect(read("src/components/Footer.tsx")).toContain(
       'to={lang === "en" ? "/en/my-account" : "/contul-meu"}',

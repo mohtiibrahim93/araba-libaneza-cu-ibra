@@ -542,6 +542,7 @@ export const translations = {
     trialFunnelStepConverted: "Convertit la curs plătit",
     // Booking — extra
     navBooking: "Programare",
+    navAccount: "Contul meu",
     bookingAddToCalendar: "Adaugă în calendar (.ics)",
     bookingManageButton: "Gestionează programarea",
     bookingRescheduleHelp:
@@ -1495,6 +1496,7 @@ export const translations = {
     trialFunnelStepConverted: "Converted to paid course",
     // Booking — extra
     navBooking: "Booking",
+    navAccount: "My account",
     bookingAddToCalendar: "Add to calendar (.ics)",
     bookingManageButton: "Manage booking",
     bookingRescheduleHelp:

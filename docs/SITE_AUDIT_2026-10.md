@@ -120,9 +120,10 @@ re-checked on 26 Oct against main and the live site.
   button press or the email; refunds processed within 14 days; a transfer
   to another group of the same level is offered before any refund; the rule
   is shown on /preturi and at the pay-in-full checkout.
-  NOT DECIDED (ask the owner): the month in progress after lesson 2:
-  (a) money back minus lessons held, minus 10%, minus the Stripe fee, or
-  (b) the unused lessons become credit.
+  DECIDED 16 Nov (owner: "B, we will think about A later"): after lesson 2
+  the unused lessons of the month in progress become credit, which is what
+  is live today. The other option, money back minus lessons held, minus
+  10%, minus the Stripe fee, may come back later.
   NOT BUILT. Drafted on 15 Nov as a document for the owner and his lawyer
   (not in this repository): the new section 4 in Romanian and English, the
   texts for /preturi and the checkout, and a paragraph on the 14-day
@@ -142,8 +143,10 @@ re-checked on 26 Oct against main and the live site.
   sign-ups stored under that confirmed address, nothing read from the
   request. It shows the student's courses, every month of a group course
   (paid, granted, due, still to come), payments and booked lessons. Noindex,
-  out of the sitemap, linked from the footer only (a top-menu link waits for
-  the owner's word). "Pay the next month by card": one month at a time, the
+  out of the sitemap, linked from the footer and, since 16 Nov (owner:
+  yes), from the top band next to "Programare" on wide screens (xl up; on
+  anything narrower it would cut the "next course" pill short) and from the
+  phone menu under "Programare". "Pay the next month by card": one month at a time, the
   lowest month still open, at the group's own price
   (supabase/functions/_shared/month-payment.ts decides; the new function
   create-month-payment prepares the Stripe payment and writes nothing to the
@@ -167,21 +170,22 @@ re-checked on 26 Oct against main and the live site.
   course with a discount, some month by month until they left; who paid what
   is not known. Proposed to him, nothing written: the two who finished as 3
   months (1,500 lei) each, the seven who left as 1 month (500 lei) each and
-  "Retras"; he corrects any line or says "ok"; (2) (a) or (b) above, explained
-  again on 15 Nov with one example ((b) is what is live and what he chose on
-  9 Nov); (3) SETTLED 15 Nov, nothing to
+  "Retras"; he corrects any line or says "ok". Owner, 16 Nov: he forgot how much each
+  paid and will look it up later; the course had 24 lessons and two students
+  stayed to the end. Nothing written, still waiting; (2) SETTLED 16 Nov:
+  (b); (3) SETTLED 15 Nov, nothing to
   change: for the one student of the 7 Nov group who moved from the 15 Aug
   group, month 1 is the one she paid, she pays months 2 and 3, and month 4
   is the granted "transfer" month (as the database already has it; the
   "month 1 stays free" line in the owner's 14 Nov note was not what he
   meant); (4) DONE 15 Nov: the owner took the three who left off the
   15 Aug group's lessons in Google Calendar, and the group's list in the
-  admin was set to the guests of its latest lesson (5 students). One person
-  who does not attend is still a guest on the 2 Sep in-person group's
-  lessons of 18 and 23 Nov; the owner removes her in Google Calendar;
-  (5) main was pushed on 15 Nov at the owner's word; Lovable's Git link is
-  still his to check, then publish and deploy; (6) whether "Contul meu" also
-  gets a link in the top menu.
+  admin was set to the guests of its latest lesson (5 students). The person
+  who does not attend the 2 Sep in-person group was taken off its three
+  upcoming lessons in Google Calendar on 16 Nov, at the owner's word, with
+  no notification sent; (5) main was pushed on 15 Nov at the owner's word;
+  Lovable's Git link is still his to check, then publish and deploy;
+  (6) DONE 16 Nov: "Contul meu" is in the top menu.
 - DONE P0-1 Stripe webhook lost events on failure: fixed (26b81146).
 - DONE P0-2 sign-up emails: admin alert restored for anonymous sign-ups,
   student confirmation sent after checkout email verification (d86573e6).
