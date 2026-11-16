@@ -25,9 +25,16 @@ import {
   cancelFeeRateFor,
   computeRefund,
   formatBani,
+  underNewRefundRules,
   withdrawalDaysFor,
   type RefundBreakdown,
 } from "../_shared/refund.ts";
+import {
+  canUseCredit,
+  creditExpiry,
+  creditRefund,
+  creditState,
+} from "../_shared/credit.ts";
 
 /**
  * The processing fee Stripe kept on a payment, in bani (owner's rule,
@@ -364,6 +371,74 @@ async function refundInputsFor(
       ),
     }),
   };
+}
+
+/** Marks the credit a cancellation left, so it is written once per sign-up. */
+const CANCELLATION_CREDIT_NOTE = "Creat automat la anulare";
+
+/**
+ * The credit a cancellation leaves (the unused lessons of the month in
+ * progress, Terms section 4) goes on the student's credit by itself: valid
+ * six months from the cancellation, tied to the card payment it sits on so a
+ * refund at expiry can go back to the same card. Once per sign-up, never
+ * twice. A failure here must not undo a cancellation that already happened:
+ * it is logged, and the owner adds the credit by hand.
+ */
+async function recordCancellationCredit(
+  // deno-lint-ignore no-explicit-any
+  supabase: any,
+  input: {
+    registration: Record<string, unknown>;
+    amountBani: number;
+    origin: string;
+    stripePaymentId: string | null;
+    actor: string;
+  },
+): Promise<string | null> {
+  if (!(input.amountBani > 0)) return null;
+  const reg = input.registration;
+  try {
+    const { data: existing, error: readErr } = await supabase
+      .from("student_credits")
+      .select("id")
+      .eq("registration_id", reg.id)
+      .eq("note", CANCELLATION_CREDIT_NOTE)
+      .maybeSingle();
+    if (readErr) throw readErr;
+    if (existing) return existing.id as string;
+    const now = new Date().toISOString();
+    const { data, error } = await supabase
+      .from("student_credits")
+      .insert({
+        student_id: reg.student_id ?? null,
+        registration_id: reg.id,
+        holder_name: String(reg.name ?? "").slice(0, 160) || "Cursant",
+        holder_email: String(reg.email ?? "").toLowerCase() || null,
+        amount_lei: Math.round(input.amountBani) / 100,
+        origin: input.origin.slice(0, 300),
+        created_at: now,
+        expires_at: creditExpiry(now),
+        // Unused credit comes back in money at expiry for sign-ups under the
+        // new Terms; under the earlier ones it simply ends.
+        refund_at_expiry: underNewRefundRules(
+          typeof reg.created_at === "string" ? reg.created_at : null,
+        ),
+        stripe_payment_id: input.stripePaymentId,
+        created_by: input.actor,
+        note: CANCELLATION_CREDIT_NOTE,
+      })
+      .select("id")
+      .single();
+    if (error) throw error;
+    return data.id as string;
+  } catch (e) {
+    console.error("[admin-registrations] cancellation credit not recorded", {
+      registrationId: reg.id,
+      amountBani: input.amountBani,
+      e,
+    });
+    return null;
+  }
 }
 
 Deno.serve(async (req) => {
@@ -5728,6 +5803,16 @@ Deno.serve(async (req) => {
         });
       }
 
+      // The unused lessons of the month in progress are credit, not money:
+      // they go on the student's credit by themselves.
+      const creditId = await recordCancellationCredit(supabase, {
+        registration: updated,
+        amountBani: breakdown.creditBani,
+        origin: `Lecțiile rămase din luna în curs (curs plătit integral, ${lessonsTaken} lecții făcute)`,
+        stripePaymentId: paymentIntentId,
+        actor: callerEmail!,
+      });
+
       // The whole breakdown is logged, not just the total: the tier and the
       // lesson count are what make a refund defensible if it is ever queried.
       await supabase.from("audit_logs").insert({
@@ -5738,6 +5823,7 @@ Deno.serve(async (req) => {
           refund_id: refund.id,
           reason: refund_reason || null,
           lessons_taken: lessonsTaken,
+          credit_id: creditId,
           ...breakdown,
         },
       });
@@ -5746,6 +5832,7 @@ Deno.serve(async (req) => {
         data: updated,
         refund_id: refund.id,
         breakdown,
+        credit_id: creditId,
         refund_label: formatBani(breakdown.refundBani),
       });
     }
@@ -5955,6 +6042,23 @@ Deno.serve(async (req) => {
         });
       }
 
+      // After the second lesson the unused lessons of the month are credit,
+      // not money: they go on the student's credit by themselves, tied to
+      // the month's card payment.
+      const latestCharge = [...charges].sort(
+        (a, b) => Date.parse(a.chargedAt) - Date.parse(b.chargedAt),
+      )[charges.length - 1];
+      const creditId =
+        breakdown.case === "credit"
+          ? await recordCancellationCredit(supabase, {
+              registration: updated,
+              amountBani: breakdown.creditBani,
+              origin: `${breakdown.lessonsNotHeld} lecții neținute din luna în curs (abonament anulat)`,
+              stripePaymentId: latestCharge?.paymentId ?? null,
+              actor: callerEmail!,
+            })
+          : null;
+
       await supabase.from("audit_logs").insert({
         actor: callerEmail!,
         action: "cancel_subscription",
@@ -5963,6 +6067,7 @@ Deno.serve(async (req) => {
           refund_ids: refundIds,
           refund_amount: refundedTotal,
           refund_failed: refundFailed,
+          credit_id: creditId,
           ...breakdown,
         },
       });
@@ -5972,8 +6077,323 @@ Deno.serve(async (req) => {
         refund_ids: refundIds,
         refund_amount: refundedTotal,
         refund_failed: refundFailed,
+        credit_id: creditId,
         breakdown,
       });
+    }
+
+    // ============ Student credit (owner, 14 and 16 Nov 2026) ============
+    // Terms, section 4 "Credit"; the rules are in _shared/credit.ts. A credit
+    // row holds the amount, each use is its own row, and what is left is
+    // worked out from the two. Money goes back only on the owner's button
+    // ("refund now"): nothing here refunds by itself, and nothing emails the
+    // student.
+    if (action === "list_credits") {
+      const { data: credits, error: credErr } = await supabase
+        .from("student_credits")
+        .select(
+          "*, student_credit_uses(id, kind, amount_lei, note, refund_ref, used_at, recorded_by)",
+        )
+        .order("expires_at", { ascending: true });
+      if (credErr) throw credErr;
+      const now = new Date();
+      return jsonResponse({
+        data: (credits ?? []).map(
+          // deno-lint-ignore no-explicit-any
+          ({ student_credit_uses, ...c }: any) => ({
+            ...c,
+            uses: student_credit_uses ?? [],
+            state: creditState(c, student_credit_uses ?? [], now),
+          }),
+        ),
+      });
+    }
+
+    if (action === "add_credit") {
+      const text = (v: unknown, max: number) =>
+        typeof v === "string" ? v.trim().slice(0, max) : "";
+      const amountLei = Math.round(Number(body.amount_lei) * 100) / 100;
+      if (!Number.isFinite(amountLei) || amountLei <= 0 || amountLei > 100_000)
+        return jsonResponse({ error: "Sumă invalidă." }, 400);
+      const origin = text(body.origin, 300);
+      if (!origin)
+        return jsonResponse({ error: "Scrie de unde vine creditul." }, 400);
+      let holderName = text(body.holder_name, 160);
+      let holderEmail = text(body.holder_email, 255).toLowerCase();
+      let studentId: string | null = null;
+      let registrationId: string | null = null;
+      let signedUpAt: string | null = null;
+      if (typeof body.registration_id === "string" && body.registration_id) {
+        const { data: reg, error: regErr } = await supabase
+          .from("registrations")
+          .select("id, name, email, student_id, created_at, anonymized_at")
+          .eq("id", body.registration_id)
+          .maybeSingle();
+        if (regErr) throw regErr;
+        if (!reg || reg.anonymized_at)
+          return jsonResponse({ error: "Înscrierea nu a fost găsită." }, 400);
+        registrationId = reg.id;
+        studentId = reg.student_id ?? null;
+        signedUpAt = reg.created_at ?? null;
+        holderName ||= String(reg.name ?? "").slice(0, 160);
+        holderEmail ||= String(reg.email ?? "").toLowerCase();
+      }
+      if (!holderName)
+        return jsonResponse({ error: "Scrie al cui este creditul." }, 400);
+      // The day it was given: today, or an earlier day the owner names.
+      const givenOn =
+        typeof body.given_on === "string" &&
+        /^\d{4}-\d{2}-\d{2}$/.test(body.given_on)
+          ? `${body.given_on}T10:00:00.000Z`
+          : new Date().toISOString();
+      if (Date.parse(givenOn) > Date.now() + 86_400_000)
+        return jsonResponse({ error: "Data nu poate fi în viitor." }, 400);
+      const { data: created, error: insErr } = await supabase
+        .from("student_credits")
+        .insert({
+          student_id: studentId,
+          registration_id: registrationId,
+          holder_name: holderName,
+          holder_email: holderEmail || null,
+          amount_lei: amountLei,
+          origin,
+          created_at: givenOn,
+          expires_at: creditExpiry(givenOn),
+          // Unused credit comes back in money at expiry under the new Terms.
+          // The owner can say otherwise; with a sign-up it follows its date.
+          refund_at_expiry:
+            typeof body.refund_at_expiry === "boolean"
+              ? body.refund_at_expiry
+              : signedUpAt
+                ? underNewRefundRules(signedUpAt)
+                : true,
+          created_by: callerEmail!,
+          note: text(body.note, 500) || null,
+        })
+        .select("id")
+        .single();
+      if (insErr) throw insErr;
+      await supabase.from("audit_logs").insert({
+        actor: callerEmail!,
+        action: "add_credit",
+        registration_id: registrationId,
+        details: { credit_id: created.id, amount_lei: amountLei, origin },
+      });
+      return jsonResponse({ success: true, id: created.id });
+    }
+
+    if (
+      action === "use_credit" ||
+      action === "transfer_credit" ||
+      action === "preview_refund_credit" ||
+      action === "refund_credit"
+    ) {
+      const creditId = typeof body.credit_id === "string" ? body.credit_id : "";
+      if (!creditId) return jsonResponse({ error: "Credit invalid." }, 400);
+      const { data: credit, error: credErr } = await supabase
+        .from("student_credits")
+        .select("*")
+        .eq("id", creditId)
+        .maybeSingle();
+      if (credErr) throw credErr;
+      if (!credit)
+        return jsonResponse({ error: "Creditul nu a fost găsit." }, 400);
+      const { data: uses, error: usesErr } = await supabase
+        .from("student_credit_uses")
+        .select("kind, amount_lei")
+        .eq("credit_id", creditId);
+      if (usesErr) throw usesErr;
+      const state = creditState(credit, uses ?? []);
+      const text = (v: unknown, max: number) =>
+        typeof v === "string" ? v.trim().slice(0, max) : "";
+      const refusal = (why: "amount" | "too_much" | "expired") =>
+        jsonResponse(
+          {
+            error:
+              why === "amount"
+                ? "Sumă invalidă."
+                : why === "too_much"
+                  ? `Au mai rămas doar ${state.remainingLei} lei din acest credit.`
+                  : "Creditul a expirat: nu mai poate fi folosit, doar returnat.",
+          },
+          400,
+        );
+
+      if (action === "use_credit") {
+        const kind = body.kind === "private" ? "private" : "group";
+        const amountLei = Math.round(Number(body.amount_lei) * 100) / 100;
+        const check = canUseCredit(state, kind, amountLei);
+        if (check !== "ok") return refusal(check);
+        const { error: insErr } = await supabase
+          .from("student_credit_uses")
+          .insert({
+            credit_id: creditId,
+            kind,
+            amount_lei: amountLei,
+            note: text(body.note, 500) || null,
+            recorded_by: callerEmail!,
+          });
+        if (insErr) throw insErr;
+        await supabase.from("audit_logs").insert({
+          actor: callerEmail!,
+          action: "use_credit",
+          registration_id: credit.registration_id,
+          details: { credit_id: creditId, kind, amount_lei: amountLei },
+        });
+        return jsonResponse({ success: true });
+      }
+
+      if (action === "transfer_credit") {
+        const amountLei = Math.round(Number(body.amount_lei) * 100) / 100;
+        const toName = text(body.to_name, 160);
+        const toEmail = text(body.to_email, 255).toLowerCase();
+        if (!toName)
+          return jsonResponse({ error: "Scrie cui îi dai creditul." }, 400);
+        const check = canUseCredit(state, "transfer", amountLei);
+        if (check !== "ok") return refusal(check);
+        // The other person gets a credit of their own with the SAME last
+        // day: passing credit on does not make it last longer.
+        const { data: passed, error: newErr } = await supabase
+          .from("student_credits")
+          .insert({
+            student_id: null,
+            registration_id: credit.registration_id,
+            holder_name: toName,
+            holder_email: toEmail || null,
+            amount_lei: amountLei,
+            origin: `Transfer de la ${credit.holder_name}`.slice(0, 300),
+            expires_at: credit.expires_at,
+            refund_at_expiry: credit.refund_at_expiry,
+            stripe_payment_id: credit.stripe_payment_id,
+            created_by: callerEmail!,
+            note: text(body.note, 500) || null,
+          })
+          .select("id")
+          .single();
+        if (newErr) throw newErr;
+        const { error: useErr } = await supabase
+          .from("student_credit_uses")
+          .insert({
+            credit_id: creditId,
+            kind: "transfer",
+            amount_lei: amountLei,
+            note: `Către ${toName}`.slice(0, 500),
+            recorded_by: callerEmail!,
+          });
+        if (useErr) {
+          // Without the use row the same money would exist twice.
+          await supabase.from("student_credits").delete().eq("id", passed.id);
+          throw useErr;
+        }
+        await supabase.from("audit_logs").insert({
+          actor: callerEmail!,
+          action: "transfer_credit",
+          registration_id: credit.registration_id,
+          details: {
+            credit_id: creditId,
+            new_credit_id: passed.id,
+            amount_lei: amountLei,
+          },
+        });
+        return jsonResponse({ success: true, id: passed.id });
+      }
+
+      // "Refund now": what is left goes back in money, minus the Stripe fee
+      // (kept once per card payment). To the same card when the credit knows
+      // its card payment; otherwise the owner returns it by hand and records
+      // that here.
+      const check = canUseCredit(state, "refund", state.remainingLei);
+      if (check !== "ok")
+        return jsonResponse({ error: "Nu mai este nimic de returnat." }, 400);
+      const byHand =
+        body.by_hand === true ||
+        !String(credit.stripe_payment_id ?? "").startsWith("pi_");
+      let feeBani = 0;
+      let refundableBani = Number.POSITIVE_INFINITY;
+      const stripe = byHand
+        ? null
+        : new Stripe(Deno.env.get("STRIPE_SECRET_KEY") || "", {
+            apiVersion: "2025-08-27.basil",
+          });
+      if (stripe) {
+        const intent = await stripe.paymentIntents.retrieve(
+          credit.stripe_payment_id,
+        );
+        const paid = Number(intent.amount_received ?? intent.amount ?? 0);
+        const refundedBefore = Number(intent.amount_refunded ?? 0);
+        refundableBani = Math.max(0, paid - refundedBefore);
+        // An earlier refund on this payment already kept Stripe's fee.
+        feeBani =
+          refundedBefore > 0
+            ? 0
+            : await stripeFeeFor(stripe, credit.stripe_payment_id);
+      }
+      const sums = creditRefund(state.remainingLei, feeBani);
+      if (stripe && sums.refundBani > refundableBani)
+        return jsonResponse({
+          error: `Pe plata cu cardul se mai pot returna doar ${formatBani(refundableBani)}. Returnează suma manual și alege „returnat manual”.`,
+        });
+      const preview = {
+        remaining_bani: sums.remainingBani,
+        fee_bani: sums.feeBani,
+        refund_bani: sums.refundBani,
+        refund_label: formatBani(sums.refundBani),
+        by_hand: byHand,
+      };
+      if (action === "preview_refund_credit")
+        return jsonResponse({ data: preview });
+
+      let refundRef: string | null = null;
+      if (stripe && sums.refundBani > 0) {
+        try {
+          const refund = await stripe.refunds.create(
+            {
+              payment_intent: credit.stripe_payment_id,
+              amount: sums.refundBani,
+            },
+            { idempotencyKey: `credit_refund_${creditId}` },
+          );
+          refundRef = refund.id;
+        } catch (stripeErr) {
+          console.error("[admin-registrations] credit refund failed", stripeErr);
+          const msg =
+            stripeErr instanceof Error ? stripeErr.message : "Eroare Stripe";
+          return jsonResponse({ error: `Rambursare eșuată: ${msg}` });
+        }
+      }
+      const { error: useErr } = await supabase
+        .from("student_credit_uses")
+        .insert({
+          credit_id: creditId,
+          kind: "refund",
+          // The whole rest is closed: what went back plus the fee kept.
+          amount_lei: state.remainingLei,
+          note: (byHand
+            ? `Returnat manual: ${formatBani(sums.refundBani)}${text(body.note, 300) ? ` · ${text(body.note, 300)}` : ""}`
+            : `Returnat pe card: ${formatBani(sums.refundBani)} · comision Stripe reținut: ${formatBani(sums.feeBani)}`
+          ).slice(0, 500),
+          refund_ref: refundRef,
+          recorded_by: callerEmail!,
+        });
+      if (useErr) {
+        // The money has gone back; say so loudly so it is recorded by hand.
+        console.error("[admin-registrations] credit refunded but not recorded", {
+          creditId,
+          refundRef,
+          useErr,
+        });
+        return jsonResponse({
+          error:
+            "Banii au fost returnați, dar înregistrarea a eșuat. Contactează suportul tehnic.",
+        });
+      }
+      await supabase.from("audit_logs").insert({
+        actor: callerEmail!,
+        action: "refund_credit",
+        registration_id: credit.registration_id,
+        details: { credit_id: creditId, refund_id: refundRef, ...preview },
+      });
+      return jsonResponse({ success: true, data: preview });
     }
 
     if (action === "get_private_lead") {

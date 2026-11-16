@@ -102,7 +102,7 @@ export function cancelPreviewLines(p: CancelPreview): string[] {
     case "credit":
       return [
         `După lecția 2 (ținute până acum: ${p.courseLessonsHeld}): luna curentă nu se rambursează în bani.`,
-        `Credit pentru cursant: ${lei(p.creditBani)} (${p.lessonsNotHeld} lecții rămase) — valabil 6 luni sau lecții private la 150 lei. Notează-l separat.`,
+        `Credit pentru cursant: ${lei(p.creditBani)} (${p.lessonsNotHeld} lecții rămase), valabil 6 luni. Se trece singur la Cursanți › Credite.`,
         "Lunile viitoare nu se mai încasează.",
       ];
     case "nothing_paid":
@@ -367,8 +367,7 @@ const RefundControl = ({
                     <p className="text-xs text-foreground">
                       Credit pentru cursant (nu bani):{" "}
                       {(preview.creditBani / 100).toLocaleString("ro-RO")} lei —
-                      valabil 6 luni sau lecții private la 150 lei. Notează-l
-                      separat.
+                      valabil 6 luni. Se trece singur la Cursanți › Credite.
                     </p>
                   )}
                 </>

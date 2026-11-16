@@ -45,6 +45,7 @@ import {
   HeartPulse,
   Inbox,
   UserPlus,
+  Wallet,
   BarChart3,
   FileText,
   Languages,
@@ -81,6 +82,7 @@ import TrialFunnelAdmin from "@/components/admin/TrialFunnelAdmin";
 const AnalyticsAdmin = lazy(() => import("@/components/admin/AnalyticsAdmin"));
 import TodayAdmin, { type TodaySummary } from "@/components/admin/TodayAdmin";
 import StudentProgressAdmin from "@/components/admin/StudentProgressAdmin";
+import CreditsAdmin from "@/components/admin/CreditsAdmin";
 import KidsSlotsAdmin from "@/components/admin/KidsSlotsAdmin";
 const AuditLogAdmin = lazy(() => import("@/components/admin/AuditLogAdmin"));
 const CardOverridesAdmin = lazy(
@@ -827,6 +829,12 @@ const Admin = () => {
           icon: UserPlus,
           hint: "Cursanți veniți din afara site-ului",
         },
+        {
+          value: "credits",
+          label: "Credite",
+          icon: Wallet,
+          hint: "Creditul fiecărui cursant: cât, de unde, până când",
+        },
       ],
     },
     {
@@ -1055,6 +1063,9 @@ const Admin = () => {
         </TabsContent>
 
         {/* ── Elevi cu cont: test de nivel + progres din joc ─────────────── */}
+        <TabsContent value="credits" className="mt-0 space-y-6">
+          <CreditsAdmin />
+        </TabsContent>
         <TabsContent value="student-progress" className="mt-0 space-y-6">
           <StudentProgressAdmin />
         </TabsContent>
