@@ -124,7 +124,17 @@ re-checked on 26 Oct against main and the live site.
   the unused lessons of the month in progress become credit, which is what
   is live today. The other option, money back minus lessons held, minus
   10%, minus the Stripe fee, may come back later.
-  NOT BUILT. Drafted on 15 Nov as a document for the owner and his lawyer
+  BUILT 16 Nov, switched off: the 10% on months not started
+  (_shared/refund.ts, cancelFeeRateFor; the admin's refund preview shows it).
+  It starts on NEW_REFUND_RULES_FROM, which is null until section 4 of the
+  Terms is published; set the day in the same change that publishes the
+  text (a test ties the two together).
+  NOT BUILT: section 4 on the site (waits for the owner's word on the
+  text), the sentence on /preturi and at the pay-in-full checkout, the
+  credit balance with its reminder and its refund at expiry, Cancel in the
+  account with the transfer offered first, and the mark for an absence with
+  an extenuating circumstance.
+  Drafted on 15 Nov as a document for the owner and his lawyer
   (not in this repository): the new section 4 in Romanian and English, the
   texts for /preturi and the checkout, and a paragraph on the 14-day
   withdrawal right (OUG 34/2014) marked "needs lawyer review". Do not
