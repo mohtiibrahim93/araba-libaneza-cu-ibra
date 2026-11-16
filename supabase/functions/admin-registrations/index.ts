@@ -22,6 +22,7 @@ import {
 import {
   COURSE_LESSONS,
   LESSONS_PER_MONTH,
+  cancelFeeRateFor,
   computeRefund,
   formatBani,
   type RefundBreakdown,
@@ -276,6 +277,7 @@ async function noShowFeeRefundFor(
       nonRefundableBani: 0,
       remainingValueBani: remaining,
       creditBani: 0,
+      cancelFeeBani: 0,
       feeBani: 0,
       refundBani: remaining,
     },
@@ -346,6 +348,11 @@ async function refundInputsFor(
       stripeFeeBani: await stripeFeeFor(stripe, paymentIntentId),
       // Private lessons have no monthly rule: unused ones always come back.
       lessonsPerMonth: formType === "private" ? null : LESSONS_PER_MONTH,
+      // The 10% on months not started is for sign-ups made from the day the
+      // new Terms are published; anyone enrolled before keeps their rule.
+      cancelFeeRate: cancelFeeRateFor(
+        typeof reg.created_at === "string" ? reg.created_at : null,
+      ),
     }),
   };
 }
@@ -5505,7 +5512,7 @@ Deno.serve(async (req) => {
       const { data: reg, error: regError } = await supabase
         .from("registrations")
         .select(
-          "id, form_type, level, quantity, cohort_id, payment_status, stripe_session_id, refunded_at, no_show_fee_status, no_show_fee_intent_id",
+          "id, created_at, form_type, level, quantity, cohort_id, payment_status, stripe_session_id, refunded_at, no_show_fee_status, no_show_fee_intent_id",
         )
         .eq("id", id)
         .maybeSingle();
@@ -5569,7 +5576,7 @@ Deno.serve(async (req) => {
       const { data: reg, error: regError } = await supabase
         .from("registrations")
         .select(
-          "id, form_type, level, quantity, cohort_id, payment_status, stripe_session_id, refunded_at, no_show_fee_status, no_show_fee_intent_id",
+          "id, created_at, form_type, level, quantity, cohort_id, payment_status, stripe_session_id, refunded_at, no_show_fee_status, no_show_fee_intent_id",
         )
         .eq("id", id)
         .maybeSingle();

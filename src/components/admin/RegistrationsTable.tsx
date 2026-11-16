@@ -114,6 +114,11 @@ export interface RefundPreview {
   remainingValueBani: number;
   /** Unused lessons of the running month, owed as credit, not money. */
   creditBani?: number;
+  /**
+   * "Taxă administrativă de anulare": 10% of the months not started, for a
+   * sign-up made under the new Terms; 0 or absent otherwise.
+   */
+  cancelFeeBani?: number;
   feeBani: number;
   refundBani: number;
   refund_label: string;
@@ -341,6 +346,14 @@ const RefundControl = ({
                       lei · comision Stripe:{" "}
                       {(preview.feeBani / 100).toLocaleString("ro-RO")} lei ·
                       lecții rămase: {preview.lessonsRemaining}
+                    </p>
+                  )}
+                  {!!preview.cancelFeeBani && (
+                    <p className="text-xs text-muted-foreground">
+                      Taxă administrativă de anulare (10% din lunile
+                      neîncepute):{" "}
+                      {(preview.cancelFeeBani / 100).toLocaleString("ro-RO")}{" "}
+                      lei
                     </p>
                   )}
                   {!!preview.creditBani && (

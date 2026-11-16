@@ -20,6 +20,19 @@
 //   1 lesson taken:  kept 62.50, refunded 2000 - 62.50 - 30 = 1907.50
 //   5 lessons taken: month 1 (500) stays — 312.50 used, 187.50 credit —
 //                    months 2–4 (1500) refunded minus 30 = 1470.00
+//
+// Owner's rules, 14 November 2026, for sign-ups made from the day the new
+// Terms are published (NEW_REFUND_RULES_FROM) and for nobody enrolled before:
+// rules 1–3 stay, with one change in rule 3. The months not started of a
+// course paid in full come back at the discounted monthly price (what was
+// paid ÷ the months of the course), minus a 10% "taxă administrativă de
+// anulare" (the owner's name for it, the only one used), minus the Stripe
+// fee, never below 0.
+// The month in progress still becomes credit (owner, 16 Nov 2026).
+//
+// Worked example — A1 in person paid in full, 2380 lei (595 a month), left
+// after 2 months: 2 x 595 = 1190, minus 10% (119) = 1071, minus the Stripe
+// fee.
 
 /** Days before the start date up to which nothing but the Stripe fee is kept. */
 export const FULL_REFUND_DAYS = 7;
@@ -29,6 +42,40 @@ export const TEST_LESSONS = 2;
 
 /** Lessons in one paid month of a group course. */
 export const LESSONS_PER_MONTH = 8;
+
+/**
+ * "Taxă administrativă de anulare": the share kept from the months not
+ * started when a course paid in full is left after the second lesson. Only
+ * for sign-ups made under the new Terms (cancelFeeRateFor).
+ */
+export const CANCEL_FEE_RATE = 0.1;
+
+/**
+ * The day the new Terms are published (YYYY-MM-DD, by the calendar in
+ * Bucharest). The rules of 14 November 2026 apply ONLY to sign-ups made from
+ * that day; a student enrolled before keeps the rules they signed up under.
+ * null = not published yet: every sign-up is still on the rule of 8 November.
+ * Set it in the same change that publishes section 4 of the Terms.
+ */
+export const NEW_REFUND_RULES_FROM: string | null = null;
+
+/**
+ * The share kept as "taxă administrativă de anulare" for a sign-up made at
+ * `signedUpAt`: 10% from the day the new Terms are published, nothing before.
+ */
+export function cancelFeeRateFor(
+  signedUpAt: string | null | undefined,
+  rulesFrom: string | null = NEW_REFUND_RULES_FROM,
+): number {
+  if (!rulesFrom || !signedUpAt) return 0;
+  const at = Date.parse(signedUpAt);
+  if (!Number.isFinite(at)) return 0;
+  // en-CA formats as YYYY-MM-DD, so the two dates compare as text.
+  const day = new Intl.DateTimeFormat("en-CA", {
+    timeZone: "Europe/Bucharest",
+  }).format(new Date(at));
+  return day >= rulesFrom ? CANCEL_FEE_RATE : 0;
+}
 
 /**
  * Lessons in a full group course, per CEFR level. Mirrors `lessons` in
@@ -63,6 +110,12 @@ export interface RefundInput {
    * monthly rule: their unused lessons always come back.
    */
   lessonsPerMonth?: number | null;
+  /**
+   * The share of the months not started kept as "taxă administrativă de
+   * anulare" (cancelFeeRateFor). Omit, or 0, for a sign-up made under the
+   * earlier Terms.
+   */
+  cancelFeeRate?: number | null;
 }
 
 export interface RefundBreakdown {
@@ -77,6 +130,12 @@ export interface RefundBreakdown {
   remainingValueBani: number;
   /** Unused lessons of the running month, kept as credit, not money. */
   creditBani: number;
+  /**
+   * "Taxă administrativă de anulare": kept from the months not started. 0
+   * under the earlier Terms, before the second lesson is over, and for
+   * private lessons.
+   */
+  cancelFeeBani: number;
   /** The Stripe processing fee kept back. */
   feeBani: number;
   /** What to actually send back through Stripe. */
@@ -92,7 +151,7 @@ const clamp = (n: number, lo: number, hi: number): number =>
 
 /**
  * Applies the published refund policy. Pure, so it is testable and auditable.
- * Always: nonRefundable + credit + fee + refund = paid.
+ * Always: nonRefundable + credit + cancelFee + fee + refund = paid.
  */
 export function computeRefund(input: RefundInput): RefundBreakdown {
   const paid = Math.max(0, Math.round(input.paidBani));
@@ -117,9 +176,12 @@ export function computeRefund(input: RefundInput): RefundBreakdown {
     tier: RefundTier,
     nonRefundableBani: number,
     creditBani: number,
+    cancelFeeRate = 0,
   ): RefundBreakdown => {
     const back = Math.max(0, paid - nonRefundableBani - creditBani);
-    const feeBani = Math.min(stripeFee, back);
+    const cancelFeeBani = round(back * clamp(cancelFeeRate, 0, 1));
+    const afterCancelFee = back - cancelFeeBani;
+    const feeBani = Math.min(stripeFee, afterCancelFee);
     return {
       tier,
       daysBeforeStart,
@@ -128,8 +190,9 @@ export function computeRefund(input: RefundInput): RefundBreakdown {
       nonRefundableBani,
       remainingValueBani: paid - nonRefundableBani,
       creditBani,
+      cancelFeeBani,
       feeBani,
-      refundBani: back - feeBani,
+      refundBani: afterCancelFee - feeBani,
     };
   };
 
@@ -147,10 +210,16 @@ export function computeRefund(input: RefundInput): RefundBreakdown {
     return finish("pro-rata", valueOf(taken), 0);
 
   // After the second lesson the running month stays: used lessons are kept,
-  // its unused lessons become credit; the months after it come back.
+  // its unused lessons become credit; the months after it come back, for a
+  // sign-up under the new Terms minus the taxă administrativă de anulare.
   const monthEnd = Math.min(total, Math.ceil(taken / perMonth) * perMonth);
   const nonRefundable = valueOf(taken);
-  return finish("credit", nonRefundable, valueOf(monthEnd) - nonRefundable);
+  return finish(
+    "credit",
+    nonRefundable,
+    valueOf(monthEnd) - nonRefundable,
+    Number(input.cancelFeeRate) || 0,
+  );
 }
 
 /** Formats bani as a Romanian lei string, e.g. 151875 → "1.518,75 lei". */
