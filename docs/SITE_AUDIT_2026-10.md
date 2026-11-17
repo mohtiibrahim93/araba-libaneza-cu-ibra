@@ -225,6 +225,21 @@ re-checked on 26 Oct against main and the live site.
   branch lovable-sync (d799986b): checked on 17 Nov, everything in it is on
   main (the two security fixes in main's own form). Deleting that branch was
   refused from this session; the owner deletes it on GitHub.
+- LIVE 17 Nov 2026 (owner: "push to main and then go live"). main 25cb4317
+  synced into Lovable; Lovable's assistant deployed all 25 edge functions
+  from it (1.2 credits; it then pushed only a regenerated
+  src/integrations/supabase/types.ts, 15cf29e8); the site was published and
+  checked live: Terms section 4 and 4.1, the 14-day paragraph and the box
+  sentence, the paid-in-full note on /preturi, "Contul meu" in the band and
+  at /contul-meu and /en/my-account, the account API (401 without sign-in),
+  create-month-payment (400 without a sign-up). Database, applied by hand
+  and recorded in supabase/migrations (all written to run again):
+  20261113120000 (method "center"), 20261116120000 (credit tables),
+  20261117120000 (early_start_requested_at); the DB's own migration list
+  still ends at 20261104150000. The six centre payments of 13 Nov were moved
+  from "other" + note to "center" (owner's OK, dry run shown), with their
+  sign-ups. Nobody signed up between 16 Nov and going live, so the new rules'
+  start day stays 16 Nov 2026.
 - TO GO LIVE (15 Nov 2026), once Lovable's editor is on GitHub's main:
   publish, and deploy admin-registrations, auth-email-hook, booking-create,
   booking-manage, booking-reminders, calendar-sync, create-checkout,
