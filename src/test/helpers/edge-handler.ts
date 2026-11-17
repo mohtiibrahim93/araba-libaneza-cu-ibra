@@ -71,10 +71,11 @@ export function loadEdgeHandler(
       // Their Google calls need keys a test does not set, so they do nothing.
       // The group refund rule (`../_shared/group-refund.ts`), the month rule
       // (`group-months.ts`, `group-online-months.ts`), the rule for paying
-      // the next month by card (`month-payment.ts`) and the credit rules
-      // (`credit.ts`) load the same way.
+      // the next month by card (`month-payment.ts`), the credit rules
+      // (`credit.ts`) and the rule for joining a group that starts inside the
+      // withdrawal period (`early-start.ts`) load the same way.
       if (
-        /^\.\.?\/(_shared\/)?(package-(lessons|titles)|group-(refund|months|online-months)|month-payment|credit)\.ts$/.test(
+        /^\.\.?\/(_shared\/)?(package-(lessons|titles)|group-(refund|months|online-months)|month-payment|credit|early-start)\.ts$/.test(
           name,
         )
       )

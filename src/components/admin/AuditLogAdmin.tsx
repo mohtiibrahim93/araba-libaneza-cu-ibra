@@ -52,6 +52,8 @@ const ACTION_LABELS: Record<string, string> = {
   use_credit: "Credit folosit",
   transfer_credit: "Credit dat altei persoane",
   refund_credit: "Credit returnat în bani",
+  record_early_start: "Cerere de începere în cele 14 zile înregistrată",
+  clear_early_start: "Cerere de începere în cele 14 zile ștearsă",
   update_status: "Schimbare status",
   reschedule_booking: "Mutare lecție",
   update_booking_details: "Lecție modificată",

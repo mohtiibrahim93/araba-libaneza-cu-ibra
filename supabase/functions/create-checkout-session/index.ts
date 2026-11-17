@@ -1,4 +1,5 @@
 import { groupEnrolmentError } from "../_shared/group-enrolment.ts";
+import { earlyStartGate } from "../_shared/early-start.ts";
 import {
   applyPlanChange,
   groupOwnPrice,
@@ -42,7 +43,7 @@ serve(async (req) => {
 
   try {
     // `plan` from older clients is ignored: the plan is read from the row.
-    const { registrationId, changePlan, quote, setup, booking } =
+    const { registrationId, changePlan, quote, setup, booking, earlyStart } =
       await req.json();
     if (!registrationId || typeof registrationId !== "string") {
       return new Response(
@@ -132,6 +133,20 @@ serve(async (req) => {
         },
       );
     }
+    // A group that starts inside the 14-day withdrawal period is joined only
+    // on the student's own request for the lessons to start in that time (the
+    // box at checkout), so lessons held are paid if they withdraw (owner,
+    // 17 Nov 2026; _shared/early-start.ts).
+    const earlyStartRefusal = await earlyStartGate(
+      supabaseAdmin,
+      reg,
+      earlyStart,
+    );
+    if (earlyStartRefusal)
+      return new Response(JSON.stringify(earlyStartRefusal), {
+        status: 409,
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+      });
 
     const stripe = new Stripe(Deno.env.get("STRIPE_SECRET_KEY") || "", {
       apiVersion: "2025-08-27.basil",

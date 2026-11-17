@@ -1,4 +1,5 @@
 import { groupEnrolmentError } from "../_shared/group-enrolment.ts";
+import { earlyStartGate } from "../_shared/early-start.ts";
 import {
   applyPlanChange,
   groupOwnPrice,
@@ -32,8 +33,15 @@ serve(async (req) => {
   }
 
   try {
-    const { courseType, email, name, registrationId, booking, changePlan } =
-      await req.json();
+    const {
+      courseType,
+      email,
+      name,
+      registrationId,
+      booking,
+      changePlan,
+      earlyStart,
+    } = await req.json();
 
     if (!courseType || !COURSE_TYPES.includes(courseType)) {
       return new Response(JSON.stringify({ error: "Invalid course type" }), {
@@ -109,6 +117,20 @@ serve(async (req) => {
         },
       );
     }
+    // A group that starts inside the 14-day withdrawal period is joined only
+    // on the student's own request for the lessons to start in that time (the
+    // box at checkout), so lessons held are paid if they withdraw (owner,
+    // 17 Nov 2026; _shared/early-start.ts).
+    const earlyStartRefusal = await earlyStartGate(
+      supabaseAdmin,
+      regRow,
+      earlyStart,
+    );
+    if (earlyStartRefusal)
+      return new Response(JSON.stringify(earlyStartRefusal), {
+        status: 409,
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+      });
 
     // Group / kids: the plan lives on the row. The buyer may switch it on
     // /checkout (changePlan, written to the row first). This function charges

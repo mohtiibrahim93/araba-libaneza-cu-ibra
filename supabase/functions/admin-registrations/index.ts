@@ -363,12 +363,13 @@ async function refundInputsFor(
       ),
       // The right of withdrawal the Terms state: inside 14 days of the
       // sign-up everything goes back, with no Stripe fee kept. Lessons held
-      // would be kept only on the student's express request to start early,
-      // which nothing records yet (startedAtRequest stays unset).
+      // are kept when the student asked for them to start in that time (the
+      // box at checkout, or recorded by the owner; _shared/early-start.ts).
       signedUpAt: typeof reg.created_at === "string" ? reg.created_at : null,
       withdrawalDays: withdrawalDaysFor(
         typeof reg.created_at === "string" ? reg.created_at : null,
       ),
+      startedAtRequest: Boolean(reg.early_start_requested_at),
     }),
   };
 }
@@ -5596,7 +5597,7 @@ Deno.serve(async (req) => {
       const { data: reg, error: regError } = await supabase
         .from("registrations")
         .select(
-          "id, created_at, form_type, level, quantity, cohort_id, payment_status, stripe_session_id, refunded_at, no_show_fee_status, no_show_fee_intent_id",
+          "id, created_at, early_start_requested_at, form_type, level, quantity, cohort_id, payment_status, stripe_session_id, refunded_at, no_show_fee_status, no_show_fee_intent_id",
         )
         .eq("id", id)
         .maybeSingle();
@@ -5660,7 +5661,7 @@ Deno.serve(async (req) => {
       const { data: reg, error: regError } = await supabase
         .from("registrations")
         .select(
-          "id, created_at, form_type, level, quantity, cohort_id, payment_status, stripe_session_id, refunded_at, no_show_fee_status, no_show_fee_intent_id",
+          "id, created_at, early_start_requested_at, form_type, level, quantity, cohort_id, payment_status, stripe_session_id, refunded_at, no_show_fee_status, no_show_fee_intent_id",
         )
         .eq("id", id)
         .maybeSingle();
@@ -5855,7 +5856,7 @@ Deno.serve(async (req) => {
       const { data: reg, error: regError } = await supabase
         .from("registrations")
         .select(
-          "id, created_at, form_type, cohort_id, stripe_subscription_id, subscription_status, canceled_at",
+          "id, created_at, early_start_requested_at, form_type, cohort_id, stripe_subscription_id, subscription_status, canceled_at",
         )
         .eq("id", id)
         .maybeSingle();
@@ -5952,9 +5953,11 @@ Deno.serve(async (req) => {
         currentPeriodEnd: periodEndUnix
           ? new Date(periodEndUnix * 1000).toISOString()
           : null,
-        // The right of withdrawal the Terms state, for sign-ups under them.
+        // The right of withdrawal the Terms state, for sign-ups under them;
+        // lessons held are kept when the student asked to start early.
         signedUpAt: reg.created_at ?? null,
         withdrawalDays: withdrawalDaysFor(reg.created_at ?? null),
+        startedAtRequest: Boolean(reg.early_start_requested_at),
       });
       // After the start the month's lessons decide the amount; with no
       // lessons known (the calendar not synced) the refund would read 0
@@ -6080,6 +6083,50 @@ Deno.serve(async (req) => {
         credit_id: creditId,
         breakdown,
       });
+    }
+
+    // The student's request to start inside the 14-day withdrawal period,
+    // received by email or WhatsApp (a sign-up paid by transfer, cash or at
+    // the centre never passes the box at checkout). Recorded by the owner,
+    // with the day it was received; undone if recorded by mistake. With it,
+    // lessons held are paid if the student withdraws (_shared/early-start.ts).
+    if (action === "set_early_start") {
+      if (typeof id !== "string")
+        return jsonResponse({ error: "Înscriere invalidă." }, 400);
+      const on = body.requested === true;
+      const receivedOn =
+        typeof body.received_on === "string" &&
+        /^\d{4}-\d{2}-\d{2}$/.test(body.received_on)
+          ? `${body.received_on}T12:00:00.000Z`
+          : new Date().toISOString();
+      if (on && Date.parse(receivedOn) > Date.now() + 86_400_000)
+        return jsonResponse({ error: "Data nu poate fi în viitor." }, 400);
+      const { data: reg, error: regErr } = await supabase
+        .from("registrations")
+        .select("id, form_type, early_start_requested_at, anonymized_at")
+        .eq("id", id)
+        .maybeSingle();
+      if (regErr) throw regErr;
+      if (!reg || reg.anonymized_at || reg.form_type !== "group")
+        return jsonResponse(
+          { error: "Doar pentru o înscriere la grupă." },
+          400,
+        );
+      const { error: updErr } = await supabase
+        .from("registrations")
+        .update({ early_start_requested_at: on ? receivedOn : null })
+        .eq("id", id);
+      if (updErr) throw updErr;
+      await supabase.from("audit_logs").insert({
+        actor: callerEmail!,
+        action: on ? "record_early_start" : "clear_early_start",
+        registration_id: id,
+        details: {
+          received_on: on ? receivedOn : null,
+          before: reg.early_start_requested_at ?? null,
+        },
+      });
+      return jsonResponse({ success: true });
     }
 
     // ============ Student credit (owner, 14 and 16 Nov 2026) ============

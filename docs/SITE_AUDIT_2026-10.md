@@ -151,6 +151,20 @@ re-checked on 26 Oct against main and the live site.
   withdrawal button OUG 18/2026 may ask for).
   Left out of the Terms on purpose, to be added when true: the Cancel and
   withdrawal buttons in the account (not built; the Terms name email).
+  EARLY START, BUILT 17 Nov (owner: "Yes protect me from free lessons"):
+  a group that starts within 14 days of paying (or has started) is joined
+  only by ticking, at checkout, the request for lessons to start inside the
+  withdrawal period; on withdrawal the lessons held are then paid. Every
+  card payment for a group passes _shared/early-start.ts and is refused
+  (409 early_start_required) until the request is recorded in
+  registrations.early_start_requested_at (column added 17 Nov with the
+  owner's OK; migration 20261117120000). The box is unticked by default and
+  its text is the one shown to the owner on 16 Nov. A request received by
+  email or WhatsApp (transfer, cash, centre) is recorded by the owner on the
+  student's sheet. Basis: European Commission guidance (DG Justice, June
+  2014, 6.5.1): a pre-ticked box or a line in the Terms does not count, and
+  the trader is not obliged to start early without the request. Whether the
+  box may be required to join such a group is for the lawyer to confirm.
   CREDIT, BUILT 16 Nov, not live (owner approved the two tables the same
   day; they exist in the database, server-only: student_credits and
   student_credit_uses, migration 20261116120000, written to run again

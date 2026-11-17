@@ -1,4 +1,5 @@
 import { groupEnrolmentError } from "../_shared/group-enrolment.ts";
+import { earlyStartGate } from "../_shared/early-start.ts";
 import { groupOwnPrice } from "../_shared/registration-plan.ts";
 import { serve } from "https://deno.land/std@0.190.0/http/server.ts";
 import Stripe from "https://esm.sh/stripe@18.5.0";
@@ -25,7 +26,8 @@ serve(async (req) => {
   }
 
   try {
-    const { courseType, email, name, registrationId } = await req.json();
+    const { courseType, email, name, registrationId, earlyStart } =
+      await req.json();
 
     if (
       !courseType ||
@@ -137,6 +139,22 @@ serve(async (req) => {
           headers: { ...corsHeaders, "Content-Type": "application/json" },
           status: 409,
         });
+      }
+      if (!isDeposit) {
+        // A group that starts inside the 14-day withdrawal period is joined only
+        // on the student's own request for the lessons to start in that time (the
+        // box at checkout), so lessons held are paid if they withdraw (owner,
+        // 17 Nov 2026; _shared/early-start.ts).
+        const earlyStartRefusal = await earlyStartGate(
+          adminClient,
+          regRow,
+          earlyStart,
+        );
+        if (earlyStartRefusal)
+          return new Response(JSON.stringify(earlyStartRefusal), {
+            status: 409,
+            headers: { ...corsHeaders, "Content-Type": "application/json" },
+          });
       }
       if (isDeposit && regRow.deposit_paid_at) {
         return new Response(JSON.stringify({ error: "Already paid" }), {

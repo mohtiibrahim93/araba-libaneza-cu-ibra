@@ -86,6 +86,11 @@ export interface Registration {
   /** Group course, month by month (supabase/functions/_shared/group-months.ts). */
   payment_months?: GroupMonthsSummary | null;
   canceled_at?: string | null;
+  /**
+   * When the student asked for lessons to start inside the 14-day withdrawal
+   * period (box at checkout, or recorded by the owner). Null = no request.
+   */
+  early_start_requested_at?: string | null;
   refunded_amount?: number | null;
   /** Kids seat deposit, kept apart from payment_status (the course's money). */
   deposit_paid_at?: string | null;

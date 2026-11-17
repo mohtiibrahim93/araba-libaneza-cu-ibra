@@ -59,6 +59,80 @@ async function readInvokeBody(err: unknown): Promise<InvokeErrorBody | null> {
   }
   return null;
 }
+/**
+ * A group that starts inside the 14-day withdrawal period (owner, 17 Nov
+ * 2026: "protect me from free lessons"; Terms, section 4). The server refuses
+ * to prepare the payment until the student asks, with this box they tick
+ * themselves, for the lessons to start in that time; if they then withdraw,
+ * they pay for the lessons held. Unticked by default: a pre-ticked box or a
+ * line in the Terms would not count (European Commission guidance, 2014).
+ */
+export const EarlyStartPanel = ({
+  english,
+  startDate,
+  onAccept,
+}: {
+  english: boolean;
+  startDate: string;
+  onAccept: () => void;
+}) => {
+  const [ticked, setTicked] = useState(false);
+  const day = new Intl.DateTimeFormat(english ? "en-GB" : "ro-RO", {
+    timeZone: "UTC",
+    day: "numeric",
+    month: "long",
+    year: "numeric",
+  }).format(new Date(`${startDate}T12:00:00Z`));
+  const today = new Intl.DateTimeFormat("en-CA", {
+    timeZone: "Europe/Bucharest",
+  }).format(new Date());
+  const started = startDate <= today;
+  return (
+    <div className="space-y-4" data-early-start>
+      <h2 className="text-lg font-semibold text-foreground">
+        {english
+          ? "Your group starts within 14 days"
+          : "Grupa ta începe în mai puțin de 14 zile"}
+      </h2>
+      <p className="text-sm text-muted-foreground">
+        {english
+          ? `You have 14 days to withdraw from the contract (Terms, section 4). Your group ${started ? "started" : "starts"} on ${day}, inside that time. To join it, tick the box below. If you would rather not, you can choose a group that starts later.`
+          : `Ai 14 zile în care te poți retrage din contract (Termeni, secțiunea 4). Grupa ta ${started ? "a început" : "începe"} pe ${day}, deci în acest timp. Ca să intri în ea, bifează căsuța de mai jos. Dacă nu vrei, poți alege o grupă care începe mai târziu.`}
+      </p>
+      <label className="flex items-start gap-3 rounded-lg border border-border p-4 text-sm text-foreground">
+        <input
+          type="checkbox"
+          className="mt-0.5 h-4 w-4 shrink-0"
+          checked={ticked}
+          onChange={(e) => setTicked(e.target.checked)}
+        />
+        <span>
+          {english
+            ? "I want my lessons to start before the 14-day withdrawal period ends. I understand that if I withdraw during that time, I pay for the lessons held until then."
+            : "Vreau să încep lecțiile înainte să treacă cele 14 zile de retragere. Înțeleg că, dacă mă retrag în acest timp, plătesc lecțiile ținute până atunci."}
+        </span>
+      </label>
+      <Button
+        type="button"
+        size="lg"
+        className="w-full"
+        disabled={!ticked}
+        onClick={onAccept}
+      >
+        {english ? "Continue to payment" : "Continuă spre plată"}
+      </Button>
+      <p className="text-center text-sm">
+        <a
+          href={english ? "/en/courses/group" : "/cursuri/grup"}
+          className="text-muted-foreground underline hover:text-foreground"
+        >
+          {english ? "Choose another group" : "Alege altă grupă"}
+        </a>
+      </p>
+    </div>
+  );
+};
+
 async function readInvokeError(err: unknown): Promise<string | null> {
   const body = await readInvokeBody(err);
   return body && typeof body.error === "string" && body.error
@@ -382,6 +456,11 @@ const Checkout = () => {
   // Set when the automatic redirect to Stripe's hosted page failed too —
   // only then do we show the manual button + WhatsApp escape hatch.
   const [hostedAutoFailed, setHostedAutoFailed] = useState(false);
+  // The group starts inside the 14-day withdrawal period and the server is
+  // waiting for the student's request (EarlyStartPanel); once they tick it,
+  // every call carries earlyStart and the server records it.
+  const [earlyStartDate, setEarlyStartDate] = useState<string | null>(null);
+  const [earlyStartAccepted, setEarlyStartAccepted] = useState(false);
 
   const showFallback = stripeLoadFailed || forceFallback;
 
@@ -446,7 +525,13 @@ const Checkout = () => {
         const useSubscription = hasPlan && plan === "monthly";
         const { data, error: invokeError } = useSubscription
           ? await supabase.functions.invoke("create-subscription", {
-              body: { email, name, registrationId, changePlan },
+              body: {
+                email,
+                name,
+                registrationId,
+                changePlan,
+                earlyStart: earlyStartAccepted,
+              },
             })
           : await supabase.functions.invoke("create-payment-intent", {
               body: {
@@ -456,10 +541,21 @@ const Checkout = () => {
                 registrationId,
                 quantity,
                 changePlan,
+                earlyStart: earlyStartAccepted,
               },
             });
         if (invokeError) {
           const body = await readInvokeBody(invokeError);
+          // The group starts inside the withdrawal period: ask first.
+          if (
+            body?.code === "early_start_required" &&
+            typeof (body as { startDate?: unknown }).startDate === "string"
+          ) {
+            if (cancelled) return;
+            setEarlyStartDate((body as { startDate: string }).startDate);
+            setPhase("ready");
+            return;
+          }
           // The row holds the other plan: follow it (this re-runs the effect).
           const rowPlan = asPlan(body?.plan);
           if (
@@ -558,6 +654,7 @@ const Checkout = () => {
     plan,
     forceFallback,
     emailVerified,
+    earlyStartAccepted,
   ]);
 
   const switchPlan = (next: Plan) => {
@@ -593,7 +690,11 @@ const Checkout = () => {
     return () => window.clearTimeout(t);
   }, [phase, stripePromise, stripeLoadFailed]);
 
-  const startHostedCheckout = async () => {
+  // `accepted`: true when called right after the early-start box is ticked
+  // (the state update has not reached this closure yet). A click event, when
+  // used as an onClick handler, is not `true`.
+  const startHostedCheckout = async (accepted?: unknown) => {
+    const earlyStartNow = accepted === true || earlyStartAccepted;
     if (!registrationId) {
       toast.error(
         english
@@ -612,11 +713,21 @@ const Checkout = () => {
           body: {
             registrationId,
             email,
+            earlyStart: earlyStartNow,
             ...(hasPlan ? { changePlan: plan } : {}),
           },
         },
       );
       if (invokeError) {
+        const refusal = await readInvokeBody(invokeError);
+        if (
+          refusal?.code === "early_start_required" &&
+          typeof (refusal as { startDate?: unknown }).startDate === "string"
+        ) {
+          setEarlyStartDate((refusal as { startDate: string }).startDate);
+          setHostedLoading(false);
+          return;
+        }
         const serverMsg = await readInvokeError(invokeError);
         throw new Error(serverMsg ?? "Nu am putut deschide pagina Stripe.");
       }
@@ -721,6 +832,18 @@ const Checkout = () => {
               english={english}
               onVerified={onEmailVerified}
               onEmailEntered={typeEmail}
+            />
+          ) : earlyStartDate && !earlyStartAccepted ? (
+            <EarlyStartPanel
+              english={english}
+              startDate={earlyStartDate}
+              onAccept={() => {
+                setEarlyStartAccepted(true);
+                setEarlyStartDate(null);
+                // The hosted page is opened by hand; the embedded form
+                // reloads by itself (earlyStartAccepted re-runs the effect).
+                if (showFallback) void startHostedCheckout(true);
+              }}
             />
           ) : offerChoiceFirst && !hostedAutoFailed ? (
             /* Back from Stripe's page: choose the plan (above), then go back. */
