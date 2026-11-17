@@ -1254,6 +1254,7 @@ export type Database = {
           deposit_amount: number | null
           deposit_paid_at: string | null
           deposit_session_id: string | null
+          early_start_requested_at: string | null
           email: string | null
           followup_snoozed_until: string | null
           form_type: string
@@ -1311,6 +1312,7 @@ export type Database = {
           deposit_amount?: number | null
           deposit_paid_at?: string | null
           deposit_session_id?: string | null
+          early_start_requested_at?: string | null
           email?: string | null
           followup_snoozed_until?: string | null
           form_type: string
@@ -1368,6 +1370,7 @@ export type Database = {
           deposit_amount?: number | null
           deposit_paid_at?: string | null
           deposit_session_id?: string | null
+          early_start_requested_at?: string | null
           email?: string | null
           followup_snoozed_until?: string | null
           form_type?: string
@@ -1539,6 +1542,113 @@ export type Database = {
           type?: string
         }
         Relationships: []
+      }
+      student_credit_uses: {
+        Row: {
+          amount_lei: number
+          credit_id: string
+          id: string
+          kind: string
+          note: string | null
+          recorded_by: string
+          refund_ref: string | null
+          used_at: string
+        }
+        Insert: {
+          amount_lei: number
+          credit_id: string
+          id?: string
+          kind: string
+          note?: string | null
+          recorded_by: string
+          refund_ref?: string | null
+          used_at?: string
+        }
+        Update: {
+          amount_lei?: number
+          credit_id?: string
+          id?: string
+          kind?: string
+          note?: string | null
+          recorded_by?: string
+          refund_ref?: string | null
+          used_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "student_credit_uses_credit_id_fkey"
+            columns: ["credit_id"]
+            isOneToOne: false
+            referencedRelation: "student_credits"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      student_credits: {
+        Row: {
+          amount_lei: number
+          created_at: string
+          created_by: string
+          expires_at: string
+          holder_email: string | null
+          holder_name: string
+          id: string
+          note: string | null
+          origin: string
+          refund_at_expiry: boolean
+          registration_id: string | null
+          reminder_sent_at: string | null
+          stripe_payment_id: string | null
+          student_id: string | null
+        }
+        Insert: {
+          amount_lei: number
+          created_at?: string
+          created_by: string
+          expires_at: string
+          holder_email?: string | null
+          holder_name: string
+          id?: string
+          note?: string | null
+          origin: string
+          refund_at_expiry?: boolean
+          registration_id?: string | null
+          reminder_sent_at?: string | null
+          stripe_payment_id?: string | null
+          student_id?: string | null
+        }
+        Update: {
+          amount_lei?: number
+          created_at?: string
+          created_by?: string
+          expires_at?: string
+          holder_email?: string | null
+          holder_name?: string
+          id?: string
+          note?: string | null
+          origin?: string
+          refund_at_expiry?: boolean
+          registration_id?: string | null
+          reminder_sent_at?: string | null
+          stripe_payment_id?: string | null
+          student_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "student_credits_registration_id_fkey"
+            columns: ["registration_id"]
+            isOneToOne: false
+            referencedRelation: "registrations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "student_credits_student_id_fkey"
+            columns: ["student_id"]
+            isOneToOne: false
+            referencedRelation: "students"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       student_progress: {
         Row: {
