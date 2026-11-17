@@ -34,6 +34,7 @@ interface Credit {
   created_at: string;
   expires_at: string;
   refund_at_expiry: boolean;
+  reminder_sent_at: string | null;
   stripe_payment_id: string | null;
   note: string | null;
   uses: CreditUse[];
@@ -379,6 +380,25 @@ const CreditsAdmin = () => {
                   ? ` · ajunge pentru ${c.state.privateLessons} ${c.state.privateLessons === 1 ? "lecție privată" : "lecții private"}`
                   : ""}
               </p>
+              {/* The email 30 days before expiry (Terms, section 4): when it
+                  went, or when it will go by itself. */}
+              {c.reminder_sent_at ? (
+                <p className="text-sm text-muted-foreground">
+                  Reamintire trimisă pe email pe {day(c.reminder_sent_at)}.
+                </p>
+              ) : c.refund_at_expiry &&
+                c.state.status === "active" &&
+                c.state.remainingLei > 0 ? (
+                <p className="text-sm text-muted-foreground">
+                  {c.holder_email
+                    ? `Reamintirea pe email pleacă singură pe ${day(
+                        new Date(
+                          Date.parse(c.expires_at) - 30 * 86_400_000,
+                        ).toISOString(),
+                      )}, la ${c.holder_email}.`
+                    : "Fără email: reamintirea nu poate fi trimisă."}
+                </p>
+              ) : null}
               {c.uses.length > 0 && (
                 <ul className="mt-2 space-y-1 text-sm text-muted-foreground">
                   {c.uses.map((u) => (

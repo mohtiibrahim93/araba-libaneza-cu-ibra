@@ -135,6 +135,9 @@ export async function sendTemplateEmail(
     label: templateName,
     idempotency_key: options.idempotencyKey || messageId,
     message_id: messageId,
+    // A template that asks the reader to reply names where replies go; the
+    // sender itself is a no-reply address.
+    ...(template.replyTo ? { reply_to: template.replyTo } : {}),
   };
   const sendOptions = { apiKey, sendUrl: Deno.env.get("LOVABLE_SEND_URL") };
 

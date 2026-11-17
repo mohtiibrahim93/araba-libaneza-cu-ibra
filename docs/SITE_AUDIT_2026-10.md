@@ -162,10 +162,15 @@ re-checked on 26 Oct against main and the live site.
   by hand). Nothing is returned by itself (owner, 16 Nov: "refund now
   button"). A cancellation in the admin that leaves credit writes it by
   itself, once per sign-up. The student sees it in "Contul meu".
-  NOT BUILT: the reminder email 30 days before expiry (the text has to be
-  shown to the owner first; credit.ts already says when it is due:
-  reminderDue). It is promised in the Terms, so it has to exist before the
-  first credit under the new rules is five months old. Also not built:
+  REMINDER EMAIL, BUILT 17 Nov (owner approved the Romanian text on 16-17
+  Nov, used word for word; the English is its translation): template
+  credit-expiry-reminder, sent by booking-reminders through
+  _shared/credit-reminders.ts once per credit, 30 days before it expires,
+  only for credit whose rest comes back in money (refund_at_expiry). The
+  credit is claimed before the send and released if the send fails. Replies
+  go to marhaba@ (reply_to; the sender stays noreply@). The admin shows when
+  it went or when it will go. Not live until booking-reminders is deployed.
+  Also not built:
   Cancel in the account with the transfer offered first; the mark for an
   absence with an extenuating circumstance; the box at checkout for
   starting lessons inside the 14 days.
@@ -201,6 +206,11 @@ re-checked on 26 Oct against main and the live site.
   before confirming), credit, and the withdrawal button the law may ask for;
   all three wait for (a)/(b) and the lawyer. Today "Rezervările mele" still
   sends its private link only to an address that has a booked lesson.
+- SYNC FIXED 16 Nov 2026, 21:33 UTC: Lovable's editor took GitHub's main
+  (its latest commit is main's). On the way it saved its own old copy to a
+  branch lovable-sync (d799986b): checked on 17 Nov, everything in it is on
+  main (the two security fixes in main's own form). Deleting that branch was
+  refused from this session; the owner deletes it on GitHub.
 - TO GO LIVE (15 Nov 2026), once Lovable's editor is on GitHub's main:
   publish, and deploy admin-registrations, auth-email-hook, booking-create,
   booking-manage, booking-reminders, calendar-sync, create-checkout,

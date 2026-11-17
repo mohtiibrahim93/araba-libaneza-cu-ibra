@@ -5,6 +5,8 @@ export interface TemplateEntry {
   component: React.ComponentType<any>;
   subject: string | ((data: Record<string, any>) => string);
   to?: string;
+  /** Where a reply goes, for an email that asks the reader to reply. */
+  replyTo?: string;
   displayName?: string;
   previewData?: Record<string, any>;
 }
@@ -31,6 +33,7 @@ import { template as expresiiLibaneze } from "./expresii-libaneze.tsx";
 import { template as plan30Zile } from "./plan-30-zile.tsx";
 import { template as groupSeatHold } from "./group-seat-hold.tsx";
 import { template as adminGroupOverCapacity } from "./admin-group-over-capacity.tsx";
+import { template as creditExpiryReminder } from "./credit-expiry-reminder.tsx";
 
 export const TEMPLATES: Record<string, TemplateEntry> = {
   "registration-confirmation": registrationConfirmation,
@@ -55,4 +58,5 @@ export const TEMPLATES: Record<string, TemplateEntry> = {
   "plan-30-zile": plan30Zile,
   "group-seat-hold": groupSeatHold,
   "admin-group-over-capacity": adminGroupOverCapacity,
+  "credit-expiry-reminder": creditExpiryReminder,
 };

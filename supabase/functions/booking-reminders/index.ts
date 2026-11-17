@@ -8,6 +8,7 @@ import {
 import { sendTemplateEmail } from "../_shared/managed-email.ts";
 import Stripe from "https://esm.sh/stripe@18.5.0";
 import { processGroupHolds } from "../_shared/group-holds.ts";
+import { processCreditReminders } from "../_shared/credit-reminders.ts";
 import { buildCorsHeaders } from "../_shared/cors.ts";
 import { lessonOfPackage } from "../_shared/package-lessons.ts";
 import { packageLessonNumber } from "../_shared/package-titles.ts";
@@ -254,8 +255,20 @@ Deno.serve(async (req) => {
     groupHolds = { error: e instanceof Error ? e.message : String(e) };
   }
 
+  // Credit about to run out (owner, 16-17 Nov 2026; Terms, section 4): one
+  // email 30 days before it expires (_shared/credit-reminders.ts). Its own
+  // try, so it never stops anything above.
+  let creditReminders: Record<string, number> | { error: string };
+  try {
+    creditReminders = await processCreditReminders(supabase, sendTemplateEmail);
+  } catch (e) {
+    console.error("[booking-reminders] credit reminders failed", e);
+    creditReminders = { error: e instanceof Error ? e.message : String(e) };
+  }
+
   return json({
     appeal_reminders: appealReminders,
+    credit_reminders: creditReminders,
     group_holds: groupHolds,
     ok: true,
     results,
