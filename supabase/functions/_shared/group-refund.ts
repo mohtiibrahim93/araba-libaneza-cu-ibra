@@ -63,7 +63,7 @@ export interface GroupCancelInput {
   withdrawalDays?: number | null;
   /**
    * The student expressly asked for lessons to begin inside the withdrawal
-   * period, so the lessons held are kept. Nothing records that yet.
+   * period, so the lessons held are kept (registrations.early_start_requested_at).
    */
   startedAtRequest?: boolean | null;
 }

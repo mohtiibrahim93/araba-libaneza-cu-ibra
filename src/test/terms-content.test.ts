@@ -117,7 +117,9 @@ describe("Terms: refund rules for new sign-ups", () => {
       "o lecție se consideră ținută chiar dacă ai lipsit",
       "Lecții anulate de noi: se reprogramează sau se returnează în bani.",
       "înainte de orice rambursare îți propunem mutarea într-o altă grupă de același nivel",
-      "Data anulării este data la care ai trimis emailul.",
+      "Cum anulezi: cu butonul „Anulează cursul” din Contul meu (la cursurile de grup)",
+      "Data anulării este data la care ne-ai trimis cererea.",
+      "Ne anunți cu butonul „Retrage-te din contract aici” din Contul meu sau printr-o declarație clară pe email",
       "procesăm rambursarea în cel mult 14 zile de la anulare",
     ])
       expect(terms, text).toContain(text);
@@ -137,7 +139,9 @@ describe("Terms: refund rules for new sign-ups", () => {
       "a lesson counts as held even if you were absent",
       "Lessons cancelled by us: they are rescheduled or refunded in money.",
       "before any refund, we offer you a move to another group of the same level",
-      "The cancellation date is the day you sent the email.",
+      "How to cancel: with the “Cancel the course” button in My account (for group courses)",
+      "The cancellation date is the day you sent us your request.",
+      "You tell us with the “Withdraw from the contract here” button in My account, or with a clear statement by email",
       "we process the refund within 14 days of the cancellation",
     ])
       expect(terms, text).toContain(text);
@@ -176,12 +180,31 @@ describe("Terms: refund rules for new sign-ups", () => {
     );
   });
 
-  it("promises no button that does not exist yet", () => {
-    // Neither Cancel nor the withdrawal button is built in the account: the
-    // Terms name email (and the school) until they are.
-    expect(terms).not.toMatch(
-      /butonul „Anulează”|“Cancel” button|butonul „Retrage-te|Withdraw from the contract here/,
+  it("names only buttons the account has, with the account's own words", () => {
+    // Built on 17 November 2026 (owner: "the cancel button if they want to
+    // cancel yes"): the Terms name a button only with the label the student
+    // sees in "Contul meu".
+    const page = readFileSync(
+      resolve(process.cwd(), "src/pages/MyAccount.tsx"),
+      "utf8",
     );
+    for (const [inTerms, onPage] of [
+      [
+        "butonul „Retrage-te din contract aici”",
+        'withdrawHere: "Retrage-te din contract aici"',
+      ],
+      [
+        "“Withdraw from the contract here” button",
+        'withdrawHere: "Withdraw from the contract here"',
+      ],
+      ["butonul „Anulează cursul”", 'cancelCourse: "Anulează cursul"'],
+      ["“Cancel the course” button", 'cancelCourse: "Cancel the course"'],
+    ]) {
+      expect(terms, inTerms).toContain(inTerms!);
+      expect(page, onPage).toContain(onPage!);
+    }
+    // No other button is promised.
+    expect(terms).not.toMatch(/butonul „Anulează”|“Cancel” button/);
   });
 
   it("states the 14-day right of withdrawal, ahead of the other rules", () => {

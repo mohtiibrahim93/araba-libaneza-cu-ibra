@@ -27,6 +27,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { WHATSAPP_CONTACT_URL } from "@/lib/social";
 import { paymentStatusText } from "@/lib/myPayments";
 import { EARLY_START_BOX, bucharestDay, longDay } from "@/lib/earlyStart";
+import { dateAndTime } from "../../supabase/functions/_shared/cancel-request";
 import {
   enrolmentTitle,
   formatDay,
@@ -118,6 +119,61 @@ const COPY = {
     paidDone: "Luna este înregistrată ca plătită. Mulțumim!",
     paidSlow:
       "Dacă luna nu apare ca plătită în câteva minute, scrie-ne pe WhatsApp.",
+    withdrawHere: "Retrage-te din contract aici",
+    withdrawUntil: (day: string) =>
+      `Ai 14 zile de la înscriere în care te poți retrage din contract, fără să dai un motiv: până pe ${day} inclusiv.`,
+    withdrawTitle: "Retragere din contract",
+    withdrawConfirm: "Confirmă retragerea",
+    cancelCourse: "Anulează cursul",
+    cancelConfirm: "Confirmă anularea",
+    moveFirst:
+      "Înainte să anulezi: te poți muta într-o altă grupă de același nivel.",
+    moveHere: "Cer mutarea în această grupă",
+    moveConfirm: (title: string) =>
+      `Ceri mutarea în „${title}”? Îți scriem ca să confirmăm mutarea.`,
+    startsOn: "începe pe",
+    statementLabel: "Declarația ta",
+    nameLabel: "Numele tău",
+    ackTo: (email: string) =>
+      `Confirmarea, cu data și ora trimiterii, o primești pe email la ${email}.`,
+    whatBack: "Ce primești înapoi (Termeni, secțiunea 4)",
+    close: "Renunță",
+    preparing2: "Se pregătește…",
+    previewFailed:
+      "Nu am putut pregăti cererea. Încearcă din nou sau scrie-ne pe WhatsApp.",
+    sendFailed:
+      "Nu am putut trimite cererea. Încearcă din nou sau scrie-ne pe WhatsApp.",
+    sentWithdrawal: "Retragerea ta a fost trimisă.",
+    sentCancellation: "Anularea ta a fost trimisă.",
+    sentTransfer: "Cererea de mutare a fost trimisă.",
+    ackMissing:
+      "Confirmarea pe email nu a plecat încă. Cererea ta este înregistrată cu data și ora de acum.",
+    sentRequest: {
+      withdrawal: (when: string) =>
+        `Ai trimis retragerea din contract pe ${when}. Îți returnăm sumele cuvenite în cel mult 14 zile.`,
+      cancellation: (when: string) =>
+        `Ai trimis anularea pe ${when}. În cel mult 14 zile îți scriem ce primești înapoi.`,
+      transfer: (when: string) =>
+        `Ai cerut mutarea în altă grupă pe ${when}. Îți scriem ca să confirmăm mutarea.`,
+    },
+    pv: {
+      unsure: "Suma o calculăm noi după Termeni și ți-o confirmăm pe email.",
+      nothingPaid:
+        "Nu ai nicio plată înregistrată, deci nu e nimic de returnat.",
+      all: (back: string, fee: boolean) =>
+        `Primești înapoi tot ce ai plătit: ${back}${fee ? ", minus comisionul de procesare Stripe" : ""}.`,
+      allButKept: (back: string, kept: string) =>
+        `Primești înapoi ${back}: tot ce ai plătit, minus lecțiile ținute (${kept}), pentru că ai cerut ca lecțiile să înceapă în cele 14 zile.`,
+      test: (kept: string, back: string, fee: boolean) =>
+        `Se rețin lecțiile ținute (${kept}). Primești înapoi ${back}${fee ? ", minus comisionul de procesare Stripe" : ""}.`,
+      credit: (credit: string) =>
+        `Luna în curs nu se mai rambursează în bani: lecțiile ei rămase devin credit de ${credit}, valabil 6 luni.`,
+      later: (back: string, fee: string | null, stripe: boolean) =>
+        `Lunile plătite care nu au început: primești înapoi ${back}${fee ? ` (după taxa administrativă de anulare de 10%, ${fee})` : ""}${stripe ? ", minus comisionul de procesare Stripe" : ""}.`,
+      none: "Nu primești nimic înapoi: lunile începute nu se rambursează.",
+      finished: "Cursul s-a încheiat: nu mai e nimic de returnat.",
+      confirm: "Îți confirmăm suma pe email, în cel mult 14 zile.",
+    },
     earlyStartTitle: "Începerea în cele 14 zile de retragere",
     earlyStartText: (started: boolean, day: string) =>
       `Grupa ta ${started ? "a început" : "începe"} pe ${day}, în cele 14 zile în care te poți retrage din contract (Termeni, secțiunea 4). Ca să participi la lecții în acest timp, bifează căsuța și trimite cererea.`,
@@ -198,6 +254,62 @@ const COPY = {
     paidDone: "The month is recorded as paid. Thank you!",
     paidSlow:
       "If the month does not show as paid in a few minutes, message us on WhatsApp.",
+    withdrawHere: "Withdraw from the contract here",
+    withdrawUntil: (day: string) =>
+      `You have 14 days from signing up in which you can withdraw from the contract without giving a reason: until ${day}, inclusive.`,
+    withdrawTitle: "Withdrawal from the contract",
+    withdrawConfirm: "Confirm withdrawal",
+    cancelCourse: "Cancel the course",
+    cancelConfirm: "Confirm cancellation",
+    moveFirst:
+      "Before you cancel: you can move to another group of the same level.",
+    moveHere: "Ask to move to this group",
+    moveConfirm: (title: string) =>
+      `Ask to move to “${title}”? We will write to confirm the move.`,
+    startsOn: "starts on",
+    statementLabel: "Your statement",
+    nameLabel: "Your name",
+    ackTo: (email: string) =>
+      `You get the confirmation, with the date and time it was sent, by email at ${email}.`,
+    whatBack: "What you get back (Terms, section 4)",
+    close: "Not now",
+    preparing2: "Preparing…",
+    previewFailed:
+      "We could not prepare the request. Try again or message us on WhatsApp.",
+    sendFailed:
+      "We could not send the request. Try again or message us on WhatsApp.",
+    sentWithdrawal: "Your withdrawal has been sent.",
+    sentCancellation: "Your cancellation has been sent.",
+    sentTransfer: "Your request to move has been sent.",
+    ackMissing:
+      "The confirmation email has not gone out yet. Your request is recorded with today's date and time.",
+    sentRequest: {
+      withdrawal: (when: string) =>
+        `You sent your withdrawal from the contract on ${when}. We refund what is due to you within 14 days.`,
+      cancellation: (when: string) =>
+        `You sent your cancellation on ${when}. Within 14 days we write to tell you what you get back.`,
+      transfer: (when: string) =>
+        `You asked to move to another group on ${when}. We will write to confirm the move.`,
+    },
+    pv: {
+      unsure:
+        "We work out the amount by the Terms and confirm it to you by email.",
+      nothingPaid:
+        "You have no payment recorded, so there is nothing to refund.",
+      all: (back: string, fee: boolean) =>
+        `You get back everything you paid: ${back}${fee ? ", minus the Stripe processing fee" : ""}.`,
+      allButKept: (back: string, kept: string) =>
+        `You get back ${back}: everything you paid, minus the lessons held (${kept}), because you asked for the lessons to start within the 14 days.`,
+      test: (kept: string, back: string, fee: boolean) =>
+        `The lessons held are kept (${kept}). You get back ${back}${fee ? ", minus the Stripe processing fee" : ""}.`,
+      credit: (credit: string) =>
+        `The month in progress is no longer refunded in money: its remaining lessons become credit of ${credit}, valid for 6 months.`,
+      later: (back: string, fee: string | null, stripe: boolean) =>
+        `Paid months that have not started: you get back ${back}${fee ? ` (after the 10% administrative cancellation fee, ${fee})` : ""}${stripe ? ", minus the Stripe processing fee" : ""}.`,
+      none: "You get nothing back: months that have started are not refunded.",
+      finished: "The course has ended: there is nothing left to refund.",
+      confirm: "We confirm the amount to you by email within 14 days.",
+    },
     earlyStartTitle: "Starting within the 14-day withdrawal period",
     earlyStartText: (started: boolean, day: string) =>
       `Your group ${started ? "started" : "starts"} on ${day}, within the 14 days in which you can withdraw from the contract (Terms, section 4). To take part in the lessons in that time, tick the box and send the request.`,
@@ -520,6 +632,307 @@ const EarlyStartRequest = ({
   );
 };
 
+// ---------------------------------------------------------------------------
+// Withdrawing or cancelling (Terms, section 4)
+// ---------------------------------------------------------------------------
+
+/** What student-cancel computes: the Terms' answer for today. */
+interface CancelPreviewData {
+  case: string;
+  paidLei: number;
+  keptLei: number;
+  creditLei: number;
+  cancelFeeLei: number;
+  backLei: number;
+  stripeFee: boolean;
+  certain: boolean;
+}
+
+interface CancelData {
+  request: { kind: string; requestedAt: string } | null;
+  name: string;
+  email: string;
+  statement: string | null;
+  preview: CancelPreviewData | null;
+  groups: Array<{
+    id: string;
+    title: string;
+    startDate: string | null;
+    schedule: string | null;
+  }>;
+}
+
+/** What comes back, in the Terms' own words, with the amounts. */
+const RefundLines = ({
+  c,
+  lang,
+  p,
+}: {
+  c: Copy;
+  lang: Lang;
+  p: CancelPreviewData;
+}) => {
+  const f = (n: number) => formatLei(n, lang);
+  const lines: string[] = [];
+  if (!p.certain) lines.push(c.pv.unsure);
+  else if (p.paidLei <= 0) lines.push(c.pv.nothingPaid);
+  else if (p.case === "withdrawal")
+    lines.push(
+      p.keptLei > 0
+        ? c.pv.allButKept(f(p.backLei), f(p.keptLei))
+        : c.pv.all(f(p.backLei), false),
+    );
+  else if (p.case === "before_start")
+    lines.push(c.pv.all(f(p.backLei), p.stripeFee));
+  else if (p.case === "test_lessons")
+    lines.push(c.pv.test(f(p.keptLei), f(p.backLei), p.stripeFee));
+  else if (p.case === "after_test_lessons") {
+    if (p.creditLei > 0) lines.push(c.pv.credit(f(p.creditLei)));
+    if (p.backLei > 0)
+      lines.push(
+        c.pv.later(
+          f(p.backLei),
+          p.cancelFeeLei > 0 ? f(p.cancelFeeLei) : null,
+          p.stripeFee,
+        ),
+      );
+    if (p.creditLei <= 0 && p.backLei <= 0) lines.push(c.pv.none);
+  } else lines.push(c.pv.finished);
+  return (
+    <div className="rounded-lg bg-muted/50 p-3 text-sm">
+      <p className="font-semibold text-foreground">{c.whatBack}</p>
+      <ul className="mt-1 list-disc space-y-1 pl-5 text-foreground">
+        {lines.map((l) => (
+          <li key={l}>{l}</li>
+        ))}
+      </ul>
+      {p.certain && p.paidLei > 0 && (
+        <p className="mt-2 text-xs text-muted-foreground">{c.pv.confirm}</p>
+      )}
+    </div>
+  );
+};
+
+/**
+ * "Retrage-te din contract aici" during the 14 days, "Anulează cursul" after
+ * them (owner, 17 Nov 2026). The withdrawal follows the withdrawal function
+ * of Directive (EU) 2023/2673, art. 11a: the button, a statement where the
+ * student confirms their name, the contract and the address the confirmation
+ * goes to, then "Confirmă retragerea"; the server emails the acknowledgement
+ * with the date and time. Before a cancellation the student is offered a move
+ * to another group of the same level, and shown what comes back.
+ */
+const CancelSection = ({
+  c,
+  lang,
+  enrolment: e,
+  onChanged,
+}: {
+  c: Copy;
+  lang: Lang;
+  enrolment: AccountEnrolment;
+  onChanged: () => Promise<unknown>;
+}) => {
+  const [open, setOpen] = useState(false);
+  const [data, setData] = useState<CancelData | null>(null);
+  const [busy, setBusy] = useState(false);
+  const [name, setName] = useState("");
+  const withdrawal = Boolean(e.withdrawalUntil);
+
+  if (e.request)
+    return (
+      <p className="mt-5 rounded-xl border border-border bg-muted/40 p-4 text-sm text-foreground">
+        {c.sentRequest[e.request.kind](
+          dateAndTime(e.request.requestedAt, lang),
+        )}
+      </p>
+    );
+  if (!e.withdrawalUntil && !e.canCancel) return null;
+
+  const openPanel = async () => {
+    setOpen(true);
+    setData(null);
+    const { data: res, error } = await supabase.functions.invoke(
+      "student-cancel",
+      { body: { action: "preview", registrationId: e.id, lang } },
+    );
+    if (error || !res) {
+      toast.error(c.previewFailed);
+      setOpen(false);
+      return;
+    }
+    const fresh = res as CancelData;
+    // Sent from another tab or device: show it as sent.
+    if (fresh.request || !fresh.statement) {
+      setOpen(false);
+      await onChanged();
+      return;
+    }
+    setData(fresh);
+    setName(fresh.name ?? "");
+  };
+
+  const send = async (
+    kind: "withdrawal" | "cancellation" | "transfer",
+    targetCohortId?: string,
+  ) => {
+    setBusy(true);
+    const { data: res, error } = await supabase.functions.invoke(
+      "student-cancel",
+      {
+        body: {
+          action: "request",
+          registrationId: e.id,
+          kind,
+          confirm: true,
+          name,
+          lang,
+          ...(targetCohortId ? { targetCohortId } : {}),
+        },
+      },
+    );
+    setBusy(false);
+    if (error || !res?.request) {
+      toast.error(c.sendFailed);
+      return;
+    }
+    toast.success(
+      kind === "withdrawal"
+        ? c.sentWithdrawal
+        : kind === "transfer"
+          ? c.sentTransfer
+          : c.sentCancellation,
+    );
+    if (res.acknowledged === false) toast(c.ackMissing);
+    setOpen(false);
+    setData(null);
+    await onChanged();
+  };
+
+  if (!open)
+    return withdrawal ? (
+      <div className="mt-5 rounded-xl border border-border p-4">
+        <p className="text-sm text-muted-foreground">
+          {c.withdrawUntil(formatDay(e.withdrawalUntil!, lang))}
+        </p>
+        <Button
+          type="button"
+          variant="outline"
+          className="mt-3"
+          onClick={() => void openPanel()}
+        >
+          {c.withdrawHere}
+        </Button>
+      </div>
+    ) : (
+      <div className="mt-5">
+        <button
+          type="button"
+          className="text-sm font-semibold text-muted-foreground underline hover:text-foreground"
+          onClick={() => void openPanel()}
+        >
+          {c.cancelCourse}
+        </button>
+      </div>
+    );
+
+  return (
+    <div
+      className="mt-5 space-y-4 rounded-xl border border-border p-4"
+      data-cancel-panel
+    >
+      <p className="font-semibold text-foreground">
+        {withdrawal ? c.withdrawTitle : c.cancelCourse}
+      </p>
+      {!data ? (
+        <p className="flex items-center gap-2 text-sm text-muted-foreground">
+          <Loader2 className="h-4 w-4 animate-spin" /> {c.preparing2}
+        </p>
+      ) : (
+        <>
+          {!withdrawal && data.groups.length > 0 && (
+            <div className="space-y-2">
+              <p className="text-sm text-foreground">{c.moveFirst}</p>
+              <ul className="space-y-2">
+                {data.groups.map((g) => (
+                  <li
+                    key={g.id}
+                    className="flex flex-wrap items-center justify-between gap-2 rounded-lg border border-border p-3 text-sm"
+                  >
+                    <span className="min-w-0">
+                      <strong className="text-foreground">{g.title}</strong>
+                      <span className="block text-muted-foreground">
+                        {g.startDate
+                          ? `${c.startsOn} ${formatDay(g.startDate, lang)}`
+                          : ""}
+                        {g.schedule ? ` · ${g.schedule}` : ""}
+                      </span>
+                    </span>
+                    <Button
+                      type="button"
+                      size="sm"
+                      variant="outline"
+                      disabled={busy}
+                      onClick={() => {
+                        if (window.confirm(c.moveConfirm(g.title)))
+                          void send("transfer", g.id);
+                      }}
+                    >
+                      {c.moveHere}
+                    </Button>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
+          {data.preview && <RefundLines c={c} lang={lang} p={data.preview} />}
+          <div className="space-y-2 text-sm">
+            <p className="font-semibold text-foreground">{c.statementLabel}</p>
+            <p className="rounded-lg border-l-4 border-border bg-muted/40 p-3 text-foreground">
+              {data.statement}
+            </p>
+            <label className="block text-foreground">
+              {c.nameLabel}
+              <input
+                className="mt-1 block h-10 w-full max-w-sm rounded-lg border border-input bg-background px-3 text-sm"
+                value={name}
+                maxLength={160}
+                autoComplete="name"
+                onChange={(ev) => setName(ev.target.value)}
+              />
+            </label>
+            <p className="text-muted-foreground">{c.ackTo(data.email)}</p>
+          </div>
+          <div className="flex flex-col gap-2 sm:flex-row">
+            <Button
+              type="button"
+              variant={withdrawal ? "default" : "destructive"}
+              disabled={busy || !name.trim()}
+              onClick={() =>
+                void send(withdrawal ? "withdrawal" : "cancellation")
+              }
+            >
+              {busy && <Loader2 className="animate-spin" />}
+              {withdrawal ? c.withdrawConfirm : c.cancelConfirm}
+            </Button>
+            <Button
+              type="button"
+              variant="outline"
+              disabled={busy}
+              onClick={() => {
+                setOpen(false);
+                setData(null);
+              }}
+            >
+              {c.close}
+            </Button>
+          </div>
+        </>
+      )}
+    </div>
+  );
+};
+
 const EnrolmentCard = ({
   c,
   lang,
@@ -656,6 +1069,8 @@ const EnrolmentCard = ({
           </p>
         </div>
       )}
+
+      <CancelSection c={c} lang={lang} enrolment={e} onChanged={onChanged} />
     </article>
   );
 };

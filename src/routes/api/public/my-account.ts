@@ -5,6 +5,7 @@ import {
   type AccountCohortRow,
   type AccountCreditRow,
   type AccountRegistrationRow,
+  type AccountRequestRow,
 } from "@/lib/myAccount";
 
 /**
@@ -131,10 +132,43 @@ export const Route = createFileRoute("/api/public/my-account")({
         if (creditError)
           console.error("[my-account] credit lookup failed", creditError);
 
+        // A withdrawal, cancellation or move the student sent from here and
+        // the owner has not handled yet: the card says so instead of showing
+        // the buttons again.
+        let requests: AccountRequestRow[] = [];
+        if (rows.length) {
+          const { data, error } = await (
+            supabaseAdmin as unknown as {
+              from: (table: string) => {
+                select: (columns: string) => {
+                  in: (
+                    column: string,
+                    values: string[],
+                  ) => {
+                    is: (
+                      column: string,
+                      value: null,
+                    ) => Promise<{ data: unknown; error: unknown }>;
+                  };
+                };
+              };
+            }
+          )
+            .from("cancellation_requests")
+            .select("registration_id,kind,requested_at")
+            .in(
+              "registration_id",
+              rows.map((r) => r.id),
+            )
+            .is("handled_at", null);
+          if (error) console.error("[my-account] request lookup failed", error);
+          else requests = (data ?? []) as AccountRequestRow[];
+        }
+
         return Response.json(
           {
             email,
-            enrolments: buildAccount(rows, cohorts),
+            enrolments: buildAccount(rows, cohorts, undefined, requests),
             bookings: bookings ?? [],
             credits: buildCredits((credits ?? []) as AccountCreditRow[]),
           },

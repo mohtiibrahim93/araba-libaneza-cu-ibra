@@ -115,6 +115,27 @@ interface Today {
     appeal_text: string | null;
     appeal_at: string;
   }>;
+  /**
+   * Withdrawals (14 days), cancellations and moves sent by students from
+   * "Contul meu", not handled yet: answer within 14 days (Terms, section 4).
+   */
+  openCancelRequests?: Array<{
+    id: string;
+    registration_id: string;
+    kind: "withdrawal" | "cancellation" | "transfer";
+    requested_at: string;
+    name: string | null;
+    statement: string;
+    shown: {
+      backLei?: number;
+      creditLei?: number;
+      stripeFee?: boolean;
+      certain?: boolean;
+    } | null;
+    subscription_stopped_at: string | null;
+    acknowledged_at: string | null;
+    registrations: { name: string | null; phone: string | null } | null;
+  }>;
   /** Private packages with one lesson left (or none) for a student still coming. */
   lowPackages?: Array<{
     id: string;
@@ -278,6 +299,38 @@ const TodayAdmin = ({
         ? {
             ...d,
             openAppeals: (d.openAppeals ?? []).filter((a) => a.id !== id),
+          }
+        : d,
+    );
+  };
+
+  // A request from "Contul meu" handled: the refund, the move or the answer
+  // is done with the usual tools; this only closes the request.
+  const resolveRequest = async (id: string) => {
+    const note = window.prompt(
+      "Cererea e rezolvată. O notă scurtă (opțional), de ex. „rambursat 500 lei pe 20 nov”:",
+      "",
+    );
+    if (note === null) return;
+    const { data: res, error: err } = await invokeAdmin<{
+      success?: boolean;
+      error?: string;
+    }>({ action: "resolve_cancel_request", id, note });
+    if (err || res?.error || res?.success !== true) {
+      toast({
+        title: res?.error || err?.message || "Nu s-a salvat.",
+        variant: "destructive",
+      });
+      return;
+    }
+    toast({ title: "Cerere rezolvată" });
+    setData((d) =>
+      d
+        ? {
+            ...d,
+            openCancelRequests: (d.openCancelRequests ?? []).filter(
+              (q) => q.id !== id,
+            ),
           }
         : d,
     );
@@ -552,6 +605,77 @@ const TodayAdmin = ({
                     />
                   </div>
                 ))}
+              </div>
+            )}
+
+            {!!data.openCancelRequests?.length && filter === "all" && (
+              <div className="space-y-3 rounded-2xl border border-admin-warn-line bg-admin-warn-bg p-4 text-admin-warn-fg">
+                <p className="text-sm font-semibold">
+                  Cereri din Contul meu — răspunde în 14 zile
+                </p>
+                <ul className="space-y-3 text-sm">
+                  {data.openCancelRequests.map((q) => (
+                    <li key={q.id} className="space-y-1">
+                      <p>
+                        <b>{q.registrations?.name || q.name || "Fără nume"}</b>{" "}
+                        ·{" "}
+                        {q.kind === "withdrawal"
+                          ? "retragere din contract (14 zile)"
+                          : q.kind === "transfer"
+                            ? "cere mutarea în altă grupă"
+                            : "anulare"}{" "}
+                        ·{" "}
+                        {new Intl.DateTimeFormat("ro-RO", {
+                          timeZone: TZ,
+                          dateStyle: "short",
+                          timeStyle: "short",
+                        }).format(new Date(q.requested_at))}
+                      </p>
+                      <p className="rounded-lg bg-card p-2 text-foreground">
+                        „{q.statement}”
+                      </p>
+                      {q.kind !== "transfer" && q.shown && (
+                        <p className="text-xs">
+                          {q.shown.certain === false
+                            ? "Nu i s-a arătat o sumă: lecțiile grupei nu erau toate în sistem."
+                            : `I s-a arătat: înapoi ${q.shown.backLei ?? 0} lei${q.shown.stripeFee ? " minus comisionul Stripe" : ""}, credit ${q.shown.creditLei ?? 0} lei.`}
+                        </p>
+                      )}
+                      {!q.acknowledged_at && (
+                        <p className="text-xs font-semibold">
+                          Confirmarea pe email către cursant nu a plecat:
+                          trimite-i-o tu, cu data și ora de mai sus.
+                        </p>
+                      )}
+                      <div className="flex flex-wrap gap-2">
+                        <button
+                          type="button"
+                          className={cn(
+                            rowBtn,
+                            "border border-admin-warn-line bg-card text-foreground",
+                          )}
+                          onClick={() => onOpenPerson?.(q.registration_id)}
+                        >
+                          Fișa
+                        </button>
+                        <button
+                          type="button"
+                          className={cn(
+                            rowBtn,
+                            "border border-admin-warn-line bg-card text-foreground",
+                          )}
+                          onClick={() => void resolveRequest(q.id)}
+                        >
+                          Rezolvată
+                        </button>
+                      </div>
+                    </li>
+                  ))}
+                </ul>
+                <p className="text-xs">
+                  Rambursarea, creditul sau mutarea le faci din fișă; data
+                  anulării este cea de mai sus. Apasă „Rezolvată” după aceea.
+                </p>
               </div>
             )}
 

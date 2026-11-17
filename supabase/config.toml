@@ -9,6 +9,9 @@ project_id = "pzouzxgswccyhxhpgfwb"
     verify_jwt = false
   [functions.create-month-payment]
     verify_jwt = false
+  [functions.student-cancel]
+    # Checks the signed-in student itself (verified-registration-owner.ts).
+    verify_jwt = false
   [functions.create-payment-intent]
     verify_jwt = false
   [functions.create-subscription]

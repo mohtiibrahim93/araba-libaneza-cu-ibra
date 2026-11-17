@@ -298,6 +298,8 @@ async function refundInputsFor(
   stripe: Stripe,
   reg: Record<string, unknown>,
   lessonsTaken: number,
+  // When the student cancelled from "Contul meu"; null: now.
+  cancelledAt: string | null = null,
 ): Promise<
   { breakdown: RefundBreakdown; paymentIntentId: string } | { error: string }
 > {
@@ -353,6 +355,7 @@ async function refundInputsFor(
       totalLessons,
       lessonsTaken,
       courseStartsAt,
+      cancelledAt,
       stripeFeeBani: await stripeFeeFor(stripe, paymentIntentId),
       // Private lessons have no monthly rule: unused ones always come back.
       lessonsPerMonth: formType === "private" ? null : LESSONS_PER_MONTH,
@@ -372,6 +375,33 @@ async function refundInputsFor(
       startedAtRequest: Boolean(reg.early_start_requested_at),
     }),
   };
+}
+
+/**
+ * The cancellation date of a sign-up whose student withdrew or cancelled from
+ * "Contul meu" and whose request is still open (cancellation_requests): the
+ * refund is worked out for that moment, not for the day the owner presses the
+ * button (Terms, section 4: the cancellation date is the day the student sent
+ * it). Null when there is none, or the table cannot be read.
+ */
+async function requestedCancellationAt(
+  // deno-lint-ignore no-explicit-any
+  supabase: any,
+  registrationId: string,
+): Promise<string | null> {
+  try {
+    const { data, error } = await supabase
+      .from("cancellation_requests")
+      .select("requested_at")
+      .eq("registration_id", registrationId)
+      .in("kind", ["withdrawal", "cancellation"])
+      .is("handled_at", null)
+      .maybeSingle();
+    if (error) return null;
+    return (data?.requested_at as string | undefined) ?? null;
+  } catch {
+    return null;
+  }
 }
 
 /** Marks the credit a cancellation left, so it is written once per sign-up. */
@@ -4019,10 +4049,25 @@ Deno.serve(async (req) => {
         .limit(50);
       if (appealsErr) throw appealsErr;
 
+      // Withdrawals, cancellations and moves students sent from "Contul meu"
+      // and the owner has not handled yet (14 days to answer, Terms section
+      // 4). A read that fails leaves the list empty rather than the screen.
+      const { data: cancelRows, error: cancelErr } = await supabase
+        .from("cancellation_requests")
+        .select(
+          "id, registration_id, kind, requested_at, name, statement, shown, subscription_stopped_at, acknowledged_at, target_cohort_id, registrations(name, phone)",
+        )
+        .is("handled_at", null)
+        .order("requested_at", { ascending: true })
+        .limit(50);
+      if (cancelErr)
+        console.error("[list_today] cancellation requests", cancelErr);
+
       return jsonResponse({
         data: {
           now: new Date(now).toISOString(),
           openAppeals: openAppeals ?? [],
+          openCancelRequests: cancelErr ? [] : (cancelRows ?? []),
           lessons: await withPackageNumbers(lessons ?? []),
           trialsToMark: trialsToMark ?? [],
           refundedLessons,
@@ -5214,6 +5259,18 @@ Deno.serve(async (req) => {
 
       const done = (updated ?? []).map((r) => r.id);
       if (done.length > 0) {
+        // The requests sent from "Contul meu" hold the name, the address and
+        // the statement: they go too. Amounts and dates stay.
+        const { error: scrubErr } = await supabase
+          .from("cancellation_requests")
+          .update({
+            name: null,
+            email: null,
+            statement: "Anonimizat (GDPR)",
+          })
+          .in("registration_id", done);
+        if (scrubErr)
+          console.error("[anonymize] cancellation requests", scrubErr);
         await supabase.from("audit_logs").insert(
           done.map((rid) => ({
             actor: callerEmail!,
@@ -5632,7 +5689,13 @@ Deno.serve(async (req) => {
       const stripe = new Stripe(Deno.env.get("STRIPE_SECRET_KEY") || "", {
         apiVersion: "2025-08-27.basil",
       });
-      const inputs = await refundInputsFor(supabase, stripe, reg, taken);
+      const inputs = await refundInputsFor(
+        supabase,
+        stripe,
+        reg,
+        taken,
+        await requestedCancellationAt(supabase, reg.id),
+      );
       if ("error" in inputs) return jsonResponse({ error: inputs.error });
       return jsonResponse({
         success: true,
@@ -5753,7 +5816,13 @@ Deno.serve(async (req) => {
       // stripe.refunds.create with no amount, which refunds the charge in
       // full — the three tiers in Terms section 4 existed on the site and in
       // _shared/refund.ts but nothing ever ran them.
-      const inputs = await refundInputsFor(supabase, stripe, reg, lessonsTaken);
+      const inputs = await refundInputsFor(
+        supabase,
+        stripe,
+        reg,
+        lessonsTaken,
+        await requestedCancellationAt(supabase, reg.id),
+      );
       if ("error" in inputs) return jsonResponse({ error: inputs.error });
       const { breakdown, paymentIntentId } = inputs;
 
@@ -5950,6 +6019,8 @@ Deno.serve(async (req) => {
         charges,
         courseStartDate,
         sessionStarts,
+        // A cancellation sent from "Contul meu" counts from when it was sent.
+        cancelledAt: await requestedCancellationAt(supabase, reg.id),
         currentPeriodEnd: periodEndUnix
           ? new Date(periodEndUnix * 1000).toISOString()
           : null,
@@ -6125,6 +6196,53 @@ Deno.serve(async (req) => {
           received_on: on ? receivedOn : null,
           before: reg.early_start_requested_at ?? null,
         },
+      });
+      return jsonResponse({ success: true });
+    }
+
+    // ============ Requests from "Contul meu" (owner, 17 Nov 2026) ============
+    // A withdrawal (14 days), a cancellation or a move the student sent with
+    // the buttons in their account (student-cancel). The owner refunds, moves
+    // or writes back with the usual tools, then marks the request handled.
+    if (action === "list_cancel_requests") {
+      if (typeof body.registration_id !== "string")
+        return jsonResponse({ error: "Înscriere invalidă." }, 400);
+      const { data, error: listErr } = await supabase
+        .from("cancellation_requests")
+        .select(
+          "id, kind, requested_at, name, email, statement, shown, target_cohort_id, subscription_stopped_at, acknowledged_at, owner_notified_at, handled_at, handled_by, handled_note",
+        )
+        .eq("registration_id", body.registration_id)
+        .order("requested_at", { ascending: false })
+        .limit(20);
+      if (listErr) throw listErr;
+      return jsonResponse({ data: data ?? [] });
+    }
+
+    if (action === "resolve_cancel_request") {
+      if (typeof id !== "string")
+        return jsonResponse({ error: "Cerere invalidă." }, 400);
+      const note =
+        typeof body.note === "string" ? body.note.trim().slice(0, 500) : "";
+      const { data: done, error: resErr } = await supabase
+        .from("cancellation_requests")
+        .update({
+          handled_at: new Date().toISOString(),
+          handled_by: callerEmail!,
+          handled_note: note || null,
+        })
+        .eq("id", id)
+        .is("handled_at", null)
+        .select("id, registration_id, kind")
+        .maybeSingle();
+      if (resErr) throw resErr;
+      if (!done)
+        return jsonResponse({ error: "Cererea a fost deja rezolvată." }, 409);
+      await supabase.from("audit_logs").insert({
+        actor: callerEmail!,
+        action: "resolve_cancel_request",
+        registration_id: done.registration_id,
+        details: { request_id: done.id, kind: done.kind, note: note || null },
       });
       return jsonResponse({ success: true });
     }

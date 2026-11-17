@@ -184,8 +184,9 @@ export interface RefundInput {
   withdrawalDays?: number | null;
   /**
    * The student expressly asked for lessons to begin inside the withdrawal
-   * period, so the lessons held are kept. Nothing records such a request yet
-   * (the checkout has no box for it), so callers leave it false.
+   * period, so the lessons held are kept. Recorded in
+   * registrations.early_start_requested_at (the box in the sign-up form, at
+   * checkout or in "Contul meu", or by the owner; _shared/early-start.ts).
    */
   startedAtRequest?: boolean | null;
 }

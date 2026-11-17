@@ -28,6 +28,7 @@ import {
   underNewRefundRules,
   withinWithdrawal,
 } from "../../supabase/functions/_shared/refund";
+import { cancelOptions } from "../../supabase/functions/_shared/cancel-request";
 import { bucharestDay, startsInsideWithdrawal } from "./earlyStart";
 
 export type Lang = "ro" | "en";
@@ -157,10 +158,32 @@ export interface AccountEnrolment {
    * not asked for the lessons to start in that time yet (needsEarlyStartRequest).
    */
   earlyStartNeeded: boolean;
+  /**
+   * "Retrage-te din contract aici" (Terms, section 4): shown until this day
+   * (YYYY-MM-DD) inclusive; null when the 14 days are over or do not apply.
+   */
+  withdrawalUntil: string | null;
+  /** "Anulează cursul": a group course still running, after the 14 days. */
+  canCancel: boolean;
+  /** A withdrawal, cancellation or move the student sent and the owner has not handled yet. */
+  request: AccountRequest | null;
   /** Private lessons: the size of the package. */
   lessons: number | null;
   payments: AccountPayment[];
   refundedLei: number;
+}
+
+/** A request sent from the account (cancellation_requests), still open. */
+export interface AccountRequest {
+  kind: "withdrawal" | "cancellation" | "transfer";
+  requestedAt: string;
+}
+
+/** The open request rows, as the server reads them. */
+export interface AccountRequestRow {
+  registration_id: string;
+  kind: string;
+  requested_at: string;
 }
 
 const lei = (v: number | string | null | undefined) => {
@@ -172,6 +195,7 @@ export function buildEnrolment(
   reg: AccountRegistrationRow,
   cohort: AccountCohortRow | null,
   today?: string,
+  request: AccountRequest | null = null,
 ): AccountEnrolment {
   const rows = (reg.registration_payments ?? []) as AccountPaymentRow[];
   const isGroup = reg.form_type === "group";
@@ -222,6 +246,14 @@ export function buildEnrolment(
     else noPaymentReason = check.reason;
   }
 
+  const now = today ? new Date(`${today}T12:00:00Z`) : new Date();
+  const options = cancelOptions(reg, cohort?.status ?? null, now);
+  // Once the student has withdrawn or cancelled, there is nothing to pay.
+  if (request && request.kind !== "transfer") {
+    nextPayment = null;
+    noPaymentReason = noPaymentReason ?? "withdrawn";
+  }
+
   return {
     id: reg.id,
     kind: reg.form_type,
@@ -246,13 +278,13 @@ export function buildEnrolment(
     monthsStatus,
     nextPayment,
     noPaymentReason,
-    earlyStartNeeded: isGroup
-      ? needsEarlyStartRequest(
-          reg,
-          cohort?.start_date ?? null,
-          today ? new Date(`${today}T12:00:00Z`) : new Date(),
-        )
-      : false,
+    earlyStartNeeded:
+      isGroup && !request
+        ? needsEarlyStartRequest(reg, cohort?.start_date ?? null, now)
+        : false,
+    withdrawalUntil: request ? null : options.withdrawalUntil,
+    canCancel: request ? false : options.cancel,
+    request,
     lessons:
       reg.form_type === "private" && reg.quantity ? Number(reg.quantity) : null,
     payments: rows
@@ -274,14 +306,27 @@ export function buildAccount(
   regs: AccountRegistrationRow[],
   cohorts: AccountCohortRow[],
   today?: string,
+  requests: AccountRequestRow[] = [],
 ): AccountEnrolment[] {
   const byId = new Map(cohorts.map((c) => [c.id, c]));
+  const open = new Map<string, AccountRequest>();
+  for (const q of requests)
+    if (
+      q.kind === "withdrawal" ||
+      q.kind === "cancellation" ||
+      q.kind === "transfer"
+    )
+      open.set(q.registration_id, {
+        kind: q.kind,
+        requestedAt: q.requested_at,
+      });
   return regs
     .map((r) =>
       buildEnrolment(
         r,
         r.cohort_id ? (byId.get(r.cohort_id) ?? null) : null,
         today,
+        open.get(r.id) ?? null,
       ),
     )
     .sort(

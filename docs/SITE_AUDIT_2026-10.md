@@ -149,8 +149,28 @@ re-checked on 26 Oct against main and the live site.
   everything, lessons held included. The lawyer's questions are still open
   (whether the right applies to courses at all; the wording of that box; the
   withdrawal button OUG 18/2026 may ask for).
-  Left out of the Terms on purpose, to be added when true: the Cancel and
-  withdrawal buttons in the account (not built; the Terms name email).
+  WITHDRAW AND CANCEL BUTTONS, BUILT 17 Nov, not live (owner: "the cancel
+  button if they want to cancel yes"; the lawyer's draft dropped: "apply
+  the proposed things"). In "Contul meu": "Retrage-te din contract aici"
+  during the 14 days (new rules), then the statement (name, contract,
+  email), then "Confirmă retragerea", then an acknowledgement email with the
+  statement and the date and time: the withdrawal function of Directive
+  (EU) 2023/2673 art. 11a, checked on EUR-Lex on 17 Nov. After the 14 days,
+  for a running group, "Anulează cursul": first the other groups of the same
+  level to move to, then what the Terms give back today
+  (_shared/cancel-request.ts: the Terms' own examples, 437.50 / 312.50 /
+  1,071 lei, are tests), then "Confirmă anularea". Server: student-cancel
+  (new edge function; the signed-in student's confirmed email must be the
+  sign-up's), which records the request with the database's time, tells a
+  card subscription to stop (cancel_at_period_end), emails the student and
+  the owner, and moves no money. Admin: "Cereri din Contul meu" in De
+  rezolvat and on the sheet, with "Rezolvată"; while a request is open the
+  Stripe refund tools count from the moment it was sent. Needs the table
+  cancellation_requests (migration 20261117140000, NOT applied: waiting for
+  the owner's OK) and a deploy. Terms section 4 now name both buttons.
+  Interpretation to confirm with the owner: months paid ahead (not paid in
+  full) under the new rules come back without the 10%, as the new Terms
+  name the 10% only for a course paid in full.
   EARLY START, BUILT 17 Nov (owner: "Yes protect me from free lessons"):
   a group that starts within 14 days of paying (or has started) is joined
   only by ticking, at checkout, the request for lessons to start inside the

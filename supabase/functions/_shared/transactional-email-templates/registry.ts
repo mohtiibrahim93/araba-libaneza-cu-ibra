@@ -34,6 +34,8 @@ import { template as plan30Zile } from "./plan-30-zile.tsx";
 import { template as groupSeatHold } from "./group-seat-hold.tsx";
 import { template as adminGroupOverCapacity } from "./admin-group-over-capacity.tsx";
 import { template as creditExpiryReminder } from "./credit-expiry-reminder.tsx";
+import { template as cancelRequestReceived } from "./cancel-request-received.tsx";
+import { template as adminCancelRequest } from "./admin-cancel-request.tsx";
 
 export const TEMPLATES: Record<string, TemplateEntry> = {
   "registration-confirmation": registrationConfirmation,
@@ -59,4 +61,6 @@ export const TEMPLATES: Record<string, TemplateEntry> = {
   "group-seat-hold": groupSeatHold,
   "admin-group-over-capacity": adminGroupOverCapacity,
   "credit-expiry-reminder": creditExpiryReminder,
+  "cancel-request-received": cancelRequestReceived,
+  "admin-cancel-request": adminCancelRequest,
 };
