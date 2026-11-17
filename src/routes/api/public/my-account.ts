@@ -65,7 +65,7 @@ export const Route = createFileRoute("/api/public/my-account")({
         const { data: regs, error: regError } = await supabaseAdmin
           .from("registrations")
           .select(
-            "id,form_type,level,format,created_at,payment_status,months_total,subscription_status,canceled_at,refunded_amount,quantity,cohort_id,registration_payments(kind,method,amount_lei,paid_at,month_from,month_to)",
+            "id,form_type,level,format,created_at,payment_status,months_total,subscription_status,canceled_at,early_start_requested_at,refunded_amount,quantity,cohort_id,registration_payments(kind,method,amount_lei,paid_at,month_from,month_to)",
           )
           .ilike("email", address)
           .is("anonymized_at", null)

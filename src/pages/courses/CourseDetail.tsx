@@ -453,11 +453,7 @@ const CourseDetail = () => {
           {posterUrl && !closed && (
             <img
               src={posterUrl}
-              alt={
-                lang === "en"
-                  ? `Poster: ${title}`
-                  : `Afiș: ${title}`
-              }
+              alt={lang === "en" ? `Poster: ${title}` : `Afiș: ${title}`}
               className="mb-8 w-full max-w-md rounded-2xl border border-border shadow-sm"
               loading="lazy"
             />
@@ -648,6 +644,7 @@ const CourseDetail = () => {
                 defaultCohort={{
                   id: c.id,
                   teaching_language: c.teaching_language === "en" ? "en" : "ro",
+                  start_date: c.start_date,
                 }}
                 lockSelection
                 embedded

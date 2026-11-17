@@ -18,6 +18,7 @@ import { Button } from "@/components/ui/button";
 import { Loader2, ArrowLeft, CheckCircle2, AlertTriangle } from "lucide-react";
 import { toast } from "sonner";
 import { trackCheckoutStart } from "@/lib/tracking";
+import { EARLY_START_BOX, longDay } from "@/lib/earlyStart";
 import {
   PAID_IN_FULL_REFUND_NOTE,
   newRefundRulesInForce,
@@ -77,12 +78,7 @@ export const EarlyStartPanel = ({
   onAccept: () => void;
 }) => {
   const [ticked, setTicked] = useState(false);
-  const day = new Intl.DateTimeFormat(english ? "en-GB" : "ro-RO", {
-    timeZone: "UTC",
-    day: "numeric",
-    month: "long",
-    year: "numeric",
-  }).format(new Date(`${startDate}T12:00:00Z`));
+  const day = longDay(startDate, english ? "en" : "ro");
   const today = new Intl.DateTimeFormat("en-CA", {
     timeZone: "Europe/Bucharest",
   }).format(new Date());
@@ -106,11 +102,7 @@ export const EarlyStartPanel = ({
           checked={ticked}
           onChange={(e) => setTicked(e.target.checked)}
         />
-        <span>
-          {english
-            ? "I want my lessons to start before the 14-day withdrawal period ends. I understand that if I withdraw during that time, I pay for the lessons held until then."
-            : "Vreau să încep lecțiile înainte să treacă cele 14 zile de retragere. Înțeleg că, dacă mă retrag în acest timp, plătesc lecțiile ținute până atunci."}
-        </span>
+        <span>{EARLY_START_BOX[english ? "en" : "ro"]}</span>
       </label>
       <Button
         type="button"

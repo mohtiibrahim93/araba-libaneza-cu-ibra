@@ -13,6 +13,12 @@ import {
 } from "@/components/ui/select";
 import NativeScheduler from "@/components/NativeScheduler";
 import GdprCheckbox from "@/components/GdprCheckbox";
+import {
+  EARLY_START_BOX,
+  bucharestDay,
+  longDay,
+  startsInsideWithdrawal,
+} from "@/lib/earlyStart";
 import { useGroupCapacities } from "@/hooks/useGroupCapacity";
 import { toast } from "sonner";
 import { Loader2, MessageCircle } from "lucide-react";
@@ -63,7 +69,12 @@ interface RegistrationFormSectionProps {
   lockCourseType?: boolean;
   lessonType?: "group" | "private";
   /** One group's own page: that exact group is chosen, in its language. */
-  defaultCohort?: { id: string; teaching_language: "ro" | "en" };
+  defaultCohort?: {
+    id: string;
+    teaching_language: "ro" | "en";
+    /** YYYY-MM-DD: decides whether the early-start box is needed. */
+    start_date?: string | null;
+  };
   embedded?: boolean;
   onBack?: () => void;
 }
@@ -79,6 +90,7 @@ type InvalidField =
   | "level"
   | "center"
   | "gdpr"
+  | "early_start"
   | "phone"
   | "email"
   | null;
@@ -160,6 +172,22 @@ const RegistrationFormSection = ({
   const [cohortLanguage, setCohortLanguage] = useState<"ro" | "en" | null>(
     defaultCohort?.teaching_language ?? null,
   );
+  // The chosen group's first day (YYYY-MM-DD). A group starting within the
+  // 14-day withdrawal period is joined only with the student's request for
+  // the lessons to start in that time (owner, 17 Nov 2026: "protect me from
+  // free lessons"); asked here so that cash, transfer and centre payers make
+  // it too, not only card payers at checkout.
+  const [cohortStart, setCohortStart] = useState<string | null>(
+    defaultCohort?.start_date ?? null,
+  );
+  const [earlyStartTicked, setEarlyStartTicked] = useState(false);
+  // The database refused the sign-up because the group starts within 14 days
+  // and this page did not know its start date: ask now.
+  const [earlyStartForced, setEarlyStartForced] = useState(false);
+  const needsEarlyStart =
+    courseType === "group" &&
+    !!cohortId &&
+    (startsInsideWithdrawal(cohortStart) || earlyStartForced);
   const [kidsSlotId, setKidsSlotId] = useState<string | null>(null);
   const [depositCheckoutFailed, setDepositCheckoutFailed] = useState(false);
   const [retryingDeposit, setRetryingDeposit] = useState(false);
@@ -353,10 +381,13 @@ const RegistrationFormSection = ({
     if (field === "format") setFormatError(true);
     if (field === "center") setCenterError(true);
     toast.error(message);
-    trackRegistrationValidationFailed(
-      field,
-      (courseType || "unknown") as CourseType | "unknown",
-    );
+    // The early-start box is not one of the tracked fields: analytics events
+    // and their values stay as they are (owner's rule).
+    if (field !== "early_start")
+      trackRegistrationValidationFailed(
+        field,
+        (courseType || "unknown") as CourseType | "unknown",
+      );
     const el = elementId ? document.getElementById(elementId) : null;
     if (el) {
       el.scrollIntoView({ behavior: "smooth", block: "center" });
@@ -413,6 +444,16 @@ const RegistrationFormSection = ({
     }
     if (!gdpr) {
       fail("gdpr", t.gdprRequired, "gdpr");
+      return;
+    }
+    if (needsEarlyStart && !earlyStartTicked) {
+      fail(
+        "early_start",
+        lang === "en"
+          ? "Your group starts within the 14-day withdrawal period: tick the box to join it, or choose a group that starts later."
+          : "Grupa ta începe în cele 14 zile de retragere: bifează căsuța ca să intri în ea sau alege o grupă care începe mai târziu.",
+        "early-start",
+      );
       return;
     }
     // Name, email, phone, course type and format are required on every form
@@ -534,6 +575,12 @@ const RegistrationFormSection = ({
         cohort_id: courseType === "group" ? cohortId : null,
         kids_slot_id: courseType === "kids" ? kidsSlotId : null,
         quantity,
+        // The student's request to start inside the 14-day withdrawal period
+        // (the box below). The database writes its own time over this one
+        // (migration 20261117130000_early_start_on_signup).
+        ...(courseType === "group" && needsEarlyStart && earlyStartTicked
+          ? { early_start_requested_at: new Date().toISOString() }
+          : {}),
         // Which language this student needs the class explained in. Taken from
         // the site language they filled the form in, the same way trials set
         // bookings.language. Without it an English-speaking registrant looked
@@ -600,6 +647,14 @@ const RegistrationFormSection = ({
           lang === "en"
             ? "This group has just filled up. Choose another group or join its waiting list."
             : "Grupa tocmai s-a ocupat. Alege altă grupă sau intră pe lista de așteptare.",
+        );
+      } else if (message.includes("early_start_required")) {
+        setEarlyStartForced(true);
+        setInvalidField("early_start");
+        toast.error(
+          lang === "en"
+            ? "Your group starts within the 14-day withdrawal period: tick the box below to join it, or choose a group that starts later."
+            : "Grupa ta începe în cele 14 zile de retragere: bifează căsuța de mai jos ca să intri în ea sau alege o grupă care începe mai târziu.",
         );
       } else if (message.includes("selected group is unavailable")) {
         toast.error(
@@ -878,6 +933,9 @@ const RegistrationFormSection = ({
                   onCohortChange={(c) => {
                     setCohortId(c?.id ?? null);
                     setCohortLanguage(c?.teaching_language ?? null);
+                    setCohortStart(c?.start_date ?? null);
+                    setEarlyStartTicked(false);
+                    setEarlyStartForced(false);
                   }}
                   locked={lockSelection && !!defaultLevel}
                 />
@@ -1013,6 +1071,39 @@ const RegistrationFormSection = ({
                       : "După trimitere plătești online: plata îți confirmă locul în grupă. Apoi Ibra îți scrie pe WhatsApp ca să se prezinte."
                     : t.mainLeadCallbackNote}
               </p>
+
+              {needsEarlyStart && (
+                <div
+                  id="early-start"
+                  className={`space-y-2 rounded-lg border p-4 ${
+                    invalidField === "early_start"
+                      ? "border-destructive"
+                      : "border-border"
+                  }`}
+                >
+                  <p className="text-sm text-muted-foreground">
+                    {cohortStart
+                      ? lang === "en"
+                        ? `Your group ${cohortStart <= bucharestDay() ? "started" : "starts"} on ${longDay(cohortStart, "en")}, within the 14 days in which you can withdraw from the contract (Terms, section 4). To join it, tick the box. If you would rather not, choose a group that starts later.`
+                        : `Grupa ta ${cohortStart <= bucharestDay() ? "a început" : "începe"} pe ${longDay(cohortStart, "ro")}, în cele 14 zile în care te poți retrage din contract (Termeni, secțiunea 4). Ca să intri în ea, bifează căsuța. Dacă nu vrei, alege o grupă care începe mai târziu.`
+                      : lang === "en"
+                        ? "Your group starts within the 14 days in which you can withdraw from the contract (Terms, section 4). To join it, tick the box. If you would rather not, choose a group that starts later."
+                        : "Grupa ta începe în cele 14 zile în care te poți retrage din contract (Termeni, secțiunea 4). Ca să intri în ea, bifează căsuța. Dacă nu vrei, alege o grupă care începe mai târziu."}
+                  </p>
+                  <label className="flex items-start gap-3 text-sm text-foreground">
+                    <input
+                      type="checkbox"
+                      className="mt-0.5 h-4 w-4 shrink-0"
+                      checked={earlyStartTicked}
+                      onChange={(e) => {
+                        setEarlyStartTicked(e.target.checked);
+                        if (e.target.checked) setInvalidField(null);
+                      }}
+                    />
+                    <span>{EARLY_START_BOX[lang === "en" ? "en" : "ro"]}</span>
+                  </label>
+                </div>
+              )}
 
               <GdprCheckbox
                 checked={gdpr}

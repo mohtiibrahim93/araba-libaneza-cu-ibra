@@ -165,6 +165,20 @@ re-checked on 26 Oct against main and the live site.
   2014, 6.5.1): a pre-ticked box or a line in the Terms does not count, and
   the trader is not obliged to start early without the request. Whether the
   box may be required to join such a group is for the lawyer to confirm.
+  EARLY START FOR EVERY PAYMENT METHOD, BUILT 17 Nov, not live (owner:
+  "fix this: cash, transfer or centre payers ... the box can't reach
+  them"). The same box (src/lib/earlyStart.ts, one text everywhere) is now
+  also in the sign-up form, required when the chosen group starts within
+  14 days, so cash, transfer and centre payers tick it too; the database
+  stamps its own time on it and refuses a website sign-up to such a group
+  without it (trigger trg_require_early_start_request, migration
+  20261117130000, applied 17 Nov with the owner's OK to fix this; the admin
+  is not affected). A student the owner adds by hand ticks it in "Contul
+  meu" (POST /api/public/early-start: Auth-confirmed email must equal the
+  sign-up's email; server time; audit "student_early_start"). The owner can
+  still record a request received by email or WhatsApp on the sheet. Terms
+  section 4 now names the form, the payment, the account, email and
+  WhatsApp as the ways to make the request.
   CREDIT, BUILT 16 Nov, not live (owner approved the two tables the same
   day; they exist in the database, server-only: student_credits and
   student_credit_uses, migration 20261116120000, written to run again

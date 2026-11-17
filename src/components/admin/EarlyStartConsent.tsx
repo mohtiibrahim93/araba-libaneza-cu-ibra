@@ -5,12 +5,12 @@ import { invokeAdmin } from "@/lib/adminAuth";
  * The student's request to start lessons inside the 14-day withdrawal period
  * (owner, 17 Nov 2026: "protect me from free lessons"; Terms, section 4).
  *
- * A card payment for a group that starts within 14 days asks for it with a
- * box the student ticks, and records it by itself. A student who pays by
- * transfer, cash or at the centre never sees that box: when they ask by email
- * or WhatsApp, the owner records it here, with the day it was received. With
- * it, lessons held are paid if the student withdraws in the 14 days; without
- * it, everything goes back.
+ * For a group that starts within 14 days the student asks with a box they
+ * tick themselves: in the sign-up form, at the card checkout, or in "Contul
+ * meu" (for a student the owner signed up by hand). When they ask by email or
+ * WhatsApp instead, the owner records it here, with the day it was received.
+ * With it, lessons held are paid if the student withdraws in the 14 days;
+ * without it, everything goes back.
  */
 const EarlyStartConsent = ({
   registrationId,
@@ -89,6 +89,10 @@ const EarlyStartConsent = ({
             Nu a cerut. Dacă grupa începe în cele 14 zile de la înscriere și se
             retrage în acest timp, primește tot înapoi, inclusiv lecțiile
             ținute.
+          </p>
+          <p className="text-muted-foreground">
+            Dacă grupa începe în cele 14 zile de la înscriere, poate bifa singur
+            cererea în Contul meu, intrând cu adresa de email de la înscriere.
           </p>
           {open ? (
             <div className="flex flex-wrap items-end gap-2">

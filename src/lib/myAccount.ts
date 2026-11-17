@@ -23,6 +23,12 @@ import {
   type CreditRow,
   type CreditUseRow,
 } from "../../supabase/functions/_shared/credit";
+import {
+  WITHDRAWAL_DAYS,
+  underNewRefundRules,
+  withinWithdrawal,
+} from "../../supabase/functions/_shared/refund";
+import { bucharestDay, startsInsideWithdrawal } from "./earlyStart";
 
 export type Lang = "ro" | "en";
 
@@ -40,7 +46,36 @@ export interface AccountRegistrationRow {
   refunded_amount: number | null;
   quantity: number | null;
   cohort_id: string | null;
+  /** When the student asked for lessons to start inside the 14 days. */
+  early_start_requested_at?: string | null;
   registration_payments: AccountPaymentRow[] | null;
+}
+
+/**
+ * Whether a group sign-up still needs the request to start inside the 14-day
+ * withdrawal period (owner, 17 Nov 2026): a sign-up under the new Terms, still
+ * inside its 14 days, to a group that starts within them, with no request
+ * yet. This is the student the owner added by hand, who saw neither the box
+ * in the sign-up form nor the one at checkout. Shared by the account page and
+ * the route that records the request.
+ */
+export function needsEarlyStartRequest(
+  reg: Pick<
+    AccountRegistrationRow,
+    "form_type" | "created_at" | "canceled_at" | "early_start_requested_at"
+  >,
+  groupStartDate: string | null | undefined,
+  now: Date = new Date(),
+): boolean {
+  if (reg.form_type !== "group" || reg.canceled_at) return false;
+  if (reg.early_start_requested_at) return false;
+  if (!underNewRefundRules(reg.created_at)) return false;
+  if (!withinWithdrawal(reg.created_at, now.toISOString(), WITHDRAWAL_DAYS))
+    return false;
+  return startsInsideWithdrawal(
+    groupStartDate,
+    bucharestDay(new Date(reg.created_at)),
+  );
 }
 
 export interface AccountPaymentRow {
@@ -117,6 +152,11 @@ export interface AccountEnrolment {
   } | null;
   /** Why there is no card payment to make; null when there is one. */
   noPaymentReason: MonthPaymentRefusal | null;
+  /**
+   * The group starts inside the 14-day withdrawal period and the student has
+   * not asked for the lessons to start in that time yet (needsEarlyStartRequest).
+   */
+  earlyStartNeeded: boolean;
   /** Private lessons: the size of the package. */
   lessons: number | null;
   payments: AccountPayment[];
@@ -206,6 +246,13 @@ export function buildEnrolment(
     monthsStatus,
     nextPayment,
     noPaymentReason,
+    earlyStartNeeded: isGroup
+      ? needsEarlyStartRequest(
+          reg,
+          cohort?.start_date ?? null,
+          today ? new Date(`${today}T12:00:00Z`) : new Date(),
+        )
+      : false,
     lessons:
       reg.form_type === "private" && reg.quantity ? Number(reg.quantity) : null,
     payments: rows

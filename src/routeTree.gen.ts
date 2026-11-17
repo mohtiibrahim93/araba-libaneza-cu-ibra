@@ -132,6 +132,7 @@ import { Route as PrivateStatusIdRouteImport } from './routes/private-status/$id
 import { Route as AdminPrivateLeadsIdRouteImport } from './routes/admin/private-leads/$id'
 import { Route as ApiPublicBookingsAccessRouteImport } from './routes/api/public/bookings-access'
 import { Route as ApiPublicContactRouteImport } from './routes/api/public/contact'
+import { Route as ApiPublicEarlyStartRouteImport } from './routes/api/public/early-start'
 import { Route as ApiPublicMyAccountRouteImport } from './routes/api/public/my-account'
 import { Route as BookingManageTokenRouteImport } from './routes/booking/manage/$token'
 import { Route as CursuriCursSlugRouteImport } from './routes/cursuri/curs/$slug'
@@ -812,6 +813,11 @@ const ApiPublicContactRoute = ApiPublicContactRouteImport.update({
   path: '/api/public/contact',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiPublicEarlyStartRoute = ApiPublicEarlyStartRouteImport.update({
+  id: '/api/public/early-start',
+  path: '/api/public/early-start',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ApiPublicMyAccountRoute = ApiPublicMyAccountRouteImport.update({
   id: '/api/public/my-account',
   path: '/api/public/my-account',
@@ -1104,6 +1110,7 @@ export interface FileRoutesByFullPath {
   '/admin/private-leads/$id': typeof AdminPrivateLeadsIdRoute
   '/api/public/bookings-access': typeof ApiPublicBookingsAccessRoute
   '/api/public/contact': typeof ApiPublicContactRoute
+  '/api/public/early-start': typeof ApiPublicEarlyStartRoute
   '/api/public/my-account': typeof ApiPublicMyAccountRoute
   '/booking/manage/$token': typeof BookingManageTokenRoute
   '/cursuri/curs/$slug': typeof CursuriCursSlugRoute
@@ -1258,6 +1265,7 @@ export interface FileRoutesByTo {
   '/admin/private-leads/$id': typeof AdminPrivateLeadsIdRoute
   '/api/public/bookings-access': typeof ApiPublicBookingsAccessRoute
   '/api/public/contact': typeof ApiPublicContactRoute
+  '/api/public/early-start': typeof ApiPublicEarlyStartRoute
   '/api/public/my-account': typeof ApiPublicMyAccountRoute
   '/booking/manage/$token': typeof BookingManageTokenRoute
   '/cursuri/curs/$slug': typeof CursuriCursSlugRoute
@@ -1415,6 +1423,7 @@ export interface FileRoutesById {
   '/admin/private-leads/$id': typeof AdminPrivateLeadsIdRoute
   '/api/public/bookings-access': typeof ApiPublicBookingsAccessRoute
   '/api/public/contact': typeof ApiPublicContactRoute
+  '/api/public/early-start': typeof ApiPublicEarlyStartRoute
   '/api/public/my-account': typeof ApiPublicMyAccountRoute
   '/booking/manage/$token': typeof BookingManageTokenRoute
   '/cursuri/curs/$slug': typeof CursuriCursSlugRoute
@@ -1573,6 +1582,7 @@ export interface FileRouteTypes {
     | '/admin/private-leads/$id'
     | '/api/public/bookings-access'
     | '/api/public/contact'
+    | '/api/public/early-start'
     | '/api/public/my-account'
     | '/booking/manage/$token'
     | '/cursuri/curs/$slug'
@@ -1727,6 +1737,7 @@ export interface FileRouteTypes {
     | '/admin/private-leads/$id'
     | '/api/public/bookings-access'
     | '/api/public/contact'
+    | '/api/public/early-start'
     | '/api/public/my-account'
     | '/booking/manage/$token'
     | '/cursuri/curs/$slug'
@@ -1883,6 +1894,7 @@ export interface FileRouteTypes {
     | '/admin/private-leads/$id'
     | '/api/public/bookings-access'
     | '/api/public/contact'
+    | '/api/public/early-start'
     | '/api/public/my-account'
     | '/booking/manage/$token'
     | '/cursuri/curs/$slug'
@@ -2038,6 +2050,7 @@ export interface RootRouteChildren {
   AdminPrivateLeadsIdRoute: typeof AdminPrivateLeadsIdRoute
   ApiPublicBookingsAccessRoute: typeof ApiPublicBookingsAccessRoute
   ApiPublicContactRoute: typeof ApiPublicContactRoute
+  ApiPublicEarlyStartRoute: typeof ApiPublicEarlyStartRoute
   ApiPublicMyAccountRoute: typeof ApiPublicMyAccountRoute
   BookingManageTokenRoute: typeof BookingManageTokenRoute
   CursuriCursSlugRoute: typeof CursuriCursSlugRoute
@@ -2932,6 +2945,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiPublicContactRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/public/early-start': {
+      id: '/api/public/early-start'
+      path: '/api/public/early-start'
+      fullPath: '/api/public/early-start'
+      preLoaderRoute: typeof ApiPublicEarlyStartRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/api/public/my-account': {
       id: '/api/public/my-account'
       path: '/api/public/my-account'
@@ -3312,6 +3332,7 @@ const rootRouteChildren: RootRouteChildren = {
   AdminPrivateLeadsIdRoute: AdminPrivateLeadsIdRoute,
   ApiPublicBookingsAccessRoute: ApiPublicBookingsAccessRoute,
   ApiPublicContactRoute: ApiPublicContactRoute,
+  ApiPublicEarlyStartRoute: ApiPublicEarlyStartRoute,
   ApiPublicMyAccountRoute: ApiPublicMyAccountRoute,
   BookingManageTokenRoute: BookingManageTokenRoute,
   CursuriCursSlugRoute: CursuriCursSlugRoute,

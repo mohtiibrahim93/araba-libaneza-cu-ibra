@@ -26,6 +26,7 @@ import { StudentAccountBox } from "@/components/StudentAccount";
 import { supabase } from "@/integrations/supabase/client";
 import { WHATSAPP_CONTACT_URL } from "@/lib/social";
 import { paymentStatusText } from "@/lib/myPayments";
+import { EARLY_START_BOX, bucharestDay, longDay } from "@/lib/earlyStart";
 import {
   enrolmentTitle,
   formatDay,
@@ -117,6 +118,13 @@ const COPY = {
     paidDone: "Luna este înregistrată ca plătită. Mulțumim!",
     paidSlow:
       "Dacă luna nu apare ca plătită în câteva minute, scrie-ne pe WhatsApp.",
+    earlyStartTitle: "Începerea în cele 14 zile de retragere",
+    earlyStartText: (started: boolean, day: string) =>
+      `Grupa ta ${started ? "a început" : "începe"} pe ${day}, în cele 14 zile în care te poți retrage din contract (Termeni, secțiunea 4). Ca să participi la lecții în acest timp, bifează căsuța și trimite cererea.`,
+    earlyStartSend: "Trimite cererea",
+    earlyStartSent: "Cererea ta a fost înregistrată.",
+    earlyStartFailed:
+      "Nu am putut înregistra cererea. Încearcă din nou sau scrie-ne pe WhatsApp.",
     lessons: "Lecțiile mele rezervate",
     noLessons: "Nu ai lecții rezervate de acum înainte.",
     online: "Online",
@@ -190,6 +198,13 @@ const COPY = {
     paidDone: "The month is recorded as paid. Thank you!",
     paidSlow:
       "If the month does not show as paid in a few minutes, message us on WhatsApp.",
+    earlyStartTitle: "Starting within the 14-day withdrawal period",
+    earlyStartText: (started: boolean, day: string) =>
+      `Your group ${started ? "started" : "starts"} on ${day}, within the 14 days in which you can withdraw from the contract (Terms, section 4). To take part in the lessons in that time, tick the box and send the request.`,
+    earlyStartSend: "Send the request",
+    earlyStartSent: "Your request has been recorded.",
+    earlyStartFailed:
+      "We could not record your request. Try again or message us on WhatsApp.",
     lessons: "My booked lessons",
     noLessons: "You have no lessons booked from now on.",
     online: "Online",
@@ -429,16 +444,96 @@ const monthTone: Record<string, string> = {
   later: "border-border bg-muted/40 text-muted-foreground",
 };
 
-const EnrolmentCard = ({
+/**
+ * The request to start lessons inside the 14-day withdrawal period (Terms,
+ * section 4), for a student the owner signed up by hand: they saw neither the
+ * box in the sign-up form nor the one at checkout. Unticked to begin with;
+ * the server records it with its own time (/api/public/early-start).
+ */
+const EarlyStartRequest = ({
   c,
   lang,
-  enrolment: e,
-  onPaid,
+  enrolment,
+  token,
+  onSent,
 }: {
   c: Copy;
   lang: Lang;
   enrolment: AccountEnrolment;
+  token: string;
+  onSent: () => Promise<unknown>;
+}) => {
+  const [ticked, setTicked] = useState(false);
+  const [busy, setBusy] = useState(false);
+  const start = enrolment.group?.startDate ?? null;
+
+  const send = async () => {
+    setBusy(true);
+    try {
+      const res = await fetch("/api/public/early-start", {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ registrationId: enrolment.id, accepted: true }),
+      });
+      if (!res.ok) throw new Error(`early-start ${res.status}`);
+      toast.success(c.earlyStartSent);
+      await onSent();
+    } catch (err) {
+      console.error("[my-account] early start failed", err);
+      toast.error(c.earlyStartFailed);
+    } finally {
+      setBusy(false);
+    }
+  };
+
+  return (
+    <div className="mt-4 space-y-3 rounded-xl border border-primary/40 bg-primary/5 p-4">
+      <p className="text-sm font-semibold text-foreground">
+        {c.earlyStartTitle}
+      </p>
+      {start && (
+        <p className="text-sm text-muted-foreground">
+          {c.earlyStartText(start <= bucharestDay(), longDay(start, lang))}
+        </p>
+      )}
+      <label className="flex items-start gap-3 text-sm text-foreground">
+        <input
+          type="checkbox"
+          className="mt-0.5 h-4 w-4 shrink-0"
+          checked={ticked}
+          onChange={(ev) => setTicked(ev.target.checked)}
+        />
+        <span>{EARLY_START_BOX[lang]}</span>
+      </label>
+      <Button
+        type="button"
+        disabled={!ticked || busy}
+        onClick={() => void send()}
+      >
+        {busy && <Loader2 className="animate-spin" />}
+        {c.earlyStartSend}
+      </Button>
+    </div>
+  );
+};
+
+const EnrolmentCard = ({
+  c,
+  lang,
+  enrolment: e,
+  token,
+  onPaid,
+  onChanged,
+}: {
+  c: Copy;
+  lang: Lang;
+  enrolment: AccountEnrolment;
+  token: string;
   onPaid: (registrationId: string, month: number) => void;
+  onChanged: () => Promise<unknown>;
 }) => {
   const schedule = lang === "en" ? e.group?.scheduleEn : e.group?.scheduleRo;
   const totalPaid = e.payments.reduce((sum, p) => sum + p.amountLei, 0);
@@ -511,6 +606,16 @@ const EnrolmentCard = ({
             })}
           </ul>
         </div>
+      )}
+
+      {e.earlyStartNeeded && (
+        <EarlyStartRequest
+          c={c}
+          lang={lang}
+          enrolment={e}
+          token={token}
+          onSent={onChanged}
+        />
       )}
 
       {e.nextPayment ? (
@@ -752,7 +857,7 @@ const MyAccount = ({ lang }: { lang: Lang }) => {
           </div>
         )}
 
-        {user && data && data.enrolments.length > 0 && (
+        {user && token && data && data.enrolments.length > 0 && (
           <section className="mt-10 space-y-5">
             <h2 className="font-display text-2xl font-bold text-foreground">
               {c.courses}
@@ -763,7 +868,9 @@ const MyAccount = ({ lang }: { lang: Lang }) => {
                 c={c}
                 lang={lang}
                 enrolment={e}
+                token={token}
                 onPaid={(id, month) => void waitForMonth(id, month)}
+                onChanged={load}
               />
             ))}
           </section>

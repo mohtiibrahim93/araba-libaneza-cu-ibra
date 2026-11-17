@@ -180,17 +180,32 @@ describe("every way to pay a group by card asks for it", () => {
   });
 });
 
-describe("the box at checkout", () => {
-  const page = read("src/pages/Checkout.tsx");
-
-  it("says exactly the approved text, in both languages", () => {
-    expect(page).toContain(
-      '"Vreau să încep lecțiile înainte să treacă cele 14 zile de retragere. Înțeleg că, dacă mă retrag în acest timp, plătesc lecțiile ținute până atunci."',
+describe("the box says exactly the approved text, everywhere", () => {
+  it("one text, in both languages", () => {
+    const text = read("src/lib/earlyStart.ts");
+    expect(text).toContain(
+      'ro: "Vreau să încep lecțiile înainte să treacă cele 14 zile de retragere. Înțeleg că, dacă mă retrag în acest timp, plătesc lecțiile ținute până atunci.",',
     );
-    expect(page).toContain(
-      '"I want my lessons to start before the 14-day withdrawal period ends. I understand that if I withdraw during that time, I pay for the lessons held until then."',
+    expect(text).toContain(
+      'en: "I want my lessons to start before the 14-day withdrawal period ends. I understand that if I withdraw during that time, I pay for the lessons held until then.",',
     );
   });
+
+  it("at checkout, in the sign-up form and in Contul meu", () => {
+    expect(read("src/pages/Checkout.tsx")).toContain(
+      '<span>{EARLY_START_BOX[english ? "en" : "ro"]}</span>',
+    );
+    expect(read("src/components/RegistrationFormSection.tsx")).toContain(
+      '<span>{EARLY_START_BOX[lang === "en" ? "en" : "ro"]}</span>',
+    );
+    expect(read("src/pages/MyAccount.tsx")).toContain(
+      "<span>{EARLY_START_BOX[lang]}</span>",
+    );
+  });
+});
+
+describe("the box at checkout", () => {
+  const page = read("src/pages/Checkout.tsx");
 
   it("starts unticked, and the button waits for the tick", () => {
     expect(page).toContain("const [ticked, setTicked] = useState(false);");
@@ -242,10 +257,10 @@ describe("the admin and the refund", () => {
   it("the Terms say how the request is made and that it is needed", () => {
     const terms = read("src/pages/Terms.tsx");
     expect(terms).toContain(
-      "Pentru o grupă care începe în cele 14 zile, această cerere se face bifând căsuța de la plată și este necesară ca să intri în grupa respectivă; dacă nu vrei, te poți înscrie la o grupă care începe mai târziu.",
+      "Pentru o grupă care începe în cele 14 zile, această cerere este necesară ca să intri în grupa respectivă: o faci bifând căsuța din formularul de înscriere, de la plată sau din Contul meu, ori scriindu-ne pe email sau pe WhatsApp. Dacă nu vrei, te poți înscrie la o grupă care începe mai târziu.",
     );
     expect(terms).toContain(
-      "For a group that starts within the 14 days, you make this request by ticking the box at payment, and it is needed to join that group; if you would rather not, you can sign up for a group that starts later.",
+      "For a group that starts within the 14 days, this request is needed to join that group: you make it by ticking the box in the sign-up form, at payment or in My account, or by writing to us by email or on WhatsApp. If you would rather not, you can sign up for a group that starts later.",
     );
   });
 
@@ -255,6 +270,122 @@ describe("the admin and the refund", () => {
     );
     expect(sql).toContain(
       "add column if not exists early_start_requested_at timestamptz;",
+    );
+  });
+});
+
+// ---------------------------------------------------------------------------
+// Cash, transfer and centre payers (owner, 17 Nov 2026: "the box can't reach
+// them"): the request is asked for at sign-up, and the database refuses a
+// sign-up from the website to such a group without it.
+// ---------------------------------------------------------------------------
+describe("the site's copy of the rule", () => {
+  it("agrees with the payment functions' copy, day by day", async () => {
+    const site = await import("@/lib/earlyStart");
+    const edge = mod();
+    expect(site.WITHDRAWAL_DAYS).toBe(edge.EARLY_START_DAYS);
+    for (const start of [
+      "2026-11-07",
+      "2026-11-17",
+      "2026-12-01",
+      "2026-12-02",
+      "2027-01-09",
+      null,
+    ])
+      expect(site.startsInsideWithdrawal(start, TODAY)).toBe(
+        edge.startsInsideWithdrawal(start, TODAY),
+      );
+  });
+
+  it("writes the day the way each language does", async () => {
+    const { longDay, bucharestDay } = await import("@/lib/earlyStart");
+    expect(longDay("2026-12-01", "ro")).toBe("1 decembrie 2026");
+    expect(longDay("2026-12-01", "en")).toBe("1 December 2026");
+    // Late in the evening in Bucharest is already the next day there.
+    expect(bucharestDay(new Date("2026-11-30T22:30:00Z"))).toBe("2026-12-01");
+  });
+});
+
+describe("the box in the sign-up form", () => {
+  const form = read("src/components/RegistrationFormSection.tsx");
+
+  it("is shown for a group that starts within 14 days, unticked", () => {
+    expect(form).toMatch(
+      /const needsEarlyStart =\s+courseType === "group" &&\s+!!cohortId &&\s+\(startsInsideWithdrawal\(cohortStart\) \|\| earlyStartForced\);/,
+    );
+    expect(form).toContain(
+      "const [earlyStartTicked, setEarlyStartTicked] = useState(false);",
+    );
+    expect(form).toContain('<div\n                  id="early-start"');
+  });
+
+  it("must be ticked to send the sign-up, and sends the request only then", () => {
+    expect(form).toMatch(
+      /if \(needsEarlyStart && !earlyStartTicked\) \{\s+fail\(\s+"early_start",/,
+    );
+    expect(form).toContain(
+      '...(courseType === "group" && needsEarlyStart && earlyStartTicked\n          ? { early_start_requested_at: new Date().toISOString() }\n          : {}),',
+    );
+  });
+
+  it("asks again when the database refuses the sign-up", () => {
+    expect(form).toMatch(
+      /message\.includes\("early_start_required"\)\) \{\s+setEarlyStartForced\(true\);/,
+    );
+  });
+
+  it("forgets the tick when the student picks another group", () => {
+    expect(form).toMatch(
+      /setCohortStart\(c\?\.start_date \?\? null\);\s+setEarlyStartTicked\(false\);\s+setEarlyStartForced\(false\);/,
+    );
+  });
+
+  it("knows the start day of the group a course page opens it with", () => {
+    expect(read("src/pages/courses/CourseDetail.tsx")).toContain(
+      "start_date: c.start_date",
+    );
+  });
+
+  it("keeps the analytics events as they are", () => {
+    expect(form).toMatch(
+      /if \(field !== "early_start"\)\s+trackRegistrationValidationFailed\(/,
+    );
+  });
+});
+
+describe("the database refuses a sign-up without it", () => {
+  const sql = read(
+    "supabase/migrations/20261117130000_early_start_on_signup.sql",
+  );
+
+  it("records the request with its own time, never the visitor's", () => {
+    expect(sql).toMatch(
+      /if NEW\.early_start_requested_at is not null then\s+NEW\.early_start_requested_at := now\(\);/,
+    );
+  });
+
+  it("refuses a group starting on or before day 14 without the request", () => {
+    expect(sql).toContain(
+      "starts <= ((now() at time zone 'Europe/Bucharest')::date + 14)",
+    );
+    expect(sql).toContain("raise exception 'early_start_required:");
+  });
+
+  it("leaves the admin, other courses and sign-ups without a group alone", () => {
+    expect(sql).toContain("NEW.form_type is distinct from 'group'");
+    expect(sql).toContain("NEW.cohort_id is null");
+    expect(sql).toContain("coalesce(auth.role(), '') = 'service_role'");
+  });
+
+  it("runs before every new sign-up, and can run again", () => {
+    expect(sql).toContain(
+      "drop trigger if exists trg_require_early_start_request on public.registrations;",
+    );
+    expect(sql).toMatch(
+      /create trigger trg_require_early_start_request\s+before insert on public\.registrations\s+for each row execute function public\.require_early_start_request\(\);/,
+    );
+    expect(sql).not.toMatch(
+      /\b(update|delete)\s+(from\s+)?public\.registrations\b/i,
     );
   });
 });
