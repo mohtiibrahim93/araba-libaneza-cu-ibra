@@ -15,6 +15,7 @@ import {
 } from "npm:@react-email/components@1.0.12";
 import type { TemplateEntry } from "./registry.ts";
 import { emailLanguage, translator } from "./language.ts";
+import { WithdrawalSection } from "./withdrawal-section.tsx";
 
 const SITE_NAME = "Arabă Libaneză cu Ibra";
 const SITE_TAGLINE = "Centrul de Arabă Libaneză";
@@ -238,6 +239,8 @@ const GroupRegistrationConfirmationEmail = ({
               </Text>
             )}
           </Section>
+          {/* The 14-day right of withdrawal and the model form (Terms, section 4). */}
+          <WithdrawalSection lang={lang} />
           <Hr style={hr} />
           <Section style={footerBrand}>
             <Text style={footerLogo}>

@@ -21,6 +21,7 @@ import { trackCheckoutStart } from "@/lib/tracking";
 import { EARLY_START_BOX, longDay } from "@/lib/earlyStart";
 import {
   PAID_IN_FULL_REFUND_NOTE,
+  WITHDRAWAL_NOTE,
   newRefundRulesInForce,
 } from "@/lib/refundRules";
 
@@ -321,6 +322,21 @@ const PaymentForm = ({
             {PAID_IN_FULL_REFUND_NOTE.checkout[english ? "en" : "ro"]}
           </p>
         )}
+      {/* The right of withdrawal, said before the payment (Terms, section 4). */}
+      {newRefundRulesInForce() && (
+        <p className="text-xs text-muted-foreground" data-withdrawal-note>
+          {WITHDRAWAL_NOTE.text[english ? "en" : "ro"]}{" "}
+          <a
+            href={WITHDRAWAL_NOTE.href[english ? "en" : "ro"]}
+            target="_blank"
+            rel="noopener"
+            className="underline hover:text-foreground"
+          >
+            {WITHDRAWAL_NOTE.link[english ? "en" : "ro"]}
+          </a>
+          .
+        </p>
+      )}
       <Button
         type="submit"
         className="w-full"

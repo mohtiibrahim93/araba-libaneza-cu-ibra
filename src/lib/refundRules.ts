@@ -54,3 +54,19 @@ export const PAID_IN_FULL_REFUND_NOTE = {
     en: "Details in the Terms, section 4",
   },
 } as const;
+
+/**
+ * The right of withdrawal in one sentence, shown before payment and before a
+ * sign-up is sent (owner, 17 Nov 2026: the lawyer's draft dropped, "apply the
+ * proposed things"): it says where the conditions, the time limit, how to
+ * withdraw and the model form are. The confirmation email repeats them in
+ * full (supabase/functions/_shared/withdrawal-info.ts).
+ */
+export const WITHDRAWAL_NOTE = {
+  text: {
+    ro: "Ai dreptul să te retragi din contract în 14 zile de la înscriere, fără să dai un motiv. Condițiile, termenul, cum o faci și modelul de formular de retragere sunt în",
+    en: "You have the right to withdraw from the contract within 14 days of signing up, without giving a reason. The conditions, the time limit, how to do it and the model withdrawal form are in",
+  },
+  link: { ro: "Termeni, secțiunea 4", en: "the Terms, section 4" },
+  href: { ro: "/terms", en: "/en/terms" },
+} as const;

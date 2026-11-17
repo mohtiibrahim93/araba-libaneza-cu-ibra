@@ -19,6 +19,7 @@ import {
   longDay,
   startsInsideWithdrawal,
 } from "@/lib/earlyStart";
+import { WITHDRAWAL_NOTE, newRefundRulesInForce } from "@/lib/refundRules";
 import { useGroupCapacities } from "@/hooks/useGroupCapacity";
 import { toast } from "sonner";
 import { Loader2, MessageCircle } from "lucide-react";
@@ -1103,6 +1104,26 @@ const RegistrationFormSection = ({
                     <span>{EARLY_START_BOX[lang === "en" ? "en" : "ro"]}</span>
                   </label>
                 </div>
+              )}
+
+              {/* The right of withdrawal, said before the sign-up is sent
+                  (Terms, section 4); the confirmation email repeats it. */}
+              {courseType && newRefundRulesInForce() && (
+                <p
+                  className="text-xs text-muted-foreground"
+                  data-withdrawal-note
+                >
+                  {WITHDRAWAL_NOTE.text[lang === "en" ? "en" : "ro"]}{" "}
+                  <a
+                    href={WITHDRAWAL_NOTE.href[lang === "en" ? "en" : "ro"]}
+                    target="_blank"
+                    rel="noopener"
+                    className="underline hover:text-foreground"
+                  >
+                    {WITHDRAWAL_NOTE.link[lang === "en" ? "en" : "ro"]}
+                  </a>
+                  .
+                </p>
               )}
 
               <GdprCheckbox

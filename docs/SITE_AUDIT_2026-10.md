@@ -171,6 +171,16 @@ re-checked on 26 Oct against main and the live site.
   Interpretation to confirm with the owner: months paid ahead (not paid in
   full) under the new rules come back without the 10%, as the new Terms
   name the 10% only for a course paid in full.
+  14-DAY INFORMATION, BUILT 17 Nov, not live (same instruction). Before
+  payment: one sentence at the checkout and in the sign-up form, with the
+  Terms one click away (WITHDRAWAL_NOTE). Terms: section 4.2, the model
+  withdrawal form (Directive 2011/83/EU annex I part B, official Romanian
+  and English texts read on EUR-Lex on 17 Nov; legislatie.just.ro was down,
+  so OUG 34/2014's own annex was not compared), filled in with section 9's
+  company details; section 4 points to it. Confirmation emails (group,
+  private, kids): the Terms' 14-day paragraph word for word and the form
+  (_shared/withdrawal-info.ts, withdrawal-section.tsx), so the student keeps
+  them in the email itself.
   EARLY START, BUILT 17 Nov (owner: "Yes protect me from free lessons"):
   a group that starts within 14 days of paying (or has started) is joined
   only by ticking, at checkout, the request for lessons to start inside the
