@@ -59,6 +59,8 @@ const ACTION_LABELS: Record<string, string> = {
   student_cancellation_request: "Anulare trimisă din Contul meu",
   student_transfer_request: "Cerere de mutare trimisă din Contul meu",
   resolve_cancel_request: "Cerere din Contul meu rezolvată",
+  mark_excused: "Absență motivată marcată",
+  unmark_excused: "Absență motivată ștearsă",
   update_status: "Schimbare status",
   reschedule_booking: "Mutare lecție",
   update_booking_details: "Lecție modificată",

@@ -181,6 +181,18 @@ re-checked on 26 Oct against main and the live site.
   private, kids): the Terms' 14-day paragraph word for word and the form
   (_shared/withdrawal-info.ts, withdrawal-section.tsx), so the student keeps
   them in the email itself.
+  ABSENCE WITH A GOOD REASON, BUILT 18 Nov, not live (owner: "the mark for
+  an absense with good reason yes"; Terms section 4 "Absențe"). On a group
+  student's sheet, "Absențe motivate": the group's lessons held so far, each
+  with a tick and an optional reason. A ticked lesson counts as not held for
+  that student in the refund shown in "Contul meu" and in the card
+  subscription's refund; the course's own progress (the two test lessons)
+  still counts it. For a one-off card refund the owner types the lessons
+  held, as before, and subtracts these. Needs the table lesson_excusals
+  (migration 20261118120000, NOT applied: waiting for the owner's OK); the
+  mark is tied to the lesson's Google Calendar event, so moving the lesson
+  keeps it. Open question for the owner: an excused lesson in a month that
+  is over changes nothing, because earlier months are not refunded (Terms).
   EARLY START, BUILT 17 Nov (owner: "Yes protect me from free lessons"):
   a group that starts within 14 days of paying (or has started) is joined
   only by ticking, at checkout, the request for lessons to start inside the

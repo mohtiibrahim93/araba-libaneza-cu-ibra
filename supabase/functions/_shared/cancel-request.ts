@@ -338,6 +338,21 @@ export function cancelPreview(input: CancelPreviewInput): CancelPreview {
   };
 }
 
+/**
+ * The current start times of the lessons the owner excused for a student
+ * (lesson_excusals, by Google Calendar event): a lesson moved in the calendar
+ * keeps its mark; one cancelled there is gone, and its mark with it.
+ */
+export function excusedStarts(
+  sessions: Array<{ starts_at: string; google_event_id: string }>,
+  excusedEventIds: string[],
+): string[] {
+  const ids = new Set(excusedEventIds);
+  return sessions
+    .filter((s) => ids.has(s.google_event_id))
+    .map((s) => s.starts_at);
+}
+
 // ---------------------------------------------------------------------------
 // The statement the student sends, as the acknowledgement repeats it
 // ---------------------------------------------------------------------------

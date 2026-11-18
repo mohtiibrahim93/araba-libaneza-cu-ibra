@@ -5996,6 +5996,7 @@ Deno.serve(async (req) => {
 
       let courseStartDate: string | null = null;
       let sessionStarts: string[] = [];
+      let excusedStarts: string[] = [];
       if (reg.cohort_id) {
         const { data: cohort } = await supabase
           .from("group_cohorts")
@@ -6006,13 +6007,28 @@ Deno.serve(async (req) => {
           (cohort as { start_date: string | null } | null)?.start_date ?? null;
         const { data: sessions, error: sessErr } = await supabase
           .from("cohort_sessions")
-          .select("starts_at")
+          .select("starts_at, google_event_id")
           .eq("cohort_id", reg.cohort_id)
           .order("starts_at");
         if (sessErr) throw sessErr;
-        sessionStarts = (sessions ?? []).map(
-          (s: { starts_at: string }) => s.starts_at,
+        const list = (sessions ?? []) as Array<{
+          starts_at: string;
+          google_event_id: string;
+        }>;
+        sessionStarts = list.map((s) => s.starts_at);
+        // Lessons the owner excused for this student are not held for them
+        // (lesson_excusals). Unread, the refund would keep them: stop.
+        const { data: marks, error: marksErr } = await supabase
+          .from("lesson_excusals")
+          .select("google_event_id")
+          .eq("registration_id", reg.id);
+        if (marksErr) throw marksErr;
+        const marked = new Set(
+          (marks ?? []).map((m: { google_event_id: string }) => m.google_event_id),
         );
+        excusedStarts = list
+          .filter((s) => marked.has(s.google_event_id))
+          .map((s) => s.starts_at);
       }
 
       const breakdown = computeGroupCancelRefund({
@@ -6021,6 +6037,7 @@ Deno.serve(async (req) => {
         sessionStarts,
         // A cancellation sent from "Contul meu" counts from when it was sent.
         cancelledAt: await requestedCancellationAt(supabase, reg.id),
+        excusedStarts,
         currentPeriodEnd: periodEndUnix
           ? new Date(periodEndUnix * 1000).toISOString()
           : null,
@@ -6196,6 +6213,126 @@ Deno.serve(async (req) => {
           received_on: on ? receivedOn : null,
           before: reg.early_start_requested_at ?? null,
         },
+      });
+      return jsonResponse({ success: true });
+    }
+
+    // ============ Absences with a good reason (owner, 17 Nov 2026) ============
+    // Terms, section 4 "Absențe": a lesson counts as held even if the student
+    // was absent, except in special situations the school accepts. The owner
+    // marks those lessons here, per student; the refund rules then count them
+    // as not held for that student. Nothing is emailed and no money moves.
+    if (action === "list_excusals") {
+      if (typeof body.registration_id !== "string")
+        return jsonResponse({ error: "Înscriere invalidă." }, 400);
+      const { data: reg, error: regErr } = await supabase
+        .from("registrations")
+        .select("id, form_type, cohort_id")
+        .eq("id", body.registration_id)
+        .maybeSingle();
+      if (regErr) throw regErr;
+      if (!reg || reg.form_type !== "group" || !reg.cohort_id)
+        return jsonResponse({ data: { lessons: [] } });
+      const { data: sessions, error: sessErr } = await supabase
+        .from("cohort_sessions")
+        .select("lesson_number, starts_at, google_event_id")
+        .eq("cohort_id", reg.cohort_id)
+        .lte("starts_at", new Date().toISOString())
+        .order("starts_at");
+      if (sessErr) throw sessErr;
+      const { data: marks, error: marksErr } = await supabase
+        .from("lesson_excusals")
+        .select("google_event_id, reason, recorded_by, created_at")
+        .eq("registration_id", reg.id);
+      if (marksErr) throw marksErr;
+      const byEvent = new Map(
+        (marks ?? []).map(
+          (m: { google_event_id: string; reason: string | null }) => [
+            m.google_event_id,
+            m,
+          ],
+        ),
+      );
+      return jsonResponse({
+        data: {
+          lessons: (sessions ?? []).map(
+            (s: {
+              lesson_number: number;
+              starts_at: string;
+              google_event_id: string;
+            }) => ({
+              ...s,
+              excused: byEvent.has(s.google_event_id),
+              reason:
+                (byEvent.get(s.google_event_id) as { reason?: string | null })
+                  ?.reason ?? null,
+            }),
+          ),
+        },
+      });
+    }
+
+    if (action === "set_excusal") {
+      const registrationId =
+        typeof body.registration_id === "string" ? body.registration_id : "";
+      const eventId =
+        typeof body.google_event_id === "string" ? body.google_event_id : "";
+      if (!registrationId || !eventId || eventId.length > 1024)
+        return jsonResponse({ error: "Lecție invalidă." }, 400);
+      const excused = body.excused === true;
+      const { data: reg, error: regErr } = await supabase
+        .from("registrations")
+        .select("id, form_type, cohort_id, anonymized_at")
+        .eq("id", registrationId)
+        .maybeSingle();
+      if (regErr) throw regErr;
+      if (!reg || reg.anonymized_at || reg.form_type !== "group")
+        return jsonResponse(
+          { error: "Doar pentru o înscriere la grupă." },
+          400,
+        );
+      // Only a lesson of the student's own group.
+      const { data: session, error: sessErr } = await supabase
+        .from("cohort_sessions")
+        .select("starts_at, google_event_id")
+        .eq("cohort_id", reg.cohort_id)
+        .eq("google_event_id", eventId)
+        .maybeSingle();
+      if (sessErr) throw sessErr;
+      if (!session)
+        return jsonResponse(
+          { error: "Lecția nu este a grupei acestui cursant." },
+          400,
+        );
+      if (excused) {
+        const reason =
+          typeof body.reason === "string"
+            ? body.reason.trim().slice(0, 300)
+            : "";
+        const { error: upErr } = await supabase.from("lesson_excusals").upsert(
+          {
+            registration_id: reg.id,
+            google_event_id: eventId,
+            lesson_starts_at: session.starts_at,
+            reason: reason || null,
+            recorded_by: callerEmail!,
+          },
+          { onConflict: "registration_id,google_event_id" },
+        );
+        if (upErr) throw upErr;
+      } else {
+        const { error: delErr } = await supabase
+          .from("lesson_excusals")
+          .delete()
+          .eq("registration_id", reg.id)
+          .eq("google_event_id", eventId);
+        if (delErr) throw delErr;
+      }
+      await supabase.from("audit_logs").insert({
+        actor: callerEmail!,
+        action: excused ? "mark_excused" : "unmark_excused",
+        registration_id: reg.id,
+        details: { lesson_starts_at: session.starts_at },
       });
       return jsonResponse({ success: true });
     }

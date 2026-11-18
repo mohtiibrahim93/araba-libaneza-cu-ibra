@@ -4,6 +4,7 @@ import MoveToCohort from "./MoveToCohort";
 import GroupWithdraw from "./GroupWithdraw";
 import EarlyStartConsent from "./EarlyStartConsent";
 import CancelRequests from "./CancelRequests";
+import LessonExcusals from "./LessonExcusals";
 import * as DialogPrimitive from "@radix-ui/react-dialog";
 import { Gamepad2, Loader2, Mail, MessageCircle, Phone, X } from "lucide-react";
 import { invokeAdmin } from "@/lib/adminAuth";
@@ -399,6 +400,9 @@ const PersonSheet = ({
                       registrationId={person.id}
                       onDone={onChanged}
                     />
+                  )}
+                  {person.form_type === "group" && !person.anonymized_at && (
+                    <LessonExcusals registrationId={person.id} />
                   )}
                   {person.form_type === "group" && !person.anonymized_at && (
                     <EarlyStartConsent

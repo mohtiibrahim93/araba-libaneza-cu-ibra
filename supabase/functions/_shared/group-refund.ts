@@ -66,6 +66,11 @@ export interface GroupCancelInput {
    * period, so the lessons held are kept (registrations.early_start_requested_at).
    */
   startedAtRequest?: boolean | null;
+  /**
+   * Start times (ISO) of the lessons the owner excused for this student (an
+   * absence with a good reason, Terms section 4 "Absențe"): not held for them.
+   */
+  excusedStarts?: string[] | null;
 }
 
 export type GroupCancelCase =
@@ -180,6 +185,14 @@ export function computeGroupCancelRefund(
   };
   if (charges.length === 0) return { case: "nothing_paid", ...empty };
 
+  // An excused lesson is not held for this student: it is not kept from the
+  // money. The course's own progress (the test lessons) still counts it.
+  const excused = new Set(
+    (input.excusedStarts ?? [])
+      .map((s) => Date.parse(s))
+      .filter((t) => Number.isFinite(t)),
+  );
+
   // The right of withdrawal (Terms, section 4; refund.ts) comes first: inside
   // its 14 days everything paid goes back, with no Stripe fee kept. Lessons
   // held are kept only when the student expressly asked to start early.
@@ -195,7 +208,7 @@ export function computeGroupCancelRefund(
         : addOneMonth(latest.chargedAt),
     );
     const inMonth = times.filter((t) => t >= from && t < to);
-    const held = inMonth.filter((t) => t <= cancelMs).length;
+    const held = inMonth.filter((t) => t <= cancelMs && !excused.has(t)).length;
     const kept =
       input.startedAtRequest && inMonth.length > 0
         ? Math.round((remaining(latest) * held) / inMonth.length)
@@ -266,7 +279,7 @@ export function computeGroupCancelRefund(
     .map((s) => Date.parse(s))
     .filter((t) => Number.isFinite(t));
   const inMonth = times.filter((t) => t >= startMs && t < endMs);
-  const held = inMonth.filter((t) => t <= cancelMs).length;
+  const held = inMonth.filter((t) => t <= cancelMs && !excused.has(t)).length;
   const notHeld = inMonth.length - held;
   const courseLessonsHeld = times.filter((t) => t <= cancelMs).length;
   const amount = remaining(current);

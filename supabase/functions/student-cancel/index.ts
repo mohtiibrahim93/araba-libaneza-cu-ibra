@@ -42,6 +42,7 @@ import {
   cancelPreview,
   cancelStatement,
   dateAndTime,
+  excusedStarts,
   longDate,
   type CancelKind,
   type CancelPreview,
@@ -202,18 +203,38 @@ serve(async (req) => {
         .eq("registration_id", reg.id);
       if (rowsErr) throw new Error("Could not read the recorded payments");
       let sessionStarts: string[] = [];
+      let excused: string[] = [];
+      // Without the absences the owner excused, the amount could be too low:
+      // then none is promised (certain: false) and the owner works it out.
+      let excusedKnown = true;
       if (reg.cohort_id) {
         const { data: sessions, error: sessErr } = await supabase
           .from("cohort_sessions")
-          .select("starts_at")
+          .select("starts_at, google_event_id")
           .eq("cohort_id", reg.cohort_id)
           .order("starts_at");
         if (sessErr) throw new Error("Could not read the lessons");
-        sessionStarts = (sessions ?? []).map(
-          (s: { starts_at: string }) => s.starts_at,
-        );
+        const list = (sessions ?? []) as Array<{
+          starts_at: string;
+          google_event_id: string;
+        }>;
+        sessionStarts = list.map((s) => s.starts_at);
+        const { data: marks, error: marksErr } = await supabase
+          .from("lesson_excusals")
+          .select("google_event_id")
+          .eq("registration_id", reg.id);
+        if (marksErr) {
+          excusedKnown = false;
+          console.error("[student-cancel] excused lessons not read", marksErr);
+        } else
+          excused = excusedStarts(
+            list,
+            (marks ?? []).map(
+              (m: { google_event_id: string }) => m.google_event_id,
+            ),
+          );
       }
-      return cancelPreview({
+      const preview = cancelPreview({
         signedUpAt: reg.created_at,
         earlyStartRequested: Boolean(reg.early_start_requested_at),
         monthsTotal:
@@ -221,8 +242,10 @@ serve(async (req) => {
         courseStartDate: cohort?.start_date ?? null,
         sessionStarts,
         rows: (rows ?? []) as MonthPaymentRow[],
+        excusedStarts: excused,
         at: now.toISOString(),
       });
+      return excusedKnown ? preview : { ...preview, certain: false };
     };
 
     /** Groups of the same level that start later and still take sign-ups. */
