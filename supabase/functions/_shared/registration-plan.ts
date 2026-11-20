@@ -29,21 +29,10 @@ export function hasPlan(formType: unknown): boolean {
   return formType === "group" || formType === "kids";
 }
 
-type PriceReader = {
-  from: (t: string) => {
-    select: (c: string) => {
-      eq: (
-        c: string,
-        v: string,
-      ) => {
-        maybeSingle: () => PromiseLike<{
-          data: { price_lei?: unknown } | null;
-          error: unknown;
-        }>;
-      };
-    };
-  };
-};
+// Kept deliberately loose: matching the full SupabaseClient<Database> against a
+// structural type made Deno's checker recurse forever (TS2589).
+// deno-lint-ignore no-explicit-any
+type PriceReader = { from: (t: string) => any };
 
 /**
  * The monthly price of the registration's own group, in whole RON, or null
