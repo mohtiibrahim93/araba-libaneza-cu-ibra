@@ -244,7 +244,7 @@ function setup(
         },
       },
       "https://esm.sh/stripe@18.5.0": { default: FakeStripe },
-      "https://esm.sh/@supabase/supabase-js@2.57.2": { createClient: () => db },
+      "https://esm.sh/@supabase/supabase-js@2": { createClient: () => db },
       "../_shared/cors.ts": { buildCorsHeaders: () => ({}) },
       "../_shared/rate-limit.ts": { checkRateLimit: async () => true },
       "../_shared/managed-email.ts": {

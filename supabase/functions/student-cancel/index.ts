@@ -28,7 +28,7 @@
 // (verified-registration-owner.ts, as for paying a month).
 import { serve } from "https://deno.land/std@0.190.0/http/server.ts";
 import Stripe from "https://esm.sh/stripe@18.5.0";
-import { createClient } from "https://esm.sh/@supabase/supabase-js@2.57.2";
+import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 import { buildCorsHeaders } from "../_shared/cors.ts";
 import { verifiedRegistrationOwner } from "../_shared/verified-registration-owner.ts";
 import { checkRateLimit } from "../_shared/rate-limit.ts";
