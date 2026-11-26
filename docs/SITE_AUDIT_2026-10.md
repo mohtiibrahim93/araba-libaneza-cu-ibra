@@ -281,6 +281,23 @@ re-checked on 26 Oct against main and the live site.
   branch lovable-sync (d799986b): checked on 17 Nov, everything in it is on
   main (the two security fixes in main's own form). Deleting that branch was
   refused from this session; the owner deletes it on GitHub.
+- LIVE 26 Nov 2026 (owner: "push to main for now", then "you have my okay
+  to do those things ... For now, do it"). The early-start box for every
+  payment method, the withdraw and cancel buttons in "Contul meu", the
+  14-day information (Terms 4.2, before payment, confirmation emails) and
+  the absences with a good reason. Database: cancellation_requests and
+  lesson_excusals created by hand from migrations 20261117140000 and
+  20261118120000 (row level security on, no policy, no rights for anon or
+  authenticated; checked). All 26 edge functions passed deno check (Deno
+  2.9.6) and were deployed by Lovable's assistant from commit 0bbe0672
+  (1.2 credits; it pushed only the regenerated types.ts, 3929efb1); the
+  site was published. Checked live: /terms and /en/terms carry section 4.2
+  and the button sentences; /api/public/early-start and my-account answer
+  401 without sign-in; student-cancel answers 400 to an empty request and
+  404 to a sign-up the caller does not own. GitHub main, Lovable and the
+  live site are on 3929efb1. Open decisions for the owner live in the
+  private doc "Questions to solve" (10% on months paid ahead; the first A1
+  group's payments; clearing unfinished trial sign-ups).
 - LIVE 17 Nov 2026 (owner: "push to main and then go live"). main 25cb4317
   synced into Lovable; Lovable's assistant deployed all 25 edge functions
   from it (1.2 credits; it then pushed only a regenerated
