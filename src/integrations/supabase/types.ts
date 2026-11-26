@@ -474,6 +474,75 @@ export type Database = {
           },
         ]
       }
+      cancellation_requests: {
+        Row: {
+          acknowledged_at: string | null
+          email: string | null
+          handled_at: string | null
+          handled_by: string | null
+          handled_note: string | null
+          id: string
+          kind: string
+          name: string | null
+          owner_notified_at: string | null
+          registration_id: string
+          requested_at: string
+          shown: Json | null
+          statement: string
+          subscription_stopped_at: string | null
+          target_cohort_id: string | null
+        }
+        Insert: {
+          acknowledged_at?: string | null
+          email?: string | null
+          handled_at?: string | null
+          handled_by?: string | null
+          handled_note?: string | null
+          id?: string
+          kind: string
+          name?: string | null
+          owner_notified_at?: string | null
+          registration_id: string
+          requested_at?: string
+          shown?: Json | null
+          statement: string
+          subscription_stopped_at?: string | null
+          target_cohort_id?: string | null
+        }
+        Update: {
+          acknowledged_at?: string | null
+          email?: string | null
+          handled_at?: string | null
+          handled_by?: string | null
+          handled_note?: string | null
+          id?: string
+          kind?: string
+          name?: string | null
+          owner_notified_at?: string | null
+          registration_id?: string
+          requested_at?: string
+          shown?: Json | null
+          statement?: string
+          subscription_stopped_at?: string | null
+          target_cohort_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "cancellation_requests_registration_id_fkey"
+            columns: ["registration_id"]
+            isOneToOne: false
+            referencedRelation: "registrations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "cancellation_requests_target_cohort_id_fkey"
+            columns: ["target_cohort_id"]
+            isOneToOne: false
+            referencedRelation: "group_cohorts"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       cohort_calendar: {
         Row: {
           calendar_title: string
@@ -1038,6 +1107,44 @@ export type Database = {
         Relationships: [
           {
             foreignKeyName: "lead_status_history_registration_id_fkey"
+            columns: ["registration_id"]
+            isOneToOne: false
+            referencedRelation: "registrations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      lesson_excusals: {
+        Row: {
+          created_at: string
+          google_event_id: string
+          id: string
+          lesson_starts_at: string
+          reason: string | null
+          recorded_by: string
+          registration_id: string
+        }
+        Insert: {
+          created_at?: string
+          google_event_id: string
+          id?: string
+          lesson_starts_at: string
+          reason?: string | null
+          recorded_by: string
+          registration_id: string
+        }
+        Update: {
+          created_at?: string
+          google_event_id?: string
+          id?: string
+          lesson_starts_at?: string
+          reason?: string | null
+          recorded_by?: string
+          registration_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "lesson_excusals_registration_id_fkey"
             columns: ["registration_id"]
             isOneToOne: false
             referencedRelation: "registrations"
