@@ -673,7 +673,8 @@ const TodayAdmin = ({
                   ))}
                 </ul>
                 <p className="text-xs">
-                  Rambursarea, creditul sau mutarea le faci din fișă; data
+                  Rambursarea, creditul sau mutarea le faci din fișă; la o
+                  retragere sau o anulare marchează și „Retras din grupă”. Data
                   anulării este cea de mai sus. Apasă „Rezolvată” după aceea.
                 </p>
               </div>

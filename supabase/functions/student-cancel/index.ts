@@ -265,6 +265,15 @@ serve(async (req) => {
       return ((data ?? []) as Cohort[]).filter((c) => c.id !== reg.cohort_id);
     };
 
+    const estimateFailed = (e: unknown): null => {
+      console.error("[student-cancel] estimate not worked out", e);
+      return null;
+    };
+    const groupsFailed = (e: unknown): Cohort[] => {
+      console.error("[student-cancel] groups not read", e);
+      return [];
+    };
+
     if (action === "preview") {
       const kind: CancelKind | null = options.withdrawalUntil
         ? "withdrawal"
@@ -291,10 +300,15 @@ serve(async (req) => {
               lang,
             })
           : null,
-        preview: kind && !open ? await previewNow() : null,
+        // The estimate and the groups help; they never stand between the
+        // student and the confirm button.
+        preview:
+          kind && !open ? await previewNow().catch(estimateFailed) : null,
         groups:
           kind === "cancellation" && !open
-            ? (await groupsToMoveTo()).map((c) => groupChoice(c, lang))
+            ? (await groupsToMoveTo().catch(groupsFailed)).map((c) =>
+                groupChoice(c, lang),
+              )
             : [],
       });
     }
@@ -339,7 +353,10 @@ serve(async (req) => {
       lang,
       target: target ? groupChoice(target, lang).title : null,
     });
-    const shown = kind === "transfer" ? null : await previewNow();
+    // A withdrawal or a cancellation is recorded even when the estimate
+    // cannot be worked out: then nothing was shown, and the owner works it out.
+    const shown =
+      kind === "transfer" ? null : await previewNow().catch(estimateFailed);
 
     const { data: saved, error: saveErr } = await supabase
       .from("cancellation_requests")

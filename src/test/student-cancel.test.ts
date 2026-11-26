@@ -13,7 +13,11 @@ const read = (p: string) => readFileSync(resolve(process.cwd(), p), "utf8");
 type Row = Record<string, unknown>;
 type Write = { table: string; op: string; value?: unknown; filters: string[] };
 
-function fakeDb(tables: Record<string, Row[]>, user: { email: string } | null) {
+function fakeDb(
+  tables: Record<string, Row[]>,
+  user: { email: string } | null,
+  failRead?: string,
+) {
   const writes: Write[] = [];
   let ids = 0;
   const from = (table: string) => {
@@ -25,6 +29,8 @@ function fakeDb(tables: Record<string, Row[]>, user: { email: string } | null) {
     const rows = () =>
       (tables[table] ?? []).filter((r) => tests.every((t) => t(r)));
     const run = async (): Promise<{ data: unknown; error: unknown }> => {
+      if (op === "select" && failRead === table)
+        return { data: null, error: { message: "read failed" } };
       if (op === "insert") {
         const row: Row = {
           id: `q${++ids}`,
@@ -210,11 +216,16 @@ const tables = (over: Row = {}): Record<string, Row[]> => ({
 
 function setup(
   t: Record<string, Row[]>,
-  opts: { user?: { email: string } | null; failAck?: boolean } = {},
+  opts: {
+    user?: { email: string } | null;
+    failAck?: boolean;
+    failRead?: string;
+  } = {},
 ) {
   const { db, writes } = fakeDb(
     t,
     opts.user === undefined ? { email: "Student@Example.test" } : opts.user,
+    opts.failRead,
   );
   const emails: unknown[][] = [];
   const stripeCalls: unknown[][] = [];
@@ -550,5 +561,34 @@ describe("the rest of the build", () => {
         "supabase/functions/_shared/transactional-email-templates/admin-cancel-request.tsx",
       ),
     ).toContain('to: "marhaba@centruldearabalibaneza.com"');
+  });
+});
+
+describe("the withdrawal is never blocked by the estimate", () => {
+  it("the button and the statement come up, and the request is recorded, when the lessons cannot be read", async () => {
+    vi.setSystemTime(new Date("2026-11-25T10:00:00.000Z"));
+    const s = setup(tables({ created_at: "2026-11-20T10:00:00.000Z" }), {
+      failRead: "cohort_sessions",
+    });
+    const preview = await s.call({ action: "preview" });
+    expect(preview.status).toBe(200);
+    expect(preview.body.statement).toContain("Mă retrag din contractul");
+    expect(preview.body.preview).toBeNull();
+    const { status } = await s.call({
+      action: "request",
+      kind: "withdrawal",
+      confirm: true,
+    });
+    expect(status).toBe(200);
+    expect(s.tables["cancellation_requests"]![0]).toMatchObject({
+      kind: "withdrawal",
+      shown: null,
+    });
+  });
+
+  it("an unread absence mark promises no amount", async () => {
+    const s = setup(tables(), { failRead: "lesson_excusals" });
+    const { body } = await s.call({ action: "preview" });
+    expect(body.preview.certain).toBe(false);
   });
 });

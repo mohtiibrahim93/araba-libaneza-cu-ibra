@@ -142,8 +142,8 @@ const CancelRequests = ({
       {rows.some((r) => !r.handled_at && r.kind !== "transfer") && (
         <p className="text-xs text-muted-foreground">
           Cât timp cererea e deschisă, rambursarea se calculează de la data
-          trimiterii. Apasă „Rezolvată” după ce ai rambursat sau ai dat
-          creditul.
+          trimiterii. După ce ai rambursat sau ai dat creditul, marchează
+          „Retras din grupă” și apasă „Rezolvată”.
         </p>
       )}
       {error && <p className="text-destructive">{error}</p>}
