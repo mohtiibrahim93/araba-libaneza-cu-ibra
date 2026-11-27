@@ -96,6 +96,8 @@ export default function BookLessonDialog({
   // lesson; it sets the Google Calendar event's end. Default: 30 for a trial,
   // 60 otherwise.
   const [bkDuration, setBkDuration] = useState(60);
+  const durHours = Math.floor(Math.max(0, bkDuration || 0) / 60);
+  const durMins = Math.max(0, bkDuration || 0) % 60;
   const [bkNotes, setBkNotes] = useState("");
   const [bkBusy, setBkBusy] = useState(false);
   const [bkWarn, setBkWarn] = useState<string[] | null>(null);
@@ -106,6 +108,19 @@ export default function BookLessonDialog({
   // "Lecție în plus": same student, but a registration of its own (package used up).
   const [bkExtra, setBkExtra] = useState(false);
   const [bkStudents, setBkStudents] = useState<PrivateStudent[] | null>(null);
+
+  // Start + length, as "HH:MM" in Romania's time; setting it sets the length.
+  const toMin = (hhmm: string) => {
+    const [h, m] = hhmm.split(":").map(Number);
+    return (h ?? 0) * 60 + (m ?? 0);
+  };
+  const endTotal = toMin(bkTime) + (bkDuration || 0);
+  const endTime = `${String(Math.floor(endTotal / 60) % 24).padStart(2, "0")}:${String(endTotal % 60).padStart(2, "0")}`;
+  const setEndTime = (hhmm: string) => {
+    let diff = toMin(hhmm) - toMin(bkTime);
+    if (diff <= 0) diff += 24 * 60;
+    setBkDuration(diff);
+  };
 
   const reset = (initial?: {
     date: string;
@@ -200,11 +215,7 @@ export default function BookLessonDialog({
       toast({ title: "Data sau ora nu sunt valide", variant: "destructive" });
       return;
     }
-    if (
-      !Number.isInteger(bkDuration) ||
-      bkDuration < 10 ||
-      bkDuration > 240
-    ) {
+    if (!Number.isInteger(bkDuration) || bkDuration < 10 || bkDuration > 240) {
       toast({
         title: "Durata trebuie să fie între 10 și 240 de minute",
         variant: "destructive",
@@ -467,9 +478,11 @@ export default function BookLessonDialog({
             <Label htmlFor="bk-duration" className="text-xs">
               Durata lecției
             </Label>
-            {/* Quick picks, or any length typed by hand (10–240 min, the
-                range booking-create accepts). */}
-            <div className="flex flex-wrap items-center gap-2">
+            {/* Three ways to set the same length, kept in sync (owner,
+                27 Nov 2026): quick picks; hours + minutes (chosen or typed);
+                or the end time ("Până la"). 10–240 min, the range
+                booking-create accepts. */}
+            <div className="flex flex-wrap gap-2">
               {[30, 60, 90].map((m) => (
                 <Button
                   key={m}
@@ -481,19 +494,53 @@ export default function BookLessonDialog({
                   {m} min
                 </Button>
               ))}
-              <Input
-                id="bk-duration"
-                className="h-9 w-24"
-                type="number"
-                inputMode="numeric"
-                min={10}
-                max={240}
-                step={5}
-                value={Number.isFinite(bkDuration) ? bkDuration : ""}
-                onChange={(e) => setBkDuration(Number(e.target.value))}
-                aria-label="Durata în minute"
-              />
-              <span className="text-xs text-muted-foreground">min</span>
+            </div>
+            <div className="flex flex-wrap items-end gap-4">
+              <div className="flex items-center gap-1.5">
+                <Input
+                  id="bk-duration"
+                  className="h-9 w-16"
+                  type="number"
+                  inputMode="numeric"
+                  min={0}
+                  max={4}
+                  value={durHours}
+                  onChange={(e) =>
+                    setBkDuration(
+                      Math.max(0, Number(e.target.value) || 0) * 60 + durMins,
+                    )
+                  }
+                  aria-label="Ore"
+                />
+                <span className="text-xs text-muted-foreground">h</span>
+                <Input
+                  className="h-9 w-16"
+                  type="number"
+                  inputMode="numeric"
+                  min={0}
+                  max={59}
+                  step={5}
+                  value={durMins}
+                  onChange={(e) =>
+                    setBkDuration(
+                      durHours * 60 +
+                        Math.min(59, Math.max(0, Number(e.target.value) || 0)),
+                    )
+                  }
+                  aria-label="Minute"
+                />
+                <span className="text-xs text-muted-foreground">min</span>
+              </div>
+              <div className="space-y-1">
+                <span className="block text-[11px] text-muted-foreground">
+                  Până la
+                </span>
+                <TimeField
+                  value={endTime}
+                  onChange={setEndTime}
+                  label="Ora de final"
+                />
+              </div>
             </div>
           </div>
           {(!bkStudentId || bkExtra) && bkKind === "paid" && (

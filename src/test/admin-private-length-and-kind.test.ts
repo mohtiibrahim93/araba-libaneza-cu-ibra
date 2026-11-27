@@ -22,6 +22,9 @@ describe("hand-booked private lessons", () => {
     expect(dialog).toContain("[30, 60, 90].map");
     expect(dialog).toContain('id="bk-duration"');
     expect(dialog).toContain("bkDuration < 10 ||");
+    // Hours + minutes, and the end time, set the same length.
+    expect(dialog).toContain('aria-label="Ore"');
+    expect(dialog).toContain('label="Ora de final"');
     expect(dialog).toContain("duration_min: bkDuration,");
     expect(dialog).not.toContain('bkKind === "trial" && (\n            <div');
   });
