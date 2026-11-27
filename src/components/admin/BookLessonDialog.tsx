@@ -400,14 +400,27 @@ export default function BookLessonDialog({
             />
           </div>
           <div className="space-y-1.5">
-            <Label className="text-xs">Ora (ora României)</Label>
+            <Label className="text-xs">De la (ora României)</Label>
             <TimeField
-              label="Ora lecției"
+              label="Ora de început"
               value={bkTime}
               onChange={(hhmm) => {
                 setBkTime(hhmm);
                 setBkWarn(null);
               }}
+            />
+          </div>
+          {/* The lesson is set as an interval (owner, 27 Nov 2026): start and
+              end; the length is worked out from them, never typed. */}
+          <div className="space-y-1.5">
+            <Label className="text-xs">Până la</Label>
+            <TimeField
+              value={endTime}
+              onChange={(hhmm) => {
+                setEndTime(hhmm);
+                setBkWarn(null);
+              }}
+              label="Ora de final"
             />
           </div>
           <div className="space-y-1.5">
@@ -475,13 +488,18 @@ export default function BookLessonDialog({
             )}
           </fieldset>
           <div className="space-y-1.5">
-            <Label htmlFor="bk-duration" className="text-xs">
-              Durata lecției
-            </Label>
-            {/* Three ways to set the same length, kept in sync (owner,
-                27 Nov 2026): quick picks; hours + minutes (chosen or typed);
-                or the end time ("Până la"). 10–240 min, the range
-                booking-create accepts. */}
+            <Label className="text-xs">Durata</Label>
+            {/* Worked out from "De la" and "Până la"; the quick picks only
+                move the end time. 10–240 min, the range booking-create
+                accepts. */}
+            <p
+              className="text-sm font-semibold tabular-nums"
+              data-testid="bk-duration"
+            >
+              {durHours > 0 ? `${durHours} h` : ""}
+              {durHours > 0 && durMins > 0 ? " " : ""}
+              {durMins > 0 || durHours === 0 ? `${durMins} min` : ""}
+            </p>
             <div className="flex flex-wrap gap-2">
               {[30, 60, 90].map((m) => (
                 <Button
@@ -494,53 +512,6 @@ export default function BookLessonDialog({
                   {m} min
                 </Button>
               ))}
-            </div>
-            <div className="flex flex-wrap items-end gap-4">
-              <div className="flex items-center gap-1.5">
-                <Input
-                  id="bk-duration"
-                  className="h-9 w-16"
-                  type="number"
-                  inputMode="numeric"
-                  min={0}
-                  max={4}
-                  value={durHours}
-                  onChange={(e) =>
-                    setBkDuration(
-                      Math.max(0, Number(e.target.value) || 0) * 60 + durMins,
-                    )
-                  }
-                  aria-label="Ore"
-                />
-                <span className="text-xs text-muted-foreground">h</span>
-                <Input
-                  className="h-9 w-16"
-                  type="number"
-                  inputMode="numeric"
-                  min={0}
-                  max={59}
-                  step={5}
-                  value={durMins}
-                  onChange={(e) =>
-                    setBkDuration(
-                      durHours * 60 +
-                        Math.min(59, Math.max(0, Number(e.target.value) || 0)),
-                    )
-                  }
-                  aria-label="Minute"
-                />
-                <span className="text-xs text-muted-foreground">min</span>
-              </div>
-              <div className="space-y-1">
-                <span className="block text-[11px] text-muted-foreground">
-                  Până la
-                </span>
-                <TimeField
-                  value={endTime}
-                  onChange={setEndTime}
-                  label="Ora de final"
-                />
-              </div>
             </div>
           </div>
           {(!bkStudentId || bkExtra) && bkKind === "paid" && (
