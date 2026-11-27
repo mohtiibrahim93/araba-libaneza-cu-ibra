@@ -200,6 +200,17 @@ export default function BookLessonDialog({
       toast({ title: "Data sau ora nu sunt valide", variant: "destructive" });
       return;
     }
+    if (
+      !Number.isInteger(bkDuration) ||
+      bkDuration < 10 ||
+      bkDuration > 240
+    ) {
+      toast({
+        title: "Durata trebuie să fie între 10 și 240 de minute",
+        variant: "destructive",
+      });
+      return;
+    }
     setBkBusy(true);
     try {
       const startAt = bucharestCivilToUtc(y, m, d, hh, mm).toISOString();
@@ -456,18 +467,34 @@ export default function BookLessonDialog({
             <Label htmlFor="bk-duration" className="text-xs">
               Durata lecției
             </Label>
-            <select
-              id="bk-duration"
-              className="h-9 w-full rounded-md border border-input bg-background px-3 text-sm"
-              value={bkDuration}
-              onChange={(e) => setBkDuration(Number(e.target.value))}
-            >
+            {/* Quick picks, or any length typed by hand (10–240 min, the
+                range booking-create accepts). */}
+            <div className="flex flex-wrap items-center gap-2">
               {[30, 60, 90].map((m) => (
-                <option key={m} value={m}>
+                <Button
+                  key={m}
+                  type="button"
+                  size="sm"
+                  variant={bkDuration === m ? "default" : "outline"}
+                  onClick={() => setBkDuration(m)}
+                >
                   {m} min
-                </option>
+                </Button>
               ))}
-            </select>
+              <Input
+                id="bk-duration"
+                className="h-9 w-24"
+                type="number"
+                inputMode="numeric"
+                min={10}
+                max={240}
+                step={5}
+                value={Number.isFinite(bkDuration) ? bkDuration : ""}
+                onChange={(e) => setBkDuration(Number(e.target.value))}
+                aria-label="Durata în minute"
+              />
+              <span className="text-xs text-muted-foreground">min</span>
+            </div>
           </div>
           {(!bkStudentId || bkExtra) && bkKind === "paid" && (
             <>

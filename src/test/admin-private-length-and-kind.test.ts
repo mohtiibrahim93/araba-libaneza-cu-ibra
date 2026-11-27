@@ -18,8 +18,10 @@ describe("hand-booked private lessons", () => {
     "utf8",
   );
 
-  it("offers 30, 60 and 90 minutes for every kind of lesson", () => {
+  it("offers 30, 60, 90 or any length for every kind of lesson", () => {
     expect(dialog).toContain("[30, 60, 90].map");
+    expect(dialog).toContain('id="bk-duration"');
+    expect(dialog).toContain("bkDuration < 10 ||");
     expect(dialog).toContain("duration_min: bkDuration,");
     expect(dialog).not.toContain('bkKind === "trial" && (\n            <div');
   });
