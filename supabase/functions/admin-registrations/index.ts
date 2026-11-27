@@ -4844,7 +4844,10 @@ Deno.serve(async (req) => {
             ...(existing?.contactEmail
               ? { contact_email: existing.contactEmail }
               : {}),
-            phone: studentPhone || null,
+            // registrations.phone is NOT NULL; the admin form marks the phone
+            // optional, so a blank one is stored as "" (27 Nov 2026: a new
+            // student without a phone could not be booked at all).
+            phone: studentPhone || "",
             language,
             format: format === "physical" ? "fizic" : "online",
             quantity: trial ? 1 : quantity,

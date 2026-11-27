@@ -30,7 +30,9 @@ describe("manual booking can be a free trial", () => {
       "utf8",
     );
     expect(form).toContain('["trial", "Probă gratuită"]');
-    expect(form).toContain("trial: true, duration_min: bkDuration");
+    expect(form).toContain('...(bkKind === "trial" ? { trial: true } : {})');
+    // Every hand-booked lesson sends its length (30/60/90), not only a trial.
+    expect(form).toContain("duration_min: bkDuration,");
   });
 });
 

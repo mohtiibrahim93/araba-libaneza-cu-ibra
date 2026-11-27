@@ -92,7 +92,10 @@ export default function BookLessonDialog({
   const [bkKind, setBkKind] = useState<"paid" | "trial" | "makeup" | "bonus">(
     "paid",
   );
-  const [bkDuration, setBkDuration] = useState(30);
+  // Lesson length (owner, 27 Nov 2026): 30, 60 or 90 minutes for any kind of
+  // lesson; it sets the Google Calendar event's end. Default: 30 for a trial,
+  // 60 otherwise.
+  const [bkDuration, setBkDuration] = useState(60);
   const [bkNotes, setBkNotes] = useState("");
   const [bkBusy, setBkBusy] = useState(false);
   const [bkWarn, setBkWarn] = useState<string[] | null>(null);
@@ -125,7 +128,7 @@ export default function BookLessonDialog({
     setBkQuantity(1);
     setBkPaid(false);
     setBkKind("paid");
-    setBkDuration(30);
+    setBkDuration(60);
     setBkNotes("");
     setBkWarn(null);
     setBkStudentId("");
@@ -148,7 +151,10 @@ export default function BookLessonDialog({
           }
           setBkStudentId(s.id);
           // A website trial sign-up opened from its sheet: the free trial.
-          if (s.form_type === "trial") setBkKind("trial");
+          if (s.form_type === "trial") {
+            setBkKind("trial");
+            setBkDuration(30);
+          }
           setBkName(s.name ?? "");
           setBkEmail(s.email ?? "");
           setBkPhone(s.phone ?? "");
@@ -172,6 +178,7 @@ export default function BookLessonDialog({
     // A website trial sign-up: the lesson is the trial it asked for.
     if (s.form_type === "trial") {
       setBkKind("trial");
+      setBkDuration(30);
       setBkExtra(false);
     }
   };
@@ -219,9 +226,8 @@ export default function BookLessonDialog({
         quantity: bkKind === "paid" ? bkQuantity : 1,
         paid: bkKind === "paid" && bkPaid,
         ...(bkKind === "makeup" || bkKind === "bonus" ? { free: true } : {}),
-        ...(bkKind === "trial"
-          ? { trial: true, duration_min: bkDuration }
-          : {}),
+        ...(bkKind === "trial" ? { trial: true } : {}),
+        duration_min: bkDuration,
         ...(bkKind === "bonus" ? { bonus: true } : {}),
         notes: bkNotes.trim() || undefined,
         force,
@@ -424,6 +430,7 @@ export default function BookLessonDialog({
                       setBkKind(kind);
                       if (kind !== "paid") setBkPaid(false);
                       if (kind === "trial") setBkDuration(30);
+                      else if (bkKind === "trial") setBkDuration(60);
                     }}
                   />
                   {label}
@@ -445,24 +452,23 @@ export default function BookLessonDialog({
               </p>
             )}
           </fieldset>
-          {bkKind === "trial" && (
-            <div className="space-y-1.5">
-              <Label className="text-xs">Durata probei (minute)</Label>
-              <Input
-                className="h-9"
-                type="number"
-                min={10}
-                max={240}
-                step={5}
-                value={bkDuration}
-                onChange={(e) =>
-                  setBkDuration(
-                    Math.min(240, Math.max(10, Number(e.target.value) || 30)),
-                  )
-                }
-              />
-            </div>
-          )}
+          <div className="space-y-1.5">
+            <Label htmlFor="bk-duration" className="text-xs">
+              Durata lecției
+            </Label>
+            <select
+              id="bk-duration"
+              className="h-9 w-full rounded-md border border-input bg-background px-3 text-sm"
+              value={bkDuration}
+              onChange={(e) => setBkDuration(Number(e.target.value))}
+            >
+              {[30, 60, 90].map((m) => (
+                <option key={m} value={m}>
+                  {m} min
+                </option>
+              ))}
+            </select>
+          </div>
           {(!bkStudentId || bkExtra) && bkKind === "paid" && (
             <>
               <div className="space-y-1.5">

@@ -4,7 +4,8 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { toast } from "@/hooks/use-toast";
-import { Loader2, UserPlus } from "lucide-react";
+import { CalendarPlus, Loader2, UserPlus } from "lucide-react";
+import BookLessonDialog from "@/components/admin/BookLessonDialog";
 
 /**
  * Add one student by hand — someone who wrote on WhatsApp, TikTok or called.
@@ -65,6 +66,11 @@ const ManualStudentForm = ({ onAdded }: { onAdded?: () => void }) => {
   const [cohorts, setCohorts] = useState<CohortOption[]>([]);
   const [f, setF] = useState(empty);
   const [saving, setSaving] = useState(false);
+  // Group or private (owner, 27 Nov 2026): a private lesson booked by hand
+  // must never land in a group. "Lecție privată" opens the private-lesson
+  // booking form (online or la centru, 30/60/90 min) instead of this one.
+  const [kind, setKind] = useState<"group" | "private">("group");
+  const [privateOpen, setPrivateOpen] = useState(false);
 
   useEffect(() => {
     void (async () => {
@@ -122,129 +128,180 @@ const ManualStudentForm = ({ onAdded }: { onAdded?: () => void }) => {
           Adaugă un cursant manual
         </h2>
       </div>
-      <p className="mb-4 text-sm text-muted-foreground">
-        Pentru cineva venit pe WhatsApp, TikTok, telefon etc. Intră direct în
-        grupa aleasă: ocupă un loc, apare în lista de înscrieri și primește
-        emailurile grupei.
-      </p>
-      <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
-        <div className="space-y-1.5">
-          <Label htmlFor="ms-name">Nume *</Label>
-          <Input
-            id="ms-name"
-            value={f.name}
-            onChange={(e) => setF({ ...f, name: e.target.value })}
-            maxLength={200}
-          />
-        </div>
-        <div className="space-y-1.5">
-          <Label htmlFor="ms-phone">Telefon *</Label>
-          <Input
-            id="ms-phone"
-            value={f.phone}
-            onChange={(e) => setF({ ...f, phone: e.target.value })}
-            maxLength={40}
-          />
-        </div>
-        <div className="space-y-1.5">
-          <Label htmlFor="ms-email">Email *</Label>
-          <Input
-            id="ms-email"
-            type="email"
-            value={f.email}
-            onChange={(e) => setF({ ...f, email: e.target.value })}
-            maxLength={320}
-            required
-          />
-        </div>
-        <div className="space-y-1.5 sm:col-span-2">
-          <Label htmlFor="ms-cohort">Grupa *</Label>
-          <select
-            id="ms-cohort"
-            className={select}
-            value={f.cohort_id}
-            onChange={(e) => setF({ ...f, cohort_id: e.target.value })}
-          >
-            <option value="">Alege grupa…</option>
-            {cohorts.map((c) => (
-              <option key={c.id} value={c.id}>
-                {label(c)}
-              </option>
-            ))}
-          </select>
-        </div>
-        <div className="space-y-1.5">
-          <Label htmlFor="ms-source">Sursa *</Label>
-          <select
-            id="ms-source"
-            className={select}
-            value={f.source}
-            onChange={(e) => setF({ ...f, source: e.target.value })}
-          >
-            {SOURCES.map(([v, l]) => (
-              <option key={v} value={v}>
-                {l}
-              </option>
-            ))}
-          </select>
-        </div>
-        <div className="space-y-1.5">
-          <Label htmlFor="ms-paid">A plătit?</Label>
-          <select
-            id="ms-paid"
-            className={select}
-            value={f.paid}
-            onChange={(e) => setF({ ...f, paid: e.target.value })}
-          >
-            <option value="no">Nu încă</option>
-            <option value="yes">Da</option>
-          </select>
-        </div>
-        {f.paid === "yes" && (
-          <div className="space-y-1.5">
-            <Label htmlFor="ms-method">Cum a plătit</Label>
-            <select
-              id="ms-method"
-              className={select}
-              value={f.payment_method}
-              onChange={(e) => setF({ ...f, payment_method: e.target.value })}
+      <fieldset className="mb-4">
+        <legend className="mb-1.5 text-sm font-medium">Tip *</legend>
+        <div className="flex flex-wrap gap-2">
+          {(
+            [
+              ["group", "Curs în grupă"],
+              ["private", "Lecție privată"],
+            ] as const
+          ).map(([k, l]) => (
+            <label
+              key={k}
+              className={`flex min-h-10 cursor-pointer items-center gap-2 rounded-lg border px-3 text-sm ${kind === k ? "border-primary bg-primary/10 font-semibold" : "border-input"}`}
             >
-              {METHODS.map(([v, l]) => (
-                <option key={v} value={v}>
-                  {l}
-                </option>
-              ))}
-            </select>
-          </div>
-        )}
-        <div className="space-y-1.5 sm:col-span-2 lg:col-span-3">
-          <Label htmlFor="ms-notes">Notițe</Label>
-          <Input
-            id="ms-notes"
-            value={f.notes}
-            onChange={(e) => setF({ ...f, notes: e.target.value })}
-            maxLength={2000}
-          />
+              <input
+                type="radio"
+                name="ms-kind"
+                value={k}
+                checked={kind === k}
+                onChange={() => {
+                  setKind(k);
+                  if (k === "private") setPrivateOpen(true);
+                }}
+              />
+              {l}
+            </label>
+          ))}
         </div>
-      </div>
-      <Button
-        className="mt-4"
-        onClick={save}
-        disabled={
-          saving ||
-          !f.name.trim() ||
-          !f.phone.trim() ||
-          !f.email.trim() ||
-          !f.cohort_id
-        }
-      >
-        {saving ? (
-          <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-        ) : (
-          <UserPlus className="mr-2 h-4 w-4" />
-        )}
-        Adaugă în grupă
-      </Button>
+      </fieldset>
+      {kind === "private" ? (
+        <>
+          <p className="mb-4 text-sm text-muted-foreground">
+            O lecție privată are o oră: se programează cu data, ora, formatul
+            (online sau la centru) și durata (30, 60 sau 90 min). Nu intră în
+            nicio grupă.
+          </p>
+          <Button onClick={() => setPrivateOpen(true)}>
+            <CalendarPlus className="mr-2 h-4 w-4" />
+            Programează o lecție privată
+          </Button>
+          <BookLessonDialog
+            open={privateOpen}
+            onClose={() => setPrivateOpen(false)}
+            onBooked={() => onAdded?.()}
+          />
+        </>
+      ) : (
+        <>
+          <p className="mb-4 text-sm text-muted-foreground">
+            Pentru cineva venit pe WhatsApp, TikTok, telefon etc. Intră direct
+            în grupa aleasă: ocupă un loc, apare în lista de înscrieri și
+            primește emailurile grupei.
+          </p>
+          <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+            <div className="space-y-1.5">
+              <Label htmlFor="ms-name">Nume *</Label>
+              <Input
+                id="ms-name"
+                value={f.name}
+                onChange={(e) => setF({ ...f, name: e.target.value })}
+                maxLength={200}
+              />
+            </div>
+            <div className="space-y-1.5">
+              <Label htmlFor="ms-phone">Telefon *</Label>
+              <Input
+                id="ms-phone"
+                value={f.phone}
+                onChange={(e) => setF({ ...f, phone: e.target.value })}
+                maxLength={40}
+              />
+            </div>
+            <div className="space-y-1.5">
+              <Label htmlFor="ms-email">Email *</Label>
+              <Input
+                id="ms-email"
+                type="email"
+                value={f.email}
+                onChange={(e) => setF({ ...f, email: e.target.value })}
+                maxLength={320}
+                required
+              />
+            </div>
+            <div className="space-y-1.5 sm:col-span-2">
+              <Label htmlFor="ms-cohort">Grupa *</Label>
+              <select
+                id="ms-cohort"
+                className={select}
+                value={f.cohort_id}
+                onChange={(e) => setF({ ...f, cohort_id: e.target.value })}
+              >
+                <option value="">Alege grupa…</option>
+                {cohorts.map((c) => (
+                  <option key={c.id} value={c.id}>
+                    {label(c)}
+                  </option>
+                ))}
+              </select>
+            </div>
+            <div className="space-y-1.5">
+              <Label htmlFor="ms-source">Sursa *</Label>
+              <select
+                id="ms-source"
+                className={select}
+                value={f.source}
+                onChange={(e) => setF({ ...f, source: e.target.value })}
+              >
+                {SOURCES.map(([v, l]) => (
+                  <option key={v} value={v}>
+                    {l}
+                  </option>
+                ))}
+              </select>
+            </div>
+            <div className="space-y-1.5">
+              <Label htmlFor="ms-paid">A plătit?</Label>
+              <select
+                id="ms-paid"
+                className={select}
+                value={f.paid}
+                onChange={(e) => setF({ ...f, paid: e.target.value })}
+              >
+                <option value="no">Nu încă</option>
+                <option value="yes">Da</option>
+              </select>
+            </div>
+            {f.paid === "yes" && (
+              <div className="space-y-1.5">
+                <Label htmlFor="ms-method">Cum a plătit</Label>
+                <select
+                  id="ms-method"
+                  className={select}
+                  value={f.payment_method}
+                  onChange={(e) =>
+                    setF({ ...f, payment_method: e.target.value })
+                  }
+                >
+                  {METHODS.map(([v, l]) => (
+                    <option key={v} value={v}>
+                      {l}
+                    </option>
+                  ))}
+                </select>
+              </div>
+            )}
+            <div className="space-y-1.5 sm:col-span-2 lg:col-span-3">
+              <Label htmlFor="ms-notes">Notițe</Label>
+              <Input
+                id="ms-notes"
+                value={f.notes}
+                onChange={(e) => setF({ ...f, notes: e.target.value })}
+                maxLength={2000}
+              />
+            </div>
+          </div>
+          <Button
+            className="mt-4"
+            onClick={save}
+            disabled={
+              saving ||
+              !f.name.trim() ||
+              !f.phone.trim() ||
+              !f.email.trim() ||
+              !f.cohort_id
+            }
+          >
+            {saving ? (
+              <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+            ) : (
+              <UserPlus className="mr-2 h-4 w-4" />
+            )}
+            Adaugă în grupă
+          </Button>
+        </>
+      )}
     </section>
   );
 };
