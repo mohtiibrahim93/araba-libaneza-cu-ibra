@@ -8,6 +8,7 @@ import {
   withLovableAiGatewayRunIdHeader,
 } from "@/lib/ai-gateway.server";
 import { ASK_SYSTEM_PROMPT } from "@/lib/askKnowledge.server";
+import { faqAnswer } from "@/lib/askFaq";
 
 type ChatRequestBody = { messages?: unknown };
 
@@ -66,6 +67,50 @@ export const Route = createFileRoute("/api/chat")({
           sanitizedMessages.length === 0
         ) {
           return new Response("Invalid messages", { status: 400 });
+        }
+
+        // Invisible bot check: the visitor's browser sends a reCAPTCHA token
+        // with every question. Scripts without a real browser are refused
+        // before any paid AI call. No sign-in, no puzzle for real visitors.
+        const recaptchaSecret = process.env["RECAPTCHA_SECRET_KEY"];
+        const recaptchaToken = request.headers.get("x-recaptcha-token");
+        if (!recaptchaSecret) {
+          return new Response("Service unavailable", { status: 503 });
+        }
+        if (!recaptchaToken || recaptchaToken.length > 4000) {
+          return new Response("Verification required", { status: 403 });
+        }
+        const verify = await fetch(
+          "https://www.google.com/recaptcha/api/siteverify",
+          {
+            method: "POST",
+            headers: { "Content-Type": "application/x-www-form-urlencoded" },
+            body: new URLSearchParams({
+              secret: recaptchaSecret,
+              response: recaptchaToken,
+            }).toString(),
+          },
+        )
+          .then((r) => r.json() as Promise<{ success?: boolean; score?: number }>)
+          .catch(() => null);
+        if (!verify?.success || (verify.score ?? 0) < 0.3) {
+          return new Response("Verification failed", { status: 403 });
+        }
+
+        // Suggested questions get an instant fixed answer: no AI credits.
+        const lastText = textOfLast(sanitizedMessages);
+        const faq = sanitizedMessages.length === 1 ? faqAnswer(lastText) : null;
+        if (faq) {
+          const { createUIMessageStream, createUIMessageStreamResponse } =
+            await import("ai");
+          const stream = createUIMessageStream({
+            execute: ({ writer }) => {
+              writer.write({ type: "text-start", id: "faq" });
+              writer.write({ type: "text-delta", id: "faq", delta: faq });
+              writer.write({ type: "text-end", id: "faq" });
+            },
+          });
+          return createUIMessageStreamResponse({ stream });
         }
 
         const key = process.env["LOVABLE_API_KEY"];
@@ -150,3 +195,12 @@ export const Route = createFileRoute("/api/chat")({
     },
   },
 });
+
+function textOfLast(messages: UIMessage[]): string {
+  const last = messages.at(-1);
+  if (!last) return "";
+  return last.parts
+    .map((p) => (p.type === "text" ? p.text : ""))
+    .join("")
+    .trim();
+}

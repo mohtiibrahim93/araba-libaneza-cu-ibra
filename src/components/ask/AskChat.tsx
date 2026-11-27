@@ -21,6 +21,7 @@ import {
   PromptInputTextarea,
 } from "@/components/ai-elements/prompt-input";
 import { Shimmer } from "@/components/ai-elements/shimmer";
+import { getRecaptchaToken } from "@/lib/recaptcha";
 import { COPY, MAX_STORED, STORAGE_KEY, textOf } from "@/components/ask/copy";
 
 /**
@@ -41,7 +42,17 @@ export default function AskChat({
   const copy = COPY[lang];
   const textareaRef = useRef<HTMLTextAreaElement | null>(null);
   const [transport] = useState(
-    () => new DefaultChatTransport({ api: "/api/chat" }),
+    () =>
+      new DefaultChatTransport({
+        api: "/api/chat",
+        // Each question carries an invisible bot-check token.
+        fetch: async (input, init) => {
+          const token = await getRecaptchaToken("chat");
+          const headers = new Headers(init?.headers);
+          if (token) headers.set("x-recaptcha-token", token);
+          return fetch(input, { ...init, headers });
+        },
+      }),
   );
   const { messages, sendMessage, status, error, setMessages } = useChat({
     id: "ask-ibra",
